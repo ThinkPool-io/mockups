@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ThinkPool — 10 ways to display ThinkPool Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Real theme.css tokens (hue 212) — NOT scaffold defaults */
+  :root{
+    --bg:hsl(212 9% 9%); --raised:hsl(212 8% 12%); --surface:hsl(212 8% 14%); --float:hsl(212 7% 17%);
+    --line:hsl(212 7% 21%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(212 14% 95%); --ink-soft:hsl(212 14% 86%); --muted:hsl(212 14% 78%); --faint:hsl(212 12% 62%);
+    --pool:hsl(212 40% 54%); --pool-strong:hsl(212 44% 44%); --pool-hi:hsl(212 44% 63%); --pool-ink:hsl(212 30% 96%);
+    --pool-soft:hsl(212 30% 18%); --accent-y:hsl(45 72% 60%);
+    --green:hsl(145 40% 58%); --slate:hsl(218 28% 64%);
+    --font-display:"Newsreader",Georgia,serif; --font-sans:"Hanken Grotesk",system-ui,sans-serif; --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:hsl(212 10% 5%);color:var(--ink);font-family:var(--font-sans);padding:40px 24px}
+  h1{font-family:var(--font-display);font-size:30px;font-weight:400;letter-spacing:-0.01em;text-align:center;margin-bottom:8px}
+  .sub{text-align:center;color:var(--faint);font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:36px}
+
+  .grid{max-width:1320px;margin:0 auto;display:grid;gap:20px;grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:0;display:flex;flex-direction:column;overflow:hidden}
+  .card.wide{grid-column:1 / -1}
+  .tag{display:flex;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--raised)}
+  .tag .n{font-family:var(--font-mono);font-size:12px;color:var(--pool-hi);font-weight:500}
+  .tag .t{font-size:13px;font-weight:600;color:var(--ink-soft)}
+  .tag .d{font-size:12px;color:var(--faint);margin-left:auto;text-align:right;max-width:55%}
+  .stage{padding:30px 26px;display:flex;flex-direction:column;align-items:center;gap:18px;flex:1;justify-content:center;min-height:230px}
+
+  /* ---- shared landing context bits ---- */
+  .eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--faint)}
+  .hero-h{font-family:var(--font-display);font-size:34px;font-weight:400;letter-spacing:-0.01em;color:var(--ink);text-align:center;line-height:1.05}
+  .hero-h .b{color:var(--pool-hi)}
+  /* composer pill (real shape: rounded-[1.9rem], float bg, line-strong border) */
+  .composer{width:100%;max-width:440px;display:flex;align-items:center;gap:10px;background:var(--float);border:1px solid var(--line-strong);border-radius:30px;padding:9px 10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 24px 60px -28px rgba(0,0,0,.7)}
+  .composer .ic{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:hsl(212 9% 9% / .7);display:grid;place-items:center;color:var(--muted);font-size:16px;flex:none}
+  .composer .ic.p{color:var(--pool)}
+  .composer .ph{flex:1;color:var(--faint);font-size:14px;padding:0 4px;font-family:var(--font-sans)}
+  .freeline{font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;color:var(--faint)}
+
+  /* mini marketing nav */
+  .nav{width:100%;max-width:480px;display:flex;align-items:center;gap:14px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--raised)}
+  .nav .wm{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ink);margin-right:auto}
+  .nav .wm b{color:var(--pool-hi);font-weight:600}
+  .nav .lnk{font-size:13px;color:var(--muted)}
+  .btn-primary{background:var(--pool-strong);color:var(--pool-ink);border:none;border-radius:9px;padding:7px 13px;font-size:13px;font-weight:600;font-family:var(--font-sans)}
+
+  /* ---- Code-flavoured primitives: angular, flat, mono, hairline ---- */
+  .glyph{display:inline-flex;color:var(--pool-hi)}
+  .term{font-family:var(--font-mono)}
+  .cursor{display:inline-block;width:7px;height:15px;background:var(--pool-hi);vertical-align:-2px;margin-left:3px;animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  .note{font-family:var(--font-mono);font-size:10.5px;color:var(--faint);text-align:center;opacity:.7}
+  .footer{text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--faint);margin-top:44px;letter-spacing:0.08em}
+
+  @media (max-width:760px){ .grid{grid-template-columns:1fr} .tag .d{display:none} }
+</style>
+</head>
+<body>
+
+<h1>10 ways to display <span style="font-style:italic">ThinkPool&nbsp;Code</span></h1>
+<p class="sub">replacing the cryptic nav icon + the afterthought hero pill · real tokens, in context</p>
+
+<div class="grid">
+
+  <!-- 1 — Polished inline chip -->
+  <div class="card">
+    <div class="tag"><span class="n">01</span><span class="t">Polished inline chip</span><span class="d">the current chip, fixed: glyph in a tile, pool tint, real affordance</span></div>
+    <div class="stage">
+      <p class="freeline">Free forever &nbsp;•&nbsp; The AI is included &nbsp;•&nbsp; Made for two</p>
+      <a style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;background:hsl(212 30% 18% / .5);border:1px solid hsl(212 40% 54% / .4);border-radius:9px;padding:8px 14px 8px 8px;box-shadow:0 0 18px -6px hsl(212 44% 63% / .35)">
+        <span style="display:grid;place-items:center;width:26px;height:26px;border-radius:6px;background:hsl(212 40% 54% / .14);color:var(--pool-hi)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 7 3 12 8 17"/><line x1="14" y1="6.5" x2="10" y2="17.5"/><polyline points="16 7 21 12 16 17"/></svg>
+        </span>
+        <span class="term" style="font-size:13px;color:var(--ink-soft);font-weight:500">ThinkPool Code</span>
+        <span class="term" style="font-size:12px;color:var(--faint)">pair on a live agent</span>
+        <span class="glyph" style="font-family:var(--font-mono);font-size:14px">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2 — Mini terminal window -->
+  <div class="card">
+    <div class="tag"><span class="n">02</span><span class="t">Mini terminal window</span><span class="d">show the product — a real terminal card, click anywhere to enter</span></div>
+    <div class="stage">
+      <p class="freeline">Free forever &nbsp;•&nbsp; The AI is included &nbsp;•&nbsp; Made for two</p>
+      <div style="width:100%;max-width:380px;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;background:hsl(212 12% 7%)">
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 11px;border-bottom:1px solid var(--line);background:var(--raised)">
+          <span style="width:9px;height:9px;border-radius:50%;background:hsl(8 52% 62%)"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:var(--accent-y)"></span>
+          <span style="width:9px;height:9px;border-radius:50%;background:var(--green)"></span>
+          <span class="term" style="margin-left:8px;font-size:11px;color:var(--faint)">thinkpool code</span>
+          <span class="term" style="margin-left:auto;font-size:11px;color:var(--pool-hi)">open →</span>
+        </div>
+        <div class="term" style="padding:13px 14px;font-size:12px;line-height:1.7">
+          <div><span style="color:var(--pool-hi)">❯</span> <span style="color:var(--muted)">pair on a live coding agent</span></div>
+          <div style="color:var(--green)">✓ two devs, one agent, one terminal</div>
+          <div><span style="color:var(--pool-hi)">❯</span> <span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — Secondary CTA with divider -->
+  <div class="card">
+    <div class="tag"><span class="n">03</span><span class="t">"or build together" divider</span><span class="d">clear hierarchy: chat is primary, Code is the labelled second path</span></div>
+    <div class="stage">
+      <p class="freeline">Free forever &nbsp;•&nbsp; The AI is included &nbsp;•&nbsp; Made for two</p>
+      <div style="display:flex;align-items:center;gap:12px;width:100%;max-width:280px;color:var(--faint)">
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+        <span class="term" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase">or build together</span>
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+      </div>
+      <a class="term" style="display:inline-flex;align-items:center;gap:9px;text-decoration:none;border:1px solid var(--line-strong);border-radius:8px;padding:9px 16px;color:var(--ink-soft);font-size:13px">
+        <span class="glyph">❯_</span> Open ThinkPool Code <span class="glyph">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 4 — Segmented Chat / Code toggle -->
+  <div class="card">
+    <div class="tag"><span class="n">04</span><span class="t">Chat / Code segmented toggle</span><span class="d">promote both as peers — flip the hero to preview either product</span></div>
+    <div class="stage">
+      <div style="display:inline-flex;padding:4px;border:1px solid var(--line);border-radius:11px;background:var(--raised);gap:4px">
+        <span style="padding:6px 16px;border-radius:8px;background:var(--float);color:var(--ink);font-size:13px;font-weight:600">Chat</span>
+        <span class="term" style="padding:6px 16px;border-radius:8px;color:var(--faint);font-size:13px;display:inline-flex;align-items:center;gap:6px"><span class="glyph">❯_</span>Code</span>
+      </div>
+      <div class="composer">
+        <span class="ic">+</span><span class="ph">Start a thought together…</span>
+        <span class="ic p">◗</span><span class="ic p">⌥</span>
+      </div>
+      <p class="note">tap "Code" → the composer becomes a terminal prompt</p>
+    </div>
+  </div>
+
+  <!-- 5 — Labelled nav pill (fix the top) -->
+  <div class="card">
+    <div class="tag"><span class="n">05</span><span class="t">Labelled nav pill</span><span class="d">kill the cryptic icon — a readable "❯_ Code" pill, even on mobile</span></div>
+    <div class="stage">
+      <div class="nav">
+        <span class="wm">think<b>pool</b></span>
+        <a class="term" style="display:inline-flex;align-items:center;gap:7px;text-decoration:none;border:1px solid hsl(212 40% 54% / .45);border-radius:8px;padding:6px 11px;color:var(--pool-hi);font-size:12.5px;box-shadow:0 0 14px -4px hsl(212 44% 63% / .5)">
+          <span class="glyph">❯_</span> Code
+        </a>
+        <span class="lnk">Sign in</span>
+        <span class="btn-primary">Start free</span>
+      </div>
+      <p class="note">before: a bare &lt;/&gt; glyph, no label on mobile → reads as a dev tool, not a product</p>
+    </div>
+  </div>
+
+  <!-- 6 — Announcement ribbon -->
+  <div class="card">
+    <div class="tag"><span class="n">06</span><span class="t">Announcement ribbon</span><span class="d">a thin strip under the nav — out of the hero's way, still seen</span></div>
+    <div class="stage">
+      <div style="width:100%;max-width:460px;display:flex;align-items:center;justify-content:center;gap:10px;padding:9px 14px;border:1px solid hsl(212 40% 54% / .3);border-radius:10px;background:linear-gradient(hsl(212 30% 18% / .4),transparent)">
+        <span class="term" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pool-ink);background:var(--pool-strong);padding:2px 7px;border-radius:5px">New</span>
+        <span class="term" style="font-size:12.5px;color:var(--ink-soft)"><span class="glyph">❯_</span> ThinkPool Code — pair-program with a live agent</span>
+        <span class="glyph" style="font-family:var(--font-mono)">→</span>
+      </div>
+      <div class="composer" style="opacity:.5;transform:scale(.92)">
+        <span class="ic">+</span><span class="ph">Start a thought together…</span><span class="ic p">◗</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 — Feature card with code preview (wide) -->
+  <div class="card wide">
+    <div class="tag"><span class="n">07</span><span class="t">Feature card with code preview</span><span class="d">the richest treatment — copy on the left, a live agent diff on the right</span></div>
+    <div class="stage" style="min-height:200px">
+      <div style="width:100%;max-width:760px;display:flex;gap:0;border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;background:var(--surface)">
+        <div style="flex:1;padding:22px 24px;display:flex;flex-direction:column;gap:8px;justify-content:center">
+          <span class="term glyph" style="font-size:13px">❯_ ThinkPool Code</span>
+          <span style="font-family:var(--font-display);font-size:21px;color:var(--ink)">Pair on a live coding agent.</span>
+          <span style="font-size:13px;color:var(--muted);line-height:1.5">Two devs, one agent, one terminal. Watch each other's prompts land in real time.</span>
+          <span class="term" style="margin-top:8px;display:inline-flex;align-items:center;gap:7px;align-self:flex-start;background:var(--pool-strong);color:var(--pool-ink);border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:500">Open Code →</span>
+        </div>
+        <div class="term" style="width:46%;background:hsl(212 12% 7%);border-left:1px solid var(--line);padding:16px 16px;font-size:11.5px;line-height:1.75">
+          <div style="color:var(--faint)">~/app/auth.js</div>
+          <div style="color:hsl(8 52% 62%)">- if (user) return token</div>
+          <div style="color:var(--green)">+ if (user &amp;&amp; user.verified)</div>
+          <div style="color:var(--green)">+&nbsp;&nbsp;&nbsp;return signToken(user)</div>
+          <div style="color:var(--muted);margin-top:6px"><span style="color:var(--pool-hi)">❯</span> ship it <span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 — Dual hero cards (wide) -->
+  <div class="card wide">
+    <div class="tag"><span class="n">08</span><span class="t">Dual entry cards — twin products</span><span class="d">reframe Code as a first-class twin of chat, each with its own door</span></div>
+    <div class="stage" style="min-height:200px">
+      <div style="width:100%;max-width:720px;display:flex;gap:16px">
+        <div style="flex:1;border:1px solid var(--line-strong);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;background:var(--surface)">
+          <span style="font-family:var(--font-display);font-size:20px;color:var(--ink)">Think together</span>
+          <span style="font-size:12.5px;color:var(--muted)">One shared conversation, one AI.</span>
+          <div class="composer" style="margin-top:auto;max-width:none"><span class="ic">+</span><span class="ph" style="font-size:13px">Start a thought…</span><span class="ic p">⌥</span></div>
+        </div>
+        <div style="flex:1;border:1px solid hsl(212 40% 54% / .4);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;background:hsl(212 12% 7%);box-shadow:0 0 26px -10px hsl(212 44% 63% / .35)">
+          <span class="term" style="font-size:20px;color:var(--ink)"><span class="glyph">❯_</span> Build together</span>
+          <span style="font-size:12.5px;color:var(--muted)">Pair on a live coding agent.</span>
+          <div class="term" style="margin-top:auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;background:var(--bg);font-size:12.5px;color:var(--faint)"><span class="glyph">❯</span> thinkpool code<span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 — Persistent corner launcher -->
+  <div class="card">
+    <div class="tag"><span class="n">09</span><span class="t">Persistent corner launcher</span><span class="d">keep the hero clean — a quiet always-there terminal launcher</span></div>
+    <div class="stage" style="align-items:stretch">
+      <div style="position:relative;width:100%;min-height:150px;border:1px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center">
+        <span style="font-family:var(--font-display);font-size:22px;color:var(--faint)">Think <span style="color:var(--pool-hi)">together.</span></span>
+        <a class="term" style="position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid hsl(212 40% 54% / .45);border-radius:9px;padding:8px 12px;background:hsl(212 12% 7%);color:var(--pool-hi);font-size:12.5px;box-shadow:0 8px 24px -10px rgba(0,0,0,.8)">
+          <span class="glyph">❯_</span> Code
+        </a>
+      </div>
+      <p class="note">floats bottom-right on every page; expands label on hover</p>
+    </div>
+  </div>
+
+  <!-- 10 — Terminal prompt-line entry -->
+  <div class="card">
+    <div class="tag"><span class="n">10</span><span class="t">Terminal prompt-line entry</span><span class="d">mirror the composer's width — "the other way to start" you type into</span></div>
+    <div class="stage">
+      <div class="composer" style="opacity:.55"><span class="ic">+</span><span class="ph">Start a thought together…</span><span class="ic p">⌥</span></div>
+      <a class="term" style="width:100%;max-width:440px;display:flex;align-items:center;gap:10px;text-decoration:none;background:hsl(212 12% 7%);border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:13.5px">
+        <span class="glyph" style="font-size:15px">❯</span>
+        <span style="color:var(--faint)">thinkpool code</span>
+        <span class="cursor"></span>
+        <span style="margin-left:auto;font-size:11px;color:var(--faint);letter-spacing:.05em">pair on a live agent →</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<p class="footer">code-entry-10 · concepts 01–10</p>
+
+</body>
+</html>
