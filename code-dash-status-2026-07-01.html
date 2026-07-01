@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code sessions — status enrichment · 5 variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:hsl(212 9% 9%); --raised:hsl(212 8% 12%); --surface:hsl(212 8% 14%); --float:hsl(212 7% 17%);
+    --line:hsl(212 7% 21%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(212 14% 95%); --muted:hsl(212 14% 78%); --faint:hsl(212 12% 62%);
+    --pool:hsl(212 40% 54%); --pool-hi:hsl(212 44% 63%); --pool-dim:hsl(212 26% 21%);
+    --positive:hsl(152 32% 60%); --caution:hsl(38 44% 60%); --danger:hsl(8 52% 62%);
+    --them:hsl(172 30% 58%);            /* partner colour, verbatim from code room */
+    --sans:"Hanken Grotesk",system-ui,-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",monospace;
+    --display:"Newsreader",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:40px 0 80px}
+  .page{max-width:1035px;margin:0 auto;padding:0 24px}
+  h1{font-family:var(--display);font-weight:500;font-size:30px;letter-spacing:-.01em;margin:0 0 4px}
+  .sub{color:var(--faint);font-size:14px;margin:0 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin:26px 0 12px}
+  .legend{border:1px solid var(--line);background:var(--raised);border-radius:14px;padding:12px 16px;margin-bottom:12px;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .legend b{color:var(--ink);font-weight:600}
+  .tag-real{color:var(--positive);font-family:var(--mono);font-size:10.5px}
+  .tag-todo{color:var(--caution);font-family:var(--mono);font-size:10.5px}
+
+  /* ---- shared bridge card ---- */
+  .bridge{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 60%,transparent);border-radius:16px;padding:14px 18px;margin-bottom:22px}
+  .bridge .ic{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--float);font-family:var(--mono);color:var(--pool-hi);font-size:13px}
+  .bridge .nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+  .bridge .mono{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:2px}
+
+  /* ---- variant frame ---- */
+  .variant{margin-bottom:44px}
+  .vhead{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+  .vnum{font-family:var(--mono);font-size:12px;color:var(--pool-hi);border:1px solid var(--line-strong);border-radius:6px;padding:2px 7px}
+  .vname{font-weight:600;font-size:15px}
+  .vthesis{color:var(--faint);font-size:12.5px;margin:0 0 14px;line-height:1.5}
+  .list{display:flex;flex-direction:column;gap:8px}
+
+  /* ---- base row ---- */
+  .row{display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 50%,transparent);border-radius:16px;padding-right:12px;overflow:hidden}
+  .rmain{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:14px 16px;text-align:left;cursor:pointer}
+  .glyph{position:relative;display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:9px;background:color-mix(in oklab,var(--pool) 12%,transparent);font-family:var(--mono);font-size:13px;color:var(--pool-hi)}
+  .rtext{min-width:0;flex:1}
+  .rname{font-weight:500;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rmeta{margin-top:2px;font-family:var(--mono);font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .rmeta .code{color:var(--pool-hi)}
+  .kebab{flex:none;width:30px;height:30px;display:grid;place-items:center;color:var(--faint);border-radius:8px}
+  .kebab:hover{background:var(--float)}
+  .sep{opacity:.5}
+
+  /* ===== shared status atoms (flat / angular / mono) ===== */
+  .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--positive);text-transform:uppercase;font-weight:600}
+  .live .sq{width:6px;height:6px;background:var(--positive);border-radius:1px;box-shadow:0 0 6px color-mix(in oklab,var(--positive) 70%,transparent)}
+  .feed{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--positive)}
+  .feed svg{width:12px;height:12px}
+  .dormant{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+  .dormant .sq{width:6px;height:6px;border:1px solid var(--line-strong);border-radius:1px}
+
+  /* owner */
+  .owner-you{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--pool-hi);border:1px solid color-mix(in oklab,var(--pool) 40%,var(--line));border-radius:5px;padding:1px 5px}
+  .owner-them{font-family:var(--mono);font-size:10px;letter-spacing:.02em;color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+
+  /* ===== partner presence — DUPLICATED VERBATIM from src/pages/code/room.jsx ===== */
+  .pp-chip{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:4px;font-family:var(--mono);font-size:8.5px;font-weight:700;line-height:1;
+    color:var(--them);background:color-mix(in oklab,var(--them) 16%,transparent);border:1px solid color-mix(in oklab,var(--them) 48%,transparent)}
+  .pp{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;font-weight:500}
+  .pp .nm{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pp .dot{width:8px;height:8px;border-radius:9999px;flex:none}
+  .pp.active{color:var(--them)}
+  .pp.active .dot{background:var(--them);box-shadow:0 0 7px var(--them)}
+  .pp.away{color:var(--muted)}
+  .pp.away .dot{background:var(--faint);opacity:.55}
+
+  /* ===== agent busy — round status glyph (spinner), matches code-room agent state ===== */
+  .agent{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--pool-hi)}
+  .spin{width:12px;height:12px;border-radius:9999px;border:1.5px solid color-mix(in oklab,var(--pool) 30%,transparent);border-top-color:var(--pool-hi);animation:sp .8s linear infinite}
+  .agent-idle{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+  .agent-idle .tick{width:11px;height:11px;border-radius:9999px;border:1px solid var(--line-strong)}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .lanes{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+
+  /* ===== V2 rail ===== */
+  .row-rail{position:relative;padding-left:3px}
+  .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
+  .rail.on{background:var(--positive);box-shadow:0 0 8px color-mix(in oklab,var(--positive) 60%,transparent)}
+  .rail.off{background:var(--line)}
+  .statgrid{display:flex;align-items:center;gap:14px;margin-top:4px;flex-wrap:wrap}
+
+  /* ===== V3 right cluster ===== */
+  .cluster{display:flex;align-items:center;gap:12px;padding-right:4px}
+  .divider{width:1px;height:26px;background:var(--line)}
+
+  /* ===== V4 hero ===== */
+  .hero{border:1px solid color-mix(in oklab,var(--positive) 26%,var(--line));background:color-mix(in oklab,var(--surface) 60%,transparent);border-radius:16px;padding:16px 18px}
+  .hero .top{display:flex;align-items:center;gap:12px}
+  .hero .statbar{display:flex;align-items:center;gap:18px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .compact{opacity:.92}
+  .section-live{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--positive);display:flex;align-items:center;gap:7px;margin:2px 0 10px}
+  .section-live .sq{width:7px;height:7px;background:var(--positive);border-radius:1px;box-shadow:0 0 7px var(--positive)}
+  .section-old{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:18px 0 10px}
+
+  /* ===== V5 second line ===== */
+  .statline{display:flex;align-items:stretch;gap:0;margin-top:9px;border-top:1px solid var(--line);padding-top:8px}
+  .stat{flex:1;min-width:0;padding:0 12px;border-left:1px solid var(--line)}
+  .stat:first-child{padding-left:0;border-left:0}
+  .stat .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:3px}
+  .stat .val{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .stat .val.on{color:var(--positive)}
+  .stat .val.them{color:var(--them)}
+  .stat .val.busy{color:var(--pool-hi)}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Code sessions</h1>
+  <p class="sub">Pair on a coding agent, live — one project, many terminals, two people.</p>
+
+  <div class="legend">
+    Every variant surfaces the same four facts per row: <b>owner</b>, <b>live + bridge feeding</b>, <b>partner present</b>, <b>agent busy</b>.
+    Partner-present chip/dot is <b>duplicated verbatim</b> from the in-room indicator (<span class="tag-real">code room · teal THEM</span>).
+    Data reality — <span class="tag-real">real now:</span> owner (owner_id), bridge-feeding (tpacct presence already on page).
+    <span class="tag-todo">needs backend:</span> per-row partner-present + agent-busy (list is a static DB snapshot today; needs a presence subscription).
+  </div>
+
+  <div class="bridge">
+    <div class="ic">⎇</div>
+    <div>
+      <div class="nm">Maxs-MBP-3.home <span style="width:8px;height:8px;border-radius:50%;background:var(--positive);box-shadow:0 0 7px var(--positive);display:inline-block"></span></div>
+      <div class="mono">v0.7.108 · 2 sessions · foreground</div>
+    </div>
+  </div>
+
+  <!-- ============ VARIANT 1 — inline status cluster ============ -->
+  <section class="variant">
+    <div class="vhead"><span class="vnum">1</span><span class="vname">Inline status cluster</span></div>
+    <p class="vthesis">Lightest touch. Keeps the existing single-line row; live-dot rides on the glyph, owner tag leads the meta line, status atoms trail inline. No layout change — drop-in enrichment.</p>
+    <div class="list" id="v1"></div>
+  </section>
+
+  <!-- ============ VARIANT 2 — left status rail ============ -->
+  <section class="variant">
+    <div class="vhead"><span class="vnum">2</span><span class="vname">Left status rail</span></div>
+    <p class="vthesis">A coloured spine on the left edge encodes liveness at a scan (green glow = live, grey = dormant). Status becomes a labelled row under the name so live sessions read as instrumented, not louder.</p>
+    <div class="list" id="v2"></div>
+  </section>
+
+  <!-- ============ VARIANT 3 — right status cluster ============ -->
+  <section class="variant">
+    <div class="vhead"><span class="vnum">3</span><span class="vname">Right status cluster</span></div>
+    <p class="vthesis">Name/meta stay minimal on the left; all live signals collect in a right-aligned cluster before the kebab — LIVE · feeding · partner chip · agent spinner. Status has one consistent home per row.</p>
+    <div class="list" id="v3"></div>
+  </section>
+
+  <!-- ============ VARIANT 4 — live pinned hero ============ -->
+  <section class="variant">
+    <div class="vhead"><span class="vnum">4</span><span class="vname">Two-tier · live pinned</span></div>
+    <p class="vthesis">Active rooms float to the top as taller hero cards with a full status bar (partner + agent + lanes + bridge); dormant sessions collapse into compact rows below. The thing that's happening now is unmissable.</p>
+    <div id="v4"></div>
+  </section>
+
+  <!-- ============ VARIANT 5 — second status line ============ -->
+  <section class="variant">
+    <div class="vhead"><span class="vnum">5</span><span class="vname">Tabular status line</span></div>
+    <p class="vthesis">Each row gains a dedicated second line: a fixed 5-column strip (OWNER · STATE · BRIDGE · PARTNER · AGENT). Every row answers the same questions in the same place — the most legible, the most structured.</p>
+    <div class="list" id="v5"></div>
+  </section>
+</div>
+
+<script>
+const FEED = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M20 8l-3-3M20 8l-3 3M20 16H4M4 16l3-3M4 16l3 3"/></svg>';
+const S = [
+  {name:'Ensemble Work', code:'RIRVOQ9K', you:true, withN:['Conrad'], date:'Jul 1, 2026', live:true, bridge:true, partner:{n:'Conrad', active:true}, agent:'busy', lanes:2},
+  {name:'Claude QA — Flow & Ensemble Test', code:'QCVHFCDT', you:true, withN:['Claude QA'], date:'Jul 1, 2026', live:true, bridge:true, partner:{n:'Claude QA', active:true}, agent:'busy', lanes:1},
+  {name:'Maxbridge', code:'YZVZGK9F', you:true, withN:[], date:'Jul 1, 2026', live:true, bridge:true, partner:null, agent:'idle', lanes:1},
+  {name:'Testing', code:'FVIHV1DE', you:false, owner:'Conrad', withN:['Conrad'], date:'Jul 1, 2026', live:false, bridge:false, partner:{n:'Conrad', active:false}, agent:null, lanes:1},
+  {name:'Code session', code:'OTWQNIU6', you:true, withN:[], date:'Jul 1, 2026', live:false, bridge:false, partner:null, agent:null, lanes:1},
+  {name:'Marketing', code:'T2OUS', you:false, owner:'Conrad', withN:['Conrad'], date:'Jun 30, 2026', live:false, bridge:false, partner:{n:'Conrad', active:false}, agent:null, lanes:1},
+];
+const only = new URLSearchParams(location.search).get('only');
+function isolate(){
+  const o=new URLSearchParams(location.search).get('only'); if(!o) return;
+  document.querySelectorAll('.variant').forEach((v,i)=>{ if(String(i+1)!==o) v.style.display='none'; });
+  const h1=document.querySelector('h1'), sb=document.querySelector('.sub');
+  if(h1) h1.style.display='none'; if(sb) sb.style.display='none';
+}
+window.addEventListener('load', isolate);
+const init = n => (n||'?').trim().charAt(0).toUpperCase();
+const el = h => { const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstChild; };
+
+const liveEl   = () => '<span class="live"><span class="sq"></span>live</span>';
+const dormEl   = () => '<span class="dormant"><span class="sq"></span>idle</span>';
+const feedEl   = () => `<span class="feed">${FEED}feeding</span>`;
+const ownerEl  = s => s.you ? '<span class="owner-you">you</span>' : `<span class="owner-them">${s.owner}’s</span>`;
+const ppChip   = p => `<span class="pp-chip" title="${p.n} is here">${init(p.n)}</span>`;
+const ppNameDot= p => `<span class="pp ${p.active?'active':'away'}"><span class="nm">${p.n}</span><span class="dot"></span></span>`;
+const agentEl  = s => s.agent==='busy' ? '<span class="agent"><span class="spin"></span>agent working</span>'
+                    : s.agent==='idle' ? '<span class="agent-idle"><span class="tick"></span>agent idle</span>' : '';
+const kebab = '<div class="kebab">⋮</div>';
+const glyph = s => `<span class="glyph">❯_</span>`;
+
+/* ---------- V1 inline ---------- */
+document.getElementById('v1').append(...S.map(s=>el(`
+  <div class="row">
+    <div class="rmain">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name}</div>
+        <div class="rmeta">
+          ${ownerEl(s)}
+          <span class="code">${s.code}</span>
+          <span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}
+          <span class="sep">·</span>${s.date}
+          ${s.live?'<span class="sep">·</span>'+liveEl():''}
+          ${s.bridge?feedEl():''}
+          ${s.partner&&s.partner.active?ppChip(s.partner):''}
+          ${s.agent==='busy'?agentEl(s):''}
+        </div>
+      </div>
+    </div>${kebab}
+  </div>`)));
+
+/* ---------- V2 rail ---------- */
+document.getElementById('v2').append(...S.map(s=>el(`
+  <div class="row row-rail">
+    <span class="rail ${s.live?'on':'off'}"></span>
+    <div class="rmain">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name} ${ownerEl(s)}</div>
+        <div class="rmeta"><span class="code">${s.code}</span><span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}<span class="sep">·</span>${s.date}</div>
+        <div class="statgrid">
+          ${s.live?liveEl():dormEl()}
+          ${s.bridge?feedEl():''}
+          ${s.partner&&s.partner.active?ppNameDot(s.partner):(s.partner?ppNameDot(s.partner):'')}
+          ${agentEl(s)}
+        </div>
+      </div>
+    </div>${kebab}
+  </div>`)));
+
+/* ---------- V3 right cluster ---------- */
+document.getElementById('v3').append(...S.map(s=>el(`
+  <div class="row">
+    <div class="rmain">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name}</div>
+        <div class="rmeta">${ownerEl(s)}<span class="code">${s.code}</span><span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}<span class="sep">·</span>${s.date}</div>
+      </div>
+    </div>
+    <div class="cluster">
+      ${s.live?liveEl():dormEl()}
+      ${s.bridge?feedEl():''}
+      ${(s.live&&(s.bridge||s.partner||s.agent))?'<span class="divider"></span>':''}
+      ${s.partner&&s.partner.active?ppChip(s.partner):''}
+      ${s.agent==='busy'?'<span class="agent"><span class="spin"></span></span>':''}
+    </div>${kebab}
+  </div>`)));
+
+/* ---------- V4 hero + compact ---------- */
+const v4 = document.getElementById('v4');
+const liveOnes = S.filter(s=>s.live), oldOnes = S.filter(s=>!s.live);
+v4.append(el('<div class="section-live"><span class="sq"></span>live now</div>'));
+const hlist = el('<div class="list"></div>');
+liveOnes.forEach(s=>hlist.append(el(`
+  <div class="hero">
+    <div class="top">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name} ${ownerEl(s)}</div>
+        <div class="rmeta"><span class="code">${s.code}</span><span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}<span class="sep">·</span>${s.date}</div>
+      </div>
+      ${liveEl()}${kebab}
+    </div>
+    <div class="statbar">
+      ${feedEl()}
+      ${s.partner?ppNameDot(s.partner):'<span class="dormant" style="text-transform:none">no partner in room</span>'}
+      ${agentEl(s)}
+      <span class="lanes">${s.lanes} terminal${s.lanes>1?'s':''}</span>
+    </div>
+  </div>`)));
+v4.append(hlist);
+v4.append(el('<div class="section-old">earlier</div>'));
+const clist = el('<div class="list"></div>');
+oldOnes.forEach(s=>clist.append(el(`
+  <div class="row compact">
+    <div class="rmain">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name}</div>
+        <div class="rmeta">${ownerEl(s)}<span class="code">${s.code}</span><span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}<span class="sep">·</span>${s.date}</div>
+      </div>
+    </div>${kebab}
+  </div>`)));
+v4.append(clist);
+
+/* ---------- V5 tabular status line ---------- */
+document.getElementById('v5').append(...S.map(s=>el(`
+  <div class="row" style="display:block;padding:14px 16px">
+    <div style="display:flex;align-items:center;gap:12px">
+      ${glyph(s)}
+      <div class="rtext">
+        <div class="rname">${s.name}</div>
+        <div class="rmeta"><span class="code">${s.code}</span><span class="sep">·</span>${s.withN.length?('with '+s.withN.join(', ')):'solo'}<span class="sep">·</span>${s.date}</div>
+      </div>
+      ${kebab}
+    </div>
+    <div class="statline">
+      <div class="stat"><span class="lbl">owner</span><span class="val ${s.you?'busy':''}">${s.you?'you':s.owner}</span></div>
+      <div class="stat"><span class="lbl">state</span><span class="val ${s.live?'on':''}">${s.live?'■ live':'□ idle'}</span></div>
+      <div class="stat"><span class="lbl">bridge</span><span class="val ${s.bridge?'on':''}">${s.bridge?'feeding':'—'}</span></div>
+      <div class="stat"><span class="lbl">partner</span><span class="val ${s.partner&&s.partner.active?'them':''}">${s.partner?(s.partner.active?ppChip(s.partner)+' here':'away'):'—'}</span></div>
+      <div class="stat"><span class="lbl">agent</span><span class="val ${s.agent==='busy'?'busy':''}">${s.agent==='busy'?'◉ working':s.agent==='idle'?'idle':'—'}</span></div>
+    </div>
+  </div>`)));
+</script>
+</body>
+</html>
