@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Code sessions — final (left status rail)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:hsl(212 9% 9%); --raised:hsl(212 8% 12%); --surface:hsl(212 8% 14%); --float:hsl(212 7% 17%);
+    --line:hsl(212 7% 21%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(212 14% 95%); --muted:hsl(212 14% 78%); --faint:hsl(212 12% 62%);
+    --pool:hsl(212 40% 54%); --pool-hi:hsl(212 44% 63%); --pool-dim:hsl(212 26% 21%);
+    --positive:hsl(152 32% 60%); --caution:hsl(38 44% 60%); --danger:hsl(8 52% 62%);
+    --them:hsl(172 30% 58%);            /* partner colour, verbatim from code room */
+    --sans:"Hanken Grotesk",system-ui,-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",monospace;
+    --display:"Newsreader",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;padding:40px 0 80px}
+  .page{max-width:1035px;margin:0 auto;padding:0 24px}
+  h1{font-family:var(--display);font-weight:500;font-size:30px;letter-spacing:-.01em;margin:0 0 4px}
+  .sub{color:var(--faint);font-size:14px;margin:0 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin:26px 0 12px}
+
+  /* join row */
+  .joinrow{display:flex;gap:10px;margin-bottom:26px}
+  .joininput{flex:1;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 50%,transparent);border-radius:14px;padding:13px 18px;color:var(--faint);font-size:14px}
+  .btn{border-radius:9999px;padding:0 20px;font-size:14px;font-weight:500;display:grid;place-items:center;border:1px solid var(--line-strong);color:var(--muted)}
+  .btn.primary{background:var(--pool);color:hsl(212 30% 96%);border-color:transparent}
+
+  /* bridge card */
+  .bridge{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 60%,transparent);border-radius:16px;padding:14px 18px;margin-bottom:22px}
+  .bridge .ic{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--float);font-family:var(--mono);color:var(--pool-hi);font-size:13px}
+  .bridge .nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+  .bridge .mono{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:2px}
+
+  .list{display:flex;flex-direction:column;gap:8px}
+
+  /* row + left rail */
+  .row{position:relative;display:flex;align-items:center;gap:2px;border:1px solid var(--line);background:color-mix(in oklab,var(--surface) 50%,transparent);border-radius:16px;padding-right:12px;padding-left:3px;overflow:hidden}
+  .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
+  .rail.on{background:var(--positive);box-shadow:0 0 8px color-mix(in oklab,var(--positive) 60%,transparent)}
+  .rail.off{background:var(--line)}
+  .rmain{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:14px 16px;text-align:left;cursor:pointer}
+  .glyph{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:9px;background:color-mix(in oklab,var(--pool) 12%,transparent);font-family:var(--mono);font-size:13px;color:var(--pool-hi)}
+  .rtext{min-width:0;flex:1}
+  .rname{font-weight:500;font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rmeta{margin-top:2px;font-family:var(--mono);font-size:11px;color:var(--faint);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .rmeta .code{color:var(--pool-hi)}
+  .rmeta .sep{opacity:.5}
+  .kebab{flex:none;width:30px;height:30px;display:grid;place-items:center;color:var(--faint);border-radius:8px}
+
+  /* hosted by — plain text, no pill */
+  .host{color:var(--faint)}
+  .host .you{color:var(--pool-hi)}
+
+  /* status row */
+  .statgrid{display:flex;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap}
+  .live{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--positive);text-transform:uppercase;font-weight:600}
+  .live .sq{width:6px;height:6px;background:var(--positive);border-radius:1px;box-shadow:0 0 6px color-mix(in oklab,var(--positive) 70%,transparent)}
+
+  /* partner presence — DUPLICATED VERBATIM from src/pages/code/room.jsx */
+  .pp{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;font-weight:500}
+  .pp .nm{max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pp .dot{width:8px;height:8px;border-radius:9999px;flex:none}
+  .pp.active{color:var(--them)}
+  .pp.active .dot{background:var(--them);box-shadow:0 0 7px var(--them)}
+  .pp.away{color:var(--muted)}
+  .pp.away .dot{background:var(--faint);opacity:.55}
+
+  /* agent busy — round status glyph (spinner), matches code-room agent state */
+  .agent{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--pool-hi)}
+  .spin{width:12px;height:12px;border-radius:9999px;border:1.5px solid color-mix(in oklab,var(--pool) 30%,transparent);border-top-color:var(--pool-hi);animation:sp .8s linear infinite}
+  .agent-idle{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+  .agent-idle .tick{width:11px;height:11px;border-radius:9999px;border:1px solid var(--line-strong)}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Code sessions</h1>
+  <p class="sub">Pair on a coding agent, live — one project, many terminals, two people.</p>
+
+  <div class="bridge">
+    <div class="ic">⎇</div>
+    <div>
+      <div class="nm">Maxs-MBP-3.home <span style="width:8px;height:8px;border-radius:50%;background:var(--positive);box-shadow:0 0 7px var(--positive);display:inline-block"></span></div>
+      <div class="mono">v0.7.108 · 2 sessions · foreground</div>
+    </div>
+  </div>
+
+  <div class="joinrow">
+    <div class="joininput">Enter a code to join your partner…</div>
+    <div class="btn">Join</div>
+    <div class="btn primary">Start a code session</div>
+  </div>
+
+  <div class="eyebrow">Your code sessions</div>
+  <div class="list" id="list"></div>
+</div>
+
+<script>
+const S = [
+  {name:'Ensemble Work', code:'RIRVOQ9K', you:true, date:'Jul 1, 2026', live:true, partner:{n:'Conrad', active:true}, agent:'busy'},
+  {name:'Claude QA — Flow & Ensemble Test', code:'QCVHFCDT', you:true, date:'Jul 1, 2026', live:true, partner:{n:'Claude QA', active:true}, agent:'busy'},
+  {name:'Maxbridge', code:'YZVZGK9F', you:true, date:'Jul 1, 2026', live:true, partner:null, agent:'idle'},
+  {name:'Testing', code:'FVIHV1DE', you:false, owner:'Conrad', date:'Jul 1, 2026', live:false, partner:{n:'Conrad', active:false}, agent:null},
+  {name:'Code session', code:'OTWQNIU6', you:true, date:'Jul 1, 2026', live:false, partner:null, agent:null},
+  {name:'Marketing', code:'T2OUS', you:false, owner:'Conrad', date:'Jun 30, 2026', live:false, partner:{n:'Conrad', active:false}, agent:null},
+];
+const el = h => { const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstChild; };
+const host = s => `<span class="host">hosted by ${s.you?'<span class="you">you</span>':s.owner}</span>`;
+const pp   = p => `<span class="pp ${p.active?'active':'away'}"><span class="nm">${p.n}</span><span class="dot"></span></span>`;
+const agentEl = s => s.agent==='busy' ? '<span class="agent"><span class="spin"></span>agent working</span>'
+                   : s.agent==='idle' ? '<span class="agent-idle"><span class="tick"></span>agent idle</span>' : '';
+
+document.getElementById('list').append(...S.map(s=>{
+  const stat = [ s.live?'<span class="live"><span class="sq"></span>live</span>':'',
+                 s.partner?pp(s.partner):'',
+                 s.live?agentEl(s):'' ].filter(Boolean).join('');
+  return el(`
+    <div class="row">
+      <span class="rail ${s.live?'on':'off'}"></span>
+      <div class="rmain">
+        <span class="glyph">❯_</span>
+        <div class="rtext">
+          <div class="rname">${s.name}</div>
+          <div class="rmeta"><span class="code">${s.code}</span><span class="sep">·</span>${host(s)}<span class="sep">·</span>${s.date}</div>
+          ${stat?`<div class="statgrid">${stat}</div>`:''}
+        </div>
+      </div>
+      <div class="kebab">⋮</div>
+    </div>`);
+}));
+</script>
+</body>
+</html>
