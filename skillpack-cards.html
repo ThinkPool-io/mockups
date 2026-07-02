@@ -29,18 +29,18 @@
       repeating-radial-gradient(circle at 90% 112%, color-mix(in srgb, var(--a) 8%, transparent) 0 1.4px, transparent 1.4px 35px),
       radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%)}
   /* animated ripples — each wave expands from the drop point and dissipates; two staggered = continuous */
-  .wake{position:absolute;inset:0;z-index:0;pointer-events:none;transform-origin:50% -4%;
-    background:repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 16%, transparent) 0 1.5px, transparent 1.5px 30px);
+  .wake{position:absolute;inset:0;pointer-events:none;transform-origin:50% -4%;
+    background:repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 20%, transparent) 0 2px, transparent 2px 30px);
     -webkit-mask:radial-gradient(120% 112% at 50% -4%, #000 4%, transparent 82%);
             mask:radial-gradient(120% 112% at 50% -4%, #000 4%, transparent 82%);
-    animation:wake 10s linear infinite}
-  .wake.w2{animation-delay:-5s}
-  @keyframes wake{0%{transform:scale(.7);opacity:0}18%{opacity:.9}100%{transform:scale(1.55);opacity:0}}
+    animation:wake 8s linear infinite}
+  .wake.w2{animation-delay:-4s}
+  @keyframes wake{0%{transform:scale(.6);opacity:0}15%{opacity:1}100%{transform:scale(1.7);opacity:0}}
   @media (prefers-reduced-motion:reduce){.wake{animation:none;opacity:.5;transform:scale(1)}.wake.w2{display:none}}
   /* film grain — kills banding, adds a digital tooth */
   .card::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
     background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E")}
-  .card>*{position:relative;z-index:1}
+  .card>:not(.wake){position:relative;z-index:1}
   .ico{width:52px;height:52px;color:var(--a);margin-bottom:20px;
     filter:drop-shadow(0 0 14px color-mix(in srgb, var(--a) 50%, transparent))}
   .ico svg{width:52px;height:52px;stroke-width:1.6}
