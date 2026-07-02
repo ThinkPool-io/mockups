@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool Skillpack — discipline for coding agents</title>
+<style>
+  :root{
+    --bg:#07070F; --surface:#0D0D18; --surface2:#12121F; --border:#1A1A2E;
+    --amber:#E8A045; --teal:#4FC3C3; --pool:#7B8FD4;
+    --text:#EDEDF2; --muted:#9494A8; --faint:#5A5A70;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(60% 60% at 50% -10%, rgba(123,143,212,.10), transparent 70%);
+    background-repeat:no-repeat;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* nav */
+  nav{display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid var(--border)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.02em}
+  .logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--amber),#c97e2e);
+    display:flex;align-items:center;justify-content:center;color:#0b0b12;font-weight:900;font-size:15px}
+  .nav-r{display:flex;align-items:center;gap:18px;font-size:14px;color:var(--muted)}
+  .nav-r a{color:var(--muted);text-decoration:none}
+  .ghbtn{border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text)!important;background:var(--surface)}
+
+  /* hero */
+  .hero{padding:76px 0 40px;text-align:center}
+  .kick{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--teal);
+    border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 13px;margin-bottom:26px}
+  .kick .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+  h1{font-size:clamp(34px,6vw,60px);line-height:1.03;letter-spacing:-.035em;font-weight:800;margin-bottom:20px}
+  h1 .g{background:linear-gradient(120deg,var(--amber),var(--pool));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:clamp(16px,2.4vw,20px);color:var(--muted);max-width:620px;margin:0 auto 34px}
+  .sub b{color:var(--text);font-weight:600}
+
+  .install{display:inline-flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:13px 16px;font-family:var(--mono);font-size:14px;margin-bottom:16px;max-width:100%;overflow:auto}
+  .install .p{color:var(--faint)}
+  .install .c{color:var(--text);white-space:nowrap}
+  .install .cp{margin-left:2px;color:var(--muted);border-left:1px solid var(--border);padding-left:12px;font-family:'Inter';font-size:12px}
+  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .badge{font-size:12.5px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:5px 12px;background:var(--surface)}
+  .badge b{color:var(--amber)}
+
+  /* section */
+  section{padding:44px 0}
+  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+  .h2{font-size:clamp(22px,3.4vw,30px);letter-spacing:-.02em;font-weight:750;margin-bottom:6px}
+  .lead{color:var(--muted);max-width:620px;margin-bottom:26px}
+
+  /* hero skill card */
+  .hero-card{border:1px solid rgba(232,160,69,.35);background:
+    linear-gradient(180deg, rgba(232,160,69,.07), rgba(232,160,69,.01)),var(--surface);
+    border-radius:16px;padding:26px;display:flex;gap:22px;align-items:flex-start;margin-bottom:30px}
+  .hero-card .ic{font-size:30px;line-height:1}
+  .hero-card h3{font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600}
+  .tag.hero{background:rgba(232,160,69,.16);color:var(--amber)}
+  .hero-card p{color:var(--muted);font-size:15px;margin-bottom:12px;max-width:640px}
+  .trig{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+  .trig b{color:var(--teal);font-weight:500}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{border:1px solid var(--border);background:var(--surface);border-radius:13px;padding:18px;transition:.15s;position:relative}
+  .card:hover{border-color:#2a2a44;transform:translateY(-2px)}
+  .card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+  .card .nm{font-family:var(--mono);font-weight:600;font-size:14.5px;color:var(--text)}
+  .cat{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:5px}
+  .cat.d{background:rgba(79,195,195,.14);color:var(--teal)}
+  .cat.c{background:rgba(123,143,212,.16);color:var(--pool)}
+  .cat.m{background:rgba(232,160,69,.14);color:var(--amber)}
+  .card p{font-size:13.5px;color:var(--muted);line-height:1.5}
+
+  /* how */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{border:1px solid var(--border);background:var(--surface);border-radius:13px;padding:20px}
+  .step .n{font-family:var(--mono);color:var(--amber);font-size:13px;margin-bottom:10px}
+  .step h4{font-size:15px;margin-bottom:6px}
+  .step p{font-size:13px;color:var(--muted)}
+  .step code{font-family:var(--mono);font-size:12px;color:var(--teal);background:var(--surface2);padding:2px 6px;border-radius:5px}
+
+  footer{border-top:1px solid var(--border);padding:34px 0 44px;margin-top:20px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer .mk{color:var(--text);font-weight:600}
+  footer a{color:var(--pool);text-decoration:none}
+
+  @media(max-width:760px){
+    .grid{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:1fr}
+    .hero-card{flex-direction:column;gap:14px}
+    .hero{padding:54px 0 30px}
+  }
+  @media(max-width:460px){ .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="brand"><span class="logo">P</span> Thinkpool <span style="color:var(--muted);font-weight:500">Skillpack</span></div>
+    <div class="nav-r">
+      <a href="#skills">Skills</a>
+      <a href="#install">Install</a>
+      <a class="ghbtn" href="#">★ Star on GitHub</a>
+    </div>
+  </nav>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kick"><span class="dot"></span> Free &amp; open · MIT · 11 skills</div>
+    <h1>The discipline a senior engineer has —<br><span class="g">that your coding agent skips by default.</span></h1>
+    <p class="sub">A free pack of <b>Claude Code skills</b> that make an agent verify before it claims, diagnose before it guesses, and fix the root instead of the symptom. Drop them in and your agent stops cutting corners.</p>
+    <div class="install">
+      <span class="p">$</span><span class="c">npx thinkpool-skillpack add</span><span class="cp">⧉ copy</span>
+    </div>
+    <div class="badges">
+      <span class="badge"><b>0</b> config</span>
+      <span class="badge"><b>MIT</b> licensed</span>
+      <span class="badge">works in <b>any</b> Claude Code project</span>
+      <span class="badge">built by <b>Thinkpool</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" id="skills">
+  <section style="padding-top:20px">
+    <div class="eyebrow">The headliner</div>
+    <div class="hero-card">
+      <div class="ic">🩸</div>
+      <div>
+        <h3>heist <span class="tag hero">flagship</span></h3>
+        <p>Point it at any competitor — a name, a URL, or a GitHub repo — and it runs a full parallel research sweep, then hands you a <b>ranked "steal brief"</b>: exactly what to lift, what to leave, and why. A decision menu, not a wall of notes.</p>
+        <div class="trig">trigger &nbsp;<b>heist cursor.com</b>&nbsp; · &nbsp;<b>heist github.com/foo/bar</b>&nbsp; · &nbsp;<b>heist Notion</b></div>
+      </div>
+    </div>
+
+    <div class="eyebrow">Discipline — the judgment agents lack</div>
+    <div class="grid">
+      <div class="card"><div class="top"><span class="nm">diagnose-first</span><span class="cat d">verify</span></div><p>After a failed fix, <b>stop</b> and re-diagnose with fresh evidence — never ship the same guess twice.</p></div>
+      <div class="card"><div class="top"><span class="nm">root-cause-fix</span><span class="cat d">verify</span></div><p>Bug showing up in 2+ places? Read the whole data path and fix the <b>root once</b>, not each symptom.</p></div>
+      <div class="card"><div class="top"><span class="nm">verify-claims</span><span class="cat d">verify</span></div><p>Never say "done" or cite a number without runtime <b>evidence you produced</b>. Green build ≠ it runs.</p></div>
+      <div class="card"><div class="top"><span class="nm">verify-in-prod</span><span class="cat d">verify</span></div><p>Reported broken again? Pull the <b>real failing artifact</b> before the next patch — not a synthetic repro.</p></div>
+      <div class="card"><div class="top"><span class="nm">use-existing-scripts</span><span class="cat d">verify</span></div><p>Check for a tool that already does it <b>before</b> reinventing curl/poll/grep mechanics inline.</p></div>
+      <div class="card"><div class="top"><span class="nm">reland-reverted</span><span class="cat d">verify</span></div><p>Before re-landing reverted code, <b>name the bug</b> that caused the revert — don't re-introduce it.</p></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:34px">Craft — measure, don't vibe</div>
+    <div class="grid">
+      <div class="card"><div class="top"><span class="nm">measure-first</span><span class="cat c">craft</span></div><p>On the 2nd CSS guess, <b>measure the pixels</b> — render, crop, or read the DOM. Then ship one real fix.</p></div>
+      <div class="card"><div class="top"><span class="nm">mockup-iterate</span><span class="cat c">craft</span></div><p>Render every design at <b>desktop AND mobile</b> by default. Mobile is never an afterthought.</p></div>
+      <div class="card"><div class="top"><span class="nm">forge</span><span class="cat m">meta</span></div><p>Re-engineer a vague request into a <b>sharp prompt</b> — task, constraints, output — before acting on it.</p></div>
+      <div class="card"><div class="top"><span class="nm">research-tool</span><span class="cat m">meta</span></div><p>Check your <b>curated index first</b>, then the web. The cheap prior before the expensive dig.</p></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap" id="install">
+  <section>
+    <div class="eyebrow">How it works</div>
+    <div class="h2">Three steps, zero config</div>
+    <p class="lead">Skills are just markdown + scripts in the open <span style="font-family:var(--mono);color:var(--teal)">agentskills.io</span> format. Claude reads them automatically and invokes them by description — or by their trigger word.</p>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h4>Install</h4><p>Run <code>npx thinkpool-skillpack add</code> — or clone into <code>.claude/skills/</code>.</p></div>
+      <div class="step"><div class="n">02</div><h4>Nothing to wire</h4><p>Claude auto-loads each skill at session start and reaches for it when it fits the task.</p></div>
+      <div class="step"><div class="n">03</div><h4>Or say the word</h4><p>Hotword skills fire on trigger: <code>heist stripe.com</code>, <code>forge add caching</code>.</p></div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <p><span class="mk">Thinkpool Skillpack</span> — free &amp; open, MIT licensed.</p>
+    <p style="margin-top:6px">Built by <a href="#">Thinkpool</a>, where two people and their agents share one room. · <a href="#">GitHub</a> · <a href="#">Docs</a></p>
+  </footer>
+</div>
+
+</body>
+</html>
