@@ -4,28 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Thinkpool Skillpack — discipline for coding agents</title>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
   :root{
-    /* REAL brand — src/styles/theme.css (dark, hue 212 blue-grey) + Thinkpool Code cyan */
     --bg:hsl(212 9% 9%); --surface:hsl(212 8% 14%); --surface2:hsl(212 8% 18%); --border:hsl(212 7% 21%);
-    --pool:hsl(212 45% 62%);   /* brand accent — calm pool blue */
-    --cyan:hsl(190 70% 57%);   /* Thinkpool Code accent */
-    --yellow:hsl(45 74% 62%);  /* reserved standout — session/join */
+    --pool:hsl(212 45% 62%); --cyan:hsl(190 70% 57%); --yellow:hsl(45 74% 62%);
     --text:hsl(212 14% 95%); --muted:hsl(212 10% 60%); --faint:hsl(212 9% 42%);
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{
-    background:var(--bg); color:var(--text);
-    font-family:'Inter',system-ui,-apple-system,sans-serif;
-    line-height:1.5; -webkit-font-smoothing:antialiased;
-    background-image:radial-gradient(60% 60% at 50% -10%, hsl(190 70% 57% / .08), transparent 70%);
-    background-repeat:no-repeat;
-  }
+  body{background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(60% 60% at 50% -10%, hsl(190 70% 57% / .08), transparent 70%);background-repeat:no-repeat}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
-  /* nav */
   nav{display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid var(--border)}
   .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.02em}
   .logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--pool));
@@ -34,7 +27,6 @@
   .nav-r a{color:var(--muted);text-decoration:none}
   .ghbtn{border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text)!important;background:var(--surface)}
 
-  /* hero */
   .hero{padding:76px 0 40px;text-align:center}
   .kick{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--cyan);
     border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 13px;margin-bottom:26px}
@@ -43,66 +35,67 @@
   h1 .g{background:linear-gradient(120deg,var(--cyan),var(--pool));-webkit-background-clip:text;background-clip:text;color:transparent}
   .sub{font-size:clamp(16px,2.4vw,20px);color:var(--muted);max-width:620px;margin:0 auto 34px}
   .sub b{color:var(--text);font-weight:600}
-
   .install{display:inline-flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);
     border-radius:12px;padding:13px 16px;font-family:var(--mono);font-size:14px;margin-bottom:16px;max-width:100%;overflow:auto}
-  .install .p{color:var(--faint)}
-  .install .c{color:var(--text);white-space:nowrap}
+  .install .p{color:var(--faint)} .install .c{color:var(--text);white-space:nowrap}
   .install .cp{margin-left:2px;color:var(--muted);border-left:1px solid var(--border);padding-left:12px;font-family:'Inter';font-size:12px}
   .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
   .badge{font-size:12.5px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:5px 12px;background:var(--surface)}
   .badge b{color:var(--cyan)}
 
-  /* section */
   section{padding:44px 0}
-  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+  .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
   .h2{font-size:clamp(22px,3.4vw,30px);letter-spacing:-.02em;font-weight:750;margin-bottom:6px}
   .lead{color:var(--muted);max-width:620px;margin-bottom:26px}
 
-  /* hero skill card — heist = yellow flagship */
-  .hero-card{border:1px solid hsl(45 74% 62% / .35);background:
-    linear-gradient(180deg, hsl(45 74% 62% / .07), hsl(45 74% 62% / .015)),var(--surface);
-    border-radius:16px;padding:26px;display:flex;gap:22px;align-items:flex-start;margin-bottom:30px}
-  .hero-card .ic{font-size:30px;line-height:1}
-  .hero-card h3{font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin-bottom:7px}
-  .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600}
-  .tag.hero{background:hsl(45 74% 62% / .16);color:var(--yellow)}
+  /* ripple card system (shared) — accent via --a; the pool ripples, animated */
+  .rc{position:relative;overflow:hidden;border:1px solid var(--border);background:var(--surface);
+    box-shadow:inset 0 1px 0 color-mix(in srgb, var(--a) 18%, transparent)}
+  .rc::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(60% 45% at 50% -6%, color-mix(in srgb, var(--a) 24%, transparent), transparent 70%),
+      repeating-radial-gradient(circle at 88% 114%, color-mix(in srgb, var(--a) 8%, transparent) 0 1.3px, transparent 1.3px 32px),
+      radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%)}
+  .wake{position:absolute;inset:0;pointer-events:none;transform-origin:50% -4%;
+    background:repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 18%, transparent) 0 1.7px, transparent 1.7px 26px);
+    -webkit-mask:radial-gradient(120% 115% at 50% -4%, #000 4%, transparent 80%);
+            mask:radial-gradient(120% 115% at 50% -4%, #000 4%, transparent 80%);
+    animation:wake 8s linear infinite}
+  .wake.w2{animation-delay:-4s}
+  @keyframes wake{0%{transform:scale(.6);opacity:0}15%{opacity:1}100%{transform:scale(1.7);opacity:0}}
+  @media (prefers-reduced-motion:reduce){.wake{animation:none;opacity:.5;transform:scale(1)}.wake.w2{display:none}}
+  .rc>:not(.wake){position:relative;z-index:1}
+
+  /* hero (heist) card */
+  .hero-card{border-radius:16px;padding:26px;display:flex;gap:22px;align-items:flex-start;margin-bottom:30px}
+  .hero-card .ic{width:34px;height:34px;color:var(--a);flex:none;filter:drop-shadow(0 0 12px color-mix(in srgb, var(--a) 50%, transparent))}
+  .hero-card h3{font-family:var(--mono);font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600;background:color-mix(in srgb, var(--a) 16%, transparent);color:var(--a)}
   .hero-card p{color:var(--muted);font-size:15px;margin-bottom:12px;max-width:640px}
-  .trig{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
-  .trig b{color:var(--cyan);font-weight:500}
+  .trig{font-family:var(--mono);font-size:12.5px;color:var(--faint)} .trig b{color:var(--cyan);font-weight:500}
 
   /* grid */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .card{border:1px solid var(--border);background:var(--surface);border-radius:13px;padding:18px;transition:.15s;position:relative}
-  .card:hover{border-color:hsl(212 10% 30%);transform:translateY(-2px)}
-  .card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-  .card .nm{font-family:var(--mono);font-weight:600;font-size:14.5px;color:var(--text)}
-  .cat{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:5px}
-  .cat.d{background:hsl(190 70% 57% / .14);color:var(--cyan)}       /* verify → Code cyan */
-  .cat.c{background:hsl(212 45% 62% / .16);color:var(--pool)}       /* craft → pool */
-  .cat.m{background:hsl(212 45% 62% / .12);color:var(--pool)}       /* meta → pool */
-  .card p{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .card{border-radius:14px;padding:20px;transition:transform .15s}
+  .card:hover{transform:translateY(-2px)}
+  .card .ico{width:28px;height:28px;color:var(--a);margin-bottom:13px;filter:drop-shadow(0 0 10px color-mix(in srgb, var(--a) 42%, transparent))}
+  .card .nm{font-family:var(--mono);font-weight:600;font-size:14.5px;color:var(--text);margin-bottom:7px}
+  .card p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:13px}
+  .cat{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:5px;
+    background:color-mix(in srgb, var(--a) 14%, transparent);color:var(--a)}
 
-  /* how */
+  footer{border-top:1px solid var(--border);padding:34px 0 44px;margin-top:20px;text-align:center;color:var(--muted);font-size:13.5px}
+  footer .mk{color:var(--text);font-weight:600} footer a{color:var(--pool);text-decoration:none}
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   .step{border:1px solid var(--border);background:var(--surface);border-radius:13px;padding:20px}
   .step .n{font-family:var(--mono);color:var(--cyan);font-size:13px;margin-bottom:10px}
-  .step h4{font-size:15px;margin-bottom:6px}
-  .step p{font-size:13px;color:var(--muted)}
+  .step h4{font-size:15px;margin-bottom:6px} .step p{font-size:13px;color:var(--muted)}
   .step code{font-family:var(--mono);font-size:12px;color:var(--cyan);background:var(--surface2);padding:2px 6px;border-radius:5px}
 
-  footer{border-top:1px solid var(--border);padding:34px 0 44px;margin-top:20px;text-align:center;color:var(--muted);font-size:13.5px}
-  footer .mk{color:var(--text);font-weight:600}
-  footer a{color:var(--pool);text-decoration:none}
-
   @media(max-width:760px){
-    .grid{grid-template-columns:1fr 1fr}
-    .steps{grid-template-columns:1fr}
-    .hero-card{flex-direction:column;gap:14px}
-    .hero{padding:54px 0 30px}
-    .nav-r a:not(.ghbtn){display:none}
-    .nav-r{gap:0}
-    .brand{font-size:15px}
+    .grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr}
+    .hero-card{flex-direction:column;gap:14px}.hero{padding:54px 0 30px}
+    .nav-r a:not(.ghbtn){display:none}.nav-r{gap:0}.brand{font-size:15px}
   }
   @media(max-width:460px){ .grid{grid-template-columns:1fr} }
 </style>
@@ -112,11 +105,7 @@
 <div class="wrap">
   <nav>
     <div class="brand"><span class="logo">P</span> Thinkpool <span style="color:var(--muted);font-weight:500">Skillpack</span></div>
-    <div class="nav-r">
-      <a href="#skills">Skills</a>
-      <a href="#install">Install</a>
-      <a class="ghbtn" href="#">★ Star on GitHub</a>
-    </div>
+    <div class="nav-r"><a href="#skills">Skills</a><a href="#install">Install</a><a class="ghbtn" href="#">★ Star on GitHub</a></div>
   </nav>
 </div>
 
@@ -125,14 +114,10 @@
     <div class="kick"><span class="dot"></span> Free &amp; open · MIT · 11 skills</div>
     <h1>The discipline a senior engineer has —<br><span class="g">that your coding agent skips by default.</span></h1>
     <p class="sub">A free pack of <b>Claude Code skills</b> that make an agent verify before it claims, diagnose before it guesses, and fix the root instead of the symptom. Drop them in and your agent stops cutting corners.</p>
-    <div class="install">
-      <span class="p">$</span><span class="c">npx thinkpool-skillpack add</span><span class="cp">⧉ copy</span>
-    </div>
+    <div class="install"><span class="p">$</span><span class="c">npx thinkpool-skillpack add</span><span class="cp">⧉ copy</span></div>
     <div class="badges">
-      <span class="badge"><b>0</b> config</span>
-      <span class="badge"><b>MIT</b> licensed</span>
-      <span class="badge">works in <b>any</b> Claude Code project</span>
-      <span class="badge">built by <b>Thinkpool</b></span>
+      <span class="badge"><b>0</b> config</span><span class="badge"><b>MIT</b> licensed</span>
+      <span class="badge">works in <b>any</b> Claude Code project</span><span class="badge">built by <b>Thinkpool</b></span>
     </div>
   </div>
 </div>
@@ -140,10 +125,11 @@
 <div class="wrap" id="skills">
   <section style="padding-top:20px">
     <div class="eyebrow">The headliner</div>
-    <div class="hero-card">
-      <div class="ic">🎯</div>
+    <div class="hero-card rc" style="--a:var(--yellow)">
+      <span class="wake"></span><span class="wake w2"></span>
+      <i class="ic" data-lucide="crosshair"></i>
       <div>
-        <h3>heist <span class="tag hero">flagship</span></h3>
+        <h3>heist <span class="tag">flagship</span></h3>
         <p>Point it at any competitor — a name, a URL, or a GitHub repo — and it runs a full parallel research sweep, then hands you a <b>ranked "steal brief"</b>: exactly what to lift, what to leave, and why. A decision menu, not a wall of notes.</p>
         <div class="trig">trigger &nbsp;<b>heist cursor.com</b>&nbsp; · &nbsp;<b>heist github.com/foo/bar</b>&nbsp; · &nbsp;<b>heist Notion</b></div>
       </div>
@@ -151,20 +137,20 @@
 
     <div class="eyebrow">Discipline — the judgment agents lack</div>
     <div class="grid">
-      <div class="card"><div class="top"><span class="nm">diagnose-first</span><span class="cat d">verify</span></div><p>After a failed fix, <b>stop</b> and re-diagnose with fresh evidence — never ship the same guess twice.</p></div>
-      <div class="card"><div class="top"><span class="nm">root-cause-fix</span><span class="cat d">verify</span></div><p>Bug showing up in 2+ places? Read the whole data path and fix the <b>root once</b>, not each symptom.</p></div>
-      <div class="card"><div class="top"><span class="nm">verify-claims</span><span class="cat d">verify</span></div><p>Never say "done" or cite a number without runtime <b>evidence you produced</b>. Green build ≠ it runs.</p></div>
-      <div class="card"><div class="top"><span class="nm">verify-in-prod</span><span class="cat d">verify</span></div><p>Reported broken again? Pull the <b>real failing artifact</b> before the next patch — not a synthetic repro.</p></div>
-      <div class="card"><div class="top"><span class="nm">use-existing-scripts</span><span class="cat d">verify</span></div><p>Check for a tool that already does it <b>before</b> reinventing curl/poll/grep mechanics inline.</p></div>
-      <div class="card"><div class="top"><span class="nm">reland-reverted</span><span class="cat d">verify</span></div><p>Before re-landing reverted code, <b>name the bug</b> that caused the revert — don't re-introduce it.</p></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="stethoscope"></i><div class="nm">diagnose-first</div><p>After a failed fix, stop and re-diagnose with fresh evidence — never ship the same guess twice.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="waypoints"></i><div class="nm">root-cause-fix</div><p>Bug in 2+ places? Read the whole data path and fix the root once, not each symptom.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="shield-check"></i><div class="nm">verify-claims</div><p>Never say "done" or cite a number without runtime evidence you produced. Green build ≠ it runs.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="activity"></i><div class="nm">verify-in-prod</div><p>Reported broken again? Pull the real failing artifact before the next patch — not a synthetic repro.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="wrench"></i><div class="nm">use-existing-scripts</div><p>Check for a tool that already does it before reinventing curl/poll/grep mechanics inline.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="rotate-ccw"></i><div class="nm">reland-reverted</div><p>Before re-landing reverted code, name the bug that caused the revert — don't re-introduce it.</p><span class="cat">verify</span></div>
     </div>
 
-    <div class="eyebrow" style="margin-top:34px">Craft — measure, don't vibe</div>
+    <div class="eyebrow" style="margin-top:34px">Craft &amp; meta</div>
     <div class="grid">
-      <div class="card"><div class="top"><span class="nm">measure-first</span><span class="cat c">craft</span></div><p>On the 2nd CSS guess, <b>measure the pixels</b> — render, crop, or read the DOM. Then ship one real fix.</p></div>
-      <div class="card"><div class="top"><span class="nm">mockup-iterate</span><span class="cat c">craft</span></div><p>Render every design at <b>desktop AND mobile</b> by default. Mobile is never an afterthought.</p></div>
-      <div class="card"><div class="top"><span class="nm">forge</span><span class="cat m">meta</span></div><p>Re-engineer a vague request into a <b>sharp prompt</b> — task, constraints, output — before acting on it.</p></div>
-      <div class="card"><div class="top"><span class="nm">research-tool</span><span class="cat m">meta</span></div><p>Check your <b>curated index first</b>, then the web. The cheap prior before the expensive dig.</p></div>
+      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="ruler"></i><div class="nm">measure-first</div><p>On the 2nd CSS guess, measure the pixels — render, crop, or read the DOM. Then ship one real fix.</p><span class="cat">craft</span></div>
+      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="monitor-smartphone"></i><div class="nm">mockup-iterate</div><p>Render every design at desktop AND mobile by default. Mobile is never an afterthought.</p><span class="cat">craft</span></div>
+      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="hammer"></i><div class="nm">forge</div><p>Re-engineer a vague request into a sharp prompt — task, constraints, output — before acting.</p><span class="cat">meta</span></div>
+      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="library"></i><div class="nm">research-tool</div><p>Check your curated index first, then the web. The cheap prior before the expensive dig.</p><span class="cat">meta</span></div>
     </div>
   </section>
 </div>
@@ -189,5 +175,6 @@
   </footer>
 </div>
 
+<script>lucide.createIcons()</script>
 </body>
 </html>
