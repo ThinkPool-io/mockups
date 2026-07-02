@@ -22,19 +22,21 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     padding:30px 24px;text-align:center}
   /* digital background: accent glow + dot-matrix + line grid + edge vignette, faded top→bottom */
+  /* ambient: drop-point bloom + a static corner ripple + edge vignette */
   .card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background:
-      /* bright drop-point bloom */
-      radial-gradient(52% 40% at 50% -4%, color-mix(in srgb, var(--a) 30%, transparent), transparent 70%),
-      /* primary ripple — rings radiating from the top-center drop */
-      repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 15%, transparent) 0 1.5px, transparent 1.5px 30px),
-      /* secondary ripple from the corner — interference, so it's organic not a bullseye */
-      repeating-radial-gradient(circle at 90% 112%, color-mix(in srgb, var(--a) 9%, transparent) 0 1.4px, transparent 1.4px 35px),
-      /* edge vignette */
-      radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%);
-    /* ripples dissipate toward the far edge */
-    -webkit-mask:radial-gradient(120% 105% at 50% -4%, #000 6%, hsl(0 0% 0% / .25) 94%);
-            mask:radial-gradient(120% 105% at 50% -4%, #000 6%, hsl(0 0% 0% / .25) 94%)}
+      radial-gradient(52% 40% at 50% -4%, color-mix(in srgb, var(--a) 26%, transparent), transparent 70%),
+      repeating-radial-gradient(circle at 90% 112%, color-mix(in srgb, var(--a) 8%, transparent) 0 1.4px, transparent 1.4px 35px),
+      radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%)}
+  /* animated ripples — each wave expands from the drop point and dissipates; two staggered = continuous */
+  .wake{position:absolute;inset:0;z-index:0;pointer-events:none;transform-origin:50% -4%;
+    background:repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 16%, transparent) 0 1.5px, transparent 1.5px 30px);
+    -webkit-mask:radial-gradient(120% 112% at 50% -4%, #000 4%, transparent 82%);
+            mask:radial-gradient(120% 112% at 50% -4%, #000 4%, transparent 82%);
+    animation:wake 10s linear infinite}
+  .wake.w2{animation-delay:-5s}
+  @keyframes wake{0%{transform:scale(.7);opacity:0}18%{opacity:.9}100%{transform:scale(1.55);opacity:0}}
+  @media (prefers-reduced-motion:reduce){.wake{animation:none;opacity:.5;transform:scale(1)}.wake.w2{display:none}}
   /* film grain — kills banding, adds a digital tooth */
   .card::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
     background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E")}
@@ -49,17 +51,17 @@
 </style></head>
 <body>
   <div class="sheet">
-    <div class="card" style="--a:var(--yellow)"><i class="ico" data-lucide="crosshair"></i><div class="nm">heist</div><div class="tg">Point it at a rival. Get a ranked steal brief.</div><div class="pill">FLAGSHIP</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="stethoscope"></i><div class="nm">diagnose-first</div><div class="tg">Failed fix? Stop and re-diagnose.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="waypoints"></i><div class="nm">root-cause-fix</div><div class="tg">Fix the root once — not each symptom.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="shield-check"></i><div class="nm">verify-claims</div><div class="tg">No "done" without evidence you produced.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="activity"></i><div class="nm">verify-in-prod</div><div class="tg">Pull the real failing artifact first.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="wrench"></i><div class="nm">use-existing-scripts</div><div class="tg">Reuse the tool before reinventing it.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--cyan)"><i class="ico" data-lucide="rotate-ccw"></i><div class="nm">reland-reverted</div><div class="tg">Name the bug before you re-land it.</div><div class="pill">VERIFY</div></div>
-    <div class="card" style="--a:var(--pool)"><i class="ico" data-lucide="ruler"></i><div class="nm">measure-first</div><div class="tg">Measure the pixels before you guess.</div><div class="pill">CRAFT</div></div>
-    <div class="card" style="--a:var(--pool)"><i class="ico" data-lucide="monitor-smartphone"></i><div class="nm">mockup-iterate</div><div class="tg">Every design, desktop and mobile.</div><div class="pill">CRAFT</div></div>
-    <div class="card" style="--a:var(--pool)"><i class="ico" data-lucide="hammer"></i><div class="nm">forge</div><div class="tg">Sharpen the request before you act.</div><div class="pill">META</div></div>
-    <div class="card" style="--a:var(--pool)"><i class="ico" data-lucide="library"></i><div class="nm">research-tool</div><div class="tg">Check the index before the web.</div><div class="pill">META</div></div>
+    <div class="card" style="--a:var(--yellow)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="crosshair"></i><div class="nm">heist</div><div class="tg">Point it at a rival. Get a ranked steal brief.</div><div class="pill">FLAGSHIP</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="stethoscope"></i><div class="nm">diagnose-first</div><div class="tg">Failed fix? Stop and re-diagnose.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="waypoints"></i><div class="nm">root-cause-fix</div><div class="tg">Fix the root once — not each symptom.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="shield-check"></i><div class="nm">verify-claims</div><div class="tg">No "done" without evidence you produced.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="activity"></i><div class="nm">verify-in-prod</div><div class="tg">Pull the real failing artifact first.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="wrench"></i><div class="nm">use-existing-scripts</div><div class="tg">Reuse the tool before reinventing it.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="rotate-ccw"></i><div class="nm">reland-reverted</div><div class="tg">Name the bug before you re-land it.</div><div class="pill">VERIFY</div></div>
+    <div class="card" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="ruler"></i><div class="nm">measure-first</div><div class="tg">Measure the pixels before you guess.</div><div class="pill">CRAFT</div></div>
+    <div class="card" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="monitor-smartphone"></i><div class="nm">mockup-iterate</div><div class="tg">Every design, desktop and mobile.</div><div class="pill">CRAFT</div></div>
+    <div class="card" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="hammer"></i><div class="nm">forge</div><div class="tg">Sharpen the request before you act.</div><div class="pill">META</div></div>
+    <div class="card" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="library"></i><div class="nm">research-tool</div><div class="tg">Check the index before the web.</div><div class="pill">META</div></div>
   </div>
   <script>lucide.createIcons()</script>
 </body></html>
