@@ -24,13 +24,17 @@
   /* digital background: accent glow + dot-matrix + line grid + edge vignette, faded top→bottom */
   .card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(72% 52% at 50% -8%, color-mix(in srgb, var(--a) 24%, transparent), transparent 66%),
-      radial-gradient(circle at center, hsl(200 30% 74% / .06) 1px, transparent 1.7px) 0 0/23px 23px,
-      repeating-linear-gradient(0deg, transparent 0 45px, hsl(200 22% 70% / .022) 45px 46px),
-      repeating-linear-gradient(90deg, transparent 0 45px, hsl(200 22% 70% / .022) 45px 46px),
-      radial-gradient(118% 96% at 50% 34%, transparent 56%, hsl(212 16% 5% / .55) 100%);
-    -webkit-mask:radial-gradient(125% 105% at 50% -6%, #000 42%, hsl(0 0% 0% / .4) 100%);
-            mask:radial-gradient(125% 105% at 50% -6%, #000 42%, hsl(0 0% 0% / .4) 100%)}
+      /* bright drop-point bloom */
+      radial-gradient(52% 40% at 50% -4%, color-mix(in srgb, var(--a) 30%, transparent), transparent 70%),
+      /* primary ripple — rings radiating from the top-center drop */
+      repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 15%, transparent) 0 1.5px, transparent 1.5px 30px),
+      /* secondary ripple from the corner — interference, so it's organic not a bullseye */
+      repeating-radial-gradient(circle at 90% 112%, color-mix(in srgb, var(--a) 9%, transparent) 0 1.4px, transparent 1.4px 35px),
+      /* edge vignette */
+      radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%);
+    /* ripples dissipate toward the far edge */
+    -webkit-mask:radial-gradient(120% 105% at 50% -4%, #000 6%, hsl(0 0% 0% / .25) 94%);
+            mask:radial-gradient(120% 105% at 50% -4%, #000 6%, hsl(0 0% 0% / .25) 94%)}
   /* film grain — kills banding, adds a digital tooth */
   .card::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;
     background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='100%25'%20height='100%25'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E")}
