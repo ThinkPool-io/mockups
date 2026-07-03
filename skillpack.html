@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Thinkpool Skillpack — discipline for coding agents</title>
+<title>Whetstone — sharpen your coding agent</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
   :root{
-    --bg:hsl(212 9% 9%); --surface:hsl(212 8% 14%); --surface2:hsl(212 8% 18%); --border:hsl(212 7% 21%);
+    --bg:hsl(213 22% 4%); --surface:hsl(213 13% 9%); --surface2:hsl(213 12% 13%); --border:hsl(213 9% 16%);
     --pool:hsl(212 45% 62%); --cyan:hsl(190 70% 57%); --yellow:hsl(45 74% 62%);
     --text:hsl(212 14% 95%); --muted:hsl(212 10% 60%); --faint:hsl(212 9% 42%);
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -16,7 +16,7 @@
   html{scroll-behavior:smooth}
   body{background:var(--bg); color:var(--text);
     font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
-    background-image:radial-gradient(60% 60% at 50% -10%, hsl(190 70% 57% / .08), transparent 70%);background-repeat:no-repeat}
+    background-image:radial-gradient(58% 55% at 50% -12%, hsl(190 70% 57% / .11), transparent 68%);background-repeat:no-repeat}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
   nav{display:flex;align-items:center;justify-content:space-between;height:60px;border-bottom:1px solid var(--border)}
@@ -52,19 +52,8 @@
   .rc{position:relative;overflow:hidden;border:1px solid var(--border);background:var(--surface);
     box-shadow:inset 0 1px 0 color-mix(in srgb, var(--a) 18%, transparent)}
   .rc::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:
-      radial-gradient(60% 45% at 50% -6%, color-mix(in srgb, var(--a) 24%, transparent), transparent 70%),
-      repeating-radial-gradient(circle at 88% 114%, color-mix(in srgb, var(--a) 8%, transparent) 0 1.3px, transparent 1.3px 32px),
-      radial-gradient(120% 96% at 50% 36%, transparent 54%, hsl(212 16% 5% / .5) 100%)}
-  .wake{position:absolute;inset:0;pointer-events:none;transform-origin:50% -4%;
-    background:repeating-radial-gradient(circle at 50% -4%, color-mix(in srgb, var(--a) 18%, transparent) 0 1.7px, transparent 1.7px 26px);
-    -webkit-mask:radial-gradient(120% 115% at 50% -4%, #000 4%, transparent 80%);
-            mask:radial-gradient(120% 115% at 50% -4%, #000 4%, transparent 80%);
-    animation:wake 8s linear infinite}
-  .wake.w2{animation-delay:-4s}
-  @keyframes wake{0%{transform:scale(.6);opacity:0}15%{opacity:1}100%{transform:scale(1.7);opacity:0}}
-  @media (prefers-reduced-motion:reduce){.wake{animation:none;opacity:.5;transform:scale(1)}.wake.w2{display:none}}
-  .rc>:not(.wake){position:relative;z-index:1}
+    background:radial-gradient(70% 45% at 50% -8%, color-mix(in srgb, var(--a) 11%, transparent), transparent 72%)}
+  .rc>*{position:relative;z-index:1}
 
   /* hero (heist) card */
   .hero-card{border-radius:16px;padding:26px;display:flex;gap:22px;align-items:flex-start;margin-bottom:30px}
@@ -104,17 +93,17 @@
 
 <div class="wrap">
   <nav>
-    <div class="brand"><span class="logo">P</span> Thinkpool <span style="color:var(--muted);font-weight:500">Skillpack</span></div>
-    <div class="nav-r"><a href="#skills">Skills</a><a href="#install">Install</a><a class="ghbtn" href="#">★ Star on GitHub</a></div>
+    <div class="brand"><span class="logo">▟</span> Whetstone</div>
+    <div class="nav-r"><a href="#skills">Skills</a><a href="#install">Install</a><a class="ghbtn" href="https://github.com/UseThinkPool/whetstone">★ Star on GitHub</a></div>
   </nav>
 </div>
 
 <div class="wrap">
   <div class="hero">
-    <div class="kick"><span class="dot"></span> Free &amp; open · MIT · 11 skills</div>
+    <div class="kick"><span class="dot"></span> Free &amp; open · MIT · 13 skills</div>
     <h1>The discipline a senior engineer has —<br><span class="g">that your coding agent skips by default.</span></h1>
     <p class="sub">A free pack of <b>Claude Code skills</b> that make an agent verify before it claims, diagnose before it guesses, and fix the root instead of the symptom. Drop them in and your agent stops cutting corners.</p>
-    <div class="install"><span class="p">$</span><span class="c">npx thinkpool-skillpack add</span><span class="cp">⧉ copy</span></div>
+    <div class="install"><span class="p">$</span><span class="c">npx whetstone</span><span class="cp">⧉ copy</span></div>
     <div class="badges">
       <span class="badge"><b>0</b> config</span><span class="badge"><b>MIT</b> licensed</span>
       <span class="badge">works in <b>any</b> Claude Code project</span><span class="badge">built by <b>Thinkpool</b></span>
@@ -126,8 +115,7 @@
   <section style="padding-top:20px">
     <div class="eyebrow">The headliner</div>
     <div class="hero-card rc" style="--a:var(--yellow)">
-      <span class="wake"></span><span class="wake w2"></span>
-      <i class="ic" data-lucide="crosshair"></i>
+            <i class="ic" data-lucide="crosshair"></i>
       <div>
         <h3>heist <span class="tag">flagship</span></h3>
         <p>Point it at any competitor — a name, a URL, or a GitHub repo — and it runs a full parallel research sweep, then hands you a <b>ranked "steal brief"</b>: exactly what to lift, what to leave, and why. A decision menu, not a wall of notes.</p>
@@ -135,22 +123,28 @@
       </div>
     </div>
 
-    <div class="eyebrow">Discipline — the judgment agents lack</div>
+    <div class="eyebrow">Verify — the judgment agents lack</div>
     <div class="grid">
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="stethoscope"></i><div class="nm">diagnose-first</div><p>After a failed fix, stop and re-diagnose with fresh evidence — never ship the same guess twice.</p><span class="cat">verify</span></div>
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="waypoints"></i><div class="nm">root-cause-fix</div><p>Bug in 2+ places? Read the whole data path and fix the root once, not each symptom.</p><span class="cat">verify</span></div>
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="shield-check"></i><div class="nm">verify-claims</div><p>Never say "done" or cite a number without runtime evidence you produced. Green build ≠ it runs.</p><span class="cat">verify</span></div>
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="activity"></i><div class="nm">verify-in-prod</div><p>Reported broken again? Pull the real failing artifact before the next patch — not a synthetic repro.</p><span class="cat">verify</span></div>
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="wrench"></i><div class="nm">use-existing-scripts</div><p>Check for a tool that already does it before reinventing curl/poll/grep mechanics inline.</p><span class="cat">verify</span></div>
-      <div class="card rc" style="--a:var(--cyan)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="rotate-ccw"></i><div class="nm">reland-reverted</div><p>Before re-landing reverted code, name the bug that caused the revert — don't re-introduce it.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><i class="ico" data-lucide="stethoscope"></i><div class="nm">diagnose-first</div><p>After a failed fix, stop and re-diagnose with fresh evidence — and if it only breaks in prod, pull the real failing artifact. Never ship the same guess twice.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><i class="ico" data-lucide="waypoints"></i><div class="nm">root-cause-fix</div><p>Bug in 2+ places? Read the whole data path and fix the root once, not each symptom.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><i class="ico" data-lucide="shield-check"></i><div class="nm">verify-claims</div><p>Never say "done" or cite a number without runtime evidence you produced. Green build ≠ it runs.</p><span class="cat">verify</span></div>
+      <div class="card rc" style="--a:var(--cyan)"><i class="ico" data-lucide="rotate-ccw"></i><div class="nm">reland-reverted</div><p>Before re-landing reverted code, name the bug that caused the revert — don't re-introduce it.</p><span class="cat">verify</span></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:34px">Restraint — write less, touch less</div>
+    <div class="grid">
+      <div class="card rc" style="--a:var(--yellow)"><i class="ico" data-lucide="minimize-2"></i><div class="nm">simplicity-first</div><p>The minimum code that solves the actual problem. Walk the ladder: does it need to exist → does the codebase / stdlib / platform already do it → can it be one line?</p><span class="cat">restraint</span></div>
+      <div class="card rc" style="--a:var(--yellow)"><i class="ico" data-lucide="scissors"></i><div class="nm">surgical-changes</div><p>Edit only what the task requires. No drive-by refactors, no "improving" adjacent code, no renames in passing. Every hunk traces to the ask.</p><span class="cat">restraint</span></div>
     </div>
 
     <div class="eyebrow" style="margin-top:34px">Craft &amp; meta</div>
     <div class="grid">
-      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="ruler"></i><div class="nm">measure-first</div><p>On the 2nd CSS guess, measure the pixels — render, crop, or read the DOM. Then ship one real fix.</p><span class="cat">craft</span></div>
-      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="monitor-smartphone"></i><div class="nm">mockup-iterate</div><p>Render every design at desktop AND mobile by default. Mobile is never an afterthought.</p><span class="cat">craft</span></div>
-      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="hammer"></i><div class="nm">forge</div><p>Re-engineer a vague request into a sharp prompt — task, constraints, output — before acting.</p><span class="cat">meta</span></div>
-      <div class="card rc" style="--a:var(--pool)"><span class="wake"></span><span class="wake w2"></span><i class="ico" data-lucide="library"></i><div class="nm">research-tool</div><p>Check your curated index first, then the web. The cheap prior before the expensive dig.</p><span class="cat">meta</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="ruler"></i><div class="nm">measure-first</div><p>On the 2nd CSS guess, measure the pixels — render, crop, or read the DOM. Then ship one real fix.</p><span class="cat">craft</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="monitor-smartphone"></i><div class="nm">mockup-iterate</div><p>Render every design at desktop AND mobile by default. Mobile is never an afterthought.</p><span class="cat">craft</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="wrench"></i><div class="nm">use-existing-scripts</div><p>Check for a tool that already does it before reinventing curl/poll/grep mechanics inline.</p><span class="cat">craft</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="hammer"></i><div class="nm">forge</div><p>Re-engineer a vague request into a sharp prompt — task, constraints, output — before acting.</p><span class="cat">meta</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="library"></i><div class="nm">research-tool</div><p>Check your curated index first, then the web. The cheap prior before the expensive dig.</p><span class="cat">meta</span></div>
+      <div class="card rc" style="--a:var(--pool)"><i class="ico" data-lucide="sparkles"></i><div class="nm">compound</div><p>When a correction or a hard-won fix teaches you something, mint it as a new skill on the spot. Lessons in the chat die; skills compound.</p><span class="cat">meta</span></div>
     </div>
   </section>
 </div>
@@ -161,7 +155,7 @@
     <div class="h2">Three steps, zero config</div>
     <p class="lead">Skills are just markdown + scripts in the open <span style="font-family:var(--mono);color:var(--cyan)">agentskills.io</span> format. Claude reads them automatically and invokes them by description — or by their trigger word.</p>
     <div class="steps">
-      <div class="step"><div class="n">01</div><h4>Install</h4><p>Run <code>npx thinkpool-skillpack add</code> — or clone into <code>.claude/skills/</code>.</p></div>
+      <div class="step"><div class="n">01</div><h4>Install</h4><p>Run <code>npx whetstone</code> — or <code>npx whetstone --global</code> for every project.</p></div>
       <div class="step"><div class="n">02</div><h4>Nothing to wire</h4><p>Claude auto-loads each skill at session start and reaches for it when it fits the task.</p></div>
       <div class="step"><div class="n">03</div><h4>Or say the word</h4><p>Hotword skills fire on trigger: <code>heist stripe.com</code>, <code>forge add caching</code>.</p></div>
     </div>
@@ -170,8 +164,8 @@
 
 <div class="wrap">
   <footer>
-    <p><span class="mk">Thinkpool Skillpack</span> — free &amp; open, MIT licensed.</p>
-    <p style="margin-top:6px">Built by <a href="#">Thinkpool</a>, where two people and their agents share one room. · <a href="#">GitHub</a> · <a href="#">Docs</a></p>
+    <p><span class="mk">Whetstone</span> — free &amp; open, MIT licensed.</p>
+    <p style="margin-top:6px">Built by <a href="https://thinkpool.io">Thinkpool</a>, where two people and their agents share one room. · <a href="https://github.com/UseThinkPool/whetstone">GitHub</a> · <a href="https://www.npmjs.com/package/whetstone">npm</a></p>
   </footer>
 </div>
 
