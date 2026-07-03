@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool — water sounds v3 (softer)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 14% 6%); --surface:hsl(212 12% 9%); --raised:hsl(212 12% 11%);
+    --line:hsl(212 8% 18%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(210 14% 95%); --muted:hsl(210 14% 78%); --faint:hsl(210 12% 62%);
+    --pool:hsl(202 56% 48%); --pool-hi:hsl(200 64% 60%);
+    --font-display:"Newsreader",Georgia,serif;
+    --font-sans:"Hanken Grotesk",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);
+    min-height:100vh;padding:38px 16px 90px;display:flex;flex-direction:column;align-items:center}
+  .mark{width:46px;height:46px;margin-bottom:14px}
+  h1{font-family:var(--font-display);font-size:28px;font-weight:400;letter-spacing:-0.01em;text-align:center}
+  .sub{color:var(--faint);font-size:14px;text-align:center;max-width:560px;margin:10px 0 4px;line-height:1.5}
+  .note{color:var(--pool-hi);font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em;text-align:center;margin-bottom:26px}
+  .sec{width:100%;max-width:680px}
+  .sechead{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--faint);margin:30px 0 14px;display:flex;align-items:center;gap:10px}
+  .sechead::after{content:'';flex:1;height:1px;background:var(--line)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .card .meta{flex:1;min-width:170px}
+  .card .name{font-size:15px;font-weight:600;color:var(--ink)}
+  .card .desc{font-size:12.5px;color:var(--faint);margin-top:2px;line-height:1.4}
+  .btns{display:flex;gap:8px;flex-shrink:0}
+  .play{height:48px;border-radius:999px;border:1px solid var(--line-strong);
+    background:var(--raised);color:var(--pool-hi);display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    cursor:pointer;padding:0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease}
+  .play:hover{border-color:var(--pool);background:hsl(212 14% 13%);transform:translateY(-1px)}
+  .play:active{transform:scale(.95)}
+  .play svg{width:16px;height:16px;flex-shrink:0}
+  .play.inv{color:var(--muted)}
+  .current{border-style:dashed;border-color:color-mix(in oklab,var(--pool) 45%,var(--line))}
+  .curtag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--pool-hi);border:1px solid color-mix(in oklab,var(--pool) 40%,transparent);border-radius:999px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .hint{color:var(--faint);font-size:12px;text-align:center;margin:26px auto 0;max-width:520px;line-height:1.5}
+  .missing{color:var(--faint);font-family:var(--font-mono);font-size:12px;padding:14px 16px;border:1px dashed var(--line);border-radius:14px;margin-bottom:10px}
+  @media (max-width:430px){
+    .card{padding:14px}
+    .card .meta{min-width:100%}
+    .btns{width:100%}
+    .btns .play{flex:1}
+  }
+</style>
+</head>
+<body>
+  <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="512" height="512" rx="112" fill="hsl(212 18% 10%)"/>
+    <circle cx="256" cy="256" r="172" fill="none" stroke="hsl(200 64% 60%)" stroke-width="40"/>
+    <g transform="translate(107.2 107.2) scale(12.4)"><path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="hsl(200 64% 60%)"/></g>
+  </svg>
+  <h1>Water sounds — v3: softer</h1>
+  <p class="sub">Ten different synthesis characters this time — not ten nudges of one drop. All pool-water, all quieter than the current sound.</p>
+  <p class="note">v3 · softer master · slower attacks · lower registers</p>
+
+  <div class="sec">
+    <div class="sechead">Current — for comparison</div>
+    <div id="reference"></div>
+
+    <div class="sechead">Ten candidates</div>
+    <div id="candidates"></div>
+
+    <p class="hint">Synthesised, not heard by me. Say "even softer / lower / shorter / more body" about any one and I'll nudge it.</p>
+  </div>
+
+<script>
+// ── Thinkpool notification sounds — v3 audition, batch A ──────────────
+// Five genuinely distinct water-drop synthesis voices, each SOFTER than the
+// shipped "Velvet" drop (which peaked ~0.40 gain on a 400→520Hz sine).
+//
+// Contract each voice honours:
+//   c    = a running AudioContext
+//   dest = the DRY master GainNode (never touch c.destination)
+//   wet  = a send bus into a 0.42s decaying-noise convolver (the ripple tail);
+//          voices push a little signal there through their own GainNode
+//   t0   = absolute AudioContext start time; everything is scheduled off it
+//          and every source is .stop()'d.
+//   play()       = one soft drop.
+//   playInvite() = a gentle two-event variant (2nd event higher and/or quieter).
+//
+// Softness ceiling held everywhere: peak gain 0.20–0.32 per event, attack
+// ramps ≥20ms (no onset tick), higher-register voices sit at whisper gain
+// ≤0.22, audible length ≤0.45s, and every gain automation ramps between
+// 0.0001 and its target — never to a literal 0 (exponentialRamp can't).
+window.CANDIDATES_A = (() => {
+  const FLOOR = 0.0001
+
+  // small wet send off any node, at a chosen amount
+  function tail(c, node, wet, amt) {
+    const ws = c.createGain()
+    ws.gain.value = amt
+    node.connect(ws).connect(wet)
+  }
+
+  // ── Voice 1 · Bloop ─────────────────────────────────────────────
+  // The classic droplet. Pitch dips DOWN then springs back UP
+  // (380→300→460 · oct), rounded sine, low gain, faint tail.
+  function bloop(c, dest, wet, t, peak, oct, dur) {
+    const m = oct
+    const osc = c.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(380 * m, t)
+    osc.frequency.exponentialRampToValueAtTime(300 * m, t + dur * 0.28)
+    osc.frequency.exponentialRampToValueAtTime(460 * m, t + dur * 0.66)
+    const g = c.createGain()
+    g.gain.setValueAtTime(FLOOR, t)
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.024)   // 24ms soft attack
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + dur)
+    const lp = c.createBiquadFilter()
+    lp.type = 'lowpass'; lp.frequency.value = 1500 * m; lp.Q.value = 0.4
+    osc.connect(g).connect(lp).connect(dest)
+    tail(c, lp, wet, 0.08)
+    osc.start(t); osc.stop(t + dur + 0.05)
+  }
+
+  // ── Voice 2 · Undertow ──────────────────────────────────────────
+  // Sub register (~250Hz), heavily lowpassed so it reads as heard
+  // THROUGH water — a soft thump, barely any tail.
+  function undertow(c, dest, wet, t, peak, oct, dur) {
+    const m = oct
+    const osc = c.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(250 * m, t)
+    osc.frequency.exponentialRampToValueAtTime(214 * m, t + dur * 0.55)  // settle down = thump
+    const g = c.createGain()
+    g.gain.setValueAtTime(FLOOR, t)
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.028)   // 28ms attack, rounded onset
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + dur)
+    const lp = c.createBiquadFilter()
+    lp.type = 'lowpass'; lp.frequency.value = 420 * m; lp.Q.value = 0.7  // muffled, submerged
+    osc.connect(g).connect(lp).connect(dest)
+    tail(c, lp, wet, 0.04)   // minimal ripple
+    osc.start(t); osc.stop(t + dur + 0.05)
+  }
+
+  // ── Voice 3 · Plip ──────────────────────────────────────────────
+  // NO oscillator. A shaped bandpass-filtered noise burst sculpted like
+  // a tiny droplet hitting the surface — dry, small, polite. The band
+  // sweeps up a touch (the surface-tension "tick" without a click).
+  function plip(c, dest, wet, t, peak, center, dur) {
+    const len = Math.floor(c.sampleRate * dur)
+    const nb = c.createBuffer(1, len, c.sampleRate)
+    const nd = nb.getChannelData(0)
+    for (let i = 0; i < len; i++) nd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2)
+    const ns = c.createBufferSource(); ns.buffer = nb
+    const bp = c.createBiquadFilter()
+    bp.type = 'bandpass'
+    bp.frequency.setValueAtTime(center, t)
+    bp.frequency.exponentialRampToValueAtTime(center * 1.5, t + dur * 0.6)
+    bp.Q.value = 6
+    const g = c.createGain()
+    g.gain.setValueAtTime(FLOOR, t)
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.022)   // 22ms attack — never percussive
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + dur)
+    ns.connect(bp).connect(g).connect(dest)
+    tail(c, g, wet, 0.05)
+    ns.start(t); ns.stop(t + dur + 0.02)
+  }
+
+  // ── Voice 4 · Ripple ────────────────────────────────────────────
+  // A mid drop whose tail undulates: a slow sine LFO modulates a gain
+  // stage, so the body pulses ~twice as it fades — expanding rings.
+  function ripple(c, dest, wet, t, peak, oct, dur) {
+    const m = oct
+    const osc = c.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(400 * m, t)
+    osc.frequency.exponentialRampToValueAtTime(500 * m, t + dur * 0.45)
+    const g = c.createGain()
+    g.gain.setValueAtTime(FLOOR, t)
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.026)   // 26ms attack
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + dur)
+    // undulation stage: base level modulated by a slow LFO → ~2 gentle pulses
+    const mod = c.createGain()
+    mod.gain.value = 0.55
+    const lfo = c.createOscillator()
+    lfo.type = 'sine'
+    lfo.frequency.value = 2 / dur          // two crests across the tail
+    const depth = c.createGain()
+    depth.gain.value = 0.42                // rides 0.13 … 0.97, never below 0
+    lfo.connect(depth).connect(mod.gain)
+    const lp = c.createBiquadFilter()
+    lp.type = 'lowpass'; lp.frequency.value = 1600 * m; lp.Q.value = 0.3
+    osc.connect(g).connect(mod).connect(lp).connect(dest)
+    tail(c, lp, wet, 0.12)                 // rings carry into the reverb
+    osc.start(t); osc.stop(t + dur + 0.05)
+    lfo.start(t); lfo.stop(t + dur + 0.05)
+  }
+
+  // ── Voice 5 · Two-bounce ────────────────────────────────────────
+  // A soft drop plus a much quieter, slightly higher echo drop ~120ms
+  // later — a droplet skipping once across the surface.
+  function tbDrop(c, dest, wet, t, peak, oct, dur) {
+    const m = oct
+    const osc = c.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(420 * m, t)
+    osc.frequency.exponentialRampToValueAtTime(520 * m, t + dur * 0.5)
+    const g = c.createGain()
+    g.gain.setValueAtTime(FLOOR, t)
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.022)   // 22ms attack
+    g.gain.exponentialRampToValueAtTime(FLOOR, t + dur)
+    const lp = c.createBiquadFilter()
+    lp.type = 'lowpass'; lp.frequency.value = 1600 * m; lp.Q.value = 0.35
+    osc.connect(g).connect(lp).connect(dest)
+    tail(c, lp, wet, 0.07)
+    osc.start(t); osc.stop(t + dur + 0.05)
+  }
+
+  return [
+    {
+      name: 'Bloop',
+      desc: 'The classic droplet — pitch dips then springs back up, rounded sine, low and round.',
+      play(c, dest, wet, t0) {
+        bloop(c, dest, wet, t0, 0.26, 1.0, 0.30)
+      },
+      playInvite(c, dest, wet, t0) {
+        bloop(c, dest, wet, t0, 0.26, 1.0, 0.30)
+        bloop(c, dest, wet, t0 + 0.18, 0.20, 1.14, 0.22)  // higher + quieter echo
+      },
+    },
+    {
+      name: 'Undertow',
+      desc: 'A sub-register thump heard through water — heavily muffled, almost no tail.',
+      play(c, dest, wet, t0) {
+        undertow(c, dest, wet, t0, 0.30, 1.0, 0.28)
+      },
+      playInvite(c, dest, wet, t0) {
+        undertow(c, dest, wet, t0, 0.30, 1.0, 0.28)
+        undertow(c, dest, wet, t0 + 0.18, 0.22, 1.18, 0.24)
+      },
+    },
+    {
+      name: 'Plip',
+      desc: 'No tone at all — a tiny shaped noise burst, like a single drop touching the surface. Dry and polite.',
+      play(c, dest, wet, t0) {
+        plip(c, dest, wet, t0, 0.20, 620, 0.16)
+      },
+      playInvite(c, dest, wet, t0) {
+        plip(c, dest, wet, t0, 0.20, 620, 0.16)
+        plip(c, dest, wet, t0 + 0.16, 0.16, 744, 0.15)    // higher + quieter
+      },
+    },
+    {
+      name: 'Ripple',
+      desc: 'A mid drop whose tail pulses twice as it fades — expanding rings on still water.',
+      play(c, dest, wet, t0) {
+        ripple(c, dest, wet, t0, 0.30, 1.0, 0.42)
+      },
+      playInvite(c, dest, wet, t0) {
+        ripple(c, dest, wet, t0, 0.28, 1.0, 0.24)
+        ripple(c, dest, wet, t0 + 0.18, 0.22, 1.14, 0.24) // higher + quieter second ring
+      },
+    },
+    {
+      name: 'Two-bounce',
+      desc: 'A soft drop with a quieter, higher echo just after — a droplet skipping once.',
+      play(c, dest, wet, t0) {
+        tbDrop(c, dest, wet, t0, 0.28, 1.0, 0.20)
+        tbDrop(c, dest, wet, t0 + 0.12, 0.17, 1.12, 0.18) // the skip
+      },
+      playInvite(c, dest, wet, t0) {
+        // graceful 3-event cascade, whisper-quiet the whole way down
+        tbDrop(c, dest, wet, t0, 0.22, 1.0, 0.18)
+        tbDrop(c, dest, wet, t0 + 0.11, 0.16, 1.10, 0.17)
+        tbDrop(c, dest, wet, t0 + 0.22, 0.12, 1.22, 0.16)
+      },
+    },
+  ]
+})();
+
+window.CANDIDATES_B = (() => {
+  // ── shared private helpers (scoped — nothing leaks but CANDIDATES_B) ──
+
+  // Envelope'd oscillator: slow attack (>=20ms), exponential decay, lowpass rounding.
+  function tone(c, dest, wet, t, o){
+    const { f0, f1=f0, dur=0.3, type='sine', gain=0.24, attack=0.025,
+            glide='chirp', lpMul=3.0, wetAmt=0.06 } = o;
+    const osc = c.createOscillator(); osc.type = type;
+    osc.frequency.setValueAtTime(f0, t);
+    if (f1 !== f0) {
+      // 'chirp' = fast bend over the first half; 'glide' = one slow sweep across the whole sound
+      const end = glide === 'glide' ? t + dur : t + dur * 0.5;
+      osc.frequency.exponentialRampToValueAtTime(f1, end);
+    }
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = Math.max(f0, f1) * lpMul; lp.Q.value = 0.3;
+    osc.connect(g).connect(lp);
+    lp.connect(dest);
+    if (wetAmt > 0) { const ws = c.createGain(); ws.gain.value = wetAmt; lp.connect(ws).connect(wet); }
+    osc.start(t); osc.stop(t + dur + 0.05);
+  }
+
+  // ── 6. Bell-drop — fundamental + soft 2.7× inharmonic partial: glass-of-water tink, low + warm ──
+  function bellDrop(c, dest, wet, t, base, gain){
+    tone(c, dest, wet, t, { f0: base, f1: base * 1.06, dur: 0.42, gain, attack: 0.02, lpMul: 2.6, wetAmt: 0.07 });
+    // the partial: much quieter, decays twice as fast — the "glass" shimmer
+    tone(c, dest, wet, t, { f0: base * 2.7, f1: base * 2.7, dur: 0.16, gain: gain * 0.24, attack: 0.02, lpMul: 1.4, wetAmt: 0.05 });
+  }
+
+  // ── 7. Meniscus — one long slow upward glide, no step chirp: surface tension releasing ──
+  function meniscus(c, dest, wet, t, f0, f1, gain){
+    tone(c, dest, wet, t, { f0, f1, dur: 0.4, gain, attack: 0.04, glide: 'glide', lpMul: 2.4, wetAmt: 0.06 });
+  }
+
+  // ── 8. Condensation — featherweight, short, higher but whisper-quiet: a drip off a cold glass ──
+  function condensation(c, dest, wet, t, f0, f1, gain){
+    tone(c, dest, wet, t, { f0, f1, dur: 0.13, gain, attack: 0.02, lpMul: 2.0, wetAmt: 0.04 });
+  }
+
+  // ── 9. Still-er — the barely-there extreme: lowest energy of the ten, near-dry ──
+  function stiller(c, dest, wet, t, f0, f1, gain){
+    tone(c, dest, wet, t, { f0, f1, dur: 0.18, gain, attack: 0.025, lpMul: 2.2, wetAmt: 0.02 });
+  }
+
+  // ── 10. Deep pool — low triangle body, faint wet, longest decay: a drop into a deep basin ──
+  function deepPool(c, dest, wet, t, f0, f1, gain){
+    const osc = c.createOscillator(); osc.type = 'triangle';
+    osc.frequency.setValueAtTime(f0, t);
+    osc.frequency.exponentialRampToValueAtTime(f1, t + 0.2);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);   // long, quiet ring
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 900; lp.Q.value = 0.4;  // triangle harmonics tamed hard
+    osc.connect(g).connect(lp);
+    lp.connect(dest);
+    const ws = c.createGain(); ws.gain.value = 0.12; lp.connect(ws).connect(wet);
+    osc.start(t); osc.stop(t + 0.6);
+  }
+
+  return [
+    {
+      name: 'Bell-drop',
+      desc: 'Two soft partials — a glass-of-water tink, but low, warm and quiet.',
+      play(c, dest, wet, t0){ bellDrop(c, dest, wet, t0, 380, 0.26); },
+      playInvite(c, dest, wet, t0){
+        bellDrop(c, dest, wet, t0, 360, 0.22);
+        bellDrop(c, dest, wet, t0 + 0.2, 430, 0.26);
+      },
+    },
+    {
+      name: 'Meniscus',
+      desc: 'One long slow upward glide — surface tension releasing. No pluck at all.',
+      play(c, dest, wet, t0){ meniscus(c, dest, wet, t0, 300, 470, 0.26); },
+      playInvite(c, dest, wet, t0){
+        meniscus(c, dest, wet, t0, 280, 420, 0.22);
+        meniscus(c, dest, wet, t0 + 0.22, 340, 520, 0.26);
+      },
+    },
+    {
+      name: 'Condensation',
+      desc: 'Featherweight ~130ms drip off a cold glass — higher, but at whisper gain.',
+      play(c, dest, wet, t0){ condensation(c, dest, wet, t0, 640, 760, 0.18); },
+      playInvite(c, dest, wet, t0){
+        condensation(c, dest, wet, t0, 600, 700, 0.15);
+        condensation(c, dest, wet, t0 + 0.16, 680, 800, 0.18);
+      },
+    },
+    {
+      name: 'Still-er',
+      desc: 'The barely-there extreme — lowest energy of the ten, near-dry, gone in 180ms.',
+      play(c, dest, wet, t0){ stiller(c, dest, wet, t0, 330, 390, 0.20); },
+      playInvite(c, dest, wet, t0){
+        stiller(c, dest, wet, t0, 315, 370, 0.17);
+        stiller(c, dest, wet, t0 + 0.17, 375, 440, 0.20);
+      },
+    },
+    {
+      name: 'Deep pool',
+      desc: 'A low triangle body dropped into a deep basin — longest ring, quietest per millisecond.',
+      play(c, dest, wet, t0){ deepPool(c, dest, wet, t0, 280, 330, 0.26); },
+      playInvite(c, dest, wet, t0){
+        deepPool(c, dest, wet, t0, 265, 310, 0.22);
+        deepPool(c, dest, wet, t0 + 0.22, 320, 380, 0.26);
+      },
+    },
+  ];
+})();
+
+
+let ctx;
+function ac(){ return ctx || (ctx = new (window.AudioContext||window.webkitAudioContext)()); }
+
+// Same 0.42s decaying-noise convolver as the shipped sound.
+let _verb;
+function reverb(c){
+  if(_verb) return _verb;
+  const len = Math.floor(c.sampleRate * 0.42);
+  const buf = c.createBuffer(2, len, c.sampleRate);
+  for(let ch=0; ch<2; ch++){
+    const d = buf.getChannelData(ch);
+    for(let i=0;i<len;i++){ d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 4.5); }
+  }
+  const cv = c.createConvolver(); cv.buffer = buf;
+  _verb = cv; return cv;
+}
+
+// Two loudness profiles: the reference plays at PROD loudness (0.62/0.55)
+// so "softer" is audible against the incumbent; candidates get 0.45/0.5.
+function buses(masterGain, wetGain){
+  const c = ac();
+  if(c.state==='suspended') c.resume();
+  const master = c.createGain(); master.gain.value = masterGain; master.connect(c.destination);
+  const wet = c.createGain(); wet.gain.value = wetGain; wet.connect(reverb(c)).connect(master);
+  return { c, master, wet };
+}
+
+// ── The shipped Velvet voice, verbatim from src/lib/sounds.js ──
+function velvetDrop(c, dest, wet, t, o){
+  const { f0, f1, dur=0.22, gain=0.42, wetAmt=0.12, click=0.012 } = o;
+  const osc = c.createOscillator(); osc.type='sine';
+  osc.frequency.setValueAtTime(f0, t);
+  osc.frequency.exponentialRampToValueAtTime(f1, t + dur*0.5);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.014);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  const lp = c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=f1*3.2; lp.Q.value=0.3;
+  osc.connect(g).connect(lp);
+  lp.connect(dest);
+  const ws = c.createGain(); ws.gain.value = wetAmt; lp.connect(ws).connect(wet);
+  osc.start(t); osc.stop(t + dur + 0.05);
+}
+function playVelvetMessage(){
+  const {c,master,wet} = buses(0.62, 0.55);
+  velvetDrop(c, master, wet, c.currentTime+0.02, {f0:400,f1:520,dur:0.26,gain:0.40,wetAmt:0.08,click:0});
+}
+function playVelvetInvite(){
+  const {c,master,wet} = buses(0.62, 0.55);
+  const t0 = c.currentTime+0.02;
+  velvetDrop(c, master, wet, t0,      {f0:380,f1:490,dur:0.24,gain:0.34,wetAmt:0.08,click:0});
+  velvetDrop(c, master, wet, t0+0.18, {f0:480,f1:620,dur:0.26,gain:0.40,wetAmt:0.09,click:0});
+}
+
+function playCand(entry){
+  try{ const {c,master,wet} = buses(0.45, 0.5); entry.play(c, master, wet, c.currentTime+0.02); }
+  catch(e){ console.error('candidate play failed:', entry && entry.name, e); }
+}
+function playCandInvite(entry){
+  try{ const {c,master,wet} = buses(0.45, 0.5); entry.playInvite(c, master, wet, c.currentTime+0.02); }
+  catch(e){ console.error('candidate invite failed:', entry && entry.name, e); }
+}
+
+const MSGICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+function card(name, desc, onMsg, onInv, extraClass, tag){
+  const el = document.createElement('div'); el.className = 'card' + (extraClass ? ' '+extraClass : '');
+  el.innerHTML = `<div class="meta"><div class="name">${name}${tag?`<span class="curtag">${tag}</span>`:''}</div><div class="desc">${desc}</div></div>
+    <div class="btns">
+      <button class="play msg" aria-label="Play ${name} message">${MSGICON}message</button>
+      <button class="play inv" aria-label="Play ${name} invite">${MSGICON}invite</button>
+    </div>`;
+  el.querySelector('.msg').onclick = onMsg;
+  el.querySelector('.inv').onclick = onInv;
+  return el;
+}
+
+document.getElementById('reference').append(
+  card('Velvet', 'What ships today — the one that got annoying. Played at production loudness.',
+       playVelvetMessage, playVelvetInvite, 'current', 'current')
+);
+
+const ALL = [ ...(window.CANDIDATES_A||[]), ...(window.CANDIDATES_B||[]) ];
+const host = document.getElementById('candidates');
+if(ALL.length === 0){
+  const m = document.createElement('div'); m.className='missing';
+  m.textContent = 'No candidate voices inlined — fragments missing.';
+  host.append(m);
+}else{
+  ALL.forEach(e => host.append(card(e.name, e.desc, ()=>playCand(e), ()=>playCandInvite(e))));
+}
+</script>
+</body>
+</html>
