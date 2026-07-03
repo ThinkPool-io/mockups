@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool — meniscus variations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 14% 6%); --surface:hsl(212 12% 9%); --raised:hsl(212 12% 11%);
+    --line:hsl(212 8% 18%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(210 14% 95%); --muted:hsl(210 14% 78%); --faint:hsl(210 12% 62%);
+    --pool:hsl(202 56% 48%); --pool-hi:hsl(200 64% 60%);
+    --font-display:"Newsreader",Georgia,serif;
+    --font-sans:"Hanken Grotesk",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);
+    min-height:100vh;padding:38px 16px 90px;display:flex;flex-direction:column;align-items:center}
+  .mark{width:46px;height:46px;margin-bottom:14px}
+  h1{font-family:var(--font-display);font-size:28px;font-weight:400;letter-spacing:-0.01em;text-align:center}
+  .sub{color:var(--faint);font-size:14px;text-align:center;max-width:560px;margin:10px 0 4px;line-height:1.5}
+  .note{color:var(--pool-hi);font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em;text-align:center;margin-bottom:26px}
+  .sec{width:100%;max-width:680px}
+  .sechead{font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--faint);margin:30px 0 14px;display:flex;align-items:center;gap:10px}
+  .sechead::after{content:'';flex:1;height:1px;background:var(--line)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .card .meta{flex:1;min-width:170px}
+  .card .name{font-size:15px;font-weight:600;color:var(--ink)}
+  .card .desc{font-size:12.5px;color:var(--faint);margin-top:2px;line-height:1.4}
+  .btns{display:flex;gap:8px;flex-shrink:0}
+  .play{height:48px;border-radius:999px;border:1px solid var(--line-strong);
+    background:var(--raised);color:var(--pool-hi);display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    cursor:pointer;padding:0 16px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease}
+  .play:hover{border-color:var(--pool);background:hsl(212 14% 13%);transform:translateY(-1px)}
+  .play:active{transform:scale(.95)}
+  .play svg{width:16px;height:16px;flex-shrink:0}
+  .play.inv{color:var(--muted)}
+  .current{border-style:dashed;border-color:color-mix(in oklab,var(--pool) 45%,var(--line))}
+  .curtag{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--pool-hi);border:1px solid color-mix(in oklab,var(--pool) 40%,transparent);border-radius:999px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .hint{color:var(--faint);font-size:12px;text-align:center;margin:26px auto 0;max-width:520px;line-height:1.5}
+  @media (max-width:430px){
+    .card{padding:14px}
+    .card .meta{min-width:100%}
+    .btns{width:100%}
+    .btns .play{flex:1}
+  }
+</style>
+</head>
+<body>
+  <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="512" height="512" rx="112" fill="hsl(212 18% 10%)"/>
+    <circle cx="256" cy="256" r="172" fill="none" stroke="hsl(200 64% 60%)" stroke-width="40"/>
+    <g transform="translate(107.2 107.2) scale(12.4)"><path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="hsl(200 64% 60%)"/></g>
+  </svg>
+  <h1>Meniscus — ten variations</h1>
+  <p class="sub">The slow-glide voice you picked, swept along different axes: register, glide span, length, direction, body, tail.</p>
+  <p class="note">meniscus family · all softer than current · no pluck anywhere</p>
+
+  <div class="sec">
+    <div class="sechead">References</div>
+    <div id="reference"></div>
+
+    <div class="sechead">Ten variations</div>
+    <div id="candidates"></div>
+
+    <p class="hint">Synthesised, not heard by me. Name one (or "3 but lower", "7 but shorter") and I'll cut the final.</p>
+  </div>
+
+<script>
+let ctx;
+function ac(){ return ctx || (ctx = new (window.AudioContext||window.webkitAudioContext)()); }
+
+let _verb;
+function reverb(c){
+  if(_verb) return _verb;
+  const len = Math.floor(c.sampleRate * 0.42);
+  const buf = c.createBuffer(2, len, c.sampleRate);
+  for(let ch=0; ch<2; ch++){
+    const d = buf.getChannelData(ch);
+    for(let i=0;i<len;i++){ d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 4.5); }
+  }
+  const cv = c.createConvolver(); cv.buffer = buf;
+  _verb = cv; return cv;
+}
+
+function buses(masterGain, wetGain){
+  const c = ac();
+  if(c.state==='suspended') c.resume();
+  const master = c.createGain(); master.gain.value = masterGain; master.connect(c.destination);
+  const wet = c.createGain(); wet.gain.value = wetGain; wet.connect(reverb(c)).connect(master);
+  return { c, master, wet };
+}
+
+// ── The meniscus voice, parameterized. One slow glide, gentle attack, no pluck. ──
+// freqs: array of [timeFraction, hz] breakpoints — first is the start, rest are ramp targets.
+function glide(c, dest, wet, t, o){
+  const { freqs, dur=0.4, type='sine', gain=0.26, attack=0.04, lpMul=2.4, lpAbs=0, wetAmt=0.06 } = o;
+  const osc = c.createOscillator(); osc.type = type;
+  osc.frequency.setValueAtTime(freqs[0][1], t);
+  for(let i=1;i<freqs.length;i++) osc.frequency.exponentialRampToValueAtTime(freqs[i][1], t + dur*freqs[i][0]);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + attack);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  const lp = c.createBiquadFilter();
+  const fmax = Math.max(...freqs.map(f=>f[1]));
+  lp.type='lowpass'; lp.frequency.value = lpAbs || fmax*lpMul; lp.Q.value = 0.3;
+  osc.connect(g).connect(lp);
+  lp.connect(dest);
+  if(wetAmt>0){ const ws=c.createGain(); ws.gain.value=wetAmt; lp.connect(ws).connect(wet); }
+  osc.start(t); osc.stop(t + dur + 0.05);
+}
+
+// Variation factory: msg = glide opts; invite auto-derives (earlier lower + later higher, quieter first).
+function men(name, desc, msg, inviteGap=0.22){
+  const invA = Object.assign({}, msg, {
+    freqs: msg.freqs.map(f=>[f[0], f[1]*0.93]), gain: Math.max(0.15, msg.gain*0.85) });
+  const invB = Object.assign({}, msg, {
+    freqs: msg.freqs.map(f=>[f[0], f[1]*1.12]) });
+  return {
+    name, desc,
+    play(c, dest, wet, t0){ glide(c, dest, wet, t0, msg); },
+    playInvite(c, dest, wet, t0){ glide(c, dest, wet, t0, invA); glide(c, dest, wet, t0+inviteGap, invB); },
+  };
+}
+
+const ORIGINAL = { freqs:[[0,300],[1,470]], dur:0.4, gain:0.26, attack:0.04, lpMul:2.4, wetAmt:0.06 };
+
+const VARIATIONS = [
+  men('1 · Lower',       'Same glide, dropped a fourth — 240→380Hz. Darker, calmer.',
+      { freqs:[[0,240],[1,380]], dur:0.4, gain:0.26, attack:0.04, lpMul:2.4, wetAmt:0.06 }),
+  men('2 · Hushed high', 'Higher register (380→560Hz) but at whisper gain — glassy, distant.',
+      { freqs:[[0,380],[1,560]], dur:0.4, gain:0.19, attack:0.04, lpMul:2.2, wetAmt:0.06 }),
+  men('3 · Shorter',     'The glide compressed to 280ms — same shape, quicker exit.',
+      { freqs:[[0,280],[1,430]], dur:0.28, gain:0.25, attack:0.03, lpMul:2.4, wetAmt:0.05 }, 0.18),
+  men('4 · Longer',      'A 550ms rise, quieter to compensate — the most ambient of the set.',
+      { freqs:[[0,280],[1,440]], dur:0.55, gain:0.21, attack:0.06, lpMul:2.3, wetAmt:0.08 }, 0.26),
+  men('5 · Narrow',      'Barely moves — 330→400Hz. More hum than sweep; the subtlest.',
+      { freqs:[[0,330],[1,400]], dur:0.38, gain:0.25, attack:0.04, lpMul:2.4, wetAmt:0.05 }),
+  men('6 · Wide',        'Twice the travel — 260→520Hz. The glide becomes the melody.',
+      { freqs:[[0,260],[1,520]], dur:0.42, gain:0.24, attack:0.04, lpMul:2.2, wetAmt:0.06 }),
+  men('7 · Falling',     'Inverted — 470→300Hz downward. A droplet sinking instead of releasing.',
+      { freqs:[[0,470],[1,300]], dur:0.4, gain:0.25, attack:0.04, lpMul:2.4, wetAmt:0.06 }),
+  men('8 · Arc',         'Rises 300→480 then settles back to 430 — over the top and to rest.',
+      { freqs:[[0,300],[0.6,480],[1,430]], dur:0.44, gain:0.25, attack:0.04, lpMul:2.3, wetAmt:0.06 }),
+  men('9 · Warm body',   'Triangle wave, heavily rounded — the same glide with more wood, less glass.',
+      { freqs:[[0,290],[1,450]], dur:0.4, type:'triangle', gain:0.24, attack:0.04, lpAbs:1000, wetAmt:0.07 }),
+  men('10 · Wet',        'The original glide with a fuller ripple tail — more pool in the room.',
+      { freqs:[[0,300],[1,470]], dur:0.4, gain:0.24, attack:0.04, lpMul:2.4, wetAmt:0.14 }),
+];
+
+// ── Velvet reference at prod loudness (verbatim from src/lib/sounds.js) ──
+function velvetDrop(c, dest, wet, t, o){
+  const { f0, f1, dur=0.22, gain=0.42, wetAmt=0.12 } = o;
+  const osc = c.createOscillator(); osc.type='sine';
+  osc.frequency.setValueAtTime(f0, t);
+  osc.frequency.exponentialRampToValueAtTime(f1, t + dur*0.5);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(gain, t + 0.014);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  const lp = c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=f1*3.2; lp.Q.value=0.3;
+  osc.connect(g).connect(lp);
+  lp.connect(dest);
+  const ws = c.createGain(); ws.gain.value = wetAmt; lp.connect(ws).connect(wet);
+  osc.start(t); osc.stop(t + dur + 0.05);
+}
+
+const MSGICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+function card(name, desc, onMsg, onInv, extraClass, tag){
+  const el = document.createElement('div'); el.className = 'card' + (extraClass ? ' '+extraClass : '');
+  el.innerHTML = `<div class="meta"><div class="name">${name}${tag?`<span class="curtag">${tag}</span>`:''}</div><div class="desc">${desc}</div></div>
+    <div class="btns">
+      <button class="play msg" aria-label="Play ${name} message">${MSGICON}message</button>
+      <button class="play inv" aria-label="Play ${name} invite">${MSGICON}invite</button>
+    </div>`;
+  el.querySelector('.msg').onclick = onMsg;
+  el.querySelector('.inv').onclick = onInv;
+  return el;
+}
+
+const ref = document.getElementById('reference');
+ref.append(
+  card('Velvet', 'What ships today, at production loudness — the annoying one.',
+    ()=>{ const {c,master,wet}=buses(0.62,0.55); velvetDrop(c,master,wet,c.currentTime+0.02,{f0:400,f1:520,dur:0.26,gain:0.40,wetAmt:0.08}); },
+    ()=>{ const {c,master,wet}=buses(0.62,0.55); const t0=c.currentTime+0.02;
+          velvetDrop(c,master,wet,t0,{f0:380,f1:490,dur:0.24,gain:0.34,wetAmt:0.08});
+          velvetDrop(c,master,wet,t0+0.18,{f0:480,f1:620,dur:0.26,gain:0.40,wetAmt:0.09}); },
+    'current','current'),
+  card('Meniscus', 'The one you picked, unchanged — 300→470Hz slow glide, 400ms.',
+    ()=>{ const {c,master,wet}=buses(0.45,0.5); glide(c,master,wet,c.currentTime+0.02, ORIGINAL); },
+    ()=>{ const {c,master,wet}=buses(0.45,0.5); const t0=c.currentTime+0.02;
+          glide(c,master,wet,t0, Object.assign({},ORIGINAL,{freqs:[[0,280],[1,420]],gain:0.22}));
+          glide(c,master,wet,t0+0.22, Object.assign({},ORIGINAL,{freqs:[[0,340],[1,520]]})); },
+    'current','picked')
+);
+
+const host = document.getElementById('candidates');
+VARIATIONS.forEach(e => host.append(card(e.name, e.desc,
+  ()=>{ try{ const {c,master,wet}=buses(0.45,0.5); e.play(c,master,wet,c.currentTime+0.02); }catch(err){ console.error('play failed:', e.name, err); } },
+  ()=>{ try{ const {c,master,wet}=buses(0.45,0.5); e.playInvite(c,master,wet,c.currentTime+0.02); }catch(err){ console.error('invite failed:', e.name, err); } }
+)));
+</script>
+</body>
+</html>
