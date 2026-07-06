@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ThinkPool — Model Switch Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 14% 6%); --surface:hsl(212 12% 9%); --raised:hsl(212 12% 7%);
+    --line:hsl(212 8% 18%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(210 14% 95%); --muted:hsl(210 14% 78%); --faint:hsl(210 12% 62%);
+    --pool:hsl(202 56% 48%); --pool-hi:hsl(200 64% 60%); --pool-dim:hsl(204 48% 32%);
+    --maks:hsl(40 48% 58%); --con:hsl(172 22% 52%);
+    --font-display:"Newsreader",Georgia,serif; --font-mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font-display);padding:40px 24px}
+  h1{font-size:28px;font-weight:400;letter-spacing:-0.01em;text-align:center;margin-bottom:6px}
+  .sub{text-align:center;color:var(--faint);font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:40px}
+
+  .grid{max-width:1280px;margin:0 auto;display:grid;gap:18px;grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative}
+
+  /* Menu-specific styles */
+  .menu{font-family:var(--font-mono);font-size:13px;background:var(--raised);border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+  .menu-header{padding:12px 16px;border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--faint);background:var(--surface)}
+  .menu-section-label{padding:8px 16px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);font-weight:500}
+  .menu-note{padding:0 16px 8px;font-size:11px;color:var(--faint);line-height:1.4}
+  .menu-item{padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);cursor:pointer;transition:background 0.15s}
+  .menu-item:last-child{border-bottom:none}
+  .menu-item:hover{background:var(--surface)}
+  .check{color:var(--pool);flex-shrink:0}
+  .item-label{flex:1;min-width:0;truncate;font-weight:400}
+  .item-note{flex-shrink:0;font-size:11px;color:var(--faint);font-family:var(--font-mono)}
+  .label{text-align:center;color:var(--muted);font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px}
+
+  .footer{text-align:center;font-family:var(--font-mono);font-size:11px;color:var(--faint);margin-top:48px;letter-spacing:0.08em}
+</style>
+</head>
+<body>
+
+<h1>Model Switch Menu</h1>
+<p class="sub">Clean headers, no repetition</p>
+
+<div class="grid">
+  <!-- Card 1: Anthropic Section (Clean Header + Model Rows + Custom Model) -->
+  <div class="card">
+    <p class="label">Anthropic Section — Clean Header ✓</p>
+    <div class="menu">
+      <div class="menu-header">Anthropic (Claude)</div>
+      <div class="menu-item">
+        <span class="item-label">Opus</span>
+        <span class="item-note">most capable</span>
+      </div>
+      <div class="menu-item">
+        <span class="check">✓</span>
+        <span class="item-label">Sonnet</span>
+        <span class="item-note">balanced</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-label">Haiku</span>
+        <span class="item-note">fast + cheap</span>
+      </div>
+      <div class="menu-item" style="border-top:1px solid var(--line)">
+        <span class="check">✓</span>
+        <span class="item-label">glm-5.2</span>
+        <span class="item-note">custom</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5">
+      <strong>Fix #1:</strong> Header shows only provider name — no active-model prefix.<br>
+      <strong>Fix #3:</strong> Custom model gets a clean ✓ row within the section.
+    </p>
+  </div>
+
+  <!-- Card 2: Your-Key Provider Sections (No Brand Repetition) -->
+  <div class="card">
+    <p class="label">Your-Key Providers — No Repetition ✓</p>
+    <div class="menu">
+      <div class="menu-section-label">Z.AI · YOUR KEY</div>
+      <div class="menu-note">switching provider restarts agent context</div>
+      <div class="menu-item">
+        <span class="check">✓</span>
+        <span class="item-label">GLM 4.5</span>
+        <span class="item-note">glm-4.6</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-label">GLM Air</span>
+        <span class="item-note">glm-4.6</span>
+      </div>
+      <div style="height:8px;background:var(--raised)"></div>
+      <div class="menu-section-label">OpenRouter · YOUR KEY</div>
+      <div class="menu-note">switching provider restarts agent context</div>
+      <div class="menu-item">
+        <span class="item-label">gpt-4o</span>
+        <span class="item-note">gpt-4o-2024</span>
+      </div>
+      <div class="menu-item">
+        <span class="item-label">gemini-pro</span>
+        <span class="item-note">gemini-1.5-pro</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5">
+      <strong>Fix #2:</strong> Provider names no longer repeat brand headers.<br>
+      "Z.AI" header → rows show "GLM 4.5" (not "Z.ai GLM 4.5").
+    </p>
+  </div>
+
+  <!-- Card 3: Before vs After Summary -->
+  <div class="card" style="grid-column:span 2">
+    <p class="label">Summary: Three Fixes Applied</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:13px;line-height:1.6">
+      <div>
+        <strong style="color:var(--pool)">BEFORE (Messy)</strong>
+        <ul style="margin:8px 0;padding-left:20px;color:var(--muted)">
+          <li>Header: "glm-5.2 · Anthropic (Claude)" — active model jammed into header</li>
+          <li>Row: "Z.ai GLM 4.5" — brand repeats the "Z.AI" header</li>
+          <li>Custom model invisible — no row, just duplicated in header</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="color:var(--con)">AFTER (Super Neat)</strong>
+        <ul style="margin:8px 0;padding-left:20px;color:var(--muted)">
+          <li>Header: "Anthropic (Claude)" — provider name only</li>
+          <li>Row: "GLM 4.5" — model name only, no brand repetition</li>
+          <li>Custom model row: "glm-5.2 ✓ custom" — visible and checkmarked</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:11px;color:var(--faint);line-height:1.5">
+      <strong>Goal:</strong> "Super neat. Make sure nothing repeats at any point. Clear separation of providers in the model names."<br>
+      Result: Each provider = one clean section header, rows = model names with zero brand repetition, active model = ✓ on its proper row.
+    </p>
+  </div>
+</div>
+
+<p class="footer">model-menu-neaten</p>
+
+</body>
+</html>
