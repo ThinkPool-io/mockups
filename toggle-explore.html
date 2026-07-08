@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toggle treatments — terminal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{
+  --cobalt:#1A6EF4; --cobalt-hi:#71A3F4; --cobalt-dim:rgba(26,110,244,.16);
+  --bg:hsl(212 13% 5%); --raised:hsl(212 10% 9%); --line:hsl(212 9% 18%); --line2:hsl(212 9% 26%);
+  --ink:#e8eaed; --muted:#8a9199; --faint:#5b636b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);font-family:'Hanken Grotesk',sans-serif;color:var(--ink);padding:18px;max-width:560px;margin:0 auto}
+h1{font-size:19px;font-weight:600;margin-bottom:2px}
+.sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:20px}
+.cell{background:var(--raised);border:1px solid var(--line);border-radius:11px;padding:16px;margin-bottom:12px}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:15px}
+.name{font-size:14px;font-weight:600}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.states{display:flex;gap:34px;align-items:center}
+.st{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.stlab{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.12em}
+.casc{font-size:11.5px;color:var(--muted);margin-top:13px;line-height:1.5}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* 1 angular slab */
+.t1{width:44px;height:24px;border-radius:6px;position:relative;transition:.2s;border:1px solid var(--line2)}
+.t1.on{background:var(--cobalt);border-color:var(--cobalt)}
+.t1.off{background:hsl(212 10% 14%)}
+.t1 .k{position:absolute;top:3px;width:16px;height:16px;border-radius:4px;transition:.2s}
+.t1.on .k{right:3px;background:#fff}
+.t1.off .k{left:3px;background:var(--muted)}
+
+/* 2 ghost track + cobalt knob */
+.t2{width:44px;height:24px;border-radius:6px;position:relative;transition:.2s;background:transparent;border:1px solid var(--line2)}
+.t2.on{border-color:var(--cobalt)}
+.t2 .k{position:absolute;top:3px;width:16px;height:16px;border-radius:4px;transition:.2s}
+.t2.on .k{right:3px;background:var(--cobalt);box-shadow:0 0 8px -1px var(--cobalt)}
+.t2.off .k{left:3px;background:hsl(212 9% 30%)}
+
+/* 3 checkbox */
+.t3{width:24px;height:24px;border-radius:5px;border:1px solid var(--line2);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:14px;transition:.15s}
+.t3.on{background:var(--cobalt-dim);border-color:var(--cobalt);color:var(--cobalt-hi)}
+.t3.off{color:transparent}
+.t3.off::after{content:"";width:0;height:0}
+
+/* 4 segmented OFF|ON */
+.t4{display:inline-flex;border:1px solid var(--line2);border-radius:7px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em}
+.t4 span{padding:6px 12px;text-transform:uppercase;color:var(--muted)}
+.t4 .a{background:var(--cobalt-dim);color:var(--cobalt-hi)}
+
+/* 5 LED + label */
+.t5{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line2);border-radius:7px;padding:6px 11px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.t5 .led{width:9px;height:9px;border-radius:2px;flex:none}
+.t5.on{border-color:rgba(26,110,244,.5);color:var(--cobalt-hi)}
+.t5.on .led{background:var(--cobalt);box-shadow:0 0 8px 0 var(--cobalt)}
+.t5.off{color:var(--muted)}
+.t5.off .led{background:hsl(212 9% 30%)}
+</style></head><body>
+<h1>Toggle treatments — angular + #1A6EF4</h1>
+<div class="sub">the last round/old-blue element · each shown ON and OFF · console aesthetic</div>
+
+<div class="cell"><div class="head"><span class="name">1 · Angular slab</span><span class="tag">closest to current, squared</span></div>
+<div class="states">
+  <div class="st"><div class="t1 on"><span class="k"></span></div><span class="stlab">on</span></div>
+  <div class="st"><div class="t1 off"><span class="k"></span></div><span class="stlab">off</span></div>
+</div><div class="casc">Same switch shape you have, but 6px corners + square knob + new cobalt. Minimal change, keeps the familiar slide.</div></div>
+
+<div class="cell"><div class="head"><span class="name">2 · Ghost track + cobalt knob</span><span class="tag">matches ghost buttons</span></div>
+<div class="states">
+  <div class="st"><div class="t2 on"><span class="k"></span></div><span class="stlab">on</span></div>
+  <div class="st"><div class="t2 off"><span class="k"></span></div><span class="stlab">off</span></div>
+</div><div class="casc">Transparent hairline track; ON = cobalt border + glowing cobalt knob, OFF = grey knob. Same outline-first language as the buttons.</div></div>
+
+<div class="cell"><div class="head"><span class="name">3 · Checkbox</span><span class="tag">most terminal</span></div>
+<div class="states">
+  <div class="st"><div class="t3 on mono">&#10003;</div><span class="stlab">on</span></div>
+  <div class="st"><div class="t3 off mono">&#10003;</div><span class="stlab">off</span></div>
+</div><div class="casc">A square that fills cobalt + checks when on, empty hairline when off. No slide — the most console-native, but changes the interaction feel.</div></div>
+
+<div class="cell"><div class="head"><span class="name">4 · Segmented OFF | ON</span><span class="tag">explicit</span></div>
+<div class="states">
+  <div class="st"><div class="t4"><span>off</span><span class="a">on</span></div><span class="stlab">on</span></div>
+  <div class="st"><div class="t4"><span class="a">off</span><span>on</span></div><span class="stlab">off</span></div>
+</div><div class="casc">Two mono cells; the active one is cobalt-tinted. State is spelled out — zero ambiguity, reads like a mode switch.</div></div>
+
+<div class="cell"><div class="head"><span class="name">5 · LED chip</span><span class="tag">statusline aesthetic</span></div>
+<div class="states">
+  <div class="st"><div class="t5 on"><span class="led"></span>on</div><span class="stlab">on</span></div>
+  <div class="st"><div class="t5 off"><span class="led"></span>off</div><span class="stlab">off</span></div>
+</div><div class="casc">A square "LED" that lights cobalt (with glow) when on + a mono ON/OFF label. Echoes the room statusline dots. Compact, very terminal.</div></div>
+
+</body></html>
