@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: hsl(212 13% 5%);
+    font-family: 'Hanken Grotesk', sans-serif;
+    color: #e8eaed;
+    padding: 22px;
+    width: 900px;
+  }
+  h1 { font-size: 19px; font-weight: 700; margin-bottom: 3px; letter-spacing: -0.01em; }
+  .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #8a9199; margin-bottom: 18px; letter-spacing: 0.02em; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cell {
+    background: hsl(212 10% 9%);
+    border: 1px solid hsl(212 9% 16%);
+    border-radius: 10px;
+    padding: 14px 15px 15px;
+    position: relative;
+  }
+  .cell.ref { border-color: hsl(212 12% 26%); background: hsl(212 10% 7%); }
+  .swatch { height: 34px; border-radius: 7px; margin-bottom: 11px; }
+  .meta { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .name { font-size: 13.5px; font-weight: 600; }
+  .code { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #9aa0a8; }
+  .row { display: flex; align-items: center; gap: 14px; }
+  .wm { font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
+  .wm .p { }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 15px; border-radius: 9px;
+    font-size: 13px; font-weight: 700; color: #1a1410;
+    font-family: 'JetBrains Mono', monospace; white-space: nowrap;
+  }
+  .chip {
+    display: inline-flex; align-items: center;
+    padding: 3px 9px; border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    border: 1px solid;
+  }
+  .tag { position: absolute; top: 12px; right: 14px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #6a7079; text-transform: uppercase; letter-spacing: 0.12em; }
+</style>
+</head>
+<body>
+  <h1>Pool cobalt — 10 candidates</h1>
+  <div class="sub">wordmark · filled CTA (dark glyph) · chip — on console bg hsl(212 13% 5%). C0 = current.</div>
+  <div class="grid" id="grid"></div>
+<script>
+  const C = [
+    { id:'C0', name:'Current',        hsl:'hsl(228 66% 54%)', note:'shipped' },
+    { id:'1',  name:'Deep Klein',     hsl:'hsl(226 62% 47%)', note:'deeper, richer' },
+    { id:'2',  name:'Electric',       hsl:'hsl(224 84% 59%)', note:'brighter, punchy' },
+    { id:'3',  name:'Indigo lean',    hsl:'hsl(236 66% 58%)', note:'toward violet' },
+    { id:'4',  name:'Ultramarine',    hsl:'hsl(230 78% 55%)', note:'more saturated' },
+    { id:'5',  name:'Royal',          hsl:'hsl(222 70% 52%)', note:'classic blue' },
+    { id:'6',  name:'Azure',          hsl:'hsl(216 82% 56%)', note:'toward cyan' },
+    { id:'7',  name:'Navy-cobalt',    hsl:'hsl(228 60% 42%)', note:'dark, serious' },
+    { id:'8',  name:'Cornflower',     hsl:'hsl(226 72% 62%)', note:'lighter, soft' },
+    { id:'9',  name:'Tailwind-600',   hsl:'hsl(217 91% 53%)', note:'known-good blue' },
+    { id:'10', name:'Muted steel',    hsl:'hsl(224 52% 54%)', note:'calmer, less punch' },
+  ];
+  function hslToHex(hsl){
+    const [h,s,l] = hsl.match(/[\d.]+/g).map(Number);
+    const a = s/100, ll = l/100;
+    const k = n => (n + h/30) % 12;
+    const f = n => ll - a*Math.min(ll,1-ll)*Math.max(-1,Math.min(k(n)-3,9-k(n),1));
+    const to = n => Math.round(255*f(n)).toString(16).padStart(2,'0');
+    return ('#'+to(0)+to(8)+to(4)).toUpperCase();
+  }
+  document.getElementById('grid').innerHTML = C.map(c => `
+    <div class="cell ${c.id==='C0'?'ref':''}">
+      <div class="tag">${c.id} · ${c.note}</div>
+      <div class="swatch" style="background:${c.hsl}"></div>
+      <div class="meta"><span class="name">${c.name}</span><span class="code">${c.hsl.replace('hsl','').replace(/[()]/g,'')} · ${hslToHex(c.hsl)}</span></div>
+      <div class="row">
+        <span class="wm">think<span class="p" style="color:${c.hsl}">pool</span></span>
+        <span class="btn" style="background:${c.hsl}">Start free</span>
+        <span class="chip" style="color:${c.hsl};border-color:${c.hsl}">plus</span>
+      </div>
+    </div>
+  `).join('');
+</script>
+</body>
+</html>
