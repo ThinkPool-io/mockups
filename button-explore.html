@@ -1,0 +1,102 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Button treatments — #1A6EF4</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{
+  --cobalt:#1A6EF4; --cobalt-hi:#5F97F2; --cobalt-dim:rgba(26,110,244,.14);
+  --bg:hsl(212 13% 5%); --raised:hsl(212 10% 9%); --line:hsl(212 9% 17%);
+  --ink:#e8eaed; --muted:#8a9199; --inkdark:#0a1220;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);font-family:'Hanken Grotesk',sans-serif;color:var(--ink);padding:18px;max-width:560px;margin:0 auto}
+h1{font-size:19px;font-weight:700;margin-bottom:2px}
+.sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:20px}
+.cell{background:var(--raised);border:1px solid var(--line);border-radius:11px;padding:15px 15px 16px;margin-bottom:12px}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:13px}
+.name{font-size:14px;font-weight:600}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.casc{font-size:11.5px;color:var(--muted);margin-top:11px;line-height:1.5}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+/* base */
+.btn{font-family:'Hanken Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.sec{font-family:'Hanken Grotesk',sans-serif;font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:11px 18px;white-space:nowrap}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* 1 solid + white */
+.b1{background:var(--cobalt);color:#fff;padding:12px 20px;border-radius:9px}
+.s1{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:9px}
+/* 2 ghost hairline */
+.b2{background:transparent;color:var(--cobalt-hi);border:1px solid var(--cobalt);border-radius:8px;padding:11px 20px}
+.s2{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:8px}
+/* 3 tinted fill */
+.b3{background:var(--cobalt-dim);color:var(--cobalt-hi);border:1px solid rgba(26,110,244,.5);border-radius:9px;padding:11px 20px}
+.s3{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:9px}
+/* 4 solid + white + top sheen */
+.b4{background:linear-gradient(180deg,#3B86FF,#1A6EF4);color:#fff;padding:12px 20px;border-radius:9px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 18px -8px rgba(26,110,244,.6)}
+.s4{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:9px}
+/* 5 angular mono */
+.b5{background:var(--cobalt);color:#fff;padding:12px 20px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;letter-spacing:.01em}
+.s5{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px}
+/* 6 left caret command bar */
+.b6{background:var(--raised);color:#fff;padding:12px 18px 12px 14px;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--cobalt);font-family:'JetBrains Mono',monospace;font-size:13px}
+.b6 .c{color:var(--cobalt-hi)}
+.s6{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px}
+/* 7 bracket mono flat */
+.b7{background:transparent;color:var(--cobalt-hi);padding:11px 16px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13px;border:1px dashed rgba(26,110,244,.45)}
+.b7 .br{color:var(--cobalt);opacity:.8}
+.s7{background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px}
+/* 8 solid white + inset ring */
+.b8{background:var(--cobalt);color:#fff;padding:12px 20px;border-radius:9px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.s8{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:9px}
+/* 9 pill soft (rounder) white */
+.b9{background:var(--cobalt);color:#fff;padding:13px 24px;border-radius:999px}
+.s9{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px}
+/* 10 flat matte deep + white */
+.b10{background:#1857C8;color:#fff;padding:12px 20px;border-radius:8px}
+.s10{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:8px}
+</style></head><body>
+<h1>Button treatments — same color #1A6EF4</h1>
+<div class="sub">primary "Start a code room" + secondary "Join" · console bg · pick one, it becomes the button language</div>
+
+<div class="cell"><div class="head"><span class="name">1 · Solid + white text</span><span class="tag">the clean fix</span></div>
+<div class="row"><button class="btn b1">Start a code room</button><button class="sec s1">Join</button></div>
+<div class="casc">Just swaps the murky dark glyph for white. Cascades: all primary CTAs, send button, upgrade.</div></div>
+
+<div class="cell"><div class="head"><span class="name">2 · Ghost hairline</span><span class="tag">most terminal</span></div>
+<div class="row"><button class="btn b2">Start a code room</button><button class="sec s2">Join</button></div>
+<div class="casc">No fill — cobalt outline + text. Primary = brighter border. Cascades: the whole UI goes outline-first, very console.</div></div>
+
+<div class="cell"><div class="head"><span class="name">3 · Tinted fill</span><span class="tag">matches "Activate bridge"</span></div>
+<div class="row"><button class="btn b3">Start a code room</button><button class="sec s3">Join</button></div>
+<div class="casc">Low-opacity cobalt bg + cobalt text + border. Softer than solid. Cascades: bridge card, chips, tags.</div></div>
+
+<div class="cell"><div class="head"><span class="name">4 · Solid + sheen + glow</span><span class="tag">dimensional</span></div>
+<div class="row"><button class="btn b4">Start a code room</button><button class="sec s4">Join</button></div>
+<div class="casc">Subtle top highlight + soft drop glow. More "product", less flat. Cascades: primary CTAs only.</div></div>
+
+<div class="cell"><div class="head"><span class="name">5 · Angular mono</span><span class="tag">technical</span></div>
+<div class="row"><button class="btn b5">start a code room</button><button class="sec s5">join</button></div>
+<div class="casc">4px corners, monospace, lowercase. Cascades hard: buttons + chips + inputs all go mono/angular.</div></div>
+
+<div class="cell"><div class="head"><span class="name">6 · Command bar (left caret)</span><span class="tag">most on-brand</span></div>
+<div class="row"><button class="btn b6"><span class="c">&#8250;_</span> start a code room</button><button class="sec s6">join</button></div>
+<div class="casc">Dark panel, cobalt left-rule + prompt glyph. Reads like a terminal command. Cascades: the ›_ motif everywhere.</div></div>
+
+<div class="cell"><div class="head"><span class="name">7 · Bracket mono</span><span class="tag">playful terminal</span></div>
+<div class="row"><button class="btn b7"><span class="br">[</span> start a code room <span class="br">]</span></button><button class="sec s7">join</button></div>
+<div class="casc">[ label ] in mono, dashed. Very code-y. Cascades: risky — reads more toy than product.</div></div>
+
+<div class="cell"><div class="head"><span class="name">8 · Solid + inset ring</span><span class="tag">refined solid</span></div>
+<div class="row"><button class="btn b8">Start a code room</button><button class="sec s8">Join</button></div>
+<div class="casc">Solid cobalt, white text, faint inner light ring for edge definition. Cascades: primary CTAs.</div></div>
+
+<div class="cell"><div class="head"><span class="name">9 · Soft pill + white</span><span class="tag">current shape, fixed color</span></div>
+<div class="row"><button class="btn b9">Start a code room</button><button class="sec s9">Join</button></div>
+<div class="casc">Same rounded shape you have now, but white text. If only the text bugged you.</div></div>
+
+<div class="cell"><div class="head"><span class="name">10 · Flat matte (deeper fill)</span><span class="tag">calmer</span></div>
+<div class="row"><button class="btn b10">Start a code room</button><button class="sec s10">Join</button></div>
+<div class="casc">Slightly deeper, desaturated fill so it sits back. White text. Cascades: primary CTAs, less shouty.</div></div>
+
+</body></html>
