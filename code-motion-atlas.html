@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool Code — motion atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════════════
+   PALETTE — verbatim from src/pages/code/structured.jsx C{} and the
+   .tp-code block in src/styles/theme.css. origin/main @ 23afbe80.
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --term:200 36% 2%; --card:200 26% 5%; --surf:199 20% 11%;
+  --line:199 24% 17%; --lineS:194 30% 26%;
+  --ink:190 26% 96%; --inkS:190 22% 88%; --muted:192 16% 76%; --faint:196 16% 60%;
+  --poolHi:190 76% 63%; --cyan:172 80% 60%;
+  --you:150 60% 60%; --them:280 60% 72%;
+  --color-positive:hsl(152 32% 60%); --color-danger:hsl(8 52% 62%);
+  --color-accent-y:hsl(45 72% 60%);
+}
+
+/* ══════════ THE SHIPPED DIALECT — copied byte-for-byte from theme.css ══════════
+   Six one-shots. Zero infinite loops. Zero easing exceptions. */
+@keyframes tp-term-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.tp-term-in { animation: tp-term-in 0.14s var(--ease-settle) both; }
+
+@keyframes tp-term-rule { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tp-term-rule { transform-origin: left center; animation: tp-term-rule 0.3s var(--ease-settle) both; }
+
+@keyframes tp-term-card { from { clip-path: inset(0 0 100% 0); opacity: .4; } to { clip-path: inset(0 0 0 0); opacity: 1; } }
+.tp-term-card { animation: tp-term-card 0.22s var(--ease-settle) both; }
+
+@keyframes tp-term-verdict { from { opacity: 1; } to { opacity: .35; } }
+.tp-term-done::before, .tp-term-fail::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px;
+  animation: tp-term-verdict 0.6s var(--ease-settle) both;
+}
+.tp-term-done { position: relative; } .tp-term-fail { position: relative; }
+.tp-term-done::before { background: var(--color-positive); }
+.tp-term-fail::before { background: var(--color-danger); }
+
+@keyframes tp-term-lane-in { from { opacity: 0; transform: translateX(6px); max-width: 0; } to { opacity: 1; transform: none; max-width: 240px; } }
+@keyframes tp-term-lane-out { from { opacity: 1; max-width: 240px; } to { opacity: 0; max-width: 0; margin-right: -8px; } }
+.tp-term-lane-in  { animation: tp-term-lane-in 0.2s var(--ease-settle) both; }
+.tp-term-lane-out { animation: tp-term-lane-out 0.18s var(--ease-settle) both; }
+
+@keyframes tp-term-flip-out { to { opacity: 0; transform: translateY(3px); } }
+@keyframes tp-term-flip-in  { from { opacity: 0; transform: translateY(-3px); } }
+.tp-term-flip-out { animation: tp-term-flip-out 0.12s var(--ease-settle) both; }
+.tp-term-flip-in  { animation: tp-term-flip-in  0.12s var(--ease-settle) both; }
+
+/* ══════════ CUT — shown for the record, NOT in the product ══════════ */
+.cut-rail { position: relative; }
+.cut-rail::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:linear-gradient(180deg,transparent,hsl(var(--poolHi)) 35%,hsl(var(--poolHi)) 65%,transparent) no-repeat;
+  background-size:100% 45%;animation:cut-rail 1.2s linear infinite}
+@keyframes cut-rail{from{background-position:0 -80%}to{background-position:0 180%}}
+@keyframes cut-cursor{50%{opacity:0}}
+.cut-cursor{animation:cut-cursor 1.06s steps(1,end) infinite}
+
+/* ══════════ TURN-BOUNDARY CANDIDATES (proposals, undecided) ══════════ */
+@keyframes spine-draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes spine-flash{from{opacity:1;box-shadow:0 0 7px hsl(var(--you)/.7)}to{opacity:.85;box-shadow:none}}
+@keyframes tint-wash{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.opt-A .band, .opt-B .band { box-shadow:none }
+.opt-A .band::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:hsl(var(--you)/.85);transform-origin:top center;animation:spine-draw .28s var(--ease-settle) both}
+.opt-B .band::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:hsl(var(--you));animation:spine-flash .5s var(--ease-settle) both}
+.opt-C .band{background:none}
+.opt-C .band::after{content:'';position:absolute;inset:0;background:hsl(var(--you)/.05);transform-origin:left center;animation:tint-wash .34s var(--ease-settle) both;z-index:-1}
+.opt-A .band, .opt-B .band, .opt-C .band, .opt-D .band { animation: tp-term-in .14s var(--ease-settle) both }
+
+/* ══════════ page chrome (mockup only, not product) ══════════ */
+*{box-sizing:border-box;margin:0}
+body{background:hsl(var(--term));color:hsl(var(--ink));font:400 13px/1.5 'IBM Plex Mono',monospace;padding:20px 16px 90px;max-width:900px;margin:0 auto}
+header{position:sticky;top:0;background:linear-gradient(hsl(var(--term)) 72%,transparent);padding:6px 0 14px;z-index:5;margin:0 -4px}
+h1{font-size:16px;font-weight:600;letter-spacing:.01em}
+.sub{color:hsl(var(--faint));font-size:10px;text-transform:uppercase;letter-spacing:.13em;margin-top:5px}
+.replay{margin-top:11px;display:flex;gap:8px;flex-wrap:wrap}
+button.rp{font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:hsl(var(--ink));
+  background:hsl(var(--surf));border:1px solid hsl(var(--lineS));padding:9px 14px;cursor:pointer;border-radius:3px}
+button.rp:hover{border-color:hsl(var(--poolHi));color:hsl(var(--poolHi))}
+button.rp.on{border-color:hsl(var(--you));color:hsl(var(--you))}
+h2{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:hsl(var(--faint));margin:28px 0 10px;font-weight:500}
+.card{border:1px solid hsl(var(--line));background:hsl(var(--card));margin-bottom:12px}
+.chd{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 12px;border-bottom:1px solid hsl(var(--line));font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:hsl(var(--faint));flex-wrap:wrap}
+.chd b{color:hsl(var(--ink));font-weight:600;letter-spacing:.06em;font-size:11px}
+.chd .meta{text-transform:none;letter-spacing:0;font-size:11px;color:hsl(var(--muted));font-family:'IBM Plex Mono'}
+.cbd{padding:14px 12px}
+.note{font-size:11.5px;color:hsl(var(--faint));font-family:Inter,sans-serif;line-height:1.5;padding:0 12px 12px}
+.dead{opacity:.62}
+.dead .chd b{color:hsl(var(--faint));text-decoration:line-through}
+.tag{font-size:9px;letter-spacing:.14em;padding:2px 6px;border:1px solid currentColor;border-radius:2px}
+.tag.ship{color:hsl(var(--you))} .tag.cut{color:hsl(var(--color-danger))} .tag.prop{color:var(--color-accent-y)}
+
+.turnhead{display:flex;align-items:center;gap:10px;font-size:11px;color:hsl(var(--faint))}
+.turnhead .who{color:hsl(var(--you));font-weight:500}
+.hair{flex:1;height:1px;background:hsl(var(--lineS))}
+.tool{border:1px solid hsl(var(--line));background:hsl(var(--surf));padding:8px 10px 8px 13px;font-size:12px;position:relative;margin-bottom:8px}
+.tool b{color:hsl(var(--poolHi));font-weight:500}
+.tool .t{color:hsl(var(--muted))}
+.tool pre{color:hsl(var(--faint));font-size:11px;margin-top:5px;white-space:pre-wrap}
+.state{float:right;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:hsl(var(--faint))}
+.lanes{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lane{display:flex;align-items:center;gap:6px;border:1px solid hsl(var(--line));background:hsl(var(--surf));padding:5px 10px;font-size:11px;color:hsl(var(--muted));white-space:nowrap;overflow:hidden}
+.lane .dot{width:5px;height:5px;background:var(--color-positive);flex:none}
+.statusline{display:flex;gap:24px;font-size:11.5px;color:hsl(var(--faint));flex-wrap:wrap}
+.statusline .v{color:hsl(var(--muted));display:inline-block}
+.row{margin:0 -12px;padding:3px 12px;position:relative}
+.band{background:hsl(var(--you)/.05);box-shadow:inset 2px 0 0 hsl(var(--you)/.85)}
+.who2{font-size:11px;font-weight:500;color:hsl(var(--you))}
+.msg{font-family:Inter,sans-serif;font-size:13.5px;line-height:1.55;color:hsl(var(--ink))}
+.agent{color:hsl(var(--muted));font-family:Inter,sans-serif;font-size:13.5px}
+.gap{height:9px}
+.composer{border:1px solid hsl(var(--lineS));background:hsl(var(--surf));padding:9px 12px;font-size:12px;color:hsl(var(--faint));display:flex;gap:3px;align-items:center}
+.blk{display:inline-block;width:7px;height:14px;background:hsl(var(--inkS))}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid hsl(var(--line));font-family:Inter,sans-serif;font-size:11.5px;color:hsl(var(--faint));line-height:1.6}
+.foot code{font-family:'IBM Plex Mono';color:hsl(var(--muted))}
+/* Replay mechanism: pseudo-element animations (::before/::after) can't be reset
+   via el.style, so we kill animation on the whole subtree for one frame, force a
+   reflow, then release. Restarts one-shots AND pseudo-driven ones alike. */
+._off, ._off *, ._off *::before, ._off *::after { animation: none !important; }
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media (max-width:520px){body{padding:14px 12px 80px}.chd{gap:6px}.statusline{flex-direction:column;gap:9px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Thinkpool Code — motion atlas</h1>
+  <div class="sub">live @ 23afbe80 · real theme.css rules · tap replay</div>
+  <div class="replay">
+    <button class="rp" id="all">▶ replay all</button>
+    <button class="rp" id="loop">↻ loop: off</button>
+  </div>
+</header>
+
+<h2>Shipped — six one-shots <span class="tag ship">LIVE</span></h2>
+
+<div class="card" data-fx>
+  <div class="chd"><b>1 · tp-term-in</b><span class="meta">0.14s · 3px rise · the entrance workhorse</span></div>
+  <div class="cbd">
+    <div class="turnhead"><span class="who fx tp-term-in">maks</span><span class="fx tp-term-in" style="animation-delay:.06s">·</span><span class="fx tp-term-in" style="animation-delay:.12s">07:58</span></div>
+  </div>
+  <div class="note">Anything arriving at a boundary. Your message rows use this — the agent's don't, because a fan-out emits several per turn and animating each would be interior motion.</div>
+</div>
+
+<div class="card" data-fx>
+  <div class="chd"><b>2 · tp-term-rule</b><span class="meta">0.3s · hairline draws left→right</span></div>
+  <div class="cbd"><div class="hair fx tp-term-rule"></div></div>
+  <div class="note">The reader's one true hairline, on room open. It's a <em>container</em> entrance — one element no matter how many events replayed.</div>
+</div>
+
+<div class="card" data-fx>
+  <div class="chd"><b>3 · tp-term-card</b><span class="meta">0.22s · clip reveal downward</span></div>
+  <div class="cbd">
+    <div class="tool fx tp-term-card">
+      <span class="state">running</span>
+      <div class="t">→ <b>Bash</b> npm run build</div>
+      <pre>vite v5.2.8 building for production…</pre>
+    </div>
+  </div>
+  <div class="note">A tool card mounting live. No scale, no bounce — it uncovers, like a printer feeding paper.</div>
+</div>
+
+<div class="card" data-fx>
+  <div class="chd"><b>4 · tp-term-done / -fail</b><span class="meta">0.6s · verdict flash → dim resting rail</span></div>
+  <div class="cbd">
+    <div class="tool fx tp-term-done"><span class="state" style="color:var(--color-positive)">done</span><div class="t">→ <b>Read</b> src/styles/theme.css</div></div>
+    <div class="tool fx tp-term-fail" style="margin-bottom:0"><span class="state" style="color:var(--color-danger)">failed</span><div class="t">→ <b>Bash</b> npm test — exit 1</div></div>
+  </div>
+  <div class="note">Fires only when this view <em>witnessed</em> the transition. Reopen the room later and the card is simply green — you don't get told about a result you already knew.</div>
+</div>
+
+<div class="card" data-fx>
+  <div class="chd"><b>5 · tp-term-lane-in / -out</b><span class="meta">0.2s / 0.18s · ensemble spawn + close</span></div>
+  <div class="cbd">
+    <div class="lanes">
+      <div class="lane"><span class="dot"></span>S3a tx-RLS</div>
+      <div class="lane"><span class="dot"></span>S4 posture</div>
+      <div class="lane fx tp-term-lane-in" id="ghost"><span class="dot" style="background:var(--color-accent-y)"></span>motion pass</div>
+    </div>
+  </div>
+  <div class="note">A lane sliding into the ensemble row, and collapsing out of it. Restored lanes on room open stay static — only a genuine live spawn animates.</div>
+</div>
+
+<div class="card" data-fx>
+  <div class="chd"><b>6 · tp-term-flip-out / -in</b><span class="meta">2 × 0.12s · status value swap</span></div>
+  <div class="cbd">
+    <div class="statusline">
+      <span>bridge <span class="v" id="fa">connected</span></span>
+      <span>model <span class="v" id="fb">opus-4-5</span></span>
+    </div>
+  </div>
+  <div class="note">Old value drops out, new one rises in. Bridge state and model switches. The label never moves; only its value does.</div>
+</div>
+
+<h2>Cut — the ambient budget was already spent <span class="tag cut">NOT SHIPPED</span></h2>
+
+<div class="card dead">
+  <div class="chd"><b>tp-term-rail</b><span class="meta">1.2s ∞ · travelling glow on a running tool</span></div>
+  <div class="cbd">
+    <div class="tool cut-rail" style="margin-bottom:0"><span class="state">running</span><div class="t">→ <b>Bash</b> npm run build</div><pre>transforming (214)…</pre></div>
+  </div>
+  <div class="note">Cut hours after shipping. The <code>···</code> badge and the thinking glyph already said “running” — this was a third simultaneous working-indicator, i.e. the double-indicator ban spread across elements instead of stacked on one.</div>
+</div>
+
+<div class="card dead">
+  <div class="chd"><b>tp-term-cursor</b><span class="meta">1.06s ∞ · composer block-blink</span></div>
+  <div class="cbd"><div class="composer">awaiting input <span class="blk cut-cursor"></span></div></div>
+  <div class="note">Cut with it. An idle composer is not an event, and the blink fought the real caret the instant you focused the box. <code>tp-term-scan</code> (a thinking scanline) died the same death at spec time — three primitives, one lesson.</div>
+</div>
+
+<h2>Undecided — turn-boundary cue <span class="tag prop">PROPOSAL</span></h2>
+
+<div class="card opt-D" data-fx>
+  <div class="chd"><b>D · nothing (shipped today)</b><span class="meta">row fades + rises; spine and tint just appear</span></div>
+  <div class="cbd">
+    <div class="agent">…rebased clean, gates still green.</div><div class="gap"></div>
+    <div class="row band fx"><div class="who2">maks</div><div class="msg">lets address turn boundary cue?</div></div>
+  </div>
+</div>
+
+<div class="card opt-A" data-fx>
+  <div class="chd"><b>A · spine draws down</b><span class="meta">0.28s · scaleY from the top</span></div>
+  <div class="cbd">
+    <div class="agent">…rebased clean, gates still green.</div><div class="gap"></div>
+    <div class="row band fx"><div class="who2">maks</div><div class="msg">lets address turn boundary cue?</div></div>
+  </div>
+  <div class="note">The green bar grows top→bottom, like a bookmark being placed. Strongest “a new turn opens here” read. Needs the spine to become a real 2px element — an inset box-shadow can't be transformed.</div>
+</div>
+
+<div class="card opt-B" data-fx>
+  <div class="chd"><b>B · spine flashes</b><span class="meta">0.5s · bright + glow → settles</span></div>
+  <div class="cbd">
+    <div class="agent">…rebased clean, gates still green.</div><div class="gap"></div>
+    <div class="row band fx"><div class="who2">maks</div><div class="msg">lets address turn boundary cue?</div></div>
+  </div>
+  <div class="note">One pulse, then still. Reintroduces a glow an hour after we buried three of them — the reason it's not my pick.</div>
+</div>
+
+<div class="card opt-C" data-fx>
+  <div class="chd"><b>C · tint washes in</b><span class="meta">0.34s · background sweeps left→right</span></div>
+  <div class="cbd">
+    <div class="agent">…rebased clean, gates still green.</div><div class="gap"></div>
+    <div class="row band fx"><div class="who2">maks</div><div class="msg">lets address turn boundary cue?</div></div>
+  </div>
+  <div class="note">Animates the row's <em>background</em> — its interior, not its edge. Bends the boundaries-only policy.</div>
+</div>
+
+<div class="foot">
+  Every rule above is copied verbatim from <code>src/styles/theme.css</code> at <code>23afbe80</code> — this page is not a re-drawing.
+  All four turn-boundary options end in the identical still frame; motion is transient, the V01 band does the static work.
+  Reduced-motion neutralises the whole page, same global guard as the product.
+</div>
+
+<script>
+const cards = [...document.querySelectorAll('[data-fx]')]
+function replayCard(card){
+  card.classList.add('_off')
+  void card.offsetWidth              // force reflow so the removal below counts as a restart
+  card.classList.remove('_off')
+}
+function replayAll(){
+  cards.forEach(replayCard)
+  // Next frame: the _off suppressor above and a flip class added in the SAME frame
+  // collapse into one style recalc, so the flip's animationstart never fires.
+  requestAnimationFrame(() => {
+    flip(fa, fa.textContent === 'connected' ? 'reconnecting' : 'connected')
+    flip(fb, fb.textContent === 'opus-4-5' ? 'sonnet-4-6' : 'opus-4-5')
+    ghostCycle()
+  })
+}
+const fa = document.getElementById('fa'), fb = document.getElementById('fb')
+function flip(el, next){
+  el.classList.remove('tp-term-flip-in'); el.classList.add('tp-term-flip-out')
+  setTimeout(() => { el.textContent = next; el.classList.remove('tp-term-flip-out'); void el.offsetWidth; el.classList.add('tp-term-flip-in') }, 125)
+}
+const ghost = document.getElementById('ghost')
+function ghostCycle(){
+  ghost.classList.remove('tp-term-lane-out'); void ghost.offsetWidth; ghost.classList.add('tp-term-lane-in')
+  setTimeout(() => { ghost.classList.remove('tp-term-lane-in'); ghost.classList.add('tp-term-lane-out') }, 1500)
+  setTimeout(() => { ghost.classList.remove('tp-term-lane-out'); void ghost.offsetWidth; ghost.classList.add('tp-term-lane-in') }, 2400)
+}
+document.getElementById('all').onclick = replayAll
+let timer = null
+const loopBtn = document.getElementById('loop')
+loopBtn.onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; loopBtn.textContent = '↻ loop: off'; loopBtn.classList.remove('on') }
+  else { replayAll(); timer = setInterval(replayAll, 3200); loopBtn.textContent = '↻ loop: on'; loopBtn.classList.add('on') }
+}
+// Tap any card to replay just that one.
+cards.forEach(c => c.addEventListener('click', () => replayCard(c)))
+</script>
+</body>
+</html>
