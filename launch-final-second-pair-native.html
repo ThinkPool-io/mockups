@@ -169,6 +169,8 @@
     .section-label { margin: 0; }
     h2 { max-width: 830px; margin-bottom: 0; font: 400 clamp(40px, 4.1vw, 62px)/1.02 var(--font-display); letter-spacing: -.035em; }
     .section-lede { max-width: 680px; margin: 20px 0 0; color: var(--color-muted); font-size: 18px; line-height: 1.58; }
+    .pair-intro { margin-bottom: 0; align-items: start; }
+    .pair-intro .pull-quote { margin-top: 22px; text-align: left; }
     .difference-band { background: var(--color-raised); }
     .compare { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-line); border-radius: var(--radius-card); overflow: hidden; }
     .compare-col { padding: 30px; background: var(--color-bg); }
@@ -280,6 +282,7 @@
       .change-note { margin: 0 10px 12px; font-size: 11px; }
       .section-pad { padding-block: 64px; }
       .section-intro { margin-bottom: 30px; }
+      .pair-intro { margin-bottom: 0; }
       h2 { font-size: 40px; line-height: 1.03; }
       .section-lede { margin-top: 16px; font-size: 16px; }
       .compare { grid-template-columns: 1fr; }
@@ -404,37 +407,6 @@
       </div>
     </section>
 
-    <section id="proof" class="proof-band">
-      <div class="shell section-pad">
-        <div class="section-intro">
-          <p class="section-label">Shared supervision · Thinkpool Ensemble</p>
-          <div>
-            <h2>Both people can see the work. <span class="pool">Either can change its direction.</span></h2>
-            <p class="section-lede">While dispatched work is active, Ensemble surfaces the live child lanes in that branch. Peer reads bounded recent activity, and Dispatch moves defined work under the room&rsquo;s permission gates. The pair remains responsible for the plan and review.</p>
-          </div>
-        </div>
-        <div class="proof-layout">
-          <figure class="workflow-frame proof-figure" aria-labelledby="proof-figure-title">
-            <figcaption class="frame-head">
-              <p class="figure-label">Illustrative workflow</p>
-              <span class="frame-context" id="proof-figure-title">catch → inspect → hand off</span>
-            </figcaption>
-            <div class="decision-trace">
-              <div class="trace-row changed"><span class="trace-state">Catch</span><p class="trace-copy"><b>Conrad spots the missing path.</b>The review changes before the build closes.</p></div>
-              <div class="trace-row"><span class="trace-state">Inspect</span><p class="trace-copy"><b>Peer reads bounded recent activity.</b>The review lane checks relevant work, not continuous shared memory.</p></div>
-              <div class="trace-row"><span class="trace-state">Hand off</span><p class="trace-copy"><b>Dispatch sends defined work.</b>The correction moves to the next live agent lane under the room&rsquo;s permission gates.</p></div>
-            </div>
-            <p class="change-note"><strong>The pair decides the plan.</strong> The lanes do the work. Thinkpool keeps the handoffs inspectable.</p>
-          </figure>
-          <div class="proof-captions" aria-label="How shared supervision works">
-            <article class="proof-caption"><span>Catch</span><div><h3>Question the assumption</h3><p>The second person can intervene while the work is still moving.</p></div></article>
-            <article class="proof-caption"><span>Peer</span><div><h3>Inspect sibling work</h3><p>Read bounded recent activity from another lane before acting.</p></div></article>
-            <article class="proof-caption"><span>Dispatch</span><div><h3>Move defined work</h3><p>Open a fresh Claude or Codex lane, or hand the task to an existing live agent lane under the room&rsquo;s permission gates.</p></div></article>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="remote">
       <div class="shell section-pad remote-grid">
         <div class="remote-copy">
@@ -470,6 +442,37 @@
       </div>
     </section>
 
+    <section id="proof" class="proof-band">
+      <div class="shell section-pad">
+        <div class="section-intro">
+          <p class="section-label">The handoffs stay in the room</p>
+          <div>
+            <h2>Both people can see the work. <span class="pool">Either can change its direction.</span></h2>
+            <p class="section-lede">While dispatched work is active, Ensemble surfaces the live child lanes in that branch. Peer reads bounded recent activity, and Dispatch moves defined work under the room&rsquo;s permission gates. The pair remains responsible for the plan and review.</p>
+          </div>
+        </div>
+        <div class="proof-layout">
+          <figure class="workflow-frame proof-figure" aria-labelledby="proof-figure-title">
+            <figcaption class="frame-head">
+              <p class="figure-label">Illustrative workflow</p>
+              <span class="frame-context" id="proof-figure-title">catch → inspect → hand off</span>
+            </figcaption>
+            <div class="decision-trace">
+              <div class="trace-row changed"><span class="trace-state">Catch</span><p class="trace-copy"><b>Conrad spots the missing path.</b>The review changes before the build closes.</p></div>
+              <div class="trace-row"><span class="trace-state">Inspect</span><p class="trace-copy"><b>Peer reads bounded recent activity.</b>The review lane checks relevant work, not continuous shared memory.</p></div>
+              <div class="trace-row"><span class="trace-state">Hand off</span><p class="trace-copy"><b>Dispatch sends defined work.</b>The correction moves to the next live agent lane under the room&rsquo;s permission gates.</p></div>
+            </div>
+            <p class="change-note"><strong>The pair decides the plan.</strong> The lanes do the work. Thinkpool keeps the handoffs inspectable.</p>
+          </figure>
+          <div class="proof-captions" aria-label="How active handoffs work">
+            <article class="proof-caption"><span>Catch</span><div><h3>Question the assumption</h3><p>The second person can intervene while the work is still moving.</p></div></article>
+            <article class="proof-caption"><span>Peer</span><div><h3>Inspect sibling work</h3><p>Read bounded recent activity from another lane before acting.</p></div></article>
+            <article class="proof-caption"><span>Dispatch</span><div><h3>Move defined work</h3><p>Open a fresh Claude or Codex lane, or hand the task to an existing live agent lane under the room&rsquo;s permission gates.</p></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="proof-band" aria-labelledby="trail-heading">
       <div class="shell section-pad">
         <div class="section-intro">
@@ -486,6 +489,19 @@
       </div>
     </section>
 
+    <section class="difference-band" aria-labelledby="pair-heading">
+      <div class="shell section-pad">
+        <div class="section-intro pair-intro">
+          <p class="section-label">Why exactly two</p>
+          <div>
+            <h2 id="pair-heading">Not a control center <span class="pool">for a crowd.</span></h2>
+            <p class="section-lede">Thinkpool Code is designed around the smallest working team: the two people responsible for the result. Both can enter a lane, question the evidence, and redirect the work. There are no passive seats and no audience around an agent dashboard.</p>
+            <p class="pull-quote">Two people. <span>Shared intent.</span> Multiple lanes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="questions">
       <div class="shell section-pad faq-grid">
         <div>
@@ -496,6 +512,7 @@
           <details open><summary>Is Thinkpool a coding agent?</summary><p>No. Thinkpool is the shared room around the Claude and Codex lanes the pair already uses.</p></details>
           <details><summary>Can both people steer the lanes?</summary><p>Both people can enter and steer the live lanes exposed in the room while the owner&rsquo;s bridge is online.</p></details>
           <details><summary>Does the host have to stay online?</summary><p>Yes, for live agent work. The agents and repository remain on the owner&rsquo;s host.</p></details>
+          <details><summary>Does Thinkpool copy the repository to its servers?</summary><p>The agents and repository stay on the owner&rsquo;s host machine. Room messages, files, uploads, and credentials have separate handling rules. Read Thinkpool&rsquo;s current Privacy and Security page before sharing sensitive work.</p></details>
           <details><summary>Do lanes share all context automatically?</summary><p>No. Peer provides bounded recent activity. Dispatch opens a fresh Claude or Codex lane or hands a task to an existing live agent lane under the room&rsquo;s permission gates. The pair remains responsible for the plan and review.</p></details>
         </div>
       </div>
