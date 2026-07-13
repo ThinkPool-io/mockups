@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Thinkpool Code gives coding-agent work a second pair of eyes in one shared browser room." />
+  <title>Thinkpool Code — A second pair of eyes for coding-agent work</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: hsl(212 9% 9%);
+      --color-raised: hsl(212 8% 12%);
+      --color-surface: hsl(212 8% 14%);
+      --color-float: hsl(212 7% 17%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(198 46% 40%);
+      --color-pool-hi: hsl(198 48% 50%);
+      --color-pool-ink: hsl(200 30% 96%);
+      --color-pool-action: hsl(198 46% 36%);
+      --color-pool-action-hover: hsl(198 46% 38%);
+      --campaign-cobalt: hsl(217 85% 62%);
+      --campaign-cobalt-hi: hsl(217 85% 70%);
+      --agent-cyan: hsl(190 70% 57%);
+      --partner: hsl(280 60% 72%);
+      --positive: hsl(152 28% 54%);
+      --caution: hsl(38 44% 60%);
+      --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --font-identity: "Space Grotesk", "Hanken Grotesk", system-ui, sans-serif;
+      --radius-card: 14px;
+      --radius-control: 9px;
+      --ease-settle: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font: 500 16px/1.5 var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    a, summary { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--color-pool-hi); outline-offset: 4px; border-radius: 4px; }
+    ::selection { background: color-mix(in oklab, var(--campaign-cobalt) 32%, transparent); }
+    h1, h2, h3, p { margin-top: 0; }
+    .shell { width: min(calc(100% - 64px), 1216px); margin-inline: auto; }
+    .pool { color: var(--campaign-cobalt-hi); }
+    .mono { font-family: var(--font-mono); }
+    .identity { font-family: var(--font-identity); }
+
+    .site-nav {
+      position: relative;
+      z-index: 10;
+      height: 68px;
+      border-bottom: 1px solid var(--color-line);
+      background: color-mix(in oklab, var(--color-bg) 90%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { min-height: 44px; display: inline-flex; align-items: center; font: 600 25px/1 var(--font-sans); letter-spacing: -.045em; }
+    .brand span { color: var(--campaign-cobalt); }
+    .nav-links { display: flex; align-items: center; gap: 24px; color: var(--color-muted); font: 500 12px/1 var(--font-mono); }
+    .nav-links > a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+    .nav-links > a:not(.nav-cta):hover { color: var(--color-ink); }
+    .nav-cta,
+    .cta {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-control);
+      padding: 0 18px;
+      color: var(--color-ink);
+      font: 600 13px/1 var(--font-mono);
+      transition: border-color .2s var(--ease-settle), background .2s var(--ease-settle), transform .2s var(--ease-settle);
+    }
+    .nav-cta { min-height: 44px; border-color: var(--color-pool-action); color: var(--color-pool-ink); background: var(--color-pool-action); }
+    .cta:hover, .nav-cta:hover { transform: translateY(-1px); }
+    .cta:hover { border-color: var(--campaign-cobalt); background: var(--color-raised); }
+    .nav-cta:hover, .cta.primary:hover { background: var(--color-pool-action-hover); border-color: var(--color-pool-action-hover); }
+    .cta.primary { background: var(--color-pool-action); border-color: var(--color-pool-action); color: var(--color-pool-ink); }
+
+    .hero {
+      position: relative;
+      overflow: clip;
+      min-height: 810px;
+      display: grid;
+      align-items: center;
+      border-bottom: 1px solid var(--color-line);
+      isolation: isolate;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: min(640px, 100%);
+      aspect-ratio: 1;
+      left: -180px;
+      top: -270px;
+      border-radius: 50%;
+      background: color-mix(in oklab, var(--campaign-cobalt) 12%, transparent);
+      filter: blur(100px);
+      opacity: .74;
+    }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(520px, 1.1fr); gap: 72px; align-items: center; padding-block: 68px 78px; }
+    .eyebrow, .section-label, .figure-label {
+      color: var(--agent-cyan);
+      font: 600 11px/1.45 var(--font-mono);
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin-bottom: 22px; }
+    .eyebrow::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: var(--positive); box-shadow: 0 0 9px var(--positive); }
+    h1 { max-width: 640px; margin-bottom: 0; font: 400 clamp(58px, 5.2vw, 78px)/.97 var(--font-display); letter-spacing: -.042em; }
+    h1 em { color: var(--campaign-cobalt-hi); font-style: normal; }
+    .hero-copy { max-width: 610px; margin: 26px 0 0; color: var(--color-muted); font-size: 19px; line-height: 1.58; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .hero-facts { margin: 20px 0 0; color: var(--color-faint); font: 500 12px/1.5 var(--font-mono); }
+
+    .workflow-frame {
+      position: relative;
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-raised);
+      box-shadow: 0 32px 90px color-mix(in oklab, black 60%, transparent);
+    }
+    .frame-head { min-height: 54px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 10px 16px; border-bottom: 1px solid var(--color-line); }
+    .figure-label { margin: 0; color: var(--color-faint); letter-spacing: .08em; }
+    .frame-context { color: var(--agent-cyan); font: 500 11px/1.4 var(--font-mono); }
+    .lane-strip { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--color-line); background: var(--color-bg); }
+    .lane { min-height: 64px; padding: 13px 15px; border-left: 1px solid var(--color-line); }
+    .lane:first-child { border-left: 0; }
+    .lane b { display: block; color: var(--color-muted); font: 600 12px/1.3 var(--font-mono); }
+    .lane span { display: block; margin-top: 5px; color: var(--color-faint); font: 500 11px/1.35 var(--font-mono); }
+    .decision-trace { display: grid; gap: 0; padding: 18px; }
+    .trace-row { position: relative; display: grid; grid-template-columns: 112px 1fr; gap: 18px; min-height: 76px; padding: 14px 16px; border: 1px solid var(--color-line); border-bottom: 0; background: var(--color-bg); }
+    .trace-row:first-child { border-radius: 10px 10px 0 0; }
+    .trace-row:last-child { border-bottom: 1px solid var(--color-line); border-radius: 0 0 10px 10px; }
+    .trace-row.changed { background: color-mix(in oklab, var(--partner) 8%, var(--color-bg)); border-color: color-mix(in oklab, var(--partner) 42%, var(--color-line)); }
+    .trace-state { color: var(--color-faint); font: 600 11px/1.4 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+    .trace-row.changed .trace-state { color: var(--partner); }
+    .trace-copy { margin: 0; color: var(--color-muted); font-size: 14px; line-height: 1.45; }
+    .trace-copy b { display: block; margin-bottom: 3px; color: var(--color-ink); font-family: var(--font-identity); font-size: 14px; }
+    .changed .trace-copy b { color: var(--partner); }
+    .change-note { display: flex; align-items: center; gap: 10px; margin: 0 18px 18px; color: var(--color-muted); font: 500 12px/1.45 var(--font-mono); }
+    .change-note::before { content: "↳"; color: var(--agent-cyan); font-size: 18px; }
+    .change-note strong { color: var(--campaign-cobalt-hi); }
+
+    section { border-bottom: 1px solid var(--color-line); }
+    .section-pad { padding-block: 96px; }
+    .section-intro { display: grid; grid-template-columns: .68fr 1.32fr; gap: 80px; align-items: end; margin-bottom: 48px; }
+    .section-label { margin: 0; }
+    h2 { max-width: 830px; margin-bottom: 0; font: 400 clamp(40px, 4.1vw, 62px)/1.02 var(--font-display); letter-spacing: -.035em; }
+    .section-lede { max-width: 680px; margin: 20px 0 0; color: var(--color-muted); font-size: 18px; line-height: 1.58; }
+    .difference-band { background: var(--color-raised); }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-line); border-radius: var(--radius-card); overflow: hidden; }
+    .compare-col { padding: 30px; background: var(--color-bg); }
+    .compare-col + .compare-col { border-left: 1px solid var(--color-line); background: var(--color-surface); }
+    .compare-col h3 { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 20px; color: var(--color-muted); font: 600 14px/1.3 var(--font-mono); }
+    .compare-col h3 span { color: var(--color-faint); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+    .compare-row { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 15px 0; border-top: 1px solid var(--color-line); color: var(--color-faint); font-size: 14px; line-height: 1.5; }
+    .compare-row i { color: var(--color-faint); font: normal 600 12px/1.5 var(--font-mono); }
+    .compare-row strong { display: block; margin-bottom: 3px; color: var(--color-muted); }
+    .compare-col.shared h3 { color: var(--campaign-cobalt-hi); }
+    .compare-col.shared i { color: var(--positive); }
+    .pull-quote { margin: 26px 0 0; text-align: center; color: var(--color-faint); font: 500 12px/1.6 var(--font-mono); }
+    .pull-quote span { color: var(--campaign-cobalt-hi); }
+
+    .proof-band { background: var(--color-surface); }
+    .proof-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(320px, .6fr); gap: 28px; align-items: stretch; }
+    .proof-figure { box-shadow: none; }
+    .proof-captions { display: grid; border: 1px solid var(--color-line); border-radius: var(--radius-card); overflow: hidden; background: var(--color-bg); }
+    .proof-caption { display: grid; grid-template-columns: 76px 1fr; gap: 14px; align-content: center; min-height: 112px; padding: 20px; border-top: 1px solid var(--color-line); }
+    .proof-caption:first-child { border-top: 0; }
+    .proof-caption span { color: var(--agent-cyan); font: 600 11px/1.3 var(--font-mono); text-transform: uppercase; }
+    .proof-caption h3 { margin-bottom: 5px; font: 600 17px/1.25 var(--font-sans); }
+    .proof-caption p { margin: 0; color: var(--color-faint); font-size: 13px; line-height: 1.5; }
+
+    .remote-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 72px; align-items: center; }
+    .remote-copy h2 em { display: block; color: var(--campaign-cobalt-hi); font-style: normal; }
+    .remote-notes { display: grid; gap: 12px; margin-top: 28px; }
+    .remote-note { display: grid; grid-template-columns: 86px 1fr; gap: 16px; padding-top: 13px; border-top: 1px solid var(--color-line); color: var(--color-faint); font-size: 14px; line-height: 1.5; }
+    .remote-note b { color: var(--color-muted); font: 600 11px/1.5 var(--font-mono); text-transform: uppercase; }
+    .remote-frame { max-width: 540px; margin-left: auto; box-shadow: none; }
+    .remote-diagram { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; padding: 28px; }
+    .device-card { min-height: 188px; display: grid; align-content: center; gap: 12px; padding: 22px; border: 1px solid var(--color-line); border-radius: 12px; background: var(--color-bg); }
+    .device-card.phone-card { border-color: color-mix(in oklab, var(--campaign-cobalt) 50%, var(--color-line)); }
+    .device-icon { color: var(--agent-cyan); font: 600 12px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .07em; }
+    .device-card h3 { margin: 0; font: 600 16px/1.25 var(--font-sans); }
+    .device-card p { margin: 0; color: var(--color-faint); font: 500 12px/1.5 var(--font-mono); }
+    .device-card .human-turn { padding-left: 10px; border-left: 2px solid var(--partner); color: var(--color-muted); }
+    .connection { color: var(--campaign-cobalt-hi); font: 600 12px/1 var(--font-mono); }
+    .boundary { margin: 0 28px 28px; padding: 14px 16px; border-left: 2px solid var(--caution); background: var(--color-bg); color: var(--color-muted); font: 500 12px/1.5 var(--font-mono); }
+
+    .demo-trail { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--color-line); border-radius: var(--radius-card); overflow: hidden; background: var(--color-line); gap: 1px; }
+    .demo-marker { min-height: 156px; padding: 22px; background: var(--color-bg); }
+    .demo-marker span { color: var(--agent-cyan); font: 600 11px/1 var(--font-mono); }
+    .demo-marker b { display: block; margin-top: 44px; color: var(--color-muted); font: 600 13px/1.25 var(--font-mono); }
+    .demo-marker small { display: block; margin-top: 8px; color: var(--color-faint); font-size: 12px; line-height: 1.45; }
+    .demo-marker.human { background: color-mix(in oklab, var(--partner) 7%, var(--color-bg)); }
+    .demo-marker.human span { color: var(--partner); }
+    .demo-marker.done { background: color-mix(in oklab, var(--positive) 6%, var(--color-bg)); }
+    .demo-marker.done span { color: var(--positive); }
+    .demo-caption { max-width: 760px; margin: 26px auto 0; text-align: center; color: var(--color-faint); font: 500 12px/1.6 var(--font-mono); }
+
+    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 80px; align-items: start; }
+    .faq-list { border-top: 1px solid var(--color-line); }
+    details { border-bottom: 1px solid var(--color-line); }
+    summary { position: relative; min-height: 56px; display: flex; align-items: center; padding: 16px 44px 16px 0; cursor: pointer; list-style: none; color: var(--color-ink); font-size: 16px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; position: absolute; right: 4px; color: var(--agent-cyan); font: 500 18px/1 var(--font-mono); }
+    details[open] summary::after { content: "−"; }
+    details p { max-width: 720px; margin: -2px 44px 20px 0; color: var(--color-faint); font-size: 14px; line-height: 1.6; }
+
+    .closing { position: relative; overflow: hidden; text-align: center; }
+    .closing::before { content: ""; position: absolute; width: min(640px, 100%); height: 380px; left: 50%; transform: translateX(-50%); bottom: -270px; border-radius: 50%; background: color-mix(in oklab, var(--campaign-cobalt) 18%, transparent); filter: blur(80px); }
+    .closing-inner { position: relative; max-width: 830px; margin-inline: auto; padding-block: 100px 112px; }
+    .closing h2 { margin-inline: auto; }
+    .closing-copy { max-width: 620px; margin: 22px auto 0; color: var(--color-muted); font-size: 17px; line-height: 1.6; }
+    .closing .actions { justify-content: center; }
+    .closing-proof { margin: 18px 0 0; color: var(--color-faint); font: 500 12px/1.5 var(--font-mono); }
+    footer { border-top: 1px solid var(--color-line); }
+    .footer-inner { min-height: 92px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .footer-links { display: flex; gap: 20px; color: var(--color-faint); font: 500 12px/1.4 var(--font-mono); }
+    .footer-links a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding-inline: 4px; }
+    .footer-links a:hover { color: var(--color-ink); }
+
+    @media (max-width: 900px) {
+      .hero { min-height: auto; }
+      .hero-grid, .remote-grid, .faq-grid { grid-template-columns: 1fr; }
+      .hero-grid { padding-block: 56px 68px; }
+      .proof-layout { grid-template-columns: 1fr; }
+      .proof-captions { grid-template-columns: repeat(3, 1fr); }
+      .proof-caption { grid-template-columns: 1fr; min-height: 172px; border-top: 0; border-left: 1px solid var(--color-line); }
+      .proof-caption:first-child { border-left: 0; }
+      .remote-frame { max-width: none; margin: 0; }
+      .section-intro { grid-template-columns: 1fr; gap: 16px; align-items: start; }
+      .faq-grid { gap: 36px; }
+    }
+
+    @media (max-width: 600px) {
+      .shell { width: calc(100% - 32px); }
+      .site-nav { height: 64px; }
+      .brand { font-size: 23px; }
+      .nav-links > a:not(.nav-cta) { display: none; }
+      .nav-cta { padding-inline: 12px; font-size: 11px; }
+      .hero::before { width: 390px; left: -150px; top: -210px; filter: blur(80px); }
+      .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 34px 48px; }
+      .eyebrow { margin-bottom: 14px; font-size: 10px; line-height: 1.45; }
+      h1 { font-size: clamp(43px, 12vw, 50px); line-height: .98; }
+      .hero-copy { margin-top: 17px; font-size: 15px; line-height: 1.48; }
+      .actions { margin-top: 20px; }
+      .hero .actions .cta { width: 100%; min-height: 48px; }
+      .hero .actions .cta:not(.primary) { display: none; }
+      .hero-facts { margin-top: 14px; font-size: 11px; line-height: 1.45; }
+      .frame-head { align-items: flex-start; flex-direction: column; gap: 3px; min-height: 56px; padding: 11px 12px; }
+      .figure-label, .frame-context { font-size: 11px; }
+      .lane-strip { display: none; }
+      .decision-trace { padding: 10px; }
+      .trace-row { grid-template-columns: 82px 1fr; gap: 10px; min-height: 64px; padding: 10px; }
+      .trace-state { font-size: 11px; }
+      .trace-copy, .trace-copy b { font-size: 12px; line-height: 1.35; }
+      .change-note { margin: 0 10px 12px; font-size: 11px; }
+      .section-pad { padding-block: 64px; }
+      .section-intro { margin-bottom: 30px; }
+      h2 { font-size: 40px; line-height: 1.03; }
+      .section-lede { margin-top: 16px; font-size: 16px; }
+      .compare { grid-template-columns: 1fr; }
+      .compare-col { padding: 22px; }
+      .compare-col + .compare-col { border-left: 0; border-top: 1px solid var(--color-line); }
+      .compare-col h3 { font-size: 12px; }
+      .compare-row { font-size: 13px; }
+      .pull-quote { font-size: 11px; }
+      .proof-captions { grid-template-columns: 1fr; }
+      .proof-caption { grid-template-columns: 64px 1fr; min-height: 96px; padding: 16px; border-left: 0; border-top: 1px solid var(--color-line); }
+      .proof-caption:first-child { border-top: 0; }
+      .proof-caption p { font-size: 12px; }
+      .remote-grid { gap: 30px; }
+      .remote-note { grid-template-columns: 74px 1fr; gap: 10px; font-size: 13px; }
+      .remote-diagram { grid-template-columns: 1fr; gap: 12px; padding: 16px; }
+      .device-card { min-height: auto; padding: 18px; }
+      .phone-card { order: -1; }
+      .connection { transform: rotate(90deg); justify-self: center; }
+      .device-card p { font-size: 12px; }
+      .boundary { margin: 0 16px 16px; font-size: 11px; }
+      .demo-trail { grid-template-columns: 1fr; }
+      .demo-marker { min-height: 78px; display: grid; grid-template-columns: 42px 1fr; column-gap: 12px; align-items: center; padding: 16px 18px; }
+      .demo-marker b { margin: 0; }
+      .demo-marker small { grid-column: 2; margin-top: -16px; }
+      .demo-caption { font-size: 11px; }
+      summary { font-size: 15px; }
+      details p { margin-right: 0; font-size: 13px; }
+      .closing-inner { padding-block: 78px 88px; }
+      .closing-copy { font-size: 16px; }
+      .closing .actions { display: grid; }
+      .closing .cta { width: 100%; }
+      .closing-proof { font-size: 11px; }
+      .footer-inner { min-height: 120px; flex-direction: column; justify-content: center; gap: 8px; }
+      .footer-links { gap: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Thinkpool home">think<span>pool</span></a>
+      <div class="nav-links">
+        <a href="#proof">Proof</a>
+        <a href="#remote">Remote</a>
+        <a href="#questions">Questions</a>
+        <a class="nav-cta" href="https://thinkpool.io/auth?mode=signup">Start a Code room</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Second pair of eyes · for founder pairs running coding agents</p>
+          <h1>More agents. <em>Still one person watching.</em></h1>
+          <p class="hero-copy">Thinkpool puts a second person in one browser room with multiple Claude or Codex lanes. Both people can see and steer the work from a phone or another laptop.</p>
+          <div class="actions">
+            <a class="cta primary" href="https://thinkpool.io/auth?mode=signup">Start a Code room&nbsp; →</a>
+            <a class="cta" href="#proof">See the proof sequence</a>
+          </div>
+          <p class="hero-facts">One room · exactly two people · live lanes require the owner&rsquo;s bridge host online</p>
+        </div>
+
+        <figure class="workflow-frame" aria-labelledby="hero-figure-title">
+          <figcaption class="frame-head">
+            <p class="figure-label">Illustrative workflow</p>
+            <span class="frame-context" id="hero-figure-title">one finding changes the next turn</span>
+          </figcaption>
+          <div class="lane-strip" aria-label="Example agent lanes">
+            <div class="lane"><b>review-mobile</b><span>example review lane</span></div>
+            <div class="lane"><b>build-fix</b><span>example build lane</span></div>
+            <div class="lane"><b>regression-sweep</b><span>example test lane</span></div>
+          </div>
+          <div class="decision-trace">
+            <div class="trace-row">
+              <span class="trace-state">Before</span>
+              <p class="trace-copy"><b>Known invite path only</b>The build plan covers the issue already reported.</p>
+            </div>
+            <div class="trace-row changed">
+              <span class="trace-state">Conrad · phone</span>
+              <p class="trace-copy"><b>Plus-address invites fail in a new tab.</b>The second person catches the missing path.</p>
+            </div>
+            <div class="trace-row">
+              <span class="trace-state">Plan changed</span>
+              <p class="trace-copy"><b>Add phone + new-tab evidence</b>Fix, test, then run the wider sweep.</p>
+            </div>
+          </div>
+          <p class="change-note"><strong>Conrad changed the plan.</strong> The next agent lane gets the missing edge case.</p>
+        </figure>
+      </div>
+    </header>
+
+    <section class="difference-band">
+      <div class="shell section-pad">
+        <div class="section-intro">
+          <p class="section-label">Parallel work, single-player supervision</p>
+          <div>
+            <h2>The agents multiplied. <span class="pool">The coordinator did not.</span></h2>
+            <p class="section-lede">One lane investigates. Another builds. A third reviews. Without a shared room, one person becomes the message bus between all of them and the partner waiting for a recap.</p>
+          </div>
+        </div>
+        <div class="compare">
+          <article class="compare-col">
+            <h3>Several agent terminals <span>one operator</span></h3>
+            <div class="compare-row"><i>—</i><div><strong>Context stays split</strong>One person moves decisions between private sessions.</div></div>
+            <div class="compare-row"><i>—</i><div><strong>The partner gets a recap</strong>Judgment arrives after the working moment.</div></div>
+          </article>
+          <article class="compare-col shared">
+            <h3>One shared room <span>two people</span></h3>
+            <div class="compare-row"><i>✓</i><div><strong>Both people see the work</strong>Either can enter the lane that needs attention.</div></div>
+            <div class="compare-row"><i>✓</i><div><strong>Judgment changes the next turn</strong>A finding becomes part of the work, not the later summary.</div></div>
+          </article>
+        </div>
+        <p class="pull-quote">More output is useful. <span>Shared judgment is the point.</span></p>
+      </div>
+    </section>
+
+    <section id="proof" class="proof-band">
+      <div class="shell section-pad">
+        <div class="section-intro">
+          <p class="section-label">Shared supervision · Thinkpool Ensemble</p>
+          <div>
+            <h2>Both people can see the work. <span class="pool">Either can change its direction.</span></h2>
+            <p class="section-lede">Ensemble keeps the room&rsquo;s lanes visible. Peer and Dispatch help the work move between them; the pair remains responsible for the plan and the review.</p>
+          </div>
+        </div>
+        <div class="proof-layout">
+          <figure class="workflow-frame proof-figure" aria-labelledby="proof-figure-title">
+            <figcaption class="frame-head">
+              <p class="figure-label">Illustrative workflow</p>
+              <span class="frame-context" id="proof-figure-title">catch → inspect → hand off</span>
+            </figcaption>
+            <div class="decision-trace">
+              <div class="trace-row changed"><span class="trace-state">Catch</span><p class="trace-copy"><b>Conrad spots the missing path.</b>The review changes before the build closes.</p></div>
+              <div class="trace-row"><span class="trace-state">Inspect</span><p class="trace-copy"><b>Peer reads bounded recent activity.</b>The review lane checks relevant work, not continuous shared memory.</p></div>
+              <div class="trace-row"><span class="trace-state">Hand off</span><p class="trace-copy"><b>Dispatch sends defined work.</b>The correction remains visible as it moves to the next lane.</p></div>
+            </div>
+            <p class="change-note"><strong>The pair decides the plan.</strong> The lanes do the work. Thinkpool keeps the handoffs inspectable.</p>
+          </figure>
+          <div class="proof-captions" aria-label="How shared supervision works">
+            <article class="proof-caption"><span>Catch</span><div><h3>Question the assumption</h3><p>The second person can intervene while the work is still moving.</p></div></article>
+            <article class="proof-caption"><span>Peer</span><div><h3>Inspect sibling work</h3><p>Read bounded recent activity from another lane before acting.</p></div></article>
+            <article class="proof-caption"><span>Dispatch</span><div><h3>Move defined work</h3><p>Send a task to a fresh or existing lane and keep it visible.</p></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="remote">
+      <div class="shell section-pad remote-grid">
+        <div class="remote-copy">
+          <p class="section-label">Remote co-steering</p>
+          <h2>The terminal stays put. <em>The room goes with both of you.</em></h2>
+          <p class="section-lede">The owner&rsquo;s bridge runs Claude or Codex on the host. Owner and joiner can open the room from a phone or another laptop and steer together while that bridge remains online.</p>
+          <div class="remote-notes">
+            <div class="remote-note"><b>Owner</b><span>Check the same lanes from another browser.</span></div>
+            <div class="remote-note"><b>Joiner</b><span>Enter a lane and steer alongside the owner.</span></div>
+            <div class="remote-note"><b>Boundary</b><span>Live agent work depends on the owner&rsquo;s bridge host.</span></div>
+          </div>
+        </div>
+        <figure class="workflow-frame remote-frame" aria-labelledby="remote-figure-title">
+          <figcaption class="frame-head">
+            <p class="figure-label">Illustrative workflow</p>
+            <span class="frame-context" id="remote-figure-title">remote participation, local execution</span>
+          </figcaption>
+          <div class="remote-diagram">
+            <div class="device-card">
+              <span class="device-icon">Host</span>
+              <h3>Owner&rsquo;s machine</h3>
+              <p>Repository + Claude or Codex runtime</p>
+            </div>
+            <span class="connection" aria-hidden="true">→</span>
+            <div class="device-card phone-card">
+              <span class="device-icon">Phone</span>
+              <h3>Conrad · second person</h3>
+              <p class="human-turn">“New-tab invite path failed. Send this to build.”</p>
+            </div>
+          </div>
+          <p class="boundary">The host bridge must stay online for live lanes. This is not hosted agent execution.</p>
+        </figure>
+      </div>
+    </section>
+
+    <section class="proof-band" aria-labelledby="trail-heading">
+      <div class="shell section-pad">
+        <div class="section-intro">
+          <p class="section-label">One decision trail</p>
+          <div><h2 id="trail-heading">The intervention stays visible <span class="pool">as the work moves.</span></h2><p class="section-lede">A compact example sequence—not a product capture or a claim that the agents work without review.</p></div>
+        </div>
+        <div class="demo-trail">
+          <div class="demo-marker"><span>01</span><b>Lead</b><small>Opens research + build lanes</small></div>
+          <div class="demo-marker human"><span>02</span><b>Second person</b><small>Catches the missing path</small></div>
+          <div class="demo-marker"><span>03</span><b>Review</b><small>Checks the relevant build activity</small></div>
+          <div class="demo-marker done"><span>04</span><b>Pair</b><small>Returns with a corrected result</small></div>
+        </div>
+        <p class="demo-caption">Illustrative workflow. The point is not autonomy. It is that both people can see where judgment is needed and act there.</p>
+      </div>
+    </section>
+
+    <section id="questions">
+      <div class="shell section-pad faq-grid">
+        <div>
+          <p class="section-label">Questions before the pair starts</p>
+          <h2>What Thinkpool does, <span class="pool">and what it does not.</span></h2>
+        </div>
+        <div class="faq-list">
+          <details open><summary>Is Thinkpool a coding agent?</summary><p>No. Thinkpool is the shared room around the Claude and Codex lanes the pair already uses.</p></details>
+          <details><summary>Can both people steer the lanes?</summary><p>Both people can see the same room, enter lanes, and send turns while the owner&rsquo;s bridge is online.</p></details>
+          <details><summary>Does the host have to stay online?</summary><p>Yes, for live agent work. The agents and repository remain on the owner&rsquo;s host.</p></details>
+          <details><summary>Do lanes share all context automatically?</summary><p>No. Peer provides bounded recent activity, and Dispatch moves defined work. The pair remains responsible for the plan and review.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="shell closing-inner">
+        <p class="eyebrow">The agents are already parallel.</p>
+        <h2>Give the work <span class="pool">a second pair of eyes.</span></h2>
+        <p class="closing-copy">Bring one task that needs a build and a review. Open the room with the person responsible for the result, then take the lane that needs judgment.</p>
+        <div class="actions"><a class="cta primary" href="https://thinkpool.io/auth?mode=signup">Start a Code room&nbsp; →</a><a class="cta" href="#proof">See the proof sequence</a></div>
+        <p class="closing-proof">Create an account, link the bridge on the host, then invite the second person.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <a class="brand" href="#top">think<span>pool</span></a>
+      <nav class="footer-links" aria-label="Footer navigation"><a href="#proof">Proof</a><a href="#remote">Remote</a><a href="#questions">Questions</a></nav>
+    </div>
+  </footer>
+</body>
+</html>
