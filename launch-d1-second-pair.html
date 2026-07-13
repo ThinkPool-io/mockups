@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thinkpool launch direction 1: Second pair of eyes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);--float:hsl(212 9% 13%);
+    --line:hsl(212 7% 21%);--line-strong:hsl(212 7% 28%);--ink:hsl(212 14% 95%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);
+    --pool:hsl(217 85% 62%);--pool-hi:hsl(217 85% 70%);--agent:hsl(190 70% 57%);--live:hsl(145 58% 52%);--partner:hsl(218 28% 64%);
+    --display:"Newsreader",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0} body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  body:before{content:"";position:fixed;inset:-30% 50% 35% -20%;background:radial-gradient(circle,var(--pool) 0,transparent 62%);opacity:.09;filter:blur(80px);pointer-events:none}
+  .nav{height:66px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:relative;z-index:2}.brand{font-size:25px;font-weight:600;letter-spacing:-.04em}.brand span{color:var(--pool)}
+  .nav-actions{display:flex;align-items:center;gap:22px;font:500 12px var(--mono)}.button{border:1px solid var(--pool);border-radius:9px;padding:11px 16px;color:var(--pool-hi)}
+  main{min-height:calc(100vh - 66px);display:grid;grid-template-columns:minmax(0,.92fr) minmax(500px,1.08fr);align-items:center;gap:64px;max-width:1216px;margin:auto;padding:64px 32px 70px}
+  .eyebrow{font:600 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:24px}.eyebrow b{color:var(--live);font-weight:600}
+  h1{font:400 clamp(52px,5.3vw,76px)/.98 var(--display);letter-spacing:-.035em;max-width:650px}h1 em{color:var(--pool-hi);font-style:normal}
+  .sub{max-width:600px;margin-top:27px;color:var(--muted);font-size:18px;line-height:1.62}.actions{display:flex;align-items:center;gap:14px;margin-top:34px}.primary{background:var(--pool);color:hsl(212 20% 7%);padding:13px 20px;border-radius:9px;font:600 13px var(--mono)}.secondary{border:1px solid var(--line-strong);padding:12px 19px;border-radius:9px;color:var(--muted);font:500 13px var(--mono)}
+  .proof{position:relative;min-height:540px;display:grid;place-items:center}.room{width:100%;max-width:620px;border:1px solid var(--line-strong);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--bg));box-shadow:0 34px 90px hsl(212 40% 2%/.72);overflow:hidden}
+  .room-top{height:48px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font:500 11px var(--mono);color:var(--faint)}.room-top strong{color:var(--ink);font-weight:500}.live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live);margin-right:8px}
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);min-height:360px}.lane{background:var(--bg);padding:18px 15px}.lane-head{display:flex;align-items:center;gap:8px;color:var(--agent);font:600 10px var(--mono);text-transform:uppercase;letter-spacing:.08em}.lane-head i{width:6px;height:6px;background:var(--live);border-radius:50%}.log{margin-top:22px;display:grid;gap:13px;font:400 10px/1.5 var(--mono);color:var(--faint)}.log span{display:block;border-left:1px solid var(--line-strong);padding-left:9px}.log b{color:var(--muted);font-weight:500}.lane:nth-child(3) .lane-head{color:var(--pool-hi)}
+  .room-foot{border-top:1px solid var(--line);padding:12px 15px;display:flex;justify-content:space-between;font:500 10px var(--mono);color:var(--faint)}.room-foot strong{color:var(--live)}
+  .person{position:absolute;border:1px solid var(--line-strong);background:var(--float);border-radius:999px;padding:9px 13px;font:500 11px var(--mono);box-shadow:0 12px 40px hsl(212 40% 2%/.7)}.person:after{content:"";position:absolute;width:28px;height:1px;background:var(--line-strong);top:50%}.maks{left:-7px;top:78px;color:var(--live)}.maks:after{left:100%}.conrad{right:-10px;bottom:88px;color:var(--partner)}.conrad:after{right:100%}.human-note{position:absolute;right:22px;top:124px;max-width:210px;border:1px solid color-mix(in oklab,var(--pool) 55%,var(--line));background:var(--raised);border-radius:10px;padding:12px 14px;font:500 11px/1.55 var(--mono);color:var(--muted)}.human-note b{display:block;color:var(--pool-hi);margin-bottom:4px}
+  .direction{position:fixed;left:22px;bottom:18px;color:var(--faint);font:500 9px var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  @media(max-width:760px){.nav{height:62px;padding:0 20px}.nav-actions>span{display:none}.brand{font-size:23px}main{display:block;padding:62px 20px 40px}.eyebrow{font-size:10px;margin-bottom:18px}h1{font-size:43px;line-height:1.02}.sub{font-size:16px;line-height:1.55;margin-top:20px}.actions{margin-top:26px}.secondary{display:none}.proof{min-height:395px;margin-top:48px}.room{border-radius:13px}.room-top{height:44px}.lanes{min-height:265px}.lane{padding:14px 10px}.lane:nth-child(2){display:none}.log{margin-top:16px;gap:10px;font-size:9px}.human-note{right:8px;top:96px;max-width:170px;font-size:9px}.person{font-size:9px;padding:7px 9px}.maks{left:-5px;top:53px}.conrad{right:-5px;bottom:39px}.direction{display:none}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="brand">think<span>pool</span></div><div class="nav-actions"><span>Sign in</span><span class="button">Start free</span></div></nav>
+<main>
+  <section>
+    <p class="eyebrow"><b>●</b> Second pair of eyes</p>
+    <h1>Your agents have more hands. Give the work <em>a second pair of eyes.</em></h1>
+    <p class="sub">Thinkpool puts two people in one room with every coding agent. Both can watch the lanes, redirect the work, and catch what one operator misses.</p>
+    <div class="actions"><span class="primary">Start a room →</span><span class="secondary">Watch a real build</span></div>
+  </section>
+  <section class="proof" aria-label="A shared room with three visible agent lanes and two people steering">
+    <div class="person maks">● Maks · reviewing</div><div class="person conrad">● Conrad · steering</div>
+    <div class="room">
+      <div class="room-top"><strong><span class="live"></span>release room</strong><span>Ensemble · 3 lanes</span></div>
+      <div class="lanes">
+        <div class="lane"><div class="lane-head"><i></i>Investigate</div><div class="log"><span><b>reading</b><br>auth flow</span><span><b>found</b><br>invite redirect</span><span>handing proof to build</span></div></div>
+        <div class="lane"><div class="lane-head"><i></i>Build</div><div class="log"><span><b>editing</b><br>return path</span><span><b>running</b><br>contract tests</span><span>2 checks passed</span></div></div>
+        <div class="lane"><div class="lane-head"><i></i>Review</div><div class="log"><span><b>checking</b><br>mobile join</span><span><b>caught</b><br>new-tab edge</span><span>sending fix back</span></div></div>
+      </div>
+      <div class="room-foot"><span>Both people see the same work</span><strong>live</strong></div>
+    </div>
+    <div class="human-note"><b>Conrad redirected review</b>The lane stays visible to both people.</div>
+  </section>
+</main>
+<p class="direction">Campaign direction 01 · human bottleneck</p>
+</body>
+</html>
