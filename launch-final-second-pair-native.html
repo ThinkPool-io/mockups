@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Thinkpool Code gives coding-agent work a second pair of eyes in one shared browser room." />
-  <title>Thinkpool Code — A second pair of eyes for coding-agent work</title>
+  <meta name="description" content="Thinkpool Code gives Claude or Codex work a second pair of eyes in one shared browser room." />
+  <meta name="theme-color" content="#151719" />
+  <title>Thinkpool Code: A second pair of eyes for coding-agent work</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
@@ -51,8 +52,10 @@
       -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
-    a, summary { -webkit-tap-highlight-color: transparent; }
+    a, summary { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     :focus-visible { outline: 2px solid var(--color-pool-hi); outline-offset: 4px; border-radius: 4px; }
+    .skip-link { position: fixed; z-index: 100; top: 8px; left: 8px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: var(--radius-control); background: var(--color-pool-action); color: var(--color-pool-ink); font: 600 13px/1 var(--font-mono); transform: translateY(-160%); }
+    .skip-link:focus-visible { transform: translateY(0); }
     ::selection { background: color-mix(in oklab, var(--campaign-cobalt) 32%, transparent); }
     h1, h2, h3, p { margin-top: 0; }
     .shell { width: min(calc(100% - 64px), 1216px); margin-inline: auto; }
@@ -320,6 +323,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="shell nav-inner">
       <a class="brand" href="#top" aria-label="Thinkpool home">think<span>pool</span></a>
@@ -336,9 +340,9 @@
     <header class="hero">
       <div class="shell hero-grid">
         <div>
-          <p class="eyebrow">Second pair of eyes · for founder pairs running coding agents</p>
+          <p class="eyebrow">Second pair of eyes · for founder pairs running multiple coding agents</p>
           <h1>More agents. <em>Still one person watching.</em></h1>
-          <p class="hero-copy">Thinkpool puts a second person in one browser room with multiple Claude or Codex lanes. Both people can see and steer the work from a phone or another laptop.</p>
+          <p class="hero-copy">Thinkpool puts a second person in one browser room with multiple Claude or Codex lanes. Both people can see and steer the work from a phone or another laptop while the owner&rsquo;s bridge host is online.</p>
           <div class="actions">
             <a class="cta primary" href="https://thinkpool.io/auth?mode=signup">Start a Code room&nbsp; →</a>
             <a class="cta" href="#proof">See the proof sequence</a>
@@ -378,7 +382,7 @@
     <section class="difference-band">
       <div class="shell section-pad">
         <div class="section-intro">
-          <p class="section-label">Parallel work, single-player supervision</p>
+          <p class="section-label">Parallel work, single-person supervision</p>
           <div>
             <h2>The agents multiplied. <span class="pool">The coordinator did not.</span></h2>
             <p class="section-lede">One lane investigates. Another builds. A third reviews. Without a shared room, one person becomes the message bus between all of them and the partner waiting for a recap.</p>
@@ -387,8 +391,8 @@
         <div class="compare">
           <article class="compare-col">
             <h3>Several agent terminals <span>one operator</span></h3>
-            <div class="compare-row"><i>—</i><div><strong>Context stays split</strong>One person moves decisions between private sessions.</div></div>
-            <div class="compare-row"><i>—</i><div><strong>The partner gets a recap</strong>Judgment arrives after the working moment.</div></div>
+            <div class="compare-row"><i aria-hidden="true">×</i><div><strong>Context stays split</strong>One person moves decisions between private sessions.</div></div>
+            <div class="compare-row"><i aria-hidden="true">×</i><div><strong>The partner gets a recap</strong>Judgment arrives after the working moment.</div></div>
           </article>
           <article class="compare-col shared">
             <h3>One shared room <span>two people</span></h3>
@@ -406,7 +410,7 @@
           <p class="section-label">Shared supervision · Thinkpool Ensemble</p>
           <div>
             <h2>Both people can see the work. <span class="pool">Either can change its direction.</span></h2>
-            <p class="section-lede">Ensemble keeps the room&rsquo;s lanes visible. Peer and Dispatch help the work move between them; the pair remains responsible for the plan and the review.</p>
+            <p class="section-lede">While dispatched work is active, Ensemble surfaces the live child lanes in that branch. Peer reads bounded recent activity, and Dispatch moves defined work under the room&rsquo;s permission gates. The pair remains responsible for the plan and review.</p>
           </div>
         </div>
         <div class="proof-layout">
@@ -418,14 +422,14 @@
             <div class="decision-trace">
               <div class="trace-row changed"><span class="trace-state">Catch</span><p class="trace-copy"><b>Conrad spots the missing path.</b>The review changes before the build closes.</p></div>
               <div class="trace-row"><span class="trace-state">Inspect</span><p class="trace-copy"><b>Peer reads bounded recent activity.</b>The review lane checks relevant work, not continuous shared memory.</p></div>
-              <div class="trace-row"><span class="trace-state">Hand off</span><p class="trace-copy"><b>Dispatch sends defined work.</b>The correction remains visible as it moves to the next lane.</p></div>
+              <div class="trace-row"><span class="trace-state">Hand off</span><p class="trace-copy"><b>Dispatch sends defined work.</b>The correction moves to the next live agent lane under the room&rsquo;s permission gates.</p></div>
             </div>
             <p class="change-note"><strong>The pair decides the plan.</strong> The lanes do the work. Thinkpool keeps the handoffs inspectable.</p>
           </figure>
           <div class="proof-captions" aria-label="How shared supervision works">
             <article class="proof-caption"><span>Catch</span><div><h3>Question the assumption</h3><p>The second person can intervene while the work is still moving.</p></div></article>
             <article class="proof-caption"><span>Peer</span><div><h3>Inspect sibling work</h3><p>Read bounded recent activity from another lane before acting.</p></div></article>
-            <article class="proof-caption"><span>Dispatch</span><div><h3>Move defined work</h3><p>Send a task to a fresh or existing lane and keep it visible.</p></div></article>
+            <article class="proof-caption"><span>Dispatch</span><div><h3>Move defined work</h3><p>Open a fresh Claude or Codex lane, or hand the task to an existing live agent lane under the room&rsquo;s permission gates.</p></div></article>
           </div>
         </div>
       </div>
@@ -470,7 +474,7 @@
       <div class="shell section-pad">
         <div class="section-intro">
           <p class="section-label">One decision trail</p>
-          <div><h2 id="trail-heading">The intervention stays visible <span class="pool">as the work moves.</span></h2><p class="section-lede">A compact example sequence—not a product capture or a claim that the agents work without review.</p></div>
+          <div><h2 id="trail-heading">The intervention stays visible <span class="pool">as the work moves.</span></h2><p class="section-lede">A compact example sequence. It is not a product capture or a claim that the agents work without review.</p></div>
         </div>
         <div class="demo-trail">
           <div class="demo-marker"><span>01</span><b>Lead</b><small>Opens research + build lanes</small></div>
@@ -490,9 +494,9 @@
         </div>
         <div class="faq-list">
           <details open><summary>Is Thinkpool a coding agent?</summary><p>No. Thinkpool is the shared room around the Claude and Codex lanes the pair already uses.</p></details>
-          <details><summary>Can both people steer the lanes?</summary><p>Both people can see the same room, enter lanes, and send turns while the owner&rsquo;s bridge is online.</p></details>
+          <details><summary>Can both people steer the lanes?</summary><p>Both people can enter and steer the live lanes exposed in the room while the owner&rsquo;s bridge is online.</p></details>
           <details><summary>Does the host have to stay online?</summary><p>Yes, for live agent work. The agents and repository remain on the owner&rsquo;s host.</p></details>
-          <details><summary>Do lanes share all context automatically?</summary><p>No. Peer provides bounded recent activity, and Dispatch moves defined work. The pair remains responsible for the plan and review.</p></details>
+          <details><summary>Do lanes share all context automatically?</summary><p>No. Peer provides bounded recent activity. Dispatch opens a fresh Claude or Codex lane or hands a task to an existing live agent lane under the room&rsquo;s permission gates. The pair remains responsible for the plan and review.</p></details>
         </div>
       </div>
     </section>
