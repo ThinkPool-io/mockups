@@ -17,7 +17,7 @@ html,body{height:100%}body{overflow:hidden}.shell{height:100vh;overflow:auto}
   <header class="hero">
     <div class="top"><div class="wordmark">think<span>pool</span></div><div class="status">Approval package · not submitted</div></div>
     <div class="hero-copy"><div class="kicker">Product Hunt launch kit · direction C</div><h1>Think together,<br>then hand the room <em>to the agent.</em></h1></div>
-    <div class="hero-bottom"><p>A complete, claim-audited campaign for technical pairs. The story stays human: shared decision, explicit handoff, visible work.</p><div class="verdict"><strong>Kit ready for human review.</strong>Submission remains blocked by authenticated proof capture, first-session QA, README correction, and promotion clearance.</div></div>
+    <div class="hero-bottom"><p>A complete, claim-audited campaign for technical pairs. The story stays human: shared decision, explicit handoff, visible work.</p><div class="verdict"><strong>Core product proof passes.</strong>Submission remains blocked by promotion clearance, maker-owned form checks, and approval to publish the corrected README.</div></div>
   </header>
   <main class="layout">
     <nav class="toc" aria-label="Launch kit contents">
@@ -551,15 +551,33 @@ html,body{height:100%}body{overflow:hidden}.shell{height:100vh;overflow:auto}
 <h3 id="visual-quality">Visual quality</h3><p>Passed for the seven rough-final assets. Every PNG is 1270 × 760 and was audited at native size after the shared exporter defect was fixed. The approval page is checked at desktop and mobile sizes.</p>
 <h3 id="conversion-clarity">Conversion clarity</h3><p>Passed. Listing, gallery, demo, maker comment, and communications all move from pair decision → explicit handoff → visible work → start a room with the relevant partner.</p>
 <h3 id="skeptical-user">Skeptical user</h3><p>Passed with a deliberate concession: Thinkpool is not always better than Slack, screen sharing, or multiple terminals. It earns a place only when two people genuinely share the decision and preserving that decision with the agent work reduces context reconstruction.</p>
+<h2 id="live-release-proof">Live release proof</h2><p><img src="https://raw.githubusercontent.com/ThinkPool-io/mockups/main/product-hunt-launch-kit-assets/launch-proof-real-bridge.png" alt="Two authenticated participants use a human-only aside, discuss the launch check, hand the room to a real Codex agent with @pool, and review the response."></p>
+<p>Verified against production on 14 July 2026:</p>
+<ul>
+<li>Two isolated authenticated accounts joined one disposable production room.</li>
+<li>A <code>//</code> aside rendered only as human-routed context, followed by an on-record pair message.</li>
+<li>The published <code>thinkpool-pair@latest</code> bridge connected a disposable repository to a real Codex runtime.</li>
+<li><code>@pool</code> reached that agent, and both browser clients rendered the exact response.</li>
+<li>The partner review rendered after the agent response.</li>
+<li>The room and throwaway accounts were deleted after capture.</li>
+<li>Separate production checks proved signed-out invite → signup confirmation → room landing, plus real cross-client realtime delivery.</li>
+</ul>
 <h2 id="readiness-verdict">Readiness verdict</h2><p><strong>Campaign package: ready for human review. Product Hunt submission: not ready.</strong></p>
-<p>Remaining blockers:</p>
+<p>Closed with evidence:</p>
 <ol>
-<li>Capture a genuine two-account, bridge-connected release-build demo showing discussion, <code>//</code>, <code>@pool</code>, connected-agent activity, and review. The current gallery uses a real public landing capture, but it is not sufficient final product proof.</li>
-<li>Prove the first-session path is repeatable for a new user, including account, room, bridge, provider, partner join, and first agent handoff.</li>
-<li>Replace or archive the stale root README before linking the repository or using it for developer onboarding. It still describes the retired chat product and old pricing/account behavior.</li>
-<li>Resolve the internal employment/public-promotion clearance recorded in the marketing plan.</li>
-<li>Restore a launch-capable bridge host and run a final production smoke test.</li>
-<li>Verify the live Product Hunt scheduler, topic labels, tagline behavior, pricing selection, upload validation, and Pacific launch time on the chosen date.</li>
+<li>The genuine two-account, bridge-connected product proof now covers <code>//</code>, on-record discussion, <code>@pool</code>, real Codex activity, and partner review.</li>
+<li>The signed-out invite and email-confirmation path now returns a fresh account to the correct room.</li>
+<li>The production baseline, database checks, launch contracts, and real two-client realtime delivery pass.</li>
+<li>The root README has been rewritten locally for the current Code product and passes the brand scan, build, and auth regression tests.</li>
+<li>The bridge host is live on <code>thinkpool-pair</code> 0.7.229, and the final production smoke passes.</li>
+<li>Product Hunt’s current official guidance was rechecked: personal maker account, 260-character description, 240 × 240 thumbnail recommendation, 1270 × 760 gallery recommendation, 2+ gallery images, public full YouTube URL, and Pacific launch-day timing.</li>
+</ol>
+<p>Remaining human and clean-machine gates:</p>
+<ol>
+<li>Resolve the internal employment/public-promotion clearance recorded in the marketing plan. This remains the hard launch blocker.</li>
+<li>Approve publishing the corrected README and verifier changes. They are prepared and verified locally but intentionally not pushed under the no-publication constraint.</li>
+<li>Run one clean-machine device-link pass with <code>npx thinkpool-pair@latest login</code>. The browser approval screen worked, but this shared host cannot safely isolate <code>auth.json</code>; automation must not overwrite the live account bridge credential store.</li>
+<li>From the named maker’s eligible personal Product Hunt account, create a private draft and verify the live topic labels, tagline behavior, pricing selection, asset validation, and chosen launch date. Do not schedule or submit yet.</li>
 <li>Have the named maker personally rewrite the first comment, maker bio, and any direct outreach.</li>
 </ol>
 <p>Do not submit, publish launch posts, or begin public outreach until every blocker is cleared and the human approval gate is explicit.</p>
