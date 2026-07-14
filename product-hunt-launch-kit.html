@@ -245,7 +245,7 @@ html,body{height:100%}body{overflow:hidden}.shell{height:100vh;overflow:auto}
 <h3 id="what-happens-if-the-bridge-disconnects">What happens if the bridge disconnects?</h3><p>The room remains a readable transcript. Thinkpool does not switch to a hidden hosted model, and new agent work waits for the bridge host to reconnect.</p>
 <h3 id="what-does-pool-do">What does <code>@pool</code> do?</h3><p>It packages the on-record room conversation plus a bounded digest of visible sibling lanes and sends that context to the same bridge-hosted connected agent. It is not a separate synthesis model and does not broadcast a command to every lane.</p>
 <h3 id="is-a-secure-private-channel">Is <code>//</code> a secure private channel?</h3><p>No. It is a human-only routing boundary in the room. The aside stays out of the default agent and <code>@pool</code> context, but it should not be described as encrypted or as a confidentiality guarantee.</p>
-<h3 id="whose-provider-key-and-bill-does-it-use">Whose provider key and bill does it use?</h3><p>The bridge host configures the provider setup. The key is sealed to that bridge, the provider call happens from the host machine, and provider charges are separate from Thinkpool. Claude lanes accept Anthropic-compatible endpoints directly; other models can be reached through a compatible gateway such as OpenRouter. Codex uses its Codex/OpenAI login.</p>
+<h3 id="whose-provider-key-and-bill-does-it-use">Whose provider key and bill does it use?</h3><p>The bridge host configures the provider setup. The key is sealed to that bridge, the provider call happens from the host machine, and provider charges are separate from Thinkpool. Claude lanes accept Anthropic-compatible endpoints directly. Non-Anthropic models require a translating gateway such as LiteLLM. Codex uses its Codex/OpenAI login.</p>
 <h3 id="is-it-safe-for-a-private-repository">Is it safe for a private repository?</h3><p>Do not answer this with a blanket assurance. Repository files remain on the bridge host, but room transcripts, attachments, activity records, and presence are handled under Thinkpool’s Privacy Policy. Voice dictation sends audio to Groq for transcription. Teams should review the current policy and access model against their requirements.</p>
 <h3 id="what-is-available-today">What is available today?</h3><p>Available: two-person rooms, the connected bridge, <code>//</code>, <code>@pool</code>, visible bounded lanes, Claude Code and Codex support, provider-direct operation, browser access, and rendered Design/mockup cards.</p>
 <p>Available with conditions: mobile-browser participation while the host bridge remains connected; compatible providers and gateways; bounded Ensemble/Cascade delegation.</p>
@@ -489,7 +489,7 @@ html,body{height:100%}body{overflow:hidden}.shell{height:100vh;overflow:auto}
 <tr>
 <td>Provider-direct operation</td>
 <td>Shipped, qualified</td>
-<td><code>bridge/providers.mjs</code>, Terms; Anthropic-compatible direct, other models through compatible gateways; Codex uses its login</td>
+<td><code>bridge/providers.mjs</code>, Terms; Anthropic-compatible direct, non-Anthropic models through a translating gateway such as LiteLLM; Codex uses its login</td>
 </tr>
 <tr>
 <td>One host provider setup powers the pair</td>
@@ -541,6 +541,8 @@ html,body{height:100%}body{overflow:hidden}.shell{height:100vh;overflow:auto}
 <h2 id="product-hunt-requirements-and-conduct">Product Hunt requirements and conduct</h2><p>Current official guidance used for this kit:</p>
 <ul>
 <li><a href="https://help.producthunt.com/en/articles/479557-how-to-post-a-product">How to post a product</a>: personal account, product name, 260-character description, recommended 240 × 240 thumbnail, recommended 1270 × 760 gallery, at least two images, and public YouTube URL.</li>
+<li><a href="https://help.producthunt.com/en/articles/2724119-how-to-schedule-a-post">How to schedule a post</a>: create a private draft or schedule a launch within 30 days; do not schedule before final approval.</li>
+<li><a href="https://help.producthunt.com/en/articles/481909-how-can-i-get-access-to-post">Posting access</a>: company accounts cannot post, and a new personal account may need to complete the current access wait before it can create the launch.</li>
 <li><a href="https://help.producthunt.com/en/articles/9883485-product-hunt-featuring-guidelines">Featuring guidelines</a>: the product must be live and usable, not a waitlist.</li>
 <li><a href="https://help.producthunt.com/en/articles/2690626-how-do-i-share-my-post">Sharing policy</a> and <a href="https://help.producthunt.com/en/articles/484935-can-i-ask-my-community-friends-family-to-upvote-a-product">upvote policy</a>: no vote asks, mass messaging, incentives, trading, or coordinated voting.</li>
 <li><a href="https://help.producthunt.com/en/articles/10030102/commenting-guidelines">Commenting guidelines</a> and <a href="https://help.producthunt.com/en/articles/3615694-community-guidelines">community guidelines</a>: genuine human profiles, specific discussion, no bots, spam, or generic automated comments.</li>
