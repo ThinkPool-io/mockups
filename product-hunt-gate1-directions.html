@@ -21,7 +21,7 @@
     main { display:grid; gap:42px; padding:42px max(20px,calc((100vw - 1270px)/2)) 96px; }
     .slide { position:relative; width:100%; height:min(760px,59.84252vw); overflow:hidden; background:var(--still); border:1px solid var(--rule); isolation:isolate; }
     .slide::after { content:""; position:absolute; inset:0; border:1px solid rgba(255,255,255,.035); pointer-events:none; z-index:9; }
-    .top { position:absolute; z-index:5; top:5.25%; left:5.2%; right:5.2%; display:flex; justify-content:space-between; align-items:center; }
+    .top { position:absolute; z-index:5; top:5.25%; left:5.2%; right:5.2%; padding-right:16px; display:flex; justify-content:space-between; align-items:center; }
     .direction { color:var(--pool); }
     .foot { position:absolute; z-index:6; left:5.2%; right:5.2%; bottom:4.3%; padding-top:13px; border-top:1px solid var(--rule); display:flex; justify-content:space-between; gap:16px; }
     .display { position:absolute; z-index:4; left:5.2%; top:19%; width:45%; margin:0; font:500 clamp(28px,4.45vw,67px)/.92 var(--serif); letter-spacing:-.055em; }
@@ -47,9 +47,14 @@
     .b-support .cue.c1 { left:42%; top:48%; }.b-support .cue.c2 { left:70%; top:53%; }.b-support .cue.c3 { left:60%; top:72%; }
     .c-support .capture { top:14%; height:68%; }.c-support .cue.c1 { left:51%; top:51%; }.c-support .cue.c2 { left:64%; top:59%; }.c-support .cue.c3 { left:60%; top:73%; }
     .c-cover .cue { right:7%; bottom:14%; }.a-cover .cue { right:7%; top:65%; }.b-cover .cue { right:8%; top:62%; }
+    body.exporting { overflow:hidden; }
+    body.exporting .intro { display:none; }
+    body.exporting main { display:block; width:1270px; padding:0; gap:0; }
+    body.exporting .slide { display:none; width:1270px; height:760px; margin:0; }
+    body.exporting .slide.is-export { display:block; }
     @media (max-width:700px) {
       .intro { margin:0 20px; padding:42px 0 30px; display:block; } .intro p { margin-top:22px; font-size:16px; } main { padding:26px 0 48px; gap:24px; } .slide { border-left:0; border-right:0; }
-      .top,.foot { left:4.5%; right:4.5%; } .foot { font-size:7px; padding-top:8px; bottom:3%; } .display { left:4.5%; top:14%; width:48%; font-size:clamp(17px,5.25vw,38px); }.subhead { left:4.5%; top:53%; width:39%; font-size:clamp(8px,1.7vw,13px); }.audience { left:4.5%; top:72%; width:38%; font-size:clamp(7px,1.35vw,10px); padding-left:8px; }.cover .capture { right:4.5%; top:15%; width:47%; height:63%; }.cue { padding:5px 6px; max-width:112px; font-size:clamp(6px,1.2vw,9px); }.cue b{font-size:6px;margin-right:3px}.capture-caption{font-size:6px;padding:4px;left:6px;bottom:6px}.support .summary{left:4.5%;top:14%;width:32%}.support h2{font-size:clamp(15px,4.25vw,28px);margin-bottom:9px}.support .summary p{font-size:clamp(7px,1.45vw,11px)}.support .micro{left:4.5%;top:58%;width:30%;padding:8px 0;font-size:clamp(6px,1.15vw,8px)}.support .capture{left:39.5%;width:56%;top:16%;height:66%}.a-support .capture{top:14%;height:69%}.c-support .capture{top:13%;height:70%}.tag,.utility,.kicker{font-size:7px}.wordmark{font-size:13px}.point{width:5px;height:5px;border-width:1px}.leader{height:1px}}
+      .top,.foot { left:4.5%; right:4.5%; } .top { padding-right:10px; } .foot { font-size:7px; padding-top:8px; bottom:3%; } .display { left:4.5%; top:14%; width:48%; font-size:clamp(17px,5.25vw,38px); }.subhead { left:4.5%; top:53%; width:39%; font-size:clamp(8px,1.7vw,13px); }.audience { left:4.5%; top:72%; width:38%; font-size:clamp(7px,1.35vw,10px); padding-left:8px; }.cover .capture { right:4.5%; top:15%; width:47%; height:63%; }.cue { padding:5px 6px; max-width:112px; font-size:clamp(6px,1.2vw,9px); }.cue b{font-size:6px;margin-right:3px}.capture-caption{font-size:6px;padding:4px;left:6px;bottom:6px}.support .summary{left:4.5%;top:14%;width:32%}.support h2{font-size:clamp(15px,4.25vw,28px);margin-bottom:9px}.support .summary p{font-size:clamp(7px,1.45vw,11px)}.support .micro{left:4.5%;top:58%;width:30%;padding:8px 0;font-size:clamp(6px,1.15vw,8px)}.support .capture{left:39.5%;width:56%;top:16%;height:66%}.a-support .capture{top:14%;height:69%}.c-support .capture{top:13%;height:70%}.tag,.utility,.kicker{font-size:7px}.wordmark{font-size:13px}.point{width:5px;height:5px;border-width:1px}.leader{height:1px}}
   </style>
 </head>
 <body>
