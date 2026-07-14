@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10252e">
+  <meta name="description" content="A step-by-step plan for subletting parking space 1327 at Křižíkova 710/30 in Karlín.">
+  <title>Křižíkova P−3 · Parking Rental Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --asphalt: #10252e;
+      --asphalt-2: #183640;
+      --concrete: #edf0ee;
+      --paper: #ffffff;
+      --blue: #176be8;
+      --orange: #ff5a24;
+      --yellow: #ffd33d;
+      --muted: #617078;
+      --line: #cad2d2;
+      --success: #097b55;
+      --shadow: 0 18px 50px rgba(16, 37, 46, .14);
+      --display: "Barlow Condensed", Impact, sans-serif;
+      --body: "IBM Plex Sans", Arial, sans-serif;
+      --mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--asphalt);
+      background:
+        linear-gradient(rgba(16,37,46,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16,37,46,.035) 1px, transparent 1px),
+        var(--concrete);
+      background-size: 24px 24px;
+      font-family: var(--body);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .skip {
+      position: fixed;
+      left: 16px;
+      top: -80px;
+      z-index: 99;
+      padding: 10px 14px;
+      background: var(--yellow);
+      color: var(--asphalt);
+      font-weight: 700;
+    }
+    .skip:focus { top: 16px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      height: 58px;
+      padding: 0 clamp(18px, 4vw, 64px);
+      color: white;
+      background: rgba(16, 37, 46, .96);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(14px);
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .parking-sign {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 2px solid white;
+      background: var(--blue);
+      font-family: var(--display);
+      font-size: 23px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 210px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #dbe4e5;
+    }
+    .progress-track {
+      flex: 1;
+      height: 5px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: rgba(255,255,255,.16);
+    }
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: var(--yellow);
+      transition: width .35s ease;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 630px;
+      padding: clamp(58px, 9vw, 118px) clamp(20px, 6vw, 92px) 76px;
+      color: white;
+      background:
+        radial-gradient(circle at 83% 18%, rgba(23,107,232,.42), transparent 30%),
+        linear-gradient(123deg, var(--asphalt) 0 66%, #0b1a20 66% 100%);
+    }
+    .hero::before {
+      content: "P−3";
+      position: absolute;
+      right: -1vw;
+      bottom: -8vw;
+      color: rgba(255,255,255,.035);
+      font-family: var(--display);
+      font-size: clamp(260px, 39vw, 610px);
+      font-weight: 800;
+      line-height: .75;
+      letter-spacing: -.08em;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+      gap: clamp(40px, 8vw, 120px);
+      align-items: end;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #bfd0d4;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 44px;
+      height: 6px;
+      background: repeating-linear-gradient(90deg, var(--yellow) 0 10px, transparent 10px 15px);
+    }
+    h1 {
+      max-width: 810px;
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(66px, 9.2vw, 142px);
+      font-weight: 700;
+      line-height: .81;
+      letter-spacing: -.035em;
+      text-transform: uppercase;
+    }
+    h1 span { display: block; color: var(--yellow); }
+    .hero-copy {
+      max-width: 660px;
+      margin: 31px 0 0;
+      color: #dbe4e5;
+      font-size: clamp(17px, 1.5vw, 21px);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 31px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.28);
+      color: white;
+      background: transparent;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+    }
+    .btn.primary { border-color: var(--yellow); color: var(--asphalt); background: var(--yellow); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:focus-visible, .copy-btn:focus-visible, .check:focus-within { outline: 3px solid var(--yellow); outline-offset: 3px; }
+
+    .permit {
+      position: relative;
+      color: var(--asphalt);
+      background: var(--paper);
+      box-shadow: 18px 22px 0 rgba(0,0,0,.18);
+      transform: rotate(1.4deg);
+    }
+    .permit::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: repeating-linear-gradient(135deg, var(--orange) 0 12px, var(--yellow) 12px 24px);
+    }
+    .permit-head { padding: 31px 28px 20px; border-bottom: 2px solid var(--asphalt); }
+    .permit-label { font: 600 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .permit-title { margin-top: 5px; font: 700 clamp(35px, 4vw, 55px)/.9 var(--display); text-transform: uppercase; }
+    .permit-body { display: grid; grid-template-columns: 1fr 1fr; }
+    .permit-cell { padding: 19px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .permit-cell:nth-child(even) { border-right: 0; }
+    .permit-cell strong { display: block; margin-top: 3px; font: 700 25px var(--display); }
+    .permit-foot { padding: 17px 22px 21px; font: 500 11px/1.5 var(--mono); color: var(--muted); }
+
+    main { overflow: clip; }
+    .gate {
+      display: grid;
+      grid-template-columns: 78px 1fr auto;
+      gap: 22px;
+      align-items: center;
+      max-width: 1160px;
+      margin: -30px auto 0;
+      padding: 23px 28px;
+      position: relative;
+      z-index: 3;
+      color: white;
+      background: var(--orange);
+      box-shadow: var(--shadow);
+    }
+    .gate-icon { font: 800 54px/.8 var(--display); }
+    .gate h2 { margin: 0 0 2px; font: 700 29px var(--display); text-transform: uppercase; letter-spacing: .01em; }
+    .gate p { margin: 0; color: #fff2ec; }
+    .gate-status { padding: 8px 11px; border: 1px solid rgba(255,255,255,.6); font: 600 11px var(--mono); text-transform: uppercase; white-space: nowrap; }
+
+    .section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(76px, 9vw, 126px) 24px;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: .65fr 1.35fr;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 54px;
+    }
+    .kicker { font: 600 12px var(--mono); letter-spacing: .11em; text-transform: uppercase; color: var(--blue); }
+    h2.section-title { margin: 7px 0 0; font: 700 clamp(46px, 6vw, 78px)/.9 var(--display); letter-spacing: -.02em; text-transform: uppercase; }
+    .section-intro { max-width: 570px; margin: 0; color: var(--muted); font-size: 18px; }
+
+    .numbers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 2px solid var(--asphalt);
+      border-bottom: 2px solid var(--asphalt);
+      background: rgba(255,255,255,.35);
+    }
+    .number { padding: 28px 24px; border-right: 1px solid var(--line); }
+    .number:last-child { border-right: 0; }
+    .number small { display: block; margin-bottom: 5px; font: 500 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .number strong { font: 700 clamp(29px, 4vw, 48px)/1 var(--display); }
+    .number em { display: block; margin-top: 7px; font-style: normal; font-size: 12px; color: var(--muted); }
+
+    .road-section {
+      color: white;
+      background: var(--asphalt);
+    }
+    .road-section .section-intro { color: #b8c8cc; }
+    .road-section .kicker { color: var(--yellow); }
+    .road {
+      position: relative;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .road::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 53px;
+      width: 4px;
+      background: repeating-linear-gradient(to bottom, var(--yellow) 0 18px, transparent 18px 32px);
+    }
+    .step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr);
+      gap: 28px;
+      padding: 0 0 55px;
+    }
+    .step:last-child { padding-bottom: 0; }
+    .step-marker {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      align-self: start;
+      width: 70px;
+      height: 70px;
+      margin-left: 20px;
+      border: 4px solid var(--yellow);
+      border-radius: 50%;
+      color: var(--yellow);
+      background: var(--asphalt);
+      font: 700 31px var(--display);
+      transition: background .2s, color .2s;
+    }
+    .step.completed .step-marker { color: var(--asphalt); background: var(--yellow); }
+    .step-card {
+      padding: 0 0 34px;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+    }
+    .step:last-child .step-card { border-bottom: 0; }
+    .step-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+    .step h3 { margin: 0; font: 700 clamp(31px, 4vw, 46px)/1 var(--display); text-transform: uppercase; }
+    .step-time { padding-top: 8px; color: #8ea3a9; font: 500 11px var(--mono); white-space: nowrap; }
+    .step-lead { max-width: 700px; margin: 12px 0 20px; color: #bfd0d4; font-size: 17px; }
+    .checks { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px 18px; }
+    .check {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 10px 0;
+      color: #edf4f5;
+      font-size: 14px;
+    }
+    .check input {
+      appearance: none;
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      margin: 1px 0 0;
+      border: 2px solid #7e969d;
+      background: transparent;
+    }
+    .check input:checked { border-color: var(--yellow); background: var(--yellow); box-shadow: inset 0 0 0 4px var(--asphalt); }
+    .note {
+      margin-top: 19px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      background: rgba(23,107,232,.12);
+      color: #d7e4ff;
+      font-size: 14px;
+    }
+    .note.warning { border-left-color: var(--orange); background: rgba(255,90,36,.12); color: #ffe0d5; }
+
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    .tool-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      padding: 28px;
+      background: var(--paper);
+      border-top: 7px solid var(--blue);
+      box-shadow: var(--shadow);
+    }
+    .tool-card.orange { border-top-color: var(--orange); }
+    .tool-card.yellow { border-top-color: var(--yellow); }
+    .tool-card.dark { color: white; background: var(--asphalt); border-top-color: var(--yellow); }
+    .tool-card h3 { margin: 6px 0 7px; font: 700 34px var(--display); text-transform: uppercase; }
+    .tool-card > p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+    .tool-card.dark > p { color: #afc0c4; }
+    .copy-block {
+      flex: 1;
+      padding: 18px;
+      white-space: pre-wrap;
+      color: #33464e;
+      background: #f3f5f4;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .dark .copy-block { color: #e7eff0; background: #0c1c22; border-color: #38505a; }
+    .copy-btn {
+      align-self: flex-start;
+      margin-top: 15px;
+      padding: 9px 13px;
+      border: 0;
+      color: white;
+      background: var(--blue);
+      font: 600 11px var(--mono);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .copy-btn.copied { color: var(--asphalt); background: var(--yellow); }
+
+    .clauses { margin: 0; padding: 0; list-style: none; counter-reset: clause; }
+    .clauses li {
+      position: relative;
+      padding: 12px 0 12px 42px;
+      border-bottom: 1px solid rgba(255,255,255,.13);
+      counter-increment: clause;
+      font-size: 14px;
+    }
+    .clauses li::before {
+      content: counter(clause, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 12px;
+      color: var(--yellow);
+      font: 600 11px var(--mono);
+    }
+
+    .closeout {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 42px;
+      align-items: start;
+    }
+    .closeout h2 { margin: 0; font: 700 clamp(52px, 7vw, 92px)/.85 var(--display); text-transform: uppercase; }
+    .finish-list { margin-top: 32px; }
+    .finish-row {
+      display: grid;
+      grid-template-columns: 115px 1fr;
+      gap: 18px;
+      padding: 17px 0;
+      border-top: 1px solid var(--line);
+    }
+    .finish-row strong { font: 600 11px var(--mono); color: var(--blue); text-transform: uppercase; }
+    .finish-row p { margin: 0; }
+    .money-card { padding: 30px; color: white; background: var(--blue); box-shadow: var(--shadow); }
+    .money-card small { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #d8e6ff; }
+    .money-card .money { margin: 15px 0 0; font: 700 clamp(68px, 9vw, 116px)/.75 var(--display); letter-spacing: -.04em; }
+    .money-card .money span { display: block; margin-top: 14px; font: 500 18px var(--body); letter-spacing: 0; }
+    .money-card hr { margin: 28px 0; border: 0; border-top: 1px solid rgba(255,255,255,.35); }
+    .money-card p { margin: 0; color: #e5efff; }
+
+    .sources {
+      padding: 54px 24px;
+      color: #b9c8cc;
+      background: #0b1b21;
+    }
+    .sources-inner { max-width: 1160px; margin: 0 auto; }
+    .sources h2 { margin: 0 0 16px; color: white; font: 700 32px var(--display); text-transform: uppercase; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+    .source-links a { color: #d8e5e7; font-size: 13px; text-underline-offset: 4px; }
+    .legal { max-width: 920px; margin: 26px 0 0; font-size: 12px; color: #82979d; }
+    footer { display: flex; justify-content: space-between; gap: 20px; max-width: 1160px; margin: 35px auto 0; padding-top: 20px; border-top: 1px solid #31454c; font: 500 10px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .section-head, .closeout { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .permit { max-width: 470px; }
+      .gate { margin-left: 18px; margin-right: 18px; grid-template-columns: 60px 1fr; }
+      .gate-status { grid-column: 2; justify-self: start; }
+      .numbers { grid-template-columns: 1fr 1fr; }
+      .number:nth-child(2) { border-right: 0; }
+      .number:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .toolkit-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar { height: 54px; padding: 0 14px; }
+      .wordmark span:last-child { display: none; }
+      .progress-wrap { min-width: 150px; }
+      .hero { padding: 54px 18px 63px; }
+      h1 { font-size: clamp(62px, 21vw, 94px); }
+      .hero-copy { font-size: 17px; }
+      .permit { margin: 18px 3px 0; box-shadow: 10px 13px 0 rgba(0,0,0,.18); }
+      .permit-head { padding: 28px 20px 17px; }
+      .permit-cell { padding: 15px 16px; }
+      .gate { grid-template-columns: 48px 1fr; padding: 20px; gap: 15px; }
+      .gate-icon { font-size: 42px; }
+      .section { padding: 76px 18px; }
+      .section-head { margin-bottom: 38px; gap: 20px; }
+      .numbers { grid-template-columns: 1fr; }
+      .number, .number:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .number:last-child { border-bottom: 0; }
+      .road::before { left: 22px; }
+      .step { grid-template-columns: 50px minmax(0,1fr); gap: 15px; padding-bottom: 42px; }
+      .step-marker { width: 44px; height: 44px; margin-left: 0; border-width: 3px; font-size: 23px; }
+      .step-time { display: none; }
+      .step h3 { font-size: 32px; }
+      .checks { grid-template-columns: 1fr; gap: 0; }
+      .tool-card { padding: 21px; }
+      .copy-block { margin-left: -8px; margin-right: -8px; font-size: 12px; }
+      .finish-row { grid-template-columns: 1fr; gap: 3px; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#plan">Skip to the plan</a>
+
+  <header class="topbar">
+    <div class="wordmark"><span class="parking-sign">P</span><span>Křižíkova rental dossier</span></div>
+    <div class="progress-wrap" aria-label="Plan progress">
+      <span id="progressText">0 / 24</span>
+      <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Private operator plan · 14 July 2026</div>
+        <h1>Empty space.<span>Paid spot.</span></h1>
+        <p class="hero-copy">The complete route from “we never use it” to a signed, paid and controlled parking sublease—built around space 1327 and the actual lease at Křižíkova 710/30.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#plan">Start at the legal gate ↓</a>
+          <a class="btn" href="#toolkit">Jump to copy-ready text</a>
+        </div>
+      </div>
+
+      <aside class="permit" aria-label="Parking space facts">
+        <div class="permit-head">
+          <div class="permit-label">Asset record / Karlín</div>
+          <div class="permit-title">Space 1327</div>
+        </div>
+        <div class="permit-body">
+          <div class="permit-cell"><span class="permit-label">Level</span><strong>P−3</strong></div>
+          <div class="permit-cell"><span class="permit-label">Ask</span><strong>3,490 Kč</strong></div>
+          <div class="permit-cell"><span class="permit-label">Market</span><strong>3.0–3.5K</strong></div>
+          <div class="permit-cell"><span class="permit-label">Lease end</span><strong>30·06·27</strong></div>
+        </div>
+        <div class="permit-foot">KŘIŽÍKOVA 710/30 · 186 00 PRAHA 8<br>UNDERGROUND · REMOTE-GATED · LONG-TERM</div>
+      </aside>
+    </div>
+  </section>
+
+  <main>
+    <aside class="gate" aria-label="Critical legal gate">
+      <div class="gate-icon">STOP</div>
+      <div>
+        <h2>Consent before keys</h2>
+        <p>Your draft lease conflicts with itself on subletting. Get the landlord’s written consent before publishing the address or handing over the remote.</p>
+      </div>
+      <div class="gate-status">Gate 01 · unresolved</div>
+    </aside>
+
+    <section class="section" aria-labelledby="positioning-title">
+      <div class="section-head">
+        <div>
+          <div class="kicker">The commercial position</div>
+          <h2 class="section-title" id="positioning-title">Price for response, not vanity</h2>
+        </div>
+        <p class="section-intro">Comparable Karlín listings cluster around 3,000–3,500 Kč. Start just below the psychological 3,500 line, then move only if the market gives you no qualified leads.</p>
+      </div>
+      <div class="numbers">
+        <div class="number"><small>Advertised rent</small><strong>3,490 Kč</strong><em>Including ordinary garage charges</em></div>
+        <div class="number"><small>Good closing band</small><strong>3,200–3,400</strong><em>Hold here for a clean tenant</em></div>
+        <div class="number"><small>Fast-fill price</small><strong>2,990 Kč</strong><em>Use after 10–14 quiet days</em></div>
+        <div class="number"><small>Remote deposit</small><strong>Actual cost</strong><em>Document replacement price first</em></div>
+      </div>
+    </section>
+
+    <section class="road-section" id="plan">
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <div class="kicker">The drive path</div>
+            <h2 class="section-title">Eight gates to rent</h2>
+          </div>
+          <p class="section-intro">Work top to bottom. Checkboxes save on this device. Do not skip ahead: every later protection depends on authority and access working first.</p>
+        </div>
+
+        <div class="road">
+          <article class="step" data-step="1">
+            <div class="step-marker">1</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Prove the right to sublet</h3><div class="step-time">Before listing</div></div>
+              <p class="step-lead">Use the signed final lease—not the blank draft—and remove the contradiction with a one-paragraph landlord consent.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Confirm the final lease is signed by the named tenant and landlord</label>
+                <label class="check"><input type="checkbox">Confirm space 1327 remains included in the signed version</label>
+                <label class="check"><input type="checkbox">Send the consent wording below to the landlord</label>
+                <label class="check"><input type="checkbox">Save signed consent or an unambiguous written approval</label>
+              </div>
+              <div class="note warning"><strong>Why this is non-negotiable:</strong> clause 6.9 looks permissive when the tenant lives there, but Article 8 separately names unapproved subletting as a termination ground. Parking is also not clearly “part of the apartment” under the residential exception.</div>
+            </div>
+          </article>
+
+          <article class="step" data-step="2">
+            <div class="step-marker">2</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Test the access loop</h3><div class="step-time">20 minutes</div></div>
+              <p class="step-lead">The tenant must be able to enter, park, leave on foot, return and retrieve the car using only the access items you intend to provide.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Drive in with the remote and reach P−3 / space 1327</label>
+                <label class="check"><input type="checkbox">Exit on foot without a residential master key</label>
+                <label class="check"><input type="checkbox">Return from the street and reach the car with the same access set</label>
+                <label class="check"><input type="checkbox">Ask management for remote/fob replacement cost and garage rules</label>
+              </div>
+              <div class="note">Record the route and any height, width or turning constraints. If pedestrians must use the vehicle ramp, verify that the building rules allow it before advertising.</div>
+            </div>
+          </article>
+
+          <article class="step" data-step="3">
+            <div class="step-marker">3</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Build the evidence pack</h3><div class="step-time">30 minutes</div></div>
+              <p class="step-lead">Good photos attract the right car; measured dimensions stop bad viewings and arguments.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Measure clear width, length and maximum vehicle height</label>
+                <label class="check"><input type="checkbox">Photograph the empty bay from front, rear and driver-door side</label>
+                <label class="check"><input type="checkbox">Photograph ramp turns, gate and bay number—without access codes</label>
+                <label class="check"><input type="checkbox">Note columns, pipes, chargers and mobile-signal limitations</label>
+              </div>
+            </div>
+          </article>
+
+          <article class="step" data-step="4">
+            <div class="step-marker">4</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Set terms before leads arrive</h3><div class="step-time">15 minutes</div></div>
+              <p class="step-lead">Make one offer and keep it consistent. Recommended: 3,490 Kč monthly, paid in advance, long-term use, one registered vehicle.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Choose the start date and a fixed end no later than 30 June 2027</label>
+                <label class="check"><input type="checkbox">Set rent due date, bank account and late-payment process</label>
+                <label class="check"><input type="checkbox">Set one month’s security plus documented remote/fob deposit</label>
+                <label class="check"><input type="checkbox">Choose explicit termination reasons and notice period</label>
+              </div>
+              <div class="note">The sublease must automatically end earlier if your main lease, landlord consent or building access right ends.</div>
+            </div>
+          </article>
+
+          <article class="step" data-step="5">
+            <div class="step-marker">5</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Publish narrowly</h3><div class="step-time">Day 1–14</div></div>
+              <p class="step-lead">Start where direct local demand lives. Use the prepared Czech copy; keep the exact bay number and access details out of the public listing.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Post on Bazoš Reality and suitable Karlín/Praha Facebook groups</label>
+                <label class="check"><input type="checkbox">Try Bezrealitky if its current parking category accepts the listing</label>
+                <label class="check"><input type="checkbox">Share with residents or nearby offices through permitted channels</label>
+                <label class="check"><input type="checkbox">Review after 7 days; change photos/title before lowering price</label>
+              </div>
+            </div>
+          </article>
+
+          <article class="step" data-step="6">
+            <div class="step-marker">6</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Screen the driver</h3><div class="step-time">10 minutes / lead</div></div>
+              <p class="step-lead">Select for reliability and vehicle fit, not the fastest “I’ll take it.” Verify identity in person and collect only what the contract needs.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Ask vehicle make, model, dimensions and registration plate</label>
+                <label class="check"><input type="checkbox">Confirm valid compulsory motor insurance</label>
+                <label class="check"><input type="checkbox">Confirm no storage, repairs, charging or third-party sharing</label>
+                <label class="check"><input type="checkbox">Verify ID at signing; avoid retaining an unnecessary ID copy</label>
+              </div>
+            </div>
+          </article>
+
+          <article class="step" data-step="7">
+            <div class="step-marker">7</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Sign, pay, then hand over</h3><div class="step-time">One meeting</div></div>
+              <p class="step-lead">No remote leaves your hand until the agreement is signed and cleared funds cover the first rent and deposits.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Sign two copies of the Czech-governed parking sublease</label>
+                <label class="check"><input type="checkbox">Receive first rent, security and remote/fob deposit by transfer</label>
+                <label class="check"><input type="checkbox">Sign a handover record with photos and access-device identifiers</label>
+                <label class="check"><input type="checkbox">Run the complete access loop together and give garage rules</label>
+              </div>
+            </div>
+          </article>
+
+          <article class="step" data-step="8">
+            <div class="step-marker">8</div>
+            <div class="step-card">
+              <div class="step-top"><h3>Operate and close cleanly</h3><div class="step-time">Monthly + exit</div></div>
+              <p class="step-lead">Keep a tiny ledger, act on late rent immediately, and make the exit as documented as the handover.</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox">Track rent received, deposits held and reimbursable costs</label>
+                <label class="check"><input type="checkbox">Record rental income and retain documents for Czech tax filing</label>
+                <label class="check"><input type="checkbox">At exit, inspect the bay and recover every remote/fob</label>
+                <label class="check"><input type="checkbox">Settle the deposit with an itemized statement and revoke access</label>
+              </div>
+              <div class="note warning">Never improvise self-help towing, wheel-clamping or blocking the vehicle. For unauthorized use, document it and follow the building manager’s and legal process.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="toolkit" aria-labelledby="toolkit-title">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Copy-ready toolkit</div>
+          <h2 class="section-title" id="toolkit-title">Words before wheels</h2>
+        </div>
+        <p class="section-intro">These are operational starting points, not a substitute for a Czech lawyer reviewing the final signed documents.</p>
+      </div>
+
+      <div class="toolkit-grid">
+        <article class="tool-card orange">
+          <div class="kicker">01 · Landlord consent</div>
+          <h3>Send this first</h3>
+          <p>Ask for a dated signature or an unambiguous reply that repeats the space and scope.</p>
+          <div class="copy-block" id="consentText">Pronajímatel výslovně souhlasí s tím, aby Nájemce po dobu trvání nájemní smlouvy přenechal třetí osobě do podnájmu výhradně vnitřní parkovací stání č. 1327 ve 3. podzemním podlaží domu na adrese Křižíkova 710/30, Praha 8. Souhlas se nevztahuje na byt č. A607, sklepní kóji č. 149 ani obytné části domu. Nájemce zůstává vůči Pronajímateli odpovědný za jednání podnájemce a za veškeré způsobené škody.
+
+V Praze dne: __________
+
+Podpis Pronajímatele: ____________________</div>
+          <button class="copy-btn" data-copy="consentText">Copy consent text</button>
+        </article>
+
+        <article class="tool-card">
+          <div class="kicker">02 · Czech listing</div>
+          <h3>Publish this</h3>
+          <p>Add the exact dimensions, availability date and your own contact method after consent.</p>
+          <div class="copy-block" id="listingText">PRONÁJEM GARÁŽOVÉHO STÁNÍ – KARLÍN, KŘIŽÍKOVA
+
+Nabízím k dlouhodobému podnájmu vnitřní parkovací stání v zabezpečené podzemní garáži na adrese Křižíkova 710/30, Praha 8 – Karlín. Stání se nachází ve 3. podzemním podlaží, vjezd je přes dálkově ovládaná vrata.
+
+• výborná dostupnost Karlína a metra B Křižíkova
+• přístup dle pravidel domu
+• určeno pro jedno registrované osobní vozidlo
+• bez skladování, oprav a nabíjení elektromobilu
+• dlouhodobý podnájem
+
+Nájemné: 3 490 Kč měsíčně.
+Vratná jistota a záloha na přístupový ovladač dle dohody. K dispozici od [DATUM].
+
+Do zprávy prosím uveďte značku/model vozidla a požadovaný termín zahájení.</div>
+          <button class="copy-btn" data-copy="listingText">Copy listing</button>
+        </article>
+
+        <article class="tool-card yellow">
+          <div class="kicker">03 · Lead screen</div>
+          <h3>Four questions</h3>
+          <p>Use the same screen for everyone. It is fast, fair and exposes mismatches before a viewing.</p>
+          <div class="copy-block" id="screenText">Dobrý den, děkuji za zájem. Než domluvíme prohlídku, prosím o čtyři informace:
+
+1. Značka, model a registrační značka vozidla?
+2. Od kdy a na jak dlouho stání potřebujete?
+3. Potvrzujete, že stání bude používat pouze toto vozidlo a nebude sloužit ke skladování, opravám ani nabíjení?
+4. Vyhovuje vám nájemné 3 490 Kč měsíčně, platba předem a vratná jistota?</div>
+          <button class="copy-btn" data-copy="screenText">Copy screening message</button>
+        </article>
+
+        <article class="tool-card dark">
+          <div class="kicker">04 · Agreement skeleton</div>
+          <h3>Clauses that protect you</h3>
+          <p>The final document should be a parking-space sublease, because you are the tenant rather than the owner.</p>
+          <ol class="clauses">
+            <li>Exact space, level, address and permitted access route</li>
+            <li>Named subtenant plus one make/model/registration plate</li>
+            <li>Fixed term ending no later than 30 June 2027</li>
+            <li>Automatic earlier end with the main lease, consent or access right</li>
+            <li>Rent, due date, deposits and documented deductions</li>
+            <li>Express termination reasons and notice period</li>
+            <li>No storage, repairs, charging, hazardous materials or further sharing</li>
+            <li>Compliance with fire, safety, garage and house rules</li>
+            <li>Responsibility for damage, guests, lost devices and access charges</li>
+            <li>Return of devices, inspection and deposit settlement at exit</li>
+            <li>No right to the apartment, cellar or residential areas</li>
+            <li>Czech law; Czech text controls if the agreement is bilingual</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="section closeout" aria-labelledby="closeout-title">
+      <div>
+        <div class="kicker">The clean finish</div>
+        <h2 id="closeout-title">Keep it boring. Keep it paid.</h2>
+        <div class="finish-list">
+          <div class="finish-row"><strong>Every month</strong><p>One bank transfer, one ledger line, one quick check that the main lease and landlord consent remain valid.</p></div>
+          <div class="finish-row"><strong>If rent is late</strong><p>Send the written notice required by the agreement immediately. Do not let informal extensions become the operating model.</p></div>
+          <div class="finish-row"><strong>If access is lost</strong><p>Notify the driver, landlord and building manager; use the contract’s early-end mechanism and document every replacement cost.</p></div>
+          <div class="finish-row"><strong>At tax time</strong><p>Keep rent and expense records. Czech Financial Administration treats rental income as taxable income in the relevant category; confirm your personal filing position with an accountant.</p></div>
+        </div>
+      </div>
+      <aside class="money-card">
+        <small>Gross monthly target</small>
+        <div class="money">3,490<span>CZK / month</span></div>
+        <hr>
+        <p>That is enough upside to do the paperwork properly. The real win is not squeezing out another 200 Kč—it is avoiding a lost remote, an unsuitable car, unpaid rent or a challenge to your main lease.</p>
+      </aside>
+    </section>
+  </main>
+
+  <section class="sources" aria-labelledby="sources-title">
+    <div class="sources-inner">
+      <h2 id="sources-title">Evidence & source notes</h2>
+      <div class="source-links">
+        <a href="https://www.sreality.cz/detail/pronajem/ostatni/garazove-stani/praha-karlin-krizikova/838890316" target="_blank" rel="noopener">Křižíkova comparable · 2,900 Kč</a>
+        <a href="https://www.jenreality.cz/reality/garazove-stani-na-pronajem-u-karlinskeho-nam-praha-8-202623/" target="_blank" rel="noopener">Křižíkova comparable · 3,300 Kč</a>
+        <a href="https://www.bezrealitky.cz/nemovitosti-byty-domy/927754-nabidka-pronajem-garaze-u-mlynskeho-kanalu-praha" target="_blank" rel="noopener">Port Karolína comparable · 3,000 Kč</a>
+        <a href="https://www.kurzy.cz/zakony/89-2012-obcansky-zakonik/paragraf-2215/" target="_blank" rel="noopener">Civil Code §2215 · subletting consent</a>
+        <a href="https://krajta.slv.cz/2012/89/par_2229" target="_blank" rel="noopener">Civil Code §2229 · fixed-term termination</a>
+        <a href="https://financnisprava.gov.cz/cs/dane/dane/dan-z-prijmu/fyzicke-osoby/pronajimatel" target="_blank" rel="noopener">Financial Administration · rental income</a>
+      </div>
+      <p class="legal">Prepared from the supplied lease draft and public listings available on 14 July 2026. The supplied file was a draft with blank tenant/signature fields. Confirm every point against the signed final lease, handover protocol and current building rules. This operator plan is practical information, not individualized Czech legal or tax advice.</p>
+      <footer><span>Křižíkova 710/30 · Parking 1327 · P−3</span><span>Built for Maks · July 2026</span></footer>
+    </div>
+  </section>
+
+  <script>
+    const boxes = [...document.querySelectorAll('.check input')];
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const storageKey = 'krizikova-parking-plan-v1';
+
+    function updateProgress() {
+      const done = boxes.filter(box => box.checked).length;
+      progressText.textContent = `${done} / ${boxes.length}`;
+      progressBar.style.width = `${(done / boxes.length) * 100}%`;
+      document.querySelectorAll('.step').forEach(step => {
+        const stepBoxes = [...step.querySelectorAll('input')];
+        step.classList.toggle('completed', stepBoxes.length > 0 && stepBoxes.every(box => box.checked));
+      });
+      try { localStorage.setItem(storageKey, JSON.stringify(boxes.map(box => box.checked))); } catch (_) {}
+    }
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      boxes.forEach((box, index) => { box.checked = Boolean(saved[index]); });
+    } catch (_) {}
+    boxes.forEach(box => box.addEventListener('change', updateProgress));
+    updateProgress();
+
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.addEventListener('click', async () => {
+        const text = document.getElementById(button.dataset.copy).innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = button.textContent;
+          button.textContent = 'Copied';
+          button.classList.add('copied');
+          setTimeout(() => { button.textContent = original; button.classList.remove('copied'); }, 1600);
+        } catch (_) {
+          button.textContent = 'Select and copy manually';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
