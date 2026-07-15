@@ -88,34 +88,7 @@
   .lede { max-width: 690px; margin: 32px auto 0; color: var(--color-muted); font-size: 18px; line-height: 1.65; text-wrap: pretty; }
 
   .proof { margin-top: 64px; }
-  .audience-rail {
-    display: grid;
-    grid-template-columns: 180px repeat(4, 1fr);
-    min-height: 58px;
-    overflow: hidden;
-    border: 1px solid var(--color-k-hair-hi);
-    border-bottom: 0;
-    border-radius: 14px 14px 0 0;
-    background: var(--color-k-card);
-    font-family: var(--font-mono);
-  }
-  .rail-lead { display: flex; align-items: center; padding: 0 16px; color: var(--color-k-slate2); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-  .audience {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 3px;
-    min-width: 0;
-    padding: 10px 14px;
-    border-left: 1px solid var(--color-k-hair);
-  }
-  .audience::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; background: var(--color-pool-cobalt); opacity: 0; }
-  .audience-name { color: var(--color-ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
-  .audience-use { color: var(--color-k-slate2); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .audience-dot { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 999px; background: var(--color-k-run); box-shadow: 0 0 5px var(--color-k-run); vertical-align: 1px; }
-
-  .console { overflow: hidden; border: 1px solid var(--color-k-hair-hi); border-radius: 0 0 14px 14px; background: var(--color-k-bg); box-shadow: 0 28px 70px -38px black; }
+  .console { overflow: hidden; border: 1px solid var(--color-k-hair-hi); border-radius: 14px; background: var(--color-k-bg); box-shadow: 0 28px 70px -38px black; }
   .tabs { display: flex; align-items: stretch; min-height: 38px; border-bottom: 1px solid var(--color-k-hair); font-family: var(--font-mono); font-size: 13px; }
   .tab-set { display: flex; min-width: 0; flex: 1; padding-left: 8px; }
   .tab { position: relative; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--color-ink); white-space: nowrap; }
@@ -183,14 +156,7 @@
     h1 { margin-top: 22px; font-size: 44px; line-height: 1.02; }
     .lede { margin-top: 28px; font-size: 16px; line-height: 1.55; }
     .proof { margin-top: 48px; }
-    .audience-rail { grid-template-columns: repeat(2, 1fr); border-radius: 12px 12px 0 0; }
-    .rail-lead { grid-column: 1 / -1; min-height: 44px; justify-content: center; border-bottom: 1px solid var(--color-k-hair); }
-    .audience { min-height: 54px; }
-    .audience:nth-child(2), .audience:nth-child(4) { border-left: 0; }
-    .audience:nth-child(4), .audience:nth-child(5) { border-top: 1px solid var(--color-k-hair); }
-    .audience-name { font-size: 11px; }
-    .audience-use { font-size: 9px; }
-    .console { border-radius: 0 0 12px 12px; }
+    .console { border-radius: 12px; }
     .tabs { min-height: 48px; }
     .tab { padding: 0 7px; font-size: 12px; }
     .tab .long { display: none; }
@@ -237,26 +203,6 @@
         </div>
 
         <div class="proof">
-          <div class="audience-rail" aria-label="Audience groups">
-            <div class="rail-lead">Same room. Different stakes.</div>
-            <div class="audience">
-              <span class="audience-name"><i class="audience-dot"></i>Hobby</span>
-              <span class="audience-use">side projects</span>
-            </div>
-            <div class="audience">
-              <span class="audience-name"><i class="audience-dot"></i>Indie</span>
-              <span class="audience-use">own products</span>
-            </div>
-            <div class="audience">
-              <span class="audience-name"><i class="audience-dot"></i>Open source</span>
-              <span class="audience-use">issues + releases</span>
-            </div>
-            <div class="audience">
-              <span class="audience-name"><i class="audience-dot"></i>Professional</span>
-              <span class="audience-use">production work</span>
-            </div>
-          </div>
-
           <div class="console" role="img" aria-label="Example Thinkpool Code session shared by two people">
             <div class="tabs">
               <div class="tab-set">
@@ -292,7 +238,7 @@
         <h2>Scaling agents isn’t the same as working together.</h2>
         <p class="section-copy">Running several agents at once is fan-out: one person, more hands. Thinkpool is lateral. Two people share one Ensemble, both able to watch and steer, while every agent terminal can see the others and hand work across the room.</p>
         <div class="moves">
-          <article class="move"><div class="mini">Multiple providers, one room</div><h3>Choose a model for the job.</h3><p>Run Claude Code or Codex, then choose the model that fits each terminal.</p></article>
+          <article class="move"><div class="mini">Multiple providers, one room</div><h3>Choose a model for the job.</h3><p>Run Claude Code, Codex, or Hermes Agent, then choose the model that fits each terminal.</p></article>
           <article class="move"><div class="mini">Ensemble</div><h3>Agents work across terminals.</h3><p>Every terminal can see the others and delegate a defined slice. The work stays visible.</p></article>
           <article class="move"><div class="mini">Pair</div><h3>Two people steer together.</h3><p>Both people can watch any terminal, step in, and redirect the work.</p></article>
         </div>
@@ -302,10 +248,9 @@
     <section class="pricing">
       <div class="section-label">Pricing</div>
       <h2>Free to start. <span class="accent">€5/mo for unlimited.</span></h2>
-      <p class="section-copy">Free keeps one active session open at a time. Plus keeps as many open as the pair needs, for €5/month flat.</p>
       <div class="pricing-card">
-        <article class="tier"><div class="tier-name">Free</div><div class="price">€0</div><p>One active Code session at a time. Close it and start another whenever you like.</p></article>
-        <article class="tier"><div class="tier-name">Plus</div><div class="price">€5 <small>/ month</small></div><p>Unlimited Code sessions open at once. One plan covers the room.</p></article>
+        <article class="tier"><div class="tier-name">Free</div><div class="price">€0</div><p>One active Thinkpool Code session at a time. Close it and start another whenever you like.</p></article>
+        <article class="tier"><div class="tier-name">Plus</div><div class="price">€5 <small>/ month</small></div><p>Unlimited active Thinkpool Code sessions open at once.</p></article>
       </div>
     </section>
   </main>
