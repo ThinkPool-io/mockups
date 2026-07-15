@@ -140,7 +140,8 @@
   .pricing h2 .accent { color: var(--color-pool-cobalt-ink); }
   .pricing-card { display: grid; grid-template-columns: 1fr 1fr; margin-top: 42px; overflow: hidden; border: 1px solid var(--color-line); border-radius: 16px; text-align: left; }
   .tier { padding: 28px; background: var(--color-raised); }
-  .tier + .tier { border-left: 1px solid var(--color-line); background: color-mix(in oklab, var(--color-pool-cobalt) 7%, var(--color-raised)); }
+  .tier + .tier { border-left: 2px solid var(--color-pool-cobalt); background: var(--color-raised); }
+  .tier + .tier .price { color: var(--color-pool-cobalt-ink); }
   .tier-name { color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
   .price { margin-top: 12px; font-family: var(--font-display); font-size: 40px; }
   .tier p { color: var(--color-muted); font-size: 14px; line-height: 1.6; }
@@ -174,7 +175,7 @@
     .move { padding: 24px; }
     .pricing { width: min(100% - 40px, 760px); padding: 72px 0; }
     .pricing-card { grid-template-columns: 1fr; }
-    .tier + .tier { border-left: 0; border-top: 1px solid var(--color-line); }
+    .tier + .tier { border-left: 0; border-top: 2px solid var(--color-pool-cobalt); }
     .footer { flex-wrap: wrap; gap: 14px 20px; }
   }
 
