@@ -115,6 +115,18 @@
     .slide-4 .brand { position: absolute; left: 7%; right: 7%; top: 6.5%; }
     .slide-4 .foot { position: absolute; left: 7%; right: 7%; bottom: 6.5%; }
 
+    /* The four-up Design board is a contact sheet, not an export surface.
+       Size type against each 320px card, not the 1440px browser viewport.
+       Export mode below keeps the platform-native pixel sizes unchanged. */
+    body:not(.export-mode) .art { container-type: inline-size; }
+    body:not(.export-mode) .headline { font-size: 13cqw; }
+    body:not(.export-mode) .slide-1 .headline { font-size: 14cqw; }
+    body:not(.export-mode) .slide-1 .copy { margin-top: 20%; }
+    body:not(.export-mode) .slide-4 .headline { font-size: 17cqw; }
+    body:not(.export-mode) .slide-4 .mark { width: 28cqw; height: 28cqw; margin-bottom: 5cqw; }
+    body:not(.export-mode) .slide-4 .url { margin-top: 6cqw; }
+    body:not(.export-mode) .slide-4 .foot { font-size: 2.5cqw; }
+
     .terminal {
       margin-top: 24px;
       overflow: hidden;
