@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ThinkPool social icon</title>
+    <style>
+      :root {
+        --bg: hsl(212 9% 9%);
+        --surface: hsl(212 8% 14%);
+        --line: hsl(212 7% 21%);
+        --ink: hsl(212 14% 95%);
+        --muted: hsl(212 14% 78%);
+        --pool: hsl(217 90% 53%);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: system-ui, sans-serif;
+      }
+      main {
+        width: min(860px, calc(100vw - 40px));
+        padding: clamp(32px, 7vw, 72px);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--surface);
+        text-align: center;
+      }
+      .mark {
+        width: min(58vw, 512px);
+        aspect-ratio: 1;
+        margin: 0 auto 28px;
+        display: block;
+      }
+      h1 { margin: 0; font-size: clamp(24px, 4vw, 40px); letter-spacing: -0.04em; }
+      p { margin: 10px 0 0; color: var(--muted); font-size: clamp(15px, 2vw, 18px); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg class="mark" viewBox="0 0 512 512" role="img" aria-label="ThinkPool Wellspring mark" xmlns="http://www.w3.org/2000/svg">
+        <rect width="512" height="512" rx="112" ry="112" fill="hsl(212 18% 10%)" />
+        <circle cx="256" cy="256" r="172" fill="none" stroke="var(--pool)" stroke-width="40" />
+        <g transform="translate(107.2 107.2) scale(12.4)">
+          <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="var(--pool)" />
+        </g>
+      </svg>
+      <h1>ThinkPool social icon</h1>
+      <p>Wellspring mark · official profile avatar</p>
+    </main>
+  </body>
+</html>
