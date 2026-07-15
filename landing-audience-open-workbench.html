@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool landing · audience workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: hsl(212 13% 5%);
+    --color-raised: hsl(212 11% 8%);
+    --color-surface: hsl(212 10% 10%);
+    --color-float: hsl(212 9% 13%);
+    --color-line: hsl(212 7% 21%);
+    --color-line-strong: hsl(212 7% 28%);
+    --color-ink: hsl(212 14% 95%);
+    --color-muted: hsl(212 14% 78%);
+    --color-faint: hsl(212 12% 62%);
+    --color-pool: hsl(217 85% 62%);
+    --color-pool-hi: hsl(217 85% 70%);
+    --color-pool-cobalt: #1a6ef4;
+    --color-pool-cobalt-ink: #7ea9f9;
+    --color-k-bg: #0a0d10;
+    --color-k-card: #06090c;
+    --color-k-line: hsl(199 24% 17%);
+    --color-k-hair: hsl(200 13% 15%);
+    --color-k-hair-hi: hsl(200 15% 24%);
+    --color-k-pool: hsl(190 70% 57%);
+    --color-k-run: hsl(152 46% 55%);
+    --color-k-slate: #6b7681;
+    --color-k-slate2: #8b96a2;
+    --color-mind-a: hsl(145 40% 58%);
+    --color-mind-b: hsl(280 60% 72%);
+    --font-display: "Newsreader", Georgia, serif;
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--color-bg); color-scheme: dark; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-ink); font-family: var(--font-sans); font-weight: 500; }
+  button, a { font: inherit; }
+  button { color: inherit; }
+  a { color: inherit; text-decoration: none; }
+
+  .nav {
+    position: relative;
+    z-index: 5;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+  }
+  .wordmark { font-family: var(--font-sans); font-size: 26px; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+  .wordmark span:last-child { color: var(--color-pool-cobalt); }
+  .nav-actions { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12.5px; }
+  .sign-in { min-height: 44px; padding: 0 12px; color: var(--color-muted); background: none; border: 0; }
+  .start-free { min-height: 44px; padding: 0 16px; border: 1px solid var(--color-pool-cobalt); border-radius: 9px; color: var(--color-pool-hi); background: transparent; font-weight: 600; }
+
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--color-line); }
+  .hero::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -255px;
+    width: 760px;
+    height: 620px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklab, var(--color-pool-cobalt) 12%, transparent), transparent 68%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; width: min(100% - 48px, 1088px); margin: 0 auto; padding: 104px 0 80px; }
+  .thesis { max-width: 760px; margin: 0 auto; text-align: center; }
+  .drop-wrap { position: relative; display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 24px; }
+  .drop-wrap::before { content: ""; position: absolute; width: 390px; height: 390px; border: 1px solid color-mix(in oklab, var(--color-pool-cobalt) 14%, transparent); border-radius: 50%; }
+  .drop { width: 20px; height: 25px; background: var(--color-pool-cobalt-ink); border-radius: 55% 45% 58% 42% / 68% 61% 39% 32%; transform: rotate(45deg); }
+  .eyebrow { margin: 0; color: var(--color-faint); font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+  h1 { margin: 20px 0 0; font-family: var(--font-display); font-size: clamp(58px, 6.1vw, 84px); font-weight: 400; line-height: 0.98; letter-spacing: -0.025em; text-wrap: balance; }
+  h1 .accent { color: var(--color-pool-cobalt-ink); }
+  h1 .dot { color: var(--color-faint); }
+  .lede { max-width: 690px; margin: 32px auto 0; color: var(--color-muted); font-size: 18px; line-height: 1.65; text-wrap: pretty; }
+
+  .proof { margin-top: 64px; }
+  .audience-rail {
+    display: grid;
+    grid-template-columns: 180px repeat(4, 1fr);
+    min-height: 58px;
+    overflow: hidden;
+    border: 1px solid var(--color-k-hair-hi);
+    border-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    background: var(--color-k-card);
+    font-family: var(--font-mono);
+  }
+  .rail-lead { display: flex; align-items: center; padding: 0 16px; color: var(--color-k-slate2); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .audience {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 10px 14px;
+    border-left: 1px solid var(--color-k-hair);
+  }
+  .audience::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; background: var(--color-pool-cobalt); opacity: 0; }
+  .audience-name { color: var(--color-ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .audience-use { color: var(--color-k-slate2); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .audience-dot { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 999px; background: var(--color-k-run); box-shadow: 0 0 5px var(--color-k-run); vertical-align: 1px; }
+
+  .console { overflow: hidden; border: 1px solid var(--color-k-hair-hi); border-radius: 0 0 14px 14px; background: var(--color-k-bg); box-shadow: 0 28px 70px -38px black; }
+  .tabs { display: flex; align-items: stretch; min-height: 38px; border-bottom: 1px solid var(--color-k-hair); font-family: var(--font-mono); font-size: 13px; }
+  .tab-set { display: flex; min-width: 0; flex: 1; padding-left: 8px; }
+  .tab { position: relative; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--color-ink); white-space: nowrap; }
+  .tab.secondary { color: var(--color-k-slate2); }
+  .tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; background: var(--color-k-pool); box-shadow: 0 0 6px color-mix(in oklab, var(--color-k-pool) 60%, transparent); }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-k-run); box-shadow: 0 0 5px var(--color-k-run); }
+  .tab-meta { display: grid; place-items: center; min-width: 38px; border-left: 1px solid var(--color-k-hair); color: var(--color-k-slate2); }
+  .session-name { display: flex; align-items: center; padding: 0 14px; border-left: 1px solid var(--color-k-hair); color: var(--color-muted); }
+  .session-name strong { color: var(--color-k-pool); }
+  .ensemble { min-height: 38px; display: flex; align-items: center; border-bottom: 1px solid var(--color-k-hair); font-family: var(--font-mono); font-size: 12px; }
+  .ensemble-label { padding: 0 12px; color: var(--color-ink); font-weight: 600; }
+  .ensemble-label span { color: var(--color-k-pool); }
+  .lane { align-self: stretch; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-left: 1px solid var(--color-k-hair); color: var(--color-k-slate2); }
+  .spinner { width: 10px; height: 10px; border: 1px solid color-mix(in oklab, var(--color-k-pool) 30%, transparent); border-top-color: var(--color-k-pool); border-radius: 50%; }
+  .transcript { min-height: 256px; padding: 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.55; }
+  .turn { margin: 0 -12px; padding: 5px 14px; border-left: 2px solid; }
+  .turn + .turn { margin-top: 1px; }
+  .turn.conrad { border-color: var(--color-mind-b); background: color-mix(in oklab, var(--color-mind-b) 5%, transparent); }
+  .turn.maks { border-color: var(--color-mind-a); background: color-mix(in oklab, var(--color-mind-a) 5%, transparent); }
+  .turn .name { margin-right: 8px; font-weight: 600; }
+  .turn.conrad .name { color: var(--color-mind-b); }
+  .turn.maks .name { color: var(--color-mind-a); }
+  .turn .text { color: var(--color-muted); font-family: var(--font-sans); }
+  .turn .time { margin-left: 6px; color: var(--color-k-slate); font-size: 9px; letter-spacing: 0.08em; }
+  .agent-line { display: flex; gap: 8px; margin-top: 18px; color: var(--color-muted); font-family: var(--font-sans); }
+  .agent-glow { width: 7px; height: 7px; margin-top: 7px; border-radius: 50%; background: var(--color-k-pool); box-shadow: 0 0 8px var(--color-k-pool); }
+  .tool { margin-top: 10px; padding: 9px 12px; border: 1px solid var(--color-k-line); border-radius: 9px; background: var(--color-k-card); color: var(--color-k-slate2); }
+  .tool strong { color: var(--color-pool-cobalt-ink); }
+  .status { display: flex; justify-content: space-between; gap: 16px; padding: 8px 14px; color: var(--color-k-slate2); font-family: var(--font-mono); font-size: 11px; }
+  .status span:first-child { color: hsl(352 84% 64%); }
+  .status span:last-child { color: var(--color-k-pool); }
+  .composer { display: flex; align-items: center; gap: 10px; min-height: 48px; margin: 0 12px 12px; padding: 0 8px 0 14px; border: 1px solid var(--color-k-hair-hi); border-radius: 10px; color: var(--color-k-slate2); font-family: var(--font-mono); font-size: 12px; }
+  .composer .placeholder { flex: 1; }
+  .composer .send { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 8px; background: var(--color-pool-cobalt); color: var(--color-k-card); font-size: 19px; font-weight: 600; }
+
+  .why { border-bottom: 1px solid var(--color-line); background: var(--color-surface); }
+  .section-inner { width: min(100% - 48px, 1088px); margin: 0 auto; padding: 96px 0; text-align: center; }
+  .section-label { color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+  h2 { max-width: 720px; margin: 18px auto 0; font-family: var(--font-display); font-size: clamp(38px, 4.2vw, 52px); font-weight: 400; line-height: 1.08; letter-spacing: -0.015em; }
+  .section-copy { max-width: 700px; margin: 18px auto 0; color: var(--color-muted); font-size: 16px; line-height: 1.7; }
+  .moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 48px; overflow: hidden; border: 1px solid var(--color-line); border-radius: 16px; background: var(--color-line); }
+  .move { padding: 28px; background: var(--color-bg); }
+  .move .mini { color: var(--color-k-pool); font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+  .move:nth-child(2) .mini, .move:nth-child(3) .mini { color: var(--color-k-run); }
+  .move h3 { margin: 14px 0 0; font-family: var(--font-display); font-size: 21px; font-weight: 400; }
+  .move p { margin: 12px 0 0; color: var(--color-muted); font-size: 14px; line-height: 1.65; }
+
+  .pricing { width: min(100% - 48px, 760px); margin: 0 auto; padding: 96px 0; text-align: center; }
+  .pricing h2 .accent { color: var(--color-pool-cobalt-ink); }
+  .pricing-card { display: grid; grid-template-columns: 1fr 1fr; margin-top: 42px; overflow: hidden; border: 1px solid var(--color-line); border-radius: 16px; text-align: left; }
+  .tier { padding: 28px; background: var(--color-raised); }
+  .tier + .tier { border-left: 1px solid var(--color-line); background: color-mix(in oklab, var(--color-pool-cobalt) 7%, var(--color-raised)); }
+  .tier-name { color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .price { margin-top: 12px; font-family: var(--font-display); font-size: 40px; }
+  .tier p { color: var(--color-muted); font-size: 14px; line-height: 1.6; }
+  .footer { display: flex; justify-content: center; gap: 24px; padding: 30px 24px; border-top: 1px solid var(--color-line); color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; }
+
+  @media (max-width: 700px) {
+    .nav { height: 63px; padding: 0 20px; }
+    .sign-in { display: none; }
+    .hero-inner { width: min(100% - 40px, 1088px); padding: 80px 0 56px; }
+    .drop-wrap { margin-bottom: 22px; }
+    .drop-wrap::before { width: 260px; height: 260px; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.13em; }
+    h1 { margin-top: 22px; font-size: 44px; line-height: 1.02; }
+    .lede { margin-top: 28px; font-size: 16px; line-height: 1.55; }
+    .proof { margin-top: 48px; }
+    .audience-rail { grid-template-columns: repeat(2, 1fr); border-radius: 12px 12px 0 0; }
+    .rail-lead { grid-column: 1 / -1; min-height: 44px; justify-content: center; border-bottom: 1px solid var(--color-k-hair); }
+    .audience { min-height: 54px; }
+    .audience:nth-child(2), .audience:nth-child(4) { border-left: 0; }
+    .audience:nth-child(4), .audience:nth-child(5) { border-top: 1px solid var(--color-k-hair); }
+    .audience-name { font-size: 11px; }
+    .audience-use { font-size: 9px; }
+    .console { border-radius: 0 0 12px 12px; }
+    .tabs { min-height: 48px; }
+    .tab { padding: 0 7px; font-size: 12px; }
+    .tab .long { display: none; }
+    .session-name { display: none; }
+    .tab-meta { min-width: 46px; }
+    .ensemble { min-height: 48px; }
+    .transcript { min-height: 238px; padding-top: 10px; overflow: hidden; }
+    .agent-line, .tool { display: none; }
+    .turn { font-size: 11px; }
+    .turn .text { font-size: 12px; }
+    .status { padding-top: 24px; }
+    .section-inner { width: min(100% - 40px, 1088px); padding: 72px 0; }
+    h2 { font-size: 36px; }
+    .moves { grid-template-columns: 1fr; }
+    .move { padding: 24px; }
+    .pricing { width: min(100% - 40px, 760px); padding: 72px 0; }
+    .pricing-card { grid-template-columns: 1fr; }
+    .tier + .tier { border-left: 0; border-top: 1px solid var(--color-line); }
+    .footer { flex-wrap: wrap; gap: 14px 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <nav class="nav" aria-label="Marketing navigation">
+    <a class="wordmark" href="#"><span>think</span><span>pool</span></a>
+    <div class="nav-actions">
+      <button class="sign-in" type="button">Sign in</button>
+      <button class="start-free" type="button">Start free</button>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="thesis">
+          <div class="drop-wrap" aria-hidden="true"><span class="drop"></span></div>
+          <p class="eyebrow">Two people steering from anywhere</p>
+          <h1>Build real code<br><span class="accent">together</span><span class="dot">.</span></h1>
+          <p class="lede">Think through the work together, then hand the room to the agent. You both see the build unfold and can step in when it drifts.</p>
+        </div>
+
+        <div class="proof">
+          <div class="audience-rail" aria-label="Audience groups">
+            <div class="rail-lead">Same room. Different stakes.</div>
+            <div class="audience">
+              <span class="audience-name"><i class="audience-dot"></i>Hobby</span>
+              <span class="audience-use">side projects</span>
+            </div>
+            <div class="audience">
+              <span class="audience-name"><i class="audience-dot"></i>Indie</span>
+              <span class="audience-use">own products</span>
+            </div>
+            <div class="audience">
+              <span class="audience-name"><i class="audience-dot"></i>Open source</span>
+              <span class="audience-use">issues + releases</span>
+            </div>
+            <div class="audience">
+              <span class="audience-name"><i class="audience-dot"></i>Professional</span>
+              <span class="audience-use">production work</span>
+            </div>
+          </div>
+
+          <div class="console" role="img" aria-label="Example Thinkpool Code session shared by two people">
+            <div class="tabs">
+              <div class="tab-set">
+                <div class="tab active"><span class="live-dot"></span><span class="long">landing direction</span><span aria-hidden="true">⌄</span></div>
+                <div class="tab secondary"><span class="live-dot"></span><span class="long">Terminal 2</span><span class="short">T2</span></div>
+              </div>
+              <div class="tab-meta">＋</div>
+              <div class="session-name"><strong>Launch</strong>&nbsp; session</div>
+              <div class="tab-meta">⬡</div>
+            </div>
+            <div class="ensemble">
+              <div class="ensemble-label">Ensemble <span>⬡1</span></div>
+              <div class="lane"><span class="spinner"></span>D1 · proof review</div>
+            </div>
+            <div class="transcript">
+              <div class="turn conrad"><span class="name">Conrad</span><span class="text">this homepage is turning into a feature wall</span><span class="time">20:36</span></div>
+              <div class="turn conrad"><span class="name">Conrad</span><span class="text">the pair is buried under product mechanics</span><span class="time">20:37</span></div>
+              <div class="turn maks"><span class="name">Maks</span><span class="text">keep one example. cut the rest.</span><span class="time">20:38</span></div>
+              <div class="turn maks"><span class="name">Maks</span><span class="text"><strong style="color:var(--color-pool-cobalt-ink)">@pool</strong> restore the compact hero and make the pair the point</span><span class="time">20:39</span></div>
+              <div class="agent-line"><span class="agent-glow"></span><span>I’ll keep the pair as the point and let the room prove the rest.</span></div>
+              <div class="tool">▸ <strong>⬡ Thinkpool Dispatch</strong>&nbsp; proof review <span style="float:right;color:var(--color-k-run)">✓</span></div>
+            </div>
+            <div class="status"><span>⏵⏵ Bypass permissions</span><span>GPT-5.6-Sol High</span></div>
+            <div class="composer"><span>＋</span><span class="placeholder">Message the room…</span><span>●</span><button class="send" type="button" aria-label="Send">→</button></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="why">
+      <div class="section-inner">
+        <div class="section-label">Why it’s different</div>
+        <h2>Scaling agents isn’t the same as working together.</h2>
+        <p class="section-copy">Running several agents at once is fan-out: one person, more hands. Thinkpool is lateral. Two people share one Ensemble, both able to watch and steer, while every agent terminal can see the others and hand work across the room.</p>
+        <div class="moves">
+          <article class="move"><div class="mini">Multiple providers, one room</div><h3>Choose a model for the job.</h3><p>Run Claude Code or Codex, then choose the model that fits each terminal.</p></article>
+          <article class="move"><div class="mini">Ensemble</div><h3>Agents work across terminals.</h3><p>Every terminal can see the others and delegate a defined slice. The work stays visible.</p></article>
+          <article class="move"><div class="mini">Pair</div><h3>Two people steer together.</h3><p>Both people can watch any terminal, step in, and redirect the work.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing">
+      <div class="section-label">Pricing</div>
+      <h2>Free to start. <span class="accent">€5/mo for unlimited.</span></h2>
+      <p class="section-copy">Free keeps one active session open at a time. Plus keeps as many open as the pair needs, for €5/month flat.</p>
+      <div class="pricing-card">
+        <article class="tier"><div class="tier-name">Free</div><div class="price">€0</div><p>One active Code session at a time. Close it and start another whenever you like.</p></article>
+        <article class="tier"><div class="tier-name">Plus</div><div class="price">€5 <small>/ month</small></div><p>Unlimited Code sessions open at once. One plan covers the room.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><a href="#">About</a><a href="#">FAQ</a><a href="#">Privacy &amp; security</a><a href="#">Terms</a><a href="#">Contact</a></footer>
+</body>
+</html>
