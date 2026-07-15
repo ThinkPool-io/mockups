@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkpool ad cover directions 02</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800;900&family=DM+Serif+Display&family=Hanken+Grotesk:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --tp-bg: #0a0d10;
+      --tp-ink: #f0f2f5;
+      --tp-muted: #a7afb9;
+      --tp-line: #30363d;
+      --tp-cobalt: #1a6ef4;
+      --tp-cobalt-hi: #7ea9f9;
+      --tp-cyan: hsl(190 70% 57%);
+      --tp-green: hsl(152 40% 58%);
+      --tp-violet: hsl(280 60% 72%);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { background: #08090b; color: #f3f4f6; font-family: "Hanken Grotesk", sans-serif; }
+    .board { min-height: 100vh; padding: 48px; background: radial-gradient(circle at 50% -10%, #172235, transparent 38rem), #08090b; }
+    .head { max-width: 1380px; margin: 0 auto 30px; }
+    .kicker { font: 600 11px/1 "IBM Plex Mono", monospace; letter-spacing: .16em; text-transform: uppercase; color: #7ea9f9; }
+    h1 { margin: 12px 0 8px; font: 400 clamp(38px, 4vw, 60px)/1 "Newsreader", serif; }
+    .note { margin: 0; color: #a7afb9; font-size: 16px; }
+    .grid { max-width: 1380px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; align-items: start; }
+    .concept { grid-column: span 2; }
+    .concept:nth-child(4) { grid-column: 2 / span 2; }
+    .concept:nth-child(5) { grid-column: 4 / span 2; }
+    .label { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 2px 9px; }
+    .label strong { font: 600 11px/1 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .label span { color: #7f8791; font: 500 10px/1 "IBM Plex Mono", monospace; }
+    .cover { position: relative; isolation: isolate; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 14px; box-shadow: 0 28px 70px -34px rgba(0,0,0,.95); }
+    .cover * { position: relative; }
+    .wm { font: 700 23px/1 "Hanken Grotesk", sans-serif; letter-spacing: -.035em; }
+    .wm .pool { color: var(--tp-cobalt); }
+    .mono { font-family: "IBM Plex Mono", monospace; }
+
+    /* 01: exact Thinkpool palette, signal diagram. */
+    .c1 { background: var(--tp-bg); color: var(--tp-ink); border: 1px solid var(--tp-line); }
+    .c1::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 67% 37%, color-mix(in oklab, var(--tp-cobalt) 25%, transparent), transparent 35%); }
+    .c1::after { content: ""; position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(var(--tp-line) 1px, transparent 1px), linear-gradient(90deg, var(--tp-line) 1px, transparent 1px); background-size: 38px 38px; mask-image: linear-gradient(to bottom, black, transparent 72%); }
+    .c1 .inner { height: 100%; padding: 7% 7% 6%; display: flex; flex-direction: column; z-index: 1; }
+    .c1 .top { display: flex; justify-content: space-between; align-items: center; }
+    .c1 .tag { font: 600 9px/1 "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--tp-cyan); }
+    .c1 h2 { margin: 23% 0 0; max-width: 9ch; font: 800 clamp(42px, 4vw, 66px)/.88 "Barlow Condensed", sans-serif; letter-spacing: -.025em; text-transform: uppercase; }
+    .c1 h2 em { display: block; color: var(--tp-cobalt-hi); font-style: normal; }
+    .c1 .signal { margin: auto 0 8%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+    .c1 .person { display: grid; place-items: center; width: 45px; height: 45px; border-radius: 50%; border: 1px solid; font: 700 12px/1 "IBM Plex Mono", monospace; }
+    .c1 .person.a { color: var(--tp-green); border-color: color-mix(in oklab, var(--tp-green) 55%, var(--tp-line)); background: color-mix(in oklab, var(--tp-green) 10%, transparent); justify-self: end; }
+    .c1 .person.b { color: var(--tp-violet); border-color: color-mix(in oklab, var(--tp-violet) 55%, var(--tp-line)); background: color-mix(in oklab, var(--tp-violet) 10%, transparent); }
+    .c1 .beam { display: flex; align-items: center; width: 100px; }
+    .c1 .beam::before, .c1 .beam::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--tp-green), var(--tp-cobalt)); }
+    .c1 .beam::after { background: linear-gradient(90deg, var(--tp-cobalt), var(--tp-violet)); }
+    .c1 .agent { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--tp-cobalt); background: color-mix(in oklab, var(--tp-cobalt) 16%, var(--tp-bg)); color: var(--tp-cobalt-hi); font: 700 13px/1 "IBM Plex Mono", monospace; box-shadow: 0 0 32px color-mix(in oklab, var(--tp-cobalt) 32%, transparent); }
+    .c1 .foot { display: flex; justify-content: space-between; color: var(--tp-muted); font: 500 9px/1 "IBM Plex Mono", monospace; }
+
+    /* 02: exact Thinkpool palette, provocative ad line. */
+    .c2 { background: var(--tp-cobalt); color: #08101d; }
+    .c2::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(-18deg, transparent 0 18px, rgba(255,255,255,.07) 18px 19px); }
+    .c2 .inner { height: 100%; padding: 7%; display: flex; flex-direction: column; }
+    .c2 .wm { color: #08101d; }
+    .c2 .wm .pool { color: #fff; }
+    .c2 .stamp { align-self: flex-end; margin-top: -18px; padding: 5px 8px; border: 2px solid #08101d; transform: rotate(3deg); font: 800 9px/1 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .c2 h2 { margin: 24% 0 0; font: 900 clamp(44px, 4.2vw, 70px)/.82 "Barlow Condensed", sans-serif; letter-spacing: -.035em; text-transform: uppercase; }
+    .c2 h2 span { display: block; color: white; text-shadow: 3px 3px 0 #08101d; }
+    .c2 .bosses { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .c2 .boss { padding: 12px; border: 2px solid #08101d; background: rgba(255,255,255,.12); font: 800 11px/1 "IBM Plex Mono", monospace; text-transform: uppercase; }
+    .c2 .boss:last-child { background: #08101d; color: white; }
+    .c2 .route { display: flex; align-items: center; gap: 8px; margin-top: 8px; font: 700 9px/1 "IBM Plex Mono", monospace; text-transform: uppercase; }
+    .c2 .route i { flex: 1; height: 2px; background: #08101d; }
+    .c2 .route b { padding: 7px 9px; border-radius: 7px; background: white; }
+    .c2 .url { margin-top: 14px; text-align: right; font: 700 10px/1 "IBM Plex Mono", monospace; }
+
+    /* 03: editorial print, warm and blunt. */
+    .c3 { background: #f0eadc; color: #171713; border: 1px solid #c9c0ad; }
+    .c3::before { content: ""; position: absolute; inset: 0; opacity: .24; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E"); mix-blend-mode: multiply; }
+    .c3 .inner { height: 100%; padding: 6.5%; display: flex; flex-direction: column; }
+    .c3 .top { display: flex; justify-content: space-between; align-items: start; }
+    .c3 .edition { text-align: right; font: 700 8px/1.4 "Space Grotesk", sans-serif; text-transform: uppercase; letter-spacing: .08em; }
+    .c3 h2 { margin: 19% 0 0; font: 400 clamp(46px, 4.5vw, 74px)/.86 "DM Serif Display", serif; letter-spacing: -.025em; }
+    .c3 h2 .turns { position: relative; display: inline-block; color: #e5462f; }
+    .c3 h2 .turns::after { content: ""; position: absolute; left: -3%; right: -3%; top: 53%; height: 6px; background: #171713; transform: rotate(-4deg); }
+    .c3 .scribble { margin: 18px 0 0 18%; transform: rotate(-2deg); font: 700 15px/1.15 "Space Grotesk", sans-serif; color: #e5462f; }
+    .c3 .proof { margin-top: auto; padding-top: 13px; border-top: 2px solid #171713; display: grid; grid-template-columns: 1fr auto; gap: 12px; font: 600 10px/1.45 "Space Grotesk", sans-serif; }
+    .c3 .proof strong { font-size: 13px; }
+    .c3 .page { display: grid; place-items: center; width: 35px; height: 35px; border: 2px solid #171713; border-radius: 50%; font-weight: 800; }
+
+    /* 04: club-poster energy, intentionally outside the product palette. */
+    .c4 { background: #15121d; color: #eaff2e; border: 1px solid #42325b; }
+    .c4::before { content: ""; position: absolute; width: 78%; aspect-ratio: 1; right: -25%; top: 8%; border: 2px solid #9b5cff; border-radius: 50%; box-shadow: 0 0 0 24px rgba(155,92,255,.08), 0 0 0 48px rgba(155,92,255,.05); }
+    .c4 .inner { height: 100%; padding: 7%; display: flex; flex-direction: column; }
+    .c4 .top { display: flex; justify-content: space-between; font: 700 9px/1 "Space Grotesk", sans-serif; text-transform: uppercase; letter-spacing: .1em; }
+    .c4 .top span:last-child { color: #f5eefe; }
+    .c4 h2 { margin: 25% 0 0; font: 800 clamp(39px, 3.9vw, 63px)/.91 "Syne", sans-serif; letter-spacing: -.045em; text-transform: uppercase; }
+    .c4 h2 span { color: #f5eefe; -webkit-text-stroke: 1px #9b5cff; text-shadow: 4px 4px 0 #9b5cff; }
+    .c4 .hands { margin-top: auto; position: relative; height: 105px; }
+    .c4 .hand { position: absolute; width: 92px; height: 58px; border: 2px solid; border-radius: 60% 40% 46% 54%; transform: rotate(18deg); }
+    .c4 .hand::after { content: "↗"; position: absolute; right: 8px; top: 5px; font: 800 28px/1 "Space Grotesk", sans-serif; }
+    .c4 .hand.a { left: 7%; bottom: 10px; border-color: #eaff2e; }
+    .c4 .hand.b { right: 7%; top: 3px; border-color: #9b5cff; color: #f5eefe; transform: rotate(198deg); }
+    .c4 .chip { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); display: grid; place-items: center; width: 62px; height: 62px; background: #eaff2e; color: #15121d; border-radius: 14px; font: 800 10px/1 "Space Grotesk", sans-serif; text-align: center; box-shadow: 0 0 36px rgba(234,255,46,.25); }
+    .c4 .foot { display: flex; justify-content: space-between; align-items: end; color: #f5eefe; font: 600 9px/1.4 "Space Grotesk", sans-serif; }
+    .c4 .foot b { color: #eaff2e; font-size: 12px; }
+
+    /* 05: metallic systems poster, many agents / two humans. */
+    .c5 { background: #d7d9dc; color: #111214; border: 1px solid #f8f8f8; }
+    .c5::before { content: ""; position: absolute; inset: 0; background: linear-gradient(118deg, rgba(255,255,255,.9), transparent 24%, rgba(112,118,127,.24) 48%, transparent 72%, rgba(255,255,255,.82)); }
+    .c5 .inner { height: 100%; padding: 6.5%; display: flex; flex-direction: column; }
+    .c5 .top { display: flex; justify-content: space-between; align-items: center; font: 700 9px/1 "IBM Plex Mono", monospace; text-transform: uppercase; }
+    .c5 .mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #ff5a1f; color: white; }
+    .c5 h2 { margin: 17% 0 0; font: 900 clamp(42px, 4.1vw, 68px)/.82 "Archivo Black", sans-serif; letter-spacing: -.055em; text-transform: uppercase; }
+    .c5 h2 .orange { color: #ff5a1f; }
+    .c5 .system { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .c5 .node { min-height: 58px; padding: 8px; border: 1.5px solid #111214; background: rgba(255,255,255,.28); display: flex; flex-direction: column; justify-content: space-between; font: 700 8px/1 "IBM Plex Mono", monospace; text-transform: uppercase; }
+    .c5 .node.human { background: #111214; color: white; }
+    .c5 .node.agent:nth-child(3), .c5 .node.agent:nth-child(5) { background: #ff5a1f; color: white; }
+    .c5 .node b { font-size: 16px; }
+    .c5 .bottom { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: 2px solid #111214; font: 700 9px/1.35 "IBM Plex Mono", monospace; text-transform: uppercase; }
+
+    @media (max-width: 1000px) {
+      .board { padding: 34px 20px 48px; }
+      .grid { display: grid; grid-template-columns: 1fr; max-width: 440px; gap: 26px; }
+      .concept, .concept:nth-child(4), .concept:nth-child(5) { grid-column: 1; }
+      .head { max-width: 440px; }
+      h1 { font-size: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="head">
+      <div class="kicker">First carousel cover only</div>
+      <h1>Five ad directions, not five landing pages.</h1>
+      <p class="note">01–02 preserve the Thinkpool palette. 03–05 are deliberately brand-adjacent.</p>
+    </header>
+    <section class="grid">
+      <article class="concept">
+        <div class="label"><strong>01 · Shared signal</strong><span>Exact brand colors</span></div>
+        <div class="cover c1">
+          <div class="inner">
+            <div class="top"><div class="wm"><span>think</span><span class="pool">pool</span></div><div class="tag">Live room</div></div>
+            <h2>Two pairs of eyes.<em>One live agent.</em></h2>
+            <div class="signal"><div class="person a">M</div><div class="beam"><div class="agent">AI</div></div><div class="person b">C</div></div>
+            <div class="foot"><span>Both watch.</span><span>Both steer.</span><span>thinkpool.io</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="concept">
+        <div class="label"><strong>02 · Two bosses</strong><span>Exact brand colors</span></div>
+        <div class="cover c2">
+          <div class="inner">
+            <div class="wm"><span>think</span><span class="pool">pool</span></div>
+            <div class="stamp">Coding agents, shared</div>
+            <h2>Your coding agent has <span>two bosses.</span></h2>
+            <div class="bosses"><div class="boss">Person 01<br>Steer</div><div class="boss">Person 02<br>Steer</div></div>
+            <div class="route"><i></i><b>Agent builds</b><i></i></div>
+            <div class="url">thinkpool.io</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="concept">
+        <div class="label"><strong>03 · Stop taking turns</strong><span>Editorial adjacent</span></div>
+        <div class="cover c3">
+          <div class="inner">
+            <div class="top"><div class="wm"><span>think</span><span class="pool">pool</span></div><div class="edition">Shared coding agents<br>Issue 001</div></div>
+            <h2>Stop taking<br><span class="turns">turns.</span></h2>
+            <div class="scribble">Build with the agent together.</div>
+            <div class="proof"><div><strong>Two people in the build.</strong><br>Both can watch, interrupt, redirect.</div><div class="page">01</div></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="concept">
+        <div class="label"><strong>04 · Both hands</strong><span>Culture-tech adjacent</span></div>
+        <div class="cover c4">
+          <div class="inner">
+            <div class="top"><span>Thinkpool / 01</span><span>Live coding agents</span></div>
+            <h2>Both hands<br><span>on the build.</span></h2>
+            <div class="hands"><div class="hand a"></div><div class="chip">LIVE<br>AGENT</div><div class="hand b"></div></div>
+            <div class="foot"><span><b>Two people.</b><br>One shared room.</span><span>thinkpool.io</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="concept">
+        <div class="label"><strong>05 · 2 × many</strong><span>Systems-tech adjacent</span></div>
+        <div class="cover c5">
+          <div class="inner">
+            <div class="top"><span>Thinkpool</span><span class="mark">2</span><span>Live build system</span></div>
+            <h2>Many agents.<br><span class="orange">Two humans.</span></h2>
+            <div class="system">
+              <div class="node human"><span>Human</span><b>01</b></div><div class="node agent"><span>Agent</span><b>A</b></div><div class="node agent"><span>Agent</span><b>B</b></div>
+              <div class="node human"><span>Human</span><b>02</b></div><div class="node agent"><span>Agent</span><b>C</b></div><div class="node agent"><span>Agent</span><b>D</b></div>
+            </div>
+            <div class="bottom"><span>One room<br>Both steer</span><span>Claude · Codex · Hermes<br>Bring your own key</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
