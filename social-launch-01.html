@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkpool social launch 01</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --cobalt: #1a6ef4;
+      --cobalt-ink: #7ea9f9;
+      --cyan: hsl(190 70% 57%);
+      --green: hsl(152 40% 58%);
+      --violet: hsl(280 60% 72%);
+      --red: hsl(350 72% 60%);
+      --font-display: "Newsreader", Georgia, serif;
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #06080a; color: var(--ink); }
+    body { font-family: var(--font-sans); }
+
+    .board {
+      min-height: 100vh;
+      padding: 52px;
+      background:
+        radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--cobalt) 14%, transparent), transparent 34rem),
+        #06080a;
+    }
+    .board-head { max-width: 1360px; margin: 0 auto 28px; }
+    .board-kicker { font: 600 11px/1 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--cobalt-ink); }
+    .board h1 { margin: 12px 0 8px; font: 400 clamp(34px, 4vw, 58px)/1.02 var(--font-display); }
+    .board-note { margin: 0; color: var(--muted); font-size: 16px; }
+    .grid { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-items: start; }
+
+    .art {
+      position: relative;
+      isolation: isolate;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 18%, color-mix(in oklab, var(--cobalt) 14%, transparent), transparent 42%),
+        var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 30px 80px -42px rgba(0, 0, 0, .95);
+    }
+    .art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .16;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 52%);
+    }
+    .safe { position: absolute; inset: 6.5% 7%; display: flex; flex-direction: column; }
+    .brand { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .wordmark { font-size: 26px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+    .wordmark span:last-child { color: var(--cobalt); }
+    .count { font: 600 10px/1 var(--font-mono); letter-spacing: .16em; color: var(--faint); }
+    .eyebrow { font: 600 10px/1.3 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+    .headline { margin: 0; font: 400 clamp(34px, 3.2vw, 52px)/.98 var(--font-display); letter-spacing: -.025em; text-wrap: balance; }
+    .headline .accent { color: var(--cobalt-ink); }
+    .sub { margin: 14px 0 0; max-width: 28ch; color: var(--muted); font-size: clamp(15px, 1.28vw, 19px); line-height: 1.45; }
+    .spacer { flex: 1; }
+    .foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; color: var(--faint); font: 500 10px/1.2 var(--font-mono); letter-spacing: .05em; }
+    .dot { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px color-mix(in oklab, var(--green) 80%, transparent); }
+
+    .slide-1 .copy { margin-top: 28%; }
+    .slide-1 .headline { font-size: clamp(40px, 4vw, 64px); }
+    .slide-1 .pair-line { margin-top: 22px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+    .pair-avatar { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line-strong); font: 600 10px/1 var(--font-mono); }
+    .pair-avatar.a { color: var(--green); background: color-mix(in oklab, var(--green) 10%, transparent); }
+    .pair-avatar.b { margin-left: -16px; color: var(--violet); background: color-mix(in oklab, var(--violet) 10%, var(--bg)); }
+
+    .slide-2 .copy { margin-top: 17%; }
+    .runtime-list { display: grid; gap: 9px; margin-top: 28px; }
+    .runtime {
+      display: flex; align-items: center; gap: 12px; padding: 13px 14px;
+      border: 1px solid var(--line); border-radius: 10px; background: color-mix(in oklab, var(--raised) 92%, transparent);
+      font: 600 13px/1 var(--font-mono); color: var(--ink);
+    }
+    .runtime::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px color-mix(in oklab, var(--cyan) 70%, transparent); }
+    .runtime small { margin-left: auto; color: var(--faint); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+
+    .slide-3 .copy { margin-top: 19%; }
+    .key-card { margin-top: 30px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--raised); }
+    .key-row { display: flex; align-items: center; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); font: 600 11px/1 var(--font-mono); color: var(--muted); }
+    .key-row:last-child { border-bottom: 0; }
+    .lock { color: var(--green); }
+    .key-row .value { margin-left: auto; color: var(--faint); font-size: 9px; }
+    .truth { margin-top: 17px; color: var(--faint); font: 500 10px/1.55 var(--font-mono); }
+
+    .slide-4 .safe { justify-content: center; align-items: center; text-align: center; }
+    .mark { width: 112px; height: 112px; margin-bottom: 30px; }
+    .slide-4 .headline { font-size: clamp(50px, 5vw, 76px); }
+    .url { margin-top: 28px; color: var(--cobalt-ink); font: 600 14px/1 var(--font-mono); letter-spacing: .06em; }
+    .slide-4 .brand { position: absolute; left: 7%; right: 7%; top: 6.5%; }
+    .slide-4 .foot { position: absolute; left: 7%; right: 7%; bottom: 6.5%; }
+
+    .terminal {
+      margin-top: 24px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      background: #0a0d10;
+      box-shadow: 0 18px 42px -24px rgba(0, 0, 0, .95);
+      font-family: var(--font-mono);
+    }
+    .tabs, .ensemble { display: flex; align-items: center; min-height: 34px; border-bottom: 1px solid var(--line); font-size: 9px; color: var(--faint); }
+    .tab { position: relative; display: flex; align-items: center; gap: 7px; align-self: stretch; padding: 0 10px; color: var(--ink); }
+    .tab::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 2px; border-radius: 3px 3px 0 0; background: var(--cyan); }
+    .tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 7px var(--green); }
+    .tab-faint { padding: 0 10px; }
+    .tab-plus { margin-left: auto; padding: 0 11px; color: var(--muted); font-size: 15px; }
+    .ensemble { padding: 0 10px; color: var(--ink); font-weight: 600; }
+    .ensemble span { margin-left: 6px; color: var(--cyan); }
+    .transcript { min-height: 154px; padding: 10px; display: grid; align-content: start; gap: 7px; font-size: 8.5px; line-height: 1.45; }
+    .msg { padding: 6px 8px; border-left: 2px solid; color: var(--muted); background: rgba(255,255,255,.018); }
+    .msg strong { margin-right: 5px; }
+    .msg.a { border-color: var(--violet); } .msg.a strong { color: var(--violet); }
+    .msg.b { border-color: var(--green); } .msg.b strong { color: var(--green); }
+    .msg.pool { border-color: var(--cobalt); } .msg.pool strong { color: var(--cobalt-ink); }
+    .tool { padding: 7px 8px; border: 1px solid var(--line); border-radius: 7px; color: var(--muted); background: #06090c; }
+    .tool b { color: var(--cyan); }
+    .tool .ok { float: right; color: var(--green); }
+    .composer { display: flex; align-items: center; gap: 8px; margin: 0 10px 10px; padding: 8px 9px; border: 1px solid var(--line-strong); border-radius: 8px; color: var(--faint); font-size: 9px; }
+    .composer .send { margin-left: auto; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; background: var(--cobalt); color: #0a0d10; font-weight: 700; }
+
+    .export-mode .board { min-height: 0; padding: 0; background: transparent; }
+    .export-mode .board-head { display: none; }
+    .export-mode .grid { display: block; max-width: none; }
+    .export-mode .art { display: none; border: 0; border-radius: 0; box-shadow: none; }
+    .export-mode .art.selected { display: block; width: 1080px; height: 1350px; aspect-ratio: auto; }
+    .export-mode.story .art.selected { height: 1920px; }
+    .export-mode .safe { inset: 86px 76px; }
+    .export-mode .wordmark { font-size: 62px; }
+    .export-mode .count { font-size: 24px; }
+    .export-mode .eyebrow { font-size: 24px; }
+    .export-mode .headline { font-size: 126px; }
+    .export-mode .sub { margin-top: 32px; font-size: 42px; }
+    .export-mode .foot { font-size: 24px; }
+    .export-mode .pair-line { margin-top: 46px; font-size: 34px; }
+    .export-mode .pair-avatar { width: 66px; height: 66px; font-size: 22px; }
+    .export-mode .slide-1 .copy { margin-top: 240px; }
+    .export-mode .slide-1 .headline { font-size: 134px; }
+    .export-mode .slide-2 .copy { margin-top: 170px; }
+    .export-mode .runtime-list { gap: 20px; margin-top: 52px; }
+    .export-mode .runtime { padding: 28px 30px; border-radius: 18px; font-size: 30px; }
+    .export-mode .runtime::before { width: 15px; height: 15px; }
+    .export-mode .runtime small { font-size: 20px; }
+    .export-mode .terminal { margin-top: 48px; border-radius: 20px; }
+    .export-mode .tabs, .export-mode .ensemble { min-height: 66px; font-size: 20px; }
+    .export-mode .tab { gap: 13px; padding: 0 20px; }
+    .export-mode .tab-dot { width: 12px; height: 12px; }
+    .export-mode .tab-faint { padding: 0 20px; }
+    .export-mode .tab-plus { padding: 0 22px; font-size: 32px; }
+    .export-mode .ensemble { padding: 0 20px; }
+    .export-mode .transcript { min-height: 280px; padding: 22px; gap: 13px; font-size: 18px; }
+    .export-mode .msg { padding: 12px 16px; border-left-width: 4px; }
+    .export-mode .tool { padding: 14px 16px; border-radius: 12px; }
+    .export-mode .composer { gap: 16px; margin: 0 20px 20px; padding: 14px 18px; border-radius: 14px; font-size: 18px; }
+    .export-mode .composer .send { width: 48px; height: 48px; border-radius: 10px; }
+    .export-mode .slide-3 .copy { margin-top: 210px; }
+    .export-mode .key-card { margin-top: 58px; border-radius: 20px; }
+    .export-mode .key-row { gap: 20px; padding: 30px; font-size: 28px; }
+    .export-mode .key-row .value { font-size: 20px; }
+    .export-mode .truth { margin-top: 32px; font-size: 22px; }
+    .export-mode .mark { width: 240px; height: 240px; margin-bottom: 64px; }
+    .export-mode .slide-4 .headline { font-size: 154px; }
+    .export-mode .url { margin-top: 56px; font-size: 32px; }
+
+    .export-mode.story .safe { inset: 150px 86px 190px; }
+    .export-mode.story .slide-1 .copy { margin-top: 430px; }
+    .export-mode.story .slide-2 .copy { margin-top: 310px; }
+    .export-mode.story .slide-3 .copy { margin-top: 390px; }
+    .export-mode.story .headline { font-size: 138px; }
+    .export-mode.story .slide-1 .headline { font-size: 146px; }
+    .export-mode.story .slide-4 .headline { font-size: 164px; }
+    .export-mode.story .slide-4 .brand { top: 150px; left: 86px; right: 86px; }
+    .export-mode.story .slide-4 .foot { bottom: 190px; left: 86px; right: 86px; }
+
+    @media (max-width: 900px) {
+      .board { padding: 28px 18px 42px; }
+      .grid { grid-template-columns: 1fr; gap: 20px; }
+      .art { max-width: 430px; margin: 0 auto; }
+      .board h1 { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-head">
+      <div class="board-kicker">Launch post 01</div>
+      <h1>Live coding agents, steered together.</h1>
+      <p class="board-note">Four-frame carousel for Instagram and TikTok. Product truth first, BYOK included.</p>
+    </header>
+
+    <section class="grid" aria-label="Social carousel frames">
+      <article class="art slide-1" data-slide="1">
+        <div class="safe">
+          <div class="brand"><div class="wordmark"><span>think</span><span>pool</span></div><div class="count">01 / 04</div></div>
+          <div class="copy">
+            <div class="eyebrow">Two people. One room.</div>
+            <h2 class="headline">Live coding agents.<br><span class="accent">Steered by two people.</span></h2>
+            <div class="pair-line"><span class="pair-avatar a">M</span><span class="pair-avatar b">C</span><span>Both watch. Both steer.</span></div>
+          </div>
+          <div class="spacer"></div>
+          <div class="foot"><span><i class="dot"></i>Live room</span><span>Swipe to see what runs inside →</span></div>
+        </div>
+      </article>
+
+      <article class="art slide-2" data-slide="2">
+        <div class="safe">
+          <div class="brand"><div class="wordmark"><span>think</span><span>pool</span></div><div class="count">02 / 04</div></div>
+          <div class="copy">
+            <div class="eyebrow">Bring the agents you use</div>
+            <h2 class="headline">Claude Code.<br>Codex.<br><span class="accent">Hermes.</span></h2>
+            <div class="runtime-list">
+              <div class="runtime">Claude Code <small>agent</small></div>
+              <div class="runtime">Codex <small>agent</small></div>
+              <div class="runtime">Hermes <small>agent</small></div>
+            </div>
+            <div class="terminal" aria-label="Thinkpool room terminal preview">
+              <div class="tabs"><div class="tab"><i class="tab-dot"></i>launch direction</div><div class="tab-faint">T2</div><div class="tab-plus">+</div></div>
+              <div class="ensemble">Ensemble <span>⬡ 2</span></div>
+              <div class="transcript">
+                <div class="msg a"><strong>Conrad</strong>the launch should show the real product</div>
+                <div class="msg b"><strong>Maks</strong><span style="color:var(--cobalt-ink);font-weight:600">@pool</span> keep BYOK in the story</div>
+                <div class="msg pool"><strong>Pool</strong>dispatched to agent</div>
+                <div class="tool"><b>⬡ Thinkpool Dispatch</b> · Hermes review <span class="ok">✓</span></div>
+              </div>
+              <div class="composer"><span>Message the room…</span><span class="send">→</span></div>
+            </div>
+          </div>
+          <div class="spacer"></div>
+          <div class="foot"><span><i class="dot"></i>Every terminal is shared</span><span>03 →</span></div>
+        </div>
+      </article>
+
+      <article class="art slide-3" data-slide="3">
+        <div class="safe">
+          <div class="brand"><div class="wordmark"><span>think</span><span>pool</span></div><div class="count">03 / 04</div></div>
+          <div class="copy">
+            <div class="eyebrow">Your provider. Your spend.</div>
+            <h2 class="headline">Bring your own<br><span class="accent">AI key.</span></h2>
+            <p class="sub">Only one person needs it. The room runs the agents. Both people steer.</p>
+            <div class="key-card">
+              <div class="key-row"><span class="lock">●</span>AI key <span class="value">sealed in browser</span></div>
+              <div class="key-row"><span class="lock">●</span>Anthropic-compatible <span class="value">direct</span></div>
+              <div class="key-row"><span class="lock">●</span>Other models <span class="value">via OpenRouter</span></div>
+            </div>
+            <div class="truth">Thinkpool charges for the shared room, not the tokens.</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="foot"><span>One key is enough for the room</span><span>04 →</span></div>
+        </div>
+      </article>
+
+      <article class="art slide-4" data-slide="4">
+        <div class="brand"><div class="wordmark"><span>think</span><span>pool</span></div><div class="count">04 / 04</div></div>
+        <div class="safe">
+          <svg class="mark" viewBox="0 0 512 512" role="img" aria-label="Thinkpool Wellspring mark">
+            <rect width="512" height="512" rx="112" fill="hsl(212 18% 10%)"/>
+            <circle cx="256" cy="256" r="172" fill="none" stroke="#1a6ef4" stroke-width="40"/>
+            <g transform="translate(107.2 107.2) scale(12.4)"><path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="#1a6ef4"/></g>
+          </svg>
+          <div class="eyebrow">Two people. Live coding agents.</div>
+          <h2 class="headline">Build<br><span class="accent">together.</span></h2>
+          <div class="url">thinkpool.io</div>
+        </div>
+        <div class="foot"><span>Free to start</span><span>See the room at thinkpool.io</span></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search)
+    const slide = params.get('slide')
+    const format = params.get('format')
+    if (slide) {
+      document.body.classList.add('export-mode')
+      if (format === 'story') document.body.classList.add('story')
+      document.querySelector(`[data-slide="${slide}"]`)?.classList.add('selected')
+    }
+  </script>
+</body>
+</html>
