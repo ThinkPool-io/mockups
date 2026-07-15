@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkpool social cover 03 branded</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0d10;
+      --raised: hsl(212 11% 8%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --line: hsl(212 7% 28%);
+      --cobalt: #1a6ef4;
+      --cobalt-hi: #7ea9f9;
+      --cyan: hsl(190 70% 57%);
+      --green: hsl(152 40% 58%);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { background: #06080a; color: var(--ink); font-family: "Hanken Grotesk", sans-serif; }
+    .board {
+      min-height: 100vh;
+      padding: 44px 24px 56px;
+      background: radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--cobalt) 16%, transparent), transparent 36rem), #06080a;
+    }
+    .head { width: min(520px, 100%); margin: 0 auto 22px; }
+    .kicker { color: var(--cobalt-hi); font: 600 10px/1 "IBM Plex Mono", monospace; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 10px 0 5px; font-size: 19px; font-weight: 600; }
+    .note { margin: 0; color: var(--faint); font-size: 13px; }
+    .cover {
+      container-type: inline-size;
+      position: relative;
+      isolation: isolate;
+      width: min(520px, 100%);
+      aspect-ratio: 4 / 5;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--bg);
+      color: var(--ink);
+      box-shadow: 0 32px 90px -42px #000;
+    }
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 83% 12%, color-mix(in oklab, var(--cobalt) 28%, transparent), transparent 30%),
+        linear-gradient(150deg, transparent 48%, color-mix(in oklab, var(--cobalt) 8%, transparent));
+    }
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .13;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+      mix-blend-mode: screen;
+    }
+    .inner { height: 100%; padding: 6.8%; display: flex; flex-direction: column; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .wordmark { font-size: 5.8cqw; font-weight: 700; letter-spacing: -.04em; line-height: 1; }
+    .wordmark span:last-child { color: var(--cobalt); }
+    .edition { text-align: right; color: var(--faint); font: 600 1.9cqw/1.45 "IBM Plex Mono", monospace; letter-spacing: .09em; text-transform: uppercase; }
+    .edition i { display: inline-block; width: 1.5cqw; height: 1.5cqw; margin-right: 1.4cqw; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+    h2 { margin: 20% 0 0; font: 400 16.4cqw/.86 "DM Serif Display", serif; letter-spacing: -.035em; }
+    .turns { position: relative; display: inline-block; color: var(--cobalt-hi); }
+    .turns::after {
+      content: "";
+      position: absolute;
+      left: -3%;
+      right: -3%;
+      top: 54%;
+      height: 1.4cqw;
+      background: var(--cyan);
+      transform: rotate(-4deg);
+      box-shadow: 0 0 15px color-mix(in oklab, var(--cyan) 35%, transparent);
+    }
+    .scribble { margin: 4.5cqw 0 0 14%; transform: rotate(-2deg); color: var(--cyan); font-size: 3.8cqw; font-weight: 700; line-height: 1.1; }
+    .scribble span { color: var(--ink); }
+    .proof { margin-top: auto; padding-top: 3.6cqw; border-top: 2px solid var(--cobalt); display: grid; grid-template-columns: 1fr auto; gap: 3cqw; }
+    .proof-copy { color: var(--muted); font-size: 2.9cqw; line-height: 1.45; }
+    .proof-copy strong { display: block; margin-bottom: .8cqw; color: var(--ink); font-size: 3.7cqw; }
+    .proof-copy em { color: var(--green); font-style: normal; }
+    .page { display: grid; place-items: center; width: 9cqw; height: 9cqw; border: 1px solid var(--cobalt); border-radius: 50%; color: var(--cobalt-hi); font: 600 2.6cqw/1 "IBM Plex Mono", monospace; }
+    .url { margin-top: 3.3cqw; text-align: right; color: var(--faint); font: 600 2.3cqw/1 "IBM Plex Mono", monospace; letter-spacing: .08em; }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="head">
+      <div class="kicker">Direction 03 · branded palette</div>
+      <h1>Editorial hook, Thinkpool colors.</h1>
+      <p class="note">First carousel cover only.</p>
+    </header>
+    <article class="cover" aria-label="Thinkpool ad cover reading Stop taking turns. Build with the agent together.">
+      <div class="inner">
+        <div class="top">
+          <div class="wordmark"><span>think</span><span>pool</span></div>
+          <div class="edition"><i></i>Shared coding agents<br>Issue 001</div>
+        </div>
+        <h2>Stop taking<br><span class="turns">turns.</span></h2>
+        <div class="scribble">Build with the <span>agent</span> together.</div>
+        <div class="proof">
+          <div class="proof-copy"><strong>Two people in the build.</strong>Both can watch, interrupt, and <em>steer.</em></div>
+          <div class="page">01</div>
+        </div>
+        <div class="url">thinkpool.io</div>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
