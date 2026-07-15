@@ -4,7 +4,7 @@
 
 Two people. One room. Live coding agents.
 
-Run Claude Code, Codex, or Hermes. Bring one AI key for the room. Both people can watch, step in, and steer the work as it happens.
+Run Claude Code, Codex, or Hermes. Whoever runs the bridge brings the AI key. Only one of you needs one. Both people can watch, step in, and steer the work as it happens.
 
 Build together at thinkpool.io
 
