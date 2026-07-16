@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool Design card · five directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);--float:hsl(212 9% 13%);
+    --panel:hsl(212 13% 8%);--card:hsl(212 13% 7%);--line:hsl(212 7% 21%);--line-strong:hsl(212 7% 28%);
+    --ink:hsl(212 14% 95%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);--cyan:hsl(190 70% 57%);
+    --cyan-soft:color-mix(in oklab,var(--cyan) 12%,transparent);--cobalt:hsl(217 85% 62%);--cobalt-fill:hsl(217 89% 53%);
+    --green:hsl(145 40% 58%);--amber:hsl(45 72% 60%);--danger:hsl(8 52% 62%);
+    --sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--display:"Newsreader",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg);color-scheme:dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:500}
+  button{font:inherit;color:inherit}
+  button,a{touch-action:manipulation}
+  .page{max-width:1440px;margin:auto;padding:46px 28px 64px}
+  .hero{max-width:1320px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,520px);gap:46px;align-items:end}
+  .eyebrow,.label{color:var(--cyan);font:600 11px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+  h1{font:600 clamp(42px,5vw,72px)/.94 var(--display);letter-spacing:-.04em;margin:12px 0 0;max-width:780px}
+  .hero-copy{margin:0;color:var(--muted);font-size:16px;line-height:1.58;max-width:49ch}
+  .verdicts{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+  .verdict{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--faint);font:500 10px/1 var(--mono)}
+  .verdict b{color:var(--green);font-weight:600}.verdict.no b{color:var(--danger)}
+  .finding{max-width:1320px;margin:28px auto 24px;padding:14px 16px;border:1px solid color-mix(in oklab,var(--amber) 28%,var(--line));border-radius:10px;background:color-mix(in oklab,var(--amber) 5%,var(--raised));display:flex;gap:12px;align-items:flex-start;color:var(--muted);font:500 11px/1.55 var(--mono)}
+  .finding strong{color:var(--amber);white-space:nowrap}.finding span{max-width:100ch}
+  .grid{max-width:1320px;margin:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .concept{min-width:0;border:1px solid var(--line);border-radius:15px;background:var(--raised);padding:15px}
+  .concept.recommended{border-color:color-mix(in oklab,var(--cyan) 54%,var(--line));box-shadow:0 0 0 1px color-mix(in oklab,var(--cyan) 10%,transparent),0 26px 70px -55px var(--cyan)}
+  .concept:last-child{grid-column:1/-1}
+  .concept-head{display:flex;gap:14px;align-items:flex-start;padding:3px 3px 14px;min-height:80px}
+  .num{color:var(--cyan);font:600 11px/1 var(--mono);padding-top:5px}
+  .concept-title{min-width:0;flex:1}.concept h2{font-size:19px;line-height:1.1;letter-spacing:-.015em;margin:0 0 6px}.concept p{margin:0;color:var(--faint);font:400 10px/1.5 var(--mono);max-width:68ch}
+  .badge{flex:none;border:1px solid color-mix(in oklab,var(--cyan) 46%,var(--line));background:var(--cyan-soft);color:var(--cyan);border-radius:999px;padding:5px 8px;font:600 8px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em}
+  .chat{border:1px solid var(--line);border-radius:11px;background:var(--bg);overflow:hidden}
+  .chat-line{display:flex;gap:9px;padding:12px 13px;color:var(--muted);font-size:12px;line-height:1.42;border-bottom:1px solid color-mix(in oklab,var(--line) 56%,transparent)}
+  .pool-dot{width:7px;height:7px;flex:none;border-radius:50%;background:var(--cyan);box-shadow:0 0 7px var(--cyan);margin-top:5px}
+  .card-wrap{padding:12px;background:var(--card)}
+  .design-card{border:1px solid var(--line);border-radius:9px;background:var(--panel);overflow:hidden}
+  .card-header{display:flex;align-items:center;gap:8px;min-height:45px;padding:0 11px;border-bottom:1px solid var(--line)}
+  .doc-icon{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--cyan-soft);color:var(--cyan);font:600 10px/1 var(--mono);flex:none}
+  .title{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:650}
+  .status{display:inline-flex;align-items:center;gap:5px;color:var(--faint);font:500 9px/1 var(--mono);white-space:nowrap}
+  .status:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+  .more{width:32px;height:32px;border:0;background:transparent;border-radius:6px;color:var(--faint);cursor:pointer}
+  .preview{position:relative;display:block;width:100%;border:0;background:var(--bg);padding:0;overflow:hidden;text-align:left;cursor:pointer}
+  .preview:hover .preview-cta{border-color:var(--cyan);color:var(--cyan)}
+  .mini-page{position:relative;height:190px;padding:18px 20px;background:var(--bg);overflow:hidden}
+  .mini-eyebrow{color:var(--cyan);font:600 7px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .mini-title{font:600 28px/.9 var(--display);letter-spacing:-.04em;margin-top:8px;max-width:10ch}
+  .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:13px}
+  .mini-box{height:55px;border:1px solid var(--line);border-radius:5px;background:var(--surface);padding:6px}
+  .mini-box b{display:block;color:var(--cyan);font:600 6px/1 var(--mono)}
+  .mini-box i{display:block;width:70%;height:4px;border-radius:4px;background:var(--line-strong);margin-top:7px}
+  .phone-thumb{position:absolute;right:14px;bottom:12px;width:54px;height:99px;border:1px solid var(--line-strong);border-radius:7px;background:var(--surface);box-shadow:0 10px 24px -12px hsl(0 0% 0%);padding:7px 5px}
+  .phone-thumb:before{content:"";display:block;width:42%;height:3px;margin:0 auto 7px;border-radius:3px;background:var(--line-strong)}
+  .phone-thumb i{display:block;height:3px;background:var(--cyan);margin:5px 0}.phone-thumb b{display:block;height:27px;border:1px solid var(--line);border-radius:3px;margin:5px 0}
+  .preview-cta{position:absolute;right:12px;top:12px;border:1px solid var(--line-strong);border-radius:6px;background:color-mix(in oklab,var(--bg) 90%,transparent);padding:6px 8px;color:var(--muted);font:500 9px/1 var(--mono);backdrop-filter:blur(8px)}
+  .actions{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+  .action{min-height:45px;border:0;background:transparent;color:var(--muted);font:600 11px/1 var(--sans);cursor:pointer;padding:0 13px}
+  .action:hover{background:var(--float);color:var(--ink)}
+  .action.primary{background:var(--cyan-soft);color:var(--cyan);border-left:1px solid var(--line);margin-left:auto}
+  .action.primary:hover{background:color-mix(in oklab,var(--cyan) 18%,transparent)}
+  .action.cobalt{background:var(--cobalt-fill);color:var(--ink);margin:7px;border-radius:7px;min-height:39px}
+  .meta{color:var(--faint);font:500 9px/1.4 var(--mono)}
+
+  /* 01: whole-card preview */
+  .v1 .preview{border-bottom:0}.v1 .mini-page{height:205px}.v1 .actions .action:not(.primary){flex:1;text-align:left}.v1 .actions .primary{min-width:136px}
+
+  /* 02: viewport switch */
+  .viewport-bar{display:flex;align-items:center;gap:4px;padding:7px 9px;border-bottom:1px solid var(--line)}
+  .view-tab{height:30px;border:0;border-radius:6px;background:transparent;color:var(--faint);padding:0 10px;font:500 9px/1 var(--mono);cursor:pointer}.view-tab.on{background:var(--cyan-soft);color:var(--cyan)}
+  .viewport-bar .meta{margin-left:auto}.v2 .mini-page{height:172px}.v2 .phone-thumb{display:none}.v2 .actions{padding:7px;gap:7px}.v2 .action{flex:1;border:1px solid var(--line);border-radius:7px;min-height:39px}.v2 .action.primary{margin:0;border-color:color-mix(in oklab,var(--cyan) 42%,var(--line));background:var(--cyan-soft)}
+
+  /* 03: compact attachment */
+  .v3{display:grid;grid-template-columns:126px minmax(0,1fr);min-height:116px}.v3 .compact-thumb{border:0;border-right:1px solid var(--line);background:var(--bg);padding:0;cursor:pointer;position:relative;overflow:hidden}.compact-thumb .mini-page{height:100%;padding:12px}.compact-thumb .mini-title{font-size:18px}.compact-thumb .mini-grid{margin-top:8px}.compact-thumb .mini-box{height:30px}.v3 .compact-info{padding:11px;display:flex;flex-direction:column;gap:5px}.v3 .compact-info .title{font-size:12px}.v3 .compact-info .actions{border:0;margin-top:auto;gap:6px}.v3 .compact-info .action{min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:6px;font-size:10px}.v3 .compact-info .primary{margin:0;background:var(--cyan-soft)}
+  .expand-row{display:none;padding:10px;border-top:1px solid var(--line);color:var(--muted);font:500 10px/1.5 var(--mono)}.design-card.expanded .expand-row{display:block}
+
+  /* 04: resilient loader */
+  .v4 .recovery{display:grid;grid-template-columns:112px minmax(0,1fr);gap:11px;padding:10px}.v4 .snapshot{height:86px;border:1px solid var(--line);border-radius:6px;background:var(--bg);padding:9px;overflow:hidden}.v4 .snapshot .mini-title{font-size:16px}.v4 .snapshot .mini-grid{margin-top:8px}.v4 .snapshot .mini-box{height:23px}.recovery-copy{min-width:0}.recovery-copy strong{display:block;font-size:12px;margin:1px 0 5px}.recovery-copy p{font-size:9px;line-height:1.45}.error-state{display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:var(--amber);font:500 9px/1 var(--mono)}.error-state:before{content:"!";display:grid;place-items:center;width:16px;height:16px;border-radius:50%;border:1px solid color-mix(in oklab,var(--amber) 60%,var(--line));font-size:9px}.v4 .actions{padding:7px;gap:7px}.v4 .action{min-height:38px;border:1px solid var(--line);border-radius:6px}.v4 .action.primary{margin:0;background:transparent}.v4 .action:first-child{flex:1}
+
+  /* 05: workspace object */
+  .v5{display:grid;grid-template-columns:minmax(0,1fr) 290px;min-height:280px}.v5 .workspace-preview{border-right:1px solid var(--line);position:relative;background:var(--bg)}.v5 .mini-page{height:100%;min-height:280px;padding:26px}.v5 .mini-title{font-size:38px}.v5 .mini-box{height:72px}.v5 .workspace-info{padding:15px;display:flex;flex-direction:column}.workspace-kicker{color:var(--cyan);font:600 9px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em}.v5 h3{font-size:17px;line-height:1.12;margin:8px 0 5px}.workspace-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.detail{border:1px solid var(--line);border-radius:7px;padding:8px}.detail b{display:block;font:600 11px/1 var(--mono);color:var(--ink)}.detail span{display:block;margin-top:5px;color:var(--faint);font:500 8px/1 var(--mono)}.v5 .actions{border:0;margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:7px}.v5 .action{border:1px solid var(--line);border-radius:7px;min-height:40px}.v5 .action.primary{margin:0;background:var(--cyan-soft);border-color:color-mix(in oklab,var(--cyan) 42%,var(--line))}
+
+  .recommendation{max-width:1320px;margin:28px auto 0;border-top:1px solid var(--line);padding-top:22px;display:grid;grid-template-columns:150px 1fr;gap:20px}.recommendation h3{margin:0;color:var(--cyan);font:600 11px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.12em}.recommendation p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:82ch}.recommendation b{color:var(--ink)}
+  .demo-toast{position:fixed;z-index:30;left:50%;bottom:20px;transform:translate(-50%,18px);opacity:0;pointer-events:none;border:1px solid var(--line-strong);border-radius:8px;background:var(--float);padding:10px 13px;color:var(--ink);font:500 10px/1.3 var(--mono);box-shadow:0 18px 50px -24px hsl(0 0% 0%);transition:.2s ease}.demo-toast.show{transform:translate(-50%,0);opacity:1}
+  .modal{position:fixed;inset:0;z-index:40;display:none;place-items:center;padding:22px;background:color-mix(in oklab,var(--bg) 82%,transparent);backdrop-filter:blur(8px)}.modal.open{display:grid}.modal-card{width:min(920px,94vw);max-height:86vh;overflow:auto;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel);box-shadow:0 28px 90px -35px hsl(0 0% 0%)}.modal-head{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line)}.modal-head strong{font-size:13px}.modal-head button{margin-left:auto;width:36px;height:36px;border:0;border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}.modal .mini-page{height:520px;padding:42px}.modal .mini-title{font-size:62px}.modal .mini-grid{margin-top:28px}.modal .mini-box{height:120px}
+  @media (prefers-reduced-motion:reduce){.demo-toast{transition:none}}
+  @media (max-width:760px){
+    .page{padding:28px 10px 46px}.hero{display:block;padding:0 6px}.hero-copy{margin-top:18px;font-size:14px}.verdict{font-size:8.5px}.finding{margin:20px 6px;display:block;font-size:9px}.finding strong{display:block;margin-bottom:6px}.grid{grid-template-columns:1fr;gap:15px}.concept:last-child{grid-column:auto}.concept{padding:8px;border-radius:12px}.concept-head{padding:6px 5px 12px;min-height:0}.concept p{font-size:9px}.badge{font-size:7.5px}.chat-line{font-size:11px;padding:10px}.card-wrap{padding:8px}.mini-page{height:176px;padding:16px}.mini-title{font-size:25px}.mini-grid{margin-top:11px}.mini-box{height:48px}.phone-thumb{width:45px;height:82px}.v1 .mini-page{height:182px}.v1 .actions .primary{min-width:125px}.action{font-size:10px;padding:0 10px}.v2 .mini-page{height:160px}.v3{grid-template-columns:100px minmax(0,1fr)}.v3 .compact-info{padding:9px}.v3 .compact-info .actions .action:first-child{display:none}.v4 .recovery{grid-template-columns:88px minmax(0,1fr);gap:9px;padding:8px}.v4 .snapshot{height:78px;padding:7px}.v4 .actions .action:last-child{flex:1}.v5{display:flex;flex-direction:column;min-height:0}.v5 .workspace-preview{border-right:0;border-bottom:1px solid var(--line)}.v5 .mini-page{min-height:190px;height:190px;padding:20px}.v5 .mini-title{font-size:29px}.v5 .mini-box{height:48px}.v5 .workspace-info{padding:12px}.workspace-details{margin:10px 0}.recommendation{grid-template-columns:1fr;margin:22px 6px 0;gap:7px}.recommendation p{font-size:13px}h1{font-size:43px}.modal .mini-page{height:72vh;padding:28px}.modal .mini-title{font-size:42px}
+    .more{width:44px;height:44px}.view-tab{height:44px}.action,.v2 .action,.v3 .compact-info .action,.v4 .action,.v5 .action{min-height:44px}
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="hero">
+    <div><div class="eyebrow">ThinkPool Code · in-chat Design card</div><h1>Make the preview the promise.</h1></div>
+    <div><p class="hero-copy">A Design card should behave like a durable shared object: preview instantly, enter editing deliberately, and never leave the room staring at “loading artifact…” with a perfectly good screenshot underneath.</p><div class="verdicts"><span class="verdict"><b>YES</b> sibling reorder</span><span class="verdict"><b>YES</b> selected-image drop</span><span class="verdict no"><b>NO</b> free-position canvas</span><span class="verdict no"><b>NO</b> touch drag yet</span></div></div>
+  </header>
+  <aside class="finding"><strong>Why yours hangs</strong><span>The current trusted-card path sends Preview into the live HTML loader. That loader has no timeout or screenshot fallback, so an unresolved signed URL or fetch can leave both Preview and Design spinning forever even though the desktop/mobile PNGs already loaded in the card.</span></aside>
+
+  <section class="grid">
+    <article class="concept recommended">
+      <header class="concept-head"><span class="num">01</span><div class="concept-title"><h2>Preview is the card</h2><p>The entire image opens instantly. Editing is one explicit secondary action. No tiny mystery affordances.</p></div><span class="badge">Recommended</span></header>
+      <div class="chat"><div class="chat-line"><span class="pool-dot"></span><span>I made five directions for the Design lane chrome.</span></div><div class="card-wrap"><div class="design-card v1"><div class="card-header"><span class="doc-icon">D</span><span class="title">Design lane chrome · five directions</span><span class="status">Ready</span><button class="more" data-demo="menu" aria-label="More actions">•••</button></div><button class="preview" data-demo="preview" aria-label="Open preview"><div class="mini-page"><div class="mini-eyebrow">ThinkPool Design</div><div class="mini-title">Five ways to make Design feel like an Ensemble lane.</div><div class="mini-grid"><div class="mini-box"><b>Nested rail</b><i></i></div><div class="mini-box"><b>Canvas dock</b><i></i></div></div><div class="phone-thumb"><i></i><b></b><i></i><b></b></div></div><span class="preview-cta">Open preview ↗</span></button><div class="actions"><button class="action" data-demo="preview">Preview desktop</button><button class="action primary" data-demo="design">Work on design</button></div></div></div></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head"><span class="num">02</span><div class="concept-title"><h2>One viewport at a time</h2><p>Desktop/mobile tabs replace the tiny side-by-side pair. The card gets shorter and each preview becomes legible.</p></div></header>
+      <div class="chat"><div class="chat-line"><span class="pool-dot"></span><span>Desktop and mobile are both verified.</span></div><div class="card-wrap"><div class="design-card v2"><div class="card-header"><span class="doc-icon">D</span><span class="title">Design lane chrome · five directions</span><span class="status">2 views</span></div><div class="viewport-bar"><button class="view-tab on" data-demo="desktop">Desktop</button><button class="view-tab" data-demo="mobile">Mobile</button><span class="meta">1440 × 900</span></div><button class="preview" data-demo="preview" aria-label="Open selected preview"><div class="mini-page"><div class="mini-eyebrow">ThinkPool Design</div><div class="mini-title">Five ways to make Design feel like an Ensemble lane.</div><div class="mini-grid"><div class="mini-box"><b>Nested rail</b><i></i></div><div class="mini-box"><b>Canvas dock</b><i></i></div></div></div></button><div class="actions"><button class="action" data-demo="preview">Open preview</button><button class="action primary" data-demo="design">Edit in Design</button></div></div></div></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head"><span class="num">03</span><div class="concept-title"><h2>Compact attachment</h2><p>Best transcript density. One representative thumbnail, clear metadata, and two compact actions; expand only on demand.</p></div><span class="badge">Smallest</span></header>
+      <div class="chat"><div class="chat-line"><span class="pool-dot"></span><span>Here’s the card—open it when you’re ready.</span></div><div class="card-wrap"><div class="design-card v3"><button class="compact-thumb" data-demo="preview" aria-label="Open preview"><div class="mini-page"><div class="mini-eyebrow">Design</div><div class="mini-title">Five ways.</div><div class="mini-grid"><div class="mini-box"></div><div class="mini-box"></div></div></div></button><div class="compact-info"><span class="title">Design lane chrome · five directions</span><span class="meta">Editable HTML · desktop + mobile</span><div class="actions"><button class="action" data-demo="expand">Details</button><button class="action" data-demo="preview">Preview</button><button class="action primary" data-demo="design">Design</button></div></div><div class="expand-row">Verified 14:42 · source-backed · share link available</div></div></div></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head"><span class="num">04</span><div class="concept-title"><h2>Resilient recovery</h2><p>Never a dead spinner. The cached screenshot remains useful while live HTML retries in the background.</p></div><span class="badge">Failure-proof</span></header>
+      <div class="chat"><div class="chat-line"><span class="pool-dot"></span><span>The live preview is slow, but your verified image is ready.</span></div><div class="card-wrap"><div class="design-card v4"><div class="card-header"><span class="doc-icon">D</span><span class="title">Design lane chrome · five directions</span><button class="more" data-demo="menu" aria-label="More actions">•••</button></div><div class="recovery"><button class="snapshot" data-demo="preview" aria-label="Open screenshot"><div class="mini-eyebrow">Design</div><div class="mini-title">Five ways.</div><div class="mini-grid"><div class="mini-box"></div><div class="mini-box"></div></div></button><div class="recovery-copy"><strong>Screenshot ready</strong><p>The editable version is taking longer than expected.</p><span class="error-state">Live HTML unavailable</span></div></div><div class="actions"><button class="action" data-demo="preview">Open screenshot</button><button class="action primary" data-demo="retry">Retry live preview</button></div></div></div></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head"><span class="num">05</span><div class="concept-title"><h2>Persistent workspace object</h2><p>Closest to the bigger website-builder idea. The card communicates continuity, revision, viewports, and who owns the next edit.</p></div><span class="badge">Builder direction</span></header>
+      <div class="chat"><div class="chat-line"><span class="pool-dot"></span><span>Your shared Design workspace has a new verified revision.</span></div><div class="card-wrap"><div class="design-card v5"><button class="workspace-preview" data-demo="preview" aria-label="Open workspace preview"><div class="mini-page"><div class="mini-eyebrow">ThinkPool Design</div><div class="mini-title">Five ways to make Design feel like an Ensemble lane.</div><div class="mini-grid"><div class="mini-box"><b>Nested rail</b><i></i></div><div class="mini-box"><b>Canvas dock</b><i></i></div></div></div></button><div class="workspace-info"><span class="workspace-kicker">Shared Design workspace</span><h3>Design lane chrome</h3><span class="meta">Latest verified revision · just now</span><div class="workspace-details"><div class="detail"><b>5</b><span>directions</span></div><div class="detail"><b>2</b><span>viewports</span></div></div><div class="actions"><button class="action" data-demo="preview">Preview</button><button class="action primary" data-demo="design">Open Design</button></div></div></div></div></div>
+    </article>
+  </section>
+
+  <section class="recommendation"><h3>My pick</h3><p><b>Ship 01’s interaction model with 04’s failure behavior.</b> The whole preview always opens the already-loaded screenshot; “Work on design” is the only path that asks for editable HTML. Add an 8-second timeout, Retry, and a screenshot fallback. If the larger persistent-builder vision wins later, 05 is the right evolution—not a permanent empty Design tab.</p></section>
+</main>
+
+<div class="demo-toast" role="status" aria-live="polite"></div>
+<div class="modal" aria-hidden="true"><div class="modal-card"><div class="modal-head"><strong>Design lane chrome · preview</strong><button data-demo="close" aria-label="Close preview">×</button></div><div class="mini-page"><div class="mini-eyebrow">ThinkPool Design</div><div class="mini-title">Five ways to make Design feel like an Ensemble lane.</div><div class="mini-grid"><div class="mini-box"><b>Nested rail</b><i></i></div><div class="mini-box"><b>Canvas dock</b><i></i></div><div class="mini-box"><b>Inspector sheet</b><i></i></div><div class="mini-box"><b>Action dock</b><i></i></div></div></div></div></div>
+<script>
+  const toast=document.querySelector('.demo-toast'),modal=document.querySelector('.modal');let timer;
+  const say=(text)=>{toast.textContent=text;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1800)};
+  document.addEventListener('click',(event)=>{
+    const button=event.target.closest('[data-demo]');if(!button)return;const action=button.dataset.demo;
+    if(action==='preview'){modal.classList.add('open');modal.setAttribute('aria-hidden','false');return}
+    if(action==='close'){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');return}
+    if(action==='design'){say('Opens the persistent Design lane.');return}
+    if(action==='retry'){say('Retrying live HTML — screenshot stays available.');return}
+    if(action==='expand'){button.closest('.design-card').classList.toggle('expanded');button.textContent=button.closest('.design-card').classList.contains('expanded')?'Hide':'Details';return}
+    if(action==='mobile'||action==='desktop'){button.parentElement.querySelectorAll('.view-tab').forEach(x=>x.classList.toggle('on',x===button));button.parentElement.querySelector('.meta').textContent=action==='mobile'?'390 × 844':'1440 × 900';say(`${action[0].toUpperCase()+action.slice(1)} preview selected.`);return}
+    say('Share, copy link, or download screenshots.');
+  });
+  modal.addEventListener('click',(event)=>{if(event.target===modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true')}});
+  document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){modal.classList.remove('open');modal.setAttribute('aria-hidden','true')}});
+</script>
+</body>
+</html>
