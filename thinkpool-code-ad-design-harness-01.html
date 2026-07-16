@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thinkpool Design · three ad covers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #ffffff;
+    --canvas: #edf1f7;
+    --ink: #0a0d10;
+    --muted: #667085;
+    --pool: #1a6ef4;
+    --pool-ink: #2e78ff;
+    --agent: hsl(190 70% 57%);
+    --run: hsl(152 40% 58%);
+    --soft-blue: #eaf0ff;
+    --soft-grey: #f3f5f8;
+    --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--canvas); }
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    padding: 28px 22px 34px;
+  }
+
+  .board-head {
+    width: min(1396px, 100%);
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .board-kicker {
+    color: var(--pool);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .board-head h1 {
+    margin: 5px 0 0;
+    font-size: 25px;
+    line-height: 1.05;
+    letter-spacing: -.035em;
+  }
+
+  .board-note {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .covers {
+    width: min(1396px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .option { min-width: 0; }
+
+  .option-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 4px 8px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .cover {
+    container-type: inline-size;
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px color-mix(in srgb, #22315b 11%, transparent);
+    padding: 8.6cqw;
+  }
+
+  .eyebrow {
+    color: var(--pool-ink);
+    font-size: 3.15cqw;
+    font-weight: 800;
+    letter-spacing: .13em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .cover h2 {
+    max-width: 100%;
+    margin: 4.8cqw 0 0;
+    font-size: 10.6cqw;
+    font-weight: 800;
+    letter-spacing: -.055em;
+    line-height: .98;
+  }
+
+  .cover h2 .pool-word { color: var(--pool); }
+
+  .lede {
+    max-width: 90%;
+    margin: 4.6cqw 0 0;
+    color: var(--muted);
+    font-size: 4cqw;
+    font-weight: 600;
+    letter-spacing: -.018em;
+    line-height: 1.42;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4cqw;
+    margin-top: 5.8cqw;
+  }
+
+  .action {
+    display: inline-flex;
+    min-height: 9.4cqw;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2.5cqw;
+    padding: 0 3.7cqw;
+    font-size: 3.15cqw;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+  }
+
+  .action.primary { background: var(--pool); color: white; }
+  .action.secondary { background: var(--soft-blue); color: #2450a4; }
+
+  .footer-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 26cqw;
+    gap: 4cqw;
+    align-items: end;
+    margin-top: auto;
+  }
+
+  .notes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.3cqw;
+    min-width: 0;
+  }
+
+  .note {
+    max-width: 100%;
+    border-radius: 2.5cqw;
+    background: var(--soft-grey);
+    color: #303846;
+    padding: 2.8cqw 3.2cqw;
+    font-size: 3.08cqw;
+    font-weight: 700;
+    line-height: 1.18;
+  }
+
+  .art {
+    position: relative;
+    aspect-ratio: 1.38 / 1;
+    overflow: hidden;
+    border-radius: 4cqw;
+    background: var(--pool);
+  }
+
+  .art .cyan,
+  .art .green,
+  .art .dark,
+  .art .line { position: absolute; }
+
+  .art-a .cyan {
+    width: 50%;
+    aspect-ratio: 1;
+    top: -10%;
+    right: 3%;
+    border-radius: 50%;
+    background: var(--agent);
+  }
+  .art-a .dark {
+    left: -2%;
+    bottom: 8%;
+    width: 63%;
+    height: 62%;
+    background: var(--ink);
+    clip-path: polygon(58% 0, 100% 100%, 0 100%);
+  }
+  .art-a .green {
+    right: 9%;
+    bottom: 10%;
+    width: 14%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--run);
+  }
+
+  .art-b { background: var(--ink); }
+  .art-b .cyan {
+    width: 60%;
+    aspect-ratio: 1;
+    left: -14%;
+    top: -28%;
+    border: 3.2cqw solid var(--agent);
+    border-radius: 50%;
+  }
+  .art-b .green {
+    width: 60%;
+    aspect-ratio: 1;
+    right: -14%;
+    bottom: -28%;
+    border: 3.2cqw solid var(--run);
+    border-radius: 50%;
+  }
+  .art-b .dark {
+    inset: 25% 35%;
+    border-radius: 50%;
+    background: var(--pool);
+  }
+
+  .art-c { background: var(--pool); }
+  .art-c .cyan {
+    inset: 0 47% 0 0;
+    background: var(--agent);
+    clip-path: polygon(0 0, 100% 0, 68% 100%, 0 100%);
+  }
+  .art-c .dark {
+    width: 54%;
+    height: 62%;
+    right: 0;
+    bottom: 0;
+    background: var(--ink);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+  .art-c .green {
+    width: 19%;
+    aspect-ratio: 1;
+    right: 17%;
+    top: 13%;
+    border-radius: 50%;
+    background: var(--run);
+  }
+
+  .wordmark {
+    position: absolute;
+    right: 8.6cqw;
+    bottom: 4.4cqw;
+    font-size: 3cqw;
+    font-weight: 800;
+    letter-spacing: -.035em;
+  }
+  .wordmark span { color: var(--pool); }
+
+  .cover-c .footer-row { margin-bottom: 5.4cqw; }
+
+  @media (max-width: 760px) {
+    body { padding: 20px 18px 32px; }
+    .board-head { align-items: start; margin-bottom: 22px; }
+    .board-head h1 { max-width: 240px; font-size: 22px; }
+    .board-note { display: none; }
+    .covers { grid-template-columns: 1fr; gap: 28px; }
+    .option-label { margin-bottom: 7px; }
+    .cover { border-radius: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="board-head">
+  <div>
+    <div class="board-kicker">Reference rebuilt, not reimagined</div>
+    <h1>Three first-post covers</h1>
+  </div>
+  <p class="board-note">Instagram 4:5 · cover only</p>
+</header>
+
+<main class="covers">
+  <section class="option">
+    <div class="option-label"><span>01 · direct conversion</span><span>recommended</span></div>
+    <article class="cover cover-a">
+      <div class="eyebrow">Thinkpool code</div>
+      <h2>Stop taking <span class="pool-word">turns.</span></h2>
+      <p class="lede">Two people share one room and steer the same coding agents. Nobody gets reduced to watching.</p>
+      <div class="actions" aria-label="Ad proof points">
+        <span class="action primary">Both see</span>
+        <span class="action secondary">Both steer</span>
+        <span class="action secondary">Both build</span>
+      </div>
+      <div class="footer-row">
+        <div class="notes">
+          <div class="note">Claude Code · Codex · Hermes</div>
+          <div class="note">One AI key starts the room</div>
+        </div>
+        <div class="art art-a" aria-hidden="true">
+          <span class="cyan"></span><span class="dark"></span><span class="green"></span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="option">
+    <div class="option-label"><span>02 · pair first</span><span>same system</span></div>
+    <article class="cover cover-b">
+      <div class="eyebrow">Thinkpool code</div>
+      <h2>Nobody just <span class="pool-word">watches.</span></h2>
+      <p class="lede">The terminal is shared. The agents are shared. Both people can step in while the work is happening.</p>
+      <div class="actions" aria-label="Ad proof points">
+        <span class="action primary">One live room</span>
+        <span class="action secondary">Two builders</span>
+      </div>
+      <div class="footer-row">
+        <div class="notes">
+          <div class="note">Shared terminal</div>
+          <div class="note">Shared agent control</div>
+        </div>
+        <div class="art art-b" aria-hidden="true">
+          <span class="cyan"></span><span class="dark"></span><span class="green"></span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="option">
+    <div class="option-label"><span>03 · product reveal</span><span>same system</span></div>
+    <article class="cover cover-c">
+      <div class="eyebrow">Thinkpool code</div>
+      <h2>Both people steer the <span class="pool-word">agents.</span></h2>
+      <p class="lede">Run Claude Code, Codex, or Hermes in one room built for a pair, not a spectator.</p>
+      <div class="actions" aria-label="Ad proof points">
+        <span class="action primary">Bring one AI key</span>
+        <span class="action secondary">Invite a partner</span>
+      </div>
+      <div class="footer-row">
+        <div class="notes">
+          <div class="note">Dispatch Ensemble lanes</div>
+          <div class="note">See every step together</div>
+        </div>
+        <div class="art art-c" aria-hidden="true">
+          <span class="cyan"></span><span class="dark"></span><span class="green"></span>
+        </div>
+      </div>
+      <div class="wordmark">think<span>pool</span>.io</div>
+    </article>
+  </section>
+</main>
+
+</body>
+</html>
