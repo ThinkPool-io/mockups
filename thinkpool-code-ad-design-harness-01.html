@@ -9,16 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #ffffff;
-    --canvas: #edf1f7;
-    --ink: #0a0d10;
-    --muted: #667085;
+    --paper: #10161d;
+    --canvas: #0a0d10;
+    --ink: #f1f4f8;
+    --muted: #8b96a2;
+    --art-dark: #06090c;
     --pool: #1a6ef4;
     --pool-ink: #2e78ff;
     --agent: hsl(190 70% 57%);
     --run: hsl(152 40% 58%);
-    --soft-blue: #eaf0ff;
-    --soft-grey: #f3f5f8;
+    --soft-blue: color-mix(in srgb, var(--pool) 16%, var(--paper));
+    --soft-grey: #171d24;
     --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   }
@@ -99,7 +100,8 @@
     flex-direction: column;
     background: var(--paper);
     border-radius: 24px;
-    box-shadow: 0 24px 70px color-mix(in srgb, #22315b 11%, transparent);
+    border: 1px solid rgba(255, 255, 255, .055);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .28);
     padding: 8.6cqw;
   }
 
@@ -154,7 +156,7 @@
   }
 
   .action.primary { background: var(--pool); color: white; }
-  .action.secondary { background: var(--soft-blue); color: #2450a4; }
+  .action.secondary { background: var(--soft-blue); color: #8fb5ff; }
 
   .footer-row {
     display: grid;
@@ -176,7 +178,7 @@
     max-width: 100%;
     border-radius: 2.5cqw;
     background: var(--soft-grey);
-    color: #303846;
+    color: #d8dee6;
     padding: 2.8cqw 3.2cqw;
     font-size: 3.08cqw;
     font-weight: 700;
@@ -209,7 +211,7 @@
     bottom: 8%;
     width: 63%;
     height: 62%;
-    background: var(--ink);
+    background: var(--art-dark);
     clip-path: polygon(58% 0, 100% 100%, 0 100%);
   }
   .art-a .green {
@@ -221,7 +223,7 @@
     background: var(--run);
   }
 
-  .art-b { background: var(--ink); }
+  .art-b { background: var(--art-dark); }
   .art-b .cyan {
     width: 60%;
     aspect-ratio: 1;
@@ -255,7 +257,7 @@
     height: 62%;
     right: 0;
     bottom: 0;
-    background: var(--ink);
+    background: var(--art-dark);
     clip-path: polygon(100% 0, 100% 100%, 0 100%);
   }
   .art-c .green {
