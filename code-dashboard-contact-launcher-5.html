@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0d10">
-  <title>ThinkPool — Contact-first session launcher</title>
+  <title>ThinkPool — New-session button directions</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
@@ -389,6 +389,37 @@
       background: var(--color-k-ok);
     }
 
+    /* Five copy directions for one deliberately simple dashboard action.
+       Contact choice and link sharing happen after the room is created. */
+    .simple-launcher {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 0;
+    }
+    .session-cta {
+      min-width: 196px;
+      min-height: 44px;
+      flex: 0 0 auto;
+      border-color: var(--color-pool-strong);
+      background: transparent;
+      color: var(--color-pool-hi);
+    }
+    .session-cta:hover {
+      border-color: var(--color-pool-hi);
+      background: color-mix(in oklab, var(--color-pool) 12%, transparent);
+      color: var(--color-ink);
+    }
+    .simple-explainer {
+      max-width: 520px;
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 13px;
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+
     /* Concept 1 — recent contact quick picks */
     .quick-pair {
       display: grid;
@@ -705,6 +736,16 @@
       .more-button { width: 44px; height: 44px; }
       .concept-caption { margin-top: 18px; }
 
+      .simple-launcher {
+        min-height: 0;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        padding: 4px 0 2px;
+      }
+      .session-cta { width: 100%; min-width: 0; }
+      .simple-explainer { font-size: 12.5px; }
+
       .quick-pair { grid-template-columns: 1fr; }
       .quick-intro { padding: 14px; border-right: 0; border-bottom: 1px solid var(--color-line); }
       .quick-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 10px; }
@@ -819,142 +860,42 @@
     </section>
 
     <section class="concept" id="concept-1" role="tabpanel" aria-labelledby="tab-1">
-      <div class="concept-caption">01 · Recent contacts</div>
-      <div class="launcher quick-pair">
-        <div class="quick-intro">
-          <h2 class="launcher-title">Who are you coding with?</h2>
-          <p class="launcher-copy">Start directly with someone you know.</p>
-        </div>
-        <div class="quick-actions">
-          <button class="contact-choice tone-a" type="button">
-            <span class="avatar">CO</span>
-            <span style="min-width:0">
-              <span class="contact-name">Conrad</span>
-              <span class="contact-meta"><span class="presence"></span> online</span>
-            </span>
-          </button>
-          <button class="contact-choice tone-b" type="button">
-            <span class="avatar">MA</span>
-            <span style="min-width:0">
-              <span class="contact-name">Maria</span>
-              <span class="contact-meta">2 sessions</span>
-            </span>
-          </button>
-          <button class="quick-more" type="button" aria-label="Choose another contact">All contacts</button>
-        </div>
-        <div class="quick-footer">
-          <a class="text-link" href="#invite-link">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Create an invite link
-          </a>
-          <a class="text-link" href="#contacts">Manage contacts</a>
-        </div>
+      <div class="concept-caption">01 · Product name</div>
+      <div class="simple-launcher">
+        <button class="button session-cta" type="button">New ThinkPool session</button>
+        <p class="simple-explainer">Create the room first, then invite a contact from inside.</p>
       </div>
     </section>
 
     <section class="concept" id="concept-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-      <div class="concept-caption">02 · Two clear actions</div>
-      <div class="launcher split-launcher">
-        <div>
-          <h2 class="launcher-title">Start a code session</h2>
-          <p class="launcher-copy">Choose a contact, or send someone a private link.</p>
-        </div>
-        <div class="split-actions">
-          <button class="button primary" type="button">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6M22 11h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Choose a contact
-          </button>
-          <button class="button secondary" type="button">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Invite by link
-          </button>
-        </div>
-        <div class="split-foot">
-          <span class="microcopy">Contacts already have a ThinkPool account.</span>
-          <a class="text-link" href="#add-contact">Add someone by email →</a>
-        </div>
+      <div class="concept-caption">02 · Action first</div>
+      <div class="simple-launcher">
+        <button class="button session-cta" type="button">Start a new session</button>
+        <p class="simple-explainer">Open the session now. You’ll choose a contact on the next step.</p>
       </div>
     </section>
 
     <section class="concept" id="concept-3" role="tabpanel" aria-labelledby="tab-3" hidden>
-      <div class="concept-caption">03 · Contact presence</div>
-      <div class="launcher presence-launcher">
-        <div class="presence-head">
-          <div>
-            <h2 class="launcher-title">Code with a contact</h2>
-            <p class="launcher-copy">Your most recent partners are ready here.</p>
-          </div>
-          <a class="text-link" href="#contacts">View all</a>
-        </div>
-        <div class="contact-list">
-          <div class="contact-row tone-a">
-            <span class="avatar">CO</span>
-            <span style="min-width:0">
-              <span class="contact-name">Conrad</span>
-              <span class="contact-status"><span class="presence"></span>active now</span>
-            </span>
-            <button class="button secondary" type="button">Code together</button>
-          </div>
-          <div class="contact-row tone-b">
-            <span class="avatar">MA</span>
-            <span style="min-width:0">
-              <span class="contact-name">Maria</span>
-              <span class="contact-status">last session 2d ago</span>
-            </span>
-            <button class="button secondary" type="button">Code together</button>
-          </div>
-        </div>
-        <div class="presence-foot">
-          <a class="text-link" href="#add-contact">+ Add contact by email</a>
-          <a class="text-link" href="#invite-link">Create an invite link</a>
-        </div>
+      <div class="concept-caption">03 · Code explicit</div>
+      <div class="simple-launcher">
+        <button class="button session-cta" type="button">Start a code session</button>
+        <p class="simple-explainer">Create the session first, then invite a contact.</p>
       </div>
     </section>
 
     <section class="concept" id="concept-4" role="tabpanel" aria-labelledby="tab-4" hidden>
-      <div class="concept-caption">04 · Search-first</div>
-      <div class="launcher search-launcher">
-        <div class="search-top">
-          <div>
-            <label class="search-label" for="contact-search">Start a session with a contact</label>
-            <div class="search-field">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <input id="contact-search" name="contact-search" type="search" placeholder="Search your contacts…" autocomplete="off">
-              <kbd>⌘ K</kbd>
-            </div>
-          </div>
-          <button class="button secondary" type="button">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Invite by link
-          </button>
-        </div>
-        <div class="search-recent">
-          <span class="recent-label">Recent</span>
-          <button class="recent-chip tone-a" type="button"><span class="chip-dot"></span>Conrad</button>
-          <button class="recent-chip tone-b" type="button"><span class="chip-dot"></span>Maria</button>
-          <a class="text-link" href="#add-contact">Add contact</a>
-        </div>
+      <div class="concept-caption">04 · Together led</div>
+      <div class="simple-launcher">
+        <button class="button session-cta" type="button">Start coding together</button>
+        <p class="simple-explainer">Open a room, then invite your partner.</p>
       </div>
     </section>
 
     <section class="concept" id="concept-5" role="tabpanel" aria-labelledby="tab-5" hidden>
-      <div class="concept-caption">05 · Guided start</div>
-      <div class="launcher guided-launcher">
-        <div class="guided-copy">
-          <span class="step-number">01</span>
-          <div>
-            <h2 class="launcher-title">Choose who joins this session</h2>
-            <p class="launcher-copy">Pick a contact first. You’ll name the room next.</p>
-          </div>
-        </div>
-        <div class="guided-actions">
-          <button class="button primary" type="button">Choose a contact</button>
-          <button class="button ghost" type="button">Invite by link</button>
-        </div>
-        <div class="guided-foot">
-          <span class="microcopy">No contact yet? Add them with their ThinkPool email.</span>
-          <a class="text-link" href="#add-contact">Add a contact →</a>
-        </div>
+      <div class="concept-caption">05 · Compact</div>
+      <div class="simple-launcher">
+        <button class="button session-cta" type="button">New session</button>
+        <p class="simple-explainer">Invite a contact immediately after creating it.</p>
       </div>
     </section>
 
@@ -973,11 +914,11 @@
 
   <script>
     const names = [
-      "Recent contacts",
-      "Two clear actions",
-      "Contact presence",
-      "Search-first",
-      "Guided start"
+      "New ThinkPool session",
+      "Start a new session",
+      "Start a code session",
+      "Start coding together",
+      "New session"
     ];
     const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
     const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
