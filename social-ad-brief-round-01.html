@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thinkpool — First ad, three proofs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --board: hsl(220 14% 8%);
+    --board-2: hsl(220 12% 11%);
+    --board-line: hsl(220 10% 21%);
+    --board-ink: hsl(210 20% 96%);
+    --board-muted: hsl(214 12% 66%);
+    --brand: #1a6ef4;
+    --paper: hsl(42 24% 94%);
+    --paper-ink: hsl(228 14% 10%);
+    --paper-muted: hsl(225 8% 38%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-display: "Newsreader", Georgia, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --font-identity: "Space Grotesk", system-ui, sans-serif;
+
+    /* Exact fixed-dark Code console tokens from src/styles/theme.css. */
+    --k-bg: #0a0d10;
+    --k-card: #06090c;
+    --k-rail: #10161d;
+    --k-rail-bg: #0d1218;
+    --k-ink: hsl(190 26% 96%);
+    --k-ink-s: hsl(190 22% 88%);
+    --k-muted: hsl(192 16% 76%);
+    --k-faint: hsl(196 16% 60%);
+    --k-line: hsl(199 24% 17%);
+    --k-agent: hsl(190 70% 57%);
+    --k-run: #3ad07f;
+    --k-you: hsl(150 60% 60%);
+    --k-them: hsl(280 60% 72%);
+    --k-bypass: hsl(352 84% 64%);
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--board); }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 34rem),
+      var(--board);
+    color: var(--board-ink);
+    font-family: var(--font-sans);
+  }
+
+  .page {
+    width: min(100%, 1500px);
+    margin: 0 auto;
+    padding: 44px 32px 64px;
+  }
+
+  .board-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 54px);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .dek {
+    max-width: 46ch;
+    margin: 8px 0 0;
+    color: var(--board-muted);
+    font: 500 13px/1.55 var(--font-mono);
+  }
+
+  .locked {
+    flex: none;
+    padding: 9px 12px;
+    border: 1px solid color-mix(in srgb, var(--brand) 45%, var(--board-line));
+    color: color-mix(in srgb, var(--brand) 74%, white);
+    font: 600 10px/1 var(--font-mono);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .directions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .direction { min-width: 0; }
+  .direction-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 2px 10px;
+  }
+  .direction-meta strong {
+    font: 600 12px/1 var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+  .direction-meta span {
+    color: var(--board-muted);
+    font: 500 10px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .poster {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--board-line) 88%, transparent);
+    box-shadow: 0 26px 56px rgba(0, 0, 0, 0.27);
+  }
+
+  .micro {
+    font: 600 clamp(8px, 0.72vw, 11px)/1.35 var(--font-mono);
+    letter-spacing: 0.095em;
+    text-transform: uppercase;
+  }
+
+  /* 01 — one clean metaphor: two inputs converge on one shared command. */
+  .metaphor {
+    background: var(--paper);
+    color: var(--paper-ink);
+    padding: clamp(22px, 2.3vw, 40px);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .metaphor .topline {
+    display: flex;
+    justify-content: space-between;
+    color: var(--paper-muted);
+  }
+
+  .metaphor-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 0;
+  }
+
+  .shared-command {
+    position: relative;
+    z-index: 2;
+    width: 66%;
+    padding: 15px 18px 16px;
+    border: 2px solid var(--paper-ink);
+    background: var(--paper);
+    font: 600 clamp(12px, 1.25vw, 18px)/1.3 var(--font-mono);
+    letter-spacing: -0.02em;
+  }
+  .shared-command b { color: var(--brand); }
+  .shared-command small {
+    display: block;
+    margin-top: 8px;
+    color: var(--paper-muted);
+    font: 500 0.58em/1.4 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .input {
+    position: absolute;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: clamp(30px, 3.3vw, 48px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    color: var(--paper);
+    background: var(--paper-ink);
+    font: 700 clamp(10px, 1vw, 14px)/1 var(--font-identity);
+  }
+  .input-a { left: 3%; top: 28%; }
+  .input-b { right: 3%; bottom: 26%; }
+  .input-a::after,
+  .input-b::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: clamp(52px, 8.4vw, 122px);
+    background: var(--brand);
+    transform-origin: left center;
+  }
+  .input-a::after { left: 96%; transform: rotate(17deg); }
+  .input-b::after { right: 96%; transform: rotate(17deg); transform-origin: right center; }
+
+  .metaphor-copy h2,
+  .product-copy h2 {
+    margin: 0;
+    font-size: clamp(31px, 3.25vw, 54px);
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+  }
+  .metaphor-copy p,
+  .product-copy p {
+    max-width: 32ch;
+    margin: 13px 0 0;
+    font-size: clamp(11px, 1.05vw, 15px);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+  .metaphor-copy p span { color: var(--brand); }
+
+  /* 02 — exact product visual vocabulary, composed as an ad rather than a UI brochure. */
+  .product {
+    background: var(--k-bg);
+    color: var(--k-ink);
+    display: grid;
+    grid-template-rows: 42% 58%;
+  }
+
+  .product-copy {
+    padding: clamp(22px, 2.35vw, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .product-copy .micro { color: var(--k-faint); }
+  .product-copy h2 { max-width: 8ch; }
+  .product-copy p { color: var(--k-muted); }
+  .product-copy p b { color: var(--brand); font-weight: 700; }
+
+  .console-crop {
+    position: relative;
+    min-height: 0;
+    margin: 0 clamp(10px, 1.1vw, 18px) clamp(10px, 1.1vw, 18px);
+    overflow: hidden;
+    border: 1px solid var(--k-line);
+    border-radius: 10px;
+    background: var(--k-bg);
+    color: var(--k-ink-s);
+    font-family: var(--font-mono);
+    box-shadow: 0 -24px 70px color-mix(in srgb, var(--brand) 8%, transparent);
+  }
+
+  .tabbar,
+  .ensemble-rail,
+  .mode-row {
+    display: flex;
+    align-items: center;
+    min-height: clamp(27px, 2.9vw, 39px);
+    padding: 0 10px;
+    border-bottom: 1px solid var(--k-line);
+    font-size: clamp(7px, 0.7vw, 10.5px);
+  }
+  .tabbar { gap: 12px; color: var(--k-faint); }
+  .tab { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .tab.active { color: var(--k-ink); }
+  .run-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--k-run); box-shadow: 0 0 7px var(--k-run); }
+  .tabbar .plus { margin-left: auto; color: var(--k-faint); }
+
+  .ensemble-rail {
+    gap: 8px;
+    background: var(--k-rail-bg);
+    color: var(--k-muted);
+  }
+  .ensemble-label { color: var(--k-ink); font-weight: 600; }
+  .lane {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border: 1px solid var(--k-line);
+    border-radius: 5px;
+    background: var(--k-rail);
+    color: var(--k-muted);
+    white-space: nowrap;
+  }
+  .lane .run-dot { width: 5px; height: 5px; }
+  .lane b { color: var(--k-agent); font-weight: 600; }
+
+  .transcript {
+    display: grid;
+    gap: 0;
+    align-content: start;
+    padding-top: 7px;
+    font-size: clamp(7px, 0.69vw, 10.4px);
+    line-height: 1.45;
+  }
+  .turn,
+  .notice,
+  .narration,
+  .tool-card {
+    padding: 6px 10px;
+  }
+  .turn { border-left: 2px solid currentColor; background: color-mix(in srgb, currentColor 5%, transparent); }
+  .turn.alex { color: var(--k-you); }
+  .turn.sam { color: var(--k-them); }
+  .turn b { font-family: var(--font-identity); margin-right: 5px; }
+  .turn .body { color: var(--k-ink-s); }
+  .turn .pool { color: var(--brand); font-weight: 700; margin-right: 4px; }
+  .notice { color: var(--brand); border-left: 2px solid var(--brand); }
+  .notice span { color: var(--k-ink-s); }
+  .narration { color: var(--k-muted); padding-left: 24px; position: relative; }
+  .narration::before { content: ""; position: absolute; left: 11px; top: 11px; width: 4px; height: 4px; border-radius: 50%; background: var(--k-agent); box-shadow: 0 0 6px var(--k-agent); }
+  .tool-card {
+    margin: 2px 10px;
+    border: 1px solid var(--k-line);
+    border-radius: 6px;
+    background: var(--k-card);
+    color: var(--k-muted);
+  }
+  .tool-card .tool-name { color: var(--k-agent); font-weight: 600; }
+  .tool-card .model { color: var(--k-ink-s); }
+  .tool-card .status { float: right; color: var(--k-run); }
+
+  .mode-row {
+    position: absolute;
+    inset: auto 0 0;
+    border-top: 1px solid var(--k-line);
+    border-bottom: 0;
+    color: var(--k-bypass);
+    background: linear-gradient(to top, var(--k-bg) 76%, transparent);
+  }
+  .mode-row span:last-child { margin-left: auto; color: var(--k-agent); }
+
+  /* 03 — the product thought reduced to type. */
+  .type-only {
+    background: hsl(228 14% 9%);
+    color: hsl(0 0% 98%);
+    padding: clamp(22px, 2.3vw, 40px);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  .type-only .micro { color: hsl(220 8% 62%); }
+  .type-stage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+  }
+  .type-stage h2 {
+    margin: 0;
+    font: 700 clamp(45px, 5vw, 80px)/0.78 var(--font-sans);
+    letter-spacing: -0.075em;
+    text-transform: uppercase;
+  }
+  .type-stage h2 span { display: block; }
+  .type-stage .turns {
+    position: relative;
+    color: var(--brand);
+  }
+  .type-stage .turns::after {
+    content: "";
+    position: absolute;
+    left: 1%;
+    right: 5%;
+    bottom: 3%;
+    height: 0.09em;
+    background: var(--brand);
+  }
+  .type-reveal {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: end;
+    padding-top: 18px;
+    border-top: 1px solid hsl(220 8% 28%);
+  }
+  .type-reveal p {
+    max-width: 29ch;
+    margin: 0;
+    color: hsl(216 12% 80%);
+    font: 600 clamp(11px, 1.06vw, 15px)/1.35 var(--font-sans);
+    letter-spacing: -0.015em;
+  }
+  .type-reveal p b { color: white; }
+  .type-reveal .both {
+    color: var(--brand);
+    font: 600 clamp(8px, 0.72vw, 11px)/1.35 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  .evidence-note {
+    margin: 24px 0 0;
+    padding: 14px 16px;
+    border-left: 2px solid var(--brand);
+    background: color-mix(in srgb, var(--board-2) 82%, transparent);
+    color: var(--board-muted);
+    font: 500 11px/1.55 var(--font-mono);
+  }
+  .evidence-note b { color: var(--board-ink); }
+
+  @media (max-width: 820px) {
+    .page { padding: 28px 18px 48px; }
+    .board-head { align-items: start; flex-direction: column; margin-bottom: 24px; }
+    .directions { grid-template-columns: 1fr; gap: 28px; }
+    .direction-meta { margin-bottom: 9px; }
+    .poster { max-width: 480px; margin: 0 auto; }
+    .micro { font-size: 9px; }
+    .metaphor, .type-only, .product-copy { padding: 26px; }
+    .metaphor-copy h2, .product-copy h2 { font-size: 38px; }
+    .metaphor-copy p, .product-copy p, .type-reveal p { font-size: 12px; }
+    .type-stage h2 { font-size: 55px; }
+    .shared-command { font-size: 13px; }
+    .tabbar, .ensemble-rail, .transcript { font-size: 8px; }
+    .lane:nth-of-type(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="board-head">
+    <div>
+      <h1>Same ad. Three kinds of proof.</h1>
+      <p class="dek">A first-cover comparison built from the agreed brief—not three unrelated style exercises.</p>
+    </div>
+    <div class="locked">Strategy locked</div>
+  </header>
+
+  <section class="directions" aria-label="Three first-ad cover directions">
+    <article class="direction">
+      <div class="direction-meta"><strong>01 · Shared input</strong><span>Visual metaphor</span></div>
+      <div class="poster metaphor">
+        <div class="topline micro"><span>Whoever you build with</span><span>01 / 03</span></div>
+        <div class="metaphor-stage" aria-label="Two collaborators steering one shared command">
+          <span class="input input-a">A</span>
+          <div class="shared-command"><b>@pool</b> split the work and show us both what happens<small>Shared room · live agent</small></div>
+          <span class="input input-b">B</span>
+        </div>
+        <div class="metaphor-copy">
+          <h2>Stop taking turns.</h2>
+          <p>Nobody just watches. <span>Thinkpool</span> lets both of you see and steer.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="direction">
+      <div class="direction-meta"><strong>02 · The room</strong><span>Faithful product crop</span></div>
+      <div class="poster product">
+        <div class="product-copy">
+          <div class="micro">One room · two collaborators · live agents</div>
+          <div>
+            <h2>Stop taking turns.</h2>
+            <p>Nobody just watches. In <b>Thinkpool</b>, both see. Both steer.</p>
+          </div>
+        </div>
+        <div class="console-crop" aria-label="Thinkpool room with a Fable conductor and two running Ensemble lanes">
+          <div class="tabbar">
+            <span class="tab active"><i class="run-dot"></i>Fable · conductor ▾</span>
+            <span class="tab"><i class="run-dot"></i>Terminal 2</span>
+            <span class="plus">＋</span>
+          </div>
+          <div class="ensemble-rail">
+            <span class="ensemble-label">Ensemble ⬡2</span>
+            <span class="lane"><i class="run-dot"></i><b>GPT‑5.6‑Sol</b> build</span>
+            <span class="lane"><i class="run-dot"></i><b>GLM‑5.2</b> review</span>
+          </div>
+          <div class="transcript">
+            <div class="turn sam"><b>Sam</b><span class="body">keep the implementation and proof review separate</span></div>
+            <div class="turn alex"><b>Alex</b><span class="pool">@pool</span><span class="body">dispatch both lanes and keep the room synced</span></div>
+            <div class="notice"><b>Pool</b> <span>dispatched to agent</span></div>
+            <div class="narration">I’ll coordinate the implementation and independent review in parallel.</div>
+            <div class="tool-card"><span class="tool-name">⬡ Thinkpool Ensemble</span><span class="status">● running</span><br><span class="model">GPT‑5.6‑Sol · implementation</span></div>
+            <div class="tool-card"><span class="tool-name">⬡ Thinkpool Ensemble</span><span class="status">● running</span><br><span class="model">GLM‑5.2 · adversarial review</span></div>
+          </div>
+          <div class="mode-row"><span>⏵⏵ Bypass permissions</span><span>Fable 5</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="direction">
+      <div class="direction-meta"><strong>03 · No decoration</strong><span>Pure typography</span></div>
+      <div class="poster type-only">
+        <div class="micro">Whoever you build with</div>
+        <div class="type-stage">
+          <h2><span>Stop</span><span>taking</span><span class="turns">turns.</span></h2>
+        </div>
+        <div class="type-reveal">
+          <p>Nobody just watches. <b>Thinkpool lets both of you see and steer.</b></p>
+          <div class="both">Both see.<br>Both steer.</div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <p class="evidence-note"><b>UI integrity:</b> option 02 uses the current Code console’s exact fixed-dark palette, tab/Ensemble hierarchy, `@pool` treatment, dispatch cards, status line, typography families, and model labels from the live source. The people and task are deliberate demo content; no real user transcript is being represented.</p>
+</main>
+</body>
+</html>
