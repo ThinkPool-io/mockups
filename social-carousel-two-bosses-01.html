@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkpool Design · Two bosses carousel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800;900&family=Hanken+Grotesk:wght@600;700;800&family=IBM+Plex+Mono:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1a6ef4;
+      --ink: #08101d;
+      --white: #ffffff;
+      --wash: rgba(255, 255, 255, .13);
+      --line: rgba(8, 16, 29, .76);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-display: "Barlow Condensed", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #08090b; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: #08090b;
+      color: #f3f4f6;
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      min-height: 100vh;
+      padding: 32px;
+      background: radial-gradient(circle at 50% -10%, #172235, transparent 42rem), #08090b;
+    }
+    .board-head {
+      width: min(1400px, 100%);
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .board-kicker,
+    .board-note,
+    .slide-label {
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .board-kicker { color: #7ea9f9; }
+    .board-head h1 {
+      margin: 8px 0 0;
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+    .board-note { margin: 0; color: #7f8791; }
+    .slides {
+      width: min(1400px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    .slide-wrap { min-width: 0; }
+    .slide-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 3px 8px;
+      color: #9aa2ac;
+      font-size: 9px;
+    }
+
+    .slide {
+      container-type: inline-size;
+      position: relative;
+      isolation: isolate;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 6.7%;
+      border-radius: 14px;
+      background: var(--blue);
+      color: var(--ink);
+      box-shadow: 0 28px 70px -34px rgba(0, 0, 0, .95);
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: repeating-linear-gradient(-18deg, transparent 0 4.2cqw, rgba(255,255,255,.07) 4.2cqw 4.45cqw);
+    }
+    .topline {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 4cqw;
+    }
+    .wordmark {
+      font: 800 5.8cqw/1 var(--font-sans);
+      letter-spacing: -.045em;
+      white-space: nowrap;
+    }
+    .wordmark .pool { color: var(--white); }
+    .count {
+      font: 700 2.5cqw/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .stamp {
+      align-self: flex-end;
+      margin-top: -1.2cqw;
+      padding: 1.4cqw 2cqw;
+      border: .55cqw solid var(--ink);
+      transform: rotate(3deg);
+      font: 800 2.35cqw/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    h2 {
+      margin: 8.5cqw 0 0;
+      font: 900 15.8cqw/.82 var(--font-display);
+      letter-spacing: -.035em;
+      text-transform: uppercase;
+    }
+    h2 .white {
+      display: block;
+      color: var(--white);
+      text-shadow: .85cqw .85cqw 0 var(--ink);
+    }
+    h2 .small-line { font-size: .78em; }
+    .deck {
+      margin: 4.5cqw 0 0;
+      max-width: 25ch;
+      font: 700 3.55cqw/1.22 var(--font-sans);
+      letter-spacing: -.02em;
+    }
+    .bottom { margin-top: auto; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2cqw;
+    }
+    .block {
+      min-width: 0;
+      padding: 3.2cqw;
+      border: .55cqw solid var(--ink);
+      background: var(--wash);
+      font: 800 2.7cqw/1.12 var(--font-mono);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .block.dark { background: var(--ink); color: var(--white); }
+    .block strong {
+      display: block;
+      margin-top: 1.7cqw;
+      font-size: 5.3cqw;
+      line-height: .9;
+      letter-spacing: -.04em;
+    }
+    .route {
+      display: flex;
+      align-items: center;
+      gap: 2cqw;
+      margin-top: 2cqw;
+      font: 800 2.45cqw/1 var(--font-mono);
+      text-transform: uppercase;
+    }
+    .route i { flex: 1; height: .55cqw; background: var(--ink); }
+    .route b {
+      padding: 2.2cqw 2.8cqw;
+      border-radius: 1.8cqw;
+      background: var(--white);
+      white-space: nowrap;
+    }
+    .url {
+      margin-top: 3.3cqw;
+      text-align: right;
+      font: 800 2.65cqw/1 var(--font-mono);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2cqw;
+    }
+    .split .block { min-height: 21cqw; }
+    .verb-list {
+      display: grid;
+      gap: 2cqw;
+      margin-top: 5cqw;
+    }
+    .verb {
+      display: grid;
+      grid-template-columns: 9cqw minmax(0, 1fr);
+      align-items: center;
+      border-top: .55cqw solid var(--ink);
+      padding-top: 2.1cqw;
+      font: 900 5.4cqw/.9 var(--font-display);
+      text-transform: uppercase;
+    }
+    .verb span:first-child {
+      font: 700 2.45cqw/1 var(--font-mono);
+      letter-spacing: .08em;
+    }
+    .terminal {
+      margin-top: 5cqw;
+      border: .55cqw solid var(--ink);
+      background: var(--ink);
+      color: var(--white);
+    }
+    .terminal-head {
+      display: flex;
+      justify-content: space-between;
+      padding: 2.1cqw 2.7cqw;
+      border-bottom: .4cqw solid var(--blue);
+      font: 700 2.25cqw/1 var(--font-mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .terminal-body {
+      display: grid;
+      gap: 2.6cqw;
+      padding: 3.3cqw 2.7cqw 3.8cqw;
+      font: 700 2.6cqw/1.25 var(--font-mono);
+    }
+    .terminal-line { display: grid; grid-template-columns: 7.8cqw minmax(0, 1fr); gap: 2cqw; }
+    .terminal-line b { color: #7ea9f9; }
+    .terminal-line:nth-child(2) b { color: #76d6e8; }
+    .terminal-line:nth-child(3) b { color: #79caa0; }
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2cqw;
+      margin-top: 5cqw;
+    }
+    .agent-card {
+      min-height: 22cqw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.8cqw 2.5cqw;
+      border: .55cqw solid var(--ink);
+      background: var(--wash);
+      font: 800 2.3cqw/1.1 var(--font-mono);
+      text-transform: uppercase;
+    }
+    .agent-card:nth-child(2) { background: var(--ink); color: var(--white); }
+    .agent-card b { font-size: 5.2cqw; line-height: .84; letter-spacing: -.04em; }
+    .key-strip {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 3cqw;
+      margin-top: 2cqw;
+      padding: 3cqw;
+      border: .55cqw solid var(--ink);
+      background: var(--white);
+      font: 800 2.55cqw/1.15 var(--font-mono);
+      text-transform: uppercase;
+    }
+    .key-icon {
+      display: grid;
+      place-items: center;
+      width: 8cqw;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 3cqw;
+    }
+    .cta-box {
+      margin-top: 6cqw;
+      padding: 4cqw;
+      border: .65cqw solid var(--ink);
+      background: var(--white);
+      box-shadow: 1.2cqw 1.2cqw 0 var(--ink);
+    }
+    .cta-box span {
+      display: block;
+      font: 700 2.55cqw/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .cta-box b {
+      display: block;
+      margin-top: 2.2cqw;
+      font: 900 8.2cqw/.86 var(--font-display);
+      letter-spacing: -.035em;
+      text-transform: uppercase;
+    }
+    .slide-1 .block,
+    .slide-2 .block {
+      min-height: 28cqw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .slide-4 .key-strip {
+      min-height: 28cqw;
+      grid-template-columns: 11cqw minmax(0, 1fr);
+      font-size: 3.15cqw;
+      line-height: 1.22;
+    }
+    .slide-4 .key-icon { width: 11cqw; font-size: 4cqw; }
+    .slide-5 .cta-box {
+      min-height: 31cqw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    body.export-mode {
+      width: 1080px;
+      height: 1350px;
+      overflow: hidden;
+    }
+    body.export-mode .board { width: 1080px; height: 1350px; padding: 0; }
+    body.export-mode .board-head,
+    body.export-mode .slide-label { display: none; }
+    body.export-mode .slides { display: block; width: 1080px; height: 1350px; }
+    body.export-mode .slide-wrap { display: none; }
+    body.export-mode .slide-wrap.export-target { display: block; }
+    body.export-mode .slide {
+      width: 1080px;
+      height: 1350px;
+      aspect-ratio: auto;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    @media (max-width: 1080px) {
+      body:not(.export-mode) .board { padding: 24px 18px 40px; }
+      body:not(.export-mode) .board-head { align-items: start; }
+      body:not(.export-mode) .board-head h1 { font-size: 25px; }
+      body:not(.export-mode) .board-note { display: none; }
+      body:not(.export-mode) .slides { max-width: 440px; grid-template-columns: 1fr; gap: 28px; }
+      body:not(.export-mode) .slide-label { font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-head">
+      <div>
+        <div class="board-kicker">Instagram carousel · 1080 × 1350</div>
+        <h1>Two bosses, five slides</h1>
+      </div>
+      <p class="board-note">Exact direction 02 visual system</p>
+    </header>
+
+    <section class="slides">
+      <article class="slide-wrap">
+        <div class="slide-label"><span>01 · Hook</span><span>Two bosses</span></div>
+        <div class="slide slide-1">
+          <div class="topline">
+            <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+            <div class="count">01 / 05</div>
+          </div>
+          <div class="stamp">Coding agents, shared</div>
+          <h2>Your coding agent has <span class="white">two bosses.</span></h2>
+          <div class="bottom">
+            <div class="grid-2">
+              <div class="block">Person 01<strong>Steers</strong></div>
+              <div class="block dark">Person 02<strong>Steers</strong></div>
+            </div>
+            <div class="route"><i></i><b>Agent builds</b><i></i></div>
+            <div class="url">thinkpool.io</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide-wrap">
+        <div class="slide-label"><span>02 · Problem</span><span>No spectator</span></div>
+        <div class="slide slide-2">
+          <div class="topline">
+            <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+            <div class="count">02 / 05</div>
+          </div>
+          <h2>One drives. <span class="white">One watches?</span></h2>
+          <p class="deck">That is not pair building. Thinkpool keeps both people in the work.</p>
+          <div class="bottom">
+            <div class="split">
+              <div class="block">Old way<strong>Wait</strong></div>
+              <div class="block dark">Thinkpool<strong>Act</strong></div>
+            </div>
+            <div class="route"><i></i><b>No spectator seat</b><i></i></div>
+            <div class="url">02 / 05</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide-wrap">
+        <div class="slide-label"><span>03 · Wedge</span><span>Shared control</span></div>
+        <div class="slide slide-3">
+          <div class="topline">
+            <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+            <div class="count">03 / 05</div>
+          </div>
+          <h2>Both see. <span class="white">Both steer.</span></h2>
+          <div class="verb-list" aria-label="Shared controls">
+            <div class="verb"><span>01</span><span>Watch</span></div>
+            <div class="verb"><span>02</span><span>Interrupt</span></div>
+            <div class="verb"><span>03</span><span>Redirect</span></div>
+          </div>
+          <div class="bottom">
+            <div class="terminal">
+              <div class="terminal-head"><span>One live room</span><span>Both connected</span></div>
+              <div class="terminal-body">
+                <div class="terminal-line"><b>01</b><span>Steer the plan</span></div>
+                <div class="terminal-line"><b>02</b><span>Step into the terminal</span></div>
+                <div class="terminal-line"><b>AI</b><span>Build with both</span></div>
+              </div>
+            </div>
+            <div class="url">03 / 05</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide-wrap">
+        <div class="slide-label"><span>04 · Mechanics</span><span>Bring one key</span></div>
+        <div class="slide slide-4">
+          <div class="topline">
+            <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+            <div class="count">04 / 05</div>
+          </div>
+          <h2>Bring the agent <span class="white small-line">you already use.</span></h2>
+          <div class="agent-grid" aria-label="Supported coding agents">
+            <div class="agent-card"><span>Run</span><b>Claude<br>Code</b></div>
+            <div class="agent-card"><span>Run</span><b>Codex</b></div>
+            <div class="agent-card"><span>Run</span><b>Hermes</b></div>
+          </div>
+          <div class="bottom">
+            <div class="key-strip"><span class="key-icon">1</span><span>One AI key starts the room. Both people steer it.</span></div>
+            <div class="url">04 / 05</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide-wrap">
+        <div class="slide-label"><span>05 · Close</span><span>Build together</span></div>
+        <div class="slide slide-5">
+          <div class="topline">
+            <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+            <div class="count">05 / 05</div>
+          </div>
+          <div class="stamp">One room · two builders</div>
+          <h2>Stop taking <span class="white">turns.</span></h2>
+          <p class="deck">Open a Thinkpool Code room. Invite the person you build with.</p>
+          <div class="bottom">
+            <div class="cta-box">
+              <span>Build together at</span>
+              <b>thinkpool.io</b>
+            </div>
+            <div class="route"><i></i><b>Both see · Both steer</b><i></i></div>
+            <div class="url">05 / 05</div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search)
+    const slide = Number(params.get('slide'))
+    if (params.get('export') === 'instagram' && slide >= 1 && slide <= 5) {
+      document.body.classList.add('export-mode')
+      document.querySelectorAll('.slide-wrap')[slide - 1].classList.add('export-target')
+    }
+  </script>
+</body>
+</html>
