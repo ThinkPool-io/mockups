@@ -102,7 +102,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, .055);
     box-shadow: 0 24px 70px rgba(0, 0, 0, .28);
-    padding: 8.6cqw;
+    padding: 8.6%;
   }
 
   .eyebrow {
@@ -117,7 +117,7 @@
   .cover h2 {
     max-width: 100%;
     margin: 4.8cqw 0 0;
-    font-size: 10.6cqw;
+    font-size: 12cqw;
     font-weight: 800;
     letter-spacing: -.055em;
     line-height: .98;
@@ -129,7 +129,7 @@
     max-width: 90%;
     margin: 4.6cqw 0 0;
     color: var(--muted);
-    font-size: 4cqw;
+    font-size: 4.35cqw;
     font-weight: 600;
     letter-spacing: -.018em;
     line-height: 1.42;
@@ -159,18 +159,24 @@
   .action.secondary { background: var(--soft-blue); color: #8fb5ff; }
 
   .footer-row {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 26cqw;
+    grid-template-columns: minmax(0, 1fr);
     gap: 4cqw;
     align-items: end;
-    margin-top: auto;
+    flex: 1;
+    min-height: 0;
+    margin-top: 6cqw;
   }
 
   .notes {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 2.3cqw;
+    width: 49%;
     min-width: 0;
   }
 
@@ -186,8 +192,9 @@
   }
 
   .art {
-    position: relative;
-    aspect-ratio: 1.38 / 1;
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 48%;
     overflow: hidden;
     border-radius: 4cqw;
     background: var(--pool);
@@ -281,6 +288,34 @@
 
   .cover-c .footer-row { margin-bottom: 5.4cqw; }
 
+  body.export-mode {
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  body.export-mode .board-head,
+  body.export-mode .option-label { display: none; }
+
+  body.export-mode .covers {
+    display: block;
+    width: 1080px;
+    height: 1350px;
+  }
+
+  body.export-mode .option { display: none; }
+  body.export-mode .option.export-target { display: block; }
+
+  body.export-mode .cover {
+    width: 1080px;
+    height: 1350px;
+    aspect-ratio: auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   @media (max-width: 760px) {
     body { padding: 20px 18px 32px; }
     .board-head { align-items: start; margin-bottom: 22px; }
@@ -371,6 +406,15 @@
     </article>
   </section>
 </main>
+
+<script>
+  const params = new URLSearchParams(location.search)
+  const exportOption = Number(params.get('option'))
+  if (params.get('export') === 'instagram' && exportOption >= 1 && exportOption <= 3) {
+    document.body.classList.add('export-mode')
+    document.querySelectorAll('.option')[exportOption - 1].classList.add('export-target')
+  }
+</script>
 
 </body>
 </html>
