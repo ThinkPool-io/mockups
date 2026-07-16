@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0d10">
+  <title>ThinkPool — Contact-first session launcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-strong: #1A6EF4;
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-soft: hsl(212 30% 18%);
+      --color-mind-a: hsl(145 40% 58%);
+      --color-mind-b: hsl(218 28% 64%);
+      --color-k-bg: #0a0d10;
+      --color-k-ok: hsl(152 40% 58%);
+      --font-display: "Newsreader", Georgia, serif;
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--color-bg); overflow-x: hidden; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: color-mix(in oklab, var(--color-pool) 22%, transparent);
+    }
+    button, input { font: inherit; }
+    button, a { touch-action: manipulation; }
+    button { color: inherit; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    .review-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid color-mix(in oklab, var(--color-pool) 32%, var(--color-line));
+      background: color-mix(in oklab, var(--color-raised) 94%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .review-inner {
+      width: min(100% - 32px, 1120px);
+      min-height: 58px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .review-title {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+    }
+    .review-title strong {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--color-ink-soft);
+      white-space: nowrap;
+    }
+    .review-title span {
+      overflow: hidden;
+      color: var(--color-faint);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .concept-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .concept-tab {
+      min-width: 36px;
+      height: 34px;
+      padding: 0 11px;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: pointer;
+      transition: border-color 160ms var(--ease-settle), background-color 160ms var(--ease-settle), color 160ms var(--ease-settle), transform 160ms var(--ease-settle);
+    }
+    .concept-tab:hover {
+      border-color: var(--color-line-strong);
+      background: var(--color-float);
+      color: var(--color-ink);
+    }
+    .concept-tab:active { transform: translateY(1px); }
+    .concept-tab[aria-selected="true"] {
+      border-color: color-mix(in oklab, var(--color-pool) 70%, var(--color-line));
+      background: color-mix(in oklab, var(--color-pool) 14%, var(--color-raised));
+      color: var(--color-pool-hi);
+    }
+    .concept-tab:focus-visible,
+    .button:focus-visible,
+    .icon-button:focus-visible,
+    .contact-choice:focus-visible,
+    .text-link:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--color-pool-hi);
+      outline-offset: 2px;
+    }
+
+    .app-nav {
+      border-bottom: 1px solid color-mix(in oklab, var(--color-line) 70%, transparent);
+      background: color-mix(in oklab, var(--color-bg) 82%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .app-nav-inner {
+      width: min(100% - 32px, 1024px);
+      height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .wordmark {
+      font-size: 25px;
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: 1;
+    }
+    .wordmark .pool { color: var(--color-pool-strong); }
+    .nav-actions { display: flex; align-items: center; gap: 6px; }
+    .nav-action {
+      min-width: 42px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--color-muted);
+      cursor: pointer;
+      transition: background-color 160ms var(--ease-settle), color 160ms var(--ease-settle);
+    }
+    .nav-action:hover { background: var(--color-float); color: var(--color-ink); }
+    .nav-action svg { width: 19px; height: 19px; }
+    .nav-action span { font-size: 12px; }
+
+    main {
+      width: min(100% - 32px, 1024px);
+      margin: 0 auto;
+      padding: 24px 0 64px;
+    }
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -.025em;
+      line-height: 1.2;
+      text-wrap: balance;
+    }
+    .lede {
+      max-width: 680px;
+      margin: 7px 0 0;
+      color: var(--color-muted);
+      font-size: 14px;
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+    .bridge-card {
+      margin-top: 20px;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid color-mix(in oklab, var(--color-k-ok) 38%, var(--color-line));
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+      box-shadow: 0 18px 44px color-mix(in oklab, var(--color-k-ok) 3%, transparent);
+    }
+    .bridge-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 9px;
+      background: var(--color-k-bg);
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 16px;
+    }
+    .bridge-copy { min-width: 0; flex: 1; }
+    .bridge-title-row { display: flex; align-items: center; gap: 8px; }
+    .bridge-title {
+      overflow: hidden;
+      color: var(--color-ink-soft);
+      font-size: 15px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--color-k-ok);
+      box-shadow: 0 0 12px color-mix(in oklab, var(--color-k-ok) 76%, transparent);
+    }
+    .bridge-meta {
+      margin-top: 4px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+    .bridge-meta .ok { color: var(--color-k-ok); }
+    .provider-button, .more-button {
+      height: 38px;
+      flex: 0 0 auto;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 9px;
+      background: transparent;
+      color: var(--color-muted);
+    }
+    .provider-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+    .provider-count {
+      border-radius: 5px;
+      padding: 2px 6px;
+      background: color-mix(in oklab, var(--color-pool) 15%, transparent);
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .more-button {
+      width: 42px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 17px;
+    }
+
+    .concept {
+      animation: concept-in 320ms var(--ease-settle) both;
+    }
+    .concept-caption {
+      margin: 20px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .concept-caption::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--color-line);
+    }
+    .launcher {
+      border: 1px solid var(--color-line);
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--color-surface) 58%, transparent);
+    }
+    .launcher-title {
+      margin: 0;
+      color: var(--color-ink);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      text-wrap: balance;
+    }
+    .launcher-copy {
+      margin: 4px 0 0;
+      color: var(--color-faint);
+      font-size: 12.5px;
+      line-height: 1.45;
+      text-wrap: pretty;
+    }
+    .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 160ms var(--ease-settle), background-color 160ms var(--ease-settle), color 160ms var(--ease-settle), transform 160ms var(--ease-settle);
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:active { transform: translateY(0); }
+    .button.primary {
+      border-color: var(--color-pool-strong);
+      background: var(--color-pool-strong);
+      color: var(--color-k-bg);
+    }
+    .button.primary:hover { background: var(--color-pool); }
+    .button.secondary {
+      border-color: var(--color-line-strong);
+      background: transparent;
+      color: var(--color-ink-soft);
+    }
+    .button.secondary:hover { border-color: color-mix(in oklab, var(--color-pool) 55%, var(--color-line)); background: var(--color-float); }
+    .button.ghost {
+      border-color: transparent;
+      background: transparent;
+      color: var(--color-muted);
+    }
+    .button.ghost:hover { background: var(--color-float); color: var(--color-ink); }
+    .button svg, .text-link svg { width: 15px; height: 15px; flex: 0 0 auto; }
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      border-radius: 4px;
+      color: var(--color-muted);
+      font-size: 12px;
+      text-decoration: none;
+      transition: color 160ms var(--ease-settle);
+    }
+    .text-link:hover { color: var(--color-pool-hi); }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--tone) 34%, var(--color-line));
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--tone) 12%, var(--color-raised));
+      color: var(--tone);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .tone-a { --tone: var(--color-mind-a); }
+    .tone-b { --tone: var(--color-mind-b); }
+    .presence {
+      width: 6px;
+      height: 6px;
+      display: inline-block;
+      border-radius: 50%;
+      background: var(--color-k-ok);
+    }
+
+    /* Concept 1 — recent contact quick picks */
+    .quick-pair {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(0, 1.75fr);
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .quick-intro {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 18px;
+      border-right: 1px solid var(--color-line);
+      background: color-mix(in oklab, var(--color-raised) 76%, transparent);
+    }
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+    }
+    .contact-choice {
+      min-width: 0;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: var(--color-raised);
+      color: var(--color-ink);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 160ms var(--ease-settle), background-color 160ms var(--ease-settle), transform 160ms var(--ease-settle);
+    }
+    .contact-choice:hover { border-color: color-mix(in oklab, var(--color-pool) 55%, var(--color-line)); background: var(--color-float); transform: translateY(-1px); }
+    .contact-name { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .contact-meta { margin-top: 2px; color: var(--color-faint); font-family: var(--font-mono); font-size: 9.5px; }
+    .quick-more {
+      min-width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--color-muted);
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .quick-footer {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 9px 12px 10px;
+      border-top: 1px solid var(--color-line);
+    }
+
+    /* Concept 2 — compact two-action launcher */
+    .split-launcher {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+      padding: 16px;
+    }
+    .split-actions { display: flex; align-items: center; gap: 8px; }
+    .split-foot {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-line);
+    }
+    .microcopy { color: var(--color-faint); font-size: 11.5px; line-height: 1.45; }
+
+    /* Concept 3 — contact rows with presence */
+    .presence-launcher { overflow: hidden; }
+    .presence-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .contact-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .contact-row {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+    }
+    .contact-row + .contact-row { border-left: 1px solid var(--color-line); }
+    .contact-status { margin-top: 2px; color: var(--color-faint); font-family: var(--font-mono); font-size: 9.5px; }
+    .contact-status .presence { margin-right: 5px; }
+    .contact-row .button { min-height: 36px; padding: 0 11px; font-size: 11.5px; }
+    .presence-foot {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--color-line);
+      background: color-mix(in oklab, var(--color-raised) 50%, transparent);
+    }
+
+    /* Concept 4 — searchable picker */
+    .search-launcher { padding: 14px; }
+    .search-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+    }
+    .search-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--color-muted);
+      font-size: 12px;
+    }
+    .search-field {
+      position: relative;
+      min-width: 0;
+    }
+    .search-field svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      color: var(--color-faint);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .search-field input {
+      width: 100%;
+      height: 44px;
+      padding: 0 40px;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 8px;
+      background: var(--color-raised);
+      color: var(--color-ink);
+      font-size: 13px;
+    }
+    .search-field input::placeholder { color: var(--color-faint); opacity: 1; }
+    .search-field kbd {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      padding: 2px 5px;
+      border: 1px solid var(--color-line);
+      border-radius: 4px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      transform: translateY(-50%);
+    }
+    .search-recent {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .recent-label {
+      margin-right: 3px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .recent-chip {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      border: 1px solid var(--color-line);
+      border-radius: 999px;
+      background: var(--color-raised);
+      color: var(--color-muted);
+      font-size: 11.5px;
+    }
+    .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tone); }
+
+    /* Concept 5 — guided partner step */
+    .guided-launcher {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      padding: 16px;
+      border-color: color-mix(in oklab, var(--color-pool) 38%, var(--color-line));
+      background: linear-gradient(110deg, color-mix(in oklab, var(--color-pool) 8%, var(--color-raised)), color-mix(in oklab, var(--color-surface) 62%, transparent));
+    }
+    .guided-copy { display: flex; align-items: center; gap: 13px; }
+    .step-number {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--color-pool) 54%, var(--color-line));
+      border-radius: 50%;
+      background: color-mix(in oklab, var(--color-pool) 12%, transparent);
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .guided-actions { display: flex; align-items: center; gap: 8px; }
+    .guided-foot {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px 0 45px;
+      border-top: 1px solid var(--color-line);
+    }
+    .guided-foot .microcopy { flex: 1; }
+
+    .sessions-section { margin-top: 28px; }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .session-card {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid color-mix(in oklab, var(--color-k-ok) 32%, var(--color-line));
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--color-surface) 64%, transparent);
+    }
+    .terminal-tile {
+      width: 54px;
+      height: 54px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--color-pool) 12%, var(--color-raised));
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 17px;
+    }
+    .session-copy { min-width: 0; flex: 1; }
+    .session-title {
+      overflow: hidden;
+      color: var(--color-ink-soft);
+      font-size: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .session-title small { color: var(--color-faint); font-size: 12px; }
+    .session-meta {
+      margin-top: 6px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      line-height: 1.6;
+    }
+    .session-meta .live { color: var(--color-k-ok); }
+    .session-meta .agent { color: hsl(190 70% 57%); }
+    .session-menu {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: var(--color-float);
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: 17px;
+    }
+
+    @keyframes concept-in {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .review-inner { width: min(100% - 20px, 1120px); min-height: 54px; gap: 8px; }
+      .review-title span { display: none; }
+      .review-title strong { font-size: 9px; letter-spacing: .1em; }
+      .concept-tabs { gap: 4px; }
+      .concept-tab { min-width: 36px; height: 44px; padding: 0 8px; }
+      .app-nav-inner { width: min(100% - 20px, 1024px); height: 68px; }
+      .wordmark { font-size: 25px; }
+      .nav-action { width: 44px; height: 44px; padding: 0; }
+      .nav-action span { display: none; }
+      main { width: min(100% - 28px, 1024px); padding-top: 24px; }
+      h1 { font-size: 27px; }
+      .lede { font-size: 14px; }
+      .bridge-card { min-height: 82px; padding: 13px 12px; gap: 11px; }
+      .bridge-icon { width: 42px; height: 42px; }
+      .bridge-title { font-size: 14px; }
+      .provider-button { width: 44px; height: 44px; padding: 0; justify-content: center; }
+      .provider-button > svg { width: 17px; }
+      .provider-button > span:not(.provider-count) { display: none; }
+      .more-button { width: 44px; height: 44px; }
+      .concept-caption { margin-top: 18px; }
+
+      .quick-pair { grid-template-columns: 1fr; }
+      .quick-intro { padding: 14px; border-right: 0; border-bottom: 1px solid var(--color-line); }
+      .quick-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 10px; }
+      .quick-actions .quick-more { grid-column: 1 / -1; width: 100%; height: 44px; font-size: 13px; }
+      .quick-footer { flex-wrap: wrap; gap: 8px 14px; }
+      .quick-footer .text-link,
+      .split-foot .text-link,
+      .presence-foot .text-link,
+      .search-recent .text-link,
+      .guided-foot .text-link { min-height: 44px; }
+
+      .split-launcher { grid-template-columns: 1fr; gap: 13px; padding: 14px; }
+      .split-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .split-actions .button { padding: 0 10px; }
+      .split-foot { align-items: flex-start; }
+
+      .presence-head { align-items: flex-start; padding: 13px 14px; }
+      .contact-list { grid-template-columns: 1fr; }
+      .contact-row { padding: 11px 12px; }
+      .contact-row + .contact-row { border-left: 0; border-top: 1px solid var(--color-line); }
+      .contact-row .button { min-height: 44px; }
+      .presence-foot { flex-wrap: wrap; gap: 7px 14px; }
+
+      .search-top { grid-template-columns: 1fr; gap: 10px; }
+      .search-top .button { width: 100%; }
+      .search-recent { flex-wrap: wrap; }
+      .recent-label { width: 100%; }
+      .recent-chip { min-height: 44px; }
+
+      .guided-launcher { grid-template-columns: 1fr; gap: 13px; padding: 14px; }
+      .guided-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .guided-foot { padding-left: 0; align-items: flex-start; }
+
+      .sessions-section { margin-top: 26px; }
+      .session-card { min-height: 112px; gap: 12px; padding: 13px 12px; }
+      .terminal-tile { width: 48px; height: 48px; }
+      .session-title { font-size: 15px; }
+      .session-title small { display: block; margin-top: 2px; }
+    }
+
+    @media (max-width: 390px) {
+      .review-title { display: none; }
+      .review-inner { justify-content: center; }
+      .quick-actions { grid-template-columns: 1fr; }
+      .quick-actions .quick-more { grid-column: auto; }
+      .contact-choice { min-height: 50px; }
+      .split-actions, .guided-actions { grid-template-columns: 1fr; }
+      .provider-count { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="review-bar">
+    <div class="review-inner">
+      <div class="review-title">
+        <strong>5 replacements</strong>
+        <span id="concept-name">Recent contacts</span>
+      </div>
+      <nav class="concept-tabs" aria-label="Mockup concepts" role="tablist">
+        <button class="concept-tab" id="tab-1" type="button" role="tab" aria-selected="true" aria-controls="concept-1">01</button>
+        <button class="concept-tab" id="tab-2" type="button" role="tab" aria-selected="false" aria-controls="concept-2">02</button>
+        <button class="concept-tab" id="tab-3" type="button" role="tab" aria-selected="false" aria-controls="concept-3">03</button>
+        <button class="concept-tab" id="tab-4" type="button" role="tab" aria-selected="false" aria-controls="concept-4">04</button>
+        <button class="concept-tab" id="tab-5" type="button" role="tab" aria-selected="false" aria-controls="concept-5">05</button>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="app-nav" aria-label="Main navigation">
+    <div class="app-nav-inner">
+      <div class="wordmark" aria-label="ThinkPool"><span>think</span><span class="pool">pool</span></div>
+      <div class="nav-actions">
+        <button class="nav-action" type="button" aria-label="Contacts">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 20v-1.6a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 20v-1.6a4 4 0 0 0-3-3.67M16 2.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Contacts</span>
+        </button>
+        <button class="nav-action" type="button" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 2 8 4.6v9.2L12 20.4 4 15.8V6.6L12 2Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="11.2" r="3.1" stroke="currentColor" stroke-width="1.8"/></svg>
+          <span>Settings</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Code sessions</h1>
+    <p class="lede">Pair on a coding agent, live — one project, many terminals, two people.</p>
+
+    <section class="bridge-card" aria-label="Connected bridge">
+      <div class="bridge-icon" aria-hidden="true">⎇</div>
+      <div class="bridge-copy">
+        <div class="bridge-title-row">
+          <div class="bridge-title">Maxs-MacBook-Pro-3</div>
+          <span class="live-dot" aria-label="Connected"></span>
+        </div>
+        <div class="bridge-meta">6 sessions · <span class="ok">managed</span></div>
+      </div>
+      <button class="provider-button" type="button" aria-label="Show agents">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2 2 5l6 3 6-3-6-3ZM2 8l6 3 6-3M2 11l6 3 6-3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>Providers</span><span class="provider-count">4</span>
+      </button>
+      <button class="more-button" type="button" aria-label="Bridge actions">•••</button>
+    </section>
+
+    <section class="concept" id="concept-1" role="tabpanel" aria-labelledby="tab-1">
+      <div class="concept-caption">01 · Recent contacts</div>
+      <div class="launcher quick-pair">
+        <div class="quick-intro">
+          <h2 class="launcher-title">Who are you coding with?</h2>
+          <p class="launcher-copy">Start directly with someone you know.</p>
+        </div>
+        <div class="quick-actions">
+          <button class="contact-choice tone-a" type="button">
+            <span class="avatar">CO</span>
+            <span style="min-width:0">
+              <span class="contact-name">Conrad</span>
+              <span class="contact-meta"><span class="presence"></span> online</span>
+            </span>
+          </button>
+          <button class="contact-choice tone-b" type="button">
+            <span class="avatar">MA</span>
+            <span style="min-width:0">
+              <span class="contact-name">Maria</span>
+              <span class="contact-meta">2 sessions</span>
+            </span>
+          </button>
+          <button class="quick-more" type="button" aria-label="Choose another contact">All contacts</button>
+        </div>
+        <div class="quick-footer">
+          <a class="text-link" href="#invite-link">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Create an invite link
+          </a>
+          <a class="text-link" href="#contacts">Manage contacts</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+      <div class="concept-caption">02 · Two clear actions</div>
+      <div class="launcher split-launcher">
+        <div>
+          <h2 class="launcher-title">Start a code session</h2>
+          <p class="launcher-copy">Choose a contact, or send someone a private link.</p>
+        </div>
+        <div class="split-actions">
+          <button class="button primary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6M22 11h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Choose a contact
+          </button>
+          <button class="button secondary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Invite by link
+          </button>
+        </div>
+        <div class="split-foot">
+          <span class="microcopy">Contacts already have a ThinkPool account.</span>
+          <a class="text-link" href="#add-contact">Add someone by email →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+      <div class="concept-caption">03 · Contact presence</div>
+      <div class="launcher presence-launcher">
+        <div class="presence-head">
+          <div>
+            <h2 class="launcher-title">Code with a contact</h2>
+            <p class="launcher-copy">Your most recent partners are ready here.</p>
+          </div>
+          <a class="text-link" href="#contacts">View all</a>
+        </div>
+        <div class="contact-list">
+          <div class="contact-row tone-a">
+            <span class="avatar">CO</span>
+            <span style="min-width:0">
+              <span class="contact-name">Conrad</span>
+              <span class="contact-status"><span class="presence"></span>active now</span>
+            </span>
+            <button class="button secondary" type="button">Code together</button>
+          </div>
+          <div class="contact-row tone-b">
+            <span class="avatar">MA</span>
+            <span style="min-width:0">
+              <span class="contact-name">Maria</span>
+              <span class="contact-status">last session 2d ago</span>
+            </span>
+            <button class="button secondary" type="button">Code together</button>
+          </div>
+        </div>
+        <div class="presence-foot">
+          <a class="text-link" href="#add-contact">+ Add contact by email</a>
+          <a class="text-link" href="#invite-link">Create an invite link</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+      <div class="concept-caption">04 · Search-first</div>
+      <div class="launcher search-launcher">
+        <div class="search-top">
+          <div>
+            <label class="search-label" for="contact-search">Start a session with a contact</label>
+            <div class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <input id="contact-search" name="contact-search" type="search" placeholder="Search your contacts…" autocomplete="off">
+              <kbd>⌘ K</kbd>
+            </div>
+          </div>
+          <button class="button secondary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10.5 13.5a4 4 0 0 0 5.66 0l2.34-2.34a4 4 0 0 0-5.66-5.66l-1.34 1.34M13.5 10.5a4 4 0 0 0-5.66 0L5.5 12.84a4 4 0 1 0 5.66 5.66l1.34-1.34" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Invite by link
+          </button>
+        </div>
+        <div class="search-recent">
+          <span class="recent-label">Recent</span>
+          <button class="recent-chip tone-a" type="button"><span class="chip-dot"></span>Conrad</button>
+          <button class="recent-chip tone-b" type="button"><span class="chip-dot"></span>Maria</button>
+          <a class="text-link" href="#add-contact">Add contact</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-5" role="tabpanel" aria-labelledby="tab-5" hidden>
+      <div class="concept-caption">05 · Guided start</div>
+      <div class="launcher guided-launcher">
+        <div class="guided-copy">
+          <span class="step-number">01</span>
+          <div>
+            <h2 class="launcher-title">Choose who joins this session</h2>
+            <p class="launcher-copy">Pick a contact first. You’ll name the room next.</p>
+          </div>
+        </div>
+        <div class="guided-actions">
+          <button class="button primary" type="button">Choose a contact</button>
+          <button class="button ghost" type="button">Invite by link</button>
+        </div>
+        <div class="guided-foot">
+          <span class="microcopy">No contact yet? Add them with their ThinkPool email.</span>
+          <a class="text-link" href="#add-contact">Add a contact →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sessions-section">
+      <h2 class="eyebrow">Your code sessions</h2>
+      <article class="session-card">
+        <div class="terminal-tile" aria-hidden="true">❯_</div>
+        <div class="session-copy">
+          <div class="session-title">Design, Product Hunt <small>hosted by you</small></div>
+          <div class="session-meta"><span class="live">■ LIVE</span> &nbsp; ● Conrad &nbsp; <span class="agent">◯ agent working</span></div>
+        </div>
+        <button class="session-menu" type="button" aria-label="Session actions">⋮</button>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const names = [
+      "Recent contacts",
+      "Two clear actions",
+      "Contact presence",
+      "Search-first",
+      "Guided start"
+    ];
+    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+    const name = document.getElementById("concept-name");
+
+    function showConcept(number, updateUrl = true) {
+      const index = Math.max(0, Math.min(4, Number(number) - 1));
+      tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach((panel, i) => { panel.hidden = i !== index; });
+      name.textContent = names[index];
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("concept", String(index + 1));
+        history.replaceState({}, "", url);
+      }
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => showConcept(index + 1));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = tabs.length - 1;
+        showConcept(next + 1);
+        tabs[next].focus();
+      });
+    });
+
+    const initial = new URLSearchParams(window.location.search).get("concept") || "1";
+    showConcept(initial, false);
+  </script>
+</body>
+</html>
