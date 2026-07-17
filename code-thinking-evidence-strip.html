@@ -341,7 +341,7 @@
       margin-left: 16px;
       padding: 7px 10px;
       display: grid;
-      grid-template-columns: 18px auto minmax(0, 1fr) auto;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
       align-items: center;
       gap: 8px;
       border: 1px solid var(--k-line);
@@ -350,7 +350,7 @@
       background: color-mix(in oklab, var(--k-card) 72%, transparent);
       font-size: 12px;
     }
-    .tool-icon, .tool-title { color: var(--k-agent-high); }
+    .tool-title { color: var(--k-agent-high); }
     .tool-title { font-weight: 600; }
     .tool-detail {
       min-width: 0;
@@ -506,7 +506,7 @@
       .thought-meta { display: none; }
       .thought-copy { font-size: 11.5px; }
       .thinking-body { grid-template-columns: 16px minmax(0, 1fr); padding-inline: 8px; }
-      .tool-row { grid-template-columns: 16px auto minmax(0, 1fr) auto; gap: 6px; padding-inline: 8px; }
+      .tool-row { grid-template-columns: 16px minmax(0, 1fr) auto; gap: 6px; padding-inline: 8px; }
       .status-line { padding: 0 12px; }
       .composer-wrap { padding: 8px 8px 10px; }
       .composer { min-height: 52px; border-radius: 10px; }
@@ -559,7 +559,7 @@ The UI should preserve that distinction: show the provider’s words when presen
             </section>
 
             <div class="tool-row" aria-label="Collapsed tool group">
-              <span>▸</span><span class="tool-icon">⛁</span><span class="tool-detail"><span class="tool-title">4 calls</span> · Search · Read · Read · Search</span><span class="tool-ok">✓</span>
+              <span class="chevron agent-cyan row-aligned" aria-hidden="true">▶</span><span class="tool-detail"><span class="tool-title">4 calls</span> · Search · Read · Read · Search</span><span class="tool-ok">✓</span>
             </div>
 
             <div class="agent-line">
