@@ -249,6 +249,7 @@
       transition: transform .18s var(--ease-settle);
     }
     .chevron.agent-cyan { color: var(--k-agent); }
+    .chevron.row-aligned { width: 13px; justify-self: center; }
     .thinking[data-open="true"] .chevron { transform: rotate(90deg); }
     .thought-label {
       display: inline-flex;
@@ -541,8 +542,8 @@
 
             <section class="thinking" data-open="true">
               <button class="thinking-toggle" type="button" aria-expanded="true" title="Provider-emitted reasoning summary">
-                <span class="chevron" aria-hidden="true">▶</span>
-                <span class="thought-label"><span class="thought-glyph" aria-hidden="true">✻</span><span>Reasoning</span></span>
+                <span class="chevron agent-cyan" aria-hidden="true">▶</span>
+                <span class="thought-label"><span class="thought-glyph removed" aria-hidden="true"></span><span>Reasoning</span></span>
                 <span class="thought-preview">Trace the provider event shapes before changing the transcript component…</span>
                 <span class="thought-meta"><span class="source-chip">Codex</span><span>18s</span><span>412 tok</span></span>
               </button>
@@ -573,7 +574,7 @@ The UI should preserve that distinction: show the provider’s words when presen
 
             <section class="thinking" data-open="false">
               <button class="thinking-toggle" type="button" aria-expanded="false" title="Provider-emitted thought">
-                <span class="chevron agent-cyan" aria-hidden="true">▶</span>
+                <span class="chevron agent-cyan row-aligned" aria-hidden="true">▶</span>
                 <span class="thought-label"><span class="thought-glyph removed" aria-hidden="true"></span><span class="agent-cyan-text">Exposed thought</span></span>
                 <span class="thought-preview">Keep the disclosure row compact; use provenance as structure, not decoration…</span>
                 <span class="thought-meta"><span class="source-chip">GLM</span><span>9s</span><span>186 tok</span></span>
