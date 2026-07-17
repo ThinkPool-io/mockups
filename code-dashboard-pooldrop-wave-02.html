@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);--float:hsl(212 9% 13%);--line:hsl(212 7% 21%);--line2:hsl(212 7% 28%);--ink:hsl(212 14% 95%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);--pool:hsl(217 85% 62%);--pool-hi:hsl(217 85% 70%);--ok:hsl(152 32% 60%);--agent:hsl(190 74% 54%)}
+    :root{--bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);--float:hsl(212 9% 13%);--line:hsl(212 7% 21%);--line2:hsl(212 7% 28%);--ink:hsl(212 14% 95%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);--pool:hsl(217 85% 62%);--pool-hi:hsl(217 85% 70%);--pool-cobalt:#1A6EF4;--pool-night:hsl(217 34% 8%);--ok:hsl(152 32% 60%);--agent:hsl(190 74% 54%)}
     *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}body{font:500 14px "Hanken Grotesk",system-ui,sans-serif}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .shell{min-height:100vh}
 .nav{height:64px;border-bottom:1px solid color-mix(in oklab,var(--line) 70%,transparent);background:color-mix(in oklab,var(--bg) 86%,transparent);display:flex;align-items:center}
@@ -27,8 +27,11 @@
 .icon-tile{display:grid;place-items:center;flex:0 0 auto;color:var(--pool-hi)}
 .bridge-tile{width:40px;height:40px;border:1px solid var(--line2);border-radius:5px;background:hsl(212 16% 6%)}
 .session-tile{width:36px;height:36px;border-radius:5px;background:color-mix(in oklab,var(--pool) 12%,var(--raised))}
+.session-tile-dark{background:var(--pool-night)}
 .glyph{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.bridge-tile .pulse-glyph{width:31px;height:31px}
 .session-tile .glyph{width:26px;height:26px;stroke-width:1.55}
+.session-glyph-cobalt{color:var(--pool-cobalt)}
 .bridge-copy{display:block;min-width:0;flex:1}
 .bridge-title{display:flex;align-items:center;gap:8px;font-size:14px}
 .bridge-title strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
@@ -43,7 +46,7 @@
 .session-list{display:grid;gap:10px}
 .new-card,.session-card{min-height:66px;border-radius:10px;display:flex;align-items:center;gap:12px}
 .new-card{width:100%;border:1px dashed color-mix(in oklab,var(--pool) 45%,transparent);background:color-mix(in oklab,var(--surface) 50%,transparent);padding:14px 20px;text-align:left}
-.new-tile{width:36px;height:36px;border:1px solid color-mix(in oklab,var(--pool) 45%,transparent);border-radius:5px;background:color-mix(in oklab,var(--pool) 10%,transparent);display:grid;place-items:center;color:var(--pool-hi);font:500 20px/1 "IBM Plex Mono",monospace}
+.new-tile{width:36px;height:36px;border:1px solid color-mix(in oklab,var(--pool) 45%,transparent);border-radius:5px;background:color-mix(in oklab,var(--pool) 10%,transparent);display:grid;place-items:center;color:var(--pool-hi);font:500 26px/1 "IBM Plex Mono",monospace}
 .session-card{border:1px solid color-mix(in oklab,var(--ok) 30%,transparent);background:color-mix(in oklab,var(--surface) 50%,transparent);padding-right:12px}
 .session-open{min-width:0;flex:1;display:flex;align-items:center;gap:12px;padding:14px 12px 14px 20px}
 .copy{min-width:0;flex:1}
@@ -84,7 +87,7 @@
     <defs>
       <symbol id="terminal-1" viewBox="0 0 24 24"><path d="M1.5 12c2.5-6.5 5-6.5 7.5 0s5 6.5 7.5 0 5-6.5 7.5 0"/></symbol>
       <symbol id="pooldrop-1" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2C9.2 6.1 4 11 4 15.5a8 8 0 0 0 16 0C20 11 14.8 6.1 12 2Z"/></symbol>
-      <symbol id="terminal-2" viewBox="0 0 24 24"><path d="M1 9c3.7-3 7.3-3 11 0s7.3 3 11 0M3 16c3-2.5 6-2.5 9 0s6 2.5 9 0"/></symbol>
+      <symbol id="terminal-2" viewBox="0 0 24 24"><circle cx="2.5" cy="12" r="1.3"/><circle cx="21.5" cy="12" r="1.3"/><path d="M4 12h3l2.5-4.5 4.5 9 2.5-4.5H20"/></symbol>
       <symbol id="pooldrop-2" viewBox="0 0 24 24"><path d="M12 2C9.2 6.1 4 11 4 15.5a8 8 0 0 0 16 0C20 11 14.8 6.1 12 2Z"/></symbol>
       <symbol id="terminal-3" viewBox="0 0 24 24"><path d="M1 8c4 0 4 8 8 8s4-8 8-8 4 8 6 8M1 16c4 0 4-8 8-8s4 8 8 8 4-8 6-8"/></symbol>
       <symbol id="pooldrop-3" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2C9.2 6.1 4 11 4 15.5a8 8 0 0 0 16 0C20 11 14.8 6.1 12 2Z"/><path stroke="var(--raised)" stroke-width="2" d="M8 15.5c2.7-2 5.3-2 8 0"/></symbol>
@@ -97,11 +100,11 @@
   <div class="shell">
     <nav class="nav"><div class="nav-inner"><div class="logo">think<span>pool</span></div><div class="nav-actions"><button class="nav-btn" aria-label="Contacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.87"/></svg></button><button class="nav-btn" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2 3.5 7v10L12 22l8.5-5V7z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div></nav>
     <main class="main">
-      <h1 class="title">Code sessions</h1><p class="lede">Pair on a coding agent, live — one project, many terminals, two people.</p>
-      <section class="bridge"><div class="bridge-row"><button class="bridge-main" aria-label="Bridge details"><span class="icon-tile bridge-tile"><svg class="glyph"><use href="#terminal-2"/></svg></span><span class="bridge-copy"><span class="bridge-title"><strong>Maxs-MacBook-Pro-3</strong><i class="online"></i></span><span class="meta">v0.7.294 · 6 sessions · <span class="managed">managed</span></span></span></button><button class="providers"><span aria-hidden="true">▱</span><span class="label">Providers</span><span class="badge">4</span></button><button class="more" aria-label="Bridge actions">•••</button></div></section>
+      <h1 class="title">Code sessions</h1><p class="lede">Agentic AI terminals steered by two people...</p>
+      <section class="bridge"><div class="bridge-row"><button class="bridge-main" aria-label="Bridge details"><span class="icon-tile bridge-tile"><svg class="glyph pulse-glyph"><use href="#terminal-2"/></svg></span><span class="bridge-copy"><span class="bridge-title"><strong>Maxs-MacBook-Pro-3</strong><i class="online"></i></span><span class="meta">v0.7.294 · 6 sessions · <span class="managed">managed</span></span></span></button><button class="providers"><span aria-hidden="true">▱</span><span class="label">Providers</span><span class="badge">4</span></button><button class="more" aria-label="Bridge actions">•••</button></div></section>
       <section class="sessions"><div class="eyebrow">Your code sessions</div><div class="session-list">
         <button class="new-card"><span class="new-tile">+</span><span class="copy"><span class="name-line"><span class="name">Start a code session</span><span class="hosted">hosted by <b>you</b></span></span><span class="helper">Open a room, invite your partner…</span></span></button>
-        <article class="session-card"><button class="session-open"><span class="icon-tile session-tile"><svg class="glyph"><use href="#pooldrop-2"/></svg></span><span class="copy"><span class="name-line"><span class="name">Conrad live room</span><span class="hosted">hosted by <b>you</b></span></span><span class="code"><b>M2579Q</b> · just now</span><span class="status"><span class="live">LIVE</span><span class="person">Conrad</span><span class="working">agent working</span></span></span></button><button class="card-menu" aria-label="Session actions">⋮</button></article>
+        <article class="session-card"><button class="session-open"><span class="icon-tile session-tile session-tile-dark"><svg class="glyph"><use class="session-glyph-cobalt" href="#pooldrop-2"/></svg></span><span class="copy"><span class="name-line"><span class="name">Conrad live room</span><span class="hosted">hosted by <b>you</b></span></span><span class="code"><b>M2579Q</b> · just now</span><span class="status"><span class="live">LIVE</span><span class="person">Conrad</span><span class="working">agent working</span></span></span></button><button class="card-menu" aria-label="Session actions">⋮</button></article>
         <article class="session-card"><button class="session-open"><span class="icon-tile session-tile"><svg class="glyph"><use href="#pooldrop-2"/></svg></span><span class="copy"><span class="name-line"><span class="name">ThinkPool dashboard</span><span class="hosted">hosted by <b>you</b></span></span><span class="code"><b>8TMX54</b> · 4m ago</span><span class="status"><span class="live">LIVE</span><span class="person">Maks</span></span></span></button><button class="card-menu" aria-label="Session actions">⋮</button></article>
       </div></section>
     </main>
