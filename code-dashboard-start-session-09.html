@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Start session 9 — Edge rail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);--float:hsl(212 9% 13%);--line:hsl(212 7% 21%);--line2:hsl(212 8% 28%);--ink:hsl(212 14% 92%);--muted:hsl(212 10% 63%);--dim:hsl(212 9% 48%);--pool:#1A6EF4;--pool-soft:hsl(216 84% 62%);--cyan:hsl(190 74% 54%);--green:hsl(158 48% 58%);--r:12px}
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+    body{font-family:"Hanken Grotesk",sans-serif}.mono{font-family:"IBM Plex Mono",monospace}.serif{font-family:"Newsreader",serif}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}.shell{min-height:100vh}.nav{height:82px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 max(24px,calc((100vw - 1090px)/2));gap:24px}
+    .logo{font-size:31px;font-weight:500;letter-spacing:-1.4px;line-height:1}.logo span{color:var(--pool)}.nav-actions{margin-left:auto;display:flex;align-items:center;gap:8px}.icon{width:44px;height:44px;border:1px solid transparent;border-radius:10px;display:grid;place-items:center;color:hsl(212 12% 76%)}.icon svg{width:23px;height:23px}.icon:hover{background:var(--raised);border-color:var(--line)}
+    .nav-launch{display:none;height:44px;align-items:center;gap:9px;border:1px solid hsl(216 52% 48%);border-radius:9px;padding:0 15px;font:500 13px "IBM Plex Mono",monospace;letter-spacing:.01em}.nav-launch b{color:var(--pool-soft);font-size:19px}.v2 .nav-launch{display:flex}
+    main{width:min(1090px,calc(100% - 48px));margin:0 auto;padding:54px 0 86px}.title-row{display:flex;align-items:flex-start;gap:24px}.title-copy{min-width:0}.title{font:400 clamp(42px,4.1vw,58px)/.98 "Newsreader",serif;letter-spacing:-1.4px;margin:0}.lede{margin:17px 0 0;color:hsl(212 10% 72%);font-size:19px;line-height:1.5}.header-launch{display:none;margin-left:auto;flex:0 0 auto;height:50px;border:1px solid hsl(216 52% 50%);border-radius:10px;padding:0 19px;align-items:center;gap:11px;font:500 14px "IBM Plex Mono",monospace}.header-launch b{color:var(--pool-soft);font-size:21px}.v1 .header-launch{display:flex}
+    .workspace-wrap{margin-top:38px;display:flex;gap:14px}.workspace{flex:1;min-width:0;border:1px solid hsl(158 27% 40%);border-radius:15px;background:linear-gradient(145deg,hsl(212 11% 8%),hsl(212 10% 7%));padding:25px;display:flex;align-items:center;gap:20px;position:relative}.term-mark{width:66px;height:66px;border:1px solid var(--line2);border-radius:13px;display:grid;place-items:center;color:var(--pool-soft);font:500 28px "IBM Plex Mono",monospace;flex:0 0 auto}.workspace-main{min-width:0}.workspace-name{font-size:22px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.online{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-left:9px;box-shadow:0 0 14px hsl(158 48% 58%/.25)}.workspace-meta{margin-top:9px;color:var(--muted);font:400 15px "IBM Plex Mono",monospace;letter-spacing:.04em}.workspace-meta em{font-style:normal;color:var(--green)}.provider{margin-left:auto;border:1px solid var(--line2);border-radius:10px;height:50px;padding:0 15px;display:flex;align-items:center;gap:10px;color:hsl(212 11% 75%);font-size:14px}.badge{background:hsl(216 48% 19%);color:var(--pool-soft);border-radius:7px;padding:6px 9px;font:500 12px "IBM Plex Mono",monospace}.more{width:50px;height:50px;border:1px solid var(--line2);border-radius:10px;display:grid;place-items:center;color:var(--muted);font-size:21px;letter-spacing:3px}
+    .bridge-footer{display:none;position:absolute;left:-1px;right:-1px;top:100%;height:62px;border:1px solid hsl(158 27% 40%);border-top-color:var(--line);border-radius:0 0 15px 15px;background:var(--raised);padding:0 17px;align-items:center;gap:15px}.bridge-footer button{height:44px;border:1px solid hsl(216 52% 50%);border-radius:8px;padding:0 15px;font:500 13px "IBM Plex Mono",monospace}.bridge-footer span{color:var(--muted);font:400 13px "IBM Plex Mono",monospace}.v3 .bridge-footer{display:flex}.v3 .workspace-wrap{margin-bottom:62px}.v3 .workspace{border-radius:15px 15px 0 0}
+    .sidecar{display:none;width:244px;flex:0 0 auto;border:1px solid hsl(216 43% 39%);border-radius:15px;background:linear-gradient(145deg,hsl(216 35% 14%),var(--raised));padding:22px;flex-direction:column;justify-content:space-between}.sidecar .plus{font:400 33px "IBM Plex Mono",monospace;color:var(--pool-soft)}.sidecar strong{display:block;font-size:17px;font-weight:500;margin-top:20px}.sidecar p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.4}.v4 .sidecar{display:flex}
+    .launch-zone{display:none}.divider-notch{display:none;position:relative;margin:44px 0 34px;height:1px;background:var(--line)}.divider-notch button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:48px;border:1px solid hsl(216 52% 50%);border-radius:999px;background:var(--bg);padding:0 20px;display:flex;align-items:center;gap:10px;font:500 13px "IBM Plex Mono",monospace}.divider-notch b{color:var(--pool-soft);font-size:20px}.v5 .divider-notch{display:block}
+    .launch-banner{display:none;margin:34px 0 42px;border:1px solid hsl(216 45% 39%);border-radius:14px;background:radial-gradient(circle at 12% 20%,hsl(216 74% 23%/.64),transparent 36%),var(--raised);padding:21px 24px;align-items:center;gap:20px}.banner-glyph{width:48px;height:48px;border:1px solid hsl(216 63% 55%/.65);border-radius:11px;display:grid;place-items:center;color:var(--pool-soft);font:400 26px "IBM Plex Mono",monospace}.banner-copy strong{font-size:18px;font-weight:500}.banner-copy p{margin:4px 0 0;color:var(--muted);font:400 13px "IBM Plex Mono",monospace}.launch-banner button{margin-left:auto;height:46px;background:var(--pool);color:white;border-radius:9px;padding:0 18px;font:500 13px "IBM Plex Mono",monospace}.v8 .launch-banner{display:flex}
+    .sessions{margin-top:46px}.v3 .sessions,.v5 .sessions,.v8 .sessions{margin-top:0}.sessions-head{display:flex;align-items:center;gap:18px;margin-bottom:19px}.eyebrow{color:hsl(212 11% 67%);font:500 14px "IBM Plex Mono",monospace;letter-spacing:.2em;text-transform:uppercase}.sessions-head:after{content:"";height:1px;background:var(--line);flex:1}.list-launch{display:none;order:2;flex:0 0 auto;height:44px;border:1px solid hsl(216 52% 50%);border-radius:9px;padding:0 15px;align-items:center;gap:9px;font:500 12px "IBM Plex Mono",monospace}.list-launch b{color:var(--pool-soft);font-size:18px}.v6 .sessions-head:after{display:none}.v6 .list-launch{display:flex;margin-left:auto}
+    .session-list{display:grid;gap:14px}.session-card,.new-card{min-height:145px;border:1px solid hsl(158 25% 39%);border-radius:15px;background:var(--raised);padding:24px;display:flex;align-items:center;gap:22px}.session-icon{width:68px;height:68px;border-radius:12px;background:hsl(216 28% 15%);display:grid;place-items:center;color:var(--pool-soft);font:500 28px "IBM Plex Mono",monospace;flex:0 0 auto}.session-copy{min-width:0}.session-name{font-size:24px;font-weight:500}.hosted{color:var(--muted);font-size:15px;margin-left:7px}.status-row{display:flex;align-items:center;gap:27px;margin-top:16px;font:400 15px "IBM Plex Mono",monospace}.live{color:var(--green)}.live:before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--green);margin-right:9px}.person{color:var(--muted)}.person:before{content:"";display:inline-block;width:11px;height:11px;border-radius:50%;background:hsl(212 11% 62%);margin-right:9px}.agent{color:var(--cyan)}.agent:before{content:"";display:inline-block;width:12px;height:12px;border:1px solid var(--cyan);border-radius:50%;margin-right:9px}.card-menu{margin-left:auto;width:50px;height:50px;border:1px solid var(--line2);border-radius:10px;display:grid;place-items:center;color:var(--muted);font-size:20px}
+    .new-card{display:none;border-style:dashed;border-color:hsl(216 44% 45%);background:linear-gradient(135deg,hsl(216 25% 10%),var(--raised));cursor:pointer}.new-card .session-icon{background:transparent;border:1px solid hsl(216 48% 43%);font-size:32px}.new-card strong{font:500 18px "IBM Plex Mono",monospace}.new-card p{margin:7px 0 0;color:var(--muted);font-size:14px}.v7 .new-card{display:flex}.v7 .session-card{order:2}
+    .after-list{display:none;margin-top:18px;border-top:1px solid var(--line);padding-top:18px;align-items:center;gap:18px}.after-list button{height:46px;border:1px solid hsl(216 52% 50%);border-radius:9px;padding:0 18px;font:500 13px "IBM Plex Mono",monospace}.after-list span{color:var(--muted);font:400 13px "IBM Plex Mono",monospace}.v10 .after-list{display:flex}
+    .edge-launch{display:none;position:fixed;right:0;top:43%;transform:translateY(-50%);width:54px;height:186px;border:1px solid hsl(216 49% 45%);border-right:0;border-radius:13px 0 0 13px;background:var(--raised);align-items:center;justify-content:center;z-index:4}.edge-launch span{writing-mode:vertical-rl;transform:rotate(180deg);font:500 12px "IBM Plex Mono",monospace;letter-spacing:.08em}.edge-launch b{position:absolute;top:16px;color:var(--pool-soft);font:400 21px "IBM Plex Mono",monospace}.v9 .edge-launch{display:flex}
+    .concept-note{position:fixed;left:16px;bottom:14px;color:hsl(212 10% 44%);font:500 10px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;pointer-events:none}
+    @media(max-width:700px){
+      .nav{height:68px;padding:0 17px}.logo{font-size:25px}.nav-actions{gap:0}.icon{width:42px;height:42px}.nav-launch{width:44px;padding:0;justify-content:center}.nav-launch span{display:none}
+      main{width:calc(100% - 32px);padding:37px 0 106px}.title-row{display:block}.title{font-size:43px}.lede{font-size:17px;margin-top:12px}.header-launch{margin:22px 0 0;width:100%;justify-content:center}.v1 .header-launch{display:flex}
+      .workspace-wrap{margin-top:30px;display:block}.workspace{padding:18px 16px;gap:14px;flex-wrap:wrap}.term-mark{width:52px;height:52px;font-size:22px}.workspace-name{font-size:18px}.workspace-meta{font-size:12px}.provider{order:3;margin:2px 0 0;width:calc(100% - 54px);justify-content:center}.more{order:4;width:48px}.sidecar{width:100%;margin-top:12px;min-height:124px;flex-direction:row;align-items:center}.sidecar .plus{flex:0 0 auto}.sidecar div:last-child{margin-left:18px}.sidecar strong{margin:0}.bridge-footer{height:auto;min-height:104px;padding:14px;align-items:stretch;flex-direction:column}.bridge-footer button{width:100%}.bridge-footer span{text-align:center}.v3 .workspace-wrap{margin-bottom:104px}
+      .divider-notch{margin:39px 0 33px}.divider-notch button{width:max-content;max-width:calc(100vw - 52px);padding:0 16px}
+      .launch-banner{margin:28px 0 36px;display:none;align-items:flex-start;flex-wrap:wrap;padding:18px}.v8 .launch-banner{display:flex}.banner-glyph{width:44px;height:44px}.banner-copy{width:calc(100% - 64px)}.launch-banner button{width:100%;margin:0;height:48px}
+      .sessions{margin-top:37px}.sessions-head{margin-bottom:15px}.eyebrow{font-size:12px;letter-spacing:.15em}.v6 .sessions-head{align-items:stretch;flex-direction:column}.v6 .list-launch{margin:0;width:100%;justify-content:center}.session-card,.new-card{min-height:0;padding:18px 16px;gap:14px;align-items:flex-start}.session-icon{width:53px;height:53px;font-size:22px}.session-name{font-size:19px}.hosted{display:block;margin:2px 0 0}.status-row{gap:12px;flex-wrap:wrap;margin-top:12px;font-size:12px}.card-menu{width:44px;height:44px}.new-card strong{font-size:15px}.new-card p{font-size:13px}
+      .after-list{align-items:stretch;flex-direction:column}.after-list button{width:100%}.after-list span{text-align:center}.edge-launch{top:auto;left:12px;right:12px;bottom:12px;width:auto;height:58px;border:1px solid hsl(216 49% 45%);border-radius:12px;background:hsl(212 12% 9%/.97);transform:none}.edge-launch span{writing-mode:horizontal-tb;transform:none;font-size:13px}.edge-launch b{position:static;margin-right:10px}.concept-note{display:none}
+    }
+  </style>
+</head>
+<body class="v9">
+  <div class="shell">
+    <nav class="nav" aria-label="Product navigation">
+      <div class="logo">think<span>pool</span></div>
+      <div class="nav-actions">
+        <button class="nav-launch" aria-label="Start a code session"><b>+</b><span>Start session</span></button>
+        <button class="icon" aria-label="Contacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-2a4 4 0 0 0-3-3.87M16 2.13a4 4 0 0 1 0 7.75"/></svg></button>
+        <button class="icon" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3.5 7v10L12 22l8.5-5V7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+    </nav>
+    <main>
+      <div class="title-row">
+        <div class="title-copy"><h1 class="title">Code sessions</h1><p class="lede">Pair on a coding agent, live — one project, many terminals, two people.</p></div>
+        <button class="header-launch"><b>+</b> Start a code session</button>
+      </div>
+      <div class="workspace-wrap">
+        <section class="workspace">
+          <div class="term-mark">⌁</div>
+          <div class="workspace-main"><div class="workspace-name">Maxs-MacBook-Pro-3 <i class="online"></i></div><div class="workspace-meta">6 sessions · <em>managed</em></div></div>
+          <button class="provider">▱ <span>Providers</span> <i class="badge">4</i></button><button class="more">•••</button>
+          <div class="bridge-footer"><button>+ Start a code session</button><span>Open a room, invite your partner…</span></div>
+        </section>
+        <button class="sidecar"><span class="plus">+</span><div><strong>Start a code session</strong><p>Open a room, then invite your partner.</p></div></button>
+      </div>
+
+      <div class="divider-notch"><button><b>+</b> Start a code session</button></div>
+      <section class="launch-banner"><div class="banner-glyph">›_</div><div class="banner-copy"><strong>Ready to pair?</strong><p>Open a room, invite your partner…</p></div><button>Start a code session</button></section>
+
+      <section class="sessions">
+        <div class="sessions-head"><div class="eyebrow">Your code sessions</div><button class="list-launch"><b>+</b> Start a code session</button></div>
+        <div class="session-list">
+          <button class="new-card"><div class="session-icon">+</div><div><strong>Start a code session</strong><p>Open a room, invite your partner…</p></div></button>
+          <article class="session-card"><div class="session-icon">›_</div><div class="session-copy"><div><span class="session-name">Design, Product Hunt</span><span class="hosted">hosted by you</span></div><div class="status-row"><span class="live">LIVE</span><span class="person">Conrad</span><span class="agent">agent working</span></div></div><button class="card-menu">⋮</button></article>
+        </div>
+        <div class="after-list"><button>+ Start a code session</button><span>Open another room when you’re ready to pair.</span></div>
+      </section>
+    </main>
+    <button class="edge-launch"><b>+</b><span>Start a code session</span></button>
+    <div class="concept-note">9 · Edge rail</div>
+  </div>
+</body>
+</html>
