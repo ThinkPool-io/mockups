@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thinkpool — Active plan composer spacing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --k-bg: #0a0d10;
+    --k-card: #06090c;
+    --term: hsl(200 36% 2%);
+    --line: hsl(199 24% 17%);
+    --line-strong: hsl(194 30% 26%);
+    --ink: hsl(190 26% 96%);
+    --ink-soft: hsl(190 22% 88%);
+    --muted: hsl(192 16% 76%);
+    --faint: hsl(196 16% 60%);
+    --agent: hsl(190 70% 57%);
+    --agent-hi: hsl(190 76% 63%);
+    --ok: hsl(150 66% 56%);
+    --bypass: hsl(352 84% 64%);
+    --danger: hsl(352 88% 62%);
+    --danger-bg: #120a0c;
+    --cobalt: #1A6EF4;
+    --rhythm: 8px;
+    --mono: "IBM Plex Mono", monospace;
+    --sans: "Hanken Grotesk", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--term); color: var(--ink); }
+  body { font-family: var(--sans); }
+  button { font: inherit; }
+
+  .stage {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 760px) 250px;
+    justify-content: center;
+    align-items: center;
+    gap: 38px;
+    padding: 30px;
+    background:
+      radial-gradient(circle at 38% 68%, hsl(190 70% 57% / .055), transparent 30%),
+      var(--term);
+  }
+
+  .app {
+    width: 100%;
+    height: min(840px, calc(100vh - 60px));
+    min-height: 700px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid hsl(194 30% 26% / .68);
+    border-radius: 14px;
+    background: var(--k-bg);
+    box-shadow: 0 24px 80px hsl(200 70% 2% / .68), 0 0 34px hsl(190 70% 57% / .045);
+  }
+
+  .terminal-bar {
+    height: 70px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--line);
+    background: hsl(200 36% 2% / .78);
+    font-family: var(--mono);
+  }
+  .terminal-name { display: flex; min-width: 0; flex: 1; align-items: center; gap: 10px; padding: 0 20px; color: var(--ink-soft); font-size: 16px; }
+  .ring { width: 15px; height: 15px; border: 2px solid hsl(190 70% 57% / .35); border-top-color: var(--agent); border-radius: 50%; }
+  .chev { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 9px solid var(--faint); opacity: .75; }
+  .bar-action { width: 74px; display: grid; place-items: center; border-left: 1px solid var(--line); color: var(--muted); font-size: 22px; }
+  .active-underline { position: absolute; left: 0; bottom: -1px; width: 154px; height: 3px; border-radius: 3px 3px 0 0; background: var(--agent); box-shadow: 0 0 10px hsl(190 70% 57% / .6); }
+  .terminal-bar { position: relative; }
+
+  .transcript {
+    min-height: 0;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 22px 20px 14px;
+    background: var(--k-bg);
+  }
+  .message { display: grid; grid-template-columns: 12px minmax(0,1fr); gap: 10px; color: var(--ink-soft); font-size: 17px; line-height: 1.46; }
+  .dot { width: 8px; height: 8px; margin-top: .55em; border-radius: 999px; background: var(--agent); box-shadow: 0 0 10px hsl(190 70% 57% / .72); }
+  code { border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; color: var(--agent-hi); background: var(--k-card); font-family: var(--mono); font-size: .9em; }
+  .tool { display: flex; align-items: center; gap: 9px; min-height: 48px; padding: 0 13px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); background: hsl(200 26% 5% / .62); font-family: var(--mono); font-size: 13px; }
+  .tool strong { color: var(--agent-hi); font-weight: 600; }
+  .tool-command { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tool-time { color: var(--faint); font-size: 11px; }
+  .ok { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 999px; color: var(--ok); background: hsl(150 66% 56% / .11); }
+
+  .footer-zone { flex: 0 0 auto; background: var(--k-bg); padding-top: 0; }
+  .active-stack { display: flex; flex-direction: column; gap: var(--rhythm); padding: 0 12px; }
+  .thinking { min-height: 24px; display: flex; align-items: center; gap: 7px; color: var(--faint); font: 13px/1.45 var(--mono); }
+  .spark { color: var(--agent); font-size: 17px; }
+
+  .plan-row {
+    min-height: 28px;
+    display: grid;
+    grid-template-columns: 13px auto minmax(0,1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 4px;
+    color: var(--ink-soft);
+    font: 13px/1.45 var(--mono);
+  }
+  .plan-chevron { color: var(--faint); font-size: 10px; }
+  .plan-label { color: var(--agent-hi); font-weight: 600; }
+  .plan-task { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .plan-count { color: var(--faint); }
+
+  /* Proposed change: no PlanTracker progress rail here. The stack uses one 8px rhythm instead. */
+  .mode-row {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: var(--rhythm) 12px 0;
+    color: var(--muted);
+    font: 13px/1.45 var(--mono);
+  }
+  .mode { display: inline-flex; align-items: center; gap: 7px; color: var(--bypass); font-weight: 500; }
+  .mode-glyph { font-size: 13px; letter-spacing: -.22em; padding-right: .22em; }
+  .model { min-width: 0; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--agent); font-weight: 500; }
+  .effort { color: var(--faint); }
+
+  .composer {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: var(--rhythm) 12px max(8px, env(safe-area-inset-bottom));
+    padding: 6px 6px 6px 10px;
+    border: 1px solid hsl(190 70% 57% / .54);
+    border-radius: 10px;
+    background: var(--k-bg);
+    box-shadow: 0 0 18px hsl(190 70% 57% / .08);
+    font-family: var(--mono);
+  }
+  .attach { width: 24px; flex: 0 0 auto; color: var(--faint); font-size: 22px; text-align: center; }
+  .placeholder { min-width: 0; flex: 1; color: var(--faint); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .composer-action { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; }
+  .agent-toggle { border: 1px solid hsl(190 70% 57% / .62); color: var(--agent); font-size: 21px; }
+  .stop { border: 1px solid var(--danger); color: var(--danger); background: color-mix(in oklab, var(--danger) 26%, var(--danger-bg)); box-shadow: 0 0 18px hsl(352 88% 62% / .16); }
+  .stop-square { width: 11px; height: 11px; border-radius: 2px; background: currentColor; }
+
+  .note { align-self: end; padding-bottom: 46px; font-family: var(--mono); }
+  .note-kicker { margin-bottom: 14px; color: var(--agent); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .note h1 { margin: 0 0 14px; color: var(--ink); font: 500 20px/1.25 var(--sans); }
+  .note p { margin: 0 0 16px; color: var(--muted); font-size: 13px; line-height: 1.58; }
+  .measure { display: grid; gap: 9px; color: var(--faint); font-size: 11px; }
+  .measure span { display: flex; align-items: center; gap: 8px; }
+  .measure i { width: 8px; height: 8px; border-radius: 2px; border: 1px solid var(--agent); }
+
+  @media (max-width: 760px) {
+    .stage { display: block; min-height: 100vh; padding: 0; background: var(--k-bg); }
+    .app { height: 100vh; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
+    .note { display: none; }
+    .terminal-bar { height: 58px; }
+    .terminal-name { padding: 0 12px; font-size: 14px; }
+    .bar-action { width: 58px; font-size: 19px; }
+    .active-underline { width: 126px; }
+    .transcript { gap: 10px; padding: 14px 12px 10px; }
+    .message { gap: 8px; font-size: 14px; line-height: 1.48; }
+    .tool { min-height: 44px; padding: 0 10px; font-size: 11.5px; }
+    .tool-time { font-size: 10px; }
+    .ok { width: 24px; height: 24px; }
+    .thinking, .plan-row, .mode-row { font-size: 12.5px; }
+    .composer { min-height: 58px; }
+  }
+
+  @media (max-height: 760px) {
+    .transcript .message:first-child { display: none; }
+    .transcript { padding-top: 10px; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <section class="app" aria-label="Active Thinkpool agent terminal">
+    <header class="terminal-bar">
+      <div class="terminal-name"><span class="ring" aria-hidden="true"></span><strong>T22</strong><span class="chev" aria-hidden="true"></span></div>
+      <div class="bar-action">＋</div>
+      <div class="bar-action">C&nbsp;●</div>
+      <div class="bar-action">⬡</div>
+      <div class="active-underline"></div>
+    </header>
+
+    <div class="transcript">
+      <div class="message">
+        <span class="dot"></span>
+        <div>The first secret write was accepted by Vercel, but <code>env pull</code> still reports an empty value. I’m checking the real configuration path before writing again.</div>
+      </div>
+      <div class="tool">
+        <strong>▶ Bash</strong>
+        <span class="tool-command">/bin/zsh -lc 'sed -n 1,240p…'</span>
+        <span class="tool-time">5.5s</span>
+        <span class="ok">✓</span>
+      </div>
+      <div class="message">
+        <span class="dot"></span>
+        <div>Root cause confirmed: Vercel deliberately redacts sensitive values on pull. The write was accepted; I’m verifying the running function instead of rotating it again.</div>
+      </div>
+      <div class="tool">
+        <strong>▶ Bash</strong>
+        <span class="tool-command">/bin/zsh -lc 'set -e; verify deploy…'</span>
+        <span class="tool-time">1/2</span>
+        <span>···</span>
+      </div>
+    </div>
+
+    <footer class="footer-zone">
+      <div class="active-stack">
+        <div class="thinking"><span class="spark">✳</span><span>Thinking… (19m 21s with high effort)</span></div>
+        <div class="plan-row">
+          <span class="plan-chevron">▸</span>
+          <span class="plan-label">Plan</span>
+          <span class="plan-task">Inventory current routes, room state, and bridge config</span>
+          <span class="plan-count">0/5</span>
+        </div>
+      </div>
+
+      <div class="mode-row">
+        <span class="mode"><span class="mode-glyph">⏵⏵</span>Bypass permissions</span>
+        <span class="model">GPT-5.6-Sol <span class="effort">High</span></span>
+      </div>
+
+      <div class="composer">
+        <span class="attach">＋</span>
+        <span class="placeholder">Message agent…</span>
+        <span class="composer-action agent-toggle">ϟ</span>
+        <span class="composer-action stop"><span class="stop-square"></span></span>
+      </div>
+    </footer>
+  </section>
+
+  <aside class="note">
+    <div class="note-kicker">Proposed footer rhythm</div>
+    <h1>One stack, no stray rail.</h1>
+    <p>The active Plan row stays legible without the two-pixel progress line. Thinking, Plan, permissions/model, and composer now share the same eight-pixel vertical rhythm.</p>
+    <div class="measure">
+      <span><i></i> Progress rail removed</span>
+      <span><i></i> 8px between every footer block</span>
+      <span><i></i> Existing type, colours, and controls preserved</span>
+    </div>
+  </aside>
+</main>
+</body>
+</html>
