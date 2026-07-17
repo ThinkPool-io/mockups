@@ -99,16 +99,16 @@
 
   .footer-zone { flex: 0 0 auto; background: var(--k-bg); padding-top: 0; }
   .active-stack { display: flex; flex-direction: column; gap: var(--rhythm); padding: 0 12px; }
-  .thinking { min-height: 24px; display: flex; align-items: center; gap: 7px; color: var(--faint); font: 13px/1.45 var(--mono); }
-  .spark { color: var(--agent); font-size: 17px; }
+  .thinking { min-height: 24px; display: grid; grid-template-columns: 16px minmax(0,1fr); align-items: center; column-gap: 4px; color: var(--faint); font: 13px/1.45 var(--mono); }
+  .spark { width: 16px; color: var(--agent); font-size: 17px; text-align: center; }
 
   .plan-row {
     min-height: 28px;
     display: grid;
-    grid-template-columns: 13px auto minmax(0,1fr) auto;
+    grid-template-columns: 16px auto minmax(0,1fr) auto;
     align-items: center;
-    gap: 8px;
-    padding: 2px 4px;
+    gap: 4px;
+    padding: 2px 0;
     color: var(--ink-soft);
     font: 13px/1.45 var(--mono);
   }
@@ -117,7 +117,7 @@
   .plan-task { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
   .plan-count { color: var(--faint); }
 
-  /* Proposed change: no PlanTracker progress rail here. The stack uses one 8px rhythm instead. */
+  /* No duplicate PlanTracker progress rail. Status blocks use 8px; mode→composer stays compact at 4px. */
   .mode-row {
     min-height: 28px;
     display: flex;
@@ -127,8 +127,8 @@
     color: var(--muted);
     font: 13px/1.45 var(--mono);
   }
-  .mode { display: inline-flex; align-items: center; gap: 7px; color: var(--bypass); font-weight: 500; }
-  .mode-glyph { font-size: 13px; letter-spacing: -.22em; padding-right: .22em; }
+  .mode { display: inline-flex; align-items: center; gap: 4px; color: var(--bypass); font-weight: 500; }
+  .mode-glyph { width: 16px; display: grid; place-items: center; font-size: 13px; letter-spacing: -.22em; padding-right: .22em; }
   .model { min-width: 0; margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--agent); font-weight: 500; }
   .effort { color: var(--faint); }
 
@@ -137,7 +137,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: var(--rhythm) 12px max(8px, env(safe-area-inset-bottom));
+    margin: 4px 12px max(8px, env(safe-area-inset-bottom));
     padding: 6px 6px 6px 10px;
     border: 1px solid hsl(190 70% 57% / .54);
     border-radius: 10px;
@@ -229,7 +229,7 @@
       </div>
 
       <div class="mode-row">
-        <span class="mode"><span class="mode-glyph">⏵⏵</span>Bypass permissions</span>
+        <span class="mode"><span class="mode-glyph">⏵⏵</span><span class="mode-label">Bypass permissions</span></span>
         <span class="model">GPT-5.6-Sol <span class="effort">High</span></span>
       </div>
 
@@ -245,10 +245,10 @@
   <aside class="note">
     <div class="note-kicker">Proposed footer rhythm</div>
     <h1>One stack, no stray rail.</h1>
-    <p>The active Plan row stays legible without the two-pixel progress line. Thinking, Plan, permissions/model, and composer now share the same eight-pixel vertical rhythm.</p>
+    <p>The active Plan row stays legible without the two-pixel progress line. Status items keep the eight-pixel terminal rhythm; only permissions/model to composer uses the tighter four-pixel control gap.</p>
     <div class="measure">
       <span><i></i> Progress rail removed</span>
-      <span><i></i> 8px between every footer block</span>
+      <span><i></i> 8px status rhythm · 4px mode-to-composer</span>
       <span><i></i> Existing type, colours, and controls preserved</span>
     </div>
   </aside>
