@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>10 ways to start a code session</title>
+  <style>
+    :root{color-scheme:dark;--bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--line:hsl(212 7% 21%);--ink:hsl(212 14% 92%);--muted:hsl(212 10% 63%);--pool:#1A6EF4}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-monospace,"SFMono-Regular",Consolas,monospace}.top{position:sticky;top:0;z-index:5;background:hsl(212 13% 5%/.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px max(14px,calc((100vw - 1160px)/2))}.head{display:flex;align-items:center;gap:18px;margin-bottom:12px}.head strong{font-size:14px;font-weight:500;letter-spacing:.08em}.head span{color:var(--muted);font-size:11px}.tabs{display:grid;grid-template-columns:repeat(10,1fr);gap:7px}.tabs button{min-width:44px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--raised);color:var(--muted);font:500 12px inherit;cursor:pointer}.tabs button[aria-selected="true"]{border-color:hsl(216 60% 54%);background:hsl(216 40% 16%);color:hsl(216 88% 70%)}.frame{width:100%;height:calc(100vh - 116px);border:0;display:block;background:var(--bg)}
+    @media(max-width:700px){.top{padding:12px}.head{display:block}.head span{display:block;margin-top:5px;line-height:1.35}.tabs{grid-template-columns:repeat(5,1fr);gap:6px}.frame{height:calc(100vh - 155px)}}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="head"><strong>10 START-SESSION DIRECTIONS</strong><span id="label">01 · Page header</span></div>
+    <div class="tabs" role="tablist" aria-label="Directions">
+      <button aria-selected="true" data-n="1" data-label="Page header">01</button><button aria-selected="false" data-n="2" data-label="App navigation">02</button><button aria-selected="false" data-n="3" data-label="Bridge footer">03</button><button aria-selected="false" data-n="4" data-label="Bridge sidecar">04</button><button aria-selected="false" data-n="5" data-label="Divider notch">05</button><button aria-selected="false" data-n="6" data-label="List heading">06</button><button aria-selected="false" data-n="7" data-label="First card">07</button><button aria-selected="false" data-n="8" data-label="Launch banner">08</button><button aria-selected="false" data-n="9" data-label="Edge rail / mobile dock">09</button><button aria-selected="false" data-n="10" data-label="After the list">10</button>
+    </div>
+  </div>
+  <iframe class="frame" title="Selected start-session direction" src="./code-dashboard-start-session-01.html"></iframe>
+  <script>
+    const frame=document.querySelector('.frame'),label=document.querySelector('#label');
+    document.querySelectorAll('[data-n]').forEach(btn=>btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-n]').forEach(b=>b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      const n=String(btn.dataset.n).padStart(2,'0');
+      frame.src=`./code-dashboard-start-session-${n}.html`;
+      label.textContent=`${n} · ${btn.dataset.label}`;
+    }));
+  </script>
+</body>
+</html>
