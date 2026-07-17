@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ThinkPool Code — Thinking evidence strip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: hsl(200 36% 2%);
+      --k-card: hsl(200 26% 5%);
+      --k-surface: hsl(199 20% 11%);
+      --k-line: hsl(199 24% 17%);
+      --k-line-strong: hsl(194 30% 26%);
+      --k-ink: hsl(190 26% 96%);
+      --k-ink-soft: hsl(190 22% 88%);
+      --k-muted: hsl(192 16% 76%);
+      --k-faint: hsl(196 16% 60%);
+      --k-agent: hsl(190 70% 57%);
+      --k-agent-high: hsl(190 76% 63%);
+      --k-pool: hsl(217 91% 53%);
+      --k-you: hsl(150 60% 60%);
+      --k-partner: hsl(280 60% 72%);
+      --k-ok: hsl(150 66% 56%);
+      --k-warn: hsl(48 86% 60%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+      --ease-settle: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: var(--k-bg);
+      color: var(--k-ink);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    button { font: inherit; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    button:focus-visible {
+      outline: 2px solid var(--k-agent-high);
+      outline-offset: -2px;
+    }
+
+    .app {
+      height: 100%;
+      display: grid;
+      grid-template-rows: 48px minmax(0, 1fr);
+      background: var(--k-bg);
+    }
+    .topbar {
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--k-line);
+      background: var(--k-card);
+      min-width: 0;
+    }
+    .room-name {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 220px;
+      padding: 0 16px;
+      border-right: 1px solid var(--k-line);
+      color: var(--k-ink-soft);
+      font-weight: 600;
+    }
+    .drop {
+      width: 9px;
+      height: 12px;
+      flex: none;
+      background: var(--k-pool);
+      border-radius: 7px 7px 8px 8px;
+      transform: rotate(45deg);
+    }
+    .room-code {
+      color: var(--k-faint);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .08em;
+    }
+    .tabs {
+      min-width: 0;
+      display: flex;
+      align-items: stretch;
+      flex: 1;
+      overflow: hidden;
+    }
+    .tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      max-width: 280px;
+      padding: 0 15px;
+      border-right: 1px solid var(--k-line);
+      color: var(--k-faint);
+      white-space: nowrap;
+    }
+    .tab.active { color: var(--k-ink); }
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      inset: auto 10px 0;
+      height: 2px;
+      background: var(--k-agent);
+      box-shadow: 0 0 8px color-mix(in oklab, var(--k-agent) 70%, transparent);
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex: none;
+      border-radius: 999px;
+      background: var(--k-ok);
+      box-shadow: 0 0 8px color-mix(in oklab, var(--k-ok) 70%, transparent);
+    }
+    .tab-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top-action {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      flex: none;
+      border-left: 1px solid var(--k-line);
+      color: var(--k-faint);
+      font-size: 18px;
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+    }
+    .terminal {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto auto;
+      border-right: 1px solid var(--k-line);
+    }
+    .timeline {
+      min-height: 0;
+      overflow: auto;
+      padding: 24px clamp(16px, 2.5vw, 38px) 18px;
+      scrollbar-color: var(--k-line-strong) transparent;
+    }
+    .timeline-inner {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .dayline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--k-faint);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .dayline::before, .dayline::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--k-line);
+    }
+    .human-line, .agent-line {
+      display: grid;
+      grid-template-columns: 16px minmax(0, 1fr);
+      gap: 0;
+      line-height: 1.62;
+    }
+    .human-glyph {
+      width: 8px;
+      height: 10px;
+      margin: 5px 0 0 2px;
+      border: 1.5px solid var(--k-you);
+      border-radius: 6px 6px 7px 7px;
+      transform: rotate(45deg);
+    }
+    .human-copy { color: var(--k-ink-soft); }
+    .human-name {
+      color: var(--k-you);
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    .clock {
+      color: var(--k-faint);
+      font-size: 9px;
+      letter-spacing: .08em;
+      margin-left: 8px;
+    }
+    .agent-orb {
+      width: 7px;
+      height: 7px;
+      margin: 7px 0 0 3px;
+      border-radius: 999px;
+      background: var(--k-agent);
+      box-shadow: 0 0 8px color-mix(in oklab, var(--k-agent) 80%, transparent);
+    }
+    .agent-copy {
+      color: var(--k-ink-soft);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.62;
+    }
+
+    .thinking {
+      margin-left: 16px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      overflow: hidden;
+      transition: border-color .18s var(--ease-settle), background .18s var(--ease-settle);
+    }
+    .thinking[data-open="true"] {
+      border-color: var(--k-line);
+      background: color-mix(in oklab, var(--k-card) 82%, transparent);
+    }
+    .thinking-toggle {
+      width: 100%;
+      min-height: 44px;
+      display: grid;
+      grid-template-columns: 18px auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border: 0;
+      background: transparent;
+      color: var(--k-muted);
+      text-align: left;
+      cursor: pointer;
+    }
+    .thinking-toggle:hover { background: color-mix(in oklab, var(--k-surface) 58%, transparent); }
+    .chevron {
+      color: var(--k-faint);
+      font-size: 10px;
+      text-align: center;
+      transition: transform .18s var(--ease-settle);
+    }
+    .thinking[data-open="true"] .chevron { transform: rotate(90deg); }
+    .thought-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--k-agent-high);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .thought-glyph {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--k-agent) 38%, transparent);
+      border-radius: 6px;
+      background: color-mix(in oklab, var(--k-agent) 8%, transparent);
+      font-size: 11px;
+    }
+    .thought-preview {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--k-faint);
+      font-size: 12px;
+    }
+    .thinking[data-open="true"] .thought-preview { opacity: .72; }
+    .thought-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--k-faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .source-chip {
+      padding: 2px 6px;
+      border: 1px solid var(--k-line);
+      border-radius: 999px;
+      color: var(--k-muted);
+      background: var(--k-bg);
+    }
+    .thinking-body {
+      display: none;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 8px;
+      padding: 0 10px 12px;
+    }
+    .thinking[data-open="true"] .thinking-body { display: grid; }
+    .evidence-rail {
+      width: 2px;
+      height: 100%;
+      min-height: 78px;
+      justify-self: center;
+      border-radius: 999px;
+      background: linear-gradient(var(--k-agent), color-mix(in oklab, var(--k-agent) 8%, transparent));
+    }
+    .thought-copy {
+      min-width: 0;
+      color: var(--k-muted);
+      font-size: 12px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+    .thought-copy strong { color: var(--k-ink-soft); font-weight: 500; }
+    .provenance {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid var(--k-line);
+      color: var(--k-faint);
+      font-size: 10px;
+    }
+    .verified-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--k-ok);
+    }
+
+    .tool-row {
+      min-height: 44px;
+      margin-left: 16px;
+      padding: 7px 10px;
+      display: grid;
+      grid-template-columns: 18px auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--k-line);
+      border-radius: 9px;
+      color: var(--k-muted);
+      background: color-mix(in oklab, var(--k-card) 72%, transparent);
+      font-size: 12px;
+    }
+    .tool-icon, .tool-title { color: var(--k-agent-high); }
+    .tool-title { font-weight: 600; }
+    .tool-detail {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .tool-ok { color: var(--k-ok); }
+
+    .status-line {
+      min-height: 41px;
+      display: grid;
+      grid-template-columns: 16px minmax(0, 1fr);
+      align-items: center;
+      padding: 0 clamp(16px, 2.5vw, 38px);
+      border-top: 1px solid var(--k-line);
+      color: var(--k-muted);
+      font-size: 12px;
+    }
+    .spark { color: var(--k-agent-high); }
+    .status-detail { color: var(--k-faint); }
+    .composer-wrap {
+      padding: 10px clamp(12px, 2vw, 28px) 14px;
+      background: var(--k-bg);
+    }
+    .composer {
+      width: min(960px, 100%);
+      min-height: 56px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 7px;
+      border: 1px solid var(--k-line-strong);
+      border-radius: 11px;
+      background: var(--k-card);
+      box-shadow: 0 12px 32px hsl(200 60% 1% / .38);
+    }
+    .attach {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      color: var(--k-faint);
+      font-size: 18px;
+    }
+    .placeholder { color: var(--k-faint); }
+    .send {
+      height: 40px;
+      min-width: 46px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--k-pool);
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color .18s var(--ease-settle), transform .18s var(--ease-settle);
+    }
+    .send:hover { background: color-mix(in oklab, var(--k-pool) 82%, white); }
+    .send:active { transform: scale(.96); }
+
+    .ensemble {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      background: var(--k-card);
+    }
+    .ensemble-head {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--k-line);
+      color: var(--k-ink-soft);
+      font-weight: 600;
+    }
+    .ensemble-count {
+      color: var(--k-agent-high);
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .lane-list {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .lane {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      color: var(--k-muted);
+    }
+    .lane.active {
+      background: var(--k-surface);
+      color: var(--k-ink-soft);
+    }
+    .lane-orb {
+      width: 7px;
+      height: 7px;
+      justify-self: center;
+      border-radius: 999px;
+      background: var(--k-ok);
+    }
+    .lane-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .lane-kind {
+      color: var(--k-faint);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .legend {
+      margin: 10px;
+      padding: 12px;
+      border: 1px solid var(--k-line);
+      border-radius: 9px;
+      color: var(--k-faint);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+    .legend strong { color: var(--k-muted); font-weight: 600; }
+
+    @media (max-width: 720px) {
+      .app { grid-template-rows: 45px minmax(0, 1fr); }
+      .room-name { display: none; }
+      .workspace { grid-template-columns: minmax(0, 1fr); }
+      .terminal { border-right: 0; }
+      .ensemble { display: none; }
+      .tab { max-width: none; flex: 1; padding: 0 12px; }
+      .top-action { width: 45px; }
+      .timeline { padding: 14px 10px 12px; }
+      .timeline-inner { gap: 10px; }
+      .thinking, .tool-row { margin-left: 0; }
+      .thinking-toggle {
+        grid-template-columns: 16px auto minmax(0, 1fr);
+        gap: 6px;
+        padding-inline: 8px;
+      }
+      .thought-label { gap: 5px; }
+      .thought-glyph { width: 17px; height: 17px; }
+      .thought-meta { display: none; }
+      .thought-copy { font-size: 11.5px; }
+      .thinking-body { grid-template-columns: 16px minmax(0, 1fr); padding-inline: 8px; }
+      .tool-row { grid-template-columns: 16px auto minmax(0, 1fr) auto; gap: 6px; padding-inline: 8px; }
+      .status-line { padding: 0 12px; }
+      .composer-wrap { padding: 8px 8px 10px; }
+      .composer { min-height: 52px; border-radius: 10px; }
+      .agent-copy { font-size: 13.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="room-name"><span class="drop" aria-hidden="true"></span><span>Thinking visibility</span><span class="room-code">X8CEP</span></div>
+      <nav class="tabs" aria-label="Open terminals">
+        <div class="tab active"><span class="status-dot"></span><span class="tab-label">Reasoning UI</span></div>
+        <div class="tab"><span class="status-dot"></span><span class="tab-label">Provider adapters</span></div>
+      </nav>
+      <div class="top-action" aria-hidden="true">＋</div>
+    </header>
+
+    <section class="workspace">
+      <div class="terminal">
+        <div class="timeline">
+          <div class="timeline-inner">
+            <div class="dayline"><span>Today · terminal transcript</span></div>
+
+            <div class="human-line">
+              <span class="human-glyph" aria-hidden="true"></span>
+              <div class="human-copy"><span class="human-name">Maks</span>Why do some agents show their reasoning while others don’t? Can we make it consistent?<span class="clock">21:14</span></div>
+            </div>
+
+            <section class="thinking" data-open="true">
+              <button class="thinking-toggle" type="button" aria-expanded="true" title="Provider-emitted reasoning summary">
+                <span class="chevron" aria-hidden="true">▶</span>
+                <span class="thought-label"><span class="thought-glyph" aria-hidden="true">✻</span><span>Reasoning summary</span></span>
+                <span class="thought-preview">Trace the provider event shapes before changing the transcript component…</span>
+                <span class="thought-meta"><span class="source-chip">Codex</span><span>18s</span><span>412 tok</span></span>
+              </button>
+              <div class="thinking-body">
+                <span class="evidence-rail" aria-hidden="true"></span>
+                <div class="thought-copy"><strong>Trace the provider event shapes before changing the transcript component.</strong>
+
+Claude-compatible providers return native thinking blocks. Hermes sends thought chunks over ACP. Codex may return a reasoning summary, but some models expose no reasoning text at all.
+
+The UI should preserve that distinction: show the provider’s words when present; otherwise show a concise activity trace without presenting it as hidden reasoning.
+                  <div class="provenance"><span class="verified-dot"></span><span>Provider-supplied summary · collapsed by default</span></div>
+                </div>
+              </div>
+            </section>
+
+            <div class="tool-row" aria-label="Collapsed tool group">
+              <span>▸</span><span class="tool-icon">⛁</span><span class="tool-detail"><span class="tool-title">4 calls</span> · Search · Read · Read · Search</span><span class="tool-ok">✓</span>
+            </div>
+
+            <div class="agent-line">
+              <span class="agent-orb" aria-hidden="true"></span>
+              <div class="agent-copy">ThinkPool can give every terminal the same useful grey trace, but the label should tell the truth: <strong>exposed thought</strong>, <strong>reasoning summary</strong>, or <strong>activity</strong>. Raw private reasoning cannot be forced from a provider that does not return it.</div>
+            </div>
+
+            <div class="human-line">
+              <span class="human-glyph" aria-hidden="true"></span>
+              <div class="human-copy"><span class="human-name">Maks</span>Proceed. Make the blocks easier to scan and collapse.<span class="clock">21:17</span></div>
+            </div>
+
+            <section class="thinking" data-open="false">
+              <button class="thinking-toggle" type="button" aria-expanded="false" title="Provider-emitted thought">
+                <span class="chevron" aria-hidden="true">▶</span>
+                <span class="thought-label"><span class="thought-glyph" aria-hidden="true">✻</span><span>Exposed thought</span></span>
+                <span class="thought-preview">Keep the disclosure row compact; use provenance as structure, not decoration…</span>
+                <span class="thought-meta"><span class="source-chip">GLM</span><span>9s</span><span>186 tok</span></span>
+              </button>
+              <div class="thinking-body">
+                <span class="evidence-rail" aria-hidden="true"></span>
+                <div class="thought-copy"><strong>Keep the disclosure row compact.</strong>
+
+Use provenance as structure, not decoration. The cyan rail connects the label to the revealed content; duration and token count remain secondary. On mobile, preserve the preview and remove metadata before truncating the actual thought.
+                  <div class="provenance"><span class="verified-dot"></span><span>Provider-emitted thought · collapsed by default</span></div>
+                </div>
+              </div>
+            </section>
+
+            <div class="agent-line">
+              <span class="agent-orb" aria-hidden="true"></span>
+              <div class="agent-copy">I’ve separated provenance from content and made the entire 44px row the disclosure target. The thought stays out of the way until you want it, while the preview still explains what the agent is doing.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-line"><span class="spark">✻</span><span>Rippling… <span class="status-detail">(6s · ↓ 135 tokens · high effort)</span></span></div>
+
+        <div class="composer-wrap">
+          <div class="composer">
+            <span class="attach">＋</span>
+            <span class="placeholder">Message the room…</span>
+            <button class="send" type="button" aria-label="Send message">→</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="ensemble">
+        <div class="ensemble-head"><span>Ensemble</span><span class="ensemble-count">3 lanes</span></div>
+        <div class="lane-list">
+          <div class="lane active"><span class="lane-orb"></span><span class="lane-name">Reasoning UI</span><span class="lane-kind">agent</span></div>
+          <div class="lane"><span class="lane-orb"></span><span class="lane-name">Provider adapters</span><span class="lane-kind">agent</span></div>
+          <div class="lane"><span class="lane-orb"></span><span class="lane-name">Review · provenance labels</span><span class="lane-kind">review</span></div>
+        </div>
+        <div class="legend"><strong>One visual language, three honest sources.</strong><br>Exposed thought · reasoning summary · activity</div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.querySelectorAll('.thinking-toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const block = button.closest('.thinking');
+        const open = block.dataset.open !== 'true';
+        block.dataset.open = String(open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+    });
+  </script>
+</body>
+</html>
