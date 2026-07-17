@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Top-row notifications · 02 Scanline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg:#0a0d10; --k-card:#06090c; --k-panel:#10161d; --k-panel-hi:#151c24;
+      --line:hsl(212 7% 21%); --line-strong:hsl(212 7% 28%);
+      --ink:hsl(212 14% 95%); --muted:hsl(212 14% 78%); --faint:hsl(212 12% 62%);
+      --cyan:hsl(190 70% 57%); --green:hsl(152 40% 58%); --red:hsl(352 88% 62%);
+      --amber:hsl(48 86% 60%); --partner:hsl(218 28% 64%);
+      --ease:cubic-bezier(.16,1,.3,1); --row:36px;
+      font-family:"Hanken Grotesk",system-ui,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;background:var(--k-bg);color:var(--ink)}
+    body{min-height:100vh;overflow:hidden}
+    button{font:inherit;touch-action:manipulation}
+    .app{height:100vh;display:flex;flex-direction:column;background:var(--k-bg)}
+    .top-row{height:var(--row);min-height:var(--row);display:flex;border-bottom:1px solid color-mix(in oklab,var(--line) 60%,transparent);font-family:"IBM Plex Mono",monospace;position:relative;z-index:20}
+    .tabs-zone{position:relative;min-width:0;flex:1;overflow:hidden}
+    .tabs{height:100%;display:flex;align-items:stretch;padding:0 6px;overflow:hidden;transition:transform .26s var(--ease),opacity .18s var(--ease)}
+    .tab{position:relative;display:flex;flex:none;align-items:center;gap:8px;padding:4px 7px;color:var(--muted);font-size:13px;white-space:nowrap}
+    .tab.active{color:var(--ink)}
+    .tab.active::after{content:"";position:absolute;left:6px;right:6px;bottom:0;height:2px;border-radius:2px 2px 0 0;background:var(--cyan);box-shadow:0 0 6px color-mix(in oklab,var(--cyan) 60%,transparent)}
+    .indicator{width:13px;height:13px;display:grid;place-items:center;flex:none;color:var(--cyan)}
+    .indicator svg{display:block}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+    .spin{width:12px;height:12px;border:1.5px solid color-mix(in oklab,var(--cyan) 25%,transparent);border-top-color:var(--cyan);border-radius:50%}
+    .question{width:13px;height:13px;display:grid;place-items:center;color:var(--cyan)}
+    .tab-menu{font-size:9px;color:var(--faint);margin-left:-3px}
+    .meta{height:100%;display:flex;flex:none;align-items:stretch}
+    .meta-cell{height:var(--row);min-width:var(--row);display:grid;place-items:center;border-left:1px solid color-mix(in oklab,var(--line) 60%,transparent);color:var(--faint);background:transparent}
+    .session{padding:0 12px;display:flex;align-items:center;gap:6px;border-left:1px solid color-mix(in oklab,var(--line) 60%,transparent);font-size:13px;white-space:nowrap}
+    .session strong{color:var(--cyan);font-weight:600}.session span{color:var(--faint)}
+    .bolt{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7}
+
+    .takeover{position:absolute;inset:0;z-index:5;width:100%;height:100%;margin:0;padding:0 7px 0 0;display:none;align-items:center;color:var(--ink);font-family:"IBM Plex Mono",monospace;overflow:hidden}
+    .takeover.on{display:flex}
+    .open-target{min-width:0;flex:1;height:100%;padding:0 0 0 10px;border:0;background:transparent;display:flex;align-items:center;gap:9px;color:inherit;text-align:left;cursor:pointer;font:inherit}
+    .takeover .lead{width:13px;height:13px;display:grid;place-items:center;flex:none;color:var(--cyan)}
+    .takeover .copy{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;font-weight:500}
+    .takeover .copy b{color:var(--cyan);font-weight:600}
+    .takeover.partner .lead,.takeover.partner .copy b{color:var(--partner)}
+    .takeover.error .lead,.takeover.error .copy b{color:var(--red)}
+    .takeover.needs .lead,.takeover.needs .copy b{color:var(--cyan)}
+    .takeover.group .lead,.takeover.group .copy b{color:var(--amber)}
+    .close{width:28px;height:28px;flex:none;display:grid;place-items:center;border:0;border-radius:5px;background:transparent;color:var(--faint);cursor:pointer;font-size:16px;line-height:1}
+    .close:hover,.close:focus-visible{background:color-mix(in oklab,var(--line) 34%,transparent);color:var(--ink)}
+    .open-target:focus-visible{outline:1px solid var(--cyan);outline-offset:-1px}
+    .mini-list{position:absolute;z-index:40;top:calc(var(--row) + 6px);left:8px;width:min(460px,calc(100vw - 16px));display:none;border:1px solid var(--line-strong);border-radius:8px;background:var(--k-panel);box-shadow:0 16px 40px rgba(0,0,0,.42);font-family:"IBM Plex Mono",monospace;overflow:hidden}
+    .mini-list.open{display:block;animation:popover-in .2s var(--ease) both}
+    .mini-list button{width:100%;min-height:44px;padding:9px 11px;border:0;border-bottom:1px solid color-mix(in oklab,var(--line) 60%,transparent);display:flex;gap:9px;align-items:center;background:transparent;color:var(--muted);text-align:left;font-size:11px;cursor:pointer}
+    .mini-list button:last-child{border-bottom:0}.mini-list button:hover{background:var(--k-panel-hi);color:var(--ink)}
+    .mini-list i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 5px var(--cyan);flex:none}
+
+    /* 01 · Conveyor sheet — one solid machine panel traverses the rail. */
+    body[data-concept="1"] .takeover{background:linear-gradient(90deg,var(--k-panel-hi),var(--k-panel));border-left:2px solid var(--cyan)}
+    body[data-concept="1"] .takeover.enter{animation:c1-in .28s var(--ease) both}
+    body[data-concept="1"] .takeover.exit{animation:c1-out .24s var(--ease) both}
+    @keyframes c1-in{from{transform:translateX(-102%)}to{transform:translateX(0)}}
+    @keyframes c1-out{from{transform:translateX(0)}to{transform:translateX(102%)}}
+
+    /* 02 · Scanline — a cyan edge develops the message behind itself. */
+    body[data-concept="2"] .takeover{background:var(--k-panel);border-right:1px solid var(--cyan)}
+    body[data-concept="2"] .takeover::before{content:"";position:absolute;inset:0 auto 0 0;width:1px;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}
+    body[data-concept="2"] .takeover.enter{animation:c2-in .36s var(--ease) both}
+    body[data-concept="2"] .takeover.enter::before{animation:c2-edge .36s var(--ease) both}
+    body[data-concept="2"] .takeover.exit{animation:c2-out .28s var(--ease) both}
+    @keyframes c2-in{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+    @keyframes c2-edge{from{transform:translateX(0)}to{transform:translateX(calc(100vw - 1px))}}
+    @keyframes c2-out{from{clip-path:inset(0)}to{clip-path:inset(0 0 0 100%)}}
+
+    /* 03 · Shutter — five staggered plates build one flat notification. */
+    .shutters{position:absolute;inset:0;display:none;grid-template-columns:repeat(5,1fr);z-index:-1}
+    .shutters i{background:var(--k-panel);border-right:1px solid color-mix(in oklab,var(--line) 45%,transparent);transform-origin:left center}
+    body[data-concept="3"] .takeover{background:transparent}
+    body[data-concept="3"] .shutters{display:grid}
+    body[data-concept="3"] .takeover.enter .shutters i{animation:c3-plate .22s var(--ease) both}
+    body[data-concept="3"] .takeover.enter .shutters i:nth-child(2){animation-delay:.025s}body[data-concept="3"] .takeover.enter .shutters i:nth-child(3){animation-delay:.05s}body[data-concept="3"] .takeover.enter .shutters i:nth-child(4){animation-delay:.075s}body[data-concept="3"] .takeover.enter .shutters i:nth-child(5){animation-delay:.1s}
+    body[data-concept="3"] .takeover.enter .lead,body[data-concept="3"] .takeover.enter .copy,body[data-concept="3"] .takeover.enter .close{animation:c3-copy .2s .09s var(--ease) both}
+    body[data-concept="3"] .takeover.exit{animation:c3-out .26s var(--ease) both;background:var(--k-panel)}
+    @keyframes c3-plate{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes c3-copy{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}@keyframes c3-out{to{transform:translateX(102%)}}
+
+    /* 04 · Carriage — tabs are physically pushed ahead of the message. */
+    body[data-concept="4"] .takeover{background:var(--k-bg);border-top:1px solid color-mix(in oklab,var(--cyan) 45%,transparent);border-bottom:1px solid color-mix(in oklab,var(--cyan) 45%,transparent)}
+    body[data-concept="4"] .takeover.enter{animation:c4-in .3s var(--ease) both}
+    body[data-concept="4"] .takeover.enter~.tabs{transform:translateX(100%)}
+    body[data-concept="4"] .takeover.exit{animation:c4-out .26s var(--ease) both}
+    @keyframes c4-in{from{transform:translateX(-100%);box-shadow:8px 0 0 var(--cyan)}to{transform:none;box-shadow:0 0 0 transparent}}@keyframes c4-out{to{transform:translateX(102%)}}
+
+    /* 05 · Undercurrent — a wave-like lower rail lifts the message into place. */
+    body[data-concept="5"] .takeover{background:linear-gradient(180deg,var(--k-bg),var(--k-panel));border-bottom:2px solid var(--cyan)}
+    body[data-concept="5"] .takeover::after{content:"";position:absolute;left:-20%;bottom:-1px;width:34%;height:2px;background:var(--ink);opacity:.7;transform:skewX(-35deg)}
+    body[data-concept="5"] .takeover.enter{animation:c5-in .34s var(--ease) both}
+    body[data-concept="5"] .takeover.enter::after{animation:c5-wave .34s var(--ease) both}
+    body[data-concept="5"] .takeover.exit{animation:c5-out .28s var(--ease) both}
+    @keyframes c5-in{from{clip-path:polygon(0 100%,0 100%,0 100%,0 100%);transform:translateY(3px)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:none}}
+    @keyframes c5-wave{from{left:-34%}to{left:100%}}@keyframes c5-out{to{clip-path:inset(0 0 0 100%)}}
+
+    .workspace{min-height:0;flex:1;display:flex;flex-direction:column;padding:10px 12px 92px;overflow:hidden;font-family:"IBM Plex Mono",monospace}
+    .feed{min-height:0;flex:1;overflow:hidden;display:flex;flex-direction:column;gap:9px}
+    .line{font-size:12.5px;line-height:1.55;color:var(--muted)}.line strong{color:var(--cyan);font-weight:600}.line.user{color:var(--ink);font-family:"Hanken Grotesk",sans-serif;font-size:14px;max-width:780px}
+    .tool{border:1px solid var(--line);border-radius:9px;background:var(--k-card);overflow:hidden;color:var(--muted);font-size:11.5px}
+    .tool-head{height:38px;display:flex;align-items:center;padding:0 10px;border-bottom:1px solid var(--line);gap:7px}.tool-head b{color:var(--cyan)}.tool-head span{margin-left:auto;color:var(--faint)}
+    .tool-body{padding:10px 12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mode-row{height:28px;display:flex;align-items:center;gap:10px;color:var(--faint);font-size:11.5px}.mode-row .model{margin-left:auto;color:var(--cyan)}
+    .composer{height:48px;border:1px solid color-mix(in oklab,var(--cyan) 60%,var(--line));border-radius:9px;display:flex;align-items:center;padding:0 8px 0 13px;color:var(--faint);font-size:12px}.composer span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.send{width:34px;height:34px;border:1px solid var(--line-strong);border-radius:8px;display:grid;place-items:center;color:var(--cyan)}
+    .review-dock{position:fixed;z-index:80;left:50%;bottom:12px;transform:translateX(-50%);width:min(760px,calc(100vw - 24px));display:flex;align-items:center;gap:6px;padding:7px;border:1px solid var(--line-strong);border-radius:10px;background:color-mix(in oklab,var(--k-panel) 94%,transparent);box-shadow:0 14px 42px rgba(0,0,0,.45);font-family:"IBM Plex Mono",monospace}
+    .concept-label{min-width:148px;padding:0 8px;color:var(--faint);font-size:10px;line-height:1.25;text-transform:uppercase;letter-spacing:.08em}.concept-label b{display:block;color:var(--cyan);font-size:11px;letter-spacing:0;text-transform:none;margin-top:2px}
+    .triggers{display:flex;gap:5px;min-width:0;overflow-x:auto;scrollbar-width:none}.triggers button{height:40px;flex:none;padding:0 11px;border:1px solid var(--line);border-radius:7px;background:var(--k-bg);color:var(--muted);font-size:10.5px;cursor:pointer}.triggers button:hover,.triggers button:focus-visible{border-color:var(--cyan);color:var(--ink);outline:none}
+    .target-flash{animation:target .65s var(--ease) both}@keyframes target{0%,100%{background:transparent}35%{background:color-mix(in oklab,var(--cyan) 14%,transparent)}}
+    @keyframes popover-in{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+    @media(max-width:639px){:root{--row:48px}.session{display:none}.meta-cell{min-width:48px;height:48px}.meta .partner-cell{display:grid}.tabs{padding-left:6px}.tab{font-size:12px;padding-inline:6px}.tab:nth-child(3){display:none}.takeover{padding-right:2px}.open-target{padding-left:8px;gap:7px}.takeover .copy{font-size:11px}.close{width:44px;height:44px}.workspace{padding:12px 12px 96px}.feed{gap:8px}.line{font-size:11.5px}.line.user{font-size:13px}.tool-body{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.mode-row{font-size:10.5px}.review-dock{bottom:8px;padding:6px;display:block}.concept-label{min-width:0;padding:2px 5px 6px}.concept-label b{display:inline;margin-left:6px}.triggers button{height:44px}.mini-list{top:54px}.composer{height:46px}}
+    @media(min-width:640px){.partner-cell{display:none}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body data-concept="2">
+  <div class="app">
+    <header class="top-row">
+      <div class="tabs-zone" id="tabsZone">
+        <div class="takeover" id="takeover" role="status" aria-live="polite" aria-atomic="true">
+          <span class="shutters" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <button class="open-target" id="openTarget" type="button">
+            <span class="lead" id="lead" aria-hidden="true"></span>
+            <span class="copy" id="copy"></span>
+          </button>
+          <button class="close" id="close" type="button" aria-label="Dismiss notification">×</button>
+        </div>
+        <div class="tabs" id="tabs">
+          <div class="tab"><span class="indicator"><span class="dot"></span></span><span>T1</span></div>
+          <div class="tab active" id="questionTab"><span class="indicator question" title="question waiting — open to answer" aria-label="question waiting, open to answer"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.35 4.25a2.27 2.27 0 0 1 4.38.8c0 1.72-2.23 1.88-2.23 3.18"/><circle cx="6.5" cy="10.45" r=".68" fill="currentColor" stroke="none"/></svg></span><span>T2</span><span class="tab-menu">▼</span></div>
+          <div class="tab"><span class="indicator"><span class="spin"></span></span><span>T3</span></div>
+        </div>
+      </div>
+      <div class="meta">
+        <button class="meta-cell" type="button" aria-label="New terminal">＋</button>
+        <div class="meta-cell partner-cell" title="Conrad is here">C<span style="position:absolute;width:6px;height:6px;border-radius:50%;background:var(--partner);margin:15px 0 0 15px"></span></div>
+        <div class="session"><strong>pricing redesign</strong><span>session with</span><span style="color:var(--partner)">Conrad ●</span></div>
+        <button class="meta-cell" type="button" aria-label="Session options"><svg class="bolt" viewBox="0 0 24 24"><path d="M12 2.5 20 7v10l-8 4.5L4 17V7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      </div>
+      <div class="mini-list" id="miniList">
+        <button type="button"><i></i><span>GLM‑5.2 finished thinking in Terminal 3, Pricing redesign session</span></button>
+        <button type="button"><i style="background:var(--partner);box-shadow:0 0 5px var(--partner)"></i><span>Conrad in Terminal 1, Launch plan session: “I’ve added the copy…”</span></button>
+        <button type="button"><i style="background:var(--amber);box-shadow:0 0 5px var(--amber)"></i><span>Claude needs you in Terminal 4, API cleanup session</span></button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <div class="feed">
+        <div class="line user">Make the notification system feel native to the terminal row, not like a generic toast.</div>
+        <div class="tool"><div class="tool-head"><b>▾ Read</b><span>42ms&nbsp; ✓</span></div><div class="tool-body">src/pages/code/room.jsx · terminal status, presence, session controls</div></div>
+        <div class="line"><strong>●</strong> The row already carries the exact context we need: terminal identity, model state, and shared presence.</div>
+        <div class="tool"><div class="tool-head"><b>▾ Bash</b><span>1.2s&nbsp; ✓</span></div><div class="tool-body">node --test tests/questionAnswers.test.mjs</div></div>
+        <div class="line"><strong>●</strong> The notification now interrupts only missed context. Visible terminals stay quiet.</div>
+      </div>
+      <div class="mode-row"><span>✣ Thinking…</span><span>Bypass permissions</span><span class="model">GLM‑5.2&nbsp; High</span></div>
+      <div class="composer"><span>＋&nbsp; Message the room · @agent → direct · @pool → steer · // → whisper</span><span class="send">●</span></div>
+    </main>
+  </div>
+
+  <div class="review-dock" aria-label="Prototype controls">
+    <div class="concept-label">Notification motion<b id="conceptName">01 · Conveyor sheet</b></div>
+    <div class="triggers">
+      <button type="button" data-demo="partner">Partner</button>
+      <button type="button" data-demo="agent">Finished</button>
+      <button type="button" data-demo="needs">Needs you</button>
+      <button type="button" data-demo="group">Grouped</button>
+      <button type="button" data-demo="error">Error</button>
+      <button type="button" data-demo="reset">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    const conceptNames={1:'01 · Conveyor sheet',2:'02 · Scanline reveal',3:'03 · Five-plate shutter',4:'04 · Tab-push carriage',5:'05 · Undercurrent wave'}
+    const body=document.body,takeover=document.getElementById('takeover'),openTarget=document.getElementById('openTarget'),copy=document.getElementById('copy'),lead=document.getElementById('lead'),close=document.getElementById('close'),mini=document.getElementById('miniList'),tabs=document.getElementById('tabs')
+    document.getElementById('conceptName').textContent=conceptNames[body.dataset.concept]
+    let timer=null, persistent=false
+    const payloads={
+      partner:{cls:'partner',icon:'C',html:'<b>Conrad</b> in Terminal 3, Pricing redesign session: Let’s simplify the notification queue…'},
+      agent:{cls:'agent',icon:'●',html:'<b>GLM‑5.2</b> finished thinking in Terminal 3, Pricing redesign session…'},
+      needs:{cls:'needs',icon:'?',html:'<b>GLM‑5.2</b> needs you in Terminal 2, Pricing redesign session…',hold:true},
+      group:{cls:'group',icon:'3',html:'<b>3 more updates</b> across 2 sessions'},
+      error:{cls:'error',icon:'!',html:'<b>GLM‑5.2</b> hit an error in Terminal 3, Pricing redesign session…'}
+    }
+    function clearTimer(){if(timer){clearTimeout(timer);timer=null}}
+    function hide(){clearTimer();persistent=false;mini.classList.remove('open');takeover.classList.remove('enter');takeover.classList.add('exit');tabs.style.transform='';setTimeout(()=>{takeover.className='takeover';copy.textContent='';lead.textContent=''},290)}
+    function show(kind,hold=false){
+      const p=payloads[kind];if(!p)return;clearTimer();mini.classList.remove('open');takeover.className=`takeover on ${p.cls}`;void takeover.offsetWidth;takeover.classList.add('enter');lead.textContent=p.icon;copy.innerHTML=p.html;persistent=!!(p.hold||hold)
+      if(!persistent)timer=setTimeout(hide,5000)
+    }
+    openTarget.addEventListener('click',()=>{if(takeover.classList.contains('group')){clearTimer();persistent=true;mini.classList.toggle('open');return}document.getElementById('questionTab').classList.add('target-flash');setTimeout(()=>document.getElementById('questionTab').classList.remove('target-flash'),700);hide()})
+    close.addEventListener('click',hide)
+    document.querySelectorAll('[data-demo]').forEach(btn=>btn.addEventListener('click',()=>btn.dataset.demo==='reset'?hide():show(btn.dataset.demo)))
+    mini.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{mini.classList.remove('open');hide()}))
+    setTimeout(()=>show('agent',true),120)
+  </script>
+</body>
+</html>
