@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- Visual verification fixture. The bridge row markup and class chains are copied
+     from CodeLab.jsx + BridgeStatus.jsx. Local renders load the current built CSS;
+     the small fallback below keeps the published diagnostic readable. -->
+<html lang="en" class="tp-code-route">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bridge update control · verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <style>
+    :root{--color-bg:hsl(212 9% 9%);--color-surface:hsl(212 8% 14%);--color-float:hsl(212 7% 17%);--color-line:hsl(212 7% 21%);--color-line-strong:hsl(212 7% 28%);--color-ink:hsl(212 14% 95%);--color-muted:hsl(212 14% 78%);--color-faint:hsl(212 12% 62%);--color-pool:hsl(198 46% 40%);--color-pool-hi:hsl(198 48% 50%);--color-positive:hsl(152 28% 54%);--font-display:"Newsreader",serif;--font-sans:"Hanken Grotesk",system-ui,sans-serif;--font-mono:"IBM Plex Mono",monospace}
+    *{box-sizing:border-box}html,body{margin:0;min-width:320px;background:var(--color-bg);color:var(--color-ink);font-family:var(--font-sans)}button{font:inherit;color:inherit}.fixture{min-height:100vh;padding:32px 24px}.shell{width:min(100%,1024px);margin:auto}.heading{margin:0;font:500 26px var(--font-display)}.sub{margin:8px 0 20px;color:var(--color-muted);font-size:14px}.bridge-card{border:1px solid color-mix(in oklab,var(--color-pool) 35%,transparent);border-radius:10px;background:color-mix(in oklab,var(--color-surface) 50%,transparent)}.bridge-row{display:flex;align-items:center;gap:12px;padding:12px 16px}.bridge-main{display:flex;min-width:0;flex:1;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:0}.bridge-tile{display:grid;width:40px;height:40px;flex:none;place-items:center;border:1px solid var(--color-line-strong);border-radius:5px;background:#0a0d10;color:var(--color-pool-hi);font:15px var(--font-mono)}.bridge-copy{min-width:0;flex:1}.bridge-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}.bridge-title span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bridge-dot{width:8px;height:8px;flex:none;border-radius:50%;background:var(--color-positive);box-shadow:0 0 7px var(--color-positive)}.bridge-meta{display:flex;align-items:baseline;gap:4px;margin-top:2px;color:var(--color-faint);font:11px var(--font-mono)}.control{height:36px;flex:none;border-radius:8px}.providers{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--color-line-strong);background:transparent;padding:0 8px 0 10px;color:var(--color-muted);font-size:12px}.update{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid color-mix(in oklab,var(--color-pool) 45%,transparent);background:color-mix(in oklab,var(--color-pool) 9%,transparent);padding:0 12px;color:var(--color-pool-hi);font-size:12px;font-weight:600}.more{display:grid;width:36px;place-items:center;border:1px solid var(--color-line-strong);background:transparent;color:var(--color-faint);font-size:17px}.readout{margin-top:24px;padding:16px 20px;border:1px solid var(--color-line-strong);border-radius:10px;background:rgba(255,255,255,.06);color:white;font:16px/1.65 ui-monospace,"SF Mono",monospace;font-variant-numeric:tabular-nums;white-space:pre-wrap}.readout b{color:var(--color-pool-hi)}
+    @media(max-width:639px){.fixture{padding:24px 16px}.bridge-row{flex-wrap:wrap;gap:10px}.providers .providers-label{display:none}.update{order:99;width:100%;height:44px}.version{display:none}.readout{font-size:14px}}
+  </style>
+  <link rel="stylesheet" href="../../dist/assets/index-DeyY8pG_.css">
+  <link rel="stylesheet" href="../../dist/assets/CodeLab-6GBZ9nXN.css">
+</head>
+<body>
+  <main class="fixture mx-auto max-w-5xl px-4 pt-6 pb-10 sm:px-6">
+    <div class="shell">
+      <h1 class="heading font-display text-[26px] font-medium tracking-tight">Code sessions</h1>
+      <p class="sub mt-2 text-[14px] leading-relaxed text-muted">Pair on a coding agent, live. One project, many terminals, two people.</p>
+      <section id="bridge-card" class="bridge-card rounded-[10px] border border-pool/35 bg-surface/50">
+        <div id="bridge-row" class="bridge-row flex flex-wrap items-center gap-2.5 px-4 py-3 sm:flex-nowrap sm:gap-3">
+          <button type="button" class="bridge-main fluid flex min-w-0 flex-1 items-center gap-3 text-left" aria-label="Show bridge providers">
+            <span class="bridge-tile grid size-10 shrink-0 place-items-center rounded-[5px] border border-line-strong bg-k-bg font-mono text-[15px] text-pool-hi" aria-hidden="true">⎇</span>
+            <span class="bridge-copy min-w-0 flex-1">
+              <span class="bridge-title flex items-center gap-2 text-[14px] font-medium text-ink"><span class="min-w-0 truncate">Bridge update available</span><span class="bridge-dot size-2 shrink-0 rounded-full" aria-hidden="true"></span></span>
+              <span class="bridge-meta mt-0.5 flex items-baseline gap-1 font-mono text-[11px] text-faint"><span class="version hidden shrink-0 sm:inline">v0.7.291 · </span><span class="min-w-0 truncate">3 sessions</span><span class="shrink-0 text-positive"> · managed</span></span>
+            </span>
+          </button>
+          <button id="providers" type="button" class="providers control fluid compact hover-lift inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-line-strong pl-2.5 pr-1 text-[12px] text-muted" aria-label="Show agents">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2 2 5l6 3 6-3-6-3ZM2 8l6 3 6-3M2 11l6 3 6-3" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg><span class="providers-label hidden sm:inline">Providers</span><span class="rounded-[5px] bg-pool/15 px-1.5 font-mono text-[10px] text-pool-hi">2</span>
+          </button>
+          <button id="restart-update" type="button" class="update control fluid compact order-last inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-pool/45 bg-pool/[0.09] px-3 text-[12px] font-semibold text-pool-hi hover:border-pool/70 hover:bg-pool/[0.14] sm:order-none sm:h-9 sm:w-auto">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg><span>Restart &amp; update</span>
+          </button>
+          <button id="more" type="button" class="more control fluid compact grid size-9 shrink-0 place-items-center rounded-lg border border-line-strong text-faint" aria-label="Bridge actions"><span aria-hidden="true">⋯</span></button>
+        </div>
+      </section>
+      <div class="readout" id="readout"><b>Measuring after production fonts load…</b></div>
+    </div>
+  </main>
+  <script>
+    document.fonts.ready.then(() => {
+      const rect = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return { width: Math.round(r.width), height: Math.round(r.height), top: Math.round(r.top), right: Math.round(r.right) } }
+      const card = rect('bridge-card'), row = rect('bridge-row'), update = rect('restart-update'), providers = rect('providers'), more = rect('more')
+      const within = update.right <= card.right + 1
+      const target = innerWidth < 640 ? 44 : 36
+      document.getElementById('readout').innerHTML = `<b>${within ? '✓' : 'Δ'} ${innerWidth}px viewport</b>\ncard       ${card.width}×${card.height}px\nrow        ${row.width}×${row.height}px\nproviders  ${providers.width}×${providers.height}px\nupdate     ${update.width}×${update.height}px\nmore       ${more.width}×${more.height}px\n${within ? '✓ update control stays inside the bridge card' : 'Δ update control overflows the bridge card'}\n${update.height >= target ? '✓' : 'Δ'} update control height ${update.height}px (target ${target}px)`
+    })
+  </script>
+</body>
+</html>
