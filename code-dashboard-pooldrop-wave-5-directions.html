@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>5 Pool-drop + terminal-wave icon pairs</title>
+  <style>
+    :root{color-scheme:dark;--bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--line:hsl(212 7% 21%);--ink:hsl(212 14% 95%);--faint:hsl(212 12% 62%)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-monospace,"SFMono-Regular",Consolas,monospace}.top{position:sticky;top:0;z-index:5;padding:13px max(13px,calc((100vw - 1120px)/2));border-bottom:1px solid var(--line);background:hsl(212 13% 5%/.96);backdrop-filter:blur(14px)}.head{display:flex;gap:16px;align-items:baseline;margin-bottom:11px}.head strong{font-size:13px;letter-spacing:.08em}.head span{color:var(--faint);font-size:11px}.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.tabs button{height:44px;min-width:44px;border:1px solid var(--line);border-radius:8px;background:var(--raised);color:var(--faint);font:500 12px inherit;cursor:pointer}.tabs button[aria-selected="true"]{border-color:hsl(217 85% 62%);background:hsl(217 35% 15%);color:hsl(217 85% 70%)}iframe{display:block;width:100%;height:calc(100vh - 111px);border:0;background:var(--bg)}@media(max-width:640px){.top{padding:11px}.head{display:block}.head span{display:block;margin-top:4px}.tabs{grid-template-columns:repeat(5,1fr);gap:6px}iframe{height:calc(100vh - 151px)}}
+  </style>
+</head>
+<body>
+  <div class="top"><div class="head"><strong>POOL DROP + TERMINAL WAVE</strong><span id="label">01 · Full drop + sine</span></div><div class="tabs" role="tablist">
+    <button aria-selected="true" data-n="1" data-label="Full drop + sine">01</button><button aria-selected="false" data-n="2" data-label="Outline drop + ripples">02</button><button aria-selected="false" data-n="3" data-label="Cut drop + crossing swell">03</button><button aria-selected="false" data-n="4" data-label="Ripple drop + stepped wave">04</button><button aria-selected="false" data-n="5" data-label="Twin drops + pulse">05</button>
+  </div></div>
+  <iframe title="Selected Pool-drop and terminal-wave pair" src="./code-dashboard-pooldrop-wave-01.html"></iframe>
+  <script>const frame=document.querySelector('iframe'),label=document.querySelector('#label');document.querySelectorAll('[data-n]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-n]').forEach(b=>b.setAttribute('aria-selected','false'));btn.setAttribute('aria-selected','true');const n=String(btn.dataset.n).padStart(2,'0');frame.src=`./code-dashboard-pooldrop-wave-${n}.html`;label.textContent=`${n} · ${btn.dataset.label}`}))</script>
+</body>
+</html>
