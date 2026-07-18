@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — Non-viewer color · 15-up comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d10;--card:#06090c;--surface:hsl(199 20% 11%);--line:hsl(199 24% 17%);--line-strong:hsl(194 30% 26%);
+    --ink:hsl(190 26% 96%);--ink-soft:hsl(190 22% 88%);--muted:hsl(192 16% 76%);--faint:hsl(196 16% 60%);
+    --viewer:hsl(150 60% 60%);--pool:#2E78FF;--agent:hsl(190 70% 57%);
+    --sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+  body{padding:28px}
+  .page{width:min(1320px,100%);margin:0 auto}
+  header{display:flex;align-items:flex-end;gap:28px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .title{flex:1}.eyebrow{font:600 10px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  h1{margin:7px 0 3px;font:600 28px/1.1 var(--sans);letter-spacing:-.025em}.sub{margin:0;color:var(--muted);font-size:13px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 15px;justify-content:flex-end;font:500 10px/1.2 var(--mono);color:var(--faint)}
+  .role{display:flex;align-items:center;gap:6px}.dot{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 9px color-mix(in oklab,var(--c) 55%,transparent)}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .option{--accent:hsl(32 78% 62%);overflow:hidden;border:1px solid var(--line);border-radius:11px;background:var(--card)}
+  .option-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 11px;border-bottom:1px solid var(--line)}
+  .num{font:600 9px/1 var(--mono);letter-spacing:.1em;color:var(--faint)}
+  .name{font-weight:700;font-size:14px;color:var(--accent)}
+  .chip{width:18px;height:18px;border-radius:5px;background:color-mix(in oklab,var(--accent) 16%,transparent);border:1px solid color-mix(in oklab,var(--accent) 55%,transparent);box-shadow:inset 0 0 9px color-mix(in oklab,var(--accent) 8%,transparent)}
+  .mini{padding:10px 10px 11px;font-size:12px;line-height:1.45;background:var(--bg)}
+  .agentline{margin:0 0 8px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.agentmark{color:var(--agent);text-shadow:0 0 8px hsl(190 70% 57%/.65);margin-right:5px}
+  .target{margin:0 -10px 8px;padding:5px 10px 6px 27px;text-indent:-17px;word-break:break-word;background:color-mix(in oklab,var(--accent) 5%,transparent);box-shadow:inset 2px 0 0 color-mix(in oklab,var(--accent) 85%,transparent)}
+  .drop{display:inline-flex;width:17px;height:1.5em;align-items:center;vertical-align:top;color:var(--accent)}.drop svg{width:12px;height:12px;overflow:visible}
+  .speaker{color:var(--accent);font:600 12px/1.45 var(--mono);margin-right:5px}.at{color:var(--agent);font:600 12px/1.45 var(--mono);margin-right:5px}.body{color:var(--ink-soft)}.clock{color:var(--faint);font:500 8px/1 var(--mono);margin-left:5px;letter-spacing:.08em}
+  .tool{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:6px;align-items:center;padding:7px 8px;border:1px solid var(--line-strong);border-radius:7px;background:var(--card);font-family:var(--mono)}
+  .tooltri,.toolname{color:hsl(172 80% 60%);font-weight:600}.toolcmd{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}.check{color:hsl(150 66% 56%)}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}header{align-items:flex-start;flex-direction:column;gap:12px}.legend{justify-content:flex-start}}
+  @media(max-width:560px){body{padding:14px 10px}header{margin-bottom:12px;padding:2px 4px 13px}h1{font-size:22px}.sub{font-size:12px}.legend{gap:7px 12px}.grid{grid-template-columns:1fr;gap:9px}.option-head{padding:8px 10px}.mini{padding:8px 10px 9px}.target{margin-bottom:7px}}
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div class="title"><div class="eyebrow">ThinkPool Code · identity color study</div><h1>Non-viewer replies — 15 alternatives</h1><p class="sub">Same terminal row, same content, same hierarchy. Only the non-viewer identity tone changes.</p></div>
+    <div class="legend" aria-label="Existing role colors"><span class="role"><i class="dot" style="--c:var(--viewer)"></i>viewer · green</span><span class="role"><i class="dot" style="--c:var(--pool)"></i>Pool · cobalt</span><span class="role"><i class="dot" style="--c:var(--agent)"></i>agent · cyan</span></div>
+  </header>
+  <section class="grid" id="grid" aria-label="Fifteen non-viewer color options"></section>
+</main>
+<template id="option-template">
+  <article class="option">
+    <div class="option-head"><span class="num"></span><span class="name"></span><i class="chip"></i></div>
+    <div class="mini">
+      <p class="agentline"><span class="agentmark">●</span>Pilot preflight is ready. No credits were spent.</p>
+      <div class="target"><span class="drop" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.7C8 1.7 3 7 3 10.1A5 5 0 0 0 13 10.1C13 7 8 1.7 8 1.7Z" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="speaker">Conrad</span><span class="at">@agent</span><span class="body">Just fucking do it Jesus Christ in a bucket</span><span class="clock">16:28</span></div>
+      <div class="tool"><span class="tooltri">▶</span><span class="toolname">Bash</span><span class="toolcmd">/bin/bash -lc "opencli browse…"</span><span class="check">✓</span></div>
+    </div>
+  </article>
+</template>
+<script>
+const options=[
+  ['01','Ember amber','hsl(32 78% 62%)'],['02','Burnt orange','hsl(24 74% 60%)'],['03','Tangerine','hsl(28 92% 64%)'],
+  ['04','Copper','hsl(22 52% 59%)'],['05','Terracotta','hsl(14 58% 63%)'],['06','Living coral','hsl(10 76% 67%)'],
+  ['07','Soft salmon','hsl(4 70% 70%)'],['08','Signal rose','hsl(348 68% 69%)'],['09','Raspberry','hsl(335 64% 65%)'],
+  ['10','Hot pink','hsl(322 68% 70%)'],['11','Old gold','hsl(46 72% 58%)'],['12','Saffron','hsl(42 88% 63%)'],
+  ['13','Citron','hsl(72 54% 64%)'],['14','Cool silver','hsl(210 10% 72%)'],['15','Warm pearl','hsl(32 22% 76%)']
+];
+const grid=document.getElementById('grid'),tpl=document.getElementById('option-template');
+for(const [num,name,color] of options){const node=tpl.content.cloneNode(true),card=node.querySelector('.option');card.style.setProperty('--accent',color);node.querySelector('.num').textContent=num;node.querySelector('.name').textContent=name;grid.appendChild(node)}
+</script>
+</body>
+</html>
