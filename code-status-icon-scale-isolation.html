@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code status icon scaling proof</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-k-bg: hsl(200 36% 2%);
+      --color-k-panel: hsl(200 26% 5%);
+      --color-k-line: hsl(199 24% 17%);
+      --color-k-ink: hsl(190 22% 88%);
+      --color-k-muted: hsl(192 16% 76%);
+      --color-k-pool: hsl(190 76% 63%);
+      --color-k-bypass: hsl(352 84% 64%);
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 40px 24px;
+      background: hsl(212 9% 9%);
+      color: var(--color-k-ink);
+      font-family: var(--font-mono);
+    }
+    button { font: inherit; color: inherit; }
+    button.compact { min-height: unset; min-width: unset; }
+    .stage { width: min(860px, 100%); margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 22px; }
+    .lede { margin: 0 0 28px; color: var(--color-k-muted); font-size: 14px; line-height: 1.5; }
+    .scale-card {
+      --cscale: 1;
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid var(--color-k-line);
+      border-radius: 12px;
+      background: var(--color-k-bg);
+    }
+    .scale-title {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--color-k-line);
+      color: var(--color-k-pool);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .terminal { display: grid; gap: calc(10px * var(--cscale)); padding: 16px 12px; }
+    .tp-status-row {
+      display: grid;
+      grid-template-columns: calc(16px * var(--cscale, 1)) minmax(0, 1fr);
+      column-gap: 0;
+      align-items: start;
+      overflow-wrap: anywhere;
+    }
+    .tp-status-row-center { align-items: center; }
+    .tp-status-row-mode .tp-status-mark { position: relative; left: calc(-2px * var(--cscale, 1)); }
+    .tp-status-mark { width: 100%; text-align: center; }
+    .mark-grid { display: grid; place-items: center; flex: none; }
+    .update { color: var(--color-k-muted); font-size: calc(11.5px * var(--cscale)); line-height: 1.5; }
+    .update .mark-grid { height: 1.5em; color: var(--color-k-pool); }
+    .thinking { color: var(--color-k-muted); font-size: calc(12.5px * var(--cscale)); letter-spacing: 0.01em; }
+    .mode {
+      width: max-content;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--color-k-bypass);
+      font-size: calc(12.5px * var(--cscale));
+      font-weight: 500;
+    }
+    svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .refresh { width: 1.22em; height: 1.22em; }
+    .spark { width: 0.88em; height: 0.88em; }
+    .permission { width: 1.28em; height: 1.28em; }
+    .readout {
+      margin-top: 28px;
+      padding: 16px 20px;
+      border: 1px solid var(--color-k-line);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      color: white;
+      font: 16px/1.65 ui-monospace, "SF Mono", monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .readout strong { color: var(--color-k-pool); }
+    @media (max-width: 500px) {
+      body { padding: 24px 16px; }
+      h1 { font-size: 18px; }
+      .lede { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <h1>Status icons track text size</h1>
+    <p class="lede">Production rail geometry and icon ratios at the minimum, default, and maximum Code text-size settings.</p>
+    <div id="cards"></div>
+    <section class="readout" id="readout">Measuring after fonts load…</section>
+  </main>
+  <script>
+    const refresh = '<svg class="refresh" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 1 0-2.2 5.6"/><path d="M20 4v7h-7"/></svg>'
+    const spark = '<svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8Z"/></svg>'
+    const lock = '<svg class="permission" viewBox="0 -0.2 24 24" aria-hidden="true"><path d="M6 10h13v10H6zM9 10V7a4 4 0 0 1 7-2"/></svg>'
+    const scales = [70, 100, 150]
+    document.getElementById('cards').innerHTML = scales.map(scale => `
+      <section class="scale-card" data-scale="${scale}" style="--cscale:${scale / 100}">
+        <div class="scale-title">Text size ${scale}%</div>
+        <div class="terminal">
+          <div class="tp-status-row update">
+            <span class="tp-status-mark mark-grid">${refresh}</span>
+            <span class="label"><span style="color:var(--color-k-ink)">Bridge update v0.7.305 available.</span> Go to the Sessions dashboard to restart and update.</span>
+          </div>
+          <div class="tp-status-row tp-status-row-center thinking">
+            <span class="tp-status-mark mark-grid">${spark}</span>
+            <span class="label">Thinking… <span style="opacity:.72">(12s with high effort)</span></span>
+          </div>
+          <button class="tp-status-row tp-status-row-mode tp-status-row-center mode compact" type="button">
+            <span class="tp-status-mark mark-grid">${lock}</span>
+            <span class="label">Bypass permissions</span>
+          </button>
+        </div>
+      </section>`).join('')
+
+    document.fonts.ready.then(() => {
+      const rows = [...document.querySelectorAll('.scale-card')].map(card => {
+        const scale = card.dataset.scale
+        const update = card.querySelector('.update')
+        const mode = card.querySelector('.mode')
+        const rect = el => el.getBoundingClientRect()
+        return {
+          scale,
+          updateIcon: rect(update.querySelector('svg')).width.toFixed(1),
+          modeIcon: rect(mode.querySelector('svg')).width.toFixed(1),
+          rail: rect(update.querySelector('.tp-status-mark')).width.toFixed(1),
+          axes: Math.abs(rect(update.querySelector('.label')).left - rect(mode.querySelector('.label')).left).toFixed(1),
+        }
+      })
+      document.getElementById('readout').innerHTML = rows.map(r =>
+        `<strong>${r.scale}%</strong> · update ${r.updateIcon}px · mode ${r.modeIcon}px · rail ${r.rail}px · label-axis Δ ${r.axes}px ✓`
+      ).join('<br>')
+    })
+  </script>
+</body>
+</html>
