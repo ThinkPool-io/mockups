@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Thinkpool Code notification system</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:hsl(212 9% 9%);--raised:hsl(212 8% 12%);--surface:hsl(212 8% 14%);--float:hsl(212 7% 17%);
+      --k-bg:#0a0d10;--k-card:#06090c;--k-panel:#10161d;--k-panel-hi:#151c24;
+      --line:hsl(212 7% 21%);--line-strong:hsl(212 7% 28%);
+      --ink:hsl(212 14% 95%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);
+      --pool:hsl(190 70% 57%);--pool-dim:hsl(198 32% 21%);--positive:hsl(152 40% 58%);
+      --danger:hsl(352 70% 62%);--caution:hsl(38 54% 60%);--partner:hsl(218 36% 67%);
+      --ease:cubic-bezier(.16,1,.3,1);--row:36px;
+      font-family:"Hanken Grotesk",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink)}
+    button{font:inherit;color:inherit}
+    .page{width:min(1280px,calc(100% - 48px));margin:0 auto;padding:52px 0 80px}
+    .eyebrow{font:600 11px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;color:var(--pool);text-transform:uppercase}
+    h1{max-width:850px;margin:15px 0 12px;font-size:clamp(34px,4.6vw,68px);line-height:.95;letter-spacing:-.045em;font-weight:600}
+    .lede{max-width:700px;margin:0;color:var(--muted);font-size:17px;line-height:1.55}
+    .source-note{display:flex;align-items:center;gap:8px;margin-top:20px;color:var(--faint);font:500 11px/1.5 "IBM Plex Mono",monospace}
+    .source-note i{width:6px;height:6px;border-radius:50%;background:var(--positive);box-shadow:0 0 6px var(--positive)}
+
+    .stage-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.7fr);gap:16px;margin-top:36px}
+    .stage,.rules,.specimen,.edge-card{border:1px solid var(--line);background:var(--raised)}
+    .stage{min-width:0;border-radius:12px;overflow:hidden;box-shadow:0 22px 50px rgba(0,0,0,.2)}
+    .stage-kicker{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);font:500 10.5px/1 "IBM Plex Mono",monospace;color:var(--faint)}
+    .stage-kicker strong{color:var(--muted);font-weight:500}
+    .app-shell{min-height:310px;background:var(--k-bg);position:relative}
+    .top-row{height:var(--row);display:flex;border-bottom:1px solid color-mix(in oklab,var(--line) 60%,transparent);font-family:"IBM Plex Mono",monospace;position:relative;z-index:3}
+    .tabs-zone{position:relative;min-width:0;flex:1;overflow:hidden}
+    .tabs{height:100%;display:flex;align-items:stretch;padding:0 6px;overflow:hidden}
+    .tab{position:relative;display:flex;flex:none;align-items:center;gap:8px;padding:4px 7px;color:var(--muted);font-size:13px;white-space:nowrap}
+    .tab.active{color:var(--ink)}
+    .tab.active:after{content:"";position:absolute;left:6px;right:6px;bottom:0;height:2px;border-radius:2px 2px 0 0;background:var(--pool);box-shadow:0 0 6px color-mix(in oklab,var(--pool) 60%,transparent)}
+    .dot{width:6px;height:6px;flex:none;border-radius:50%;background:var(--positive);box-shadow:0 0 5px var(--positive)}
+    .qmark{width:13px;height:13px;display:grid;place-items:center;flex:none;color:var(--pool);font-size:12px;font-weight:600}
+    .caret{font-size:9px;color:var(--faint);margin-left:-3px}
+    .meta{height:100%;display:flex;flex:none;align-items:stretch}
+    .meta-cell{height:var(--row);min-width:var(--row);border:0;border-left:1px solid color-mix(in oklab,var(--line) 60%,transparent);display:grid;place-items:center;background:transparent;color:var(--faint)}
+    .session{padding:0 12px;display:flex;align-items:center;gap:6px;border-left:1px solid color-mix(in oklab,var(--line) 60%,transparent);font-size:12px;white-space:nowrap}
+    .session strong{color:var(--pool);font-weight:600}.session span{color:var(--faint)}
+    .bolt{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7}
+    .partner-cell{display:none;position:relative;font-size:10px;color:var(--partner)}
+    .partner-cell:after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:var(--partner);transform:translate(8px,8px)}
+
+    .notice{position:absolute;inset:0;z-index:5;display:flex;align-items:center;background:linear-gradient(90deg,var(--k-panel-hi),var(--k-panel));border-left:2px solid var(--tone,var(--pool));border-bottom:1px solid color-mix(in oklab,var(--tone,var(--pool)) 64%,transparent);box-shadow:0 5px 14px -13px var(--tone,var(--pool));overflow:hidden;animation:notice-in .3s var(--ease) both}
+    .notice:after{content:"";position:absolute;left:0;bottom:-1px;width:18%;height:2px;background:var(--ink);opacity:.76;animation:current .38s var(--ease) both}
+    .notice-main{height:100%;min-width:0;flex:1;border:0;background:transparent;display:flex;align-items:center;gap:9px;padding:0 8px 0 10px;text-align:left}
+    .notice-glyph{width:14px;height:14px;display:grid;place-items:center;flex:none;color:var(--tone,var(--pool));font:600 12px/1 "IBM Plex Mono",monospace}
+    .notice-copy{min-width:0;display:flex;align-items:baseline;gap:7px;white-space:nowrap;overflow:hidden;font-size:13px;line-height:1}
+    .notice-copy strong{flex:none;color:var(--ink);font-weight:650}
+    .notice-copy .locator{flex:none;color:var(--tone,var(--pool));font:600 11.5px/1 "IBM Plex Mono",monospace}
+    .notice-copy .context{min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--faint);font-size:12px}
+    .dismiss{width:32px;height:100%;flex:none;border:0;background:transparent;color:var(--faint);font-size:17px}
+    .dismiss:hover{background:color-mix(in oklab,var(--line) 32%,transparent);color:var(--ink)}
+    .notice[data-tone="partner"]{--tone:var(--partner)}
+    .notice[data-tone="ready"]{--tone:var(--positive)}
+    .notice[data-tone="question"]{--tone:var(--pool)}
+    .notice[data-tone="approval"]{--tone:var(--caution)}
+    .notice[data-tone="error"]{--tone:var(--danger)}
+    .notice[data-tone="group"]{--tone:var(--caution)}
+    @keyframes notice-in{from{transform:translateX(-102%)}to{transform:none}}
+    @keyframes current{from{transform:translateX(-180%)}to{transform:translateX(760%)}}
+
+    .terminal{height:274px;padding:20px 20px 16px;display:flex;flex-direction:column;font-family:"IBM Plex Mono",monospace}
+    .terminal-line{font-size:12px;line-height:1.55;color:var(--faint)}
+    .terminal-line + .terminal-line{margin-top:9px}.terminal-line b{color:var(--pool);font-weight:600}
+    .tool{margin-top:14px;border:1px solid var(--line);border-radius:9px;background:var(--k-card);overflow:hidden;color:var(--muted);font-size:11px}
+    .tool-head{height:38px;display:flex;align-items:center;gap:7px;padding:0 10px}.tool-head b{color:var(--pool)}.tool-head span{margin-left:auto;color:var(--faint)}
+    .terminal-bottom{margin-top:auto}.mode{display:flex;gap:12px;margin-bottom:8px;color:var(--faint);font-size:10.5px}.mode .model{margin-left:auto;color:var(--pool)}
+    .composer{height:48px;border:1px solid color-mix(in oklab,var(--pool) 55%,var(--line));border-radius:9px;display:flex;align-items:center;padding:0 7px 0 12px;color:var(--faint);font-size:11.5px}.composer span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.send{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:8px;color:var(--pool)}
+
+    .rules{border-radius:12px;padding:18px}
+    .rules h2,.section-title h2{margin:0;font-size:19px;letter-spacing:-.02em}
+    .rule-list{margin-top:18px;display:grid;gap:16px}
+    .rule{display:grid;grid-template-columns:24px 1fr;gap:9px}
+    .rule i{width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line-strong);border-radius:6px;color:var(--pool);font:600 10px/1 "IBM Plex Mono",monospace;font-style:normal}
+    .rule b{display:block;font-size:13px;font-weight:650}.rule span{display:block;margin-top:3px;color:var(--faint);font-size:12px;line-height:1.4}
+    .anti{margin-top:18px;padding:12px;border-left:2px solid var(--danger);background:color-mix(in oklab,var(--danger) 6%,var(--k-bg));color:var(--muted);font-size:12px;line-height:1.45}
+    .anti code{font-family:"IBM Plex Mono",monospace;color:var(--faint);text-decoration:line-through}
+
+    .selector{margin-top:14px;display:flex;gap:6px;overflow:auto;padding-bottom:2px;scrollbar-width:none}
+    .selector button{height:36px;flex:none;padding:0 11px;border:1px solid var(--line);border-radius:7px;background:var(--k-bg);color:var(--muted);font:500 10.5px/1 "IBM Plex Mono",monospace;cursor:pointer}
+    .selector button[aria-pressed="true"]{border-color:color-mix(in oklab,var(--pool) 66%,var(--line));background:color-mix(in oklab,var(--pool) 9%,var(--k-bg));color:var(--ink)}
+
+    .section-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:58px 0 18px}
+    .section-title p{max-width:560px;margin:0;color:var(--faint);font-size:13px;line-height:1.45;text-align:right}
+    .catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .specimen{min-width:0;border-radius:10px;overflow:hidden}
+    .specimen-head{display:flex;align-items:start;gap:12px;padding:15px 16px 13px;border-bottom:1px solid var(--line)}
+    .state-number{color:var(--faint);font:500 10px/1.2 "IBM Plex Mono",monospace;padding-top:3px}
+    .state-title{min-width:0;flex:1}.state-title h3{margin:0;font-size:15px;font-weight:650}.state-title p{margin:4px 0 0;color:var(--faint);font-size:11.5px;line-height:1.35}
+    .urgency{flex:none;padding:4px 7px;border:1px solid var(--line);border-radius:999px;color:var(--faint);font:500 9.5px/1 "IBM Plex Mono",monospace}
+    .rail-only{height:43px;position:relative;background:var(--k-bg);border-bottom:1px solid var(--line)}
+    .rail-only .notice{right:0}
+    .rail-only .notice-copy{font-size:12.5px}
+    .spec{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;background:var(--k-card)}
+    .spec div{min-width:0;padding:11px 12px;border-right:1px solid var(--line)}.spec div:last-child{border-right:0}
+    .spec dt{margin:0;color:var(--faint);font:500 9px/1 "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.08em}
+    .spec dd{margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.3}
+    .cross{padding:11px 12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--faint)}
+    .cross code{font-family:"IBM Plex Mono",monospace;color:var(--muted)}
+    .group-detail{border-top:1px solid var(--line);background:var(--k-panel)}
+    .group-row{min-height:44px;display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:11.5px}.group-row:last-child{border-bottom:0}
+    .group-row i{font:600 10px/1 "IBM Plex Mono",monospace;font-style:normal;color:var(--pool)}.group-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.group-row code{color:var(--faint);font:500 10px/1 "IBM Plex Mono",monospace}
+
+    .edge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .edge-card{border-radius:10px;padding:15px}.edge-card h3{margin:0;font-size:14px}.edge-card p{margin:8px 0 0;color:var(--faint);font-size:12px;line-height:1.45}
+    .queue{display:flex;align-items:center;gap:6px;margin-top:13px;font:500 10px/1 "IBM Plex Mono",monospace;color:var(--faint)}
+    .queue i{width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--line);border-radius:6px;font-style:normal}.queue i:first-child{border-color:var(--pool);color:var(--pool)}
+    .footer{display:flex;justify-content:space-between;gap:24px;margin-top:36px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font:500 10.5px/1.5 "IBM Plex Mono",monospace}
+
+    @media(max-width:760px){
+      :root{--row:48px}
+      .page{width:100%;padding:28px 12px 56px}
+      .eyebrow{font-size:9.5px}h1{font-size:39px;margin-top:12px}.lede{font-size:15px}.source-note{align-items:flex-start}
+      .stage-grid{display:block;margin-top:26px}.rules{margin-top:12px}
+      .stage-kicker{padding-inline:12px}.stage-kicker span{display:none}
+      .app-shell{min-height:390px}
+      .meta-cell{min-width:48px;height:48px}.session{display:none}.partner-cell{display:grid}
+      .tabs{padding-left:6px}.tab{padding-inline:6px;font-size:12px}.tab:nth-child(3){display:none}
+      .notice-main{gap:7px;padding-left:8px;padding-right:2px}.notice-copy{gap:6px;font-size:13px}.notice-copy .locator{font-size:11px}.notice-copy .context{display:none}.dismiss{width:44px}
+      .terminal{height:342px;padding:18px 12px 12px}.terminal-line{font-size:11.5px}.tool{margin-top:12px}.mode{font-size:9.5px}.mode span:nth-child(2){display:none}.composer{height:46px;font-size:11px}
+      .selector{margin-inline:-1px}
+      .section-title{display:block;margin:44px 0 14px}.section-title p{margin-top:7px;text-align:left;font-size:12px}
+      .catalog{grid-template-columns:1fr;gap:11px}
+      .specimen-head{padding:14px 13px 12px}.rail-only{height:48px}
+      .rail-only .notice-main{padding-left:8px}.rail-only .notice-copy{font-size:13px}.rail-only .notice-copy .context{display:none}
+      .spec{grid-template-columns:repeat(2,minmax(0,1fr))}.spec div:nth-child(2){border-right:0}.spec div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+      .edge-grid{grid-template-columns:1fr 1fr}.edge-card{padding:13px}
+      .footer{display:block}.footer span{display:block;margin-top:7px}
+    }
+    @media(max-width:380px){.edge-grid{grid-template-columns:1fr}.notice-copy strong{font-size:12.5px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="eyebrow">Code notification system · complete state sheet</div>
+    <h1>Say what changed. Show where.</h1>
+    <p class="lede">The top rail routes missed context back to the exact terminal. State comes first, location stays visible, and model metadata stays inside the terminal.</p>
+    <div class="source-note"><i></i><span>Derived from the production Code header, the shipped Conveyor × Undercurrent motion, and the tested 390px rail.</span></div>
+
+    <section class="stage-grid">
+      <div class="stage">
+        <div class="stage-kicker"><strong>Live rail in product context</strong><span>Tap a state below</span></div>
+        <div class="app-shell">
+          <header class="top-row">
+            <div class="tabs-zone">
+              <div class="tabs" aria-hidden="true">
+                <div class="tab"><span class="dot"></span><span>T1</span></div>
+                <div class="tab active"><span class="qmark">?</span><span>T2</span><span class="caret">▼</span></div>
+                <div class="tab"><span class="dot"></span><span>T3</span></div>
+              </div>
+              <div class="notice" id="liveNotice" data-tone="question" role="status" aria-live="polite" aria-atomic="true">
+                <button class="notice-main" type="button">
+                  <span class="notice-glyph" id="liveGlyph">?</span>
+                  <span class="notice-copy"><strong id="liveLabel">Question waiting</strong><span class="locator" id="liveLocator">T2</span><span class="context" id="liveContext">Pricing redesign</span></span>
+                </button>
+                <button class="dismiss" type="button" aria-label="Dismiss notification">×</button>
+              </div>
+            </div>
+            <div class="meta">
+              <button class="meta-cell" aria-label="New terminal">＋</button>
+              <div class="meta-cell partner-cell" title="Conrad is here">C</div>
+              <div class="session"><strong>pricing redesign</strong><span>session with</span><span style="color:var(--partner)">Conrad ●</span></div>
+              <button class="meta-cell" aria-label="Session options"><svg class="bolt" viewBox="0 0 24 24"><path d="M12 2.5 20 7v10l-8 4.5L4 17V7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+          </header>
+          <div class="terminal">
+            <div class="terminal-line"><b>●</b> The rail interrupts only missed context. The active terminal remains quiet.</div>
+            <div class="tool"><div class="tool-head"><b>▾ Bash</b><span>1.2s&nbsp; ✓</span></div></div>
+            <div class="terminal-line"><b>●</b> Opening the rail lands on the exact question, approval, result, or message.</div>
+            <div class="terminal-bottom">
+              <div class="mode"><span>✣ Waiting</span><span>Bypass permissions</span><span class="model">GPT-5.6-Sol High</span></div>
+              <div class="composer"><span>＋&nbsp; Message agent…</span><span class="send">➜</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="selector" role="group" aria-label="Preview notification state">
+          <button data-state="partner">Partner</button><button data-state="ready">Ready</button><button data-state="review">Review</button><button data-state="question" aria-pressed="true">Question</button><button data-state="approval">Approval</button><button data-state="needs">Needs input</button><button data-state="error">Failed</button><button data-state="group">Grouped</button>
+        </div>
+      </div>
+
+      <aside class="rules">
+        <h2>The rail contract</h2>
+        <div class="rule-list">
+          <div class="rule"><i>1</i><div><b>State first</b><span>“Question waiting” is readable before the terminal locator.</span></div></div>
+          <div class="rule"><i>2</i><div><b>Location survives</b><span>The compact T1/T2 locator never truncates on mobile.</span></div></div>
+          <div class="rule"><i>3</i><div><b>Urgency changes behavior</b><span>Blocking states persist. Informational states leave after five seconds.</span></div></div>
+          <div class="rule"><i>4</i><div><b>One precise destination</b><span>Tap opens the source terminal and focuses the exact event.</span></div></div>
+          <div class="rule"><i>5</i><div><b>Model stays secondary</b><span>Agent and model names remain in terminal chrome, not the alert sentence.</span></div></div>
+        </div>
+        <div class="anti">Remove the telemetry sentence:<br><code>gpt-5.6-sol needs you in Terminal…</code></div>
+      </aside>
+    </section>
+
+    <div class="section-title"><h2>Every notification type</h2><p>The same component changes tone, timing, persistence, and destination without changing its geometry.</p></div>
+    <section class="catalog" id="catalog"></section>
+
+    <div class="section-title"><h2>Edge behavior</h2><p>These rules prevent the rail from becoming a second inbox or hiding the terminal it is meant to route back to.</p></div>
+    <section class="edge-grid">
+      <article class="edge-card"><h3>Queue priority</h3><p>A blocking event interrupts an ordinary alert. The interrupted alert resumes after the blocking state resolves.</p><div class="queue"><i>?</i><span>→</span><i>✓</i><span>→</span><i>C</i></div></article>
+      <article class="edge-card"><h3>Rapid updates</h3><p>Show two ordinary events individually. Collapse subsequent events into “3 updates · 2 sessions”.</p><div class="queue"><i>1</i><i>2</i><i>3+</i></div></article>
+      <article class="edge-card"><h3>Mobile overflow</h3><p>Keep the state and T-number. Hide session context first. Never truncate the source terminal.</p><div class="queue"><i>?</i><span>Question waiting</span><i>T2</i></div></article>
+      <article class="edge-card"><h3>Motion and access</h3><p>One left-to-right entrance and one lower sweep. Reduced motion keeps the final static state. Status text remains in the live region.</p><div class="queue"><i>↦</i><span>300ms</span><i>AA</i></div></article>
+      <article class="edge-card"><h3>Watched terminal</h3><p>Show no rail when this terminal is visible, focused, and recently active. The event is already in front of the pair.</p><div class="queue"><i>T2</i><span>visible</span><i>∅</i></div></article>
+      <article class="edge-card"><h3>Resolution</h3><p>A question or approval disappears only when answered, resolved elsewhere, or explicitly dismissed. Resolution clears every duplicate.</p><div class="queue"><i>?</i><span>→ answered →</span><i>✓</i></div></article>
+    </section>
+
+    <footer class="footer"><span>Mobile: 390 × 844 · 48px rail · 44px dismiss target</span><span>Desktop: 1440 × 900 · 36px rail · session context retained</span></footer>
+  </main>
+
+  <script>
+    const states = [
+      {id:'partner',n:'01',title:'Partner message',desc:'A person added context in a terminal you are not watching.',tone:'partner',glyph:'C',label:'Conrad replied',loc:'T1',context:'“I tightened the empty state…”',urgency:'Informational',hold:'5 seconds',tap:'Open message',priority:'Normal',other:'Conrad replied · T1 · Launch plan'},
+      {id:'ready',n:'02',title:'Agent ready',desc:'The agent finished a turn with no special review outcome.',tone:'ready',glyph:'✓',label:'Ready',loc:'T3',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready · T3 · API cleanup'},
+      {id:'review',n:'03',title:'Ready for review',desc:'The turn produced a concrete result that should be inspected.',tone:'ready',glyph:'✓',label:'Ready for review',loc:'T2',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready for review · T2 · Pricing'},
+      {id:'question',n:'04',title:'Question waiting',desc:'An MCQ or typed question card is waiting for a response.',tone:'question',glyph:'?',label:'Question waiting',loc:'T2',context:'Pricing redesign',urgency:'Blocking',hold:'Until answered',tap:'Focus question',priority:'Immediate',other:'Question waiting · T2 · Pricing'},
+      {id:'approval',n:'05',title:'Approval needed',desc:'A command, tool, permission, or plan needs explicit approval.',tone:'approval',glyph:'!',label:'Approval needed',loc:'T1',context:'Run database migration',urgency:'Blocking',hold:'Until decided',tap:'Focus approval',priority:'Immediate',other:'Approval needed · T1 · Launch plan'},
+      {id:'needs',n:'06',title:'Needs input',desc:'The agent cannot continue, but the request is not an MCQ or permission.',tone:'question',glyph:'?',label:'Needs input',loc:'T4',context:'Choose deployment target',urgency:'Blocking',hold:'Until handled',tap:'Open request',priority:'Immediate',other:'Needs input · T4 · API cleanup'},
+      {id:'error',n:'07',title:'Turn failed',desc:'The agent stopped because a turn or runtime failed.',tone:'error',glyph:'!',label:'Failed',loc:'T3',context:'Open to inspect',urgency:'High',hold:'Until opened',tap:'Open failure',priority:'Before ordinary',other:'Failed · T3 · Pricing'},
+      {id:'group',n:'08',title:'Grouped updates',desc:'Three or more ordinary updates are waiting after the first two.',tone:'group',glyph:'3',label:'3 updates',loc:'2 sessions',context:'',urgency:'Summary',hold:'Until opened',tap:'Expand list',priority:'After blocking',other:'Expanded list preserves every T-number and session'}
+    ];
+    const catalog=document.getElementById('catalog');
+    const rail=(s)=>`<div class="notice" data-tone="${s.tone}"><button class="notice-main" type="button"><span class="notice-glyph">${s.glyph}</span><span class="notice-copy"><strong>${s.label}</strong><span class="locator">${s.loc}</span>${s.context?`<span class="context">${s.context}</span>`:''}</span></button><button class="dismiss" aria-label="Dismiss notification">×</button></div>`;
+    const grouped=`<div class="group-detail"><div class="group-row"><i>?</i><span>Question waiting</span><code>T4 · API cleanup</code></div><div class="group-row"><i>✓</i><span>Ready for review</span><code>T2 · Pricing</code></div><div class="group-row"><i>C</i><span>Conrad replied</span><code>T1 · Launch plan</code></div></div>`;
+    catalog.innerHTML=states.map(s=>`<article class="specimen"><div class="specimen-head"><span class="state-number">${s.n}</span><div class="state-title"><h3>${s.title}</h3><p>${s.desc}</p></div><span class="urgency">${s.urgency}</span></div><div class="rail-only">${rail(s)}</div>${s.id==='group'?grouped:''}<dl class="spec"><div><dt>Duration</dt><dd>${s.hold}</dd></div><div><dt>Tap</dt><dd>${s.tap}</dd></div><div><dt>Queue</dt><dd>${s.priority}</dd></div><div><dt>ARIA</dt><dd>${s.urgency==='Informational'?'Polite status':'Persistent status'}</dd></div></dl><div class="cross">Other session: <code>${s.other}</code></div></article>`).join('');
+
+    const liveNotice=document.getElementById('liveNotice'),liveGlyph=document.getElementById('liveGlyph'),liveLabel=document.getElementById('liveLabel'),liveLocator=document.getElementById('liveLocator'),liveContext=document.getElementById('liveContext');
+    document.querySelectorAll('[data-state]').forEach(button=>button.addEventListener('click',()=>{
+      const s=states.find(x=>x.id===button.dataset.state);if(!s)return;
+      document.querySelectorAll('[data-state]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+      liveNotice.dataset.tone=s.tone;liveGlyph.textContent=s.glyph;liveLabel.textContent=s.label;liveLocator.textContent=s.loc;liveContext.textContent=s.context;
+      liveContext.style.display=s.context?'':'none';liveNotice.style.animation='none';void liveNotice.offsetWidth;liveNotice.style.animation='notice-in .3s var(--ease) both';
+    }));
+  </script>
+</body>
+</html>
