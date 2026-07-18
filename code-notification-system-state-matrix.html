@@ -56,7 +56,9 @@
     .notice{position:absolute;inset:0;z-index:5;display:flex;align-items:center;background:linear-gradient(90deg,var(--k-panel-hi),var(--k-panel));border-left:2px solid var(--tone,var(--pool));border-bottom:1px solid color-mix(in oklab,var(--tone,var(--pool)) 64%,transparent);box-shadow:0 5px 14px -13px var(--tone,var(--pool));overflow:hidden;animation:notice-in .3s var(--ease) both}
     .notice:after{content:"";position:absolute;left:0;bottom:-1px;width:18%;height:2px;background:var(--ink);opacity:.76;animation:current .38s var(--ease) both}
     .notice-main{height:100%;min-width:0;flex:1;border:0;background:transparent;display:flex;align-items:center;gap:9px;padding:0 8px 0 10px;text-align:left}
-    .notice-glyph{width:14px;height:14px;display:grid;place-items:center;flex:none;color:var(--tone,var(--pool));font:600 12px/1 "IBM Plex Mono",monospace}
+    .notice-glyph{width:18px;height:18px;display:grid;place-items:center;flex:none;color:var(--tone,var(--pool))}
+    .notice-glyph svg{display:block;width:16px;height:16px;overflow:visible;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .notice-glyph svg .bead{fill:currentColor;stroke:none}
     .notice-copy{min-width:0;display:flex;align-items:baseline;gap:7px;white-space:nowrap;overflow:hidden;font-size:13px;line-height:1}
     .notice-copy strong{flex:none;color:var(--ink);font-weight:650}
     .notice-copy .locator{flex:none;color:var(--tone,var(--pool));font:600 11.5px/1 "IBM Plex Mono",monospace}
@@ -89,6 +91,16 @@
     .anti{margin-top:18px;padding:12px;border-left:2px solid var(--danger);background:color-mix(in oklab,var(--danger) 6%,var(--k-bg));color:var(--muted);font-size:12px;line-height:1.45}
     .anti code{font-family:"IBM Plex Mono",monospace;color:var(--faint);text-decoration:line-through}
 
+    .icon-family{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--raised);overflow:hidden}
+    .icon-family-head{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .icon-family-head h2{margin:0;font-size:15px}.icon-family-head p{margin:0;color:var(--faint);font-size:11.5px}
+    .icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+    .icon-item{min-width:0;display:flex;align-items:center;gap:11px;padding:14px 16px;border-right:1px solid var(--line)}.icon-item:last-child{border-right:0}
+    .icon-swatch{width:36px;height:36px;display:grid;place-items:center;flex:none;border:1px solid var(--line-strong);border-radius:9px;background:var(--k-bg);color:var(--icon-tone,var(--pool))}
+    .icon-swatch svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.icon-swatch .bead{fill:currentColor;stroke:none}
+    .icon-item b{display:block;font-size:12.5px}.icon-item span{display:block;margin-top:3px;color:var(--faint);font:500 9.5px/1.2 "IBM Plex Mono",monospace}
+    .icon-item[data-tone="ready"]{--icon-tone:var(--positive)}.icon-item[data-tone="approval"]{--icon-tone:var(--caution)}.icon-item[data-tone="error"]{--icon-tone:var(--danger)}.icon-item[data-tone="partner"]{--icon-tone:var(--partner)}
+
     .selector{margin-top:14px;display:flex;gap:6px;overflow:auto;padding-bottom:2px;scrollbar-width:none}
     .selector button{height:36px;flex:none;padding:0 11px;border:1px solid var(--line);border-radius:7px;background:var(--k-bg);color:var(--muted);font:500 10.5px/1 "IBM Plex Mono",monospace;cursor:pointer}
     .selector button[aria-pressed="true"]{border-color:color-mix(in oklab,var(--pool) 66%,var(--line));background:color-mix(in oklab,var(--pool) 9%,var(--k-bg));color:var(--ink)}
@@ -112,7 +124,7 @@
     .cross code{font-family:"IBM Plex Mono",monospace;color:var(--muted)}
     .group-detail{border-top:1px solid var(--line);background:var(--k-panel)}
     .group-row{min-height:44px;display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:11.5px}.group-row:last-child{border-bottom:0}
-    .group-row i{font:600 10px/1 "IBM Plex Mono",monospace;font-style:normal;color:var(--pool)}.group-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.group-row code{color:var(--faint);font:500 10px/1 "IBM Plex Mono",monospace}
+    .group-row i{width:18px;height:18px;display:grid;place-items:center;font-style:normal;color:var(--pool)}.group-row i svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.group-row i .bead{fill:currentColor;stroke:none}.group-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.group-row code{color:var(--faint);font:500 10px/1 "IBM Plex Mono",monospace}
 
     .edge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .edge-card{border-radius:10px;padding:15px}.edge-card h3{margin:0;font-size:14px}.edge-card p{margin:8px 0 0;color:var(--faint);font-size:12px;line-height:1.45}
@@ -132,6 +144,7 @@
       .notice-main{gap:7px;padding-left:8px;padding-right:2px}.notice-copy{gap:6px;font-size:13px}.notice-copy .locator{font-size:11px}.notice-copy .context{display:none}.dismiss{width:44px}
       .terminal{height:342px;padding:18px 12px 12px}.terminal-line{font-size:11.5px}.tool{margin-top:12px}.mode{font-size:9.5px}.mode span:nth-child(2){display:none}.composer{height:46px;font-size:11px}
       .selector{margin-inline:-1px}
+      .icon-family-head{display:block}.icon-family-head p{margin-top:5px}.icon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.icon-item{border-bottom:1px solid var(--line)}.icon-item:nth-child(2n){border-right:0}.icon-item:last-child{border-bottom:0}
       .section-title{display:block;margin:44px 0 14px}.section-title p{margin-top:7px;text-align:left;font-size:12px}
       .catalog{grid-template-columns:1fr;gap:11px}
       .specimen-head{padding:14px 13px 12px}.rail-only{height:48px}
@@ -164,7 +177,7 @@
               </div>
               <div class="notice" id="liveNotice" data-tone="question" role="status" aria-live="polite" aria-atomic="true">
                 <button class="notice-main" type="button">
-                  <span class="notice-glyph" id="liveGlyph">?</span>
+                  <span class="notice-glyph" id="liveGlyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8a3.8 3.8 0 0 1 7.1-1.8c1.2 2.7-.7 4.2-2.3 5.1-1.1.7-1.4 1.6-1.4 2.8"/><circle class="bead" cx="11.9" cy="19" r="1.35"/></svg></span>
                   <span class="notice-copy"><strong id="liveLabel">Question waiting</strong><span class="locator" id="liveLocator">T2</span><span class="context" id="liveContext">Pricing redesign</span></span>
                 </button>
                 <button class="dismiss" type="button" aria-label="Dismiss notification">×</button>
@@ -205,12 +218,17 @@
       </aside>
     </section>
 
+    <section class="icon-family">
+      <div class="icon-family-head"><h2>The pool bead status family</h2><p>One 24px grid, 2px rounded stroke, 18px display box, one filled bead.</p></div>
+      <div class="icon-grid" id="iconGrid"></div>
+    </section>
+
     <div class="section-title"><h2>Every notification type</h2><p>The same component changes tone, timing, persistence, and destination without changing its geometry.</p></div>
     <section class="catalog" id="catalog"></section>
 
     <div class="section-title"><h2>Edge behavior</h2><p>These rules prevent the rail from becoming a second inbox or hiding the terminal it is meant to route back to.</p></div>
     <section class="edge-grid">
-      <article class="edge-card"><h3>Queue priority</h3><p>A blocking event interrupts an ordinary alert. The interrupted alert resumes after the blocking state resolves.</p><div class="queue"><i>?</i><span>→</span><i>✓</i><span>→</span><i>C</i></div></article>
+      <article class="edge-card"><h3>Queue priority</h3><p>A blocking event interrupts an ordinary alert. The interrupted alert resumes after the blocking state resolves.</p><div class="queue"><i>?</i><span>→</span><i>✓</i><span>→</span><i>↩</i></div></article>
       <article class="edge-card"><h3>Rapid updates</h3><p>Show two ordinary events individually. Collapse subsequent events into “3 updates · 2 sessions”.</p><div class="queue"><i>1</i><i>2</i><i>3+</i></div></article>
       <article class="edge-card"><h3>Mobile overflow</h3><p>Keep the state and T-number. Hide session context first. Never truncate the source terminal.</p><div class="queue"><i>?</i><span>Question waiting</span><i>T2</i></div></article>
       <article class="edge-card"><h3>Motion and access</h3><p>One left-to-right entrance and one lower sweep. Reduced motion keeps the final static state. Status text remains in the live region.</p><div class="queue"><i>↦</i><span>300ms</span><i>AA</i></div></article>
@@ -222,26 +240,36 @@
   </main>
 
   <script>
+    const icons={
+      partner:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-5 3.5v-3.5H5z"/><circle class="bead" cx="9" cy="10.5" r="1.15"/></svg>`,
+      ready:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle class="bead" cx="4.8" cy="12.6" r="1.15"/><path d="m6.9 12.7 3.4 3.8L19 7.4"/></svg>`,
+      question:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8a3.8 3.8 0 0 1 7.1-1.8c1.2 2.7-.7 4.2-2.3 5.1-1.1.7-1.4 1.6-1.4 2.8"/><circle class="bead" cx="11.9" cy="19" r="1.35"/></svg>`,
+      alert:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5v10.2"/><circle class="bead" cx="12" cy="19" r="1.35"/></svg>`,
+      updates:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.8 7.2c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><path d="M6.8 12c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><path d="M6.8 16.8c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><circle class="bead" cx="3.8" cy="12" r="1.3"/></svg>`
+    };
     const states = [
-      {id:'partner',n:'01',title:'Partner message',desc:'A person added context in a terminal you are not watching.',tone:'partner',glyph:'C',label:'Conrad replied',loc:'T1',context:'“I tightened the empty state…”',urgency:'Informational',hold:'5 seconds',tap:'Open message',priority:'Normal',other:'Conrad replied · T1 · Launch plan'},
-      {id:'ready',n:'02',title:'Agent ready',desc:'The agent finished a turn with no special review outcome.',tone:'ready',glyph:'✓',label:'Ready',loc:'T3',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready · T3 · API cleanup'},
-      {id:'review',n:'03',title:'Ready for review',desc:'The turn produced a concrete result that should be inspected.',tone:'ready',glyph:'✓',label:'Ready for review',loc:'T2',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready for review · T2 · Pricing'},
-      {id:'question',n:'04',title:'Question waiting',desc:'An MCQ or typed question card is waiting for a response.',tone:'question',glyph:'?',label:'Question waiting',loc:'T2',context:'Pricing redesign',urgency:'Blocking',hold:'Until answered',tap:'Focus question',priority:'Immediate',other:'Question waiting · T2 · Pricing'},
-      {id:'approval',n:'05',title:'Approval needed',desc:'A command, tool, permission, or plan needs explicit approval.',tone:'approval',glyph:'!',label:'Approval needed',loc:'T1',context:'Run database migration',urgency:'Blocking',hold:'Until decided',tap:'Focus approval',priority:'Immediate',other:'Approval needed · T1 · Launch plan'},
-      {id:'needs',n:'06',title:'Needs input',desc:'The agent cannot continue, but the request is not an MCQ or permission.',tone:'question',glyph:'?',label:'Needs input',loc:'T4',context:'Choose deployment target',urgency:'Blocking',hold:'Until handled',tap:'Open request',priority:'Immediate',other:'Needs input · T4 · API cleanup'},
-      {id:'error',n:'07',title:'Turn failed',desc:'The agent stopped because a turn or runtime failed.',tone:'error',glyph:'!',label:'Failed',loc:'T3',context:'Open to inspect',urgency:'High',hold:'Until opened',tap:'Open failure',priority:'Before ordinary',other:'Failed · T3 · Pricing'},
-      {id:'group',n:'08',title:'Grouped updates',desc:'Three or more ordinary updates are waiting after the first two.',tone:'group',glyph:'3',label:'3 updates',loc:'2 sessions',context:'',urgency:'Summary',hold:'Until opened',tap:'Expand list',priority:'After blocking',other:'Expanded list preserves every T-number and session'}
+      {id:'partner',n:'01',title:'Partner message',desc:'A person added context in a terminal you are not watching.',tone:'partner',icon:'partner',label:'Conrad replied',loc:'T1',context:'“I tightened the empty state…”',urgency:'Informational',hold:'5 seconds',tap:'Open message',priority:'Normal',other:'Conrad replied · T1 · Launch plan'},
+      {id:'ready',n:'02',title:'Agent ready',desc:'The agent finished a turn with no special review outcome.',tone:'ready',icon:'ready',label:'Ready',loc:'T3',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready · T3 · API cleanup'},
+      {id:'review',n:'03',title:'Ready for review',desc:'The turn produced a concrete result that should be inspected.',tone:'ready',icon:'ready',label:'Ready for review',loc:'T2',context:'',urgency:'Informational',hold:'5 seconds',tap:'Open result',priority:'Normal',other:'Ready for review · T2 · Pricing'},
+      {id:'question',n:'04',title:'Question waiting',desc:'An MCQ or typed question card is waiting for a response.',tone:'question',icon:'question',label:'Question waiting',loc:'T2',context:'Pricing redesign',urgency:'Blocking',hold:'Until answered',tap:'Focus question',priority:'Immediate',other:'Question waiting · T2 · Pricing'},
+      {id:'approval',n:'05',title:'Approval needed',desc:'A command, tool, permission, or plan needs explicit approval.',tone:'approval',icon:'alert',label:'Approval needed',loc:'T1',context:'Run database migration',urgency:'Blocking',hold:'Until decided',tap:'Focus approval',priority:'Immediate',other:'Approval needed · T1 · Launch plan'},
+      {id:'needs',n:'06',title:'Needs input',desc:'The agent cannot continue, but the request is not an MCQ or permission.',tone:'question',icon:'question',label:'Needs input',loc:'T4',context:'Choose deployment target',urgency:'Blocking',hold:'Until handled',tap:'Open request',priority:'Immediate',other:'Needs input · T4 · API cleanup'},
+      {id:'error',n:'07',title:'Turn failed',desc:'The agent stopped because a turn or runtime failed.',tone:'error',icon:'alert',label:'Failed',loc:'T3',context:'Open to inspect',urgency:'High',hold:'Until opened',tap:'Open failure',priority:'Before ordinary',other:'Failed · T3 · Pricing'},
+      {id:'group',n:'08',title:'Grouped updates',desc:'Three or more ordinary updates are waiting after the first two.',tone:'group',icon:'updates',label:'3 updates',loc:'2 sessions',context:'',urgency:'Summary',hold:'Until opened',tap:'Expand list',priority:'After blocking',other:'Expanded list preserves every T-number and session'}
     ];
     const catalog=document.getElementById('catalog');
-    const rail=(s)=>`<div class="notice" data-tone="${s.tone}"><button class="notice-main" type="button"><span class="notice-glyph">${s.glyph}</span><span class="notice-copy"><strong>${s.label}</strong><span class="locator">${s.loc}</span>${s.context?`<span class="context">${s.context}</span>`:''}</span></button><button class="dismiss" aria-label="Dismiss notification">×</button></div>`;
-    const grouped=`<div class="group-detail"><div class="group-row"><i>?</i><span>Question waiting</span><code>T4 · API cleanup</code></div><div class="group-row"><i>✓</i><span>Ready for review</span><code>T2 · Pricing</code></div><div class="group-row"><i>C</i><span>Conrad replied</span><code>T1 · Launch plan</code></div></div>`;
+    const rail=(s)=>`<div class="notice" data-tone="${s.tone}"><button class="notice-main" type="button"><span class="notice-glyph">${icons[s.icon]}</span><span class="notice-copy"><strong>${s.label}</strong><span class="locator">${s.loc}</span>${s.context?`<span class="context">${s.context}</span>`:''}</span></button><button class="dismiss" aria-label="Dismiss notification">×</button></div>`;
+    const grouped=`<div class="group-detail"><div class="group-row"><i>${icons.question}</i><span>Question waiting</span><code>T4 · API cleanup</code></div><div class="group-row"><i>${icons.ready}</i><span>Ready for review</span><code>T2 · Pricing</code></div><div class="group-row"><i>${icons.partner}</i><span>Conrad replied</span><code>T1 · Launch plan</code></div></div>`;
     catalog.innerHTML=states.map(s=>`<article class="specimen"><div class="specimen-head"><span class="state-number">${s.n}</span><div class="state-title"><h3>${s.title}</h3><p>${s.desc}</p></div><span class="urgency">${s.urgency}</span></div><div class="rail-only">${rail(s)}</div>${s.id==='group'?grouped:''}<dl class="spec"><div><dt>Duration</dt><dd>${s.hold}</dd></div><div><dt>Tap</dt><dd>${s.tap}</dd></div><div><dt>Queue</dt><dd>${s.priority}</dd></div><div><dt>ARIA</dt><dd>${s.urgency==='Informational'?'Polite status':'Persistent status'}</dd></div></dl><div class="cross">Other session: <code>${s.other}</code></div></article>`).join('');
+
+    const iconMeta=[['ready','ready','Ready','Result complete'],['question','question','Question','Response waiting'],['alert','approval','Attention','Decision or failure'],['updates','approval','Updates','Several events'],['partner','partner','Partner','Message from the pair']];
+    document.getElementById('iconGrid').innerHTML=iconMeta.map(([key,tone,label,desc])=>`<div class="icon-item" data-tone="${tone}"><div class="icon-swatch">${icons[key]}</div><div><b>${label}</b><span>${desc}</span></div></div>`).join('');
 
     const liveNotice=document.getElementById('liveNotice'),liveGlyph=document.getElementById('liveGlyph'),liveLabel=document.getElementById('liveLabel'),liveLocator=document.getElementById('liveLocator'),liveContext=document.getElementById('liveContext');
     document.querySelectorAll('[data-state]').forEach(button=>button.addEventListener('click',()=>{
       const s=states.find(x=>x.id===button.dataset.state);if(!s)return;
       document.querySelectorAll('[data-state]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-      liveNotice.dataset.tone=s.tone;liveGlyph.textContent=s.glyph;liveLabel.textContent=s.label;liveLocator.textContent=s.loc;liveContext.textContent=s.context;
+      liveNotice.dataset.tone=s.tone;liveGlyph.innerHTML=icons[s.icon];liveLabel.textContent=s.label;liveLocator.textContent=s.loc;liveContext.textContent=s.context;
       liveContext.style.display=s.context?'':'none';liveNotice.style.animation='none';void liveNotice.offsetWidth;liveNotice.style.animation='notice-in .3s var(--ease) both';
     }));
   </script>
