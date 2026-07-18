@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — User action row highlights · 10-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:hsl(212 13% 5%);--term:hsl(200 36% 2%);--card:hsl(200 26% 5%);--surf:hsl(199 20% 11%);
+    --line:hsl(199 24% 17%);--line-strong:hsl(194 30% 26%);--ink:hsl(190 26% 96%);
+    --ink-soft:hsl(190 22% 88%);--muted:hsl(192 16% 76%);--faint:hsl(196 16% 60%);
+    --viewer:hsl(150 60% 60%);--partner:hsl(210 10% 72%);--pool:hsl(220 95% 55%);--agent:hsl(190 70% 57%);
+    --ok:hsl(150 66% 56%);--sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--page);color:var(--ink);font-family:var(--sans)}
+  body{padding:22px}
+  .page{width:min(1396px,100%);margin:0 auto}
+  header{display:flex;align-items:flex-end;gap:24px;margin-bottom:14px;padding:2px 2px 15px;border-bottom:1px solid var(--line)}
+  .title{flex:1;min-width:0}.eyebrow{font:600 10px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+  h1{margin:6px 0 3px;font:600 27px/1.1 var(--sans);letter-spacing:-.025em}.sub{margin:0;color:var(--muted);font-size:13px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:flex-end;font:500 10px/1.2 var(--mono);color:var(--faint)}
+  .role{display:flex;align-items:center;gap:6px}.dot{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 8px color-mix(in oklab,var(--c) 62%,transparent)}
+  .section{margin-top:14px}.section-head{display:flex;align-items:baseline;gap:10px;margin:0 2px 8px}
+  .section-kicker{font:700 10px/1 var(--mono);letter-spacing:.14em;color:var(--pool)}
+  .section-title{font:600 14px/1.2 var(--sans);color:var(--ink-soft)}.section-note{margin-left:auto;font:500 9px/1.2 var(--mono);color:var(--faint)}
+  .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+  .option{overflow:hidden;min-width:0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  .option-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:7px;align-items:center;min-height:38px;padding:7px 9px;border-bottom:1px solid var(--line);background:color-mix(in oklab,var(--surf) 42%,transparent)}
+  .num{font:600 9px/1 var(--mono);letter-spacing:.1em;color:var(--faint)}.name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;font-size:12.5px;color:var(--ink)}
+  .metric{font:600 8px/1 var(--mono);letter-spacing:.04em;color:var(--faint)}
+  .terminal{padding:8px 9px 9px;background:var(--term);font-size:11.5px;line-height:1.48}
+  .agentline{margin:0 0 6px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .agentmark{display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--agent);box-shadow:0 0 7px color-mix(in oklab,var(--agent) 70%,transparent)}
+  .user-row{--u:var(--viewer);position:relative;margin:0 -9px 4px;padding:5px 9px 5px 25px;text-indent:-16px;word-break:break-word;isolation:isolate}
+  .user-row.partner{--u:var(--partner)}
+  .drop{display:inline-flex;width:16px;height:1.5em;align-items:center;vertical-align:top;color:var(--u);text-indent:0}
+  .drop svg{width:11px;height:11px;overflow:visible}
+  .speaker{color:var(--u);font:600 11.5px/1.48 var(--mono);margin-right:4px;text-indent:0}.route{font:600 11.5px/1.48 var(--mono);margin-right:4px;text-indent:0}
+  .route.pool{color:var(--pool)}.route.agent{color:var(--agent)}.body{color:var(--ink-soft)}.clock{color:var(--faint);font:500 7.5px/1 var(--mono);margin-left:4px;letter-spacing:.08em;text-indent:0}
+  .tool{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:5px;align-items:center;margin-top:6px;padding:6px 7px;border:1px solid var(--line-strong);border-radius:7px;background:var(--card);font:500 9px/1.2 var(--mono)}
+  .tooltri,.toolname{color:var(--agent);font-weight:600}.toolcmd{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}.check{color:var(--ok)}
+
+  /* A · Same current grammar, one controlled intensity ladder. */
+  .i1 .user-row{background:color-mix(in oklab,var(--u) 7%,transparent);box-shadow:inset 2px 0 0 color-mix(in oklab,var(--u) 92%,transparent)}
+  .i2 .user-row{background:color-mix(in oklab,var(--u) 10%,transparent);box-shadow:inset 2px 0 0 var(--u)}
+  .i3 .user-row{background:color-mix(in oklab,var(--u) 13%,transparent);box-shadow:inset 3px 0 0 var(--u)}
+  .i4 .user-row{background:color-mix(in oklab,var(--u) 16%,transparent);box-shadow:inset 3px 0 0 var(--u),inset 10px 0 16px color-mix(in oklab,var(--u) 7%,transparent)}
+  .i5 .user-row{background:color-mix(in oklab,var(--u) 20%,transparent);box-shadow:inset 4px 0 0 var(--u),inset 14px 0 22px color-mix(in oklab,var(--u) 10%,transparent)}
+  .i4 .speaker,.i4 .drop,.i5 .speaker,.i5 .drop{text-shadow:0 0 8px color-mix(in oklab,var(--u) 48%,transparent)}
+
+  /* B · Five different row grammars. */
+  .d1 .user-row{background:color-mix(in oklab,var(--u) 8%,transparent);box-shadow:inset 3px 0 0 var(--u),inset 12px 0 18px color-mix(in oklab,var(--u) 15%,transparent)}
+  .d1 .user-row::before{content:"";position:absolute;z-index:-1;inset:2px auto 2px 0;width:3px;background:var(--u);filter:blur(4px);opacity:.72}
+  .d2 .user-row{margin:0 0 4px;padding:5px 8px 5px 24px;border:1px solid color-mix(in oklab,var(--u) 58%,var(--line));border-radius:7px;background:color-mix(in oklab,var(--u) 7%,transparent);box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--u) 8%,transparent)}
+  .d3 .user-row{background:linear-gradient(90deg,color-mix(in oklab,var(--u) 23%,transparent) 0%,color-mix(in oklab,var(--u) 10%,transparent) 38%,transparent 92%);box-shadow:inset 2px 0 0 var(--u)}
+  .d4 .user-row{background:color-mix(in oklab,var(--u) 6%,transparent);box-shadow:inset 2px 0 0 var(--u),inset 7px 0 0 color-mix(in oklab,var(--u) 20%,transparent),inset 0 -1px 0 color-mix(in oklab,var(--u) 28%,transparent)}
+  .d5 .user-row{background:color-mix(in oklab,var(--u) 4%,transparent);box-shadow:inset 2px 0 0 color-mix(in oklab,var(--u) 50%,transparent)}
+  .d5 .speaker{display:inline-block;margin:-1px 4px -1px 0;padding:1px 6px 1px 4px;border:1px solid color-mix(in oklab,var(--u) 54%,transparent);border-radius:5px;background:color-mix(in oklab,var(--u) 14%,transparent);box-shadow:0 0 10px color-mix(in oklab,var(--u) 10%,transparent)}
+
+  @media(max-width:1120px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:760px){body{padding:14px 10px}header{align-items:flex-start;flex-direction:column;gap:10px;margin-bottom:10px}.legend{justify-content:flex-start}.grid{grid-template-columns:1fr}.section{margin-top:12px}.section-head{align-items:flex-start;flex-wrap:wrap}.section-note{width:100%;margin-left:0}.terminal{font-size:12px}.speaker,.route{font-size:12px}.option-head{min-height:40px}.user-row{padding-top:6px;padding-bottom:6px}}
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div class="title"><div class="eyebrow">ThinkPool Code · terminal identity study</div><h1>User action rows — 10 stronger treatments</h1><p class="sub">Both people stay distinct: viewer green and non-viewer cool silver. Pool cobalt and agent cyan remain routing colors.</p></div>
+    <div class="legend" aria-label="Terminal role colors"><span class="role"><i class="dot" style="--c:var(--viewer)"></i>viewer · green</span><span class="role"><i class="dot" style="--c:var(--partner)"></i>non-viewer · silver</span><span class="role"><i class="dot" style="--c:var(--pool)"></i>Pool · cobalt</span><span class="role"><i class="dot" style="--c:var(--agent)"></i>agent · cyan</span></div>
+  </header>
+
+  <section class="section">
+    <div class="section-head"><span class="section-kicker">A · 01–05</span><span class="section-title">Incremental brightness + strikingness</span><span class="section-note">same 5% wash + 2px spine grammar, progressively lifted</span></div>
+    <div class="grid" id="intensity-grid" aria-label="Five incremental intensity options"></div>
+  </section>
+  <section class="section">
+    <div class="section-head"><span class="section-kicker">B · 06–10</span><span class="section-title">New row-highlight directions</span><span class="section-note">different emphasis grammar, colors and content held constant</span></div>
+    <div class="grid" id="direction-grid" aria-label="Five new row highlight directions"></div>
+  </section>
+</main>
+
+<template id="option-template">
+  <article class="option">
+    <div class="option-head"><span class="num"></span><span class="name"></span><span class="metric"></span></div>
+    <div class="terminal">
+      <p class="agentline"><span class="agentmark"></span>The route is ready for the final call.</p>
+      <div class="user-row viewer"><span class="drop" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.7C8 1.7 3 7 3 10.1A5 5 0 0 0 13 10.1C13 7 8 1.7 8 1.7Z" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="speaker">Maks</span><span class="route pool">@pool</span><span class="body">ship the desktop and mobile pass</span><span class="clock">20:38</span></div>
+      <div class="user-row partner"><span class="drop" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.7C8 1.7 3 7 3 10.1A5 5 0 0 0 13 10.1C13 7 8 1.7 8 1.7Z" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="speaker">Conrad</span><span class="route agent">@agent</span><span class="body">check the live route before we call it done</span><span class="clock">20:39</span></div>
+      <div class="tool"><span class="tooltri">▶</span><span class="toolname">Bash</span><span class="toolcmd">npm run build</span><span class="check">✓</span></div>
+    </div>
+  </article>
+</template>
+<script>
+  const intensity=[
+    ['01','Lift 1','7% wash','i1'],['02','Lift 2','10% wash','i2'],['03','Lift 3','13% wash','i3'],
+    ['04','Lift 4','16% wash','i4'],['05','Lift 5','20% wash','i5']
+  ];
+  const directions=[
+    ['06','Beacon edge','glow rail','d1'],['07','Framed action','outline','d2'],['08','Gradient sweep','wide fade','d3'],
+    ['09','Double rail','layered','d4'],['10','Identity capsule','speaker','d5']
+  ];
+  const tpl=document.getElementById('option-template');
+  function mount(id,items){const grid=document.getElementById(id);for(const [num,name,metric,cls] of items){const node=tpl.content.cloneNode(true);const card=node.querySelector('.option');card.classList.add(cls);node.querySelector('.num').textContent=num;node.querySelector('.name').textContent=name;node.querySelector('.metric').textContent=metric;grid.appendChild(node)}}
+  mount('intensity-grid',intensity);mount('direction-grid',directions);
+</script>
+</body>
+</html>
