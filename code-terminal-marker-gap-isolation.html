@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terminal marker gap measurement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: hsl(212 9% 9%);
+      --color-surface: hsl(212 8% 14%);
+      --color-line: hsl(212 7% 21%);
+      --color-ink: hsl(212 14% 95%);
+      --color-muted: hsl(212 14% 78%);
+      --color-k-pool: hsl(189 74% 58%);
+      --color-k-bg: hsl(212 9% 9%);
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 48px;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-mono);
+    }
+    button { font: inherit; color: inherit; }
+    button.compact { min-height: unset; min-width: unset; }
+    .stage { width: min(760px, 100%); margin: 0 auto; }
+    h1 { margin: 0 0 12px; font-size: 22px; }
+    .lede { margin: 0 0 32px; color: var(--color-muted); font-size: 14px; line-height: 1.55; }
+    .row {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid var(--color-line);
+      background: var(--color-surface);
+      margin-bottom: 16px;
+    }
+    .tab { display: flex; align-items: center; padding: 4px 6px; font-size: 13px; }
+    .tab-button { display: flex; align-items: center; padding: 0; border: 0; background: transparent; white-space: nowrap; }
+    .current { gap: 8px; }
+    .intended { gap: 4px; }
+    .mark { display: grid; width: 13px; height: 13px; flex: none; place-items: center; }
+    .mark svg { display: block; overflow: visible; color: var(--color-k-pool); }
+    .name { color: var(--color-ink); }
+    .readout {
+      margin-top: 28px;
+      padding: 16px 20px;
+      border: 1px solid var(--color-line);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      font: 16px/1.65 ui-monospace, "SF Mono", monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .readout strong { color: var(--color-k-pool); }
+    @media (max-width: 500px) {
+      body { padding: 24px 16px; }
+      h1 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <h1>Terminal marker → label gap</h1>
+    <p class="lede">Production tab geometry, icon size, font, and compact-button reset. Only the flex gap changes.</p>
+
+    <div class="row">
+      <div class="tab">
+        <button class="tab-button compact current" type="button">
+          <span class="mark" id="current-mark">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
+              <path d="M8.8 9.1a3.2 3.2 0 0 1 6-1.2c1 2.2-.7 3.4-2 4.2-.8.5-1 1.2-1 2" fill="none" stroke="var(--color-k-bg)" stroke-width="2.55" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="11.8" cy="17.6" r="1.25" fill="var(--color-k-bg)"></circle>
+            </svg>
+          </span>
+          <span class="name" id="current-name">Terminal one</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="tab">
+        <button class="tab-button compact intended" type="button">
+          <span class="mark" id="intended-mark">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
+              <path d="M8.8 9.1a3.2 3.2 0 0 1 6-1.2c1 2.2-.7 3.4-2 4.2-.8.5-1 1.2-1 2" fill="none" stroke="var(--color-k-bg)" stroke-width="2.55" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="11.8" cy="17.6" r="1.25" fill="var(--color-k-bg)"></circle>
+            </svg>
+          </span>
+          <span class="name" id="intended-name">Terminal one</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="readout" id="readout">Measuring after fonts load…</section>
+  </main>
+  <script>
+    document.fonts.ready.then(() => {
+      const gap = (markId, nameId) => {
+        const mark = document.getElementById(markId).getBoundingClientRect()
+        const name = document.getElementById(nameId).getBoundingClientRect()
+        return Math.round((name.left - mark.right) * 100) / 100
+      }
+      const current = gap('current-mark', 'current-name')
+      const intended = gap('intended-mark', 'intended-name')
+      document.getElementById('readout').innerHTML = [
+        `<strong>Current</strong> &nbsp; ${current}px — production gap-2`,
+        `<strong>Intended</strong> ${intended}px — brand icon-to-label gap-1`,
+        `<strong>Delta</strong> &nbsp;&nbsp; ${intended - current}px — ✓ tighter without overlap`,
+      ].join('<br>')
+    })
+  </script>
+</body>
+</html>
