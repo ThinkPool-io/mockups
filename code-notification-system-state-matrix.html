@@ -57,7 +57,7 @@
     .notice:after{content:"";position:absolute;left:0;bottom:-1px;width:18%;height:2px;background:var(--ink);opacity:.76;animation:current .38s var(--ease) both}
     .notice-main{height:100%;min-width:0;flex:1;border:0;background:transparent;display:flex;align-items:center;gap:9px;padding:0 8px 0 10px;text-align:left}
     .notice-glyph{width:18px;height:18px;display:grid;place-items:center;flex:none;color:var(--tone,var(--pool))}
-    .notice-glyph svg{display:block;width:16px;height:16px;overflow:visible;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .notice-glyph svg{display:block;width:16px;height:16px;overflow:visible;fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}
     .notice-glyph svg .bead{fill:currentColor;stroke:none}
     .notice-copy{min-width:0;display:flex;align-items:baseline;gap:7px;white-space:nowrap;overflow:hidden;font-size:13px;line-height:1}
     .notice-copy strong{flex:none;color:var(--ink);font-weight:650}
@@ -97,7 +97,7 @@
     .icon-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
     .icon-item{min-width:0;display:flex;align-items:center;gap:11px;padding:14px 16px;border-right:1px solid var(--line)}.icon-item:last-child{border-right:0}
     .icon-swatch{width:36px;height:36px;display:grid;place-items:center;flex:none;border:1px solid var(--line-strong);border-radius:9px;background:var(--k-bg);color:var(--icon-tone,var(--pool))}
-    .icon-swatch svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.icon-swatch .bead{fill:currentColor;stroke:none}
+    .icon-swatch svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}.icon-swatch .bead{fill:currentColor;stroke:none}
     .icon-item b{display:block;font-size:12.5px}.icon-item span{display:block;margin-top:3px;color:var(--faint);font:500 9.5px/1.2 "IBM Plex Mono",monospace}
     .icon-item[data-tone="ready"]{--icon-tone:var(--positive)}.icon-item[data-tone="approval"]{--icon-tone:var(--caution)}.icon-item[data-tone="error"]{--icon-tone:var(--danger)}.icon-item[data-tone="partner"]{--icon-tone:var(--partner)}
 
@@ -124,7 +124,7 @@
     .cross code{font-family:"IBM Plex Mono",monospace;color:var(--muted)}
     .group-detail{border-top:1px solid var(--line);background:var(--k-panel)}
     .group-row{min-height:44px;display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:11.5px}.group-row:last-child{border-bottom:0}
-    .group-row i{width:18px;height:18px;display:grid;place-items:center;font-style:normal;color:var(--pool)}.group-row i svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.group-row i .bead{fill:currentColor;stroke:none}.group-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.group-row code{color:var(--faint);font:500 10px/1 "IBM Plex Mono",monospace}
+    .group-row i{width:18px;height:18px;display:grid;place-items:center;font-style:normal;color:var(--pool)}.group-row i svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}.group-row i .bead{fill:currentColor;stroke:none}.group-row span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}.group-row code{color:var(--faint);font:500 10px/1 "IBM Plex Mono",monospace}
 
     .edge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
     .edge-card{border-radius:10px;padding:15px}.edge-card h3{margin:0;font-size:14px}.edge-card p{margin:8px 0 0;color:var(--faint);font-size:12px;line-height:1.45}
@@ -177,7 +177,7 @@
               </div>
               <div class="notice" id="liveNotice" data-tone="question" role="status" aria-live="polite" aria-atomic="true">
                 <button class="notice-main" type="button">
-                  <span class="notice-glyph" id="liveGlyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8a3.8 3.8 0 0 1 7.1-1.8c1.2 2.7-.7 4.2-2.3 5.1-1.1.7-1.4 1.6-1.4 2.8"/><circle class="bead" cx="11.9" cy="19" r="1.35"/></svg></span>
+                  <span class="notice-glyph" id="liveGlyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="M9.1 9.1a3.1 3.1 0 0 1 5.8-1.1c.8 2.1-.8 3.2-2 4-.8.5-1 1.2-1 2.1"/><circle class="bead" cx="11.9" cy="17.4" r="1.3"/></svg></span>
                   <span class="notice-copy"><strong id="liveLabel">Question waiting</strong><span class="locator" id="liveLocator">T2</span><span class="context" id="liveContext">Pricing redesign</span></span>
                 </button>
                 <button class="dismiss" type="button" aria-label="Dismiss notification">×</button>
@@ -219,7 +219,7 @@
     </section>
 
     <section class="icon-family">
-      <div class="icon-family-head"><h2>The pool bead status family</h2><p>One 24px grid, 2px rounded stroke, 18px display box, one filled bead.</p></div>
+      <div class="icon-family-head"><h2>The strengthened Wellspring status family</h2><p>One 24px grid, 2.7px rounded stroke, fixed open arc, enlarged interior marks.</p></div>
       <div class="icon-grid" id="iconGrid"></div>
     </section>
 
@@ -241,11 +241,11 @@
 
   <script>
     const icons={
-      partner:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14v10H11l-5 3.5v-3.5H5z"/><circle class="bead" cx="9" cy="10.5" r="1.15"/></svg>`,
-      ready:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle class="bead" cx="4.8" cy="12.6" r="1.15"/><path d="m6.9 12.7 3.4 3.8L19 7.4"/></svg>`,
-      question:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 8.8a3.8 3.8 0 0 1 7.1-1.8c1.2 2.7-.7 4.2-2.3 5.1-1.1.7-1.4 1.6-1.4 2.8"/><circle class="bead" cx="11.9" cy="19" r="1.35"/></svg>`,
-      alert:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5v10.2"/><circle class="bead" cx="12" cy="19" r="1.35"/></svg>`,
-      updates:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.8 7.2c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><path d="M6.8 12c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><path d="M6.8 16.8c3.1-2.2 6.1 2.2 9.2 0 1.1-.8 2.1-.9 3-.6"/><circle class="bead" cx="3.8" cy="12" r="1.3"/></svg>`
+      partner:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="M7.7 8.2h8.6v5.8h-4.7l-2.8 1.9V14H7.7Z"/></svg>`,
+      ready:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="m7.7 12.1 3 3.2 6.7-7.3"/></svg>`,
+      question:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="M9.1 9.1a3.1 3.1 0 0 1 5.8-1.1c.8 2.1-.8 3.2-2 4-.8.5-1 1.2-1 2.1"/><circle class="bead" cx="11.9" cy="17.4" r="1.3"/></svg>`,
+      alert:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="M12 7.2v6.6"/><circle class="bead" cx="12" cy="17.4" r="1.3"/></svg>`,
+      updates:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.7 6.1a9 9 0 1 0 .7 10.7"/><path d="M7.7 8.8h8.6M7.7 12h8.6M7.7 15.2h8.6"/></svg>`
     };
     const states = [
       {id:'partner',n:'01',title:'Partner message',desc:'A person added context in a terminal you are not watching.',tone:'partner',icon:'partner',label:'Conrad replied',loc:'T1',context:'“I tightened the empty state…”',urgency:'Informational',hold:'5 seconds',tap:'Open message',priority:'Normal',other:'Conrad replied · T1 · Launch plan'},
