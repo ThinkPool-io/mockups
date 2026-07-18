@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — Non-viewer 04 · Copper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --k-bg:#0a0d10;--k-card:#06090c;--k-surf:hsl(199 20% 11%);--k-line:hsl(199 24% 17%);
+    --ink:hsl(190 26% 96%);--ink-soft:hsl(190 22% 88%);--muted:hsl(192 16% 76%);--faint:hsl(196 16% 60%);
+    --viewer:hsl(150 60% 60%);--pool:#2E78FF;--agent:hsl(190 70% 57%);
+    --accent:hsl(32 78% 62%);--accent-rgb:231 166 85;
+    --sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--k-bg);color:var(--ink);font-family:var(--sans)}
+  body{padding:24px;display:flex;justify-content:center}
+  button{font:inherit}
+  .page{width:min(980px,100%);display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;align-items:start}
+  .brief{position:sticky;top:24px;padding:20px;border:1px solid var(--k-line);border-radius:14px;background:hsl(200 26% 5%)}
+  .eyebrow{font:600 10px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  h1{margin:11px 0 7px;font:600 22px/1.12 var(--sans);letter-spacing:-.02em;color:var(--accent)}
+  .note{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+  .swatches{display:grid;gap:9px;margin-top:20px;font:500 11px/1.25 var(--mono)}
+  .swatch{display:grid;grid-template-columns:12px 1fr;align-items:center;gap:8px;color:var(--faint)}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px color-mix(in oklab,var(--c) 50%,transparent)}
+  .terminal{overflow:hidden;border:1px solid hsl(194 30% 26%);border-radius:14px;background:var(--k-bg);box-shadow:0 20px 70px #0008}
+  .termbar{height:54px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--k-line);font-family:var(--mono)}
+  .live{width:10px;height:10px;border-radius:50%;background:hsl(152 40% 58%);box-shadow:0 0 10px hsl(152 40% 58%/.5)}
+  .termname{font-weight:600;color:var(--ink-soft);letter-spacing:.01em}.termspacer{flex:1}.provider{color:var(--agent);font-weight:600}
+  .feed{padding:13px 12px 11px;font-size:14px;line-height:1.55}
+  .agentline{margin:0 0 12px;color:var(--ink-soft)}
+  .agentmark{display:inline-block;width:1.28em;color:var(--agent);text-shadow:0 0 10px hsl(190 70% 57%/.65)}
+  .inline-code{font-family:var(--mono);color:var(--agent);padding:1px 5px;border:1px solid hsl(194 30% 26%);border-radius:5px;background:var(--k-card)}
+  .target{margin:0 -12px 12px;padding:6px 12px 7px 30px;text-indent:-18px;word-break:break-word;background:color-mix(in oklab,var(--accent) 5%,transparent);box-shadow:inset 2px 0 0 color-mix(in oklab,var(--accent) 85%,transparent)}
+  .drop{display:inline-flex;width:18px;height:1.62em;align-items:center;vertical-align:top;color:var(--accent)}
+  .drop svg{width:13px;height:13px;overflow:visible}
+  .name{color:var(--accent);font:600 14px/1.55 var(--mono);margin-right:6px}
+  .at{color:var(--agent);font:600 14px/1.55 var(--mono);margin-right:6px}
+  .body{color:var(--ink-soft)}
+  .clock{color:var(--faint);font:500 10px/1 var(--mono);margin-left:6px;letter-spacing:.08em}
+  .tool{margin:0 0 12px;padding:11px 12px;display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid hsl(194 30% 26%);border-radius:9px;background:var(--k-card);font-family:var(--mono)}
+  .tooltri,.toolname{color:hsl(172 80% 60%);font-weight:600}.toolcmd{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+  .check{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:hsl(150 66% 56%/.12);color:hsl(150 66% 56%)}
+  .answer{margin:0 0 12px;color:var(--ink-soft)}
+  .section{color:var(--agent);font-weight:700;margin-top:7px}
+  .status{border-top:1px solid var(--k-line);padding:10px 12px 12px;font-family:var(--mono);font-size:12px}
+  .thinking{color:var(--faint);margin-bottom:8px}.spark{color:var(--agent)}
+  .mode{display:flex;align-items:center;gap:8px;color:hsl(352 84% 64%)}.model{margin-left:auto;color:var(--agent)}.effort{color:var(--faint)}
+  .composer{margin-top:9px;min-height:54px;border:1px solid hsl(190 70% 57%/.55);border-radius:10px;display:flex;align-items:center;padding:0 12px;color:var(--faint);font-size:14px}.send{margin-left:auto;color:var(--agent);font-size:22px}
+  @media(max-width:720px){
+    body{padding:0}.page{display:block;width:100%}.brief{position:relative;top:auto;border:0;border-bottom:1px solid var(--k-line);border-radius:0;padding:14px 16px 12px}.eyebrow{font-size:9px}h1{display:inline;margin:0 8px 0 0;font-size:17px}.note{display:inline;font-size:11px}.swatches{display:none}.terminal{border:0;border-radius:0;box-shadow:none}.termbar{height:48px;padding:0 12px}.feed{font-size:14px}.target{padding-top:6px;padding-bottom:7px}.name,.at{font-size:13px}.tool{padding:10px}.status{font-size:11px}.composer{min-height:52px}
+  }
+</style>
+</head>
+<body data-option="04">
+<main class="page">
+  <aside class="brief">
+    <div class="eyebrow">Non-viewer identity · option <span id="num">01</span></div>
+    <h1 id="label">Ember amber</h1>
+    <p class="note" id="note">Warm and unmistakably human.</p>
+    <div class="swatches" aria-label="Existing role color legend">
+      <div class="swatch"><span class="dot" style="--c:var(--viewer)"></span><span>viewer · green</span></div>
+      <div class="swatch"><span class="dot" style="--c:var(--pool)"></span><span>Pool · cobalt</span></div>
+      <div class="swatch"><span class="dot" style="--c:var(--agent)"></span><span>agent · cyan</span></div>
+      <div class="swatch"><span class="dot" style="--c:var(--accent)"></span><span>non-viewer · <span id="legend">amber</span></span></div>
+    </div>
+  </aside>
+  <section class="terminal" aria-label="ThinkPool terminal color mockup">
+    <header class="termbar"><span class="live"></span><span class="termname">Higgsfield SLOP</span><span class="termspacer"></span><span class="provider">C ●</span></header>
+    <div class="feed">
+      <p class="agentline"><span class="agentmark">●</span>For the pilot, two prices are confirmed from Higgsfield’s no-job cost endpoint. I’m checking the signed-in account’s read-only catalogue rather than inventing a number.</p>
+      <div class="target">
+        <span class="drop" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.7C8 1.7 3 7 3 10.1A5 5 0 0 0 13 10.1C13 7 8 1.7 8 1.7Z" stroke="currentColor" stroke-width="1.6"/></svg></span><span class="name">Conrad</span><span class="at">@agent</span><span class="body">Just fucking do it Jesus Christ in a bucket</span><span class="clock">16:28</span>
+      </div>
+      <div class="tool"><span class="tooltri">▶</span><span class="toolname">Bash</span><span class="toolcmd">/bin/bash -lc "opencli browse…"</span><span class="check">✓</span></div>
+      <p class="answer"><span class="agentmark">●</span>Pilot preflight is ready. No media was uploaded, no workspace was selected persistently, and no credits were spent.</p>
+      <div class="section">Current state</div>
+    </div>
+    <footer class="status">
+      <div class="thinking"><span class="spark">✳</span> Thinking… (15s with high effort)</div>
+      <div class="mode"><span>▢</span><span>Bypass permissions</span><span class="model">GPT-5.6-Sol</span><span class="effort">High</span></div>
+      <div class="composer"><span>＋ Message agent…</span><span class="send">ϟ</span></div>
+    </footer>
+  </section>
+</main>
+<script>
+const options={
+  '01':['Ember amber','amber','hsl(32 78% 62%)','Warm and unmistakably human.'],
+  '02':['Burnt orange','orange','hsl(24 74% 60%)','Earthy warmth with less warning energy.'],
+  '03':['Tangerine','tangerine','hsl(28 92% 64%)','The brightest warm candidate.'],
+  '04':['Copper','copper','hsl(22 52% 59%)','Muted, industrial, and terminal-native.'],
+  '05':['Terracotta','terracotta','hsl(14 58% 63%)','Grounded clay warmth without shouting.'],
+  '06':['Living coral','coral','hsl(10 76% 67%)','Friendly contrast against the cool system.'],
+  '07':['Soft salmon','salmon','hsl(4 70% 70%)','Gentle separation with a human feel.'],
+  '08':['Signal rose','rose','hsl(348 68% 69%)','Distinctive and expressive, still readable.'],
+  '09':['Raspberry','raspberry','hsl(335 64% 65%)','Strong identity without returning to violet.'],
+  '10':['Hot pink','pink','hsl(322 68% 70%)','The playful high-energy wildcard.'],
+  '11':['Old gold','gold','hsl(46 72% 58%)','Dense gold that avoids bright warning yellow.'],
+  '12':['Saffron','saffron','hsl(42 88% 63%)','Sunny and obvious at a glance.'],
+  '13':['Citron','citron','hsl(72 54% 64%)','Acid-green wildcard, near but not viewer green.'],
+  '14':['Cool silver','silver','hsl(210 10% 72%)','Neutral separation with almost no chroma.'],
+  '15':['Warm pearl','pearl','hsl(32 22% 76%)','Quiet warm-neutral identity.']
+};
+const key=document.body.dataset.option||'01';const o=options[key];
+document.documentElement.style.setProperty('--accent',o[2]);
+document.getElementById('num').textContent=key;document.getElementById('label').textContent=o[0];document.getElementById('legend').textContent=o[1];document.getElementById('note').textContent=o[3];
+</script>
+</body>
+</html>
