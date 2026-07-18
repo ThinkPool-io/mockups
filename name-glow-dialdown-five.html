@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Name glow dial-down — five options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --term: hsl(200 36% 2%);
+      --card: hsl(200 26% 5%);
+      --line: hsl(199 24% 17%);
+      --ink: hsl(190 22% 88%);
+      --muted: hsl(192 16% 76%);
+      --faint: hsl(196 16% 60%);
+      --agent: hsl(190 70% 57%);
+      --you: hsl(150 60% 60%);
+      --them: hsl(210 20% 91%);
+      --them-lane: hsl(210 10% 72%);
+      --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080b0e;
+      color: var(--ink);
+      font-family: var(--sans);
+      min-height: 100vh;
+    }
+    .page { width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding: 54px 0 72px; }
+    header { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; margin-bottom: 24px; }
+    .eyebrow { color: var(--agent); font: 500 11px/1.4 var(--mono); letter-spacing: .11em; text-transform: uppercase; margin-bottom: 10px; }
+    h1 { color: hsl(190 26% 96%); font: 500 clamp(28px, 4vw, 46px)/1.05 var(--sans); letter-spacing: -.035em; margin: 0 0 10px; }
+    .dek { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0; max-width: 660px; }
+    .current {
+      background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+      color: var(--faint); font: 12px/1.45 var(--mono); padding: 11px 13px; white-space: nowrap;
+    }
+    .current strong { color: var(--them); font-weight: 500; text-shadow: 0 0 9px color-mix(in oklab, var(--them) 28%, transparent); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .option {
+      background: var(--term); border: 1px solid var(--line); border-radius: 13px; overflow: hidden;
+      min-height: 240px; display: flex; flex-direction: column;
+    }
+    .option-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 17px 18px 14px; border-bottom: 1px solid hsl(199 24% 17% / .72); }
+    .option-title { font: 500 13px/1.3 var(--mono); color: hsl(190 26% 96%); }
+    .recipe { font: 11px/1.3 var(--mono); color: var(--faint); }
+    .transcript { padding: 16px 12px 17px; display: grid; gap: 8px; }
+    .row { margin: 0 -12px; padding: 5px 12px 5px calc(12px + 1.29em); text-indent: -1.29em; white-space: normal; }
+    .partner { background: color-mix(in oklab, var(--them-lane) 12%, transparent); box-shadow: inset 3px 0 0 var(--them), inset 10px 0 16px color-mix(in oklab, var(--them-lane) 16%, transparent); }
+    .viewer { background: hsl(150 60% 60% / .10); box-shadow: inset 2.5px 0 0 var(--you), inset 10px 0 16px hsl(150 60% 60% / .11); }
+    .drop { display: inline-flex; width: .95em; height: 1.62em; margin-right: .34em; vertical-align: top; align-items: center; filter: drop-shadow(0 0 4.5px color-mix(in oklab, currentColor 28%, transparent)); }
+    .drop svg { width: .95em; height: .95em; overflow: visible; }
+    .partner .drop { color: var(--them); }
+    .viewer .drop { color: var(--you); }
+    .name { font: 600 13.5px/1.55 var(--mono); margin-right: 6px; }
+    .partner .name { color: var(--them); }
+    .viewer .name { color: var(--you); }
+    .body { color: var(--ink); font: 400 13.5px/1.55 var(--sans); }
+    .time { color: var(--faint); font: 10px/1.4 var(--mono); letter-spacing: .08em; margin-left: 6px; }
+    .agent-row { display: flex; gap: 4px; margin: 3px 0; padding: 4px 0; }
+    .agent-dot { flex: none; width: .92em; height: 1.6em; display: grid; place-items: center; }
+    .agent-dot::after { content: ""; width: .52em; height: .52em; border-radius: 50%; background: var(--agent); box-shadow: 0 0 .52em color-mix(in oklab, var(--agent) 70%, transparent); }
+    .agent-copy { color: var(--ink); font: 400 13.5px/1.6 var(--sans); }
+    .note { margin-top: auto; padding: 12px 18px 15px; color: var(--faint); font: 11px/1.5 var(--mono); border-top: 1px solid hsl(199 24% 17% / .5); }
+    .o1 .name { text-shadow: 0 0 7px color-mix(in oklab, currentColor 20%, transparent); }
+    .o2 .name { text-shadow: 0 0 5px color-mix(in oklab, currentColor 16%, transparent); }
+    .o3 .name { text-shadow: 0 0 3px color-mix(in oklab, currentColor 18%, transparent); }
+    .o4 .name { text-shadow: 0 0 2px color-mix(in oklab, currentColor 12%, transparent); }
+    .o5 .name { text-shadow: none; }
+    .recommended { border-color: color-mix(in oklab, var(--agent) 55%, var(--line)); box-shadow: 0 0 0 1px color-mix(in oklab, var(--agent) 12%, transparent); }
+    .recommended .option-title::after { content: "recommended"; margin-left: 9px; color: var(--agent); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .wide { grid-column: 1 / -1; }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 24px, 520px); padding: 28px 0 44px; }
+      header { grid-template-columns: 1fr; gap: 14px; }
+      h1 { font-size: 31px; }
+      .current { white-space: normal; }
+      .grid { grid-template-columns: 1fr; }
+      .wide { grid-column: auto; }
+      .option { min-height: 0; }
+      .option-head { padding: 15px 14px 12px; }
+      .transcript { padding-top: 14px; padding-bottom: 14px; }
+      .note { padding: 11px 14px 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <div class="eyebrow">Thinkpool Code · attribution study</div>
+        <h1>Dial down the name glow.</h1>
+        <p class="dek">Five quieter treatments on the real Pearl Beacon and viewer-green transcript bands. Only the name shadow changes; lane paint, identity color, glyph, type, and spacing stay fixed.</p>
+      </div>
+      <div class="current">current&nbsp; <strong>Conrad</strong>&nbsp; 9px · 28%</div>
+    </header>
+
+    <section class="grid" aria-label="Five name glow options">
+      <article class="option o1">
+        <div class="option-head"><span class="option-title">01 · Soft halo</span><span class="recipe">7px · 20%</span></div>
+        <div class="transcript">
+          <div class="row partner"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Conrad</span><span class="body">looks good to me</span><span class="time">20:45</span></div>
+          <div class="agent-row"><span class="agent-dot"></span><span class="agent-copy">I’ll keep the partner turn distinct without flooding the reply lane.</span></div>
+          <div class="row viewer"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Maks</span><span class="body">ship this direction</span><span class="time">20:46</span></div>
+        </div>
+        <div class="note">Closest to current. Still visibly luminous on mobile.</div>
+      </article>
+
+      <article class="option o2 recommended">
+        <div class="option-head"><span class="option-title">02 · Quiet halo</span><span class="recipe">5px · 16%</span></div>
+        <div class="transcript">
+          <div class="row partner"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Conrad</span><span class="body">looks good to me</span><span class="time">20:45</span></div>
+          <div class="agent-row"><span class="agent-dot"></span><span class="agent-copy">I’ll keep the partner turn distinct without flooding the reply lane.</span></div>
+          <div class="row viewer"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Maks</span><span class="body">ship this direction</span><span class="time">20:46</span></div>
+        </div>
+        <div class="note">Keeps a restrained identity shimmer without softening the letters.</div>
+      </article>
+
+      <article class="option o3">
+        <div class="option-head"><span class="option-title">03 · Tight glint</span><span class="recipe">3px · 18%</span></div>
+        <div class="transcript">
+          <div class="row partner"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Conrad</span><span class="body">looks good to me</span><span class="time">20:45</span></div>
+          <div class="agent-row"><span class="agent-dot"></span><span class="agent-copy">I’ll keep the partner turn distinct without flooding the reply lane.</span></div>
+          <div class="row viewer"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Maks</span><span class="body">ship this direction</span><span class="time">20:46</span></div>
+        </div>
+        <div class="note">Narrower edge energy; slightly crisper and more technical.</div>
+      </article>
+
+      <article class="option o4">
+        <div class="option-head"><span class="option-title">04 · Near-flat</span><span class="recipe">2px · 12%</span></div>
+        <div class="transcript">
+          <div class="row partner"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Conrad</span><span class="body">looks good to me</span><span class="time">20:45</span></div>
+          <div class="agent-row"><span class="agent-dot"></span><span class="agent-copy">I’ll keep the partner turn distinct without flooding the reply lane.</span></div>
+          <div class="row viewer"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Maks</span><span class="body">ship this direction</span><span class="time">20:46</span></div>
+        </div>
+        <div class="note">Almost pure type color. The lane and glyph do the identity work.</div>
+      </article>
+
+      <article class="option o5 wide">
+        <div class="option-head"><span class="option-title">05 · No name glow</span><span class="recipe">none</span></div>
+        <div class="transcript">
+          <div class="row partner"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Conrad</span><span class="body">looks good to me</span><span class="time">20:45</span></div>
+          <div class="agent-row"><span class="agent-dot"></span><span class="agent-copy">I’ll keep the partner turn distinct without flooding the reply lane.</span></div>
+          <div class="row viewer"><span class="drop"><svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5C8 1.5 2.8 7 2.8 10.2a5.2 5.2 0 0 0 10.4 0C13.2 7 8 1.5 8 1.5Z" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="name">Maks</span><span class="body">ship this direction</span><span class="time">20:46</span></div>
+        </div>
+        <div class="note">Cleanest and calmest. The glowing drop remains, so attribution still has one luminous anchor.</div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
