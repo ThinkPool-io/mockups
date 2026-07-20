@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — mobile conversation reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(220 10% 9%); --raised:hsl(220 9% 11%); --surface:hsl(220 9% 13%);
+    --float:hsl(220 8% 16%); --line:hsl(220 8% 22%); --line-strong:hsl(220 9% 29%);
+    --ink:hsl(40 8% 97%); --ink-soft:hsl(40 8% 94%); --muted:hsl(220 6% 68%); --faint:hsl(220 6% 52%);
+    --pool:hsl(217 85% 62%); --pool-hi:hsl(217 85% 70%); --pool-dim:hsl(212 26% 21%);
+    --mind-a:hsl(145 40% 58%); --mind-b:hsl(220 56% 64%); --positive:hsl(152 28% 54%);
+    --font-sans:"Hanken Grotesk",system-ui,sans-serif;
+    --font-display:"Newsreader",Georgia,serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+    --ease-settle:cubic-bezier(.16,1,.3,1);
+    --scale:1;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg)}
+  body{font-family:var(--font-sans);color:var(--ink);font-weight:500}
+  .viewport{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+  .stage{position:absolute;left:50%;top:50%;width:1080px;height:1920px;overflow:hidden;
+    transform:translate(-50%,-50%) scale(var(--scale));transform-origin:center;background:var(--bg)}
+  .glow{position:absolute;inset:0;background:
+    radial-gradient(72% 35% at 50% 0%,color-mix(in oklab,var(--pool) 9%,transparent),transparent 72%),
+    radial-gradient(65% 30% at 50% 100%,color-mix(in oklab,var(--pool) 5%,transparent),transparent 76%)}
+  .grain{position:absolute;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E")}
+
+  .hook,.payoff,.brand-end,.product{position:absolute;inset:0}
+  .hook,.payoff,.brand-end{display:flex;align-items:center;justify-content:center;text-align:center}
+  .title{font-family:var(--font-sans);font-size:104px;font-weight:700;line-height:.96;letter-spacing:-.045em}
+  .title span{display:block;color:var(--pool)}
+  .payoff .title{font-family:var(--font-display);font-weight:600;font-size:112px;letter-spacing:-.035em}
+
+  .product{padding:64px 44px 46px;opacity:0}
+  .mobile-shell{height:100%;border:1px solid var(--line);background:color-mix(in oklab,var(--bg) 90%,var(--raised));
+    border-radius:48px;overflow:hidden;box-shadow:0 42px 100px color-mix(in oklab,var(--bg) 80%,transparent)}
+  .safe{height:38px;border-bottom:1px solid color-mix(in oklab,var(--line) 55%,transparent);background:var(--raised)}
+  .nav{height:112px;padding:0 32px;display:flex;align-items:center;border-bottom:1px solid var(--line);background:var(--raised)}
+  .wordmark{font-size:42px;font-weight:700;letter-spacing:-.035em;line-height:1}
+  .wordmark .pool{color:var(--pool)}
+  .room{margin-left:auto;text-align:right;display:flex;align-items:center;gap:15px}
+  .room-copy strong{display:block;font-family:var(--font-mono);font-size:18px;font-weight:500;color:var(--ink-soft)}
+  .room-copy span{display:block;margin-top:4px;font-family:var(--font-mono);font-size:14px;color:var(--faint)}
+  .faces{display:flex;align-items:center}
+  .face{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin-left:-8px;border:3px solid var(--raised);
+    background:var(--surface);font-size:12px;font-weight:700}
+  .face.a{color:var(--mind-a);box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--mind-a) 48%,transparent)}
+  .face.b{color:var(--mind-b);box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--mind-b) 48%,transparent)}
+
+  .ensemble{height:78px;padding:0 32px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);background:color-mix(in oklab,var(--raised) 82%,var(--surface))}
+  .ensemble-label{font-family:var(--font-mono);font-size:15px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);margin-right:4px}
+  .lane{height:38px;border:1px solid var(--line);border-radius:999px;padding:0 15px;display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:13px;color:var(--muted);background:var(--bg)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--positive);box-shadow:0 0 14px color-mix(in oklab,var(--positive) 45%,transparent)}
+  .lane.worker{color:var(--ink-soft);border-color:color-mix(in oklab,var(--pool) 40%,var(--line));opacity:0;transform:translateX(18px)}
+
+  .transcript{position:relative;height:1330px;padding:74px 36px 160px;overflow:hidden}
+  .thread-line{position:absolute;left:55px;top:112px;width:1px;height:830px;background:linear-gradient(var(--line),color-mix(in oklab,var(--line) 34%,transparent))}
+  .message{position:relative;margin:0 0 34px;padding:28px 30px 29px 40px;border:1px solid var(--line);border-radius:22px;background:var(--surface);opacity:0;transform:translateY(38px) scale(.97);filter:blur(5px);box-shadow:0 18px 38px color-mix(in oklab,var(--bg) 52%,transparent)}
+  .message:before{content:"";position:absolute;left:-1px;top:26px;bottom:26px;width:4px;border-radius:4px;background:var(--role)}
+  .message.conrad{--role:var(--mind-a)}
+  .message.maks{--role:var(--mind-b);margin-left:52px}
+  .message.agent{--role:var(--pool);margin-left:24px;background:color-mix(in oklab,var(--pool-dim) 28%,var(--surface))}
+  .message.worker{--role:var(--pool-hi);margin-left:52px;background:var(--raised)}
+  .meta{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-family:var(--font-mono);font-size:19px;line-height:1}
+  .name{color:var(--role);font-weight:600}.at{color:var(--pool-hi);font-weight:500}.time{margin-left:auto;color:var(--faint);font-size:13px}
+  .copy{font-size:39px;line-height:1.27;letter-spacing:-.018em;color:var(--ink-soft)}
+  .copy strong{font-weight:600;color:var(--ink)}
+  .agent .copy{font-family:var(--font-mono);font-size:27px;line-height:1.42;color:var(--muted)}
+  .worker .copy{font-family:var(--font-mono);font-size:28px;line-height:1.42}
+  .check{display:inline-grid;width:26px;height:26px;border-radius:50%;place-items:center;margin-right:10px;background:color-mix(in oklab,var(--positive) 18%,transparent);color:var(--positive);font-size:16px}
+
+  .composer-wrap{position:absolute;left:32px;right:32px;bottom:32px}
+  .permissions{display:flex;align-items:center;gap:9px;margin:0 14px 12px;font-family:var(--font-mono);font-size:13px;color:var(--faint)}
+  .permissions .pool-dot{width:8px;height:8px;border-radius:50%;background:var(--pool)}
+  .composer{height:112px;border:1px solid var(--line-strong);border-radius:30px;background:var(--float);display:flex;align-items:center;padding:0 18px 0 28px;box-shadow:0 18px 45px color-mix(in oklab,var(--bg) 75%,transparent)}
+  .placeholder{font-size:24px;color:var(--faint)}
+  .send{margin-left:auto;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:var(--pool);color:hsl(220 10% 9%);font-size:28px;font-weight:700}
+
+  .brand-end{flex-direction:column;gap:48px}
+  .brand-end .wordmark{font-size:96px}
+  .tagline{font-family:var(--font-mono);font-size:28px;line-height:1.55;color:var(--muted);letter-spacing:.01em}
+  .tagline strong{color:var(--ink-soft);font-weight:500}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="viewport">
+  <section class="stage" aria-label="ThinkPool mobile social reel concept">
+    <div class="glow"></div><div class="grain"></div>
+
+    <div class="hook" id="hook"><div class="title">The app<span>broke.</span></div></div>
+
+    <div class="product" id="product">
+      <div class="mobile-shell">
+        <div class="safe"></div>
+        <header class="nav">
+          <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+          <div class="room">
+            <div class="room-copy"><strong>🌈 session</strong><span>2 people · 2 agents</span></div>
+            <div class="faces"><span class="face a">C</span><span class="face b">M</span></div>
+          </div>
+        </header>
+        <div class="ensemble">
+          <span class="ensemble-label">Ensemble</span>
+          <span class="lane"><i class="dot"></i>Marketing</span>
+          <span class="lane worker" id="workerLane"><i class="dot"></i>Fix transcript scroll lock</span>
+        </div>
+
+        <div class="transcript">
+          <div class="thread-line"></div>
+          <article class="message conrad" id="message1">
+            <div class="meta"><span class="name">Conrad</span><span class="at">@agent</span><span class="time">18:00</span></div>
+            <div class="copy">I can’t scroll up after you’ve placed the text. Something’s broke.</div>
+          </article>
+          <article class="message maks" id="message2">
+            <div class="meta"><span class="name">Maks</span><span class="at">@agent</span><span class="time">18:00</span></div>
+            <div class="copy">Spawn a new terminal to fix it. Keep this one for marketing.</div>
+          </article>
+          <article class="message agent" id="message3">
+            <div class="meta"><span class="name">agent</span><span class="time">18:01</span></div>
+            <div class="copy">Opened separate lane: <strong>Fix transcript scroll lock</strong></div>
+          </article>
+          <article class="message worker" id="message4">
+            <div class="meta"><span class="name">Fix transcript scroll lock</span><span class="time">18:04</span></div>
+            <div class="copy"><span class="check">✓</span><strong>Scroll fix complete.</strong><br>Long transcript now stays where you left it.</div>
+          </article>
+
+          <div class="composer-wrap">
+            <div class="permissions"><span class="pool-dot"></span>agent can act in this workspace</div>
+            <div class="composer"><span class="placeholder">Think together…</span><span class="send">↑</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="payoff" id="payoff"><div class="title">The work<span>didn’t.</span></div></div>
+    <div class="brand-end" id="brandEnd">
+      <div class="wordmark"><span>think</span><span class="pool">pool</span></div>
+      <div class="tagline"><strong>Build together.</strong><br>Don’t take turns.</div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n))
+  const ease=n=>1-Math.pow(1-clamp(n),4)
+  const fade=(t,a,b,c,d)=>t<a?0:t<b?ease((t-a)/(b-a)):t<c?1:t<d?1-ease((t-c)/(d-c)):0
+  const setPop=(el,p,dx=0)=>{
+    p=ease(p); el.style.opacity=p; el.style.transform=`translate(${dx*(1-p)}px,${38*(1-p)}px) scale(${.97+.03*p})`; el.style.filter=`blur(${5*(1-p)}px)`
+  }
+  window.renderAt=(t)=>{
+    const hook=fade(t,0,.18,1.05,1.42)
+    document.querySelector('#hook').style.opacity=hook
+    document.querySelector('#hook').style.transform=`scale(${.96+.04*ease(clamp(t/.85))})`
+
+    const product=fade(t,1.12,1.56,10.35,10.82)
+    const productEl=document.querySelector('#product')
+    productEl.style.opacity=product
+    productEl.style.transform=`scale(${1.035-.035*ease(clamp((t-1.12)/.7))})`
+
+    setPop(document.querySelector('#message1'),clamp((t-1.6)/.55),-16)
+    setPop(document.querySelector('#message2'),clamp((t-3.05)/.58),20)
+    const lane=ease(clamp((t-4.72)/.45)); const laneEl=document.querySelector('#workerLane')
+    laneEl.style.opacity=lane; laneEl.style.transform=`translateX(${18*(1-lane)}px)`
+    setPop(document.querySelector('#message3'),clamp((t-5.05)/.56),-12)
+    setPop(document.querySelector('#message4'),clamp((t-7.35)/.58),18)
+
+    const payoff=fade(t,10.48,10.9,12.42,12.86)
+    const payoffEl=document.querySelector('#payoff'); payoffEl.style.opacity=payoff
+    payoffEl.style.transform=`scale(${.96+.04*ease(clamp((t-10.48)/.75))})`
+
+    const end=fade(t,12.56,13.0,15,15.01)
+    const endEl=document.querySelector('#brandEnd'); endEl.style.opacity=end
+    endEl.style.transform=`translateY(${26*(1-ease(clamp((t-12.56)/.6)))}px)`
+  }
+  const size=()=>document.documentElement.style.setProperty('--scale',Math.min(innerWidth/1080,innerHeight/1920))
+  addEventListener('resize',size); size()
+  const q=new URLSearchParams(location.search)
+  if(q.has('t')) window.renderAt(Number(q.get('t')))
+  else if(q.has('autoplay')){
+    const start=performance.now(); const tick=now=>{window.renderAt(((now-start)/1000)%15);requestAnimationFrame(tick)};requestAnimationFrame(tick)
+  } else window.renderAt(8.45)
+</script>
+</body>
+</html>
