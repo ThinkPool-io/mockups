@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — Viewer message greens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 13% 5%);--raised:hsl(212 11% 8%);--surface:hsl(212 10% 10%);
+    --line:hsl(212 7% 21%);--line-strong:hsl(212 7% 28%);
+    --ink:hsl(212 14% 95%);--ink-soft:hsl(212 14% 86%);--muted:hsl(212 14% 78%);--faint:hsl(212 12% 62%);
+    --glacier:hsl(201 78% 64%);--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+    --font-sans:"Hanken Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;min-width:320px;background:var(--bg);color:var(--ink);font-family:var(--font-mono)}
+  .page{width:min(1360px,100%);margin:0 auto;padding:34px 28px 48px}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px}
+  .eyebrow{margin:0 0 7px;color:var(--glacier);font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase}
+  h1{margin:0;font-size:30px;font-weight:600;letter-spacing:-.035em}
+  .sub{max-width:610px;margin:10px 0 0;color:var(--muted);font-family:var(--font-sans);font-size:14px;line-height:1.45}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;color:var(--faint);font-size:10px}
+  .legend span{padding:7px 9px;border:1px solid var(--line);border-radius:999px;background:var(--raised)}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .card{--green:hsl(150 60% 60%);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:hsl(200 36% 2%)}
+  .card-head{display:flex;align-items:center;gap:9px;min-height:42px;padding:8px 11px;border-bottom:1px solid var(--line);background:var(--raised)}
+  .num{color:var(--faint);font-size:9px;letter-spacing:.1em}
+  .swatch{width:13px;height:13px;border-radius:4px;background:var(--green);box-shadow:0 0 10px color-mix(in oklab,var(--green) 34%,transparent)}
+  .name{font-size:12px;font-weight:600}
+  .value{margin-left:auto;color:var(--faint);font-size:9px;white-space:nowrap}
+  .current{padding:3px 5px;border:1px solid color-mix(in oklab,var(--green) 42%,transparent);border-radius:4px;color:var(--green);font-size:8px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .terminal{padding:16px 12px 17px}
+  .message{margin:0 -12px;padding:4px 12px 4px calc(12px + 1.29em);text-indent:-1.29em;word-break:break-word;background:hsl(from var(--green) h s l / .10);box-shadow:inset 2.5px 0 0 var(--green),inset 10px 0 16px hsl(from var(--green) h s l / .11);font-size:13px;line-height:1.55}
+  .message+.message{margin-top:8px}
+  .partner{--partner:hsl(218 60% 72%);background:hsl(from var(--partner) h s l / .12);box-shadow:inset 3px 0 0 var(--partner),inset 10px 0 16px hsl(from var(--partner) h s l / .16)}
+  .partner .drop,.partner .speaker{color:var(--partner)}
+  .partner .drop{filter:drop-shadow(0 0 4.5px color-mix(in oklab,var(--partner) 28%,transparent))}
+  .partner .speaker{text-shadow:0 0 7px color-mix(in oklab,var(--partner) 34%,transparent)}
+  .drop{display:inline-flex;align-items:center;height:1.62em;margin-right:.34em;vertical-align:top;color:var(--green);filter:drop-shadow(0 0 4.5px color-mix(in oklab,var(--green) 28%,transparent))}
+  .drop svg{width:.95em;height:.95em;overflow:visible}
+  .speaker{margin-right:6px;color:var(--green);font-weight:600;text-shadow:0 0 7px color-mix(in oklab,var(--green) 34%,transparent)}
+  .body{color:var(--ink-soft);font-family:var(--font-sans);font-size:13.5px;font-weight:500}
+  time{margin-left:6px;color:var(--faint);font-size:9px;letter-spacing:.08em}
+  .footer{margin:28px 0 0;text-align:center;color:var(--faint);font-size:10px;letter-spacing:.08em}
+  @media(max-width:700px){
+    .page{padding:24px 12px 36px}.top{display:block;margin-bottom:18px}h1{font-size:24px}.sub{font-size:13px}
+    .legend{justify-content:flex-start;margin-top:14px}.grid{grid-template-columns:1fr;gap:10px}
+    .card-head{min-height:44px}.terminal{padding-top:14px;padding-bottom:15px}
+  }
+</style>
+</head>
+<body>
+<main class="page">
+<header class="top">
+  <div>
+    <p class="eyebrow">Thinkpool Code · identity study</p>
+    <h1>Viewer message greens</h1>
+    <p class="sub">Each green sits in a real two-person exchange beside the fixed Cornflower partner row. Only the viewer green changes.</p>
+  </div>
+  <div class="legend"><span>Viewer green varies</span><span>Partner stays Cornflower</span><span>10 directions</span></div>
+</header>
+
+<div class="grid" aria-label="Ten viewer green options">
+  <article class="card" style="--green:hsl(150 60% 60%)">
+    <div class="card-head"><span class="num">01</span><span class="swatch"></span><span class="name">Upper Green</span><span class="current">Current</span><span class="value">150 · 60 · 60</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(153 64% 55%)">
+    <div class="card-head"><span class="num">02</span><span class="swatch"></span><span class="name">Emerald</span><span class="value">153 · 64 · 55</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(161 48% 58%)">
+    <div class="card-head"><span class="num">03</span><span class="swatch"></span><span class="name">Jade</span><span class="value">161 · 48 · 58</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(145 52% 67%)">
+    <div class="card-head"><span class="num">04</span><span class="swatch"></span><span class="name">Mint Leaf</span><span class="value">145 · 52 · 67</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(137 40% 58%)">
+    <div class="card-head"><span class="num">05</span><span class="swatch"></span><span class="name">Fern</span><span class="value">137 · 40 · 58</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(112 34% 58%)">
+    <div class="card-head"><span class="num">06</span><span class="swatch"></span><span class="name">Moss</span><span class="value">112 · 34 · 58</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(134 28% 66%)">
+    <div class="card-head"><span class="num">07</span><span class="swatch"></span><span class="name">Sage</span><span class="value">134 · 28 · 66</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(148 72% 51%)">
+    <div class="card-head"><span class="num">08</span><span class="swatch"></span><span class="name">Malachite</span><span class="value">148 · 72 · 51</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(166 44% 64%)">
+    <div class="card-head"><span class="num">09</span><span class="swatch"></span><span class="name">Seafoam</span><span class="value">166 · 44 · 64</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+  <article class="card" style="--green:hsl(102 48% 61%)">
+    <div class="card-head"><span class="num">10</span><span class="swatch"></span><span class="name">Lime Leaf</span><span class="value">102 · 48 · 61</span></div>
+    <div class="terminal"><div class="message"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Maks</span><span class="body">this direction feels clearer without shouting</span><time>21:14</time></div></div>
+  </article>
+</div>
+<p class="footer">Current is option 01 · choose a number and I’ll port the exact HSL.</p>
+</main>
+<script>
+  const partnerRow = `<div class="message partner"><span class="drop"><svg viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 1.5C6 5 2.5 8.7 2.5 12.2A5.5 5.5 0 0 0 13.5 12.2C13.5 8.7 10 5 8 1.5Z"/></svg></span><span class="speaker">Conrad</span><span class="body">cornflower stays fixed as the partner reference</span><time>21:13</time></div>`
+  document.querySelectorAll('.terminal').forEach((terminal) => terminal.insertAdjacentHTML('afterbegin', partnerRow))
+</script>
+</body>
+</html>
