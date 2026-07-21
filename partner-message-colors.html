@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — Other person message colors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:hsl(220 10% 7%);--surface:hsl(220 9% 11%);--raised:hsl(220 9% 13%);
+    --line:hsl(220 8% 22%);--line-strong:hsl(220 9% 29%);
+    --ink:hsl(40 8% 97%);--ink-soft:hsl(40 8% 94%);--muted:hsl(220 6% 68%);--faint:hsl(220 6% 52%);
+    --pool:hsl(217 85% 62%);--font-sans:"Hanken Grotesk",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,monospace;--font-identity:"Space Grotesk","Hanken Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--page)}
+  body{margin:0;min-width:320px;background:var(--page);color:var(--ink);font-family:var(--font-sans);font-weight:500}
+  .page{width:min(1380px,100%);margin:0 auto;padding:36px 32px 56px}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;padding:0 2px}
+  .eyebrow{margin:0 0 8px;color:var(--pool);font:600 11px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase}
+  h1{margin:0;font-size:clamp(28px,3vw,42px);line-height:1.02;letter-spacing:-.035em;font-weight:600}
+  .intro{max-width:560px;margin:12px 0 0;color:var(--muted);font-size:15px;line-height:1.5}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;color:var(--muted);font:500 11px/1 var(--font-mono)}
+  .legend span{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .option{--accent:hsl(210 20% 91%);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;box-shadow:0 16px 38px hsl(220 30% 2%/.16)}
+  .option-head{display:flex;align-items:center;gap:11px;min-height:48px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .num{color:var(--faint);font:500 10px/1 var(--font-mono);letter-spacing:.08em}
+  .swatch{width:16px;height:16px;border-radius:5px;background:var(--accent);box-shadow:0 0 12px color-mix(in oklab,var(--accent) 30%,transparent)}
+  .name{font-family:var(--font-identity);font-size:13px;font-weight:600;letter-spacing:-.01em}
+  .value{margin-left:auto;color:var(--faint);font:500 10px/1 var(--font-mono)}
+  .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line)}
+  .theme{min-width:0;padding:12px 12px 14px}
+  .theme.calm{--term:hsl(220 10% 9%);--term-ink:hsl(40 8% 94%);--term-faint:hsl(220 6% 52%);background:hsl(220 10% 9%)}
+  .theme.neon{--term:hsl(200 36% 2%);--term-ink:hsl(190 22% 88%);--term-faint:hsl(196 16% 60%);background:hsl(200 36% 2%)}
+  .theme-label{display:flex;align-items:center;gap:6px;margin:0 0 9px;color:var(--term-faint);font:500 9px/1 var(--font-mono);letter-spacing:.09em;text-transform:uppercase}
+  .theme-label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 7px var(--accent)}
+  .message{margin:0 -12px;padding:5px 12px 6px calc(12px + 1.29em);min-height:58px;text-indent:-1.29em;background:color-mix(in oklab,var(--accent) 12%,transparent);box-shadow:inset 3px 0 0 var(--accent),inset 10px 0 16px color-mix(in oklab,var(--accent) 16%,transparent);color:var(--term-ink);font-size:13.5px;line-height:1.55;word-break:break-word}
+  .drop-box{display:inline-flex;align-items:center;justify-content:flex-start;width:.95em;height:1.62em;margin-right:.34em;vertical-align:top;text-indent:0;color:var(--accent);filter:drop-shadow(0 0 4.5px color-mix(in oklab,var(--accent) 28%,transparent))}
+  .drop{display:block;width:.95em;height:.95em;overflow:visible}
+  .author{margin-right:6px;color:var(--accent);font-family:var(--font-identity);font-weight:600;text-shadow:0 0 5px color-mix(in oklab,var(--accent) 16%,transparent)}
+  .time{margin-left:6px;color:var(--term-faint);font:500 9px/1 var(--font-mono);letter-spacing:.08em;white-space:nowrap}
+  footer{display:flex;justify-content:space-between;gap:16px;margin-top:24px;padding:0 2px;color:var(--faint);font:500 10px/1.4 var(--font-mono)}
+  @media(max-width:900px){.page{padding:28px 18px 44px}header{align-items:flex-start;flex-direction:column}.legend{justify-content:flex-start}.grid{grid-template-columns:1fr}}
+  @media(max-width:520px){.page{padding:24px 12px 40px}.pair{grid-template-columns:1fr}.theme{padding:11px 12px 13px}.option-head{padding:9px 11px}.value{font-size:9px}footer{flex-direction:column}}
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Other person · color round</p>
+      <h1>20 colors. Both skins.</h1>
+      <p class="intro">Conrad’s exact partner-message treatment in Calm Pool and Neon Noir. Same band, spine, glow, type, and message every time—only the partner color moves.</p>
+    </div>
+    <div class="legend" aria-label="Comparison legend"><span>Calm Pool</span><span>Neon Noir</span><span>20 options</span></div>
+  </header>
+  <section class="grid" id="options" aria-label="Partner message color options"></section>
+  <footer><span>Source-backed from structured.jsx + Code theme tokens</span><span>Pick by number or name</span></footer>
+</main>
+<script>
+  const options = [
+    ['01','Apricot','28 72% 70%'],['02','Marigold','43 66% 65%'],['03','Pistachio','92 42% 64%'],['04','Moss Mint','135 32% 63%'],
+    ['05','Seafoam','158 40% 64%'],['06','Lagoon','174 42% 62%'],['07','Ice Cyan','191 50% 68%'],['08','Open Sky','203 58% 69%'],
+    ['09','Cornflower','218 60% 72%'],['10','Periwinkle','234 54% 73%'],['11','Lavender','252 46% 75%'],['12','Wisteria','270 42% 72%'],
+    ['13','Orchid','290 42% 72%'],['14','Fuchsia','315 44% 70%'],['15','Rosewater','338 52% 72%'],['16','Soft Coral','8 62% 70%'],
+    ['17','Papaya','20 66% 68%'],['18','Warm Sand','50 38% 71%'],['19','Garden Sage','112 25% 68%'],['20','Steel Teal','186 28% 67%']
+  ];
+  const drop = `<span class="drop-box" aria-hidden="true"><svg class="drop" viewBox="0 0 16 16" fill="none"><path d="M8 1.65C8 1.65 2.8 7.25 2.8 10.35a5.2 5.2 0 0 0 10.4 0C13.2 7.25 8 1.65 8 1.65Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/></svg></span>`;
+  const message = theme => `<div class="theme ${theme}"><p class="theme-label">${theme === 'calm' ? 'Calm Pool' : 'Neon Noir'}</p><div class="message">${drop}<span class="author">Conrad</span><span>Give us a script we can use and then we will feed it to you once we have recorded it.</span><span class="time">20:15</span></div></div>`;
+  document.querySelector('#options').innerHTML = options.map(([num,name,hsl]) => `<article class="option" style="--accent:hsl(${hsl})"><div class="option-head"><span class="num">${num}</span><span class="swatch"></span><span class="name">${name}</span><span class="value">hsl(${hsl})</span></div><div class="pair">${message('calm')}${message('neon')}</div></article>`).join('');
+</script>
+</body>
+</html>
