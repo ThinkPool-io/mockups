@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ThinkPool — 10 metadata separator directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:dark;
+    --color-k-bg:#0a0d10;
+    --color-k-panel-7:hsl(212 13% 7%);
+    --color-k-panel-8:hsl(212 13% 8%);
+    --color-k-panel-10:hsl(212 13% 10%);
+    --color-line:hsl(212 7% 21%);
+    --color-line-strong:hsl(212 7% 28%);
+    --color-ink:hsl(212 14% 95%);
+    --color-muted:hsl(212 14% 78%);
+    --color-faint:hsl(212 12% 62%);
+    --color-k-pool:hsl(201 78% 64%);
+    --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--color-k-bg);color:var(--color-ink);font-family:var(--font-mono);padding:40px 32px 56px}
+  .board{max-width:1280px;margin:0 auto}
+  header{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:28px;border-bottom:1px solid var(--color-line);padding-bottom:22px}
+  .eyebrow{color:var(--color-k-pool);font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:9px}
+  h1{font-size:26px;line-height:1.15;letter-spacing:-.025em;margin:0;font-weight:600}
+  .lede{max-width:535px;color:var(--color-faint);font-size:11px;line-height:1.55;margin:0;text-align:right}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .option{min-width:0;background:var(--color-k-panel-8);border:1px solid var(--color-line);border-radius:9px;overflow:hidden}
+  .option-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--color-line);background:var(--color-k-panel-7);padding:10px 12px}
+  .number{color:var(--color-k-pool);font-size:10px;font-weight:600;letter-spacing:.08em}
+  .option h2{font-size:11px;line-height:1.25;margin:0;font-weight:600;color:var(--color-ink)}
+  .tag{margin-left:auto;border:1px solid var(--color-line-strong);border-radius:999px;padding:3px 6px;color:var(--color-faint);font-size:8px;letter-spacing:.09em;text-transform:uppercase}
+  .tag.strong{border-color:color-mix(in srgb,var(--color-k-pool) 50%,transparent);color:var(--color-k-pool)}
+  .sample{padding:14px 14px 15px;display:grid;gap:13px;min-height:138px}
+  .label{color:var(--color-faint);font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+  .line{min-width:0;color:var(--color-ink);font-size:11px;line-height:1.55}
+  .dim{color:var(--color-faint)}
+  .muted{color:var(--color-muted)}
+  .accent{color:var(--color-k-pool)}
+  .nowrap{white-space:nowrap}
+  .sep{color:var(--color-faint);font-weight:400}
+
+  /* 01 — typography alone */
+  .tone{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:9px;row-gap:3px}
+  .tone .primary{font-weight:600;color:var(--color-ink)}
+  .tone .secondary{color:var(--color-faint)}
+
+  /* 02 — structural hairline */
+  .hairline{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+  .hairline i{width:1px;height:12px;background:var(--color-line-strong);display:inline-block}
+
+  /* 06 — brackets */
+  .bracket{color:var(--color-faint)}
+  .bracket b{font-weight:500;color:var(--color-muted)}
+
+  /* 07 — chips */
+  .chips{display:flex;flex-wrap:wrap;gap:5px}
+  .chip{border:1px solid var(--color-line-strong);background:var(--color-k-panel-10);border-radius:5px;padding:3px 6px;color:var(--color-muted);font-size:9px;line-height:1.3}
+  .chip:first-child{color:var(--color-ink)}
+
+  /* 08 — stack */
+  .stack{display:grid;gap:3px}
+  .stack .value{font-size:11px;color:var(--color-ink)}
+  .stack .support{font-size:9px;color:var(--color-faint)}
+
+  /* 09 — tab stops */
+  .tabs{display:grid;grid-template-columns:minmax(110px,1.2fr) minmax(50px,.55fr) minmax(110px,1fr);gap:9px;align-items:baseline}
+  .tabs span{min-width:0}
+
+  /* 10 — connector */
+  .connector{display:flex;align-items:center;gap:7px}
+  .connector .rule{height:1px;min-width:14px;flex:1;background:var(--color-line)}
+
+  footer{display:flex;justify-content:space-between;gap:24px;margin-top:22px;color:var(--color-faint);font-size:9px;line-height:1.5}
+  footer strong{color:var(--color-muted);font-weight:500}
+
+  @media(max-width:720px){
+    body{padding:22px 14px 40px}
+    header{display:block;margin-bottom:18px;padding-bottom:17px}
+    h1{font-size:21px}
+    .lede{margin-top:10px;text-align:left}
+    .grid{grid-template-columns:1fr;gap:12px}
+    .sample{min-height:0}
+    footer{display:block}
+    footer span{display:block;margin-top:7px}
+  }
+</style>
+</head>
+<body>
+<main class="board">
+  <header>
+    <div>
+      <div class="eyebrow">ThinkPool Code · comparison board</div>
+      <h1>10 ways to retire the middle dot</h1>
+    </div>
+    <p class="lede">Same real Session Info content, ten systems. Each direction is tested on compact usage metadata and a longer provider list.</p>
+  </header>
+
+  <section class="grid" aria-label="Metadata separator alternatives">
+    <article class="option">
+      <div class="option-head"><span class="number">01</span><h2>Tone shift</h2><span class="tag strong">Top 3</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line tone"><span class="primary">13%</span><span class="secondary">33.7k/258.4k</span><span class="secondary">output</span></div></div>
+        <div><div class="label">Providers connected</div><div class="line tone"><span class="primary">Anthropic (Claude)</span><span class="secondary">GLM (provider)</span><span class="secondary">OpenAI (Codex)</span><span class="secondary">Hermes</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">02</span><h2>Hairline rail</h2><span class="tag strong">Recommended</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line hairline"><span>13%</span><i></i><span class="dim">33.7k/258.4k</span><i></i><span class="dim">output</span></div></div>
+        <div><div class="label">Providers connected</div><div class="line hairline"><span>Anthropic (Claude)</span><i></i><span class="dim">GLM (provider)</span><i></i><span class="dim">OpenAI (Codex)</span><i></i><span class="dim">Hermes</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">03</span><h2>Forward slash</h2><span class="tag">Technical</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line">13% <span class="sep">/</span> <span class="dim">33.7k/258.4k</span> <span class="sep">/</span> <span class="dim">output</span></div></div>
+        <div><div class="label">Providers connected</div><div class="line">Anthropic (Claude) <span class="sep">/</span> <span class="dim">GLM (provider)</span> <span class="sep">/</span> <span class="dim">OpenAI (Codex)</span> <span class="sep">/</span> <span class="dim">Hermes</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">04</span><h2>Directional arrow</h2><span class="tag">Flow</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line">13% <span class="sep">→</span> <span class="dim">33.7k/258.4k</span> <span class="sep">→</span> <span class="dim">output</span></div></div>
+        <div><div class="label">Hosting bridge</div><div class="line">max <span class="sep">→</span> <span class="dim">thinkpool</span> <span class="sep">→</span> <span class="dim">serving this room</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">05</span><h2>Em dash</h2><span class="tag">Editorial</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line">13% <span class="sep">—</span> <span class="dim">33.7k/258.4k</span> <span class="sep">—</span> <span class="dim">output</span></div></div>
+        <div><div class="label">Providers connected</div><div class="line">Anthropic (Claude) <span class="sep">—</span> <span class="dim">GLM (provider)</span> <span class="sep">—</span> <span class="dim">OpenAI (Codex)</span> <span class="sep">—</span> <span class="dim">Hermes</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">06</span><h2>Bracket the secondary</h2><span class="tag">Compact</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line">13% <span class="bracket">[<b>33.7k/258.4k</b>] [<b>output</b>]</span></div></div>
+        <div><div class="label">Started</div><div class="line">today <span class="bracket">[<b>14:41</b>]</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">07</span><h2>Metadata chips</h2><span class="tag strong">Top 3</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="chips"><span class="chip">13%</span><span class="chip">33.7k/258.4k</span><span class="chip">output</span></div></div>
+        <div><div class="label">Providers connected</div><div class="chips"><span class="chip">Anthropic (Claude)</span><span class="chip">GLM (provider)</span><span class="chip">OpenAI (Codex)</span><span class="chip">Hermes</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">08</span><h2>Stacked hierarchy</h2><span class="tag">Calmest</span></div>
+      <div class="sample">
+        <div class="stack"><div class="label">Context / focused terminal</div><div class="value">13%</div><div class="support">33.7k/258.4k output</div></div>
+        <div class="stack"><div class="label">Providers connected</div><div class="value">Anthropic (Claude), GLM (provider)</div><div class="support">OpenAI (Codex), Hermes</div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">09</span><h2>Tab stops</h2><span class="tag strong">Top 3</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line tabs"><span>13%</span><span class="dim">output</span><span class="dim">33.7k/258.4k</span></div></div>
+        <div><div class="label">Timeline</div><div class="line tabs"><span>today</span><span class="dim">started</span><span class="dim">14:41</span></div></div>
+      </div>
+    </article>
+
+    <article class="option">
+      <div class="option-head"><span class="number">10</span><h2>Connector line</h2><span class="tag">Spatial</span></div>
+      <div class="sample">
+        <div><div class="label">Context / focused terminal</div><div class="line connector"><span>13%</span><span class="rule"></span><span class="dim nowrap">33.7k/258.4k</span></div></div>
+        <div><div class="label">Started</div><div class="line connector"><span>today</span><span class="rule"></span><span class="dim nowrap">14:41</span></div></div>
+      </div>
+    </article>
+  </section>
+
+  <footer>
+    <strong>My pick: 02 Hairline rail</strong>
+    <span>It preserves terminal density, adds real structure, and disappears more gracefully than punctuation when lines wrap.</span>
+  </footer>
+</main>
+</body>
+</html>
