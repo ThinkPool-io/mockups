@@ -631,6 +631,12 @@
 
       window.__timelines["snowflake-thinking-options"] = tl;
       tl.seek(0);
+
+      // The HyperFrames renderer and Studio own the paused playhead everywhere
+      // except the standalone GitHub Pages review surface.
+      if (window.location.hostname === "thinkpool-io.github.io") {
+        tl.repeat(-1).play(0);
+      }
     </script>
   </body>
 </html>
