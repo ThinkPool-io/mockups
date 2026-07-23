@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Thinkpool Design — Dormant terminal invite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: hsl(212 13% 5%);
+    --color-raised: hsl(212 11% 8%);
+    --color-surface: hsl(212 10% 10%);
+    --color-float: hsl(212 9% 13%);
+    --color-line: hsl(212 7% 21%);
+    --color-line-strong: hsl(212 7% 28%);
+    --color-ink: hsl(212 14% 95%);
+    --color-ink-soft: hsl(212 14% 86%);
+    --color-muted: hsl(212 14% 78%);
+    --color-faint: hsl(212 12% 62%);
+    --color-pool: hsl(217 85% 62%);
+    --color-pool-hi: hsl(217 85% 70%);
+    --color-agent: hsl(200 64% 60%);
+    --color-agent-hi: hsl(198 72% 68%);
+    --color-owner: hsl(145 40% 58%);
+    --color-partner: hsl(220 56% 64%);
+    --color-bypass: hsl(352 84% 64%);
+    --color-positive: hsl(152 28% 54%);
+    --ease-settle: cubic-bezier(.16, 1, .3, 1);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; }
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  button { font: inherit; }
+
+  .boot {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: var(--color-bg);
+    transition: opacity 260ms var(--ease-settle), visibility 260ms;
+  }
+  .boot-inner {
+    display: grid;
+    place-items: center;
+    gap: 14px;
+    color: var(--color-faint);
+    font: 500 12px/1 var(--font-mono);
+    letter-spacing: .02em;
+  }
+  .spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid color-mix(in oklab, var(--color-agent) 22%, transparent);
+    border-top-color: var(--color-agent);
+    border-radius: 50%;
+    animation: spin 760ms linear infinite;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-agent) 42%, transparent));
+  }
+  body.ready .boot { opacity: 0; visibility: hidden; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .app {
+    height: 100dvh;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    opacity: 0;
+    transform: translateY(3px);
+    transition: opacity 220ms var(--ease-settle), transform 220ms var(--ease-settle);
+  }
+  body.ready .app { opacity: 1; transform: none; }
+
+  .chrome {
+    position: relative;
+    z-index: 20;
+    height: 48px;
+    flex: 0 0 48px;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-line) 62%, transparent);
+    background: var(--color-bg);
+    font-family: var(--font-mono);
+  }
+  .tab {
+    position: relative;
+    display: flex;
+    min-width: 86px;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px 0 12px;
+    color: var(--color-ink);
+    font-size: 13px;
+  }
+  .tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--color-agent);
+    box-shadow: 0 0 7px color-mix(in oklab, var(--color-agent) 62%, transparent);
+  }
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: var(--color-positive);
+    box-shadow: 0 0 6px var(--color-positive);
+  }
+  .tab-name { white-space: nowrap; }
+  .tab-caret {
+    width: 0;
+    height: 0;
+    margin-left: 1px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--color-faint);
+    opacity: .8;
+  }
+  .meta {
+    margin-left: auto;
+    display: flex;
+    align-items: stretch;
+  }
+  .chrome-cell {
+    position: relative;
+    display: grid;
+    width: 48px;
+    flex: 0 0 48px;
+    place-items: center;
+    border: 0;
+    border-left: 1px solid color-mix(in oklab, var(--color-line) 62%, transparent);
+    background: transparent;
+    color: var(--color-faint);
+    cursor: pointer;
+  }
+  .chrome-cell:hover,
+  .chrome-cell:focus-visible,
+  .chrome-cell[aria-expanded="true"] {
+    color: var(--color-ink);
+    outline: none;
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--color-ink) 44%, transparent));
+  }
+  .gear-pulse::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid color-mix(in oklab, var(--color-agent) 46%, transparent);
+    border-radius: 8px;
+    opacity: 0;
+    animation: gear-nudge 1.8s 1.15s var(--ease-settle) 2;
+    pointer-events: none;
+  }
+  @keyframes gear-nudge {
+    0%, 100% { opacity: 0; transform: scale(.84); }
+    28%, 62% { opacity: 1; transform: scale(1); box-shadow: 0 0 12px color-mix(in oklab, var(--color-agent) 30%, transparent); }
+  }
+  .session-label {
+    display: flex;
+    min-width: 180px;
+    align-items: center;
+    gap: 6px;
+    padding: 0 13px;
+    border-left: 1px solid color-mix(in oklab, var(--color-line) 62%, transparent);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .session-label strong { color: var(--color-agent); font-weight: 600; }
+  .session-label span { color: var(--color-faint); }
+
+  .terminal {
+    position: relative;
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .empty-wrap {
+    min-height: 0;
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: 26px 20px 18px;
+  }
+  .empty-state {
+    width: min(420px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translateY(-5%);
+  }
+  .pair-signal {
+    position: relative;
+    width: 122px;
+    height: 46px;
+    margin-bottom: 22px;
+  }
+  .pair-line {
+    position: absolute;
+    left: 31px;
+    right: 31px;
+    top: 22px;
+    height: 1px;
+    background: repeating-linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-partner) 60%, transparent) 0 4px,
+      transparent 4px 8px
+    );
+  }
+  .person {
+    position: absolute;
+    top: 6px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 9px;
+    font: 600 12px/1 var(--font-mono);
+  }
+  .person-owner {
+    left: 5px;
+    color: var(--color-owner);
+    background: color-mix(in oklab, var(--color-owner) 15%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-owner) 48%, transparent);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--color-owner) 16%, transparent);
+  }
+  .person-partner {
+    right: 5px;
+    color: var(--color-partner);
+    background: var(--color-bg);
+    border: 1px dashed color-mix(in oklab, var(--color-partner) 70%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-partner) 6%, transparent);
+  }
+  .empty-state h1 {
+    margin: 0;
+    color: var(--color-ink);
+    font: 600 22px/1.2 var(--font-sans);
+    letter-spacing: -.02em;
+  }
+  .empty-state .instruction {
+    max-width: 350px;
+    margin: 10px 0 0;
+    color: var(--color-muted);
+    font: 400 13px/1.65 var(--font-mono);
+  }
+  .instruction .settings-word {
+    color: var(--color-agent-hi);
+    white-space: nowrap;
+  }
+  .instruction .settings-word svg { vertical-align: -2px; margin-right: 3px; }
+  .empty-state .aside {
+    margin: 12px 0 0;
+    color: var(--color-faint);
+    font: 400 11px/1.55 var(--font-mono);
+  }
+
+  .composer-area {
+    flex: 0 0 auto;
+    padding: 0 12px 12px;
+    font-family: var(--font-mono);
+  }
+  .mode-row {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    color: var(--color-bypass);
+    font-size: 12px;
+  }
+  .mode-row .model {
+    margin-left: auto;
+    color: var(--color-agent);
+    font-weight: 500;
+  }
+  .mode-row .effort { color: var(--color-faint); }
+  .composer {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--color-raised) 70%, transparent);
+    padding: 8px 10px 8px 16px;
+  }
+  .composer-plus { color: var(--color-faint); font-size: 25px; font-weight: 400; }
+  .placeholder {
+    min-width: 0;
+    flex: 1;
+    color: var(--color-faint);
+    font-size: 14px;
+  }
+  .send {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 0;
+    border-radius: 9px;
+    background: var(--color-agent);
+    color: var(--color-bg);
+  }
+
+  .menu {
+    position: fixed;
+    z-index: 40;
+    top: 55px;
+    right: 8px;
+    width: 244px;
+    padding: 5px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 11px;
+    background: color-mix(in oklab, var(--color-float) 94%, transparent);
+    box-shadow: 0 18px 50px color-mix(in oklab, black 50%, transparent);
+    opacity: 0;
+    transform: translateY(-7px) scale(.985);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: opacity 150ms var(--ease-settle), transform 150ms var(--ease-settle);
+    font-family: var(--font-sans);
+  }
+  .menu.open { opacity: 1; transform: none; pointer-events: auto; }
+  .mobile-identity {
+    display: none;
+    padding: 9px 10px 10px;
+    border-bottom: 1px solid var(--color-line);
+    font-family: var(--font-mono);
+  }
+  .mobile-identity strong { display: block; color: var(--color-ink); font-size: 13px; }
+  .mobile-identity span { color: var(--color-agent); font-size: 10px; letter-spacing: .08em; }
+  .menu-item {
+    width: 100%;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--color-ink-soft);
+    padding: 8px 9px;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .menu-item:hover,
+  .menu-item:focus-visible { background: var(--color-surface); outline: none; color: var(--color-ink); }
+  .menu-item svg { flex: 0 0 16px; color: var(--color-faint); }
+  .menu-item.invite {
+    color: var(--color-agent-hi);
+    background: color-mix(in oklab, var(--color-agent) 10%, transparent);
+    box-shadow: inset 2px 0 0 color-mix(in oklab, var(--color-agent) 70%, transparent);
+  }
+  .menu-divider { height: 1px; margin: 4px 5px; background: var(--color-line); }
+  .menu-item.leave { color: hsl(8 52% 62%); }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: color-mix(in oklab, var(--color-bg) 66%, transparent);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 170ms var(--ease-settle);
+  }
+  .backdrop.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    width: min(400px, 100%);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 15px;
+    background: var(--color-surface);
+    box-shadow: 0 24px 70px color-mix(in oklab, black 58%, transparent);
+    overflow: hidden;
+    transform: translateY(9px) scale(.985);
+    transition: transform 180ms var(--ease-settle);
+  }
+  .backdrop.open .modal { transform: none; }
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 18px 15px;
+  }
+  .modal-head h2 { margin: 0; font: 600 18px/1.2 var(--font-sans); letter-spacing: -.015em; }
+  .modal-close {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--color-faint);
+    font-size: 21px;
+    cursor: pointer;
+  }
+  .modal-copy {
+    margin: -4px 18px 15px;
+    color: var(--color-faint);
+    font: 400 12px/1.55 var(--font-mono);
+  }
+  .contacts { padding: 0 14px 16px; }
+  .contact {
+    width: 100%;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--color-raised) 56%, transparent);
+    padding: 10px 12px;
+    color: var(--color-ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .contact-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    border-radius: 9px;
+    border: 1px solid color-mix(in oklab, var(--color-partner) 48%, transparent);
+    background: color-mix(in oklab, var(--color-partner) 14%, transparent);
+    color: var(--color-partner);
+    font: 600 12px/1 var(--font-mono);
+  }
+  .contact-name { min-width: 0; flex: 1; font-size: 14px; }
+  .contact-action { color: var(--color-agent-hi); font: 500 11px/1 var(--font-mono); }
+  .modal-foot {
+    display: flex;
+    gap: 8px;
+    padding: 12px 14px 14px;
+    border-top: 1px solid var(--color-line);
+  }
+  .modal-button {
+    min-height: 42px;
+    flex: 1;
+    border: 1px solid var(--color-line);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--color-ink-soft);
+    font: 500 13px/1 var(--font-sans);
+    cursor: pointer;
+  }
+  .modal-button.link { color: var(--color-agent-hi); }
+
+  .toast {
+    position: fixed;
+    z-index: 80;
+    left: 50%;
+    bottom: 90px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 9px;
+    background: var(--color-float);
+    color: var(--color-ink-soft);
+    font: 500 11px/1 var(--font-mono);
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    pointer-events: none;
+    transition: opacity 150ms, transform 150ms var(--ease-settle);
+  }
+  .toast.open { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 600px) {
+    .chrome { height: 48px; flex-basis: 48px; }
+    .tab { min-width: 0; flex: 1; padding-left: 12px; }
+    .session-label { display: none; }
+    .chrome-cell { width: 46px; flex-basis: 46px; }
+    .empty-wrap { padding: 18px 18px 8px; }
+    .empty-state { transform: translateY(-4%); }
+    .pair-signal { margin-bottom: 18px; }
+    .empty-state h1 { font-size: 20px; }
+    .empty-state .instruction { max-width: 320px; font-size: 12px; }
+    .empty-state .aside { font-size: 10px; }
+    .composer-area { padding: 0 10px 10px; }
+    .mode-row { min-height: 28px; padding: 0 3px; font-size: 10px; gap: 5px; }
+    .composer { min-height: 58px; border-radius: 11px; padding-left: 13px; }
+    .placeholder { font-size: 13px; }
+    .send { width: 40px; height: 40px; }
+    .menu { top: 54px; right: 6px; width: min(264px, calc(100vw - 12px)); }
+    .mobile-identity { display: block; }
+    .backdrop { align-items: end; padding: 10px; }
+    .modal { width: 100%; border-radius: 15px; }
+    .modal-head { padding-top: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="boot" aria-live="polite">
+    <div class="boot-inner">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Starting Codex…</span>
+    </div>
+  </div>
+
+  <main class="app">
+    <header class="chrome">
+      <div class="tab" aria-current="page">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="tab-name">T1</span>
+        <span class="tab-caret" aria-hidden="true"></span>
+      </div>
+      <div class="meta">
+        <button class="chrome-cell" type="button" aria-label="New terminal" title="New terminal">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="session-label" aria-label="Code session">
+          <strong>Code</strong><span>session</span>
+        </div>
+        <button id="gear" class="chrome-cell gear-pulse" type="button" aria-label="Session options" aria-expanded="false" title="Session options">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.15.37.35.7.6 1 .28.3.65.46 1.1.49H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="terminal">
+      <div class="empty-wrap">
+        <div class="empty-state">
+          <div class="pair-signal" aria-hidden="true">
+            <span class="pair-line"></span>
+            <span class="person person-owner">M</span>
+            <span class="person person-partner">+</span>
+          </div>
+          <h1>No partner here yet</h1>
+          <p class="instruction">
+            Open
+            <span class="settings-word">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.8-1L14.4 3h-4.8l-.4 3.1a8 8 0 0 0-1.8 1l-2.4-1-2 3.4L5.1 11a7 7 0 0 0 0 2L3 14.5l2 3.4 2.4-1a8 8 0 0 0 1.8 1l.4 3.1h4.8l.4-3.1a8 8 0 0 0 1.8-1l2.4 1 2-3.4-2.1-1.5a7 7 0 0 0 .1-1Z"/></svg>
+              session settings
+            </span>,
+            then choose <span class="settings-word">Invite a contact</span>.
+          </p>
+          <p class="aside">Or start now. A partner can join this terminal later.</p>
+        </div>
+      </div>
+
+      <footer class="composer-area">
+        <div class="mode-row">
+          <span aria-hidden="true">◇</span>
+          <span>Bypass permissions</span>
+          <span class="model">GPT-5.6-Sol</span>
+          <span class="effort">High</span>
+        </div>
+        <div class="composer">
+          <span class="composer-plus" aria-hidden="true">+</span>
+          <span class="placeholder">Message agent…</span>
+          <button class="send" type="button" aria-label="Send">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <div id="menu" class="menu" role="menu" aria-label="Session options">
+    <div class="mobile-identity">
+      <strong>Code session</strong>
+      <span>HJH4TVUV</span>
+    </div>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      <span>Session info</span>
+    </button>
+    <button id="invite" class="menu-item invite" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>
+      <span>Invite a contact</span>
+    </button>
+    <button id="copy-menu" class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/></svg>
+      <span>Copy invite link</span>
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="4" width="12" height="16" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h8"/></svg>
+      <span>Copy terminal transcript</span>
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+      <span>Text size</span>
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4zM12 5v14"/></svg>
+      <span>Compact tool rows</span>
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+      <span>Feedback</span>
+    </button>
+    <button class="menu-item" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.7 2.7 0 1 1 3.3 2.6c-.8.3-.8 1.1-.8 1.9M12 17h.01"/></svg>
+      <span>Guide</span>
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item leave" type="button" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 17l5-5-5-5M15 12H3M21 19V5a2 2 0 0 0-2-2h-6"/></svg>
+      <span>Leave room</span>
+    </button>
+  </div>
+
+  <div id="backdrop" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="invite-title">
+    <section class="modal">
+      <header class="modal-head">
+        <h2 id="invite-title">Invite a contact</h2>
+        <button id="close-modal" class="modal-close" type="button" aria-label="Close">×</button>
+      </header>
+      <p class="modal-copy">Choose the partner for this session.</p>
+      <div class="contacts">
+        <button id="contact" class="contact" type="button">
+          <span class="contact-mark">C</span>
+          <span class="contact-name">Conrad</span>
+          <span class="contact-action">invite →</span>
+        </button>
+      </div>
+      <footer class="modal-foot">
+        <button id="copy-modal" class="modal-button link" type="button">Copy invite link</button>
+        <button id="done" class="modal-button" type="button">Done</button>
+      </footer>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status">Invite link copied</div>
+
+<script>
+  const gear = document.getElementById('gear')
+  const menu = document.getElementById('menu')
+  const invite = document.getElementById('invite')
+  const backdrop = document.getElementById('backdrop')
+  const toast = document.getElementById('toast')
+
+  window.setTimeout(() => document.body.classList.add('ready'), 520)
+
+  function closeMenu() {
+    menu.classList.remove('open')
+    gear.setAttribute('aria-expanded', 'false')
+  }
+  function closeModal() {
+    backdrop.classList.remove('open')
+  }
+  function showToast(message) {
+    toast.textContent = message
+    toast.classList.add('open')
+    window.setTimeout(() => toast.classList.remove('open'), 1500)
+  }
+
+  gear.addEventListener('click', (event) => {
+    event.stopPropagation()
+    const open = !menu.classList.contains('open')
+    menu.classList.toggle('open', open)
+    gear.setAttribute('aria-expanded', String(open))
+  })
+  invite.addEventListener('click', () => {
+    closeMenu()
+    backdrop.classList.add('open')
+  })
+  document.getElementById('close-modal').addEventListener('click', closeModal)
+  document.getElementById('done').addEventListener('click', closeModal)
+  backdrop.addEventListener('click', (event) => {
+    if (event.target === backdrop) closeModal()
+  })
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target) && event.target !== gear) closeMenu()
+  })
+  document.getElementById('copy-menu').addEventListener('click', () => {
+    closeMenu()
+    showToast('Invite link copied')
+  })
+  document.getElementById('copy-modal').addEventListener('click', () => showToast('Invite link copied'))
+  document.getElementById('contact').addEventListener('click', () => {
+    closeModal()
+    showToast('Invite sent to Conrad')
+  })
+</script>
+</body>
+</html>
