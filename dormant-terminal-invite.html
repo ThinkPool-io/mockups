@@ -212,11 +212,13 @@
     width: 122px;
     height: 46px;
     margin-bottom: 22px;
+    overflow: hidden;
   }
   .pair-line {
     position: absolute;
-    left: 31px;
-    right: 31px;
+    z-index: 0;
+    left: 38px;
+    right: 38px;
     top: 22px;
     height: 1px;
     background: repeating-linear-gradient(
@@ -227,6 +229,7 @@
   }
   .person {
     position: absolute;
+    z-index: 1;
     top: 6px;
     display: grid;
     width: 34px;
@@ -238,7 +241,7 @@
   .person-owner {
     left: 5px;
     color: var(--color-owner);
-    background: color-mix(in oklab, var(--color-owner) 15%, transparent);
+    background: color-mix(in oklab, var(--color-owner) 15%, var(--color-bg));
     border: 1px solid color-mix(in oklab, var(--color-owner) 48%, transparent);
     box-shadow: 0 0 10px color-mix(in oklab, var(--color-owner) 16%, transparent);
   }
@@ -265,7 +268,14 @@
     color: var(--color-agent-hi);
     white-space: nowrap;
   }
-  .instruction .settings-word svg { vertical-align: -2px; margin-right: 3px; }
+  .instruction .settings-word svg { vertical-align: -2px; margin-right: 2px; }
+  .instruction .invite-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .instruction .invite-actions svg { margin-right: 0; }
+  .instruction .choice-or { color: var(--color-muted); margin: 0 2px; }
   .empty-state .aside {
     margin: 12px 0 0;
     color: var(--color-faint);
@@ -556,12 +566,16 @@
           <p class="instruction">
             Open
             <span class="settings-word">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.8-1L14.4 3h-4.8l-.4 3.1a8 8 0 0 0-1.8 1l-2.4-1-2 3.4L5.1 11a7 7 0 0 0 0 2L3 14.5l2 3.4 2.4-1a8 8 0 0 0 1.8 1l.4 3.1h4.8l.4-3.1a8 8 0 0 0 1.8-1l2.4 1 2-3.4-2.1-1.5a7 7 0 0 0 .1-1Z"/></svg>
-              session settings
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.8-1L14.4 3h-4.8l-.4 3.1a8 8 0 0 0-1.8 1l-2.4-1-2 3.4L5.1 11a7 7 0 0 0 0 2L3 14.5l2 3.4 2.4-1a8 8 0 0 0 1.8 1l.4 3.1h4.8l.4-3.1a8 8 0 0 0 1.8-1l2.4 1 2-3.4-2.1-1.5a7 7 0 0 0 .1-1Z"/></svg>session settings
             </span>,
-            then choose <span class="settings-word">Invite a contact</span>.
+            then choose
+            <span class="settings-word invite-actions">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg><span>Invite a contact</span>
+              <span class="choice-or">or</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/></svg><span>Copy invite link</span>
+            </span>.
           </p>
-          <p class="aside">Or start now. A partner can join this terminal later.</p>
+          <p class="aside">You can also start the work solo. Your partner can join the session later at any time.</p>
         </div>
       </div>
 
