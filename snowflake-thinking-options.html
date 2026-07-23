@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>ThinkPool Code · Snowflake thinking studies</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0a0d10;
+        --card: #06090c;
+        --rail: #10161d;
+        --line: hsl(199 24% 17%);
+        --ink: hsl(190 26% 96%);
+        --ink-soft: hsl(190 22% 88%);
+        --muted: hsl(192 16% 76%);
+        --faint: hsl(196 16% 60%);
+        --glacier: hsl(201 78% 64%);
+        --glacier-bright: hsl(201 86% 76%);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        margin: 0;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      body {
+        color: var(--ink-soft);
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+      }
+
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+
+      #board {
+        position: absolute;
+        inset: 0;
+      }
+
+      .frame {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+        padding: 56px 64px 52px;
+        background: var(--bg);
+      }
+
+      .header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        min-height: 92px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow,
+      .proof {
+        color: var(--faint);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 10px 0 0;
+        color: var(--ink);
+        font-size: 38px;
+        font-weight: 500;
+        letter-spacing: -0.03em;
+      }
+
+      .proof {
+        padding-bottom: 5px;
+        color: var(--glacier);
+        letter-spacing: 0.08em;
+      }
+
+      .grid {
+        display: grid;
+        flex: 1;
+        min-height: 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .study {
+        display: grid;
+        grid-template-columns: 58px minmax(0, 1fr) auto;
+        grid-template-rows: auto 1fr;
+        align-items: center;
+        min-width: 0;
+        padding: 17px 22px 16px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+      }
+
+      .study:nth-child(4n + 2),
+      .study:nth-child(4n + 3) {
+        background: color-mix(in srgb, var(--rail) 52%, var(--card));
+      }
+
+      .number {
+        grid-row: 1 / 3;
+        align-self: stretch;
+        display: flex;
+        align-items: flex-start;
+        padding-top: 1px;
+        color: var(--glacier);
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+      }
+
+      .name {
+        color: var(--faint);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .cycle {
+        color: color-mix(in srgb, var(--faint) 70%, transparent);
+        font-size: 14px;
+        letter-spacing: 0.06em;
+      }
+
+      .status {
+        grid-column: 2 / 4;
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr);
+        align-items: center;
+        min-width: 0;
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 24px;
+        line-height: 1.35;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+      }
+
+      .status strong {
+        color: var(--ink-soft);
+        font-weight: 500;
+      }
+
+      .detail {
+        color: var(--faint);
+      }
+
+      .spark {
+        display: block;
+        width: 29px;
+        height: 29px;
+        overflow: visible;
+        color: var(--glacier);
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .spark .ray {
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .spark .core {
+        fill: currentColor;
+        stroke: none;
+      }
+
+      .spark .orbit-dot {
+        fill: var(--glacier-bright);
+        stroke: none;
+      }
+
+      .spark .echo {
+        opacity: 0;
+        transform-origin: 20px 20px;
+      }
+
+      .s2 .ray,
+      .s5 .ray {
+        opacity: 0.34;
+      }
+
+      .micro-note {
+        position: absolute;
+        right: 64px;
+        bottom: 20px;
+        color: color-mix(in srgb, var(--faint) 58%, transparent);
+        font-size: 13px;
+        letter-spacing: 0.04em;
+      }
+
+      @media (min-width: 701px) and (max-width: 1919px) {
+        html,
+        body {
+          width: 100vw;
+          height: calc(100vw * 0.5625);
+        }
+
+        #stage {
+          transform: scale(calc(100vw / 1920px));
+          transform-origin: top left;
+        }
+      }
+
+      @media (max-width: 700px) {
+        html,
+        body {
+          width: 100%;
+          height: auto;
+          min-height: 844px;
+          overflow-x: hidden;
+          overflow-y: auto;
+        }
+
+        #stage {
+          width: 100%;
+          height: auto;
+          min-height: 1710px;
+          overflow: visible;
+        }
+
+        #board,
+        .frame {
+          position: relative;
+          inset: auto;
+        }
+
+        .frame {
+          gap: 18px;
+          min-height: 1710px;
+          padding: 24px 18px 34px;
+        }
+
+        .header {
+          grid-template-columns: 1fr;
+          gap: 12px;
+          min-height: 0;
+          padding-bottom: 18px;
+        }
+
+        .eyebrow,
+        .proof {
+          font-size: 11px;
+        }
+
+        h1 {
+          margin-top: 7px;
+          font-size: 25px;
+        }
+
+        .proof {
+          padding-bottom: 0;
+        }
+
+        .grid {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .study {
+          grid-template-columns: 38px minmax(0, 1fr) auto;
+          flex: none;
+          min-height: 136px;
+          padding: 15px 14px 14px;
+        }
+
+        .number,
+        .name {
+          font-size: 12px;
+        }
+
+        .cycle {
+          font-size: 10px;
+        }
+
+        .status {
+          grid-template-columns: 34px minmax(0, 1fr);
+          margin-top: 7px;
+          font-size: 14px;
+          white-space: normal;
+        }
+
+        .spark {
+          width: 23px;
+          height: 23px;
+        }
+
+        .micro-note {
+          position: static;
+          margin-top: -3px;
+          text-align: right;
+          font-size: 9px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="snowflake-thinking-options"
+      data-start="0"
+      data-duration="6"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <section id="board" class="clip" data-start="0" data-duration="6" data-track-index="1">
+        <div class="frame">
+          <header class="header">
+            <div>
+              <div class="eyebrow">ThinkPool Code · motion study</div>
+              <h1>10 snowflake thinking loops</h1>
+            </div>
+            <div class="proof">6s proof · all options live</div>
+          </header>
+
+          <div class="grid">
+            <article class="study s1">
+              <span class="number">01</span><span class="name">Breathing core</span><span class="cycle">1.5s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal pair-1" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal pair-2" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal pair-3" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal pair-1" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal pair-2" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal pair-3" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s2">
+              <span class="number">02</span><span class="name">Radial relay</span><span class="cycle">1.5s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal pair-1" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal pair-2" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal pair-3" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal pair-1" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal pair-2" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal pair-3" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s3">
+              <span class="number">03</span><span class="name">Ice bloom</span><span class="cycle">1.8s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal pair-1" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal pair-2" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal pair-3" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal pair-1" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal pair-2" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal pair-3" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s4">
+              <span class="number">04</span><span class="name">Twin orbit</span><span class="cycle">2.7s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal" x1="20" y1="5" x2="20" y2="12" />
+                    <line class="ray diagonal" x1="9.5" y1="9.5" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal" x1="28" y1="20" x2="35" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="25.8" x2="30.5" y2="30.5" />
+                    <line class="ray cardinal" x1="20" y1="28" x2="20" y2="35" />
+                    <line class="ray diagonal" x1="9.5" y1="30.5" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal" x1="5" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="14.2" x2="30.5" y2="9.5" />
+                    <circle class="core" cx="20" cy="20" r="2" />
+                  </g>
+                  <g class="orbit">
+                    <circle class="orbit-dot" cx="20" cy="3.5" r="1.35" />
+                    <circle class="orbit-dot" cx="20" cy="36.5" r="1.35" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s5">
+              <span class="number">05</span><span class="name">Focus sweep</span><span class="cycle">1.8s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal band-2" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal band-1" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal band-3" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal band-4" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal band-2" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal band-1" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal band-3" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal band-4" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s6">
+              <span class="number">06</span><span class="name">Quiet spin</span><span class="cycle">2.7s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s7">
+              <span class="number">07</span><span class="name">Four-beat cross</span><span class="cycle">1.2s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s8">
+              <span class="number">08</span><span class="name">Pulse echo</span><span class="cycle">1.35s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <circle class="echo" cx="20" cy="20" r="8.5" />
+                  <g class="rays">
+                    <line class="ray cardinal" x1="20" y1="5" x2="20" y2="12" />
+                    <line class="ray diagonal" x1="9.5" y1="9.5" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal" x1="28" y1="20" x2="35" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="25.8" x2="30.5" y2="30.5" />
+                    <line class="ray cardinal" x1="20" y1="28" x2="20" y2="35" />
+                    <line class="ray diagonal" x1="9.5" y1="30.5" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal" x1="5" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="14.2" x2="30.5" y2="9.5" />
+                    <circle class="core" cx="20" cy="20" r="2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s9">
+              <span class="number">09</span><span class="name">Micro shiver</span><span class="cycle">2s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+
+            <article class="study s10">
+              <span class="number">10</span><span class="name">Paired draw</span><span class="cycle">1.5s</span>
+              <div class="status">
+                <svg class="spark" viewBox="0 0 40 40" aria-hidden="true">
+                  <g class="rays">
+                    <line class="ray cardinal pair-1" x1="20" y1="3" x2="20" y2="12" />
+                    <line class="ray diagonal pair-2" x1="8" y1="8" x2="14.2" y2="14.2" />
+                    <line class="ray cardinal pair-3" x1="28" y1="20" x2="37" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="25.8" x2="32" y2="32" />
+                    <line class="ray cardinal pair-1" x1="20" y1="28" x2="20" y2="37" />
+                    <line class="ray diagonal pair-2" x1="8" y1="32" x2="14.2" y2="25.8" />
+                    <line class="ray cardinal pair-3" x1="3" y1="20" x2="12" y2="20" />
+                    <line class="ray diagonal pair-4" x1="25.8" y1="14.2" x2="32" y2="8" />
+                    <circle class="core" cx="20" cy="20" r="2.2" />
+                  </g>
+                </svg>
+                <span><strong>Thinking</strong>… <span class="detail">(17m 26s with high effort)</span></span>
+              </div>
+            </article>
+          </div>
+
+          <div class="micro-note">Indicator scale enlarged for comparison · production line-height preserved</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const t0 = 0.25;
+
+      tl.fromTo(".s1 .rays",
+        { scale: 0.88, opacity: 0.58, transformOrigin: "50% 50%" },
+        { scale: 1.08, opacity: 1, duration: 0.75, ease: "sine.inOut", yoyo: true, repeat: 6 },
+        t0);
+
+      for (let cycle = 0; cycle < 4; cycle += 1) {
+        for (let pair = 1; pair <= 4; pair += 1) {
+          tl.fromTo(`.s2 .pair-${pair}`,
+            { opacity: 0.34, scale: 0.92, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1.1, duration: 0.24, ease: "sine.out", yoyo: true, repeat: 1 },
+            t0 + cycle * 1.35 + (pair - 1) * 0.27);
+        }
+      }
+
+      for (let cycle = 0; cycle < 3; cycle += 1) {
+        for (let pair = 1; pair <= 4; pair += 1) {
+          tl.fromTo(`.s3 .pair-${pair}`,
+            { opacity: 0.32, scale: 0.2, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1, duration: 0.42, ease: "power3.out", yoyo: true, repeat: 1 },
+            t0 + cycle * 1.8 + (pair - 1) * 0.12);
+        }
+      }
+
+      tl.fromTo(".s4 .orbit",
+        { rotation: 0, transformOrigin: "50% 50%" },
+        { rotation: 360, duration: 2.7, ease: "none", repeat: 1 },
+        t0);
+
+      const sweepBands = [1, 2, 3, 4];
+      for (let cycle = 0; cycle < 3; cycle += 1) {
+        sweepBands.forEach((band, index) => {
+          tl.fromTo(`.s5 .band-${band}`,
+            { opacity: 0.36, scale: 0.94, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1.14, duration: 0.3, ease: "power2.out", yoyo: true, repeat: 1 },
+            t0 + cycle * 1.8 + index * 0.22);
+        });
+      }
+
+      [0.35, 3.05].forEach((start) => {
+        tl.to(".s6 .rays", { rotation: 45, transformOrigin: "50% 50%", duration: 1.05, ease: "sine.inOut" }, start);
+        tl.to(".s6 .rays", { rotation: 0, transformOrigin: "50% 50%", duration: 1.05, ease: "sine.inOut" }, start + 1.35);
+      });
+
+      tl.fromTo(".s7 .cardinal",
+        { opacity: 1, scale: 1.08, transformOrigin: "50% 50%" },
+        { opacity: 0.34, scale: 0.92, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 8 },
+        t0);
+      tl.fromTo(".s7 .diagonal",
+        { opacity: 0.34, scale: 0.92, transformOrigin: "50% 50%" },
+        { opacity: 1, scale: 1.08, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 8 },
+        t0);
+
+      tl.fromTo(".s8 .echo",
+        { opacity: 0.62, scale: 0.35, transformOrigin: "50% 50%" },
+        { opacity: 0, scale: 1.55, duration: 1.35, ease: "power2.out", repeat: 3 },
+        t0);
+
+      [0.8, 2.8, 4.8].forEach((start) => {
+        tl.to(".s9 .rays", { rotation: 2, transformOrigin: "50% 50%", duration: 0.11, ease: "power2.out" }, start);
+        tl.to(".s9 .rays", { rotation: -1.5, transformOrigin: "50% 50%", duration: 0.1, ease: "none" }, start + 0.11);
+        tl.to(".s9 .rays", { rotation: 0, transformOrigin: "50% 50%", duration: 0.16, ease: "sine.out" }, start + 0.23);
+      });
+
+      for (let cycle = 0; cycle < 4; cycle += 1) {
+        for (let pair = 1; pair <= 4; pair += 1) {
+          tl.fromTo(`.s10 .pair-${pair}`,
+            { opacity: 0.3, scale: 0.15, transformOrigin: "50% 50%" },
+            { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out", yoyo: true, repeat: 1 },
+            t0 + cycle * 1.5 + (pair - 1) * 0.18);
+        }
+      }
+
+      window.__timelines["snowflake-thinking-options"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
