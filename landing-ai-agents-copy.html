@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thinkpool - AI coding agents steered by two people</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --surface: hsl(212 10% 10%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --cobalt: #1a6ef4;
+    --cobalt-ink: #2e78ff;
+    --code-bg: #0a0d10;
+    --code-card: #06090c;
+    --code-line: rgba(255,255,255,.08);
+    --code-line-hi: rgba(255,255,255,.15);
+    --glacier: hsl(201 78% 64%);
+    --green: #3ad07f;
+    --partner: hsl(218 60% 72%);
+    --viewer: hsl(161 48% 58%);
+    --display: "Newsreader", Georgia, serif;
+    --sans: "Hanken Grotesk", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+  body { font-family: var(--sans); font-weight: 500; }
+  a { color: inherit; text-decoration: none; }
+  button { color: inherit; font: inherit; }
+  .nav {
+    height: 64px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1024px; margin: auto; padding: 0 24px;
+  }
+  .nav-rail { border-bottom: 1px solid var(--line); }
+  .wordmark { font-size: 26px; font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+  .wordmark b { color: var(--cobalt); font-weight: 600; }
+  .nav-actions { display: flex; align-items: center; gap: 8px; font: 500 12.5px var(--mono); }
+  .signin { padding: 10px; color: var(--muted); }
+  .start { border: 1px solid var(--cobalt); border-radius: 9px; padding: 9px 16px; color: hsl(217 85% 70%); }
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .hero::before {
+    content: ""; position: absolute; z-index: 0; left: 50%; top: -290px;
+    width: 840px; height: 720px; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklab, var(--cobalt) 12%, transparent), transparent 68%);
+  }
+  .hero-inner { position: relative; z-index: 1; width: min(calc(100% - 48px), 1088px); margin: auto; padding: 72px 0 32px; }
+  .thesis { max-width: 800px; margin: auto; text-align: center; }
+  .drop-wrap { position: relative; display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 24px; }
+  .drop-wrap::before { content: ""; position: absolute; width: 390px; height: 390px; border: 1px solid color-mix(in oklab, var(--cobalt) 15%, transparent); border-radius: 50%; }
+  .drop { width: 19px; height: 24px; background: var(--cobalt-ink); border-radius: 55% 45% 58% 42% / 68% 61% 39% 32%; transform: rotate(45deg); }
+  .eyebrow { margin: 0; color: var(--faint); font: 600 12px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+  h1 { margin: 20px 0 0; font: 400 clamp(58px,6.1vw,82px)/.99 var(--display); letter-spacing: -.025em; text-wrap: balance; }
+  h1 .accent { color: var(--cobalt-ink); }
+  h1 .dot { color: var(--faint); }
+  .lede { max-width: 720px; margin: 28px auto 0; color: var(--muted); font-size: 18px; line-height: 1.65; text-wrap: pretty; }
+  .proof { margin-top: 48px; }
+  .console { overflow: hidden; border: 1px solid var(--code-line-hi); border-radius: 14px; background: var(--code-bg); box-shadow: 0 22px 60px -30px #000; }
+  .tabs { display: flex; min-height: 38px; border-bottom: 1px solid var(--code-line); font: 13px var(--mono); }
+  .tabset { display: flex; min-width: 0; flex: 1; padding-left: 8px; }
+  .tab { position: relative; display: flex; align-items: center; gap: 8px; padding: 0 10px; white-space: nowrap; }
+  .tab.secondary { color: #8b96a2; }
+  .tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; background: var(--glacier); }
+  .live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 5px var(--green); }
+  .meta { display: grid; place-items: center; min-width: 38px; border-left: 1px solid var(--code-line); color: #8b96a2; }
+  .launch { display: flex; align-items: center; padding: 0 14px; border-left: 1px solid var(--code-line); color: var(--muted); }
+  .launch b { color: var(--glacier); }
+  .ensemble { display: flex; min-height: 38px; align-items: stretch; border-bottom: 1px solid var(--code-line); font: 12px var(--mono); }
+  .ensemble-label { display: flex; align-items: center; padding: 0 12px; font-weight: 600; }
+  .ensemble-label b { color: var(--glacier); }
+  .lane { display: flex; align-items: center; gap: 8px; padding: 0 14px; border-left: 1px solid var(--code-line); color: var(--muted); }
+  .spinner { width: 10px; height: 10px; border: 1px solid color-mix(in oklab,var(--glacier) 28%,transparent); border-top-color: var(--glacier); border-radius: 50%; }
+  .transcript { min-height: 244px; padding: 12px; font: 13px/1.55 var(--mono); }
+  .turn { margin: 0 -12px; padding: 5px 14px; border-left: 2px solid; }
+  .turn.partner { border-color: var(--partner); background: color-mix(in oklab,var(--partner) 5%,transparent); }
+  .turn.viewer { border-color: var(--viewer); background: color-mix(in oklab,var(--viewer) 5%,transparent); }
+  .turn .name { margin-right: 8px; font-weight: 600; }
+  .partner .name { color: var(--partner); }
+  .viewer .name { color: var(--viewer); }
+  .turn .text { color: var(--muted); font-family: var(--sans); }
+  .time { margin-left: 6px; color: #6b7681; font-size: 9px; letter-spacing: .08em; }
+  .agent { display: flex; gap: 8px; margin-top: 16px; color: var(--muted); font-family: var(--sans); }
+  .agent::before { content: ""; width: 7px; height: 7px; margin-top: 7px; border-radius: 50%; background: var(--glacier); box-shadow: 0 0 8px var(--glacier); }
+  .tool { margin-top: 10px; padding: 9px 12px; border: 1px solid var(--code-line); border-radius: 9px; background: var(--code-card); color: #8b96a2; }
+  .tool b { color: var(--cobalt-ink); }
+  .why { padding: 64px 24px 72px; text-align: center; background: var(--surface); }
+  .section-label { color: var(--faint); font: 600 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+  h2 { max-width: 720px; margin: 18px auto 0; font: 400 clamp(38px,4.2vw,52px)/1.08 var(--display); }
+  .why p { max-width: 700px; margin: 18px auto 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+  @media (max-width: 700px) {
+    .nav { height: 55px; padding: 0 16px; }
+    .signin { display: none; }
+    .hero-inner { width: calc(100% - 40px); padding: 58px 0 28px; }
+    .drop-wrap { margin-bottom: 22px; }
+    .drop-wrap::before { width: 260px; height: 260px; }
+    .eyebrow { font-size: 11px; letter-spacing: .13em; }
+    h1 { margin-top: 22px; font-size: 42px; line-height: 1.02; }
+    .lede { margin-top: 25px; font-size: 16px; line-height: 1.55; }
+    .proof { margin-top: 36px; }
+    .tabs, .ensemble { min-height: 48px; }
+    .tab { padding: 0 7px; font-size: 12px; }
+    .tab .long, .launch { display: none; }
+    .meta { min-width: 46px; }
+    .transcript { height: 290px; min-height: 0; overflow: hidden; padding-top: 10px; }
+    .turn { font-size: 11px; }
+    .turn .text { font-size: 12px; }
+    .agent, .tool { display: none; }
+    .why { padding: 60px 20px; }
+    h2 { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+  <div class="nav-rail">
+    <nav class="nav" aria-label="Marketing navigation">
+      <a class="wordmark" href="#"><span>think</span><b>pool</b></a>
+      <div class="nav-actions"><a class="signin" href="#">Sign in</a><a class="start" href="#">Start free</a></div>
+    </nav>
+  </div>
+  <main>
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="thesis">
+          <div class="drop-wrap" aria-hidden="true"><span class="drop"></span></div>
+          <p class="eyebrow">Two people steering from anywhere</p>
+          <h1>Steer AI coding agents<br><span class="accent">together</span><span class="dot">.</span></h1>
+          <p class="lede">Share Claude Code, Codex, or Hermes Agent with a partner. Both of you can watch and steer the work from a browser or phone.</p>
+        </div>
+        <div class="proof">
+          <div class="console" role="img" aria-label="Example Thinkpool Code session shared by two people">
+            <div class="tabs">
+              <div class="tabset">
+                <div class="tab active"><span class="live"></span><span class="long">landing direction</span><span>⌄</span></div>
+                <div class="tab secondary"><span class="live"></span><span class="long">Terminal 2</span><span>T2</span></div>
+              </div>
+              <div class="meta">＋</div><div class="launch"><b>Launch</b>&nbsp; session</div><div class="meta">⚙</div>
+            </div>
+            <div class="ensemble"><div class="ensemble-label">Ensemble&nbsp;<b>⬡1</b></div><div class="lane"><span class="spinner"></span><span style="color:var(--glacier)">Opus 4.8</span> proof review</div></div>
+            <div class="transcript">
+              <div class="turn partner"><span class="name">Conrad</span><span class="text"><i>this homepage is turning into a feature wall</i></span><span class="time">20:36</span></div>
+              <div class="turn partner"><span class="name">Conrad</span><span class="text">the pair is buried under product mechanics</span><span class="time">20:37</span></div>
+              <div class="turn viewer"><span class="name">Maks</span><span class="text">keep one example. cut the rest.</span><span class="time">20:38</span></div>
+              <div class="turn viewer"><span class="name">Maks</span><span class="text">We need to restore the compact hero and make the pair the point</span><span class="time">20:39</span></div>
+              <div class="agent">I’ll keep the pair as the point and let the room prove the rest.</div>
+              <div class="tool">▸ <b>⬡ Thinkpool Dispatch</b>&nbsp; proof review <span style="float:right;color:var(--green)">✓</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="why">
+      <div class="section-label">Multiplayer AI coding</div>
+      <h2>Scaling agents isn’t the same as working together.</h2>
+      <p>Running several agents at once is fan-out: one person, more hands. Thinkpool is lateral. Two people share one Ensemble, both able to watch and steer, while top-level agents can inspect other terminals and hand defined work to visible worker lanes.</p>
+    </section>
+  </main>
+</body>
+</html>
