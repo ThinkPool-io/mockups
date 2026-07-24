@@ -68,6 +68,7 @@
   .tabs { display: flex; min-height: 38px; border-bottom: 1px solid var(--code-line); font: 13px var(--mono); }
   .tabset { display: flex; min-width: 0; flex: 1; padding-left: 8px; }
   .tab { position: relative; display: flex; align-items: center; gap: 8px; padding: 0 10px; white-space: nowrap; }
+  .tab .short { display: none; }
   .tab.secondary { color: #8b96a2; }
   .tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; background: var(--glacier); }
   .live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 5px var(--green); }
@@ -109,6 +110,7 @@
     .tabs, .ensemble { min-height: 48px; }
     .tab { padding: 0 7px; font-size: 12px; }
     .tab .long, .launch { display: none; }
+    .tab .short { display: inline; }
     .meta { min-width: 46px; }
     .transcript { height: 290px; min-height: 0; overflow: hidden; padding-top: 10px; }
     .turn { font-size: 11px; }
@@ -140,7 +142,7 @@
             <div class="tabs">
               <div class="tabset">
                 <div class="tab active"><span class="live"></span><span class="long">landing direction</span><span>⌄</span></div>
-                <div class="tab secondary"><span class="live"></span><span class="long">Terminal 2</span><span>T2</span></div>
+                <div class="tab secondary"><span class="live"></span><span class="long">Terminal 2</span><span class="short">T2</span></div>
               </div>
               <div class="meta">＋</div><div class="launch"><b>Launch</b>&nbsp; session</div><div class="meta">⚙</div>
             </div>
