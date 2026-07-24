@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ - Thinkpool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --surface: hsl(212 10% 10%);
+    --line: hsl(212 7% 21%);
+    --ink: hsl(212 14% 95%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --cobalt: #1a6ef4;
+    --cobalt-ink: #2e78ff;
+    --display: "Newsreader", Georgia, serif;
+    --sans: "Hanken Grotesk", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+  body { font-family: var(--sans); font-weight: 500; }
+  a { color: inherit; text-decoration: none; }
+  .nav-rail { border-bottom: 1px solid var(--line); }
+  .nav { height: 64px; max-width: 1024px; margin: auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+  .wordmark { font-size: 26px; font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+  .wordmark b { color: var(--cobalt); font-weight: 600; }
+  .nav-actions { display: flex; align-items: center; gap: 8px; font: 500 12.5px var(--mono); }
+  .signin { padding: 10px; color: var(--muted); }
+  .start { border: 1px solid var(--cobalt); border-radius: 9px; padding: 9px 16px; color: hsl(217 85% 70%); }
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .hero::before { content: ""; position: absolute; left: 50%; top: -300px; width: 720px; height: 620px; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle, color-mix(in oklab,var(--cobalt) 13%,transparent), transparent 70%); }
+  .hero-inner { position: relative; width: min(calc(100% - 40px), 768px); margin: auto; padding: 68px 0 36px; text-align: center; }
+  .eyebrow { margin: 0; color: var(--faint); font: 600 12px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+  h1 { margin: 26px 0 0; font: 400 clamp(48px,6vw,64px)/1.04 var(--display); letter-spacing: -.02em; }
+  h1 .accent { color: var(--cobalt-ink); }
+  h1 .dot { color: var(--faint); }
+  .lede { max-width: 620px; margin: 28px auto 0; color: var(--muted); font-size: 18px; line-height: 1.65; }
+  .lede a { color: var(--cobalt-ink); font-family: var(--mono); font-size: .95em; }
+  .faq-wrap { width: min(calc(100% - 40px), 704px); margin: 0 auto; padding: 32px 0 64px; }
+  .faq-panel { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: 0 30px 70px -45px rgba(0,0,0,.9); }
+  .faq-row { display: grid; grid-template-columns: 28px 1fr; column-gap: 14px; row-gap: 8px; padding: 24px 28px; border-bottom: 1px solid var(--line); }
+  .faq-row:last-child { border: 0; }
+  .num { padding-top: 2px; color: var(--cobalt-ink); font: 600 12px var(--mono); font-variant-numeric: tabular-nums; }
+  h2 { margin: 0; color: var(--ink); font-size: 15.5px; line-height: 1.4; }
+  .answer { grid-column: 2; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.72; }
+  .new .num::after { content: ""; display: inline-block; width: 4px; height: 4px; margin-left: 5px; border-radius: 50%; background: var(--cobalt); vertical-align: 2px; }
+  .cta { max-width: 704px; margin: auto; padding: 36px 20px 72px; border-top: 1px solid var(--line); text-align: center; }
+  .cta-mark { width: 38px; height: 38px; margin: auto; display: grid; place-items: center; border-radius: 11px; background: hsl(212 18% 10%); color: var(--cobalt); font: 600 24px var(--sans); }
+  .cta h2 { margin-top: 22px; font: 400 40px/1.1 var(--display); }
+  .cta p { max-width: 430px; margin: 14px auto 0; color: var(--muted); line-height: 1.6; }
+  @media (max-width: 700px) {
+    .nav { height: 55px; padding: 0 16px; }
+    .signin { display: none; }
+    .hero-inner { padding: 52px 0 32px; }
+    .eyebrow { font-size: 11px; }
+    h1 { margin-top: 26px; font-size: 42px; }
+    .lede { margin-top: 26px; font-size: 16px; line-height: 1.55; }
+    .faq-wrap { width: calc(100% - 24px); padding-top: 28px; }
+    .faq-row { grid-template-columns: 28px 1fr; padding: 22px 16px; }
+    .answer { font-size: 13.5px; }
+    .cta h2 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+  <div class="nav-rail">
+    <nav class="nav" aria-label="Marketing navigation">
+      <a class="wordmark" href="#"><span>think</span><b>pool</b></a>
+      <div class="nav-actions"><a class="signin" href="#">Sign in</a><a class="start" href="#">Start free</a></div>
+    </nav>
+  </div>
+  <main>
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Good to know</p>
+        <h1>Before you<br><span class="accent">start</span><span class="dot">.</span></h1>
+        <p class="lede">Choose Claude Code, Codex, or Hermes Agent, open a room, pair on an AI coding agent. Something missing? Ask us at <a href="mailto:support@thinkpool.io">support@thinkpool.io</a>.</p>
+      </div>
+    </header>
+    <section class="faq-wrap">
+      <div class="faq-panel">
+        <article class="faq-row"><span class="num">01</span><h2>What is Thinkpool?</h2><p class="answer">A room where two people pair on an AI coding agent. One of you connects a bridge on your own machine with a supported runtime installed and signed in or configured. The agent reads the repo, edits, and runs commands while both of you watch the same room and steer it together.</p></article>
+        <article class="faq-row new"><span class="num">02</span><h2>Can two people use Claude Code or Codex together?</h2><p class="answer">Yes. Thinkpool gives both people the same browser room, where they can watch and steer Claude Code, Codex, or Hermes Agent together. One person runs the bridge. Their partner joins through the room link from a desktop or phone.</p></article>
+        <article class="faq-row new"><span class="num">03</span><h2>Can my partner and I control Claude Code or Codex remotely from a phone?</h2><p class="answer">Yes. Thinkpool connects the AI coding agents on your bridge machine to a shared browser room. You and your partner can watch and steer them from a phone, tablet, or computer while the repository and runtime credentials stay on the bridge machine.</p></article>
+        <article class="faq-row new"><span class="num">04</span><h2>What is multiplayer AI coding?</h2><p class="answer">Multiplayer AI coding puts more than one person inside the same running agent session. In Thinkpool, two people watch and steer Claude Code, Codex, or Hermes Agent together instead of passing screenshots, transcripts, or pull requests back and forth.</p></article>
+        <article class="faq-row new"><span class="num">05</span><h2>Is Thinkpool an AI pair programming tool?</h2><p class="answer">Yes, with two people in the pair. Both of you share the same coding room and steer the AI coding agents together. The agent does the typing while the two people keep the intent and decisions shared.</p></article>
+        <article class="faq-row new"><span class="num">06</span><h2>Can two people vibe code together?</h2><p class="answer">Yes. Share a Thinkpool room and both people can describe what to build, watch the AI coding agent work, and redirect it from their own browser. The repository and runtime stay on the bridge machine.</p></article>
+        <article class="faq-row"><span class="num">07</span><h2>What is an agent terminal?</h2><p class="answer">A single running instance of a coding agent inside your room. Open more than one to work on different things at once or look straight into what another terminal is doing. Every terminal is visible to both people.</p></article>
+        <article class="faq-row"><span class="num">08</span><h2>What happens if the bridge isn’t running?</h2><p class="answer">The room still opens and every past terminal is still readable, but nothing new happens. A room with no bridge connected is a read-only transcript, not a chat.</p></article>
+        <article class="faq-row"><span class="num">09</span><h2>Which coding agents and credentials does Thinkpool support?</h2><p class="answer">Thinkpool supports Claude Code, Codex, and Hermes Agent. Each runtime uses its own required host login or credentials on the bridge machine.</p></article>
+        <article class="faq-row"><span class="num">10</span><h2>What does it cost?</h2><p class="answer">Free gets you one active code session at a time and no card is required. Plus lets you keep unlimited sessions open at once for €5 per month.</p></article>
+      </div>
+    </section>
+    <section class="cta">
+      <div class="cta-mark">t</div>
+      <h2>Easier to try than to read about.</h2>
+      <p>Free to start. Your partner joins through the room link with a free account.</p>
+    </section>
+  </main>
+</body>
+</html>
