@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>ThinkPool — Terminal picker header revision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: hsl(212 13% 5%);
+    --color-raised: hsl(212 11% 8%);
+    --color-surface: hsl(212 10% 10%);
+    --color-float: hsl(212 9% 13%);
+    --color-line: hsl(212 7% 21%);
+    --color-line-strong: hsl(212 7% 28%);
+    --color-ink: hsl(212 14% 95%);
+    --color-muted: hsl(212 14% 78%);
+    --color-faint: hsl(212 12% 62%);
+    --color-k-agent: hsl(201 78% 64%);
+    --color-k-agent-hi: hsl(201 84% 72%);
+    --color-positive: hsl(152 28% 54%);
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { width: 100%; min-height: 100%; margin: 0; background: #050709; }
+  button { font: inherit; }
+
+  body {
+    display: grid;
+    place-items: center;
+    min-height: 100dvh;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+  }
+
+  .device {
+    position: relative;
+    width: min(430px, 100vw);
+    height: min(860px, 100dvh);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 40%, color-mix(in oklab, var(--color-k-agent) 4%, transparent), transparent 44%),
+      var(--color-bg);
+  }
+
+  .statusbar {
+    height: 58px;
+    padding: 20px 22px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  .system-icons { display: flex; align-items: center; gap: 8px; color: var(--color-ink); }
+  .signal { display: flex; align-items: end; gap: 2px; height: 13px; }
+  .signal i { display: block; width: 3px; border-radius: 2px; background: currentColor; }
+  .signal i:nth-child(1) { height: 5px; }
+  .signal i:nth-child(2) { height: 8px; }
+  .signal i:nth-child(3) { height: 11px; }
+  .battery { width: 25px; height: 12px; border: 1.5px solid currentColor; border-radius: 3px; padding: 2px; position: relative; }
+  .battery::after { content: ""; position: absolute; right: -3px; top: 3px; width: 2px; height: 5px; border-radius: 0 2px 2px 0; background: currentColor; }
+  .battery b { display: block; width: 51%; height: 100%; background: hsl(48 92% 53%); border-radius: 1px; }
+
+  .roombar {
+    height: 54px;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-line) 72%, transparent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    font-size: 12px;
+    color: var(--color-muted);
+    opacity: .46;
+  }
+
+  .roombar .live {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-positive);
+    box-shadow: 0 0 12px var(--color-positive);
+  }
+  .roombar .room-name { color: var(--color-ink); min-width: 0; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .roombar .room-icon { width: 38px; text-align: center; font-size: 18px; }
+
+  .transcript {
+    padding: 32px 22px;
+    color: var(--color-muted);
+    opacity: .12;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .ghost-line { height: 10px; margin-bottom: 14px; border-radius: 6px; background: var(--color-muted); }
+  .ghost-line:nth-child(1) { width: 74%; }
+  .ghost-line:nth-child(2) { width: 91%; }
+  .ghost-line:nth-child(3) { width: 58%; }
+
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in oklab, var(--color-bg) 72%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .sheet {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: min(650px, calc(100dvh - 150px));
+    overflow: hidden;
+    border: 1px solid var(--color-line-strong);
+    border-bottom: 0;
+    border-radius: 18px 18px 0 0;
+    background: var(--color-raised);
+    box-shadow: 0 -28px 70px -36px rgba(0, 0, 0, .95);
+    transition: transform .32s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .sheet.is-hidden { transform: translateY(calc(100% - 58px)); }
+
+  .sheet-accent {
+    position: absolute;
+    top: 0;
+    left: 56px;
+    right: 56px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-k-agent) 72%, transparent), transparent);
+  }
+
+  .pull-zone {
+    position: relative;
+    height: 26px;
+    display: grid;
+    place-items: center;
+  }
+
+  .pull-handle {
+    width: 34px;
+    height: 4px;
+    border-radius: 99px;
+    background: color-mix(in oklab, var(--color-faint) 48%, transparent);
+  }
+
+  .dismiss {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-faint);
+    cursor: pointer;
+  }
+  .dismiss:hover { color: var(--color-ink); background: var(--color-float); }
+  .dismiss svg { transition: transform .25s ease; }
+  .sheet.is-hidden .dismiss svg { transform: rotate(180deg); }
+
+  .sheet-header {
+    height: 76px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 18px 14px 20px;
+    border-bottom: 1px solid var(--color-line);
+    background:
+      linear-gradient(90deg, color-mix(in oklab, var(--color-k-agent) 5%, transparent), transparent 44%),
+      var(--color-surface);
+  }
+
+  .heading { min-width: 0; flex: 1; }
+  .eyebrow {
+    margin-bottom: 3px;
+    color: var(--color-k-agent);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .title-row { display: flex; align-items: center; gap: 9px; }
+  .title {
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -.02em;
+  }
+  .count {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border: 1px solid color-mix(in oklab, var(--color-k-agent) 24%, var(--color-line));
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-k-agent) 7%, transparent);
+    color: var(--color-muted);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .new-terminal {
+    height: 42px;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    border: 1px solid var(--color-k-agent-hi);
+    border-radius: 10px;
+    background: var(--color-k-agent);
+    color: hsl(212 18% 9%);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-k-agent) 18%, transparent),
+      0 8px 22px -14px var(--color-k-agent);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .new-terminal:hover { background: var(--color-k-agent-hi); }
+  .new-terminal svg { width: 16px; height: 16px; stroke-width: 2.2; }
+
+  .launcher {
+    position: absolute;
+    z-index: 4;
+    top: 104px;
+    right: 18px;
+    width: 190px;
+    padding: 7px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 12px;
+    background: var(--color-float);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, .5);
+    opacity: 0;
+    transform: translateY(-6px) scale(.98);
+    pointer-events: none;
+    transition: opacity .16s ease, transform .16s ease;
+  }
+  .launcher.is-open { opacity: 1; transform: none; pointer-events: auto; }
+  .launcher button {
+    width: 100%;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    border-radius: 7px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--color-muted);
+    font-size: 10px;
+    cursor: pointer;
+  }
+  .launcher button:hover { background: color-mix(in oklab, var(--color-k-agent) 8%, transparent); color: var(--color-ink); }
+  .launcher kbd { color: var(--color-faint); font: inherit; font-size: 8px; }
+
+  .terminal-list {
+    height: calc(100% - 102px);
+    overflow-y: auto;
+    padding: 10px 10px max(22px, env(safe-area-inset-bottom));
+  }
+
+  .terminal {
+    position: relative;
+    width: 100%;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 10px 10px 12px;
+    background: transparent;
+    color: var(--color-muted);
+    text-align: left;
+    cursor: pointer;
+  }
+  .terminal:hover { background: var(--color-float); }
+  .terminal.active {
+    background:
+      linear-gradient(90deg, color-mix(in oklab, var(--color-k-agent) 8%, transparent), transparent 70%),
+      hsl(212 10% 8%);
+  }
+  .terminal.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    border-radius: 99px;
+    background: var(--color-k-agent);
+    box-shadow: 0 0 12px color-mix(in oklab, var(--color-k-agent) 40%, transparent);
+  }
+
+  .index {
+    width: 29px;
+    flex: 0 0 29px;
+    color: var(--color-k-agent);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .04em;
+    opacity: .92;
+  }
+
+  .terminal-copy { min-width: 0; flex: 1; }
+  .terminal-name {
+    display: block;
+    overflow: hidden;
+    color: var(--color-ink);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .terminal-state {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 4px;
+    color: var(--color-faint);
+    font-size: 9.5px;
+    line-height: 1;
+  }
+  .state-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--color-positive);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--color-positive) 65%, transparent);
+  }
+  .state-dot.thinking {
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid color-mix(in oklab, var(--color-k-agent) 62%, transparent);
+    border-top-color: var(--color-k-agent);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .more {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: grid;
+    place-items: center;
+    border-left: 1px solid var(--color-line);
+    color: var(--color-faint);
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+  .terminal:not(.active) .more { visibility: hidden; }
+
+  .note {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 22px;
+    transform: translateX(-50%);
+    color: color-mix(in oklab, var(--color-faint) 58%, transparent);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 700px) {
+    body {
+      background:
+        radial-gradient(circle at 50% 40%, color-mix(in oklab, var(--color-k-agent) 6%, transparent), transparent 30%),
+        #050709;
+    }
+    .device {
+      height: 844px;
+      border: 1px solid var(--color-line);
+      border-radius: 28px;
+      box-shadow: 0 34px 90px rgba(0,0,0,.62);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .device { width: 100vw; height: 100dvh; }
+    .note { display: none; }
+    .sheet { height: min(650px, calc(100dvh - 128px)); }
+    .sheet-header { padding-left: 18px; padding-right: 14px; }
+    .eyebrow { font-size: 7.5px; }
+    .title { font-size: 15px; }
+    .count { height: 20px; padding: 0 7px; font-size: 8px; }
+    .new-terminal { height: 40px; padding: 0 12px; font-size: 10px; }
+    .terminal { min-height: 73px; }
+    .terminal-name { font-size: 11.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<main class="device">
+  <div class="statusbar" aria-hidden="true">
+    <span>19:22</span>
+    <span class="system-icons">
+      <span class="signal"><i></i><i></i><i></i></span>
+      <span>⌁</span>
+      <span class="battery"><b></b></span>
+    </span>
+  </div>
+
+  <div class="roombar" aria-hidden="true">
+    <span class="live"></span>
+    <span class="room-name">Mobile Terminal Scrolling</span>
+    <span>1/6</span>
+    <span class="room-icon">☷</span>
+    <span class="room-icon">⚙</span>
+  </div>
+
+  <div class="transcript" aria-hidden="true">
+    <div class="ghost-line"></div>
+    <div class="ghost-line"></div>
+    <div class="ghost-line"></div>
+  </div>
+
+  <div class="backdrop"></div>
+  <div class="note">Header revision · interactive</div>
+
+  <section class="sheet" id="sheet" aria-label="Terminal picker">
+    <div class="sheet-accent"></div>
+    <div class="pull-zone">
+      <span class="pull-handle" aria-hidden="true"></span>
+      <button class="dismiss" id="dismiss" aria-label="Dismiss terminal picker">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m6.5 9 5.5 5.5L17.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <header class="sheet-header">
+      <div class="heading">
+        <div class="eyebrow">Terminal switcher</div>
+        <div class="title-row">
+          <span class="title">Terminals</span>
+          <span class="count">6 open</span>
+        </div>
+      </div>
+      <button class="new-terminal" id="newTerminal" aria-expanded="false" aria-controls="launcher">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-linecap="round"/>
+        </svg>
+        <span>New terminal</span>
+      </button>
+    </header>
+
+    <div class="launcher" id="launcher" role="menu" aria-label="New terminal">
+      <button role="menuitem"><span>Claude Code</span><kbd>⌘1</kbd></button>
+      <button role="menuitem"><span>Codex</span><kbd>⌘2</kbd></button>
+      <button role="menuitem"><span>Hermes</span><kbd>⌘3</kbd></button>
+    </div>
+
+    <div class="terminal-list" role="list" aria-label="Open terminals">
+      <button class="terminal active" role="listitem" aria-current="page">
+        <span class="index">01</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Mobile Terminal Scrolling</span>
+          <span class="terminal-state"><span class="state-dot"></span>Ready</span>
+        </span>
+        <span class="more" aria-label="Terminal actions">•••</span>
+      </button>
+
+      <button class="terminal" role="listitem">
+        <span class="index">02</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Conrad building things</span>
+          <span class="terminal-state"><span class="state-dot thinking"></span>Agent thinking</span>
+        </span>
+        <span class="more">•••</span>
+      </button>
+
+      <button class="terminal" role="listitem">
+        <span class="index">03</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Improve Session Animations</span>
+          <span class="terminal-state"><span class="state-dot"></span>Ready</span>
+        </span>
+        <span class="more">•••</span>
+      </button>
+
+      <button class="terminal" role="listitem">
+        <span class="index">04</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Spain trip investigation</span>
+          <span class="terminal-state"><span class="state-dot"></span>Ready</span>
+        </span>
+        <span class="more">•••</span>
+      </button>
+
+      <button class="terminal" role="listitem">
+        <span class="index">05</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Google Ads</span>
+          <span class="terminal-state"><span class="state-dot"></span>Ready</span>
+        </span>
+        <span class="more">•••</span>
+      </button>
+
+      <button class="terminal" role="listitem">
+        <span class="index">06</span>
+        <span class="terminal-copy">
+          <span class="terminal-name">Reddit Promo</span>
+          <span class="terminal-state"><span class="state-dot"></span>Ready</span>
+        </span>
+        <span class="more">•••</span>
+      </button>
+    </div>
+  </section>
+</main>
+
+<script>
+  const sheet = document.querySelector('#sheet');
+  const dismiss = document.querySelector('#dismiss');
+  const newTerminal = document.querySelector('#newTerminal');
+  const launcher = document.querySelector('#launcher');
+
+  dismiss.addEventListener('click', () => {
+    sheet.classList.toggle('is-hidden');
+    launcher.classList.remove('is-open');
+    newTerminal.setAttribute('aria-expanded', 'false');
+  });
+
+  newTerminal.addEventListener('click', () => {
+    const isOpen = launcher.classList.toggle('is-open');
+    newTerminal.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  document.querySelectorAll('.terminal').forEach((terminal) => {
+    terminal.addEventListener('click', () => {
+      document.querySelectorAll('.terminal').forEach((item) => {
+        item.classList.remove('active');
+        item.removeAttribute('aria-current');
+      });
+      terminal.classList.add('active');
+      terminal.setAttribute('aria-current', 'page');
+    });
+  });
+</script>
+</body>
+</html>
