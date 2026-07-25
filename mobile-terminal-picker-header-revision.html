@@ -117,7 +117,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: min(650px, calc(100dvh - 150px));
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: min(650px, calc(100dvh - 150px));
     overflow: hidden;
     border: 1px solid var(--color-line-strong);
     border-bottom: 0;
@@ -243,7 +246,9 @@
   .launcher kbd { color: var(--color-faint); font: inherit; font-size: 8px; }
 
   .terminal-list {
-    height: calc(100% - 64px);
+    height: auto;
+    min-height: 0;
+    flex: 0 1 auto;
     overflow-y: auto;
     padding: 10px 10px max(22px, env(safe-area-inset-bottom));
     background: var(--color-bg);
@@ -373,7 +378,7 @@
   @media (max-width: 420px) {
     .device { width: 100vw; height: 100dvh; }
     .note { display: none; }
-    .sheet { height: min(650px, calc(100dvh - 128px)); }
+    .sheet { max-height: min(650px, calc(100dvh - 128px)); }
     .sheet-header { padding-left: 18px; padding-right: 14px; }
     .eyebrow { font-size: 7.5px; }
     .title { gap: 6px; font-size: 15px; }
@@ -448,7 +453,7 @@
           <span class="terminal-state"><span class="state-dot"></span>Ready</span>
         </span>
         <span class="more" aria-label="Terminal actions">
-          <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5.5 8.5h13L12 15.5z" fill="currentColor"/>
           </svg>
         </span>
