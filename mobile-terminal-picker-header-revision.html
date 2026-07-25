@@ -143,9 +143,7 @@
     gap: 14px;
     padding: 0 18px 0 20px;
     border-bottom: 1px solid var(--color-line);
-    background:
-      linear-gradient(90deg, color-mix(in oklab, var(--color-k-agent) 5%, transparent), transparent 44%),
-      var(--color-surface);
+    background: var(--color-bg);
   }
 
   .heading { min-width: 0; flex: 1; }
@@ -160,18 +158,19 @@
   .title-row { display: flex; align-items: center; gap: 9px; }
   .title {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 17px;
-    line-height: 1;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 16px;
+    line-height: 1.2;
     font-weight: 600;
     letter-spacing: -.02em;
   }
   .title-count {
     color: var(--color-k-agent);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
   }
   .count {
     display: inline-flex;
@@ -377,7 +376,8 @@
     .sheet { height: min(650px, calc(100dvh - 128px)); }
     .sheet-header { padding-left: 18px; padding-right: 14px; }
     .eyebrow { font-size: 7.5px; }
-    .title { font-size: 15px; }
+    .title { gap: 6px; font-size: 15px; }
+    .title-count { font-size: 10.5px; }
     .count { height: 20px; padding: 0 7px; font-size: 8px; }
     .new-terminal { height: 40px; padding: 0 12px; font-size: 10px; }
     .terminal { min-height: 73px; }
@@ -448,8 +448,8 @@
           <span class="terminal-state"><span class="state-dot"></span>Ready</span>
         </span>
         <span class="more" aria-label="Terminal actions">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="m7 9.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5.5 8.5h13L12 15.5z" fill="currentColor"/>
           </svg>
         </span>
       </button>
