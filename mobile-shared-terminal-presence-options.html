@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Thinkpool — shared terminal presence options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(220 56% 72%);
+      --positive: hsl(152 40% 58%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at 48% -20%, color-mix(in oklab, var(--pool) 8%, transparent), transparent 38%),
+        var(--bg);
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      width: min(1400px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 34px 36px 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 24px;
+      padding: 0 2px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 clamp(24px, 3vw, 36px)/1.08 var(--font-sans);
+      letter-spacing: -.035em;
+    }
+
+    .intro p {
+      width: min(46ch, 44vw);
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      grid-column: span 2;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: color-mix(in oklab, var(--raised) 94%, transparent);
+    }
+
+    .option:nth-child(4) { grid-column: 2 / span 2; }
+    .option:nth-child(5) { grid-column: 4 / span 2; }
+
+    .option-head {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+    }
+
+    .option-code {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 7px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 14px/1.2 var(--font-sans);
+      letter-spacing: -.01em;
+    }
+
+    .option-head p {
+      margin: 3px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .phone {
+      position: relative;
+      overflow: hidden;
+      min-height: 228px;
+      background: var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      height: 52px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .selector {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      padding: 0 11px;
+    }
+
+    .status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 999px;
+      background: var(--positive);
+      box-shadow: 0 0 7px var(--positive);
+    }
+
+    .name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chevron {
+      width: 10px;
+      flex: 0 0 10px;
+      color: var(--faint);
+    }
+
+    .cell {
+      position: relative;
+      display: grid;
+      width: 52px;
+      flex: 0 0 52px;
+      place-items: center;
+      border-left: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      color: var(--faint);
+    }
+
+    .plus {
+      font: 300 28px/1 var(--font-sans);
+      transform: translateY(-1px);
+    }
+
+    .gear {
+      width: 18px;
+      height: 18px;
+      opacity: .82;
+    }
+
+    .avatar {
+      display: grid;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--partner) 48%, transparent);
+      border-radius: 4px;
+      background: color-mix(in oklab, var(--partner) 16%, transparent);
+      color: var(--partner);
+      font: 700 9px/1 var(--font-mono);
+    }
+
+    .ensemble {
+      display: flex;
+      height: 51px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .hex {
+      display: grid;
+      width: 50px;
+      flex: 0 0 50px;
+      place-items: center;
+      border-right: 1px solid var(--line);
+      color: var(--pool);
+      font-size: 12px;
+    }
+
+    .lane {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 7px;
+      padding: 0 12px;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .lane::after {
+      position: absolute;
+      right: 8px;
+      bottom: 0;
+      left: 8px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--pool);
+      box-shadow: 0 0 6px color-mix(in oklab, var(--pool) 60%, transparent);
+      content: "";
+    }
+
+    .lane b { color: var(--pool); font-weight: 500; }
+    .close { margin-left: auto; color: var(--faint); }
+
+    .transcript {
+      padding: 18px 24px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .transcript p {
+      position: relative;
+      margin: 0 0 11px;
+    }
+
+    .transcript p::before {
+      position: absolute;
+      top: .62em;
+      left: -13px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--pool);
+      box-shadow: 0 0 7px var(--pool);
+      content: "";
+    }
+
+    .tool {
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--faint);
+      font: 500 10px/30px var(--font-mono);
+      padding: 0 10px;
+    }
+
+    /* A — replace the left status dot with a co-view avatar; retain ready state as pin. */
+    .a .status { display: none; }
+    .a .lead-avatar {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      flex-basis: 22px;
+      font-size: 10px;
+    }
+    .a .lead-avatar::after {
+      position: absolute;
+      right: -2px;
+      bottom: -2px;
+      width: 7px;
+      height: 7px;
+      border: 1.5px solid var(--bg);
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 5px var(--positive);
+      content: "";
+    }
+
+    /* B — count and presence become one compact information cluster. */
+    .count-cluster {
+      display: inline-flex;
+      height: 26px;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid color-mix(in oklab, var(--line-strong) 72%, transparent);
+      border-radius: 7px;
+      padding: 0 6px 0 8px;
+      background: color-mix(in oklab, var(--float) 55%, transparent);
+    }
+
+    /* C — partner presence rides on the Add cell without changing its action. */
+    .add-avatar {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 15px;
+      height: 15px;
+      border-radius: 4px;
+      background: var(--bg);
+      font-size: 7.5px;
+      box-shadow: 0 0 0 2px var(--bg);
+    }
+
+    /* D — a shared-view rail becomes the active selector's lower edge. */
+    .presence-rail {
+      position: absolute;
+      right: 10px;
+      bottom: 0;
+      left: 11px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: color-mix(in oklab, var(--partner) 82%, transparent);
+      box-shadow: 0 0 7px color-mix(in oklab, var(--partner) 54%, transparent);
+    }
+
+    .rail-avatar {
+      position: absolute;
+      z-index: 1;
+      right: 8px;
+      bottom: -8px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--bg);
+      font-size: 8px;
+      box-shadow: 0 0 0 2px var(--bg);
+    }
+
+    /* E — presence joins the picker control; count remains unchanged. */
+    .picker-presence {
+      display: inline-flex;
+      height: 28px;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      border-radius: 7px;
+      padding: 0 6px;
+      color: var(--faint);
+    }
+
+    .picker-presence .avatar {
+      width: 19px;
+      height: 19px;
+    }
+
+    @media (max-width: 700px) {
+      .board { padding: 22px 14px 32px; }
+      .intro { display: block; margin-bottom: 14px; padding: 0 2px 16px; }
+      .intro p { width: auto; margin-top: 10px; }
+      .options { display: flex; flex-direction: column; gap: 12px; }
+      .option, .option:nth-child(4), .option:nth-child(5) { grid-column: auto; }
+      .option-head { min-height: 56px; }
+      .phone { min-height: 232px; }
+      .topbar { height: 52px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Mobile terminal presence · 5 directions</p>
+        <h1>Where should “same terminal” live?</h1>
+      </div>
+      <p>Each option preserves the real 48px terminal bar, active-terminal count, picker chevron, Add action, and Ensemble rail. Only Conrad’s terminal-scoped presence moves.</p>
+    </header>
+
+    <section class="options" aria-label="Partner presence placement options">
+      <article class="option a">
+        <header class="option-head">
+          <span class="option-code">A</span>
+          <div><h2>Status becomes co-view</h2><p>No extra width; green pin preserves Ready.</p></div>
+        </header>
+        <div class="phone">
+          <div class="topbar">
+            <div class="selector">
+              <span class="status"></span>
+              <span class="avatar lead-avatar" aria-label="Conrad is viewing this terminal">C</span>
+              <span class="name">Mobile Terminal Scrolling</span>
+              <span class="count">1/5</span>
+              <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg>
+            </div>
+            <div class="cell"><span class="plus">+</span></div>
+            <div class="cell"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+          </div>
+          <div class="ensemble"><span class="hex">⬡¹</span><span class="lane"><b>Design</b> Thinkpool — terminal action… <span class="close">×</span></span></div>
+          <div class="transcript"><p>Conrad is here on this terminal.</p><div class="tool">▸ Bash · npm run build</div></div>
+        </div>
+      </article>
+
+      <article class="option b">
+        <header class="option-head">
+          <span class="option-code">B</span>
+          <div><h2>Count capsule</h2><p>Navigation and co-viewing share one cluster.</p></div>
+        </header>
+        <div class="phone">
+          <div class="topbar">
+            <div class="selector">
+              <span class="status"></span>
+              <span class="name">Mobile Terminal Scrolling</span>
+              <span class="count-cluster"><span class="count">1/5</span><span class="avatar" aria-label="Conrad is viewing this terminal">C</span></span>
+              <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg>
+            </div>
+            <div class="cell"><span class="plus">+</span></div>
+            <div class="cell"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+          </div>
+          <div class="ensemble"><span class="hex">⬡¹</span><span class="lane"><b>Design</b> Thinkpool — terminal action… <span class="close">×</span></span></div>
+          <div class="transcript"><p>The count becomes the shared-view anchor.</p><div class="tool">▸ Bash · npm run build</div></div>
+        </div>
+      </article>
+
+      <article class="option c">
+        <header class="option-head">
+          <span class="option-code">C</span>
+          <div><h2>Badge the Add cell</h2><p>Keeps the terminal selector completely clean.</p></div>
+        </header>
+        <div class="phone">
+          <div class="topbar">
+            <div class="selector">
+              <span class="status"></span>
+              <span class="name">Mobile Terminal Scrolling</span>
+              <span class="count">1/5</span>
+              <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg>
+            </div>
+            <div class="cell"><span class="plus">+</span><span class="avatar add-avatar" aria-label="Conrad is viewing this terminal">C</span></div>
+            <div class="cell"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+          </div>
+          <div class="ensemble"><span class="hex">⬡¹</span><span class="lane"><b>Design</b> Thinkpool — terminal action… <span class="close">×</span></span></div>
+          <div class="transcript"><p>Presence moves into the nearest utility cell.</p><div class="tool">▸ Bash · npm run build</div></div>
+        </div>
+      </article>
+
+      <article class="option d">
+        <header class="option-head">
+          <span class="option-code">D</span>
+          <div><h2>Shared-view rail</h2><p>Presence becomes a calm active-edge signal.</p></div>
+        </header>
+        <div class="phone">
+          <div class="topbar">
+            <div class="selector">
+              <span class="status"></span>
+              <span class="name">Mobile Terminal Scrolling</span>
+              <span class="count">1/5</span>
+              <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg>
+              <span class="presence-rail"></span>
+              <span class="avatar rail-avatar" aria-label="Conrad is viewing this terminal">C</span>
+            </div>
+            <div class="cell"><span class="plus">+</span></div>
+            <div class="cell"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+          </div>
+          <div class="ensemble"><span class="hex">⬡¹</span><span class="lane"><b>Design</b> Thinkpool — terminal action… <span class="close">×</span></span></div>
+          <div class="transcript"><p>The terminal gets a distinct co-view edge.</p><div class="tool">▸ Bash · npm run build</div></div>
+        </div>
+      </article>
+
+      <article class="option e">
+        <header class="option-head">
+          <span class="option-code">E</span>
+          <div><h2>Merge with picker</h2><p>The initial and chevron become one control.</p></div>
+        </header>
+        <div class="phone">
+          <div class="topbar">
+            <div class="selector">
+              <span class="status"></span>
+              <span class="name">Mobile Terminal Scrolling</span>
+              <span class="count">1/5</span>
+              <span class="picker-presence"><span class="avatar" aria-label="Conrad is viewing this terminal">C</span><svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg></span>
+            </div>
+            <div class="cell"><span class="plus">+</span></div>
+            <div class="cell"><svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+          </div>
+          <div class="ensemble"><span class="hex">⬡¹</span><span class="lane"><b>Design</b> Thinkpool — terminal action… <span class="close">×</span></span></div>
+          <div class="transcript"><p>Co-viewing attaches to terminal switching.</p><div class="tool">▸ Bash · npm run build</div></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
