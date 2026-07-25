@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Thinkpool — status-list icon variations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --positive: hsl(152 40% 58%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--pool) 8%, transparent), transparent 38%),
+        var(--bg);
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      width: min(1400px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 32px 36px 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 22px;
+      padding: 0 2px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 clamp(24px, 3vw, 36px)/1.08 var(--font-sans);
+      letter-spacing: -.035em;
+    }
+
+    .intro-copy {
+      width: min(48ch, 44vw);
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      grid-column: span 2;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: color-mix(in oklab, var(--raised) 94%, transparent);
+    }
+
+    .option:nth-child(4) { grid-column: 2 / span 2; }
+    .option:nth-child(5) { grid-column: 4 / span 2; }
+
+    .option-head {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+    }
+
+    .option-code {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 7px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 14px/1.2 var(--font-sans);
+      letter-spacing: -.01em;
+    }
+
+    .option-head p {
+      margin: 3px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .study {
+      min-height: 132px;
+      background: var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      height: 48px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-current {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 999px;
+      background: var(--positive);
+      box-shadow: 0 0 7px var(--positive);
+    }
+
+    .name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .cell {
+      display: grid;
+      width: 48px;
+      flex: 0 0 48px;
+      place-items: center;
+      border-left: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      color: var(--faint);
+    }
+
+    .popup-cell {
+      color: var(--pool);
+      background: color-mix(in oklab, var(--pool) 5%, transparent);
+    }
+
+    .popup-icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .gear {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      opacity: .82;
+    }
+
+    .detail {
+      display: flex;
+      min-height: 84px;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+    }
+
+    .magnify {
+      display: grid;
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--pool) 5%, var(--raised));
+      color: var(--pool);
+    }
+
+    .magnify .popup-icon {
+      width: 30px;
+      height: 30px;
+      stroke-width: 1.55;
+    }
+
+    .detail-copy {
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .detail-copy strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font: 500 10.5px/1.2 var(--font-mono);
+    }
+
+    .shared {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr);
+      gap: 18px;
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--raised);
+    }
+
+    .shared-copy {
+      align-self: center;
+      padding: 24px 26px;
+    }
+
+    .shared-copy .eyebrow { margin-bottom: 9px; }
+
+    .shared-copy h2 {
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .shared-copy p {
+      max-width: 56ch;
+      margin: 0;
+      color: var(--faint);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .sheet {
+      overflow: hidden;
+      border-left: 1px solid var(--line-strong);
+      background: var(--raised);
+      font-family: var(--font-mono);
+    }
+
+    .sheet-head {
+      display: flex;
+      height: 55px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px 0 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sheet-title {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sheet-total {
+      color: var(--faint);
+      font-size: 10.5px;
+    }
+
+    .new-terminal {
+      display: inline-flex;
+      height: 32px;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 8px;
+      padding: 0 9px;
+      background: color-mix(in oklab, var(--pool) 8%, transparent);
+      color: var(--pool);
+      font-size: 10.5px;
+      font-weight: 500;
+    }
+
+    .new-terminal svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .close {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--faint);
+    }
+
+    .close svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+    }
+
+    .terminal-list { padding: 6px; }
+
+    .terminal-row {
+      position: relative;
+      display: flex;
+      min-height: 47px;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: var(--muted);
+    }
+
+    .terminal-row.active {
+      background: color-mix(in oklab, var(--surface) 64%, transparent);
+      color: var(--ink);
+    }
+
+    .terminal-row.active::before {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 0;
+      width: 2px;
+      border-radius: 2px;
+      background: var(--pool);
+      content: "";
+    }
+
+    .row-status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 6px var(--positive);
+    }
+
+    .row-copy { min-width: 0; flex: 1; }
+
+    .row-name {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 11.5px;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-state {
+      display: block;
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 9.5px;
+    }
+
+    .row-index { color: var(--faint); font-size: 9.5px; }
+
+    @media (max-width: 700px) {
+      .board { padding: 22px 14px 32px; }
+      .intro { display: block; margin-bottom: 14px; padding: 0 2px 16px; }
+      .intro-copy { width: auto; margin-top: 10px; }
+      .options { display: flex; flex-direction: column; gap: 12px; }
+      .option, .option:nth-child(4), .option:nth-child(5) { grid-column: auto; }
+      .option-head { min-height: 56px; }
+      .shared { display: block; margin-top: 12px; }
+      .shared-copy { padding: 20px 18px; }
+      .sheet { border-top: 1px solid var(--line-strong); border-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>
+    </symbol>
+    <symbol id="signal-rows" viewBox="0 0 24 24">
+      <circle cx="5.5" cy="7" r="1.35" fill="currentColor" stroke="none"/>
+      <circle cx="5.5" cy="12" r="1.35" fill="currentColor" stroke="none" opacity=".65"/>
+      <circle cx="5.5" cy="17" r="1.35" fill="currentColor" stroke="none" opacity=".4"/>
+      <path d="M9 7h10M9 12h7M9 17h9"/>
+    </symbol>
+    <symbol id="active-rail" viewBox="0 0 24 24">
+      <path d="M5 5v14M9 7h10M9 12h7M9 17h9"/>
+      <path d="M5 9v6" stroke-width="3"/>
+    </symbol>
+    <symbol id="numbered" viewBox="0 0 24 24">
+      <path d="M10 7h9M10 12h7M10 17h9"/>
+      <path d="M4.5 6.3h1v2M4 12h2l-2 2h2M4 16.5h2l-1 1 1 1H4"/>
+    </symbol>
+    <symbol id="prompt-rows" viewBox="0 0 24 24">
+      <path d="m4 6 2 1.5L4 9M9 7.5h10M4 10.5l2 1.5L4 13.5M9 12h8M4 15l2 1.5L4 18M9 16.5h10"/>
+    </symbol>
+    <symbol id="contained-queue" viewBox="0 0 24 24">
+      <rect x="3.5" y="4" width="17" height="16" rx="2.5"/>
+      <circle cx="7" cy="8" r="1" fill="currentColor" stroke="none"/>
+      <circle cx="7" cy="12" r="1" fill="currentColor" stroke="none" opacity=".65"/>
+      <circle cx="7" cy="16" r="1" fill="currentColor" stroke="none" opacity=".4"/>
+      <path d="M10 8h7M10 12h5M10 16h7"/>
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Status-list study · 5 more icons</p>
+        <h1>How much “terminal list” should the icon say?</h1>
+      </div>
+      <p class="intro-copy">Every variant uses the real 20px glyph inside the same 48px trigger. The larger study below each bar exposes the geometry without changing the shipped context.</p>
+    </header>
+
+    <section class="options" aria-label="Status-list icon variations">
+      <article class="option">
+        <header class="option-head"><span class="option-code">A</span><div><h2>Signal rows</h2><p>Status-first; closest to the original list icon.</p></div></header>
+        <div class="study">
+          <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="popup-icon"><use href="#signal-rows"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+          <div class="detail"><span class="magnify"><svg class="popup-icon"><use href="#signal-rows"/></svg></span><span class="detail-copy"><strong>3 live states</strong>Signals that the list contains working terminals, not static files.</span></div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">B</span><div><h2>Active rail</h2><p>Uses the popup’s selected-terminal language.</p></div></header>
+        <div class="study">
+          <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="popup-icon"><use href="#active-rail"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+          <div class="detail"><span class="magnify"><svg class="popup-icon"><use href="#active-rail"/></svg></span><span class="detail-copy"><strong>Selected lane</strong>Echoes the Glacier rail already marking the active terminal.</span></div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">C</span><div><h2>Numbered lanes</h2><p>Makes terminal order and quick switching explicit.</p></div></header>
+        <div class="study">
+          <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="popup-icon"><use href="#numbered"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+          <div class="detail"><span class="magnify"><svg class="popup-icon"><use href="#numbered"/></svg></span><span class="detail-copy"><strong>1 · 2 · 3</strong>Connects directly to the numbered rows inside the picker.</span></div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">D</span><div><h2>Prompt rows</h2><p>Three terminal prompts arranged as a list.</p></div></header>
+        <div class="study">
+          <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="popup-icon"><use href="#prompt-rows"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+          <div class="detail"><span class="magnify"><svg class="popup-icon"><use href="#prompt-rows"/></svg></span><span class="detail-copy"><strong>Terminal-native</strong>Keeps the list shape while making each row feel like a shell.</span></div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">E</span><div><h2>Contained queue</h2><p>A self-contained “open terminal manager” glyph.</p></div></header>
+        <div class="study">
+          <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="popup-icon"><use href="#contained-queue"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+          <div class="detail"><span class="magnify"><svg class="popup-icon"><use href="#contained-queue"/></svg></span><span class="detail-copy"><strong>Manager surface</strong>Most explicit as a button, but visually the heaviest option.</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="shared" aria-label="Shared popup behavior">
+      <div class="shared-copy">
+        <p class="eyebrow">Held constant</p>
+        <h2>Every icon opens this same terminal sheet</h2>
+        <p>The former header “+” becomes the popup trigger. Creating a terminal moves into the sheet header as “New,” while the active terminal list remains unchanged.</p>
+      </div>
+      <div class="sheet">
+        <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+        <div class="terminal-list">
+          <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+          <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+          <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
