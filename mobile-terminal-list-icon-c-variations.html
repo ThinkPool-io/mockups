@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Thinkpool — five variations of list icon C</title>
+  <title>Thinkpool — five new terminal list icons</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -278,85 +278,76 @@
       <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>
     </symbol>
 
-    <!-- A: measured from the supplied 122×105 crop: ~40×34 device px = ~20×17 CSS px. -->
+    <!-- A: plain list rows — no markers. -->
     <symbol id="reference" viewBox="0 0 24 24">
-      <rect x="3" y="3.5" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
-      <rect x="3" y="10" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
-      <rect x="3" y="16.5" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
-      <path d="M9 5.5h11M9 12h8M9 18.5h10" stroke-width="1.85"/>
+      <path d="M4 6h16M4 12h12M4 18h14" stroke-width="2"/>
     </symbol>
 
-    <!-- B: same glyph, compressed vertically and horizontally. -->
+    <!-- B: classic bulleted list. -->
     <symbol id="compact" viewBox="0 0 24 24">
-      <rect x="4" y="4.5" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
-      <rect x="4" y="10.25" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
-      <rect x="4" y="16" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
-      <path d="M9.25 6.25h9.75M9.25 12h7.25M9.25 17.75h8.75" stroke-width="1.7"/>
+      <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/>
+      <path d="M9 6h11M9 12h8M9 18h10" stroke-width="1.8"/>
     </symbol>
 
-    <!-- C: same glyph, wider and airier. -->
+    <!-- C: checklist. -->
     <symbol id="airy" viewBox="0 0 24 24">
-      <rect x="2.75" y="2.75" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
-      <rect x="2.75" y="10.1" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
-      <rect x="2.75" y="17.45" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
-      <path d="M8.75 4.65h12M8.75 12h9M8.75 19.35h11" stroke-width="1.65"/>
+      <path d="m3 5.8 1.5 1.5L7 4.7M10 6h10M3 11.8l1.5 1.5L7 10.7M10 12h8M3 17.8l1.5 1.5L7 16.7M10 18h10" stroke-width="1.8"/>
     </symbol>
 
-    <!-- D: same geometry, circular markers instead of rounded squares. -->
+    <!-- D: ordered list. -->
     <symbol id="round" viewBox="0 0 24 24">
-      <circle cx="5" cy="5.5" r="2" fill="currentColor" stroke="none"/>
-      <circle cx="5" cy="12" r="2" fill="currentColor" stroke="none"/>
-      <circle cx="5" cy="18.5" r="2" fill="currentColor" stroke="none"/>
-      <path d="M9 5.5h11M9 12h8M9 18.5h10" stroke-width="1.85"/>
+      <path d="M4.2 4.6h1.3v3M3.8 12h2.4l-2.4 2.8h2.5M3.8 17.1h2.5l-1.3 1.2 1.3 1.2H3.8M10 6h10M10 12h8M10 18h10" stroke-width="1.65"/>
     </symbol>
 
-    <!-- E: same glyph with stronger pixel weight for small OLED rendering. -->
+    <!-- E: list with an active row. -->
     <symbol id="bold" viewBox="0 0 24 24">
-      <rect x="3" y="3.5" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
-      <rect x="3" y="9.9" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
-      <rect x="3" y="16.3" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
-      <path d="M9.25 5.62h10.25M9.25 12.02h7.5M9.25 18.42h9.25" stroke-width="2.2"/>
+      <rect x="3" y="3.5" width="18" height="4.5" rx="1.2"/>
+      <rect x="3" y="9.75" width="18" height="4.5" rx="1.2" fill="currentColor" fill-opacity=".24"/>
+      <rect x="3" y="16" width="18" height="4.5" rx="1.2"/>
+      <path d="M6 5.75h10M6 12h12M6 18.25h8" stroke-width="1.55"/>
     </symbol>
   </svg>
 
   <main class="board">
     <header class="intro">
       <div>
-        <p class="eyebrow">List icon C · 5 geometry variations</p>
-        <h1>Same icon. Five precise treatments.</h1>
+        <p class="eyebrow">Terminal list trigger · 5 new icons</p>
+        <h1>Five list icons. Clean slate.</h1>
       </div>
-      <p class="intro-copy">All five keep the exact three-marker + three-line motif from your screenshot. Only proportions, density, marker corners, and stroke weight change.</p>
+      <p class="intro-copy">Five independently designed list glyphs. The product header, 20px icon box, 48px button, count, and gear stay identical.</p>
     </header>
 
     <section class="options" aria-label="Five variations of status-list icon C">
       <article class="option">
-        <header class="option-head"><span class="option-code">A</span><div><h2>Reference</h2><p>Closest measured match to the supplied crop.</p></div></header>
+        <header class="option-head"><span class="option-code">A</span><div><h2>Plain rows</h2><p>The quietest possible list symbol.</p></div></header>
         <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#reference"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
-        <div class="study"><span class="zoom"><svg class="icon"><use href="#reference"/></svg></span><span class="spec"><strong>Rounded-square markers</strong>Staggered line lengths and the same slightly tall silhouette as the screenshot.<span class="measure">≈ 20×17 · 1.85 stroke</span></span></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#reference"/></svg></span><span class="spec"><strong>Three staggered rails</strong>Minimal and calm; could also read as a compact menu.<span class="measure">20px glyph · 48px button</span></span></div>
       </article>
 
       <article class="option">
-        <header class="option-head"><span class="option-code">B</span><div><h2>Compact</h2><p>Tighter silhouette with more breathing room.</p></div></header>
+        <header class="option-head"><span class="option-code">B</span><div><h2>Bulleted list</h2><p>The universal list icon.</p></div></header>
         <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#compact"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
-        <div class="study"><span class="zoom"><svg class="icon"><use href="#compact"/></svg></span><span class="spec"><strong>Smaller markers + shorter rails</strong>Keeps the cell calmer while staying recognizably the same icon.<span class="measure">≈ 16×15 · 1.7 stroke</span></span></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#compact"/></svg></span><span class="spec"><strong>Dots + staggered rails</strong>Most immediately recognizable without needing product knowledge.<span class="measure">20px glyph · 48px button</span></span></div>
       </article>
 
       <article class="option">
-        <header class="option-head"><span class="option-code">C</span><div><h2>Airy</h2><p>More vertical separation and longer rails.</p></div></header>
+        <header class="option-head"><span class="option-code">C</span><div><h2>Checklist</h2><p>List rows with clear state.</p></div></header>
         <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#airy"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
-        <div class="study"><span class="zoom"><svg class="icon"><use href="#airy"/></svg></span><span class="spec"><strong>Open spacing</strong>Reads fastest as a list, but occupies the most of the 20px box.<span class="measure">≈ 19×18 · 1.65 stroke</span></span></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#airy"/></svg></span><span class="spec"><strong>Checks + rails</strong>Suggests terminal readiness, though it leans toward completed tasks.<span class="measure">20px glyph · 48px button</span></span></div>
       </article>
 
       <article class="option">
-        <header class="option-head"><span class="option-code">D</span><div><h2>Round markers</h2><p>Same layout with softer status dots.</p></div></header>
+        <header class="option-head"><span class="option-code">D</span><div><h2>Numbered list</h2><p>Connects directly to terminal order.</p></div></header>
         <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#round"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
-        <div class="study"><span class="zoom"><svg class="icon"><use href="#round"/></svg></span><span class="spec"><strong>Circular markers</strong>Connects most naturally to the terminal status dots used throughout the UI.<span class="measure">≈ 17×17 · 1.85 stroke</span></span></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#round"/></svg></span><span class="spec"><strong>1 · 2 · 3 + rails</strong>Matches the numbered rows inside the terminal popup.<span class="measure">20px glyph · 48px button</span></span></div>
       </article>
 
       <article class="option">
-        <header class="option-head"><span class="option-code">E</span><div><h2>Bold pixel</h2><p>Heavier version for sharper small-screen rendering.</p></div></header>
+        <header class="option-head"><span class="option-code">E</span><div><h2>Active-row list</h2><p>Shows a list with one selected terminal.</p></div></header>
         <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#bold"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
-        <div class="study"><span class="zoom"><svg class="icon"><use href="#bold"/></svg></span><span class="spec"><strong>Square markers + heavier rails</strong>Closest to the screenshot’s pixel-dense glow, with less blur at 20px.<span class="measure">≈ 17×17 · 2.2 stroke</span></span></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#bold"/></svg></span><span class="spec"><strong>Three rows + selected middle</strong>Most product-specific: it previews the picker’s active-row state.<span class="measure">20px glyph · 48px button</span></span></div>
       </article>
     </section>
   </main>
