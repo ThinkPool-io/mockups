@@ -193,10 +193,19 @@
   }
   .title-row { display: flex; align-items: center; gap: 9px; }
   .title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 17px;
     line-height: 1;
     font-weight: 600;
     letter-spacing: -.02em;
+  }
+  .title-count {
+    color: var(--color-k-agent);
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
   .count {
     display: inline-flex;
@@ -219,18 +228,19 @@
     align-items: center;
     gap: 8px;
     padding: 0 14px;
-    border: 1px solid var(--color-k-agent-hi);
+    border: 1px solid color-mix(in oklab, var(--color-k-agent) 58%, var(--color-line));
     border-radius: 10px;
-    background: var(--color-k-agent);
-    color: hsl(212 18% 9%);
-    box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-k-agent) 18%, transparent),
-      0 8px 22px -14px var(--color-k-agent);
+    background: transparent;
+    color: var(--color-k-agent);
+    box-shadow: none;
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
   }
-  .new-terminal:hover { background: var(--color-k-agent-hi); }
+  .new-terminal:hover {
+    border-color: var(--color-k-agent);
+    background: color-mix(in oklab, var(--color-k-agent) 8%, transparent);
+  }
   .new-terminal svg { width: 16px; height: 16px; stroke-width: 2.2; }
 
   .launcher {
@@ -453,10 +463,8 @@
 
     <header class="sheet-header">
       <div class="heading">
-        <div class="eyebrow">Terminal switcher</div>
         <div class="title-row">
-          <span class="title">Terminals</span>
-          <span class="count">6 open</span>
+          <span class="title"><span class="title-count">6</span><span>Terminals</span></span>
         </div>
       </div>
       <button class="new-terminal" id="newTerminal" aria-expanded="false" aria-controls="launcher">
@@ -480,7 +488,11 @@
           <span class="terminal-name">Mobile Terminal Scrolling</span>
           <span class="terminal-state"><span class="state-dot"></span>Ready</span>
         </span>
-        <span class="more" aria-label="Terminal actions">•••</span>
+        <span class="more" aria-label="Terminal actions">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m7 9.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </button>
 
       <button class="terminal" role="listitem">
