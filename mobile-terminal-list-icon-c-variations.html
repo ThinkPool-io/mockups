@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Thinkpool — five variations of list icon C</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --positive: hsl(152 40% 58%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--pool) 8%, transparent), transparent 38%),
+        var(--bg);
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      width: min(1380px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 34px 38px 44px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 22px;
+      padding: 0 2px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 clamp(24px, 3vw, 36px)/1.08 var(--font-sans);
+      letter-spacing: -.035em;
+    }
+
+    .intro-copy {
+      width: min(50ch, 44vw);
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      grid-column: span 2;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: color-mix(in oklab, var(--raised) 94%, transparent);
+    }
+
+    .option:nth-child(4) { grid-column: 2 / span 2; }
+    .option:nth-child(5) { grid-column: 4 / span 2; }
+
+    .option-head {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+    }
+
+    .option-code {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 7px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 14px/1.2 var(--font-sans);
+      letter-spacing: -.01em;
+    }
+
+    .option-head p {
+      margin: 3px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .topbar {
+      display: flex;
+      height: 48px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      background: var(--bg);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-current {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 999px;
+      background: var(--positive);
+      box-shadow: 0 0 7px var(--positive);
+    }
+
+    .name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .cell {
+      display: grid;
+      width: 48px;
+      flex: 0 0 48px;
+      place-items: center;
+      border-left: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      color: var(--faint);
+    }
+
+    .popup-cell {
+      color: var(--pool);
+      background: color-mix(in oklab, var(--pool) 5%, transparent);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .gear {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      opacity: .82;
+    }
+
+    .study {
+      display: grid;
+      min-height: 150px;
+      grid-template-columns: 108px 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg);
+    }
+
+    .zoom {
+      display: grid;
+      width: 92px;
+      height: 92px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: color-mix(in oklab, var(--pool) 5%, var(--raised));
+      color: var(--pool);
+    }
+
+    .zoom .icon {
+      width: 56px;
+      height: 56px;
+    }
+
+    .spec {
+      min-width: 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .spec strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font: 500 11px/1.2 var(--font-mono);
+    }
+
+    .measure {
+      display: inline-flex;
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 3px 6px;
+      color: var(--pool);
+      font: 500 9px/1.2 var(--font-mono);
+    }
+
+    @media (max-width: 700px) {
+      .board { padding: 22px 14px 32px; }
+      .intro { display: block; margin-bottom: 14px; padding: 0 2px 16px; }
+      .intro-copy { width: auto; margin-top: 10px; }
+      .options { display: flex; flex-direction: column; gap: 12px; }
+      .option, .option:nth-child(4), .option:nth-child(5) { grid-column: auto; }
+      .option-head { min-height: 56px; }
+      .study { grid-template-columns: 96px 1fr; min-height: 136px; padding: 12px 14px; }
+      .zoom { width: 82px; height: 82px; }
+      .zoom .icon { width: 50px; height: 50px; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>
+    </symbol>
+
+    <!-- A: measured from the supplied 122×105 crop: ~40×34 device px = ~20×17 CSS px. -->
+    <symbol id="reference" viewBox="0 0 24 24">
+      <rect x="3" y="3.5" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
+      <rect x="3" y="10" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
+      <rect x="3" y="16.5" width="4" height="4" rx=".9" fill="currentColor" stroke="none"/>
+      <path d="M9 5.5h11M9 12h8M9 18.5h10" stroke-width="1.85"/>
+    </symbol>
+
+    <!-- B: same glyph, compressed vertically and horizontally. -->
+    <symbol id="compact" viewBox="0 0 24 24">
+      <rect x="4" y="4.5" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
+      <rect x="4" y="10.25" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
+      <rect x="4" y="16" width="3.5" height="3.5" rx=".8" fill="currentColor" stroke="none"/>
+      <path d="M9.25 6.25h9.75M9.25 12h7.25M9.25 17.75h8.75" stroke-width="1.7"/>
+    </symbol>
+
+    <!-- C: same glyph, wider and airier. -->
+    <symbol id="airy" viewBox="0 0 24 24">
+      <rect x="2.75" y="2.75" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
+      <rect x="2.75" y="10.1" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
+      <rect x="2.75" y="17.45" width="3.75" height="3.75" rx=".9" fill="currentColor" stroke="none"/>
+      <path d="M8.75 4.65h12M8.75 12h9M8.75 19.35h11" stroke-width="1.65"/>
+    </symbol>
+
+    <!-- D: same geometry, circular markers instead of rounded squares. -->
+    <symbol id="round" viewBox="0 0 24 24">
+      <circle cx="5" cy="5.5" r="2" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="12" r="2" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="18.5" r="2" fill="currentColor" stroke="none"/>
+      <path d="M9 5.5h11M9 12h8M9 18.5h10" stroke-width="1.85"/>
+    </symbol>
+
+    <!-- E: same glyph with stronger pixel weight for small OLED rendering. -->
+    <symbol id="bold" viewBox="0 0 24 24">
+      <rect x="3" y="3.5" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
+      <rect x="3" y="9.9" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
+      <rect x="3" y="16.3" width="4.25" height="4.25" rx=".7" fill="currentColor" stroke="none"/>
+      <path d="M9.25 5.62h10.25M9.25 12.02h7.5M9.25 18.42h9.25" stroke-width="2.2"/>
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">List icon C · 5 geometry variations</p>
+        <h1>Same icon. Five precise treatments.</h1>
+      </div>
+      <p class="intro-copy">All five keep the exact three-marker + three-line motif from your screenshot. Only proportions, density, marker corners, and stroke weight change.</p>
+    </header>
+
+    <section class="options" aria-label="Five variations of status-list icon C">
+      <article class="option">
+        <header class="option-head"><span class="option-code">A</span><div><h2>Reference</h2><p>Closest measured match to the supplied crop.</p></div></header>
+        <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#reference"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#reference"/></svg></span><span class="spec"><strong>Rounded-square markers</strong>Staggered line lengths and the same slightly tall silhouette as the screenshot.<span class="measure">≈ 20×17 · 1.85 stroke</span></span></div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">B</span><div><h2>Compact</h2><p>Tighter silhouette with more breathing room.</p></div></header>
+        <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#compact"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#compact"/></svg></span><span class="spec"><strong>Smaller markers + shorter rails</strong>Keeps the cell calmer while staying recognizably the same icon.<span class="measure">≈ 16×15 · 1.7 stroke</span></span></div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">C</span><div><h2>Airy</h2><p>More vertical separation and longer rails.</p></div></header>
+        <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#airy"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#airy"/></svg></span><span class="spec"><strong>Open spacing</strong>Reads fastest as a list, but occupies the most of the 20px box.<span class="measure">≈ 19×18 · 1.65 stroke</span></span></div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">D</span><div><h2>Round markers</h2><p>Same layout with softer status dots.</p></div></header>
+        <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#round"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#round"/></svg></span><span class="spec"><strong>Circular markers</strong>Connects most naturally to the terminal status dots used throughout the UI.<span class="measure">≈ 17×17 · 1.85 stroke</span></span></div>
+      </article>
+
+      <article class="option">
+        <header class="option-head"><span class="option-code">E</span><div><h2>Bold pixel</h2><p>Heavier version for sharper small-screen rendering.</p></div></header>
+        <div class="topbar"><div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div><div class="cell popup-cell"><svg class="icon"><use href="#bold"/></svg></div><div class="cell"><svg class="gear"><use href="#gear"/></svg></div></div>
+        <div class="study"><span class="zoom"><svg class="icon"><use href="#bold"/></svg></span><span class="spec"><strong>Square markers + heavier rails</strong>Closest to the screenshot’s pixel-dense glow, with less blur at 20px.<span class="measure">≈ 17×17 · 2.2 stroke</span></span></div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
