@@ -227,7 +227,7 @@
   }
 
   .snowflake.proposed {
-    font-size: 20px;
+    font-size: var(--glyph-size, 20px);
     filter: drop-shadow(0 0 7px color-mix(in oklab, var(--pool) 28%, transparent));
   }
 
@@ -389,7 +389,7 @@
 
       <div class="thinking-wrap">
         <div class="status-row">
-          <span id="hero-glyph" class="status-mark snowflake proposed" style="--optical-y:-.91px">✦︎</span>
+          <span id="hero-glyph" class="status-mark snowflake proposed" style="--glyph-size:19.2px;--optical-y:-.44px">✻︎</span>
           <span><span>Thinking</span>… <span class="detail">(8s with high effort)</span></span>
         </div>
         <p class="note">The glyph grows 82%; the label remains on the same 28px transcript rail.</p>
@@ -408,10 +408,10 @@
       </div>
     </article>
     <article class="compare-card">
-      <div class="compare-head"><strong>Proposed</strong><span>20px glyph · fixed rail</span></div>
+      <div class="compare-head"><strong>Proposed</strong><span>≈20px · normalized ink box</span></div>
       <div class="rail-demo">
         <div class="status-row">
-          <span id="compare-glyph" class="status-mark snowflake proposed" style="--optical-y:-.91px">✦︎</span>
+          <span id="compare-glyph" class="status-mark snowflake proposed" style="--glyph-size:19.2px;--optical-y:-.44px">✻︎</span>
           <span><span>Thinking</span>… <span class="detail">(8s with high effort)</span></span>
         </div>
       </div>
@@ -420,9 +420,13 @@
 </main>
 
 <script>
+  // Per-glyph sizes normalize each character to a 12.25px outer painted box
+  // in IBM Plex Mono. Optical Y offsets scale with the corrected font size.
   const frames = [
-    ["✻︎", -.45], ["✵︎", -.91], ["✦︎", -.91], ["✶︎", -.45], ["✷︎", -.91],
-    ["✺︎", -.91], ["❈︎", -.91], ["❉︎", -.91], ["❋︎", -1.36], ["✧︎", -.91]
+    ["✻︎", 19.2, -.44], ["✵︎", 20.4, -.93], ["✦︎", 21.3, -.97],
+    ["✶︎", 18.8, -.43], ["✷︎", 20.9, -.95], ["✺︎", 21.3, -.97],
+    ["❈︎", 21.3, -.97], ["❉︎", 20.9, -.95], ["❋︎", 20.9, -1.42],
+    ["✧︎", 21.3, -.97]
   ];
   const targets = [document.querySelector("#hero-glyph"), document.querySelector("#compare-glyph")];
   let frame = 0;
@@ -431,7 +435,8 @@
       frame = (frame + 1) % frames.length;
       targets.forEach((target) => {
         target.textContent = frames[frame][0];
-        target.style.setProperty("--optical-y", `${frames[frame][1]}px`);
+        target.style.setProperty("--glyph-size", `${frames[frame][1]}px`);
+        target.style.setProperty("--optical-y", `${frames[frame][2]}px`);
       });
     }, 150);
   }
