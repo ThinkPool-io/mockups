@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Thinkpool — terminal actions inside the picker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --panel-7: hsl(212 13% 7%);
+      --panel-8: hsl(212 13% 8%);
+      --panel-10: hsl(212 13% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --ok: hsl(152 40% 58%);
+      --danger: hsl(352 88% 62%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--pool);
+      outline-offset: -3px;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100dvh;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      min-height: 48px;
+      flex: 0 0 auto;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      background: color-mix(in oklab, var(--bg) 94%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .desktop-tabs { display: none; }
+    .mobile-bar { display: flex; min-width: 0; flex: 1; }
+
+    .terminal-trigger {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      background: transparent;
+      padding: 0 12px;
+      text-align: left;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .status-slot {
+      display: grid;
+      width: 13px;
+      flex: 0 0 13px;
+      place-items: center;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 6px var(--ok);
+    }
+
+    .busy {
+      width: 13px;
+      height: 13px;
+      border: 2px solid color-mix(in oklab, var(--pool) 25%, transparent);
+      border-top-color: var(--pool);
+      border-radius: 999px;
+      animation: spin .9s linear infinite;
+    }
+
+    .terminal-name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      color: var(--ink);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .terminal-count {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chevron {
+      width: 10px;
+      flex: 0 0 10px;
+      color: var(--faint);
+    }
+
+    .top-control {
+      display: grid;
+      width: 48px;
+      min-height: 48px;
+      flex: 0 0 48px;
+      place-items: center;
+      border: 0;
+      border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      background: transparent;
+      color: var(--faint);
+      cursor: pointer;
+    }
+
+    .top-control:hover { color: var(--ink); background: var(--panel-7); }
+    .top-control svg { width: 18px; height: 18px; }
+
+    .transcript {
+      min-height: 0;
+      flex: 1;
+      overflow: hidden;
+      padding: 20px 29px 118px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .assistant-line {
+      position: relative;
+      max-width: 82ch;
+      margin: 0 0 22px;
+      color: var(--ink-soft);
+    }
+
+    .assistant-line::before {
+      position: absolute;
+      top: .72em;
+      left: -15px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--pool);
+      box-shadow: 0 0 8px var(--pool);
+      content: "";
+    }
+
+    .tool-row {
+      display: flex;
+      min-height: 54px;
+      max-width: 100%;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px -17px;
+      border: 1px solid color-mix(in oklab, var(--pool) 18%, var(--line));
+      border-radius: 9px;
+      padding: 0 11px;
+      background: color-mix(in oklab, var(--panel-7) 72%, transparent);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--faint);
+    }
+
+    .tool-row strong { color: var(--pool); }
+    .tool-row .ok { margin-left: auto; color: var(--ok); }
+
+    .composer {
+      position: fixed;
+      z-index: 2;
+      right: 12px;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      left: 12px;
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 4px 5px 4px 14px;
+      background: var(--bg);
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .composer .send {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      margin-left: auto;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: var(--pool);
+      color: var(--bg);
+      font-size: 22px;
+    }
+
+    .overlay {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      align-items: end;
+      background: color-mix(in oklab, var(--bg) 84%, transparent);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .24s ease;
+    }
+
+    .overlay[data-open="true"] { opacity: 1; pointer-events: auto; }
+
+    .sheet {
+      display: flex;
+      width: min(480px, calc(100% - 30px));
+      max-height: 72dvh;
+      margin: 0 auto -16px;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(18px) scale(.98);
+      transform-origin: center bottom;
+      border: 1px solid var(--line-strong);
+      border-bottom: 0;
+      border-radius: 12px 12px 0 0;
+      background: var(--panel-8);
+      transition: transform .35s var(--ease-settle);
+    }
+
+    .overlay[data-open="true"] .sheet { transform: none; }
+
+    .sheet-head {
+      display: flex;
+      min-height: 62px;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      padding: 0 18px;
+      font-family: var(--font-mono);
+    }
+
+    .sheet-head strong { color: var(--ink); font-size: 13px; }
+    .sheet-head span { color: var(--faint); font-size: 10.5px; }
+
+    .close {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      margin-left: auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .term-list {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 18px 12px calc(24px + env(safe-area-inset-bottom));
+      scrollbar-width: none;
+    }
+
+    .term-list::-webkit-scrollbar { display: none; }
+
+    .term-row {
+      position: relative;
+      display: flex;
+      min-height: 56px;
+      align-items: stretch;
+      border-radius: 9px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    .term-row + .term-row { margin-top: 1px; }
+    .term-row[data-active="true"] { background: var(--panel-7); color: var(--ink); }
+
+    .term-row[data-active="true"]::before {
+      position: absolute;
+      z-index: 2;
+      top: 8px;
+      bottom: 8px;
+      left: 0;
+      width: 2px;
+      border-radius: 999px;
+      background: var(--pool);
+      content: "";
+    }
+
+    .term-select {
+      display: flex;
+      min-width: 0;
+      min-height: 56px;
+      flex: 1;
+      align-items: center;
+      gap: 12px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      padding: 8px 6px 8px 12px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .term-copy { min-width: 0; flex: 1; }
+    .term-copy strong {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .term-copy small {
+      display: block;
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--faint);
+      font-size: 10.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ordinal {
+      width: 20px;
+      flex: 0 0 20px;
+      color: var(--faint);
+      text-align: center;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .row-actions {
+      display: none;
+      width: 44px;
+      min-height: 44px;
+      flex: 0 0 44px;
+      align-self: center;
+      place-items: center;
+      border: 0;
+      border-left: 1px solid color-mix(in oklab, var(--line) 65%, transparent);
+      border-radius: 0 9px 9px 0;
+      background: transparent;
+      color: var(--faint);
+      cursor: pointer;
+    }
+
+    .term-row[data-active="true"] .row-actions { display: grid; }
+    .row-actions:hover, .row-actions[aria-expanded="true"] { color: var(--ink); background: var(--float); }
+
+    .actions-popover {
+      position: absolute;
+      z-index: 5;
+      right: 5px;
+      bottom: calc(100% - 2px);
+      display: none;
+      width: 210px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      background: var(--panel-10);
+      box-shadow: 0 24px 64px color-mix(in oklab, var(--bg) 70%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .actions-popover[data-open="true"] { display: block; animation: menu-in .24s var(--ease-settle) both; }
+
+    .action-title {
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      color: var(--faint);
+      font-size: 10.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .order-row {
+      display: flex;
+      min-height: 44px;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px 6px 12px;
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .order-row span:first-child { flex: 1; }
+    .order-control {
+      display: inline-flex;
+      height: 32px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+
+    .order-control button {
+      display: grid;
+      width: 34px;
+      place-items: center;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .order-control button + button { border-left: 1px solid var(--line); }
+
+    .action-item {
+      display: flex;
+      width: 100%;
+      min-height: 44px;
+      align-items: center;
+      gap: 10px;
+      border: 0;
+      border-top: 1px solid color-mix(in oklab, var(--line) 55%, transparent);
+      background: transparent;
+      padding: 0 12px;
+      color: var(--ink);
+      text-align: left;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .action-item:hover { background: var(--float); }
+    .action-item.danger { color: var(--danger); }
+
+    .desktop-control { display: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes menu-in {
+      from { opacity: 0; transform: translateY(4px) scale(.96); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (min-width: 640px) {
+      .topbar { min-height: 37px; }
+      .mobile-bar, .overlay { display: none; }
+      .desktop-tabs {
+        display: flex;
+        min-width: 0;
+        flex: 1;
+        align-items: stretch;
+        overflow: hidden;
+        padding-left: 6px;
+      }
+
+      .desktop-tab {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 8px;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        padding: 0 8px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .desktop-tab.active { border-bottom-color: var(--pool); color: var(--ink); }
+      .desktop-tab span { max-width: 190px; overflow: hidden; text-overflow: ellipsis; }
+      .desktop-control {
+        display: grid;
+        width: 37px;
+        place-items: center;
+        border: 0;
+        border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+        background: transparent;
+        color: var(--faint);
+      }
+
+      .transcript { padding: 28px 30px 90px; }
+      .tool-row { max-width: none; }
+      .composer { right: 12px; bottom: 8px; left: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="mobile-bar">
+        <button class="terminal-trigger" id="terminalTrigger" type="button" aria-haspopup="dialog" aria-controls="terminalSheet" aria-expanded="true">
+          <span class="status-slot"><span class="status-dot"></span></span>
+          <span class="terminal-name" id="activeTopName">Mobile Terminal Scrolling</span>
+          <span class="terminal-count"><span id="activeIndex">8</span>/8</span>
+          <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"></path></svg>
+        </button>
+        <button class="top-control" type="button" aria-label="New terminal">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+        </button>
+        <button class="top-control" type="button" aria-label="Session options">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" stroke="currentColor" stroke-width="1.6"></path><path d="m19 13.2 1.3 1-.2 1.4-1.5.5-.8 1.3.3 1.5-1.2.8-1.3-.9-1.5.4-.8 1.4h-1.5L11 19.2l-1.5-.4-1.3.9-1.2-.8.3-1.5-.8-1.3-1.5-.5-.2-1.4 1.3-1v-1.6l-1.3-1 .2-1.4 1.5-.5.8-1.3L7 5.9l1.2-.8 1.3.9 1.5-.4.8-1.4h1.5l.8 1.4 1.5.4 1.3-.9 1.2.8-.3 1.5.8 1.3 1.5.5.2 1.4-1.3 1v1.6Z" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"></path></svg>
+        </button>
+      </div>
+
+      <nav class="desktop-tabs" aria-label="Open terminals">
+        <button class="desktop-tab active" type="button"><span class="busy"></span><span>Mobile Terminal Scrolling</span>⌄</button>
+        <button class="desktop-tab" type="button"><span class="busy"></span><span>Improve Session Animations</span></button>
+        <button class="desktop-tab" type="button"><span class="status-dot"></span><span>Reddit Promo</span></button>
+        <button class="desktop-tab" type="button"><span class="status-dot"></span><span>Repo Security</span></button>
+        <button class="desktop-tab" type="button"><span class="busy"></span><span>Implement Thinkpool</span></button>
+        <button class="desktop-tab" type="button"><span class="status-dot"></span><span>Google Ads</span></button>
+      </nav>
+      <button class="desktop-control" type="button" aria-label="New terminal">＋</button>
+      <button class="desktop-control" type="button" aria-label="Session options">⚙</button>
+    </header>
+
+    <section class="transcript" aria-label="Terminal transcript">
+      <p class="assistant-line">The mobile terminal picker keeps every lane reachable without hiding work off-screen. Terminal-specific actions now live with the terminal they affect.</p>
+      <div class="tool-row"><span>▸</span><strong>Thinkpool Preview</strong><span>mobile terminal actions</span><span class="ok">✓</span></div>
+      <p class="assistant-line">The top bar stays focused on navigation: active terminal, new terminal, and room settings. Open the picker to switch or manage a terminal.</p>
+      <div class="tool-row"><span>▸</span><strong>Bash</strong><span>build + viewport checks</span><span class="ok">✓</span></div>
+    </section>
+
+    <div class="composer" aria-hidden="true"><span>＋</span><span>Message the room…</span><button class="send" type="button" tabindex="-1">→</button></div>
+  </main>
+
+  <div class="overlay" id="terminalSheet" data-open="true" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <section class="sheet">
+      <header class="sheet-head">
+        <strong id="sheetTitle">Terminals</strong>
+        <span>8</span>
+        <button class="close" id="closeSheet" type="button" aria-label="Close terminal picker">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+        </button>
+      </header>
+
+      <div class="term-list" id="termList" role="list" aria-label="Open terminals">
+        <div class="term-row" data-index="1" data-name="Improve Session Animations" data-state="Agent thinking" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="busy"></span></span><span class="term-copy"><strong>Improve Session Animations</strong><small>Agent thinking</small></span><span class="ordinal">1</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Improve Session Animations" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="2" data-name="Investigate Turn Failure" data-state="Ready" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Investigate Turn Failure</strong><small>Ready</small></span><span class="ordinal">2</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Investigate Turn Failure" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="3" data-name="Update Link Format" data-state="Ready" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Update Link Format</strong><small>Ready</small></span><span class="ordinal">3</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Update Link Format" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="4" data-name="Reddit Promo" data-state="Ready" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Reddit Promo</strong><small>Ready</small></span><span class="ordinal">4</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Reddit Promo" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="5" data-name="Repo Security" data-state="Ready" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Repo Security</strong><small>Ready</small></span><span class="ordinal">5</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Repo Security" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="6" data-name="Implement Thinkpool" data-state="Agent thinking" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="busy"></span></span><span class="term-copy"><strong>Implement Thinkpool</strong><small>Agent thinking</small></span><span class="ordinal">6</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Implement Thinkpool" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="7" data-name="Google Ads" data-state="Ready" role="listitem">
+          <button class="term-select" type="button"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Google Ads</strong><small>Ready</small></span><span class="ordinal">7</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Google Ads" aria-expanded="false"><span aria-hidden="true">•••</span></button>
+        </div>
+        <div class="term-row" data-index="8" data-name="Mobile Terminal Scrolling" data-state="Ready" data-active="true" role="listitem">
+          <button class="term-select" type="button" aria-current="page"><span class="status-slot"><span class="status-dot"></span></span><span class="term-copy"><strong>Mobile Terminal Scrolling</strong><small>Ready</small></span><span class="ordinal">8</span></button>
+          <button class="row-actions" type="button" aria-label="Actions for Mobile Terminal Scrolling" aria-expanded="false">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7" fill="currentColor"></circle><circle cx="12" cy="12" r="1.7" fill="currentColor"></circle><circle cx="19" cy="12" r="1.7" fill="currentColor"></circle></svg>
+          </button>
+          <div class="actions-popover" data-open="false" role="menu" aria-label="Terminal actions">
+            <div class="action-title">Mobile Terminal Scrolling</div>
+            <div class="order-row"><span>Order</span><span class="order-control"><button type="button" aria-label="Move terminal up">↑</button><button type="button" aria-label="Move terminal down">↓</button></span></div>
+            <button class="action-item" type="button" role="menuitem"><span aria-hidden="true">✎</span><span>Rename</span></button>
+            <button class="action-item danger" type="button" role="menuitem"><span aria-hidden="true">×</span><span>Remove</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('terminalSheet')
+    const trigger = document.getElementById('terminalTrigger')
+    const closeSheet = document.getElementById('closeSheet')
+    const activeTopName = document.getElementById('activeTopName')
+    const activeIndex = document.getElementById('activeIndex')
+    const rows = [...document.querySelectorAll('.term-row')]
+
+    function setSheet(open) {
+      overlay.dataset.open = String(open)
+      trigger.setAttribute('aria-expanded', String(open))
+    }
+
+    function closeAllActions() {
+      document.querySelectorAll('.actions-popover').forEach((menu) => { menu.dataset.open = 'false' })
+      document.querySelectorAll('.row-actions').forEach((button) => button.setAttribute('aria-expanded', 'false'))
+    }
+
+    function ensureActions(row) {
+      let menu = row.querySelector('.actions-popover')
+      if (!menu) {
+        menu = document.createElement('div')
+        menu.className = 'actions-popover'
+        menu.dataset.open = 'false'
+        menu.setAttribute('role', 'menu')
+        menu.setAttribute('aria-label', 'Terminal actions')
+        menu.innerHTML = '<div class="action-title"></div><div class="order-row"><span>Order</span><span class="order-control"><button type="button" aria-label="Move terminal up">↑</button><button type="button" aria-label="Move terminal down">↓</button></span></div><button class="action-item" type="button" role="menuitem"><span aria-hidden="true">✎</span><span>Rename</span></button><button class="action-item danger" type="button" role="menuitem"><span aria-hidden="true">×</span><span>Remove</span></button>'
+        row.appendChild(menu)
+      }
+      menu.querySelector('.action-title').textContent = row.dataset.name
+      return menu
+    }
+
+    function selectRow(row) {
+      closeAllActions()
+      rows.forEach((candidate) => {
+        const active = candidate === row
+        candidate.dataset.active = active ? 'true' : 'false'
+        candidate.querySelector('.term-select').toggleAttribute('aria-current', active)
+      })
+      activeTopName.textContent = row.dataset.name
+      activeIndex.textContent = row.dataset.index
+      const action = row.querySelector('.row-actions')
+      action.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7" fill="currentColor"></circle><circle cx="12" cy="12" r="1.7" fill="currentColor"></circle><circle cx="19" cy="12" r="1.7" fill="currentColor"></circle></svg>'
+      ensureActions(row)
+    }
+
+    rows.forEach((row) => {
+      row.querySelector('.term-select').addEventListener('click', () => selectRow(row))
+      row.querySelector('.row-actions').addEventListener('click', (event) => {
+        event.stopPropagation()
+        const button = event.currentTarget
+        const menu = ensureActions(row)
+        const willOpen = menu.dataset.open !== 'true'
+        closeAllActions()
+        menu.dataset.open = String(willOpen)
+        button.setAttribute('aria-expanded', String(willOpen))
+      })
+    })
+
+    trigger.addEventListener('click', () => setSheet(true))
+    closeSheet.addEventListener('click', () => setSheet(false))
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) setSheet(false)
+    })
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (document.querySelector('.actions-popover[data-open="true"]')) closeAllActions()
+        else setSheet(false)
+      }
+    })
+  </script>
+</body>
+</html>
