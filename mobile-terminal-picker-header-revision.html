@@ -127,8 +127,6 @@
     transition: transform .32s cubic-bezier(.16, 1, .3, 1);
   }
 
-  .sheet.is-hidden { transform: translateY(calc(100% - 58px)); }
-
   .sheet-accent {
     position: absolute;
     top: 0;
@@ -138,44 +136,12 @@
     background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--color-k-agent) 72%, transparent), transparent);
   }
 
-  .pull-zone {
-    position: relative;
-    height: 26px;
-    display: grid;
-    place-items: center;
-  }
-
-  .pull-handle {
-    width: 34px;
-    height: 4px;
-    border-radius: 99px;
-    background: color-mix(in oklab, var(--color-faint) 48%, transparent);
-  }
-
-  .dismiss {
-    position: absolute;
-    top: 6px;
-    right: 12px;
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--color-faint);
-    cursor: pointer;
-  }
-  .dismiss:hover { color: var(--color-ink); background: var(--color-float); }
-  .dismiss svg { transition: transform .25s ease; }
-  .sheet.is-hidden .dismiss svg { transform: rotate(180deg); }
-
   .sheet-header {
-    height: 76px;
+    height: 64px;
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 0 18px 14px 20px;
+    padding: 0 18px 0 20px;
     border-bottom: 1px solid var(--color-line);
     background:
       linear-gradient(90deg, color-mix(in oklab, var(--color-k-agent) 5%, transparent), transparent 44%),
@@ -246,7 +212,7 @@
   .launcher {
     position: absolute;
     z-index: 4;
-    top: 104px;
+    top: 66px;
     right: 18px;
     width: 190px;
     padding: 7px;
@@ -278,9 +244,10 @@
   .launcher kbd { color: var(--color-faint); font: inherit; font-size: 8px; }
 
   .terminal-list {
-    height: calc(100% - 102px);
+    height: calc(100% - 64px);
     overflow-y: auto;
     padding: 10px 10px max(22px, env(safe-area-inset-bottom));
+    background: var(--color-bg);
   }
 
   .terminal {
@@ -452,14 +419,6 @@
 
   <section class="sheet" id="sheet" aria-label="Terminal picker">
     <div class="sheet-accent"></div>
-    <div class="pull-zone">
-      <span class="pull-handle" aria-hidden="true"></span>
-      <button class="dismiss" id="dismiss" aria-label="Dismiss terminal picker">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="m6.5 9 5.5 5.5L17.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
 
     <header class="sheet-header">
       <div class="heading">
@@ -545,15 +504,8 @@
 
 <script>
   const sheet = document.querySelector('#sheet');
-  const dismiss = document.querySelector('#dismiss');
   const newTerminal = document.querySelector('#newTerminal');
   const launcher = document.querySelector('#launcher');
-
-  dismiss.addEventListener('click', () => {
-    sheet.classList.toggle('is-hidden');
-    launcher.classList.remove('is-open');
-    newTerminal.setAttribute('aria-expanded', 'false');
-  });
 
   newTerminal.addEventListener('click', () => {
     const isOpen = launcher.classList.toggle('is-open');
