@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ThinkPool — larger thinking snowflake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --term: hsl(200 36% 2%);
+    --card: hsl(200 26% 5%);
+    --surface: hsl(199 20% 11%);
+    --line: hsl(199 24% 17%);
+    --line-strong: hsl(194 30% 26%);
+    --ink: hsl(190 26% 96%);
+    --ink-soft: hsl(190 22% 88%);
+    --muted: hsl(192 16% 76%);
+    --faint: hsl(196 16% 60%);
+    --pool: hsl(201 78% 64%);
+    --pool-bright: hsl(201 86% 76%);
+    --cobalt: hsl(217 91% 53%);
+    --you: hsl(161 48% 58%);
+    --partner: hsl(218 60% 72%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 50% -18%, color-mix(in oklab, var(--pool) 10%, transparent), transparent 38rem),
+      var(--term);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  .page {
+    width: min(1080px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 54px 0 64px;
+  }
+
+  .intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 32px;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow, .measure, .terminal, .comparison {
+    font-family: var(--font-mono);
+  }
+
+  .eyebrow {
+    color: var(--pool-bright);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 8px 0 0;
+    color: var(--ink);
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1;
+    letter-spacing: -.045em;
+    font-weight: 600;
+  }
+
+  .measure {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--muted);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .measure strong {
+    color: var(--pool-bright);
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .arrow { color: var(--faint); }
+
+  .terminal {
+    overflow: hidden;
+    background: var(--term);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 22px 72px color-mix(in oklab, black 48%, transparent);
+  }
+
+  .terminal-top {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 11px;
+  }
+
+  .tab {
+    height: 100%;
+    min-width: 226px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    color: var(--ink-soft);
+    border-bottom: 2px solid var(--pool);
+    background: color-mix(in oklab, var(--pool) 5%, transparent);
+  }
+
+  .presence {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--you);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--you) 72%, transparent);
+  }
+
+  .terminal-actions {
+    margin-left: auto;
+    padding: 0 14px;
+    color: var(--pool);
+  }
+
+  .ensemble {
+    min-height: 37px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in oklab, var(--surface) 34%, var(--term));
+    font-size: 11px;
+  }
+
+  .ensemble strong { font-weight: 600; }
+  .agent { color: var(--pool); }
+
+  .timeline {
+    padding: 12px 0 20px;
+    display: grid;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .turn, .assistant {
+    padding: 0 12px;
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .turn .drop, .assistant .dot {
+    position: relative;
+    left: -2px;
+    width: 16px;
+    text-align: center;
+  }
+
+  .partner { color: var(--partner); }
+  .you { color: var(--you); }
+  .name { font-weight: 600; }
+  .message { color: var(--ink-soft); }
+  .time { color: var(--faint); font-size: 8px; margin-left: 7px; }
+
+  .tool {
+    margin: 0 12px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--card);
+  }
+
+  .tool-icon { color: var(--pool-bright); }
+  .tool strong { color: var(--ink-soft); font-weight: 600; }
+  .tool-time { margin-left: auto; color: var(--faint); font-size: 9px; }
+
+  .thinking-wrap {
+    margin-top: 1px;
+    padding: 10px 12px 8px;
+    border-top: 1px solid color-mix(in oklab, var(--line) 62%, transparent);
+    background: linear-gradient(90deg, color-mix(in oklab, var(--pool) 4%, var(--term)), var(--term) 56%);
+  }
+
+  .status-row {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    align-items: center;
+    color: var(--muted);
+    font-size: 12.5px;
+    letter-spacing: .01em;
+  }
+
+  .status-mark {
+    width: 16px;
+    text-align: center;
+  }
+
+  .snowflake {
+    position: relative;
+    left: -2px;
+    display: grid;
+    place-items: center;
+    width: 16px;
+    color: var(--pool-bright);
+    line-height: 1;
+    text-align: center;
+    transform: translateY(var(--optical-y, 0px));
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  .snowflake.proposed {
+    font-size: 20px;
+    filter: drop-shadow(0 0 7px color-mix(in oklab, var(--pool) 28%, transparent));
+  }
+
+  .snowflake.current {
+    font-size: 11px;
+  }
+
+  .detail { color: var(--faint); }
+
+  .note {
+    margin: 10px 12px 0 28px;
+    color: var(--faint);
+    font-family: var(--font-sans);
+    font-size: 11px;
+  }
+
+  .comparison {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .compare-card {
+    padding: 18px 18px 20px;
+    background: color-mix(in oklab, var(--surface) 64%, var(--term));
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+
+  .compare-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    color: var(--faint);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .compare-head strong {
+    color: var(--ink-soft);
+    font-size: 10px;
+  }
+
+  .rail-demo {
+    position: relative;
+    padding: 12px;
+    background: var(--term);
+    border: 1px solid color-mix(in oklab, var(--line) 74%, transparent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .rail-demo::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 28px;
+    width: 1px;
+    background: color-mix(in oklab, var(--pool) 28%, transparent);
+    pointer-events: none;
+  }
+
+  .rail-demo .status-row {
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .32; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .snowflake { animation: none; opacity: 1; }
+  }
+
+  @media (max-width: 639px) {
+    .page {
+      width: min(100% - 24px, 430px);
+      padding: 28px 0 34px;
+    }
+    .intro {
+      display: block;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin-top: 7px;
+      font-size: 30px;
+      line-height: 1.04;
+    }
+    .measure { margin-top: 15px; }
+    .terminal { border-radius: 9px; }
+    .tab { min-width: 185px; }
+    .ensemble { gap: 8px; overflow: hidden; }
+    .ensemble .agent-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .timeline { font-size: 12px; }
+    .tool { padding: 0 10px; }
+    .tool-time { display: none; }
+    .thinking-wrap { padding-top: 13px; padding-bottom: 11px; }
+    .status-row { font-size: 12.5px; }
+    .snowflake {
+      transform: translateY(calc(-0.75px + var(--optical-y, 0px)));
+    }
+    .note { line-height: 1.45; }
+    .comparison {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .compare-card { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="intro">
+    <div>
+      <div class="eyebrow">Thinking indicator · scale study</div>
+      <h1>Make the snowflake unmistakable.</h1>
+    </div>
+    <div class="measure">
+      <span>current</span><strong>11</strong><span class="arrow">→</span><strong>20</strong><span>px</span>
+    </div>
+  </header>
+
+  <section class="terminal" aria-label="Proposed thinking indicator in the ThinkPool terminal">
+    <div class="terminal-top">
+      <div class="tab"><span class="presence"></span><span>snowflake pass</span><span>⌄</span></div>
+      <div class="terminal-actions">Terminal 2</div>
+    </div>
+    <div class="ensemble">
+      <strong>Ensemble</strong><span class="agent">◉</span><span class="agent agent-label">GPT-5.6-Sol · high</span>
+    </div>
+
+    <div class="timeline">
+      <div class="turn partner">
+        <span class="drop">♧</span>
+        <span><span class="name">Conrad</span> <span class="message">the cycle feels right again</span><span class="time">20:52</span></span>
+      </div>
+      <div class="turn you">
+        <span class="drop">♧</span>
+        <span><span class="name">Maks</span> <span class="message">make the snowflake a lot bigger</span><span class="time">20:53</span></span>
+      </div>
+      <div class="assistant">
+        <span class="dot" style="color:var(--pool-bright)">●</span>
+        <span class="message">I’m enlarging the animated mark without moving the Thinking text rail.</span>
+      </div>
+      <div class="tool">
+        <span class="tool-icon">⌁</span><strong>3 calls</strong><span>1 Read</span><span>2 Edit</span><span class="tool-time">4.1s</span>
+      </div>
+
+      <div class="thinking-wrap">
+        <div class="status-row">
+          <span id="hero-glyph" class="status-mark snowflake proposed" style="--optical-y:-.91px">✦︎</span>
+          <span><span>Thinking</span>… <span class="detail">(8s with high effort)</span></span>
+        </div>
+        <p class="note">The glyph grows 82%; the label remains on the same 28px transcript rail.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="comparison" aria-label="Current and proposed scale comparison">
+    <article class="compare-card">
+      <div class="compare-head"><strong>Current</strong><span>11px glyph</span></div>
+      <div class="rail-demo">
+        <div class="status-row">
+          <span class="status-mark snowflake current" style="--optical-y:-.5px">✦︎</span>
+          <span><span>Thinking</span>… <span class="detail">(8s with high effort)</span></span>
+        </div>
+      </div>
+    </article>
+    <article class="compare-card">
+      <div class="compare-head"><strong>Proposed</strong><span>20px glyph · fixed rail</span></div>
+      <div class="rail-demo">
+        <div class="status-row">
+          <span id="compare-glyph" class="status-mark snowflake proposed" style="--optical-y:-.91px">✦︎</span>
+          <span><span>Thinking</span>… <span class="detail">(8s with high effort)</span></span>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script>
+  const frames = [
+    ["✻︎", -.45], ["✵︎", -.91], ["✦︎", -.91], ["✶︎", -.45], ["✷︎", -.91],
+    ["✺︎", -.91], ["❈︎", -.91], ["❉︎", -.91], ["❋︎", -1.36], ["✧︎", -.91]
+  ];
+  const targets = [document.querySelector("#hero-glyph"), document.querySelector("#compare-glyph")];
+  let frame = 0;
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.setInterval(() => {
+      frame = (frame + 1) % frames.length;
+      targets.forEach((target) => {
+        target.textContent = frames[frame][0];
+        target.style.setProperty("--optical-y", `${frames[frame][1]}px`);
+      });
+    }, 150);
+  }
+</script>
+</body>
+</html>
