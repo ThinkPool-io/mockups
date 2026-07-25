@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ThinkPool — Room chat icon directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --k-bg: #0a0d10;
+    --k-panel: hsl(212 12% 7%);
+    --k-raised: hsl(212 11% 8%);
+    --k-surface: hsl(212 10% 10%);
+    --k-float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(201 78% 64%);
+    --pool-dim: hsl(201 24% 18%);
+    --partner: hsl(220 56% 64%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; min-height: 100%; background: var(--k-bg); color: var(--ink); }
+
+  body {
+    padding: 22px 24px 24px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  button { font: inherit; }
+
+  .board {
+    width: min(1320px, 100%);
+    margin: 0 auto;
+  }
+
+  .intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  .eyebrow,
+  .viewport-label,
+  .option-no,
+  .badge,
+  .instruction {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .eyebrow {
+    margin: 0 0 4px;
+    color: var(--pool);
+    font-size: 10px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(23px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -.035em;
+  }
+
+  .instruction {
+    margin: 0;
+    max-width: 420px;
+    color: var(--faint);
+    font-size: 9px;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  .contexts {
+    display: grid;
+    grid-template-columns: 1.25fr .75fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .context {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--k-panel);
+  }
+
+  .context-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 29px;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--line);
+    font: 10px/1 var(--font-mono);
+    color: var(--faint);
+  }
+
+  .context-head strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .chrome {
+    display: flex;
+    height: 44px;
+    align-items: stretch;
+    overflow: hidden;
+    font: 11px/1 var(--font-mono);
+  }
+
+  .tab-strip {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    gap: 19px;
+    padding: 0 11px;
+    white-space: nowrap;
+  }
+
+  .term { color: var(--ink); }
+  .term::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--pool);
+    box-shadow: 0 0 7px var(--pool);
+    vertical-align: 1px;
+  }
+
+  .term.muted { color: var(--muted); }
+  .term.muted::before { background: transparent; box-shadow: none; border: 1px solid var(--line-strong); }
+
+  .cell {
+    position: relative;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 0;
+    border-left: 1px solid var(--line);
+    background: transparent;
+    color: var(--faint);
+  }
+
+  .cell.desktop { width: 36px; height: 36px; align-self: center; }
+  .cell.mobile { width: 48px; height: 48px; }
+  .cell.chat { color: var(--pool); background: color-mix(in oklab, var(--pool) 5%, transparent); }
+  .cell svg { width: 18px; height: 18px; }
+  .cell.mobile svg { width: 20px; height: 20px; }
+
+  .plus {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--faint);
+  }
+
+  .session {
+    display: flex;
+    align-items: center;
+    min-width: 210px;
+    padding: 0 12px;
+    border-left: 1px solid var(--line);
+    color: var(--faint);
+  }
+
+  .session b { margin-right: 5px; color: var(--pool); font-weight: 600; }
+  .session i { margin-left: 5px; color: var(--partner); font-style: normal; }
+
+  .mobile-title {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    color: var(--ink);
+  }
+
+  .mobile-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mobile-title small { color: var(--faint); font-size: 9px; }
+
+  .stack-glyph {
+    width: 20px;
+    height: 20px;
+    color: var(--pool);
+  }
+
+  .unread {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 999px;
+    background: var(--pool);
+    color: var(--k-bg);
+    font: 700 8px/14px var(--font-mono);
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .option {
+    position: relative;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--k-raised);
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+  }
+
+  .option:hover,
+  .option:focus-visible {
+    border-color: var(--line-strong);
+    background: var(--k-surface);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .option[aria-pressed="true"] {
+    border-color: color-mix(in oklab, var(--pool) 60%, var(--line));
+    background: color-mix(in oklab, var(--pool) 6%, var(--k-raised));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--pool) 18%, transparent);
+  }
+
+  .option-top {
+    display: flex;
+    min-height: 22px;
+    align-items: start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .option-no {
+    color: var(--faint);
+    font-size: 9px;
+  }
+
+  .badge {
+    padding: 2px 5px;
+    border: 1px solid color-mix(in oklab, var(--pool) 35%, var(--line));
+    border-radius: 999px;
+    color: var(--pool);
+    font-size: 7px;
+    line-height: 1.2;
+  }
+
+  .name {
+    margin: 4px 0 2px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -.01em;
+  }
+
+  .reason {
+    min-height: 30px;
+    margin: 0;
+    color: var(--faint);
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .size-test {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .sample-wrap { text-align: center; }
+  .sample-label {
+    display: block;
+    margin-top: 4px;
+    color: var(--faint);
+    font: 8px/1 var(--font-mono);
+  }
+
+  .sample {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    background: var(--k-panel);
+    color: var(--pool);
+  }
+
+  .sample.d { width: 36px; height: 36px; }
+  .sample.m { width: 48px; height: 48px; }
+  .sample.d svg { width: 17px; height: 17px; }
+  .sample.m svg { width: 20px; height: 20px; }
+
+  .icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+    color: var(--faint);
+    font: 9px/1.4 var(--font-mono);
+  }
+
+  .footer strong { color: var(--pool); font-weight: 500; }
+
+  @media (max-width: 700px) {
+    body { padding: 14px 12px 16px; }
+    .intro { align-items: start; margin-bottom: 10px; }
+    .instruction { display: none; }
+    h1 { font-size: 22px; }
+    .contexts { display: block; margin-bottom: 10px; }
+    .context.desktop-context { display: none; }
+    .context-head { height: 25px; }
+    .chrome { height: 48px; }
+    .options { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+    .option { min-height: 119px; padding: 9px; border-radius: 7px; }
+    .option-top { min-height: 15px; }
+    .name { margin-top: 2px; font-size: 13px; }
+    .reason { display: none; }
+    .size-test { gap: 8px; margin-top: 6px; }
+    .sample.d { width: 32px; height: 32px; }
+    .sample.d svg { width: 16px; height: 16px; }
+    .sample.m { width: 40px; height: 40px; }
+    .sample.m svg { width: 19px; height: 19px; }
+    .sample-label { margin-top: 3px; font-size: 7px; }
+    .footer { margin-top: 9px; }
+    .footer span:last-child { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .option { transition: none; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <symbol id="i-single" viewBox="0 0 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+    </symbol>
+    <symbol id="i-voices" viewBox="0 0 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+      <circle cx="9" cy="12" r=".8" fill="currentColor" stroke="none"/>
+      <circle cx="15" cy="12" r=".8" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-paired" viewBox="0 0 24 24">
+      <path d="M8.3 17.5 4 18.8l1.2-4A6.7 6.7 0 0 1 11 4.7a6.8 6.8 0 0 1 6.4 4.5"/>
+      <path d="M19.7 18.1 21 21l-3.2-.9A5.6 5.6 0 1 1 19.7 18Z"/>
+    </symbol>
+    <symbol id="i-people" viewBox="0 0 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+      <circle cx="9.3" cy="10.2" r="1.3"/>
+      <circle cx="14.7" cy="10.2" r="1.3"/>
+      <path d="M7.2 15c.5-1.5 1.4-2.2 2.7-2.2M16.8 15c-.5-1.5-1.4-2.2-2.7-2.2"/>
+    </symbol>
+    <symbol id="i-dialogue" viewBox="0 0 24 24">
+      <path d="M4.7 13.8 3 16l.4-3.5a5.8 5.8 0 1 1 9.7-4.3"/>
+      <path d="m19.2 17.6 1.8 2.2-.5-3.4a5.8 5.8 0 1 0-9.6-4.4"/>
+    </symbol>
+    <symbol id="i-broadcast" viewBox="0 0 24 24">
+      <path d="M18 13.3a6.2 6.2 0 0 1-9.4 5.4L5 19.5l.8-3.6A6.2 6.2 0 1 1 18 13.3Z"/>
+      <path d="M6.3 5.4A9 9 0 0 1 20.1 8M4 2.8A12.5 12.5 0 0 1 21.8 5"/>
+    </symbol>
+    <symbol id="i-thread" viewBox="0 0 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+      <path d="M8 9.5h8M8 12.5h6M8 15.5h4"/>
+    </symbol>
+    <symbol id="i-pool" viewBox="0 0 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+      <path d="M12 7.7c1.8 2.3 2.8 3.8 2.8 5.2a2.8 2.8 0 0 1-5.6 0c0-1.4 1-2.9 2.8-5.2Z"/>
+    </symbol>
+    <symbol id="i-open" viewBox="0 0 24 24">
+      <path d="M8 5H6a3 3 0 0 0-3 3v3l-1 3 4-1h3a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3Z"/>
+      <path d="M16 11h2a3 3 0 0 1 3 3v3l1 3-4-1h-3a3 3 0 0 1-3-3v-2"/>
+    </symbol>
+    <symbol id="i-roundtable" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M16.5 12.2a4.6 4.6 0 0 1-7 4l-2.6.6.6-2.7a4.6 4.6 0 1 1 9-1.9Z"/>
+    </symbol>
+    <symbol id="i-stack" viewBox="0 0 24 24">
+      <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/>
+      <path d="M9 6h11M9 12h8M9 18h10"/>
+    </symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19 13.7v-3.4l-2-.6-.5-1.2 1-1.8-2.4-2.4-1.8 1-1.3-.5-.6-2H8l-.6 2-1.2.5-1.9-1-2.4 2.4 1 1.8-.5 1.2-2 .6v3.4l2 .6.5 1.2-1 1.8 2.4 2.4 1.9-1 1.2.5.6 2h3.4l.6-2 1.3-.5 1.8 1 2.4-2.4-1-1.8.5-1.2Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main class="board">
+  <header class="intro">
+    <div>
+      <p class="eyebrow">Room-level control · 10 directions</p>
+      <h1>Which mark earns the square?</h1>
+    </div>
+    <p class="instruction">Select an option to place it in both real top-row contexts. Every glyph is tested at its shipping size.</p>
+  </header>
+
+  <section class="contexts" aria-label="Selected icon in desktop and mobile chrome">
+    <article class="context desktop-context">
+      <div class="context-head"><strong>Desktop · right of New terminal</strong><span id="desktop-choice">03 Paired bubbles</span></div>
+      <div class="chrome">
+        <div class="tab-strip">
+          <span class="term">Mobile Terminal Scrolling</span>
+          <span class="term muted">Conrad building things</span>
+          <span class="term muted">Side chat</span>
+        </div>
+        <button class="cell desktop plus" aria-label="New terminal">+</button>
+        <button class="cell desktop chat" aria-label="Room chat">
+          <svg class="icon"><use id="desktop-icon" href="#i-paired"/></svg>
+          <span class="unread">3</span>
+        </button>
+        <div class="session"><b>ThinkPool</b> session with <i>Conrad ●</i></div>
+        <button class="cell desktop" aria-label="Session options"><svg class="icon"><use href="#i-gear"/></svg></button>
+      </div>
+    </article>
+
+    <article class="context mobile-context">
+      <div class="context-head"><strong>Mobile · right of terminal stack</strong><span id="mobile-choice">03 Paired bubbles</span></div>
+      <div class="chrome">
+        <div class="mobile-title"><span>Mobile Terminal Scrolling</span><small>1/8</small></div>
+        <button class="cell mobile" aria-label="Open terminal picker">
+          <svg class="icon stack-glyph"><use href="#i-stack"/></svg>
+        </button>
+        <button class="cell mobile chat" aria-label="Room chat">
+          <svg class="icon"><use id="mobile-icon" href="#i-paired"/></svg>
+          <span class="unread">3</span>
+        </button>
+        <button class="cell mobile" aria-label="Session options"><svg class="icon"><use href="#i-gear"/></svg></button>
+      </div>
+    </article>
+  </section>
+
+  <section class="options" aria-label="Ten room chat icon options">
+    <button class="option" data-icon="single" data-label="01 Single bubble" aria-pressed="false">
+      <div class="option-top"><span class="option-no">01 · Baseline</span></div>
+      <h2 class="name">Single bubble</h2>
+      <p class="reason">Clean, familiar, but says generic chat.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-single"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-single"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="voices" data-label="02 Two voices" aria-pressed="false">
+      <div class="option-top"><span class="option-no">02 · Minimal</span><span class="badge">Strong</span></div>
+      <h2 class="name">Two voices</h2>
+      <p class="reason">One room, visibly shared by two people.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-voices"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-voices"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="paired" data-label="03 Paired bubbles" aria-pressed="true">
+      <div class="option-top"><span class="option-no">03 · Shared</span><span class="badge">My pick</span></div>
+      <h2 class="name">Paired bubbles</h2>
+      <p class="reason">Distinct from feedback and clearly multi-party.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-paired"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-paired"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="people" data-label="04 People in bubble" aria-pressed="false">
+      <div class="option-top"><span class="option-no">04 · Literal</span></div>
+      <h2 class="name">People in bubble</h2>
+      <p class="reason">Most explicit room cue; busier at desktop size.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-people"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-people"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="dialogue" data-label="05 Dialogue" aria-pressed="false">
+      <div class="option-top"><span class="option-no">05 · Exchange</span></div>
+      <h2 class="name">Dialogue</h2>
+      <p class="reason">Two-way conversation without a central room.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-dialogue"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-dialogue"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="broadcast" data-label="06 Broadcast" aria-pressed="false">
+      <div class="option-top"><span class="option-no">06 · Room-wide</span></div>
+      <h2 class="name">Broadcast</h2>
+      <p class="reason">Signals every terminal; risks reading as live audio.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-broadcast"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-broadcast"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="thread" data-label="07 Thread lines" aria-pressed="false">
+      <div class="option-top"><span class="option-no">07 · Transcript</span></div>
+      <h2 class="name">Thread lines</h2>
+      <p class="reason">Emphasizes the collected message history.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-thread"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-thread"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="pool" data-label="08 Pool drop" aria-pressed="false">
+      <div class="option-top"><span class="option-no">08 · Branded</span><span class="badge">Strong</span></div>
+      <h2 class="name">Pool drop</h2>
+      <p class="reason">Ownable ThinkPool mark; may imply agent chat.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-pool"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-pool"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="open" data-label="09 Open channel" aria-pressed="false">
+      <div class="option-top"><span class="option-no">09 · Channel</span></div>
+      <h2 class="name">Open channel</h2>
+      <p class="reason">Feels lightweight and ambient, less like an inbox.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-open"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-open"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+
+    <button class="option" data-icon="roundtable" data-label="10 Roundtable" aria-pressed="false">
+      <div class="option-top"><span class="option-no">10 · Room</span></div>
+      <h2 class="name">Roundtable</h2>
+      <p class="reason">Makes “room” explicit, but becomes dense at 17px.</p>
+      <div class="size-test">
+        <span class="sample-wrap"><span class="sample d"><svg class="icon"><use href="#i-roundtable"/></svg></span><span class="sample-label">17 px</span></span>
+        <span class="sample-wrap"><span class="sample m"><svg class="icon"><use href="#i-roundtable"/></svg></span><span class="sample-label">20 px</span></span>
+      </div>
+    </button>
+  </section>
+
+  <footer class="footer">
+    <span>Selected: <strong id="footer-choice">03 Paired bubbles</strong></span>
+    <span>Glacier denotes room-level communication · unread count stays cobalt</span>
+  </footer>
+</main>
+
+<script>
+  const options = Array.from(document.querySelectorAll('.option'));
+  const targets = [
+    document.getElementById('desktop-icon'),
+    document.getElementById('mobile-icon')
+  ];
+  const labels = [
+    document.getElementById('desktop-choice'),
+    document.getElementById('mobile-choice'),
+    document.getElementById('footer-choice')
+  ];
+
+  options.forEach((option) => {
+    option.addEventListener('click', () => {
+      const icon = option.dataset.icon;
+      const label = option.dataset.label;
+      options.forEach((item) => item.setAttribute('aria-pressed', String(item === option)));
+      targets.forEach((target) => target.setAttribute('href', `#i-${icon}`));
+      labels.forEach((target) => { target.textContent = label; });
+    });
+  });
+</script>
+</body>
+</html>
