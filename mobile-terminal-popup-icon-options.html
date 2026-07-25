@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Thinkpool — terminal popup icon options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --positive: hsl(152 40% 58%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      background:
+        radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--pool) 8%, transparent), transparent 38%),
+        var(--bg);
+      color: var(--ink-soft);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      width: min(1400px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 36px 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 20px;
+      padding: 0 2px 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 clamp(24px, 3vw, 36px)/1.08 var(--font-sans);
+      letter-spacing: -.035em;
+    }
+
+    .intro-copy {
+      width: min(48ch, 44vw);
+      margin: 0;
+      color: var(--faint);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      grid-column: span 2;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: color-mix(in oklab, var(--raised) 94%, transparent);
+    }
+
+    .option:nth-child(4) { grid-column: 2 / span 2; }
+    .option:nth-child(5) { grid-column: 4 / span 2; }
+
+    .option-head {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+    }
+
+    .option-code {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 7px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font: 600 14px/1.2 var(--font-sans);
+      letter-spacing: -.01em;
+    }
+
+    .option-head p {
+      margin: 3px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .scene {
+      position: relative;
+      min-height: 326px;
+      overflow: hidden;
+      background:
+        linear-gradient(to bottom, transparent 48px, color-mix(in oklab, var(--bg) 56%, transparent) 48px),
+        var(--bg);
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      height: 48px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      background: var(--bg);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-current {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 999px;
+      background: var(--positive);
+      box-shadow: 0 0 7px var(--positive);
+    }
+
+    .name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 10.5px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .cell {
+      display: grid;
+      width: 48px;
+      flex: 0 0 48px;
+      place-items: center;
+      border-left: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      color: var(--faint);
+    }
+
+    .popup-cell {
+      color: var(--pool);
+      background: color-mix(in oklab, var(--pool) 5%, transparent);
+    }
+
+    .popup-icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .gear {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      opacity: .82;
+    }
+
+    .backdrop {
+      position: absolute;
+      z-index: 1;
+      inset: 48px 0 0;
+      background: color-mix(in oklab, black 48%, transparent);
+    }
+
+    .ghost-content {
+      position: absolute;
+      top: 72px;
+      right: 20px;
+      left: 20px;
+      color: color-mix(in oklab, var(--faint) 25%, transparent);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .sheet {
+      position: absolute;
+      z-index: 2;
+      right: 10px;
+      bottom: -1px;
+      left: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-bottom: 0;
+      border-radius: 12px 12px 0 0;
+      background: var(--raised);
+      box-shadow: 0 -14px 40px color-mix(in oklab, black 30%, transparent);
+      font-family: var(--font-mono);
+    }
+
+    .sheet-head {
+      display: flex;
+      height: 55px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px 0 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sheet-title {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sheet-total {
+      color: var(--faint);
+      font-size: 10.5px;
+    }
+
+    .new-terminal {
+      display: inline-flex;
+      height: 32px;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      border: 1px solid color-mix(in oklab, var(--pool) 44%, var(--line));
+      border-radius: 8px;
+      padding: 0 9px;
+      background: color-mix(in oklab, var(--pool) 8%, transparent);
+      color: var(--pool);
+      font-size: 10.5px;
+      font-weight: 500;
+    }
+
+    .new-terminal svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .close {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--faint);
+    }
+
+    .close svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+    }
+
+    .terminal-list {
+      padding: 6px;
+    }
+
+    .terminal-row {
+      position: relative;
+      display: flex;
+      min-height: 47px;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: var(--muted);
+    }
+
+    .terminal-row.active {
+      background: color-mix(in oklab, var(--surface) 64%, transparent);
+      color: var(--ink);
+    }
+
+    .terminal-row.active::before {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      left: 0;
+      width: 2px;
+      border-radius: 2px;
+      background: var(--pool);
+      content: "";
+    }
+
+    .row-status {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 7px;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 6px var(--positive);
+    }
+
+    .row-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-name {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 11.5px;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-state {
+      display: block;
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 9.5px;
+    }
+
+    .row-index {
+      color: var(--faint);
+      font-size: 9.5px;
+    }
+
+    @media (max-width: 700px) {
+      .board { padding: 22px 14px 32px; }
+      .intro { display: block; margin-bottom: 14px; padding: 0 2px 16px; }
+      .intro-copy { width: auto; margin-top: 10px; }
+      .options { display: flex; flex-direction: column; gap: 12px; }
+      .option, .option:nth-child(4), .option:nth-child(5) { grid-column: auto; }
+      .option-head { min-height: 56px; }
+      .scene { min-height: 330px; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/>
+    </symbol>
+    <symbol id="stack" viewBox="0 0 24 24">
+      <rect x="4" y="7" width="14" height="11" rx="2"/>
+      <path d="M8 4h10a2 2 0 0 1 2 2v8"/>
+    </symbol>
+    <symbol id="prompt" viewBox="0 0 24 24">
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/>
+      <path d="m7.5 9 3 3-3 3M12.5 15h4"/>
+    </symbol>
+    <symbol id="lanes" viewBox="0 0 24 24">
+      <circle cx="5.5" cy="7" r="1.3"/>
+      <circle cx="5.5" cy="12" r="1.3"/>
+      <circle cx="5.5" cy="17" r="1.3"/>
+      <path d="M9 7h10M9 12h8M9 17h10"/>
+    </symbol>
+    <symbol id="grid" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1.2"/>
+      <rect x="14" y="4" width="6" height="6" rx="1.2"/>
+      <rect x="4" y="14" width="6" height="6" rx="1.2"/>
+      <rect x="14" y="14" width="6" height="6" rx="1.2"/>
+    </symbol>
+    <symbol id="drawer" viewBox="0 0 24 24">
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/>
+      <path d="M4 10h16M9 14l3 2.5 3-2.5"/>
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Terminal popup trigger · 5 icons</p>
+        <h1>What should replace the “+”?</h1>
+      </div>
+      <p class="intro-copy">The count stays as quiet metadata. The square button now opens Terminals; “New terminal” moves into the popup header.</p>
+    </header>
+
+    <section class="options" aria-label="Terminal popup icon options">
+      <article class="option a">
+        <header class="option-head">
+          <span class="option-code">A</span>
+          <div><h2>Stacked windows</h2><p>Reads as multiple open terminal surfaces.</p></div>
+        </header>
+        <div class="scene">
+          <div class="topbar">
+            <div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div>
+            <div class="cell popup-cell"><svg class="popup-icon"><use href="#stack"/></svg></div>
+            <div class="cell"><svg class="gear"><use href="#gear"/></svg></div>
+          </div>
+          <div class="ghost-content">Terminal transcript continues behind the modal.</div>
+          <div class="backdrop"></div>
+          <div class="sheet">
+            <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+            <div class="terminal-list">
+              <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option b">
+        <header class="option-head">
+          <span class="option-code">B</span>
+          <div><h2>Terminal prompt</h2><p>The most literal “terminal” symbol.</p></div>
+        </header>
+        <div class="scene">
+          <div class="topbar">
+            <div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div>
+            <div class="cell popup-cell"><svg class="popup-icon"><use href="#prompt"/></svg></div>
+            <div class="cell"><svg class="gear"><use href="#gear"/></svg></div>
+          </div>
+          <div class="ghost-content">Terminal transcript continues behind the modal.</div>
+          <div class="backdrop"></div>
+          <div class="sheet">
+            <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+            <div class="terminal-list">
+              <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option c">
+        <header class="option-head">
+          <span class="option-code">C</span>
+          <div><h2>Status list</h2><p>Matches the popup’s terminal rows.</p></div>
+        </header>
+        <div class="scene">
+          <div class="topbar">
+            <div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div>
+            <div class="cell popup-cell"><svg class="popup-icon"><use href="#lanes"/></svg></div>
+            <div class="cell"><svg class="gear"><use href="#gear"/></svg></div>
+          </div>
+          <div class="ghost-content">Terminal transcript continues behind the modal.</div>
+          <div class="backdrop"></div>
+          <div class="sheet">
+            <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+            <div class="terminal-list">
+              <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option d">
+        <header class="option-head">
+          <span class="option-code">D</span>
+          <div><h2>Terminal grid</h2><p>Compact overview of multiple workspaces.</p></div>
+        </header>
+        <div class="scene">
+          <div class="topbar">
+            <div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div>
+            <div class="cell popup-cell"><svg class="popup-icon"><use href="#grid"/></svg></div>
+            <div class="cell"><svg class="gear"><use href="#gear"/></svg></div>
+          </div>
+          <div class="ghost-content">Terminal transcript continues behind the modal.</div>
+          <div class="backdrop"></div>
+          <div class="sheet">
+            <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+            <div class="terminal-list">
+              <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option e">
+        <header class="option-head">
+          <span class="option-code">E</span>
+          <div><h2>Terminal drawer</h2><p>Communicates the bottom-sheet interaction.</p></div>
+        </header>
+        <div class="scene">
+          <div class="topbar">
+            <div class="terminal-current"><span class="status"></span><span class="name">Mobile Terminal Scrolling</span><span class="count">1/5</span></div>
+            <div class="cell popup-cell"><svg class="popup-icon"><use href="#drawer"/></svg></div>
+            <div class="cell"><svg class="gear"><use href="#gear"/></svg></div>
+          </div>
+          <div class="ghost-content">Terminal transcript continues behind the modal.</div>
+          <div class="backdrop"></div>
+          <div class="sheet">
+            <div class="sheet-head"><span class="sheet-title">Terminals</span><span class="sheet-total">5</span><span class="new-terminal"><svg viewBox="0 0 12 12"><path d="M6 1v10M1 6h10"/></svg>New</span><span class="close"><svg viewBox="0 0 12 12"><path d="m2 2 8 8M10 2 2 10"/></svg></span></div>
+            <div class="terminal-list">
+              <div class="terminal-row active"><span class="row-status"></span><span class="row-copy"><span class="row-name">Mobile Terminal Scrolling</span><span class="row-state">Ready</span></span><span class="row-index">1</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Repo Security</span><span class="row-state">Ready</span></span><span class="row-index">2</span></div>
+              <div class="terminal-row"><span class="row-status"></span><span class="row-copy"><span class="row-name">Conrad building things</span><span class="row-state">Agent thinking</span></span><span class="row-index">3</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
