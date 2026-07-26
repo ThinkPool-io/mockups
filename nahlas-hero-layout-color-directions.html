@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nahlas — five full hero treatments</title>
+  <style>
+    :root {
+      --canvas: #e9ece8;
+      --surface: #ffffff;
+      --bone: #f4efe6;
+      --ink: #151715;
+      --muted: #626862;
+      --line: #cbd0ca;
+      --red: #e32920;
+      --red-dark: #a91e18;
+      --slate: #183047;
+      --blue: #2e5b78;
+      --display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      --body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--canvas); }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(21, 23, 21, .025) 1px, transparent 1px),
+        linear-gradient(rgba(21, 23, 21, .025) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: var(--body);
+      margin: 0;
+      min-width: 320px;
+    }
+
+    a { color: inherit; }
+
+    .board-head {
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      gap: 28px;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 500px);
+      padding: 52px clamp(22px, 5vw, 78px) 56px;
+    }
+
+    .eyebrow,
+    .option-number,
+    .option-tag,
+    .micro,
+    .nav-links,
+    .status,
+    .seal {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .075em;
+      text-transform: uppercase;
+    }
+
+    .board-head .eyebrow {
+      color: #ff6d65;
+      margin: 0 0 18px;
+    }
+
+    .board-head h1 {
+      font-family: var(--display);
+      font-size: clamp(50px, 6.8vw, 100px);
+      letter-spacing: -.055em;
+      line-height: .88;
+      margin: 0;
+      max-width: 880px;
+      text-transform: uppercase;
+    }
+
+    .board-head h1 span { color: var(--red); }
+
+    .board-intro {
+      align-self: end;
+      color: #d2d7d1;
+      font-size: 17px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .board-intro strong { color: #fff; }
+
+    .board-rule {
+      border-top: 1px solid #474b47;
+      color: #d2d7d1;
+      display: flex;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      gap: 18px;
+      grid-column: 1 / -1;
+      justify-content: space-between;
+      letter-spacing: .06em;
+      padding-top: 18px;
+      text-transform: uppercase;
+    }
+
+    .board-rule b { color: #ff6d65; }
+
+    .options {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0 auto;
+      max-width: 1540px;
+      padding: 40px clamp(18px, 3vw, 44px) 84px;
+    }
+
+    .option {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(21, 23, 21, .07);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .option-meta {
+      align-items: center;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: auto 1fr auto;
+      min-height: 76px;
+      padding: 14px 18px;
+    }
+
+    .option-number {
+      align-items: center;
+      background: var(--ink);
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+    }
+
+    .option-name {
+      font-size: 15px;
+      font-weight: 850;
+      letter-spacing: -.01em;
+      margin: 0 0 3px;
+    }
+
+    .option-idea {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .option-tag {
+      background: var(--canvas);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 590px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mini-nav {
+      align-items: center;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: auto 1fr auto;
+      min-height: 72px;
+      padding: 0 28px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: var(--display);
+      font-size: 25px;
+      letter-spacing: -.04em;
+      text-transform: uppercase;
+    }
+
+    .logo i { color: var(--red); font-style: normal; }
+
+    .nav-links {
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .nav-cta {
+      align-items: center;
+      background: var(--red);
+      border-radius: 8px;
+      color: #fff;
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 900;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .hero-body {
+      padding: 48px 30px 36px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .hero h2 {
+      font-family: var(--display);
+      letter-spacing: -.052em;
+      line-height: .89;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .hero h2 span { display: block; }
+
+    .hero-copy {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 550;
+      line-height: 1.55;
+      margin: 24px 0 0;
+      max-width: 510px;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .cta {
+      align-items: center;
+      background: var(--red);
+      border: 2px solid var(--red);
+      border-radius: 8px;
+      color: #fff;
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 900;
+      gap: 20px;
+      justify-content: space-between;
+      min-height: 52px;
+      padding: 0 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .cta::after { content: "→"; font-size: 18px; }
+
+    .secondary {
+      border-bottom: 1px solid currentColor;
+      font-size: 11px;
+      font-weight: 900;
+      padding-bottom: 4px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    /* 01 — Red field: protest-poster force with a calm white utility bar. */
+    .opt-1 .hero { background: var(--red); color: #fff; }
+    .opt-1 .mini-nav { background: #fff; color: var(--ink); }
+    .opt-1 .hero-body { padding-top: 64px; }
+    .opt-1 h2 { font-size: clamp(48px, 4.4vw, 62px); max-width: 650px; }
+    .opt-1 h2 span {
+      color: var(--ink);
+      margin-left: 7%;
+      position: relative;
+      width: 110%;
+    }
+    .opt-1 h2 span::after {
+      background: #fff;
+      bottom: -17px;
+      content: "";
+      height: 8px;
+      left: -18%;
+      position: absolute;
+      transform: rotate(-3deg);
+      width: 115%;
+    }
+    .opt-1 .hero-copy { color: #fff; max-width: 480px; }
+    .opt-1 .cta { background: var(--ink); border-color: var(--ink); }
+    .opt-1 .status {
+      border: 1px solid rgba(255,255,255,.65);
+      bottom: 28px;
+      color: #fff;
+      padding: 10px 12px;
+      position: absolute;
+      right: 28px;
+      transform: rotate(2deg);
+    }
+
+    /* 02 — Bone editorial: most restrained, with a stamped civic evidence object. */
+    .opt-2 .hero {
+      background:
+        linear-gradient(90deg, transparent 69%, rgba(227,41,32,.07) 69%),
+        var(--bone);
+    }
+    .opt-2 .hero-body { max-width: 75%; padding-top: 62px; }
+    .opt-2 h2 { font-size: clamp(47px, 4.2vw, 59px); max-width: 630px; }
+    .opt-2 h2 span { color: var(--red); }
+    .opt-2 .evidence-ticket {
+      background: #fff;
+      border: 1px solid var(--ink);
+      bottom: 34px;
+      box-shadow: 8px 8px 0 var(--red);
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      position: absolute;
+      right: 28px;
+      transform: rotate(2deg);
+      width: 200px;
+    }
+    .opt-2 .evidence-ticket b { font-size: 24px; letter-spacing: -.04em; }
+    .opt-2 .ticket-line { border-top: 1px dashed #91968f; }
+
+    /* 03 — Black registry: accountability looks like a permanent public record. */
+    .opt-3 .hero { background: var(--ink); color: #fff; }
+    .opt-3 .mini-nav { border-bottom: 1px solid #3c403c; }
+    .opt-3 .nav-links { color: #aeb4ad; }
+    .opt-3 .nav-cta { border-radius: 0; }
+    .opt-3 .hero-body { padding-top: 54px; }
+    .opt-3 h2 {
+      font-size: clamp(47px, 4.2vw, 59px);
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+    }
+    .opt-3 h2 span { color: var(--red); }
+    .opt-3 .hero-copy { color: #c8cdc7; }
+    .opt-3 .registry-grid {
+      inset: 72px 0 0;
+      opacity: .18;
+      position: absolute;
+      background:
+        linear-gradient(90deg, #fff 1px, transparent 1px),
+        linear-gradient(#fff 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+    .opt-3 .case-mark {
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      position: absolute;
+      right: 28px;
+      text-transform: uppercase;
+      top: 104px;
+      writing-mode: vertical-rl;
+    }
+    .opt-3 .cta { border-radius: 0; }
+
+    /* 04 — Split pressure: city quiet on one side, residents forcing movement on the other. */
+    .opt-4 .hero {
+      background: linear-gradient(112deg, #fff 0 57%, var(--red) 57% 100%);
+    }
+    .opt-4 .hero-body { padding-top: 58px; }
+    .opt-4 h2 { font-size: clamp(47px, 4.2vw, 59px); max-width: 625px; }
+    .opt-4 h2 span {
+      background: var(--ink);
+      color: #fff;
+      margin-top: 8px;
+      padding: 5px 12px 10px;
+      transform: rotate(-1.5deg);
+      width: fit-content;
+    }
+    .opt-4 .hero-copy {
+      background: rgba(255,255,255,.93);
+      color: #424742;
+      padding: 13px 15px;
+    }
+    .opt-4 .crowd {
+      align-items: flex-end;
+      bottom: -8px;
+      display: flex;
+      gap: 8px;
+      opacity: .92;
+      position: absolute;
+      right: 22px;
+      transform: rotate(-3deg);
+    }
+    .opt-4 .person {
+      background: var(--ink);
+      border-radius: 40px 40px 0 0;
+      height: 152px;
+      position: relative;
+      width: 54px;
+    }
+    .opt-4 .person::before {
+      background: var(--ink);
+      border-radius: 50%;
+      content: "";
+      height: 48px;
+      left: 3px;
+      position: absolute;
+      top: -34px;
+      width: 48px;
+    }
+    .opt-4 .person:nth-child(2) { height: 196px; }
+    .opt-4 .person:nth-child(2)::before { background: #fff; }
+    .opt-4 .person:nth-child(3) { height: 130px; }
+    .opt-4 .cta { background: var(--ink); border-color: var(--ink); }
+
+    /* 05 — Cold city: a calmer civic-blue system with an unmistakable red action. */
+    .opt-5 { grid-column: 1 / -1; }
+    .opt-5 .hero {
+      background:
+        radial-gradient(circle at 84% 25%, rgba(255,255,255,.11), transparent 20%),
+        linear-gradient(125deg, var(--slate), #101d29);
+      color: #fff;
+    }
+    .opt-5 .mini-nav { border-bottom: 1px solid rgba(255,255,255,.24); }
+    .opt-5 .nav-links { color: #becad2; }
+    .opt-5 .hero-body { padding-top: 54px; }
+    .opt-5 h2 { font-size: clamp(55px, 6.7vw, 92px); max-width: 850px; }
+    .opt-5 h2 span { color: #ff5c53; }
+    .opt-5 .hero-copy { color: #d1dbe1; max-width: 560px; }
+    .opt-5 .map-lines {
+      height: 360px;
+      opacity: .28;
+      position: absolute;
+      right: -40px;
+      top: 108px;
+      transform: rotate(-5deg);
+      width: 44%;
+    }
+    .opt-5 .map-lines::before,
+    .opt-5 .map-lines::after {
+      border: 3px solid #fff;
+      content: "";
+      inset: 30px 20px 80px 55px;
+      position: absolute;
+      transform: skew(-14deg) rotate(8deg);
+    }
+    .opt-5 .map-lines::after {
+      border-color: #ff5c53;
+      inset: 110px 70px 10px 0;
+      transform: skew(9deg) rotate(-11deg);
+    }
+    .opt-5 .pin {
+      background: var(--red);
+      border: 7px solid #fff;
+      border-radius: 50% 50% 50% 0;
+      height: 48px;
+      position: absolute;
+      right: 15%;
+      top: 245px;
+      transform: rotate(-45deg);
+      width: 48px;
+    }
+    .opt-5 .seal {
+      border: 1px solid rgba(255,255,255,.45);
+      bottom: 28px;
+      color: #fff;
+      padding: 10px 12px;
+      position: absolute;
+      right: 28px;
+    }
+
+    .board-footer {
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      padding: 28px clamp(22px, 5vw, 78px);
+    }
+
+    .board-footer b {
+      font-family: var(--display);
+      font-size: 22px;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+
+    .board-footer span {
+      align-self: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .board-head { grid-template-columns: 1fr; }
+      .board-intro { max-width: 700px; }
+      .options { grid-template-columns: 1fr; }
+      .opt-5 { grid-column: auto; }
+    }
+
+    @media (max-width: 560px) {
+      .board-head { padding: 34px 18px 38px; }
+      .board-head h1 { font-size: 49px; }
+      .board-intro { font-size: 15px; }
+      .options { gap: 22px; padding: 24px 12px 56px; }
+      .option { border-radius: 10px; }
+      .option-meta {
+        align-items: start;
+        grid-template-columns: auto 1fr;
+        min-height: 84px;
+      }
+      .option-tag { display: none; }
+      .hero { min-height: 620px; }
+      .mini-nav {
+        grid-template-columns: auto 1fr;
+        min-height: 66px;
+        padding: 0 18px;
+      }
+      .logo { font-size: 23px; }
+      .nav-links { display: none; }
+      .nav-cta { font-size: 9px; justify-self: end; min-height: 44px; padding: 0 12px; }
+      .hero-body { padding: 62px 18px 28px; }
+      .hero h2,
+      .opt-1 h2,
+      .opt-2 h2,
+      .opt-3 h2,
+      .opt-4 h2,
+      .opt-5 h2 {
+        font-size: clamp(37px, 10.15vw, 40px);
+        line-height: .92;
+        max-width: 100%;
+      }
+      .hero-copy {
+        font-size: 15px;
+        line-height: 1.52;
+        margin-top: 26px;
+      }
+      .actions { align-items: stretch; flex-direction: column; gap: 18px; }
+      .cta { min-height: 56px; width: 100%; }
+      .secondary { align-self: flex-start; min-height: 30px; }
+
+      .opt-1 .hero-body { padding-top: 70px; }
+      .opt-1 h2 span { margin-left: 0; width: 100%; }
+      .opt-1 h2 span::after { left: -12%; width: 125%; }
+      .opt-1 .status { bottom: 20px; right: 18px; }
+
+      .opt-2 .hero {
+        background: linear-gradient(180deg, var(--bone) 0 74%, rgba(227,41,32,.08) 74%);
+      }
+      .opt-2 .hero-body { max-width: 100%; padding-top: 64px; }
+      .opt-2 .evidence-ticket {
+        bottom: 28px;
+        left: 18px;
+        right: auto;
+        width: calc(100% - 44px);
+      }
+      .opt-2 .actions { margin-bottom: 170px; }
+
+      .opt-3 .hero-body { padding-top: 58px; }
+      .opt-3 .case-mark { display: none; }
+      .opt-3 .registry-grid { background-size: 42px 42px; }
+
+      .opt-4 .hero { background: linear-gradient(165deg, #fff 0 69%, var(--red) 69% 100%); }
+      .opt-4 .hero-body { padding-top: 62px; }
+      .opt-4 h2 span { padding: 5px 8px 8px; }
+      .opt-4 .hero-copy { padding: 10px 12px; }
+      .opt-4 .crowd { opacity: .2; right: 6px; }
+
+      .opt-5 .hero-body { padding-top: 62px; }
+      .opt-5 .map-lines { opacity: .12; right: -80px; top: 210px; width: 94%; }
+      .opt-5 .pin { opacity: .55; right: 16%; top: 310px; }
+      .opt-5 .seal { bottom: 20px; right: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="board-head">
+    <div>
+      <p class="eyebrow">Nahlas / Full hero treatment round</p>
+      <h1>Same words.<br><span>Five pressure systems.</span></h1>
+    </div>
+    <p class="board-intro">
+      Five complete above-the-fold directions: navigation, accusation, explanation, calls to action,
+      composition and color. <strong>The copy stays approved and the type stays deliberately readable.</strong>
+    </p>
+    <div class="board-rule">
+      <span><b>No yellow.</b> No copy changes.</span>
+      <span>Bone · blood · black · white · cold civic blue</span>
+    </div>
+  </header>
+
+  <main class="options">
+    <article class="option opt-1">
+      <header class="option-meta">
+        <span class="option-number">01</span>
+        <div>
+          <p class="option-name">Red field</p>
+          <p class="option-idea">The loudest option: the whole hero behaves like a street poster.</p>
+        </div>
+        <span class="option-tag">Maximum campaign</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions">
+            <a class="cta" href="#report">Report what you see</a>
+            <a class="secondary" href="#cases">See active cases →</a>
+          </div>
+        </div>
+        <span class="status">Public space belongs to everyone</span>
+      </section>
+    </article>
+
+    <article class="option opt-2">
+      <header class="option-meta">
+        <span class="option-number">02</span>
+        <div>
+          <p class="option-name">Bone evidence desk</p>
+          <p class="option-idea">A calmer editorial field with one tangible accountability artifact.</p>
+        </div>
+        <span class="option-tag">Readable / ownable</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions">
+            <a class="cta" href="#report">Report what you see</a>
+            <a class="secondary" href="#cases">See active cases →</a>
+          </div>
+        </div>
+        <aside class="evidence-ticket" aria-label="Public case example">
+          <span class="micro">Public case</span>
+          <b>#CZ-0428</b>
+          <span class="ticket-line"></span>
+          <span class="micro">Owner named</span>
+          <span class="micro">Deadline visible</span>
+        </aside>
+      </section>
+    </article>
+
+    <article class="option opt-3">
+      <header class="option-meta">
+        <span class="option-number">03</span>
+        <div>
+          <p class="option-name">Black registry</p>
+          <p class="option-idea">The case record—not chaos—is the intimidating visual device.</p>
+        </div>
+        <span class="option-tag">Hard accountability</span>
+      </header>
+      <section class="hero">
+        <div class="registry-grid" aria-hidden="true"></div>
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions">
+            <a class="cta" href="#report">Report what you see</a>
+            <a class="secondary" href="#cases">See active cases →</a>
+          </div>
+        </div>
+        <span class="case-mark">Evidence → owner → deadline → outcome</span>
+      </section>
+    </article>
+
+    <article class="option opt-4">
+      <header class="option-meta">
+        <span class="option-number">04</span>
+        <div>
+          <p class="option-name">Split pressure</p>
+          <p class="option-idea">A clean service surface collides with collective resident pressure.</p>
+        </div>
+        <span class="option-tag">Product + movement</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions">
+            <a class="cta" href="#report">Report what you see</a>
+            <a class="secondary" href="#cases">See active cases →</a>
+          </div>
+        </div>
+        <div class="crowd" aria-hidden="true"><span class="person"></span><span class="person"></span><span class="person"></span></div>
+      </section>
+    </article>
+
+    <article class="option opt-5">
+      <header class="option-meta">
+        <span class="option-number">05</span>
+        <div>
+          <p class="option-name">Cold city</p>
+          <p class="option-idea">A colder civic map aesthetic; red is reserved for the accusation and action.</p>
+        </div>
+        <span class="option-tag">Serious / scalable</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="map-lines" aria-hidden="true"></div>
+        <span class="pin" aria-hidden="true"></span>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions">
+            <a class="cta" href="#report">Report what you see</a>
+            <a class="secondary" href="#cases">See active cases →</a>
+          </div>
+        </div>
+        <span class="seal">Public space belongs to everyone</span>
+      </section>
+    </article>
+  </main>
+
+  <footer class="board-footer">
+    <b>Pick the pressure system.</b>
+    <span>Nahlas full hero exploration · desktop + mobile · July 2026</span>
+  </footer>
+</body>
+</html>
