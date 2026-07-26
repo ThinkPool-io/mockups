@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nahlas — 10 provocative hero directions</title>
+  <style>
+    :root {
+      --canvas: #eceeea;
+      --surface: #ffffff;
+      --bone: #f5f1e8;
+      --ink: #171917;
+      --muted: #656a64;
+      --line: #d2d6d0;
+      --red: #df2b21;
+      --red-dark: #971b15;
+      --yellow: #f4dc58;
+      --green: #3a8d58;
+      --display: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      --body: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--canvas); }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(23, 25, 23, .025) 1px, transparent 1px),
+        linear-gradient(rgba(23, 25, 23, .025) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 24px 24px;
+      color: var(--ink);
+      font-family: var(--body);
+      margin: 0;
+      min-width: 320px;
+    }
+
+    button, a { font: inherit; }
+
+    .board-head {
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      gap: 30px;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
+      padding: 52px clamp(22px, 5vw, 76px) 58px;
+    }
+
+    .board-kicker,
+    .option-kicker,
+    .micro,
+    .tiny-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .board-kicker { color: var(--yellow); margin: 0 0 15px; }
+
+    .board-head h1 {
+      font-family: var(--display);
+      font-size: clamp(54px, 7.5vw, 112px);
+      letter-spacing: -.045em;
+      line-height: .82;
+      margin: 0;
+      max-width: 850px;
+      text-transform: uppercase;
+    }
+
+    .board-head h1 span { color: var(--red); }
+
+    .board-intro {
+      align-self: end;
+      color: #d9ddd7;
+      font-size: 18px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .board-intro strong { color: #fff; }
+
+    .board-note {
+      background: var(--yellow);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      grid-column: 1 / -1;
+      justify-self: start;
+      letter-spacing: .05em;
+      margin-top: 6px;
+      padding: 10px 13px;
+      transform: rotate(-.5deg);
+    }
+
+    .options {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0 auto;
+      max-width: 1500px;
+      padding: 38px clamp(18px, 3vw, 42px) 80px;
+    }
+
+    .option {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 14px 38px rgba(23, 25, 23, .06);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .option-meta {
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 16px;
+      grid-template-columns: auto 1fr auto;
+      min-height: 72px;
+      padding: 14px 18px;
+    }
+
+    .option-number {
+      align-items: center;
+      background: var(--ink);
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+      height: 36px;
+      justify-content: center;
+      width: 36px;
+    }
+
+    .option-name {
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -.01em;
+      margin: 0 0 3px;
+    }
+
+    .option-idea {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .option-tag {
+      background: var(--canvas);
+      border-radius: 999px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      padding: 7px 9px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 430px;
+      overflow: hidden;
+      padding: 0 30px 30px;
+      position: relative;
+    }
+
+    .mini-nav {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      min-height: 64px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .logo {
+      font-family: var(--display);
+      font-size: 25px;
+      letter-spacing: -.025em;
+      text-transform: uppercase;
+    }
+
+    .logo i { color: var(--red); font-style: normal; }
+
+    .mini-meta {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      font-family: var(--display);
+      letter-spacing: -.035em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .hero p { margin: 0; }
+
+    .hero-copy {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 430px;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .cta {
+      align-items: center;
+      background: var(--red);
+      border: 2px solid var(--red);
+      border-radius: 9px;
+      color: #fff;
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 900;
+      gap: 14px;
+      justify-content: space-between;
+      letter-spacing: .01em;
+      min-height: 48px;
+      padding: 0 18px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .cta::after { content: "→"; font-size: 17px; }
+
+    .secondary {
+      border-bottom: 1px solid var(--ink);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 900;
+      padding-bottom: 3px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    /* 01 — accusation wall */
+    .opt-1 .hero {
+      background:
+        radial-gradient(circle at 91% 12%, rgba(223, 43, 33, .13), transparent 32%),
+        #f3f5f2;
+    }
+
+    .opt-1 h2 {
+      font-size: clamp(52px, 6.4vw, 86px);
+      line-height: .82;
+      max-width: 610px;
+      padding-top: 46px;
+    }
+
+    .opt-1 h2 span {
+      color: var(--red);
+      display: block;
+    }
+
+    .opt-1 .hero-copy { margin-top: 25px; }
+
+    .opt-1 .strike {
+      background: var(--red);
+      height: 12px;
+      position: absolute;
+      right: -8%;
+      top: 245px;
+      transform: rotate(-7deg);
+      width: 48%;
+    }
+
+    /* 02 — public receipt */
+    .opt-2 .hero { background: var(--bone); }
+
+    .opt-2 .receipt {
+      background: #fff;
+      border: 1px solid var(--ink);
+      box-shadow: 9px 9px 0 var(--red);
+      display: grid;
+      gap: 12px;
+      margin: 32px 0 0;
+      max-width: 560px;
+      padding: 24px;
+      position: relative;
+      transform: rotate(-1deg);
+    }
+
+    .opt-2 .receipt::before,
+    .opt-2 .receipt::after {
+      background: var(--bone);
+      content: "";
+      height: 10px;
+      left: -3px;
+      position: absolute;
+      width: calc(100% + 6px);
+    }
+
+    .opt-2 .receipt::before {
+      clip-path: polygon(0 100%, 3% 0, 6% 100%, 9% 0, 12% 100%, 15% 0, 18% 100%, 21% 0, 24% 100%, 27% 0, 30% 100%, 33% 0, 36% 100%, 39% 0, 42% 100%, 45% 0, 48% 100%, 51% 0, 54% 100%, 57% 0, 60% 100%, 63% 0, 66% 100%, 69% 0, 72% 100%, 75% 0, 78% 100%, 81% 0, 84% 100%, 87% 0, 90% 100%, 93% 0, 96% 100%, 100% 0);
+      top: -1px;
+    }
+
+    .opt-2 .receipt::after {
+      bottom: -1px;
+      clip-path: polygon(0 0, 3% 100%, 6% 0, 9% 100%, 12% 0, 15% 100%, 18% 0, 21% 100%, 24% 0, 27% 100%, 30% 0, 33% 100%, 36% 0, 39% 100%, 42% 0, 45% 100%, 48% 0, 51% 100%, 54% 0, 57% 100%, 60% 0, 63% 100%, 66% 0, 69% 100%, 72% 0, 75% 100%, 78% 0, 81% 100%, 84% 0, 87% 100%, 90% 0, 93% 100%, 96% 0, 100% 100%);
+    }
+
+    .opt-2 h2 { font-size: clamp(48px, 6vw, 78px); line-height: .86; }
+    .opt-2 .receipt-line { border-top: 1px dashed var(--ink); }
+    .opt-2 .receipt-row { display: flex; justify-content: space-between; }
+    .opt-2 .receipt-row b { color: var(--red); }
+
+    /* 03 — map pin */
+    .opt-3 .hero { background: var(--ink); color: #fff; }
+    .opt-3 .mini-meta { color: #9fa59d; }
+    .opt-3 .pin {
+      background: var(--red);
+      border-radius: 50% 50% 50% 0;
+      height: 210px;
+      position: absolute;
+      right: 44px;
+      top: 116px;
+      transform: rotate(-45deg);
+      width: 210px;
+    }
+
+    .opt-3 .pin::after {
+      background: var(--yellow);
+      border-radius: 50%;
+      content: "";
+      height: 76px;
+      left: 67px;
+      position: absolute;
+      top: 67px;
+      width: 76px;
+    }
+
+    .opt-3 h2 {
+      font-size: clamp(51px, 6.3vw, 82px);
+      line-height: .84;
+      max-width: 470px;
+      padding-top: 54px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .opt-3 h2 span { color: var(--yellow); }
+    .opt-3 .hero-copy { color: #cfd4cd; margin-top: 22px; position: relative; z-index: 2; }
+    .opt-3 .actions { position: relative; z-index: 2; }
+
+    /* 04 — silence / unanswered */
+    .opt-4 .hero { background: #f6f7f5; }
+    .opt-4 .silence {
+      color: #d5d8d3;
+      font-family: var(--display);
+      font-size: clamp(115px, 15vw, 190px);
+      left: 18px;
+      letter-spacing: -.06em;
+      line-height: .8;
+      position: absolute;
+      top: 92px;
+      transform: rotate(-4deg);
+      white-space: nowrap;
+    }
+
+    .opt-4 h2 {
+      font-size: clamp(48px, 6vw, 78px);
+      line-height: .85;
+      max-width: 540px;
+      padding-top: 115px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .opt-4 .stamp {
+      border: 5px solid var(--red);
+      color: var(--red);
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 900;
+      padding: 8px 12px;
+      position: absolute;
+      right: 28px;
+      text-transform: uppercase;
+      top: 110px;
+      transform: rotate(10deg);
+    }
+
+    .opt-4 .hero-copy { margin-top: 20px; position: relative; z-index: 2; }
+
+    /* 05 — deadline */
+    .opt-5 .hero { background: var(--red); color: #fff; }
+    .opt-5 .mini-meta { color: #ffd5d2; }
+    .opt-5 .deadline-grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding-top: 56px;
+    }
+
+    .opt-5 h2 { font-size: clamp(48px, 5.8vw, 76px); line-height: .86; }
+    .opt-5 .days { text-align: center; }
+    .opt-5 .days strong {
+      color: var(--yellow);
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(100px, 13vw, 160px);
+      letter-spacing: -.05em;
+      line-height: .7;
+    }
+    .opt-5 .days span { font-family: var(--mono); font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+    .opt-5 .hero-copy { color: #ffe2df; margin-top: 21px; }
+    .opt-5 .cta { background: var(--ink); border-color: var(--ink); }
+    .opt-5 .secondary { border-color: #fff; color: #fff; }
+
+    /* 06 — neighborhood score */
+    .opt-6 .hero { background: var(--bone); }
+    .opt-6 .score-layout {
+      align-items: end;
+      display: grid;
+      gap: 28px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding-top: 58px;
+    }
+
+    .opt-6 h2 { font-size: clamp(49px, 5.8vw, 76px); line-height: .86; }
+    .opt-6 h2 span { color: var(--red); }
+    .opt-6 .hero-copy { margin-top: 20px; }
+    .opt-6 .score {
+      border-left: 2px solid var(--ink);
+      min-width: 165px;
+      padding-left: 24px;
+    }
+    .opt-6 .score strong {
+      color: var(--red);
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(94px, 12vw, 150px);
+      letter-spacing: -.06em;
+      line-height: .7;
+    }
+    .opt-6 .score span { font-family: var(--mono); font-size: 10px; font-weight: 900; }
+    .opt-6 .score-meter { background: #d7d8cf; height: 8px; margin-top: 14px; overflow: hidden; }
+    .opt-6 .score-meter i { background: var(--red); display: block; height: 100%; width: 38%; }
+
+    /* 07 — stacked complaints */
+    .opt-7 .hero { background: #f5f6f3; }
+    .opt-7 h2 {
+      font-size: clamp(46px, 5.8vw, 76px);
+      line-height: .86;
+      max-width: 430px;
+      padding-top: 66px;
+      position: relative;
+      z-index: 3;
+    }
+    .opt-7 h2 span { color: var(--red); }
+    .opt-7 .hero-copy { margin-top: 20px; position: relative; z-index: 3; }
+    .opt-7 .actions { position: relative; z-index: 3; }
+    .opt-7 .case-stack { position: absolute; right: 38px; top: 92px; width: 220px; }
+    .opt-7 .case-slip {
+      background: #fff;
+      border: 1px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      margin-bottom: -54px;
+      min-height: 92px;
+      padding: 13px;
+      position: relative;
+    }
+    .opt-7 .case-slip:nth-child(1) { transform: rotate(8deg) translateX(15px); }
+    .opt-7 .case-slip:nth-child(2) { transform: rotate(-5deg) translateX(-4px); }
+    .opt-7 .case-slip:nth-child(3) { background: var(--yellow); transform: rotate(2deg) translateX(10px); }
+    .opt-7 .case-slip b { color: var(--red); display: block; margin-bottom: 7px; }
+
+    /* 08 — evidence strip */
+    .opt-8 .hero {
+      background:
+        linear-gradient(135deg, transparent 0 66%, rgba(223, 43, 33, .09) 66% 100%),
+        #fff;
+    }
+    .opt-8 .evidence-strip {
+      display: grid;
+      gap: 7px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 28px;
+    }
+    .opt-8 .evidence {
+      background: var(--ink);
+      color: #fff;
+      min-height: 93px;
+      overflow: hidden;
+      padding: 13px;
+      position: relative;
+    }
+    .opt-8 .evidence:nth-child(2) { background: var(--red); }
+    .opt-8 .evidence:nth-child(3) { background: var(--yellow); color: var(--ink); }
+    .opt-8 .evidence::after {
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      content: "";
+      height: 35px;
+      opacity: .35;
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      width: 35px;
+    }
+    .opt-8 h2 { font-size: clamp(45px, 5.5vw, 72px); line-height: .86; margin-top: 28px; }
+    .opt-8 .hero-copy { margin-top: 18px; }
+
+    /* 09 — case number */
+    .opt-9 .hero { background: var(--ink); color: #fff; }
+    .opt-9 .mini-meta { color: #aeb3ac; }
+    .opt-9 .case-number {
+      color: #373a37;
+      font-family: var(--display);
+      font-size: clamp(150px, 21vw, 270px);
+      letter-spacing: -.07em;
+      line-height: .72;
+      position: absolute;
+      right: 16px;
+      top: 88px;
+    }
+    .opt-9 h2 {
+      font-size: clamp(47px, 5.8vw, 76px);
+      line-height: .86;
+      max-width: 520px;
+      padding-top: 76px;
+      position: relative;
+      z-index: 2;
+    }
+    .opt-9 h2 span { color: var(--red); }
+    .opt-9 .hero-copy { color: #c9cec7; margin-top: 21px; position: relative; z-index: 2; }
+    .opt-9 .actions { position: relative; z-index: 2; }
+
+    /* 10 — collective pressure */
+    .opt-10 .hero { background: var(--yellow); }
+    .opt-10 .crowd {
+      bottom: -18px;
+      display: flex;
+      gap: 8px;
+      position: absolute;
+      right: 22px;
+      transform: rotate(-3deg);
+    }
+    .opt-10 .person {
+      background: var(--ink);
+      border-radius: 40px 40px 0 0;
+      height: 170px;
+      position: relative;
+      width: 58px;
+    }
+    .opt-10 .person::before {
+      background: var(--ink);
+      border-radius: 50%;
+      content: "";
+      height: 52px;
+      left: 3px;
+      position: absolute;
+      top: -38px;
+      width: 52px;
+    }
+    .opt-10 .person:nth-child(2) { height: 205px; }
+    .opt-10 .person:nth-child(2)::before { background: var(--red); }
+    .opt-10 .person:nth-child(3) { height: 150px; }
+    .opt-10 h2 {
+      font-size: clamp(48px, 5.9vw, 78px);
+      line-height: .84;
+      max-width: 500px;
+      padding-top: 70px;
+      position: relative;
+      z-index: 2;
+    }
+    .opt-10 h2 span { color: var(--red); }
+    .opt-10 .hero-copy { color: #3d403d; margin-top: 20px; position: relative; z-index: 2; }
+    .opt-10 .actions { position: relative; z-index: 2; }
+    .opt-10 .cta { background: var(--ink); border-color: var(--ink); }
+
+    .board-footer {
+      background: var(--red);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      padding: 26px clamp(22px, 5vw, 76px);
+    }
+
+    .board-footer b { font-family: var(--display); font-size: 25px; text-transform: uppercase; }
+    .board-footer span { font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: .05em; }
+
+    @media (max-width: 900px) {
+      .board-head { grid-template-columns: 1fr; }
+      .board-intro { max-width: 650px; }
+      .options { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .board-head { gap: 22px; padding: 34px 18px 38px; }
+      .board-head h1 { font-size: 54px; }
+      .board-intro { font-size: 15px; }
+      .board-note { line-height: 1.45; transform: none; }
+      .options { gap: 20px; padding: 22px 12px 48px; }
+      .option { border-radius: 13px; }
+      .option-meta { gap: 10px; grid-template-columns: auto 1fr; padding: 12px; }
+      .option-tag { display: none; }
+      .hero { min-height: 500px; padding: 0 20px 24px; }
+      .mini-nav { min-height: 58px; }
+      .mini-meta { font-size: 8px; }
+      .hero-copy { font-size: 14px; }
+      .actions { align-items: flex-start; flex-direction: column; }
+      .cta { min-height: 50px; width: 100%; }
+
+      .opt-1 h2,
+      .opt-2 h2,
+      .opt-3 h2,
+      .opt-4 h2,
+      .opt-5 h2,
+      .opt-6 h2,
+      .opt-7 h2,
+      .opt-8 h2,
+      .opt-9 h2,
+      .opt-10 h2 {
+        font-size: 52px;
+        max-width: 100%;
+      }
+
+      .opt-1 h2 { padding-top: 50px; }
+      .opt-1 .strike { top: 270px; width: 65%; }
+
+      .opt-2 .receipt { margin-top: 38px; padding: 21px; }
+      .opt-2 h2 { font-size: 48px; }
+
+      .opt-3 .pin { height: 150px; opacity: .65; right: -20px; top: 120px; width: 150px; }
+      .opt-3 .pin::after { height: 54px; left: 48px; top: 48px; width: 54px; }
+      .opt-3 h2 { padding-top: 60px; }
+
+      .opt-4 .silence { font-size: 112px; left: 10px; top: 110px; }
+      .opt-4 h2 { padding-top: 126px; }
+      .opt-4 .stamp { font-size: 14px; right: 20px; top: 92px; }
+
+      .opt-5 .deadline-grid,
+      .opt-6 .score-layout { align-items: start; grid-template-columns: 1fr; padding-top: 50px; }
+      .opt-5 .days { border-top: 1px solid rgba(255, 255, 255, .45); padding-top: 18px; text-align: left; }
+      .opt-5 .days strong { font-size: 92px; }
+      .opt-6 .score { border-left: 0; border-top: 2px solid var(--ink); padding: 18px 0 0; }
+      .opt-6 .score strong { font-size: 96px; }
+
+      .opt-7 h2 { padding-top: 54px; }
+      .opt-7 .case-stack { opacity: .28; right: 8px; top: 180px; width: 190px; }
+
+      .opt-8 .evidence-strip { gap: 5px; }
+      .opt-8 .evidence { min-height: 78px; padding: 10px; }
+
+      .opt-9 .case-number { font-size: 150px; opacity: .8; right: -4px; top: 110px; }
+      .opt-9 h2 { padding-top: 74px; }
+
+      .opt-10 .crowd { opacity: .2; right: -18px; }
+      .opt-10 h2 { padding-top: 72px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="board-head">
+    <div>
+      <p class="board-kicker">Nahlas / Landing hero direction round</p>
+      <h1>Provocative.<br><span>Not exhausting.</span></h1>
+    </div>
+    <p class="board-intro">
+      Ten ways to make the landing page impossible to ignore while saying exactly what Nahlas does:
+      <strong>report a public-space problem, attach evidence, and make the responsible authority answer for it.</strong>
+    </p>
+    <div class="board-note">THE CTA STAYS A CLEAR ACTION. THE PROVOCATION LIVES IN THE HERO THESIS.</div>
+  </header>
+
+  <main class="options">
+    <article class="option opt-1">
+      <header class="option-meta">
+        <span class="option-number">01</span>
+        <div>
+          <p class="option-name">The accusation</p>
+          <p class="option-idea">Closest to the protest-poster origin, without profanity.</p>
+        </div>
+        <span class="option-tag">Direct / campaign</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Prague · Public cases</span></nav>
+        <h2>Your neighborhood<br><span>has been abandoned.</span></h2>
+        <span class="strike" aria-hidden="true"></span>
+        <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+        <div class="actions"><a class="cta" href="#">Report what you see</a><a class="secondary" href="#">See active cases</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-2">
+      <header class="option-meta">
+        <span class="option-number">02</span>
+        <div>
+          <p class="option-name">The public receipt</p>
+          <p class="option-idea">Turns accountability into a physical civic artifact.</p>
+        </div>
+        <span class="option-tag">Ownable / product</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Evidence in. Answers out.</span></nav>
+        <div class="receipt">
+          <span class="micro">Public accountability receipt</span>
+          <h2>We keep the receipt.</h2>
+          <div class="receipt-line"></div>
+          <div class="receipt-row"><span class="micro">Problem reported</span><b class="micro">Case stays open</b></div>
+          <p class="hero-copy">Your photo, location, responsible authority, deadline and every official response—on one public record.</p>
+          <div class="actions"><a class="cta" href="#">Create a public case</a><a class="secondary" href="#">How it works</a></div>
+        </div>
+      </section>
+    </article>
+
+    <article class="option opt-3">
+      <header class="option-meta">
+        <span class="option-number">03</span>
+        <div>
+          <p class="option-name">The map pin</p>
+          <p class="option-idea">Makes location the hero and the reporting flow instantly obvious.</p>
+        </div>
+        <span class="option-tag">Clear / iconic</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Prague · Neighborhood by neighborhood</span></nav>
+        <div class="pin" aria-hidden="true"></div>
+        <h2>Put the problem<br><span>on the map.</span></h2>
+        <p class="hero-copy">Drop a pin, add a photo, and Nahlas assigns the district and keeps the case visible until somebody acts.</p>
+        <div class="actions"><a class="cta" href="#">Pin a problem</a><a class="secondary" href="#">Explore the map</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-4">
+      <header class="option-meta">
+        <span class="option-number">04</span>
+        <div>
+          <p class="option-name">Official silence</p>
+          <p class="option-idea">Provocation comes from the uncomfortable empty answer.</p>
+        </div>
+        <span class="option-tag">Editorial / sharp</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">No answer is still an answer</span></nav>
+        <div class="silence" aria-hidden="true">…</div>
+        <div class="stamp">Still unanswered</div>
+        <h2>Silence is not a fix.</h2>
+        <p class="hero-copy">Nahlas turns your report into a public case with an owner, a deadline and a record of every response—or lack of one.</p>
+        <div class="actions"><a class="cta" href="#">Put it on the record</a><a class="secondary" href="#">See overdue cases</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-5">
+      <header class="option-meta">
+        <span class="option-number">05</span>
+        <div>
+          <p class="option-name">The public deadline</p>
+          <p class="option-idea">Makes the product moat—ongoing accountability—the spectacle.</p>
+        </div>
+        <span class="option-tag">Urgent / operational</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">One owner · One deadline</span></nav>
+        <div class="deadline-grid">
+          <div>
+            <h2>A complaint can vanish.<br>A deadline can’t.</h2>
+            <p class="hero-copy">Report the issue once. Nahlas assigns it, publishes the clock and keeps the case alive until the result is visible.</p>
+          </div>
+          <div class="days"><strong>12</strong><span>days without action</span></div>
+        </div>
+        <div class="actions"><a class="cta" href="#">Start the clock</a><a class="secondary" href="#">View public deadlines</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-6">
+      <header class="option-meta">
+        <span class="option-number">06</span>
+        <div>
+          <p class="option-name">The neighborhood score</p>
+          <p class="option-idea">Leads with a provocative shared measure, not a generic complaint form.</p>
+        </div>
+        <span class="option-tag">Local / measurable</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Karlín · Prague 8</span></nav>
+        <div class="score-layout">
+          <div>
+            <h2>How is your neighborhood<br><span>really doing?</span></h2>
+            <p class="hero-copy">The score reflects open cases, response time and verified fixes—not promises. Your evidence changes the picture.</p>
+          </div>
+          <div class="score"><strong>3.8</strong><span>out of 10 · Karlín</span><div class="score-meter"><i></i></div></div>
+        </div>
+        <div class="actions"><a class="cta" href="#">Report and improve the score</a><a class="secondary" href="#">Compare neighborhoods</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-7">
+      <header class="option-meta">
+        <span class="option-number">07</span>
+        <div>
+          <p class="option-name">One case, many witnesses</p>
+          <p class="option-idea">Explains pooled complaints as collective pressure.</p>
+        </div>
+        <span class="option-tag">Collective / social proof</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Reports pool into one public case</span></nav>
+        <div class="case-stack" aria-hidden="true">
+          <div class="case-slip"><b>REPORT #14</b>Broken glass · Sokolovská</div>
+          <div class="case-slip"><b>REPORT #15</b>Same place · new evidence</div>
+          <div class="case-slip"><b>ONE PUBLIC CASE</b>Authority named · clock running</div>
+        </div>
+        <h2>One report is easy to lose.<br><span>Twenty are a case.</span></h2>
+        <p class="hero-copy">Add your evidence. Nahlas pools matching reports, removes duplicates and builds one public record the district cannot misplace.</p>
+        <div class="actions"><a class="cta" href="#">Add your evidence</a><a class="secondary" href="#">See pooled cases</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-8">
+      <header class="option-meta">
+        <span class="option-number">08</span>
+        <div>
+          <p class="option-name">Evidence first</p>
+          <p class="option-idea">A quiet, confident hero built around three concrete inputs.</p>
+        </div>
+        <span class="option-tag">Useful / trustworthy</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Anonymous by default</span></nav>
+        <div class="evidence-strip">
+          <div class="evidence"><span class="tiny-label">01 / Photo</span></div>
+          <div class="evidence"><span class="tiny-label">02 / Pin</span></div>
+          <div class="evidence"><span class="tiny-label">03 / Proof</span></div>
+        </div>
+        <h2>Don’t just complain.<br>Leave evidence.</h2>
+        <p class="hero-copy">Nahlas turns what you saw into a public case, assigns the responsible district and tracks the result.</p>
+        <div class="actions"><a class="cta" href="#">Report with evidence</a><a class="secondary" href="#">Your privacy</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-9">
+      <header class="option-meta">
+        <span class="option-number">09</span>
+        <div>
+          <p class="option-name">The case number</p>
+          <p class="option-idea">The transformation from street problem to durable case is the hero.</p>
+        </div>
+        <span class="option-tag">Systemic / credible</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Public case registry</span></nav>
+        <div class="case-number" aria-hidden="true">#428</div>
+        <h2>Make it impossible<br><span>to lose.</span></h2>
+        <p class="hero-copy">A photo becomes a case number. A pin becomes an owner. A complaint becomes a public deadline.</p>
+        <div class="actions"><a class="cta" href="#">Open a case</a><a class="secondary" href="#">Search the registry</a></div>
+      </section>
+    </article>
+
+    <article class="option opt-10">
+      <header class="option-meta">
+        <span class="option-number">10</span>
+        <div>
+          <p class="option-name">Collective pressure</p>
+          <p class="option-idea">Optimistic provocation: the neighborhood is the force.</p>
+        </div>
+        <span class="option-tag">Movement / hopeful</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav"><span class="logo">Nahlas<i>.</i></span><span class="mini-meta">Public space belongs to everyone</span></nav>
+        <div class="crowd" aria-hidden="true"><span class="person"></span><span class="person"></span><span class="person"></span></div>
+        <h2>The city notices<br><span>when we all do.</span></h2>
+        <p class="hero-copy">Report what is happening on your street. Nahlas connects the evidence, names the authority and makes the outcome public.</p>
+        <div class="actions"><a class="cta" href="#">Report your street</a><a class="secondary" href="#">Join an active case</a></div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="board-footer">
+    <b>Pick a direction. Then we make it real.</b>
+    <span>Nahlas hero exploration · desktop and mobile · July 2026</span>
+  </footer>
+</body>
+</html>
