@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nahlas — Cold City hero variations</title>
+  <style>
+    :root {
+      --canvas: #e7edf1;
+      --white: #fff;
+      --frost: #edf4f7;
+      --ice: #a9dded;
+      --cyan: #57c7e8;
+      --blue: #2867d3;
+      --cobalt: #174b9a;
+      --slate: #1b3348;
+      --navy: #102638;
+      --midnight: #091725;
+      --ink: #10171d;
+      --muted: #60717d;
+      --line: #c5d0d7;
+      --display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      --body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); }
+
+    body {
+      background:
+        linear-gradient(90deg, rgba(16,23,29,.025) 1px, transparent 1px),
+        linear-gradient(rgba(16,23,29,.025) 1px, transparent 1px),
+        var(--canvas);
+      background-size: 28px 28px;
+      color: var(--ink);
+      font-family: var(--body);
+      margin: 0;
+      min-width: 320px;
+    }
+
+    a { color: inherit; }
+
+    .board-head {
+      background: var(--midnight);
+      color: var(--white);
+      display: grid;
+      gap: 28px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 500px);
+      padding: 52px clamp(22px, 5vw, 78px) 56px;
+      position: relative;
+    }
+
+    .board-head::after {
+      background: var(--cyan);
+      bottom: 0;
+      content: "";
+      height: 5px;
+      left: 0;
+      position: absolute;
+      width: 36%;
+    }
+
+    .eyebrow,
+    .micro,
+    .nav-links,
+    .option-number,
+    .option-tag,
+    .case-label,
+    .district,
+    .map-key {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .075em;
+      text-transform: uppercase;
+    }
+
+    .board-head .eyebrow { color: var(--cyan); margin: 0 0 18px; }
+
+    .board-head h1 {
+      font-family: var(--display);
+      font-size: clamp(50px, 5.8vw, 84px);
+      letter-spacing: -.055em;
+      line-height: .88;
+      margin: 0;
+      max-width: 900px;
+      text-transform: uppercase;
+    }
+
+    .board-head h1 span { color: var(--cyan); }
+
+    .board-intro {
+      align-self: end;
+      color: #cbd8e0;
+      font-size: 17px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .board-intro strong { color: var(--white); }
+
+    .board-rule {
+      border-top: 1px solid #3b4c58;
+      color: #bfd0da;
+      display: flex;
+      flex-wrap: wrap;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      gap: 18px;
+      grid-column: 1 / -1;
+      justify-content: space-between;
+      letter-spacing: .06em;
+      padding-top: 18px;
+      text-transform: uppercase;
+    }
+
+    .board-rule b { color: var(--cyan); }
+
+    .options {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0 auto;
+      max-width: 1540px;
+      padding: 40px clamp(18px, 3vw, 44px) 84px;
+    }
+
+    .option {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(9,23,37,.07);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .option-meta {
+      align-items: center;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: auto 1fr auto;
+      min-height: 76px;
+      padding: 14px 18px;
+    }
+
+    .option-number {
+      align-items: center;
+      background: var(--midnight);
+      border-radius: 50%;
+      color: var(--white);
+      display: flex;
+      height: 38px;
+      justify-content: center;
+      width: 38px;
+    }
+
+    .option-name {
+      font-size: 15px;
+      font-weight: 850;
+      letter-spacing: -.01em;
+      margin: 0 0 3px;
+    }
+
+    .option-idea {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .option-tag {
+      background: var(--frost);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 590px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mini-nav {
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      display: grid;
+      gap: 16px;
+      grid-template-columns: auto 1fr auto;
+      min-height: 72px;
+      padding: 0 28px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo {
+      font-family: var(--display);
+      font-size: 25px;
+      letter-spacing: -.04em;
+      text-transform: uppercase;
+    }
+
+    .logo i { color: var(--cyan); font-style: normal; }
+
+    .nav-links {
+      color: #bac9d2;
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .nav-cta {
+      align-items: center;
+      background: var(--blue);
+      border-radius: 8px;
+      color: var(--white);
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 900;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .hero-body {
+      padding: 54px 30px 36px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .hero h2 {
+      font-family: var(--display);
+      font-size: clamp(47px, 4.2vw, 59px);
+      letter-spacing: -.052em;
+      line-height: .9;
+      margin: 0;
+      max-width: 650px;
+      text-transform: uppercase;
+    }
+
+    .hero h2 span { display: block; }
+
+    .hero-copy {
+      color: #cbd7de;
+      font-size: 15px;
+      font-weight: 550;
+      line-height: 1.55;
+      margin: 24px 0 0;
+      max-width: 510px;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .cta {
+      align-items: center;
+      background: var(--blue);
+      border: 2px solid var(--blue);
+      border-radius: 8px;
+      color: var(--white);
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 900;
+      gap: 20px;
+      justify-content: space-between;
+      min-height: 52px;
+      padding: 0 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .cta::after { content: "→"; font-size: 18px; }
+
+    .secondary {
+      border-bottom: 1px solid currentColor;
+      font-size: 11px;
+      font-weight: 900;
+      padding-bottom: 4px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    /* 01 — Midnight Pin */
+    .opt-1 .hero {
+      background: linear-gradient(125deg, var(--slate), var(--midnight));
+      color: var(--white);
+    }
+
+    .opt-1 h2 span { color: var(--cyan); }
+
+    .map-frames {
+      height: 360px;
+      opacity: .28;
+      position: absolute;
+      right: -30px;
+      top: 116px;
+      transform: rotate(-5deg);
+      width: 48%;
+    }
+
+    .map-frames::before,
+    .map-frames::after {
+      border: 3px solid var(--white);
+      content: "";
+      inset: 20px 20px 90px 50px;
+      position: absolute;
+      transform: skew(-12deg) rotate(7deg);
+    }
+
+    .map-frames::after {
+      border-color: var(--cyan);
+      inset: 105px 75px 0 0;
+      transform: skew(8deg) rotate(-10deg);
+    }
+
+    .pin {
+      background: var(--blue);
+      border: 7px solid var(--white);
+      border-radius: 50% 50% 50% 0;
+      height: 48px;
+      position: absolute;
+      right: 15%;
+      top: 255px;
+      transform: rotate(-45deg);
+      width: 48px;
+    }
+
+    .opt-1 .district {
+      border: 1px solid rgba(255,255,255,.45);
+      bottom: 28px;
+      color: var(--white);
+      padding: 10px 12px;
+      position: absolute;
+      right: 28px;
+    }
+
+    /* 02 — Blueprint Case */
+    .opt-2 .hero {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+        var(--cobalt);
+      background-size: 42px 42px;
+      color: var(--white);
+    }
+
+    .opt-2 h2 span { color: var(--ice); }
+    .opt-2 .hero-copy { color: #e1edf3; }
+    .opt-2 .nav-cta,
+    .opt-2 .cta { background: var(--white); border-color: var(--white); color: var(--cobalt); }
+
+    .route-line {
+      border: 4px solid var(--ice);
+      border-left: 0;
+      bottom: 24px;
+      height: 156px;
+      opacity: .8;
+      position: absolute;
+      right: -20px;
+      transform: skew(-16deg) rotate(-8deg);
+      width: 42%;
+    }
+
+    .route-line::before,
+    .route-line::after {
+      background: var(--white);
+      border: 5px solid var(--ice);
+      border-radius: 50%;
+      content: "";
+      height: 24px;
+      position: absolute;
+      width: 24px;
+    }
+
+    .route-line::before { left: -12px; top: -14px; }
+    .route-line::after { bottom: -14px; right: 20%; }
+
+    /* 03 — Frost Warning */
+    .opt-3 .hero {
+      background:
+        linear-gradient(105deg, var(--frost) 0 72%, #d6e8ef 72% 100%);
+      color: var(--ink);
+    }
+
+    .opt-3 .mini-nav { border-bottom-color: #c4d3da; }
+    .opt-3 .nav-links { color: #647681; }
+    .opt-3 h2 span {
+      background: var(--blue);
+      color: var(--white);
+      margin-top: 7px;
+      padding: 5px 10px 9px;
+      transform: rotate(-1deg);
+      width: fit-content;
+    }
+    .opt-3 .hero-copy { color: #4f626d; }
+    .opt-3 .cta { background: var(--midnight); border-color: var(--midnight); }
+
+    .case-slip {
+      background: var(--white);
+      border: 1px solid var(--midnight);
+      bottom: 32px;
+      box-shadow: 8px 8px 0 var(--cyan);
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      position: absolute;
+      right: 28px;
+      transform: rotate(2deg);
+      width: 200px;
+    }
+
+    .case-slip b { font-size: 23px; letter-spacing: -.04em; }
+    .case-slip hr { border: 0; border-top: 1px dashed #83949e; margin: 0; width: 100%; }
+
+    /* 04 — Civic Floodlight */
+    .opt-4 .hero {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .opt-4 .hero::before {
+      background: var(--cyan);
+      content: "";
+      height: 168px;
+      left: -12%;
+      opacity: .92;
+      position: absolute;
+      top: 190px;
+      transform: rotate(-5deg);
+      width: 125%;
+    }
+
+    .opt-4 h2 { position: relative; }
+    .opt-4 h2 span {
+      color: var(--midnight);
+      position: relative;
+      z-index: 2;
+    }
+    .opt-4 .hero-copy { color: #d2dce2; margin-top: 40px; }
+    .opt-4 .nav-cta,
+    .opt-4 .cta { background: var(--cyan); border-color: var(--cyan); color: var(--midnight); }
+
+    .opt-4 .case-label {
+      bottom: 30px;
+      color: var(--ice);
+      position: absolute;
+      right: 28px;
+    }
+
+    /* 05 — District Boundary */
+    .opt-5 { grid-column: 1 / -1; }
+    .opt-5 .hero {
+      background: linear-gradient(114deg, var(--midnight) 0 57%, var(--blue) 57% 100%);
+      color: var(--white);
+    }
+
+    .opt-5 .hero-body { padding-top: 52px; }
+    .opt-5 h2 {
+      font-size: clamp(55px, 6.7vw, 92px);
+      max-width: 900px;
+    }
+    .opt-5 h2 span {
+      color: var(--ice);
+      margin-left: 7%;
+    }
+    .opt-5 .hero-copy { color: #d0dce3; max-width: 560px; }
+    .opt-5 .nav-cta,
+    .opt-5 .cta { background: var(--white); border-color: var(--white); color: var(--midnight); }
+
+    .boundary {
+      border: 3px solid rgba(255,255,255,.52);
+      bottom: 26px;
+      height: 210px;
+      position: absolute;
+      right: 5%;
+      transform: skew(-12deg) rotate(-6deg);
+      width: 31%;
+    }
+
+    .boundary::before {
+      color: var(--white);
+      content: "KARLÍN / PRAGUE 8";
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      left: 20px;
+      letter-spacing: .07em;
+      position: absolute;
+      text-transform: uppercase;
+      top: 20px;
+      transform: skew(12deg) rotate(6deg);
+    }
+
+    .board-footer {
+      background: var(--blue);
+      color: var(--white);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      padding: 28px clamp(22px, 5vw, 78px);
+    }
+
+    .board-footer b {
+      font-family: var(--display);
+      font-size: 22px;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+
+    .board-footer span {
+      align-self: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .board-head { grid-template-columns: 1fr; }
+      .options { grid-template-columns: 1fr; }
+      .opt-5 { grid-column: auto; }
+    }
+
+    @media (max-width: 560px) {
+      .board-head { padding: 34px 18px 38px; }
+      .board-head h1 { font-size: 40px; }
+      .board-intro { font-size: 15px; }
+      .options { gap: 22px; padding: 24px 12px 56px; }
+      .option { border-radius: 10px; }
+      .option-meta {
+        align-items: start;
+        grid-template-columns: auto 1fr;
+        min-height: 84px;
+      }
+      .option-tag { display: none; }
+      .hero { min-height: 620px; }
+      .mini-nav {
+        grid-template-columns: auto 1fr;
+        min-height: 66px;
+        padding: 0 18px;
+      }
+      .logo { font-size: 23px; }
+      .nav-links { display: none; }
+      .nav-cta { font-size: 9px; justify-self: end; min-height: 44px; padding: 0 12px; }
+      .hero-body { padding: 62px 18px 28px; }
+      .hero h2,
+      .opt-5 h2 {
+        font-size: clamp(37px, 10.15vw, 40px);
+        line-height: .92;
+        max-width: 100%;
+      }
+      .hero-copy {
+        font-size: 15px;
+        line-height: 1.52;
+        margin-top: 26px;
+      }
+      .actions { align-items: stretch; flex-direction: column; gap: 18px; }
+      .cta { min-height: 56px; width: 100%; }
+      .secondary { align-self: flex-start; min-height: 30px; }
+
+      .map-frames { opacity: .12; right: -82px; top: 220px; width: 98%; }
+      .pin { opacity: .62; right: 15%; top: 330px; }
+      .opt-1 .district { bottom: 20px; right: 18px; }
+
+      .route-line { opacity: .28; width: 75%; }
+
+      .opt-3 .hero { background: linear-gradient(165deg, var(--frost) 0 72%, #d6e8ef 72% 100%); }
+      .opt-3 h2 span { padding: 5px 7px 8px; }
+      .case-slip {
+        bottom: 28px;
+        left: 18px;
+        right: auto;
+        width: calc(100% - 44px);
+      }
+      .opt-3 .actions { margin-bottom: 170px; }
+
+      .opt-4 .hero::before { height: 120px; top: 230px; }
+      .opt-4 h2 span { color: var(--midnight); }
+      .opt-4 .hero-copy { margin-top: 58px; }
+      .opt-4 .case-label { bottom: 20px; right: 18px; }
+
+      .opt-5 .hero { background: linear-gradient(164deg, var(--midnight) 0 72%, var(--blue) 72% 100%); }
+      .opt-5 h2 span { margin-left: 0; }
+      .boundary { bottom: 20px; height: 118px; opacity: .32; right: -10%; width: 66%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="board-head">
+    <div>
+      <p class="eyebrow">Nahlas / Cold City refinement</p>
+      <h1>Cold city.<br><span>Five temperatures.</span></h1>
+    </div>
+    <p class="board-intro">
+      Five complete variations of the selected Cold City hero. <strong>Every direction keeps the approved copy,
+      readable type, map logic and serious civic pressure.</strong>
+    </p>
+    <div class="board-rule">
+      <span><b>No warm color.</b> No yellow. No orange. No coral.</span>
+      <span>Midnight · steel · ice · cobalt · black · white</span>
+    </div>
+  </header>
+
+  <main class="options">
+    <article class="option opt-1">
+      <header class="option-meta">
+        <span class="option-number">01</span>
+        <div>
+          <p class="option-name">Midnight Pin</p>
+          <p class="option-idea">Closest to the chosen direction; quieter blue action and sharper map geometry.</p>
+        </div>
+        <span class="option-tag">Closest evolution</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="map-frames" aria-hidden="true"></div>
+        <span class="pin" aria-hidden="true"></span>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions"><a class="cta" href="#report">Report what you see</a><a class="secondary" href="#cases">See active cases →</a></div>
+        </div>
+        <span class="district">Public space belongs to everyone</span>
+      </section>
+    </article>
+
+    <article class="option opt-2">
+      <header class="option-meta">
+        <span class="option-number">02</span>
+        <div>
+          <p class="option-name">Blueprint Case</p>
+          <p class="option-idea">Turns the hero into a civic plan: measured, technical and impossible to misroute.</p>
+        </div>
+        <span class="option-tag">Technical pressure</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <span class="route-line" aria-hidden="true"></span>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions"><a class="cta" href="#report">Report what you see</a><a class="secondary" href="#cases">See active cases →</a></div>
+        </div>
+      </section>
+    </article>
+
+    <article class="option opt-3">
+      <header class="option-meta">
+        <span class="option-number">03</span>
+        <div>
+          <p class="option-name">Frost Warning</p>
+          <p class="option-idea">The lightest and easiest to read, with one cold-blue accusation block.</p>
+        </div>
+        <span class="option-tag">Calm / sharp</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions"><a class="cta" href="#report">Report what you see</a><a class="secondary" href="#cases">See active cases →</a></div>
+        </div>
+        <aside class="case-slip">
+          <span class="micro">Public case</span><b>#CZ-0428</b><hr>
+          <span class="micro">Owner named</span><span class="micro">Deadline visible</span>
+        </aside>
+      </section>
+    </article>
+
+    <article class="option opt-4">
+      <header class="option-meta">
+        <span class="option-number">04</span>
+        <div>
+          <p class="option-name">Civic Floodlight</p>
+          <p class="option-idea">Near-black city, hit by one icy beam that exposes official neglect.</p>
+        </div>
+        <span class="option-tag">Provocative / cool</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions"><a class="cta" href="#report">Report what you see</a><a class="secondary" href="#cases">See active cases →</a></div>
+        </div>
+        <span class="case-label">Evidence → owner → deadline → outcome</span>
+      </section>
+    </article>
+
+    <article class="option opt-5">
+      <header class="option-meta">
+        <span class="option-number">05</span>
+        <div>
+          <p class="option-name">District Boundary</p>
+          <p class="option-idea">The neighborhood itself becomes the graphic—the strongest location-led direction.</p>
+        </div>
+        <span class="option-tag">Location ownership</span>
+      </header>
+      <section class="hero">
+        <nav class="mini-nav">
+          <span class="logo">Nahlas<i>.</i></span>
+          <span class="nav-links">Prague · Public cases · Case registry</span>
+          <a class="nav-cta" href="#report">Report a problem</a>
+        </nav>
+        <div class="boundary" aria-hidden="true"></div>
+        <div class="hero-body">
+          <p class="micro">What Nahlas does</p>
+          <h2>Your neighborhood<span>has been abandoned.</span></h2>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="actions"><a class="cta" href="#report">Report what you see</a><a class="secondary" href="#cases">See active cases →</a></div>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="board-footer">
+    <b>Pick the coldest pressure.</b>
+    <span>Nahlas Cold City exploration · desktop + mobile · July 2026</span>
+  </footer>
+</body>
+</html>
