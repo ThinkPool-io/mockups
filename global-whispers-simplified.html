@@ -278,6 +278,25 @@
     .message-group.viewer { color: var(--viewer); }
     .message-group.other { color: var(--partner); }
 
+    .day-divider {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .day-divider span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in oklab, var(--surface) 70%, transparent);
+      padding: 4px 12px;
+      color: var(--faint);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
     .message {
       position: relative;
       border-left: 2px solid color-mix(in oklab, currentColor 45%, transparent);
@@ -468,6 +487,7 @@
           <span>Whispers</span>
         </header>
         <div class="messages" role="log" aria-live="polite" aria-label="Whisper messages">
+          <div class="day-divider" role="separator" aria-label="Yesterday"><span>Yesterday</span></div>
           <section class="message-group viewer" aria-label="Messages from Maks">
             <article class="message"><span class="name">Maks</span><span>I think the global chat is enough</span></article>
             <article class="message"><span class="name">Maks</span><span>if the room already gets pooled.</span></article>
@@ -476,6 +496,7 @@
               <span class="receipt" title="Seen by Conrad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.4"/></svg>Seen</span>
             </div>
           </section>
+          <div class="day-divider" role="separator" aria-label="Today"><span>Today</span></div>
           <section class="message-group other" aria-label="Messages from Conrad">
             <article class="message"><span class="name">Conrad</span><span>Agreed. One private thread is easier to follow.</span></article>
             <div class="message-meta"><time>07:43 PM</time></div>
