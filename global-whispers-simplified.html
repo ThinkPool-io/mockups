@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Global Whispers — simplified</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --agent: hsl(198 64% 60%);
+      --agent-hi: hsl(198 70% 70%);
+      --owner: hsl(145 23% 57%);
+      --partner: hsl(220 32% 66%);
+      --danger: hsl(8 52% 62%);
+      --positive: hsl(152 28% 54%);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
+    body { color: var(--ink); font-family: "Hanken Grotesk", system-ui, sans-serif; }
+    button, textarea { color: inherit; font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+    .app {
+      display: flex;
+      width: 100vw;
+      height: 100dvh;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      min-height: 37px;
+      align-items: stretch;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+    }
+
+    .tabs {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .tab {
+      position: relative;
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .tab.active { color: var(--ink); }
+    .tab.active::after {
+      position: absolute;
+      right: 8px;
+      bottom: 0;
+      left: 8px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--agent);
+      box-shadow: 0 0 6px color-mix(in oklab, var(--agent) 60%, transparent);
+      content: "";
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--positive);
+      box-shadow: 0 0 5px var(--positive);
+    }
+
+    .meta {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: stretch;
+    }
+
+    .cell {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      place-items: center;
+      border: 0;
+      border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      background: transparent;
+      color: var(--faint);
+    }
+
+    .cell.active {
+      background: color-mix(in oklab, var(--float) 72%, transparent);
+      color: var(--agent);
+    }
+
+    .cell svg { width: 19px; height: 19px; }
+    .cell:hover, .cell:focus-visible { color: var(--ink); outline: none; }
+    .cell:focus-visible { box-shadow: inset 0 0 0 2px var(--agent); }
+
+    .session {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 6px;
+      border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      padding: 0 12px 0 10px;
+      color: var(--faint);
+      white-space: nowrap;
+    }
+
+    .session strong { color: var(--partner); font-weight: 500; }
+    .presence {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--partner);
+      box-shadow: 0 0 7px var(--partner);
+    }
+
+    .mobile-title, .mobile-list, .mobile-person { display: none; }
+
+    .workspace {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .terminal {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    .terminal-feed {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      flex-direction: column;
+      gap: 15px;
+      overflow: hidden;
+      padding: 18px 16px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .human {
+      border-left: 2px solid color-mix(in oklab, var(--partner) 68%, transparent);
+      background: color-mix(in oklab, var(--partner) 6%, var(--bg));
+      padding: 5px 12px;
+      color: var(--partner);
+    }
+
+    .human strong { color: var(--ink-soft); }
+    .assistant { max-width: 850px; color: var(--ink-soft); }
+    .assistant p { margin: 0 0 7px; }
+    .assistant ul { margin: 7px 0 0; padding-left: 20px; }
+
+    .tool {
+      display: flex;
+      max-width: 920px;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid color-mix(in oklab, var(--agent) 20%, var(--line));
+      border-radius: 9px;
+      background: color-mix(in oklab, var(--raised) 86%, var(--agent) 2%);
+      padding: 10px 12px;
+      color: var(--muted);
+    }
+
+    .tool .chev { color: var(--agent); }
+    .tool code { min-width: 0; overflow: hidden; color: var(--ink-soft); text-overflow: ellipsis; white-space: nowrap; }
+    .tool .ok { margin-left: auto; color: var(--positive); }
+
+    .status {
+      margin-top: auto;
+      color: var(--danger);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+    }
+
+    .terminal-composer {
+      display: flex;
+      min-height: 50px;
+      align-items: center;
+      gap: 10px;
+      margin: 0 12px 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 6px 7px 6px 13px;
+      color: var(--faint);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+    }
+
+    .send {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      margin-left: auto;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: var(--agent);
+      color: hsl(212 13% 5%);
+    }
+
+    .whispers {
+      display: flex;
+      width: clamp(320px, 28vw, 400px);
+      min-width: 320px;
+      min-height: 0;
+      flex: 0 0 auto;
+      flex-direction: column;
+      border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      background: var(--bg);
+    }
+
+    .whisper-head {
+      display: flex;
+      height: 36px;
+      flex: 0 0 36px;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      padding: 0 12px;
+      color: var(--ink);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+    }
+
+    .whisper-head svg { width: 14px; height: 14px; color: var(--faint); }
+
+    .messages {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 2px;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    .message {
+      position: relative;
+      border-left: 2px solid color-mix(in oklab, currentColor 45%, transparent);
+      background: color-mix(in oklab, currentColor 5%, var(--raised));
+      padding: 7px 10px 8px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12.5px;
+      font-style: italic;
+      line-height: 1.58;
+      overflow-wrap: anywhere;
+    }
+
+    .message.owner { color: var(--owner); }
+    .message.partner { color: var(--partner); }
+    .message .name { margin-right: 6px; color: currentColor; font-style: normal; font-weight: 600; }
+    .message time {
+      margin-left: 6px;
+      color: color-mix(in oklab, currentColor 62%, var(--faint));
+      font-size: 9px;
+      font-style: normal;
+      letter-spacing: .08em;
+    }
+
+    .receipt {
+      display: inline-flex;
+      height: 1.58em;
+      align-items: center;
+      gap: 3px;
+      margin-left: 6px;
+      color: color-mix(in oklab, currentColor 58%, var(--faint));
+      font-size: 9px;
+      font-style: normal;
+      letter-spacing: .04em;
+      vertical-align: top;
+    }
+
+    .receipt svg { width: 12px; height: 12px; }
+
+    .whisper-compose {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      margin: 0 12px max(8px, env(safe-area-inset-bottom));
+      border: 1px solid color-mix(in oklab, var(--partner) 45%, var(--line));
+      border-radius: 9px;
+      padding: 6px 6px 6px 10px;
+      background: var(--bg);
+    }
+
+    .whisper-compose textarea {
+      min-width: 0;
+      height: 25px;
+      flex: 1;
+      resize: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--ink);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+      line-height: 25px;
+    }
+
+    .whisper-compose textarea::placeholder { color: var(--faint); opacity: 1; }
+    .whisper-compose:focus-within { border-color: var(--partner); }
+    .whisper-compose .send { width: 32px; height: 32px; background: color-mix(in oklab, var(--partner) 70%, var(--surface)); }
+
+    @media (max-width: 639px) {
+      .topbar { min-height: 48px; }
+      .tabs, .plus, .session { display: none; }
+      .meta { width: 100%; }
+      .mobile-title {
+        display: flex;
+        min-width: 0;
+        flex: 1;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        color: var(--ink);
+      }
+      .mobile-title svg { width: 12px; height: 12px; color: var(--agent); }
+      .mobile-list, .mobile-person {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        place-items: center;
+        border: 0;
+        border-left: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+        background: transparent;
+      }
+      .mobile-list { color: var(--agent); }
+      .mobile-person {
+        grid-auto-flow: column;
+        gap: 4px;
+        color: var(--partner);
+        font-weight: 600;
+      }
+      .mobile-person .presence { width: 7px; height: 7px; }
+      .cell { width: 48px; height: 48px; flex-basis: 48px; }
+      .cell svg { width: 20px; height: 20px; }
+      .terminal { display: none; }
+      .whispers {
+        width: 100%;
+        min-width: 0;
+        border-left: 0;
+      }
+      .whisper-head { display: none; }
+      .messages { justify-content: flex-end; gap: 3px; padding: 10px 0; }
+      .message { padding: 7px 11px 8px; font-size: 13px; line-height: 1.6; }
+      .whisper-compose {
+        min-height: 52px;
+        margin: 0 12px max(8px, env(safe-area-inset-bottom));
+      }
+      .whisper-compose textarea { height: 32px; font-size: 14.5px; line-height: 32px; }
+      .whisper-compose .send { width: 38px; height: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-label="Global Whispers mockup">
+    <header class="topbar">
+      <nav class="tabs" aria-label="Terminals">
+        <span class="tab active"><span class="dot"></span>Contacts</span>
+        <span class="tab"><span class="dot"></span>CodeRabbit</span>
+        <span class="tab"><span class="dot"></span>Protect thinkpool</span>
+        <span class="tab"><span class="dot"></span>Polish thinkpool</span>
+        <span class="tab"><span class="dot"></span>Mallorca Weekend</span>
+      </nav>
+      <div class="meta">
+        <div class="mobile-title">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Contacts</span>
+        </div>
+        <button class="cell plus" type="button" aria-label="New terminal">＋</button>
+        <button class="mobile-list" type="button" aria-label="Open terminal picker">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="5" cy="6" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="5" cy="18" r="1.5" fill="currentColor"/>
+            <path d="M9 6h11M9 12h8M9 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="mobile-person" title="Conrad is here"><span>C</span><span class="presence"></span></div>
+        <div class="session"><span>🌈</span><span>session with</span><strong>Conrad</strong><span class="presence"></span></div>
+        <button class="cell active" type="button" aria-label="Close Whispers" aria-pressed="true" title="Whispers">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+            <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </button>
+        <button class="cell" type="button" aria-label="Session options" title="Session options">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6l-.04.08H10l-.04-.08a1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1L3.92 14v-4L4 9.96a1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88L4.2 7l2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6l.04-.08h4L14.08 4a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 7l-.06.06A1.7 1.7 0 0 0 19.4 9c.1.38.31.72.6 1l.08.04v4L20 14a1.7 1.7 0 0 0-.6 1Z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <section class="terminal" aria-label="Terminal">
+        <div class="terminal-feed">
+          <div class="human"><strong>Maks</strong> Keep Whispers global and remove the terminal target.</div>
+          <div class="assistant">
+            <p>That leaves one clear private conversation surface.</p>
+            <ul>
+              <li>Room messages still pool into terminals.</li>
+              <li>Whispers stay between the two people.</li>
+              <li>Read state appears only when it becomes meaningful.</li>
+            </ul>
+          </div>
+          <div class="tool"><span class="chev">›</span><strong>Bash</strong><code>node --test tests/code-room-chat.test.mjs</code><span class="ok">✓</span></div>
+          <div class="assistant"><p>The focused interaction tests pass. The header now reads session → Whispers → settings.</p></div>
+          <div class="status">▱ Bypass permissions&nbsp;&nbsp;<span style="color:var(--faint)">ctx 64%</span></div>
+        </div>
+        <div class="terminal-composer">
+          <span>＋</span><span>Message the room — @agent → direct — @pool → steer — hold Space → talk</span>
+          <button class="send" type="button" aria-label="Send room message">➜</button>
+        </div>
+      </section>
+
+      <aside class="whispers" aria-label="Whispers">
+        <header class="whisper-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+            <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/>
+            <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>Whispers</span>
+        </header>
+        <div class="messages" role="log" aria-live="polite" aria-label="Whisper messages">
+          <article class="message partner"><span class="name">Maks</span><span>I think the global chat is enough if the room already gets pooled.</span><time>07:42 PM</time></article>
+          <article class="message owner"><span class="name">Conrad</span><span>Agreed. One private thread is easier to follow.</span><time>07:43 PM</time><span class="receipt" title="Seen by Maks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.4"/></svg>Seen</span></article>
+          <article class="message partner"><span class="name">Maks</span><span>And keep the terminal routing out of here.</span><time>07:43 PM</time></article>
+          <article class="message owner"><span class="name">Conrad</span><span>Yep — Whispers stays between us.</span><time>07:44 PM</time></article>
+          <article class="message partner"><span class="name">Maks</span><span>The dull blue and green are much easier to scan.</span><time>07:44 PM</time></article>
+        </div>
+        <form class="whisper-compose">
+          <textarea rows="1" name="whispers-message" autocomplete="off" placeholder="Whisper to Conrad…" aria-label="Whisper to Conrad"></textarea>
+          <button class="send" type="button" aria-label="Send whisper">➜</button>
+        </form>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
