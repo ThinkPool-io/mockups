@@ -241,40 +241,40 @@
 
     .queue {
       display: flex;
-      min-height: 74px;
-      flex: 0 0 74px;
+      min-height: 54px;
+      flex: 0 0 54px;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       border-top: 1px solid var(--line);
       background: var(--k-panel);
-      padding: 8px 14px max(8px, env(safe-area-inset-bottom));
+      padding: 6px 10px max(6px, env(safe-area-inset-bottom));
       font-family: var(--font-mono);
     }
-    .queue-count { flex: none; padding: 0 14px 0 4px; color: var(--ink); font-size: 15px; font-weight: 600; }
+    .queue-count { flex: none; padding: 0 10px 0 4px; color: var(--ink); font-size: 13px; font-weight: 600; }
     .queue-number { color: var(--pool); }
     .queue-chip {
       display: flex;
-      min-width: 250px;
-      height: 56px;
+      min-width: 230px;
+      height: 40px;
       align-items: center;
       gap: 8px;
       border: 1px solid var(--line);
       border-radius: 7px;
       background: var(--k-float);
-      padding: 0 14px;
+      padding: 0 12px;
       color: var(--muted);
       font-size: 12px;
     }
     .queue-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .queue-chip b { color: var(--faint); }
-    .queue-actions { display: flex; margin-left: auto; align-items: center; gap: 14px; }
-    .clear { border: 0; background: transparent; color: var(--muted); }
+    .queue-actions { display: flex; margin-left: auto; align-items: center; gap: 8px; }
+    .clear { min-height: 40px; border: 0; background: transparent; padding: 0 10px; color: var(--muted); }
     .apply {
-      min-height: 48px;
+      min-height: 40px;
       border: 0;
       border-radius: 8px;
       background: var(--pool-action);
-      padding: 0 22px;
+      padding: 0 18px;
       color: hsl(212 18% 8%);
       font-weight: 600;
     }
@@ -303,16 +303,16 @@
       .route { padding: 18px; }
       .route strong { font-size: 18px; }
       .queue {
-        min-height: 82px;
-        flex-basis: 82px;
+        min-height: 64px;
+        flex-basis: 64px;
         gap: 8px;
-        padding: 8px 10px max(8px, env(safe-area-inset-bottom));
+        padding: 6px 8px max(6px, env(safe-area-inset-bottom));
       }
       .queue-count { padding: 0; font-size: 12px; }
       .queue-chip { display: none; }
       .queue-actions { gap: 8px; }
       .clear { min-height: 44px; padding: 0 8px; }
-      .apply { min-height: 48px; padding: 0 16px; }
+      .apply { min-height: 44px; padding: 0 16px; }
     }
   </style>
 </head>
@@ -384,8 +384,8 @@
       <div class="queue-chip"><b>1</b><span>Prompt — What Nahlas does</span></div>
       <div class="queue-chip"><b>2</b><span>Prompt — has been abandoned.</span></div>
       <div class="queue-actions">
-        <button class="clear" type="button">Clear</button>
-        <button class="apply" type="button">Apply 2</button>
+        <button class="clear" type="button">Clear all</button>
+        <button class="apply" type="button">Apply all</button>
       </div>
     </footer>
   </main>
