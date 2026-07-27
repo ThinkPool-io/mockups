@@ -98,6 +98,25 @@
       border: 2px solid var(--magenta);
       border-top-color: transparent;
     }
+    .design-lockup {
+      display: inline-flex;
+      flex: none;
+      align-items: baseline;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      white-space: nowrap;
+    }
+    .design-lockup .think { color: var(--ink); }
+    .design-lockup .pool { color: var(--cobalt); }
+    .design-lockup .design {
+      margin-left: 6px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
     .title {
       min-width: 0;
       flex: 1;
@@ -451,9 +470,8 @@
 
       <article class="mockup-card" aria-label="Code home · Pair request banner mockup">
         <header class="card-head">
-          <span class="mockup-mark" aria-hidden="true"></span>
+          <span class="design-lockup" aria-label="thinkpool Design"><span class="think">think</span><span class="pool">pool</span><span class="design">Design</span></span>
           <div class="title">Code home · Pair request banner</div>
-          <div class="views">2 views</div>
         </header>
 
         <div class="preview-shell">
