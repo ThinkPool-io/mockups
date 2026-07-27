@@ -83,34 +83,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .collaborator {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-    .collaborator-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--viewer); }
-    .mode-toggle {
-      display: flex;
-      margin-left: auto;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--k-bg);
-      padding: 2px;
-    }
-    .mode-toggle button {
-      min-height: 32px;
-      border: 0;
-      border-radius: 4px;
-      background: transparent;
-      padding: 0 12px;
-      color: var(--muted);
-      cursor: pointer;
-    }
-    .mode-toggle .active { background: color-mix(in oklab, var(--pool-action) 15%, transparent); color: hsl(217 85% 70%); }
-
     .canvas {
       min-height: 0;
       flex: 1;
@@ -279,6 +251,7 @@
       font-family: var(--font-mono);
     }
     .queue-count { flex: none; padding: 0 14px 0 4px; color: var(--ink); font-size: 15px; font-weight: 600; }
+    .queue-number { color: var(--pool); }
     .queue-chip {
       display: flex;
       min-width: 250px;
@@ -309,9 +282,8 @@
     @media (max-width: 760px) {
       .design-toolbar { min-height: 49px; flex-basis: 49px; padding: 0 12px; }
       .back { width: 44px; justify-content: center; padding: 0; }
-      .back span, .collaborator { display: none; }
+      .back span { display: none; }
       .page-title { font-size: 12px; }
-      .mode-toggle button { min-width: 52px; min-height: 44px; padding: 0 8px; font-size: 11px; }
       .canvas { padding: 0; }
       .artifact { min-height: 1100px; box-shadow: none; }
       .nahla-nav { height: 76px; gap: 10px; padding: 0 18px; }
@@ -354,12 +326,7 @@
         <span>Terminal</span>
       </button>
       <span class="toolbar-rule" aria-hidden="true"></span>
-      <div class="page-title">thinkpool design · Nahlas — Full landing</div>
-      <div class="collaborator"><span class="collaborator-dot"></span>You</div>
-      <div class="mode-toggle" aria-label="Viewer mode">
-        <button type="button">Preview</button>
-        <button type="button" class="active">Edit</button>
-      </div>
+      <div class="page-title">Nahlas — Full landing</div>
     </header>
 
     <section class="canvas" aria-label="Editable page canvas">
@@ -413,7 +380,7 @@
     </section>
 
     <footer class="queue" aria-label="Design changes">
-      <div class="queue-count">Queued edits 2</div>
+      <div class="queue-count">Queued edits <span class="queue-number">2</span></div>
       <div class="queue-chip"><b>1</b><span>Prompt — What Nahlas does</span></div>
       <div class="queue-chip"><b>2</b><span>Prompt — has been abandoned.</span></div>
       <div class="queue-actions">
