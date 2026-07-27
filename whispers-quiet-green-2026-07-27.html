@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Whispers · quieter active-view greens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: hsl(212 13% 5%);
+      --surface: hsl(212 10% 10%);
+      --panel-7: hsl(212 10% 7%);
+      --panel-14: hsl(212 9% 14%);
+      --line: hsl(212 7% 21%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(217 85% 62%);
+      --pool-fill: hsl(217 85% 55%);
+      --pool-ink: hsl(212 13% 5%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -30%, color-mix(in oklab, var(--pool) 7%, transparent), transparent 48%),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: min(1280px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 40px 0 48px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 42px);
+      font-weight: 600;
+      letter-spacing: -.035em;
+      line-height: 1.05;
+    }
+
+    .lede {
+      max-width: 730px;
+      margin: 12px 0 28px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid color-mix(in oklab, var(--line) 72%, transparent);
+      border-radius: 12px;
+      background: color-mix(in oklab, var(--surface) 86%, var(--bg));
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--green) 30%, var(--line));
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--green) 8%, transparent);
+    }
+
+    .option-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 16px 14px;
+    }
+
+    .number {
+      display: inline-grid;
+      width: 23px;
+      height: 23px;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid color-mix(in oklab, var(--green) 34%, var(--line));
+      border-radius: 6px;
+      color: var(--green);
+      font: 700 10px/1 var(--font-mono);
+    }
+
+    .copy { min-width: 0; flex: 1; }
+
+    h2 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .description {
+      margin: 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .pick {
+      flex: 0 0 auto;
+      margin-top: 2px;
+      color: var(--green);
+      font: 600 8px/1 var(--font-mono);
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .chrome {
+      position: relative;
+      display: flex;
+      height: 54px;
+      align-items: stretch;
+      overflow: hidden;
+      border-top: 1px solid color-mix(in oklab, var(--line) 62%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 62%, transparent);
+      background: hsl(212 13% 4.5%);
+    }
+
+    .room-title {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      color: var(--ink);
+      font: 600 11px/1 var(--font-mono);
+      letter-spacing: .025em;
+      white-space: nowrap;
+    }
+
+    .session-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border: 1px solid var(--pool);
+      border-radius: 50%;
+    }
+
+    .room-title span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-controls {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: stretch;
+    }
+
+    .control {
+      position: relative;
+      display: grid;
+      width: 42px;
+      place-items: center;
+      border-left: 1px solid color-mix(in oklab, var(--line) 62%, transparent);
+      color: var(--faint);
+    }
+
+    .control svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.6;
+    }
+
+    .whispers {
+      width: 46px;
+      color: var(--green);
+    }
+
+    .badge {
+      position: absolute;
+      top: 6px;
+      right: 4px;
+      display: grid;
+      min-width: 15px;
+      height: 15px;
+      place-items: center;
+      padding: 0 3px;
+      border: 1.5px solid hsl(212 13% 4.5%);
+      border-radius: 999px;
+      background: var(--pool-fill);
+      color: var(--pool-ink);
+      font: 700 8px/1 var(--font-mono);
+    }
+
+    .state-line {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 16px 15px;
+      color: var(--faint);
+      font: 500 10px/1.3 var(--font-mono);
+    }
+
+    .state-swatch {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .option-1 { --green: hsl(151 18% 58%); }
+    .option-1 .whispers {
+      background: var(--panel-7);
+      color: color-mix(in oklab, var(--green) 84%, var(--faint));
+    }
+
+    .option-2 { --green: hsl(139 17% 51%); }
+    .option-2 .whispers {
+      background: color-mix(in oklab, var(--green) 7%, var(--panel-7));
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--green) 18%, transparent);
+      color: color-mix(in oklab, var(--green) 76%, var(--faint));
+    }
+
+    .option-3 { --green: hsl(150 23% 53%); }
+    .option-3 .whispers {
+      background: var(--panel-7);
+      color: var(--faint);
+    }
+    .option-3 .live-dot {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      width: 6px;
+      height: 6px;
+      border: 1px solid hsl(212 13% 4.5%);
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .option-4 { --green: hsl(154 16% 56%); }
+    .option-4 .whispers {
+      margin: 7px 5px;
+      width: 36px;
+      border: 1px solid color-mix(in oklab, var(--green) 28%, var(--line));
+      border-radius: 7px;
+      color: color-mix(in oklab, var(--green) 58%, var(--faint));
+    }
+    .option-4 .badge { top: -2px; right: -4px; }
+
+    .option-5 { --green: hsl(162 15% 55%); }
+    .option-5 .whispers {
+      background:
+        radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--green) 8%, transparent), transparent 68%),
+        var(--panel-7);
+      color: color-mix(in oklab, var(--green) 70%, var(--faint));
+      filter: drop-shadow(0 0 2px color-mix(in oklab, var(--green) 25%, transparent));
+    }
+
+    .footer-note {
+      margin: 18px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .option-5 .whispers {
+        animation: breathe 3.2s ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%, 100% { filter: drop-shadow(0 0 1px color-mix(in oklab, var(--green) 15%, transparent)); }
+        50% { filter: drop-shadow(0 0 3px color-mix(in oklab, var(--green) 28%, transparent)); }
+      }
+    }
+
+    @media (max-width: 860px) {
+      main {
+        width: min(100% - 24px, 520px);
+        padding: 22px 0 28px;
+      }
+
+      h1 { font-size: 27px; }
+      .lede { margin-bottom: 18px; font-size: 13px; }
+      .grid { grid-template-columns: 1fr; gap: 10px; }
+      .option-header { padding: 11px 12px 10px; }
+      .description { font-size: 11px; }
+      .chrome { height: 47px; }
+      .room-title { font-size: 10px; }
+      .control { width: 39px; }
+      .whispers { width: 43px; }
+      .option-4 .whispers { width: 33px; margin: 6px 5px; }
+      .state-line { padding: 9px 12px 11px; }
+      .footer-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Whispers · active-view signal</p>
+    <h1>Five quieter greens</h1>
+    <p class="lede">The cobalt unread badge stays fixed. Only the “your partner is looking at Whispers” treatment changes, shown at the real header scale.</p>
+
+    <section class="grid" aria-label="Five quieter green options">
+      <article class="option option-1">
+        <div class="option-header">
+          <span class="number">01</span>
+          <div class="copy">
+            <h2>Quiet sage</h2>
+            <p class="description">Whole glyph, desaturated. No glow.</p>
+          </div>
+        </div>
+        <div class="chrome">
+          <div class="room-title"><i class="session-dot"></i><span>Manage Terminal Whispers</span></div>
+          <div class="header-controls">
+            <div class="control whispers">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+              <span class="badge">6</span>
+            </div>
+            <div class="control" aria-hidden="true">⚙</div>
+          </div>
+        </div>
+        <div class="state-line"><i class="state-swatch"></i>Maks is viewing Whispers</div>
+      </article>
+
+      <article class="option option-2">
+        <div class="option-header">
+          <span class="number">02</span>
+          <div class="copy">
+            <h2>Dusty moss</h2>
+            <p class="description">Low green wash, faint inset edge.</p>
+          </div>
+        </div>
+        <div class="chrome">
+          <div class="room-title"><i class="session-dot"></i><span>Manage Terminal Whispers</span></div>
+          <div class="header-controls">
+            <div class="control whispers">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+              <span class="badge">6</span>
+            </div>
+            <div class="control" aria-hidden="true">⚙</div>
+          </div>
+        </div>
+        <div class="state-line"><i class="state-swatch"></i>Maks is viewing Whispers</div>
+      </article>
+
+      <article class="option option-3 recommended">
+        <div class="option-header">
+          <span class="number">03</span>
+          <div class="copy">
+            <h2>Pinpoint</h2>
+            <p class="description">Neutral glyph, tiny green live dot.</p>
+          </div>
+          <span class="pick">calmest</span>
+        </div>
+        <div class="chrome">
+          <div class="room-title"><i class="session-dot"></i><span>Manage Terminal Whispers</span></div>
+          <div class="header-controls">
+            <div class="control whispers">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+              <i class="live-dot"></i>
+              <span class="badge">6</span>
+            </div>
+            <div class="control" aria-hidden="true">⚙</div>
+          </div>
+        </div>
+        <div class="state-line"><i class="state-swatch"></i>Maks is viewing Whispers</div>
+      </article>
+
+      <article class="option option-4">
+        <div class="option-header">
+          <span class="number">04</span>
+          <div class="copy">
+            <h2>Hairline ring</h2>
+            <p class="description">Neutral-green glyph in a soft outline.</p>
+          </div>
+        </div>
+        <div class="chrome">
+          <div class="room-title"><i class="session-dot"></i><span>Manage Terminal Whispers</span></div>
+          <div class="header-controls">
+            <div class="control whispers">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+              <span class="badge">6</span>
+            </div>
+            <div class="control" aria-hidden="true">⚙</div>
+          </div>
+        </div>
+        <div class="state-line"><i class="state-swatch"></i>Maks is viewing Whispers</div>
+      </article>
+
+      <article class="option option-5">
+        <div class="option-header">
+          <span class="number">05</span>
+          <div class="copy">
+            <h2>Soft edge</h2>
+            <p class="description">Low-color glyph, 3.2s micro-breath.</p>
+          </div>
+        </div>
+        <div class="chrome">
+          <div class="room-title"><i class="session-dot"></i><span>Manage Terminal Whispers</span></div>
+          <div class="header-controls">
+            <div class="control whispers">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+              <span class="badge">6</span>
+            </div>
+            <div class="control" aria-hidden="true">⚙</div>
+          </div>
+        </div>
+        <div class="state-line"><i class="state-swatch"></i>Maks is viewing Whispers</div>
+      </article>
+    </section>
+
+    <p class="footer-note">All five preserve the existing 36–48px responsive control geometry, the Two Voices glyph, and the cobalt unread count. The green is identity/presence only—never success-state green.</p>
+  </main>
+</body>
+</html>
