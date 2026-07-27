@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>thinkpool — Side chat green, five quieter directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Grotesk:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --card: hsl(212 13% 7%);
+    --surface: hsl(200 14% 9%);
+    --float: hsl(212 13% 12%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --partner: hsl(218 60% 72%);
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    --font-identity: "Space Grotesk", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background:
+      radial-gradient(circle at 50% -10%, hsl(161 22% 15% / 0.18), transparent 36rem),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font-mono);
+  }
+
+  main {
+    width: min(1380px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 44px;
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 20px;
+    margin-bottom: 22px;
+    padding: 0 2px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--faint);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 760px;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+  }
+
+  .lede {
+    margin: 10px 0 0;
+    max-width: 760px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .baseline {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 38px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--faint);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .baseline-swatch {
+    width: 42px;
+    height: 18px;
+    background: hsl(161 48% 58%);
+    box-shadow: inset 2px 0 hsl(161 48% 68%);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .option {
+    --self: hsl(155 24% 55%);
+    --self-mix: 66%;
+    --band-mix: 4%;
+    --edge-mix: 36%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--card);
+  }
+
+  .option[data-option="2"] {
+    --self: hsl(163 28% 54%);
+    --self-mix: 67%;
+    --band-mix: 4%;
+    --edge-mix: 38%;
+  }
+
+  .option[data-option="3"] {
+    --self: hsl(145 22% 54%);
+    --self-mix: 68%;
+    --band-mix: 4%;
+    --edge-mix: 36%;
+  }
+
+  .option[data-option="4"] {
+    --self: hsl(171 20% 52%);
+    --self-mix: 70%;
+    --band-mix: 3.5%;
+    --edge-mix: 34%;
+  }
+
+  .option[data-option="5"] {
+    --self: hsl(182 22% 55%);
+    --self-mix: 66%;
+    --band-mix: 3.5%;
+    --edge-mix: 34%;
+  }
+
+  .option-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    min-height: 52px;
+    gap: 10px;
+    padding: 9px 11px;
+    border-bottom: 1px solid var(--line);
+    background: hsl(212 13% 8%);
+  }
+
+  .number {
+    display: grid;
+    width: 27px;
+    height: 27px;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--self) 42%, var(--line));
+    color: color-mix(in oklab, var(--self) 72%, var(--muted));
+    font-size: 10px;
+  }
+
+  .option-title {
+    min-width: 0;
+  }
+
+  .option-title h2 {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .option-title p {
+    margin: 3px 0 0;
+    color: var(--faint);
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+  }
+
+  .quietness {
+    color: color-mix(in oklab, var(--self) 64%, var(--faint));
+    font-size: 8px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .lane {
+    min-height: 334px;
+    background: hsl(212 13% 5%);
+  }
+
+  .lane-top {
+    display: flex;
+    min-height: 35px;
+    align-items: center;
+    gap: 9px;
+    padding: 0 11px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .back {
+    color: hsl(201 78% 64%);
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  .lane-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chat-icon {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    margin-left: auto;
+    place-items: center;
+    border-left: 1px solid var(--line);
+    color: hsl(201 78% 64%);
+    font-size: 15px;
+  }
+
+  .date {
+    padding: 12px 11px 8px;
+    color: var(--faint);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .message {
+    padding: 4px 11px;
+    background: color-mix(in oklab, var(--partner) 5%, var(--surface));
+    box-shadow: inset 2px 0 0 color-mix(in oklab, var(--partner) 45%, transparent);
+    color: color-mix(in oklab, var(--partner) 74%, var(--faint));
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.62;
+  }
+
+  .message.self {
+    background: color-mix(in oklab, var(--self) var(--band-mix), var(--surface));
+    box-shadow: inset 2px 0 0 color-mix(in oklab, var(--self) var(--edge-mix), transparent);
+    color: color-mix(in oklab, var(--self) var(--self-mix), var(--faint));
+  }
+
+  .name {
+    margin-right: 6px;
+    font-family: var(--font-identity);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .time {
+    min-height: 17px;
+    padding: 2px 11px 3px;
+    color: color-mix(in oklab, var(--partner) 74%, var(--faint));
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .time.self {
+    color: color-mix(in oklab, var(--self) var(--self-mix), var(--faint));
+  }
+
+  .composer-wrap {
+    padding: 8px 11px;
+  }
+
+  .composer {
+    display: flex;
+    min-height: 38px;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px 5px 10px;
+    border: 1px solid color-mix(in oklab, var(--partner) 45%, var(--line));
+    color: var(--faint);
+    font-size: 10px;
+  }
+
+  .send {
+    display: grid;
+    width: 27px;
+    height: 27px;
+    margin-left: auto;
+    place-items: center;
+    background: color-mix(in oklab, var(--partner) 42%, var(--surface));
+    color: hsl(212 13% 5%);
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .why {
+    min-height: 45px;
+    margin: 0;
+    padding: 10px 11px 11px;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 9px;
+    line-height: 1.45;
+  }
+
+  .why strong {
+    color: color-mix(in oklab, var(--self) 64%, var(--muted));
+    font-weight: 500;
+  }
+
+  @media (max-width: 980px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 620px) {
+    main {
+      width: min(100% - 20px, 430px);
+      padding: 20px 0 32px;
+    }
+
+    .intro {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h1 { font-size: 23px; }
+    .lede { font-size: 11px; }
+    .baseline { width: 100%; }
+    .grid { grid-template-columns: 1fr; gap: 10px; }
+    .lane { min-height: 318px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="intro">
+    <div>
+      <p class="eyebrow">Side chat · viewer messages · color study</p>
+      <h1>Five greens that sit back instead of popping</h1>
+      <p class="lede">Same bands, typography, partner blue, timestamps, and composer as the live lane. Only the viewer-green recipe changes.</p>
+    </div>
+    <div class="baseline" aria-label="Current live viewer green">
+      <span class="baseline-swatch" aria-hidden="true"></span>
+      <span>Live · 161 / 48 / 58</span>
+    </div>
+  </header>
+
+  <section class="grid" aria-label="Five quieter viewer-green options">
+    <article class="option" data-option="1">
+      <header class="option-head">
+        <span class="number">01</span>
+        <div class="option-title">
+          <h2>Smoke sage</h2>
+          <p>155° · 24% · 55%</p>
+        </div>
+        <span class="quietness">softest</span>
+      </header>
+      <div class="lane">
+        <div class="lane-top"><span class="back">‹</span><span class="lane-title">Manage Terminal Whispers</span><span class="chat-icon">◉</span></div>
+        <div class="date">27 July 2026</div>
+        <div class="message self"><span class="name">Maks</span>Okay, cool. The lane should feel calmer.</div>
+        <div class="message self"><span class="name">Maks</span>Keep the identity clear without lighting up the whole row.</div>
+        <div class="time self">19:18</div>
+        <div class="message"><span class="name">Conrad</span>Yeah, this is much easier to scan.</div>
+        <div class="time">19:19</div>
+        <div class="message self"><span class="name">Maks</span>Nice. It still reads green.</div>
+        <div class="time self">19:20</div>
+        <div class="composer-wrap"><div class="composer">Whisper to Conrad…<span class="send">→</span></div></div>
+      </div>
+      <p class="why"><strong>Most restrained.</strong> A greyed sage that lets the blue remain the crisper counterpoint.</p>
+    </article>
+
+    <article class="option" data-option="2">
+      <header class="option-head">
+        <span class="number">02</span>
+        <div class="option-title">
+          <h2>Eucalyptus</h2>
+          <p>163° · 28% · 54%</p>
+        </div>
+        <span class="quietness">balanced</span>
+      </header>
+      <div class="lane">
+        <div class="lane-top"><span class="back">‹</span><span class="lane-title">Manage Terminal Whispers</span><span class="chat-icon">◉</span></div>
+        <div class="date">27 July 2026</div>
+        <div class="message self"><span class="name">Maks</span>Okay, cool. The lane should feel calmer.</div>
+        <div class="message self"><span class="name">Maks</span>Keep the identity clear without lighting up the whole row.</div>
+        <div class="time self">19:18</div>
+        <div class="message"><span class="name">Conrad</span>Yeah, this is much easier to scan.</div>
+        <div class="time">19:19</div>
+        <div class="message self"><span class="name">Maks</span>Nice. It still reads green.</div>
+        <div class="time self">19:20</div>
+        <div class="composer-wrap"><div class="composer">Whisper to Conrad…<span class="send">→</span></div></div>
+      </div>
+      <p class="why"><strong>Best balance.</strong> Keeps the current jade family but cuts saturation almost in half.</p>
+    </article>
+
+    <article class="option" data-option="3">
+      <header class="option-head">
+        <span class="number">03</span>
+        <div class="option-title">
+          <h2>Moss</h2>
+          <p>145° · 22% · 54%</p>
+        </div>
+        <span class="quietness">earthy</span>
+      </header>
+      <div class="lane">
+        <div class="lane-top"><span class="back">‹</span><span class="lane-title">Manage Terminal Whispers</span><span class="chat-icon">◉</span></div>
+        <div class="date">27 July 2026</div>
+        <div class="message self"><span class="name">Maks</span>Okay, cool. The lane should feel calmer.</div>
+        <div class="message self"><span class="name">Maks</span>Keep the identity clear without lighting up the whole row.</div>
+        <div class="time self">19:18</div>
+        <div class="message"><span class="name">Conrad</span>Yeah, this is much easier to scan.</div>
+        <div class="time">19:19</div>
+        <div class="message self"><span class="name">Maks</span>Nice. It still reads green.</div>
+        <div class="time self">19:20</div>
+        <div class="composer-wrap"><div class="composer">Whisper to Conrad…<span class="send">→</span></div></div>
+      </div>
+      <p class="why"><strong>Warmer and earthy.</strong> Furthest from the cool-blue partner while staying low-energy.</p>
+    </article>
+
+    <article class="option" data-option="4">
+      <header class="option-head">
+        <span class="number">04</span>
+        <div class="option-title">
+          <h2>Graphite jade</h2>
+          <p>171° · 20% · 52%</p>
+        </div>
+        <span class="quietness">neutral</span>
+      </header>
+      <div class="lane">
+        <div class="lane-top"><span class="back">‹</span><span class="lane-title">Manage Terminal Whispers</span><span class="chat-icon">◉</span></div>
+        <div class="date">27 July 2026</div>
+        <div class="message self"><span class="name">Maks</span>Okay, cool. The lane should feel calmer.</div>
+        <div class="message self"><span class="name">Maks</span>Keep the identity clear without lighting up the whole row.</div>
+        <div class="time self">19:18</div>
+        <div class="message"><span class="name">Conrad</span>Yeah, this is much easier to scan.</div>
+        <div class="time">19:19</div>
+        <div class="message self"><span class="name">Maks</span>Nice. It still reads green.</div>
+        <div class="time self">19:20</div>
+        <div class="composer-wrap"><div class="composer">Whisper to Conrad…<span class="send">→</span></div></div>
+      </div>
+      <p class="why"><strong>Most neutral.</strong> Nearly slate, with just enough jade to preserve viewer identity.</p>
+    </article>
+
+    <article class="option" data-option="5">
+      <header class="option-head">
+        <span class="number">05</span>
+        <div class="option-title">
+          <h2>Blue sage</h2>
+          <p>182° · 22% · 55%</p>
+        </div>
+        <span class="quietness">cool</span>
+      </header>
+      <div class="lane">
+        <div class="lane-top"><span class="back">‹</span><span class="lane-title">Manage Terminal Whispers</span><span class="chat-icon">◉</span></div>
+        <div class="date">27 July 2026</div>
+        <div class="message self"><span class="name">Maks</span>Okay, cool. The lane should feel calmer.</div>
+        <div class="message self"><span class="name">Maks</span>Keep the identity clear without lighting up the whole row.</div>
+        <div class="time self">19:18</div>
+        <div class="message"><span class="name">Conrad</span>Yeah, this is much easier to scan.</div>
+        <div class="time">19:19</div>
+        <div class="message self"><span class="name">Maks</span>Nice. It still reads green.</div>
+        <div class="time self">19:20</div>
+        <div class="composer-wrap"><div class="composer">Whisper to Conrad…<span class="send">→</span></div></div>
+      </div>
+      <p class="why"><strong>Coolest direction.</strong> Quiet teal-green that harmonizes with Glacier without becoming cyan.</p>
+    </article>
+  </section>
+</main>
+</body>
+</html>
