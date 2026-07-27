@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nahlas — Full landing</title>
+  <style>
+    :root {
+      --canvas: #f3f5f2;
+      --surface: #ffffff;
+      --ink: #171917;
+      --muted: #626761;
+      --line: #d8dcd6;
+      --soft: #e9ede7;
+      --red: #d61f26;
+      --red-dark: #97151b;
+      --green: #40a35d;
+      --radius: 16px;
+      --display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      --body: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); scroll-behavior: smooth; }
+    body {
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--body);
+      margin: 0;
+      min-width: 320px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button, select, input[type="file"], input[type="checkbox"] { cursor: pointer; }
+
+    .topbar {
+      align-items: center;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      height: 72px;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 4.5vw, 72px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .brand {
+      font-family: var(--display);
+      font-size: clamp(2rem, 3vw, 2.65rem);
+      letter-spacing: -.055em;
+      line-height: .9;
+    }
+    .brand i { color: var(--red); font-style: normal; }
+    .topbar-right { align-items: center; display: flex; gap: clamp(14px, 2vw, 28px); }
+    .utility {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .live-mark { align-items: center; display: inline-flex; gap: 8px; }
+    .live-mark i { background: var(--green); border-radius: 50%; height: 8px; width: 8px; }
+    .languages { align-items: center; display: flex; gap: 4px; }
+    .lang {
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      display: inline-flex;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 900;
+      height: 36px;
+      justify-content: center;
+      min-width: 36px;
+      padding: 0 8px;
+    }
+    .lang.active { background: var(--ink); border-color: var(--ink); color: white; }
+    .button {
+      align-items: center;
+      background: var(--red);
+      border: 1px solid var(--red);
+      border-radius: 10px;
+      color: #fff;
+      display: inline-flex;
+      font-size: .82rem;
+      font-weight: 800;
+      gap: 18px;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 18px;
+    }
+    .button-small { min-height: 40px; padding: 9px 14px; }
+    .button-black { background: var(--ink); border-color: var(--ink); }
+
+    .hero {
+      background:
+        linear-gradient(108deg, transparent 0 71%, rgba(214,31,38,.055) 71%),
+        var(--canvas);
+      overflow: hidden;
+      padding: clamp(64px, 8vw, 118px) clamp(20px, 4.5vw, 72px) clamp(74px, 8vw, 112px);
+    }
+    .hero-layout {
+      align-items: end;
+      display: grid;
+      gap: clamp(40px, 5vw, 82px);
+      grid-template-columns: minmax(0,1fr) minmax(270px,340px);
+      margin: 0 auto;
+      max-width: 1440px;
+    }
+    .kicker {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      margin: 0 0 18px;
+      text-transform: uppercase;
+    }
+    .kicker::before { color: var(--red); content: "● "; }
+    .hero h1 {
+      font-family: var(--display);
+      font-size: clamp(4rem, 6.3vw, 7rem);
+      letter-spacing: -.058em;
+      line-height: .88;
+      margin: 0;
+      max-width: 1050px;
+      text-transform: uppercase;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero-copy {
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+      font-weight: 550;
+      line-height: 1.55;
+      margin: 28px 0 0;
+      max-width: 720px;
+    }
+    .hero-actions { align-items: center; display: flex; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
+    .hero-actions .button { border-radius: 9px; gap: 28px; min-height: 56px; padding: 0 22px; }
+    .case-link {
+      border-bottom: 1px solid var(--ink);
+      font-size: .9rem;
+      font-weight: 800;
+      padding-bottom: 4px;
+    }
+    .paper {
+      align-self: end;
+      background: var(--surface);
+      border: 1px solid var(--ink);
+      box-shadow: 10px 10px 0 var(--red);
+      display: grid;
+      gap: 11px;
+      margin: 0 10px 10px 0;
+      min-height: 292px;
+      padding: 24px;
+      transform: rotate(1.5deg);
+      width: 100%;
+    }
+    .paper-label, .paper dt {
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 900;
+      letter-spacing: .075em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    .paper strong { font-size: clamp(2rem, 3.1vw, 2.8rem); letter-spacing: -.055em; }
+    .paper h2 { font-size: 1.35rem; letter-spacing: -.035em; line-height: 1.05; margin: 3px 0 0; }
+    .paper-location { color: var(--muted); font-size: .86rem; }
+    .paper-rule { border-top: 1px dashed #939a92; display: block; }
+    .paper dl { display: grid; gap: 10px; margin: 0; }
+    .paper dl div { align-items: baseline; display: grid; gap: 10px; grid-template-columns: 88px minmax(0,1fr); }
+    .paper dt { color: var(--muted); font-size: .62rem; }
+    .paper dd { font-size: .86rem; font-weight: 800; margin: 0; }
+    .steps {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      margin-top: 72px;
+      max-width: 1080px;
+      overflow: hidden;
+    }
+    .steps article {
+      display: grid;
+      gap: 7px;
+      grid-template-columns: 34px 1fr;
+      padding: 22px 24px;
+    }
+    .steps article + article { border-left: 1px solid var(--line); }
+    .steps b {
+      align-items: center;
+      background: var(--soft);
+      border-radius: 50%;
+      color: var(--muted);
+      display: flex;
+      font-family: var(--mono);
+      font-size: .68rem;
+      grid-row: 1 / 3;
+      height: 30px;
+      justify-content: center;
+      width: 30px;
+    }
+    .steps strong { font-size: .88rem; }
+    .steps span { color: var(--muted); font-size: .9rem; line-height: 1.4; }
+
+    .scores {
+      background: var(--surface);
+      padding: clamp(54px, 6vw, 88px) clamp(20px, 4.5vw, 72px);
+    }
+    .section-head {
+      align-items: end;
+      display: grid;
+      gap: clamp(36px, 8vw, 120px);
+      grid-template-columns: minmax(0,1.4fr) minmax(250px,.6fr);
+      margin: 0 auto;
+      max-width: 1440px;
+    }
+    .section-head h2, .report-intro h2 {
+      font-size: clamp(2rem, 3.5vw, 3.6rem);
+      letter-spacing: -.05em;
+      line-height: .98;
+      margin: 0;
+    }
+    .section-head > p {
+      border-left: 2px solid var(--red);
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+      padding-left: 20px;
+    }
+    .score-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      margin: 30px auto 0;
+      max-width: 1440px;
+    }
+    .score-card {
+      align-items: center;
+      background: var(--canvas);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      gap: 20px;
+      min-height: 112px;
+      padding: 20px;
+    }
+    .score-number { align-items: baseline; color: var(--red); display: flex; gap: 5px; }
+    .score-number strong { font-size: 3rem; letter-spacing: -.06em; }
+    .score-number span { color: var(--muted); font-family: var(--mono); font-size: .7rem; }
+    .score-card h3 { font-size: 1.05rem; margin: 0 0 8px; }
+    .score-card p { color: var(--muted); font-size: .86rem; line-height: 1.4; margin: 0; }
+    .score-method {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      margin: 20px auto 0;
+      max-width: 1440px;
+    }
+
+    .report {
+      background: #e8ece7;
+      display: grid;
+      gap: clamp(32px, 5vw, 72px);
+      grid-template-columns: minmax(260px,.66fr) minmax(0,1.34fr);
+      padding: clamp(56px, 6vw, 88px) clamp(20px, 4.5vw, 72px);
+    }
+    .report-intro { align-self: start; position: sticky; top: 108px; }
+    .report-intro h2 { max-width: 520px; }
+    .report-intro > p:not(.kicker) {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 22px 0 0;
+      max-width: 470px;
+    }
+    .privacy-tape {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+      display: grid;
+      font-family: var(--mono);
+      font-size: .68rem;
+      gap: 9px;
+      margin-top: 22px;
+      max-width: 450px;
+      padding: 14px 16px;
+    }
+    .privacy-tape b { color: #216b36; }
+    .form {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(23,25,23,.08);
+      display: grid;
+      gap: 22px;
+      margin: 0;
+      padding: clamp(24px, 4vw, 46px);
+    }
+    .field-row { display: grid; gap: 18px; grid-template-columns: repeat(2,minmax(0,1fr)); }
+    label {
+      color: var(--muted);
+      display: grid;
+      font-size: .76rem;
+      font-weight: 750;
+      gap: 8px;
+    }
+    input, select, textarea {
+      background: #fafbf9;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      font-size: 1rem;
+      min-height: 50px;
+      padding: 13px 14px;
+      width: 100%;
+    }
+    textarea { min-height: 132px; resize: vertical; }
+    .route {
+      background: #f8eeee;
+      border: 1px solid #e4c4c5;
+      border-radius: 12px;
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+    }
+    .route b {
+      color: var(--muted);
+      display: block;
+      font-family: var(--mono);
+      font-size: .66rem;
+      letter-spacing: .05em;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    .route strong { font-size: 1rem; }
+    .route a { color: var(--red-dark); font-size: .75rem; font-weight: 850; }
+    .route p { color: var(--muted); font-size: .78rem; line-height: 1.45; margin: 0; }
+    .map-block {
+      background: #f8f9f7;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      padding: 14px;
+    }
+    .map-head {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .map-head b { color: var(--muted); font-family: var(--mono); font-size: .7rem; letter-spacing: .04em; }
+    .map-head span { color: var(--muted); font-size: .76rem; }
+    .map {
+      background:
+        linear-gradient(26deg, transparent 47%, rgba(255,255,255,.95) 48% 51%, transparent 52%),
+        linear-gradient(99deg, transparent 43%, rgba(255,255,255,.9) 44% 47%, transparent 48%),
+        linear-gradient(152deg, transparent 28%, rgba(255,255,255,.9) 29% 32%, transparent 33%),
+        linear-gradient(65deg, transparent 68%, rgba(205,215,204,.9) 69% 72%, transparent 73%),
+        #dfe8dd;
+      border: 1px solid #cbd4ca;
+      border-radius: 10px;
+      height: 340px;
+      overflow: hidden;
+      position: relative;
+    }
+    .map::before {
+      border: 11px solid rgba(123,164,196,.52);
+      border-radius: 50%;
+      content: "";
+      height: 470px;
+      left: -90px;
+      position: absolute;
+      top: 170px;
+      transform: rotate(-18deg);
+      width: 700px;
+    }
+    .district {
+      color: #687267;
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 850;
+      letter-spacing: .06em;
+      position: absolute;
+      text-transform: uppercase;
+    }
+    .district.one { left: 13%; top: 20%; }
+    .district.two { right: 13%; top: 22%; }
+    .district.three { left: 34%; top: 66%; }
+    .pin {
+      background: var(--red);
+      border: 3px solid white;
+      border-radius: 50% 50% 50% 0;
+      box-shadow: 0 5px 12px rgba(23,25,23,.25);
+      height: 28px;
+      left: 55%;
+      position: absolute;
+      top: 44%;
+      transform: rotate(-45deg);
+      width: 28px;
+    }
+    .pin::after {
+      background: white;
+      border-radius: 50%;
+      content: "";
+      height: 8px;
+      left: 7px;
+      position: absolute;
+      top: 7px;
+      width: 8px;
+    }
+    .map-note {
+      align-items: center;
+      color: var(--muted);
+      display: flex;
+      font-family: var(--mono);
+      font-size: .68rem;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .file-field {
+      background: #fafbf9;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .file-field input { background: transparent; border: 0; min-height: 32px; padding: 0; }
+    .file-field small { font-family: var(--mono); }
+    .consent {
+      align-items: start;
+      background: var(--canvas);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      display: flex;
+      font-size: .82rem;
+      font-weight: 500;
+      gap: 11px;
+      line-height: 1.45;
+      padding: 14px;
+    }
+    .consent input { flex: 0 0 auto; height: 18px; min-height: 0; margin: 2px 0 0; padding: 0; width: 18px; }
+    .anonymity { color: var(--muted); font-family: var(--mono); font-size: .68rem; line-height: 1.45; margin: -7px 0 0; }
+    .submit { justify-content: space-between; width: 100%; }
+
+    footer {
+      align-items: center;
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      display: grid;
+      gap: 24px;
+      grid-template-columns: auto 1fr auto;
+      padding: 34px clamp(20px, 4.5vw, 72px);
+    }
+    .footer-copy { font-size: .78rem; line-height: 1.55; }
+    .footer-copy p { margin: 0; }
+    .credit { font-size: .74rem; text-decoration: underline; text-underline-offset: 4px; }
+
+    @media (max-width: 980px) {
+      .hero-layout { gap: 36px; grid-template-columns: minmax(0,1fr) minmax(230px,270px); }
+      .report { grid-template-columns: 1fr; }
+      .report-intro { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .topbar { height: 66px; padding: 0 16px; }
+      .brand { font-size: 2rem; }
+      .live-mark, .topbar-link { display: none; }
+      .topbar-right { gap: 8px; }
+      .button-small { font-size: .68rem; max-width: 132px; padding: 9px 10px; }
+      .hero { padding: 42px 18px 72px; }
+      .hero-layout { align-items: start; gap: 42px; grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(2.5rem,10.25vw,3.1rem); line-height: .88; }
+      .hero-copy { margin-top: 24px; }
+      .hero-actions { align-items: stretch; flex-direction: column; gap: 18px; }
+      .hero-actions .button { justify-content: space-between; width: 100%; }
+      .case-link { align-self: start; }
+      .paper { margin: 0 8px 8px 0; min-height: 265px; padding: 22px; }
+      .paper strong { font-size: 1.95rem; }
+      .steps { grid-template-columns: 1fr; margin-top: 60px; }
+      .steps article + article { border-left: 0; border-top: 1px solid var(--line); }
+      .scores { padding: 64px 18px; }
+      .section-head { align-items: start; gap: 24px; grid-template-columns: 1fr; }
+      .section-head h2, .report-intro h2 { font-size: clamp(2.4rem,12vw,3.5rem); }
+      .score-grid { grid-template-columns: 1fr; }
+      .report { gap: 38px; padding: 72px 18px; }
+      .form { border-radius: 16px; padding: 22px; }
+      .field-row { grid-template-columns: 1fr; }
+      .map { height: 290px; }
+      footer { align-items: start; grid-template-columns: 1fr; }
+      footer .brand { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Nahlas home">NAHLAS<i>.</i></a>
+    <div class="topbar-right">
+      <span class="utility live-mark"><i></i>Prague · Public cases</span>
+      <a class="utility topbar-link" href="https://nahlas-prague.usethinkpool.chatgpt.site/cases">Case registry</a>
+      <nav class="languages" aria-label="Languages">
+        <a class="lang active" href="#top" aria-current="page">EN</a>
+        <a class="lang" href="https://nahlas-prague.usethinkpool.chatgpt.site/cs">CS</a>
+        <a class="lang" href="https://nahlas-prague.usethinkpool.chatgpt.site/ru">RU</a>
+      </nav>
+      <a class="button button-small" href="#report">Report a problem</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-layout">
+        <div>
+          <p class="kicker">What Nahlas does</p>
+          <h1>Your<br>neighborhood<br><span>has been<br>abandoned.</span></h1>
+          <p class="hero-copy">Photograph the problem. Pin the location. Nahlas names the responsible authority and tracks the case until it is fixed.</p>
+          <div class="hero-actions">
+            <a class="button" href="#report">Report what you see <span>→</span></a>
+            <a class="case-link" href="https://nahlas-prague.usethinkpool.chatgpt.site/cases">See active cases →</a>
+          </div>
+        </div>
+        <aside class="paper" aria-label="Public case example">
+          <p class="paper-label">Public case</p>
+          <strong>#PRAHA-8-001</strong>
+          <h2>Blocked pavement</h2>
+          <span class="paper-location">Karlín · Prague 8</span>
+          <span class="paper-rule"></span>
+          <dl>
+            <div><dt>Responsible</dt><dd>Prague 8 district</dd></div>
+            <div><dt>Response due</dt><dd>14 August</dd></div>
+          </dl>
+        </aside>
+      </div>
+      <div class="steps" aria-label="How Nahlas works">
+        <article><b>1</b><strong>You report</strong><span>Photo, location, description.</span></article>
+        <article><b>2</b><strong>We make it public</strong><span>One case, one authority, one deadline.</span></article>
+        <article><b>3</b><strong>Everyone sees the result</strong><span>Fixed, overdue or still being ignored.</span></article>
+      </div>
+    </section>
+
+    <section class="scores">
+      <div class="section-head">
+        <div>
+          <p class="kicker">Neighborhood accountability score</p>
+          <h2>Is your district getting things fixed?</h2>
+        </div>
+        <p>Documented fixes raise the score. Overdue cases lower it.</p>
+      </div>
+      <div class="score-grid">
+        <article class="score-card">
+          <div class="score-number"><strong>6</strong><span>/ 10</span></div>
+          <div><h3>Karlín · Prague 8</h3><p>3 public cases · 1 fixed · 0 overdue</p></div>
+        </article>
+        <article class="score-card">
+          <div class="score-number"><strong>4</strong><span>/ 10</span></div>
+          <div><h3>Žižkov · Prague 3</h3><p>2 public cases · 0 fixed · 0 overdue</p></div>
+        </article>
+        <article class="score-card">
+          <div class="score-number"><strong>2</strong><span>/ 10</span></div>
+          <div><h3>Smíchov · Prague 5</h3><p>4 public cases · 0 fixed · 2 overdue</p></div>
+        </article>
+      </div>
+      <p class="score-method">METHOD · FIXED 10 · ROUTED 6 · RECEIVED 4 · OVERDUE 2</p>
+    </section>
+
+    <section class="report" id="report">
+      <div class="report-intro">
+        <p class="kicker">Report a problem</p>
+        <h2>Photo. Place. What’s wrong.</h2>
+        <p>Add a photo, pin the place and describe what is happening. We remove photo metadata before review.</p>
+        <div class="privacy-tape">
+          <b>✓ PHOTO METADATA REMOVED</b>
+          <span>PUBLIC ONLY AFTER REVIEW</span>
+          <span>NO ACCOUNT REQUIRED</span>
+        </div>
+      </div>
+
+      <form class="form">
+        <div class="field-row">
+          <label>What is happening?
+            <select>
+              <option>Blocked pavement or wheelchair access</option>
+              <option>Waste and street filth</option>
+              <option>Broken glass</option>
+              <option>Unsafe public space</option>
+              <option>Public intoxication and harassment</option>
+              <option>Night noise and recurring disorder</option>
+              <option>Graffiti</option>
+            </select>
+          </label>
+          <label>Responsible district
+            <select>
+              <option>Prague 8</option>
+              <option>Prague 1</option>
+              <option>Prague 2</option>
+              <option>Prague 3</option>
+              <option>Prague 5</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Street or landmark
+          <input value="Sokolovská, near Invalidovna" aria-label="Street or landmark">
+        </label>
+
+        <div class="route">
+          <div><b>Likely responsible route</b><strong>Prague 8 Municipal District</strong></div>
+          <a href="https://www.praha8.cz/" target="_blank" rel="noreferrer">Open official channel ↗</a>
+          <p>Nahlas suggests the likely route. It does not file an official complaint for you.</p>
+        </div>
+
+        <div class="map-block">
+          <div class="map-head"><b>Pin the exact place</b><span>Drag the pin to adjust</span></div>
+          <div class="map" role="img" aria-label="Map of Prague with a pin in Karlín">
+            <span class="district one">Karlín</span>
+            <span class="district two">Libeň</span>
+            <span class="district three">Žižkov</span>
+            <span class="pin"></span>
+          </div>
+          <div class="map-note"><span>Prague 8 · Karlín</span><span>50.0986, 14.4648</span></div>
+        </div>
+
+        <label>What should the authority know?
+          <textarea>Construction materials have blocked most of the pavement for several days. Wheelchairs and prams have to enter the road to pass.</textarea>
+        </label>
+
+        <div class="field-row">
+          <label class="file-field">Photograph
+            <input type="file" accept="image/jpeg,image/png,image/webp">
+            <small>JPG · PNG · WEBP</small>
+          </label>
+          <label>Email — optional
+            <input type="email" placeholder="For status updates only">
+          </label>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" checked>
+          <span>I confirm that this report documents a public-space problem and does not intentionally identify a private person.</span>
+        </label>
+        <p class="anonymity">Your identity is not published. Exact coordinates are used for routing and shown only at neighborhood-level on public pages.</p>
+        <button class="button button-black submit" type="button">Submit report <span>↗</span></button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#top">NAHLAS<i>.</i></a>
+    <div class="footer-copy">
+      <p>Public evidence without public exposure.</p>
+      <p>© 2026 NAHLAS · PRAGUE</p>
+    </div>
+    <a class="credit" href="https://thinkpool.io">Built with thinkpool.io</a>
+  </footer>
+</body>
+</html>
