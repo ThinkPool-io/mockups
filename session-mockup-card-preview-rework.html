@@ -151,10 +151,12 @@
     }
     .preview-tabs {
       display: flex;
-      min-height: 46px;
+      min-height: 0;
+      flex: none;
+      align-self: stretch;
       align-items: center;
       gap: 5px;
-      margin-bottom: 10px;
+      margin-left: auto;
     }
     .tab {
       min-height: 44px;
@@ -173,13 +175,6 @@
       background: var(--surface);
       color: var(--ink);
     }
-    .dimensions {
-      margin-left: auto;
-      color: var(--faint);
-      font-family: var(--font-mono);
-      font-size: 10px;
-    }
-
     .preview-stage {
       position: relative;
       display: grid;
@@ -435,8 +430,9 @@
       .title { font-size: 12px; }
       .views { font-size: 9px; }
       .preview-shell { padding: 8px; }
-      .preview-tabs { margin-bottom: 7px; }
-      .dimensions { font-size: 9px; }
+      .card-head { gap: 6px; padding: 0 8px; }
+      .title { font-size: 11.5px; }
+      .tab { padding: 0 9px; font-size: 10.5px; }
       .preview-stage { height: 520px; }
       .preview-stage::after {
         right: 8px;
@@ -471,15 +467,13 @@
       <article class="mockup-card" aria-label="Code home · Pair request banner mockup">
         <header class="card-head">
           <div class="title">Code home: Pair request banner</div>
-        </header>
-
-        <div class="preview-shell">
           <div class="preview-tabs" role="group" aria-label="Preview viewport">
             <button class="tab" type="button" data-viewport="desktop" aria-pressed="true">Desktop</button>
             <button class="tab" type="button" data-viewport="mobile" aria-pressed="false">Mobile</button>
-            <span class="dimensions" aria-live="polite">1440 × 900</span>
           </div>
+        </header>
 
+        <div class="preview-shell">
           <button class="preview-stage" type="button" aria-label="Expand desktop preview">
             <div class="capture desktop active" data-capture="desktop">
               <div class="shot">
@@ -561,7 +555,6 @@
     (() => {
       const tabs = [...document.querySelectorAll("[data-viewport]")]
       const stage = document.querySelector(".preview-stage")
-      const dimensions = document.querySelector(".dimensions")
       const dialog = document.querySelector("dialog")
       const close = document.querySelector(".close")
       let selected = matchMedia("(max-width: 600px)").matches ? "mobile" : "desktop"
@@ -570,7 +563,6 @@
         tabs.forEach((tab) => tab.setAttribute("aria-pressed", String(tab.dataset.viewport === selected)))
         document.querySelectorAll("[data-capture]").forEach((capture) => capture.classList.toggle("active", capture.dataset.capture === selected))
         document.querySelectorAll("[data-modal-capture]").forEach((capture) => capture.classList.toggle("active", capture.dataset.modalCapture === selected))
-        dimensions.textContent = selected === "mobile" ? "390 × 844" : "1440 × 900"
         stage.setAttribute("aria-label", `Expand ${selected} preview`)
       }
 
