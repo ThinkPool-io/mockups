@@ -238,6 +238,33 @@
     }
     .route-label { margin-bottom: 10px; color: hsl(140 4% 34%); }
     .route strong { font-family: "Space Grotesk", var(--font-sans); font-size: 22px; }
+    [data-queued-edit] {
+      position: relative;
+      border-radius: 10px;
+      outline: 2px solid hsl(202 79% 60% / .58);
+      outline-offset: 5px;
+      box-shadow: 0 0 0 9px hsl(202 79% 60% / .09);
+    }
+    [data-queued-edit]::after {
+      content: attr(data-queued-edit);
+      position: absolute;
+      z-index: 2;
+      top: -16px;
+      right: -16px;
+      display: grid;
+      width: 22px;
+      height: 22px;
+      place-items: center;
+      border: 2px solid var(--k-panel);
+      border-radius: 50%;
+      background: var(--pool);
+      color: hsl(212 18% 8%);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 2px 8px hsl(212 18% 8% / .25);
+    }
 
     .queue {
       display: flex;
@@ -346,7 +373,7 @@
         <div class="nahla-main">
           <section class="intro">
             <p class="eyebrow">Report a problem</p>
-            <h1>Photo. Place.<br>What’s wrong.</h1>
+            <h1 data-queued-edit="1">Photo. Place.<br>What’s wrong.</h1>
             <p class="intro-copy">Add a photo, pin the place and describe what is happening. We remove photo metadata before review.</p>
             <div class="privacy-card">
               <strong>✓ Photo metadata removed</strong><br>
@@ -369,7 +396,7 @@
                 <label>Street or landmark</label>
                 <div class="input">&nbsp;</div>
               </div>
-              <div class="route">
+              <div class="route" data-queued-edit="2">
                 <div class="route-label">Likely responsible route</div>
                 <strong>Prague 8 Municipal District</strong>
               </div>
@@ -384,7 +411,7 @@
       <div class="queue-chip"><b>1</b><span>Prompt — What Nahlas does</span></div>
       <div class="queue-chip"><b>2</b><span>Prompt — has been abandoned.</span></div>
       <div class="queue-actions">
-        <button class="clear" type="button">Clear all</button>
+        <button class="clear" type="button">Clear</button>
         <button class="apply" type="button">Apply all</button>
       </div>
     </footer>
