@@ -188,6 +188,10 @@
       color: var(--faint);
     }
 
+    .whispers.present {
+      color: var(--partner);
+    }
+
     .whispers.active {
       background: var(--k-panel-14);
       color: var(--partner);
@@ -209,17 +213,6 @@
       stroke-width: 2;
       stroke-linecap: round;
       stroke-linejoin: round;
-    }
-
-    .presence {
-      position: absolute;
-      right: -4px;
-      bottom: -4px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--partner);
-      box-shadow: 0 0 6px var(--partner);
     }
 
     .typing {
@@ -328,8 +321,8 @@
     <div class="intro">
       <div>
         <p class="eyebrow">Mobile chrome · combined Whispers control</p>
-        <h1>One icon, four signals.</h1>
-        <p class="lede">The speech bubble stays geometrically centered. Presence, active viewing, typing, and unread state are overlays—never separate header cells.</p>
+        <h1>One icon, five clear states.</h1>
+        <p class="lede">Presence changes only the speech bubble’s stroke. Viewing adds glow, typing adds dots, and unread adds a count—without rails, outlines, or an external presence dot.</p>
       </div>
       <div class="spec">48px tap target · 22px icon</div>
     </div>
@@ -366,7 +359,7 @@
         <div class="state-copy">
           <div>
             <h2>Partner here</h2>
-            <p>Small cornflower presence dot.</p>
+            <p>The icon stroke turns cornflower. No badge, dot, or layout change.</p>
           </div>
           <span class="state-index">02</span>
         </div>
@@ -378,12 +371,11 @@
             </svg>
           </div>
           <div class="chrome-cell">
-            <div class="whispers">
+            <div class="whispers present">
               <span class="voice-wrap">
                 <svg class="voice-icon" viewBox="0 0.5 24 24">
                   <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
                 </svg>
-                <i class="presence"></i>
               </span>
             </div>
           </div>
@@ -411,7 +403,6 @@
                 <svg class="voice-icon" viewBox="0 0.5 24 24">
                   <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
                 </svg>
-                <i class="presence"></i>
               </span>
             </div>
           </div>
@@ -450,7 +441,7 @@
         <div class="state-copy">
           <div>
             <h2>Unread</h2>
-            <p>Count top-right; presence remains below.</p>
+            <p>Count top-right; session presence remains in the icon stroke.</p>
           </div>
           <span class="state-index">05</span>
         </div>
@@ -462,12 +453,11 @@
             </svg>
           </div>
           <div class="chrome-cell">
-            <div class="whispers">
+            <div class="whispers present">
               <span class="voice-wrap">
                 <svg class="voice-icon" viewBox="0 0.5 24 24">
                   <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
                 </svg>
-                <i class="presence"></i>
               </span>
               <span class="unread">3</span>
             </div>
@@ -476,7 +466,7 @@
       </article>
     </section>
 
-    <p class="note">Recommended system: keep the icon’s center fixed in every state. Presence, typing, and unread badges are absolutely positioned overlays, so the header never shifts and the full 48px cell remains the tap target.</p>
+    <p class="note">Recommended system: grey means absent; cornflower means present; glow means viewing; dots mean typing; the count means unread. The icon’s geometric center and the full 48px tap target remain fixed in every state.</p>
   </main>
 </body>
 </html>
