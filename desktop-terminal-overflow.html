@@ -142,7 +142,7 @@
     }
 
     .open-state .stage {
-      min-height: 294px;
+      min-height: 320px;
       padding-right: 148px;
       padding-left: 148px;
     }
@@ -248,33 +248,56 @@
       position: absolute;
       z-index: 2;
       top: 0;
-      right: 44px;
+      right: 0;
       bottom: 0;
       width: 36px;
       pointer-events: none;
       background: linear-gradient(90deg, transparent, var(--k-bg));
     }
 
-    .more {
+    .stack-control {
       position: relative;
-      z-index: 3;
       display: grid;
-      width: 44px;
+      width: 36px;
       height: 35px;
-      flex: 0 0 44px;
+      flex: 0 0 36px;
       place-items: center;
       border: 0;
       border-left: 1px solid var(--line);
       background: var(--panel-7);
       color: var(--pool);
-      font: 600 10px/1 var(--font-mono);
       cursor: pointer;
     }
 
-    .more.open {
+    .stack-control.open {
       background: var(--panel-14);
       color: var(--ink);
       box-shadow: inset 0 -2px 0 var(--pool);
+    }
+
+    .stack-icon {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+    }
+
+    .hidden-count {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      display: grid;
+      min-width: 12px;
+      height: 12px;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--pool);
+      color: var(--k-bg);
+      font-size: 7px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .meta {
@@ -394,6 +417,21 @@
 
     .menu-item.active .state-label { color: var(--pool); }
 
+    .menu-item.new-terminal {
+      border-top: 1px solid var(--line);
+      color: var(--pool);
+      font-weight: 500;
+    }
+
+    .menu-plus {
+      display: grid;
+      width: 12px;
+      flex: 0 0 12px;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
     .note {
       margin: 15px 0 0;
       padding: 10px 12px;
@@ -424,21 +462,20 @@
       .state.open-state { grid-column: auto; }
       .state-copy { min-height: 48px; padding: 7px 9px; }
       .stage {
-        min-height: 76px;
-        padding: 18px 8px 20px;
+        min-height: 62px;
+        padding: 12px 8px;
       }
       .open-state .stage {
-        min-height: 242px;
+        min-height: 270px;
         padding: 18px 8px 20px;
       }
       .session { display: none; }
       .meta { width: 33px; flex-basis: 33px; }
       .tab { padding: 0 5px; font-size: 9px; }
       .tab span:last-child { max-width: 13ch; }
-      .more { width: 42px; flex-basis: 42px; }
       .menu { top: 42px; right: 66px; width: min(244px, calc(100% - 76px)); }
       .menu-head { padding-top: 7px; padding-bottom: 6px; }
-      .menu-item { height: 29px; }
+      .menu-item { height: 26px; }
       .note { margin-top: 10px; font-size: 9px; }
     }
   </style>
@@ -449,7 +486,7 @@
       <div>
         <p class="eyebrow">Desktop chrome · terminal overflow</p>
         <h1>Keep the row. Reveal what’s hidden.</h1>
-        <p class="lede">The overflow control appears only when the tab strip is clipped. It stays inside the tab region, while the existing square plus remains the unmistakable “new terminal” action.</p>
+        <p class="lede">The fixed square control is “new terminal” while tabs fit. When the strip clips, that same slot becomes the terminal-list control and “New terminal” moves into its popup.</p>
       </div>
       <div class="spec">Measured overflow · no count threshold</div>
     </header>
@@ -486,7 +523,7 @@
         <div class="state-copy">
           <div>
             <h2>Tabs overflow</h2>
-            <p>A pinned collapsed-tab pill reports exactly how many terminals are hidden.</p>
+            <p>The fixed plus cell becomes a stacked-terminals button with a hidden-count badge.</p>
           </div>
           <span class="state-index">02</span>
         </div>
@@ -497,9 +534,14 @@
               <div class="tab"><i class="status done">✓</i><span>CodeRabbit</span></div>
               <div class="tab"><i class="status idle"></i><span>Protect thinkpool</span></div>
               <div class="fade"></div>
-              <button class="more" type="button" aria-label="Show 3 more terminals">+3</button>
             </div>
-            <span class="meta" title="New terminal">+</span>
+            <button class="stack-control" type="button" aria-label="Show all terminals, 3 hidden">
+              <svg class="stack-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="5" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.4" fill="currentColor" stroke="none"/>
+                <path d="M9 6h11M9 12h8M9 18h10"/>
+              </svg>
+              <span class="hidden-count">3</span>
+            </button>
             <span class="session"><b>NAHLAS</b><span>with</span><em>Conrad</em></span>
             <span class="meta">
               <svg class="voice-icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
@@ -526,9 +568,14 @@
               <div class="tab"><i class="status done">✓</i><span>CodeRabbit</span></div>
               <div class="tab"><i class="status idle"></i><span>Protect thinkpool</span></div>
               <div class="fade"></div>
-              <button class="more open" type="button" aria-expanded="true">+3</button>
             </div>
-            <span class="meta" title="New terminal">+</span>
+            <button class="stack-control open" type="button" aria-label="Close terminal list, 3 hidden" aria-expanded="true">
+              <svg class="stack-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="5" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.4" fill="currentColor" stroke="none"/>
+                <path d="M9 6h11M9 12h8M9 18h10"/>
+              </svg>
+              <span class="hidden-count">3</span>
+            </button>
             <span class="session"><b>NAHLAS</b><span>with</span><em>Conrad</em></span>
             <span class="meta">
               <svg class="voice-icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
@@ -545,13 +592,14 @@
               <button class="menu-item" role="menuitem"><i class="status spin"></i><span class="name">Polish thinkpool</span><span class="state-label">Working</span></button>
               <button class="menu-item" role="menuitem"><i class="status waiting"></i><span class="name">Mallorca Weekend</span><span class="state-label">Waiting</span></button>
               <button class="menu-item" role="menuitem"><i class="status idle"></i><span class="name">PRIMORDIAL PIVOT</span><span class="state-label">Idle</span></button>
+              <button class="menu-item new-terminal" role="menuitem"><span class="menu-plus">+</span><span class="name">New terminal</span></button>
             </div>
           </div>
         </div>
       </article>
     </section>
 
-    <p class="note">Recommended behavior: render `+N` only when `scrollWidth &gt; clientWidth`; N is the number of terminals fully hidden beyond the visible strip. The row remains horizontally scrollable, and the menu is a discovery shortcut—not a second source of terminal state.</p>
+    <p class="note">Recommended behavior: keep one fixed 36px control. It is `+` while every tab fits; on measured overflow it becomes the stacked-terminals icon with N hidden. The popup owns both terminal discovery and the relocated “New terminal” action.</p>
   </main>
 </body>
 </html>
