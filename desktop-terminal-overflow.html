@@ -413,7 +413,7 @@
     @media (max-width: 700px) {
       main {
         width: 100%;
-        padding: 20px 12px 26px;
+        padding: 20px 12px 8px;
       }
 
       .intro { display: block; margin-bottom: 14px; }
@@ -423,18 +423,22 @@
       .grid { grid-template-columns: 1fr; gap: 9px; }
       .state.open-state { grid-column: auto; }
       .state-copy { min-height: 48px; padding: 7px 9px; }
-      .stage,
-      .open-state .stage {
-        min-height: 138px;
-        padding: 28px 8px 34px;
+      .stage {
+        min-height: 76px;
+        padding: 18px 8px 20px;
       }
-      .open-state .stage { min-height: 294px; }
+      .open-state .stage {
+        min-height: 242px;
+        padding: 18px 8px 20px;
+      }
       .session { display: none; }
       .meta { width: 33px; flex-basis: 33px; }
       .tab { padding: 0 5px; font-size: 9px; }
       .tab span:last-child { max-width: 13ch; }
       .more { width: 42px; flex-basis: 42px; }
       .menu { top: 42px; right: 66px; width: min(244px, calc(100% - 76px)); }
+      .menu-head { padding-top: 7px; padding-bottom: 6px; }
+      .menu-item { height: 29px; }
       .note { margin-top: 10px; font-size: 9px; }
     }
   </style>
