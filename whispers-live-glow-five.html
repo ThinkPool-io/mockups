@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool — Whispers live-presence glow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --k-bg: #0a0d10;
+    --k-panel-7: hsl(212 13% 7%);
+    --k-panel-10: hsl(212 13% 10%);
+    --line: hsl(212 7% 21%);
+    --line-soft: color-mix(in oklab, var(--line) 60%, transparent);
+    --ink: hsl(212 14% 95%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --partner: hsl(218 60% 72%);
+    --partner-hi: hsl(218 72% 80%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--k-bg); color: var(--ink); }
+  body { font-family: var(--font-sans); padding: 32px 24px 44px; }
+
+  .intro {
+    max-width: 1120px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(18px, 2.2vw, 26px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  .sub {
+    margin: 7px 0 0;
+    max-width: 680px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.55;
+  }
+  .legend {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--partner);
+  }
+
+  .grid {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .card {
+    min-width: 0;
+    border: 1px solid var(--line-soft);
+    background: var(--k-panel-7);
+  }
+  .card:last-child { grid-column: 1 / -1; }
+  .card-copy {
+    min-height: 72px;
+    padding: 14px 16px 13px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .card-title {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--font-mono);
+  }
+  .number {
+    color: var(--partner);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  h2 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .desc {
+    margin: 5px 0 0 30px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.45;
+  }
+
+  .chrome {
+    position: relative;
+    height: 92px;
+    display: flex;
+    align-items: flex-end;
+    background: var(--k-bg);
+    overflow: hidden;
+  }
+  .top-row {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid color-mix(in oklab, var(--line) 30%, transparent);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .term {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 17px;
+  }
+  .term-dot {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    border-radius: 50%;
+    background: hsl(152 40% 58%);
+    box-shadow: 0 0 8px hsl(152 40% 58% / 0.65);
+  }
+  .initial {
+    align-self: center;
+    display: grid;
+    width: 29px;
+    height: 29px;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--partner) 52%, transparent);
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--partner) 12%, transparent);
+    color: var(--partner);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .control {
+    position: relative;
+    isolation: isolate;
+    width: 64px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-left: 1px solid var(--line-soft);
+    color: var(--partner);
+  }
+  .control.gear { color: var(--faint); border-right: 1px solid var(--line-soft); }
+  .icon {
+    position: relative;
+    z-index: 2;
+    width: 27px;
+    height: 27px;
+    overflow: visible;
+  }
+  .icon path,
+  .icon circle {
+    vector-effect: non-scaling-stroke;
+  }
+  .icon path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon circle { fill: currentColor; }
+
+  .v1 .icon {
+    color: var(--partner-hi);
+    filter:
+      drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 95%, transparent))
+      drop-shadow(0 0 9px color-mix(in oklab, var(--partner) 58%, transparent));
+  }
+  .v1::before {
+    content: "";
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklab, var(--partner) 20%, transparent), transparent 68%);
+  }
+
+  .v2::before {
+    content: "";
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 9px;
+    background: color-mix(in oklab, var(--partner) 13%, var(--k-bg));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, var(--partner) 28%, transparent),
+      0 0 14px color-mix(in oklab, var(--partner) 22%, transparent);
+  }
+  .v2 .icon {
+    color: var(--partner-hi);
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--partner) 68%, transparent));
+  }
+
+  .v3::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 8px;
+    border: 1px solid color-mix(in oklab, var(--partner) 48%, transparent);
+    box-shadow:
+      inset 0 0 12px color-mix(in oklab, var(--partner) 13%, transparent),
+      0 0 10px color-mix(in oklab, var(--partner) 24%, transparent);
+  }
+  .v3 .icon {
+    color: var(--partner-hi);
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--partner) 82%, transparent));
+  }
+
+  .v4::before,
+  .v4::after {
+    content: "";
+    position: absolute;
+    border: 1px solid color-mix(in oklab, var(--partner) 40%, transparent);
+    border-radius: 50%;
+  }
+  .v4::before {
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 12px color-mix(in oklab, var(--partner) 24%, transparent);
+  }
+  .v4::after {
+    width: 51px;
+    height: 51px;
+    border-color: color-mix(in oklab, var(--partner) 18%, transparent);
+  }
+  .v4 .icon {
+    color: var(--partner-hi);
+    filter:
+      drop-shadow(0 0 4px var(--partner))
+      drop-shadow(0 0 10px color-mix(in oklab, var(--partner) 46%, transparent));
+  }
+
+  .v5 {
+    background:
+      radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--partner) 18%, transparent) 0 20%, transparent 64%);
+    box-shadow:
+      inset 0 -2px 0 color-mix(in oklab, var(--partner) 72%, transparent),
+      inset 0 0 22px color-mix(in oklab, var(--partner) 11%, transparent);
+  }
+  .v5 .icon {
+    color: var(--partner-hi);
+    filter:
+      drop-shadow(0 0 2px var(--partner))
+      drop-shadow(0 0 8px color-mix(in oklab, var(--partner) 82%, transparent))
+      drop-shadow(0 0 16px color-mix(in oklab, var(--partner) 42%, transparent));
+  }
+
+  .footer {
+    max-width: 1120px;
+    margin: 22px auto 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    body { padding: 22px 14px 32px; }
+    .intro { display: block; margin-bottom: 18px; }
+    .legend { margin-top: 10px; }
+    .grid { grid-template-columns: 1fr; gap: 12px; }
+    .card:last-child { grid-column: auto; }
+    .card-copy { min-height: 0; }
+    .chrome { height: 86px; }
+    .top-row { height: 60px; }
+    .term { padding-left: 14px; font-size: 16px; }
+    .control { width: 58px; }
+    .desc { margin-left: 29px; }
+  }
+</style>
+</head>
+<body>
+  <header class="intro">
+    <div>
+      <h1>Whispers · live presence</h1>
+      <p class="sub">Five stronger treatments for “your partner is live in this session.” Icon geometry and top-row spacing stay unchanged.</p>
+    </div>
+    <div class="legend">Partner active · Side chat closed</div>
+  </header>
+
+  <main class="grid">
+    <article class="card">
+      <div class="card-copy">
+        <div class="card-title"><span class="number">01</span><h2>Soft halo</h2></div>
+        <p class="desc">Brighter icon plus a restrained circular bloom. Minimal change.</p>
+      </div>
+      <div class="chrome"><div class="top-row">
+        <div class="term"><span class="term-dot"></span><span>T32</span></div>
+        <span class="initial">C</span>
+        <div class="control v1" aria-label="Whispers, partner active">
+          <svg class="icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>
+        </div>
+        <div class="control gear" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1A1.7 1.7 0 0 0 8.4 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-.6-1A1.7 1.7 0 0 0 2.3 13.6H2V9.5h.3A1.7 1.7 0 0 0 4 8.4a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.46 3.6l.06.06A1.7 1.7 0 0 0 8.4 4a1.7 1.7 0 0 0 1-.6A1.7 1.7 0 0 0 9.8 2.3V2h4.1v.3A1.7 1.7 0 0 0 15 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.4 8.4a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4.1h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+        </div>
+      </div></div>
+    </article>
+
+    <article class="card">
+      <div class="card-copy">
+        <div class="card-title"><span class="number">02</span><h2>Live tile</h2></div>
+        <p class="desc">Quiet Cornflower backplate makes presence persist at a glance.</p>
+      </div>
+      <div class="chrome"><div class="top-row">
+        <div class="term"><span class="term-dot"></span><span>T32</span></div>
+        <span class="initial">C</span>
+        <div class="control v2" aria-label="Whispers, partner active">
+          <svg class="icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>
+        </div>
+        <div class="control gear" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1A1.7 1.7 0 0 0 8.4 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-.6-1A1.7 1.7 0 0 0 2.3 13.6H2V9.5h.3A1.7 1.7 0 0 0 4 8.4a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.46 3.6l.06.06A1.7 1.7 0 0 0 8.4 4a1.7 1.7 0 0 0 1-.6A1.7 1.7 0 0 0 9.8 2.3V2h4.1v.3A1.7 1.7 0 0 0 15 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.4 8.4a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4.1h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
+      </div></div>
+    </article>
+
+    <article class="card">
+      <div class="card-copy">
+        <div class="card-title"><span class="number">03</span><h2>Edge glow</h2></div>
+        <p class="desc">A glowing control outline reads as live without looking selected.</p>
+      </div>
+      <div class="chrome"><div class="top-row">
+        <div class="term"><span class="term-dot"></span><span>T32</span></div>
+        <span class="initial">C</span>
+        <div class="control v3" aria-label="Whispers, partner active">
+          <svg class="icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>
+        </div>
+        <div class="control gear" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1A1.7 1.7 0 0 0 8.4 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-.6-1A1.7 1.7 0 0 0 2.3 13.6H2V9.5h.3A1.7 1.7 0 0 0 4 8.4a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.46 3.6l.06.06A1.7 1.7 0 0 0 8.4 4a1.7 1.7 0 0 0 1-.6A1.7 1.7 0 0 0 9.8 2.3V2h4.1v.3A1.7 1.7 0 0 0 15 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.4 8.4a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4.1h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
+      </div></div>
+    </article>
+
+    <article class="card">
+      <div class="card-copy">
+        <div class="card-title"><span class="number">04</span><h2>Presence rings</h2></div>
+        <p class="desc">Two quiet echoes make “someone is here” the clearest state.</p>
+      </div>
+      <div class="chrome"><div class="top-row">
+        <div class="term"><span class="term-dot"></span><span>T32</span></div>
+        <span class="initial">C</span>
+        <div class="control v4" aria-label="Whispers, partner active">
+          <svg class="icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>
+        </div>
+        <div class="control gear" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1A1.7 1.7 0 0 0 8.4 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-.6-1A1.7 1.7 0 0 0 2.3 13.6H2V9.5h.3A1.7 1.7 0 0 0 4 8.4a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.46 3.6l.06.06A1.7 1.7 0 0 0 8.4 4a1.7 1.7 0 0 0 1-.6A1.7 1.7 0 0 0 9.8 2.3V2h4.1v.3A1.7 1.7 0 0 0 15 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.4 8.4a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4.1h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
+      </div></div>
+    </article>
+
+    <article class="card">
+      <div class="card-copy">
+        <div class="card-title"><span class="number">05</span><h2>Signal bloom</h2></div>
+        <p class="desc">Strongest option: broad aura, bright icon, and a lit cell edge.</p>
+      </div>
+      <div class="chrome"><div class="top-row">
+        <div class="term"><span class="term-dot"></span><span>T32</span></div>
+        <span class="initial">C</span>
+        <div class="control v5" aria-label="Whispers, partner active">
+          <svg class="icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg>
+        </div>
+        <div class="control gear" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21H9.5v-.1A1.7 1.7 0 0 0 8.4 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4 15a1.7 1.7 0 0 0-.6-1A1.7 1.7 0 0 0 2.3 13.6H2V9.5h.3A1.7 1.7 0 0 0 4 8.4a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.46 3.6l.06.06A1.7 1.7 0 0 0 8.4 4a1.7 1.7 0 0 0 1-.6A1.7 1.7 0 0 0 9.8 2.3V2h4.1v.3A1.7 1.7 0 0 0 15 4a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06-.06A1.7 1.7 0 0 0 19.4 8.4a1.7 1.7 0 0 0 .6 1 1.7 1.7 0 0 0 1.1.4h.1v4.1h-.1A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
+      </div></div>
+    </article>
+  </main>
+
+  <p class="footer">All five use the shipped Cornflower partner identity. No dots or rails were added, so presence stays distinct from terminal status and selection.</p>
+</body>
+</html>
