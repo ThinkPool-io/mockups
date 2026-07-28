@@ -417,6 +417,21 @@
 
     .menu-item.active .state-label { color: var(--pool); }
 
+    .partner-chip {
+      display: grid;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--partner) 48%, transparent);
+      border-radius: 4px;
+      background: color-mix(in oklab, var(--partner) 16%, transparent);
+      color: var(--partner);
+      font-size: 8.5px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
     .menu-item.new-terminal {
       border-top: 1px solid var(--line);
       color: var(--pool);
@@ -557,7 +572,7 @@
         <div class="state-copy">
           <div>
             <h2>Terminal list open</h2>
-            <p>The same status language appears in a compact, keyboard-navigable menu. Selecting a row switches and scrolls its tab into view.</p>
+            <p>The compact menu preserves agent state and shows the partner’s initial on the terminal they are actively viewing.</p>
           </div>
           <span class="state-index">03</span>
         </div>
@@ -589,7 +604,7 @@
               <button class="menu-item active" role="menuitem"><i class="status"></i><span class="name">Contacts</span><span class="state-label">Current</span></button>
               <button class="menu-item" role="menuitem"><i class="status done">✓</i><span class="name">CodeRabbit</span><span class="state-label">Done</span></button>
               <button class="menu-item" role="menuitem"><i class="status idle"></i><span class="name">Protect thinkpool</span><span class="state-label">Idle</span></button>
-              <button class="menu-item" role="menuitem"><i class="status spin"></i><span class="name">Polish thinkpool</span><span class="state-label">Working</span></button>
+              <button class="menu-item" role="menuitem"><i class="status spin"></i><span class="name">Polish thinkpool</span><span class="partner-chip" title="Conrad is viewing this terminal" aria-label="Conrad is viewing this terminal">C</span><span class="state-label">Working</span></button>
               <button class="menu-item" role="menuitem"><i class="status waiting"></i><span class="name">Mallorca Weekend</span><span class="state-label">Waiting</span></button>
               <button class="menu-item" role="menuitem"><i class="status idle"></i><span class="name">PRIMORDIAL PIVOT</span><span class="state-label">Idle</span></button>
               <button class="menu-item new-terminal" role="menuitem"><span class="menu-plus">+</span><span class="name">New terminal</span></button>
