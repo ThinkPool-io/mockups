@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>thinkpool — desktop terminal overflow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: #0a0d10;
+      --panel-7: hsl(212 13% 7%);
+      --panel-8: hsl(212 13% 8%);
+      --panel-14: hsl(212 14% 8%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --positive: hsl(152 40% 58%);
+      --caution: hsl(48 86% 60%);
+      --partner: hsl(218 60% 72%);
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -12%, hsl(201 78% 64% / 0.06), transparent 36rem),
+        var(--k-bg);
+      color: var(--ink);
+      font-family: var(--font-mono);
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .spec {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      color: var(--faint);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .state {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--panel-7);
+    }
+
+    .state.open-state {
+      grid-column: 1 / -1;
+    }
+
+    .state-copy {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 11px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .state-copy h2 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .state-copy p {
+      margin: 4px 0 0;
+      color: var(--faint);
+      font-size: 8.5px;
+      line-height: 1.4;
+    }
+
+    .state-index {
+      flex: 0 0 auto;
+      color: var(--partner);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
+    .stage {
+      min-height: 148px;
+      padding: 34px 12px 42px;
+      background: var(--k-bg);
+    }
+
+    .open-state .stage {
+      min-height: 294px;
+      padding-right: 148px;
+      padding-left: 148px;
+    }
+
+    .chrome {
+      position: relative;
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      height: 37px;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      background: var(--k-bg);
+    }
+
+    .tabs {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: stretch;
+      overflow: hidden;
+      padding-left: 6px;
+    }
+
+    .tab {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      flex: 0 1 auto;
+      align-items: center;
+      gap: 7px;
+      padding: 0 7px;
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .tab span:last-child {
+      min-width: 0;
+      max-width: 19ch;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tab.active {
+      color: var(--ink);
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      right: 6px;
+      bottom: 0;
+      left: 6px;
+      height: 2px;
+      background: var(--pool);
+      box-shadow: 0 0 6px color-mix(in oklab, var(--pool) 60%, transparent);
+    }
+
+    .status {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 5px var(--positive);
+    }
+
+    .status.waiting {
+      background: var(--caution);
+      box-shadow: 0 0 5px color-mix(in oklab, var(--caution) 65%, transparent);
+    }
+
+    .status.idle {
+      background: transparent;
+      border: 1px solid var(--line-strong);
+      box-shadow: none;
+    }
+
+    .status.spin {
+      width: 11px;
+      height: 11px;
+      border: 1.5px solid color-mix(in oklab, var(--pool) 25%, transparent);
+      border-top-color: var(--pool);
+      animation: spin 1s linear infinite;
+    }
+
+    .status.done {
+      display: grid;
+      width: 12px;
+      height: 12px;
+      place-items: center;
+      border-radius: 0;
+      background: none;
+      color: var(--positive);
+      box-shadow: none;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .fade {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      right: 44px;
+      bottom: 0;
+      width: 36px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, var(--k-bg));
+    }
+
+    .more {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      width: 44px;
+      height: 35px;
+      flex: 0 0 44px;
+      place-items: center;
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: var(--panel-7);
+      color: var(--pool);
+      font: 600 10px/1 var(--font-mono);
+      cursor: pointer;
+    }
+
+    .more.open {
+      background: var(--panel-14);
+      color: var(--ink);
+      box-shadow: inset 0 -2px 0 var(--pool);
+    }
+
+    .meta {
+      display: grid;
+      width: 36px;
+      height: 35px;
+      flex: 0 0 36px;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 18px;
+    }
+
+    .session {
+      display: flex;
+      height: 35px;
+      max-width: 198px;
+      flex: 0 1 198px;
+      align-items: center;
+      gap: 5px;
+      padding: 0 10px;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .session b {
+      color: var(--pool);
+      font-weight: 600;
+    }
+
+    .session em {
+      max-width: 72px;
+      overflow: hidden;
+      color: var(--partner);
+      font-style: normal;
+      text-overflow: ellipsis;
+    }
+
+    .voice-icon,
+    .gear {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .menu {
+      position: absolute;
+      z-index: 10;
+      top: 42px;
+      right: 270px;
+      width: 244px;
+      overflow: hidden;
+      border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+      border-radius: 8px;
+      background: var(--panel-8);
+      box-shadow: 0 24px 64px -20px hsl(0 0% 0% / 0.7);
+    }
+
+    .menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 11px 7px;
+      border-bottom: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 9px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .menu-head span:last-child {
+      color: var(--pool);
+      letter-spacing: 0;
+    }
+
+    .menu-item {
+      display: flex;
+      width: 100%;
+      height: 35px;
+      align-items: center;
+      gap: 9px;
+      padding: 0 11px;
+      border: 0;
+      border-bottom: 1px solid color-mix(in oklab, var(--line) 45%, transparent);
+      background: transparent;
+      color: var(--ink);
+      font: 400 11px/1 var(--font-mono);
+      text-align: left;
+    }
+
+    .menu-item:last-child { border-bottom: 0; }
+
+    .menu-item.active {
+      background: color-mix(in oklab, var(--pool) 9%, transparent);
+      color: var(--pool);
+    }
+
+    .menu-item .name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .menu-item .state-label {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 8px;
+    }
+
+    .menu-item.active .state-label { color: var(--pool); }
+
+    .note {
+      margin: 15px 0 0;
+      padding: 10px 12px;
+      border-left: 2px solid var(--pool);
+      background: color-mix(in oklab, var(--pool) 5%, var(--panel-7));
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .status.spin { animation: none; }
+    }
+
+    @media (max-width: 700px) {
+      main {
+        width: 100%;
+        padding: 20px 12px 26px;
+      }
+
+      .intro { display: block; margin-bottom: 14px; }
+      .spec { display: none; }
+      h1 { font-size: 20px; }
+      .lede { font-size: 10px; line-height: 1.55; }
+      .grid { grid-template-columns: 1fr; gap: 9px; }
+      .state.open-state { grid-column: auto; }
+      .state-copy { min-height: 48px; padding: 7px 9px; }
+      .stage,
+      .open-state .stage {
+        min-height: 138px;
+        padding: 28px 8px 34px;
+      }
+      .open-state .stage { min-height: 294px; }
+      .session { display: none; }
+      .meta { width: 33px; flex-basis: 33px; }
+      .tab { padding: 0 5px; font-size: 9px; }
+      .tab span:last-child { max-width: 13ch; }
+      .more { width: 42px; flex-basis: 42px; }
+      .menu { top: 42px; right: 66px; width: min(244px, calc(100% - 76px)); }
+      .note { margin-top: 10px; font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Desktop chrome · terminal overflow</p>
+        <h1>Keep the row. Reveal what’s hidden.</h1>
+        <p class="lede">The overflow control appears only when the tab strip is clipped. It stays inside the tab region, while the existing square plus remains the unmistakable “new terminal” action.</p>
+      </div>
+      <div class="spec">Measured overflow · no count threshold</div>
+    </header>
+
+    <section class="grid" aria-label="Desktop terminal overflow states">
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Everything fits</h2>
+            <p>No overflow affordance. The existing row remains unchanged.</p>
+          </div>
+          <span class="state-index">01</span>
+        </div>
+        <div class="stage">
+          <div class="chrome">
+            <div class="tabs">
+              <div class="tab active"><i class="status"></i><span>Contacts</span></div>
+              <div class="tab"><i class="status done">✓</i><span>CodeRabbit</span></div>
+              <div class="tab"><i class="status idle"></i><span>Protect thinkpool</span></div>
+            </div>
+            <span class="meta" title="New terminal">+</span>
+            <span class="session"><b>NAHLAS</b><span>with</span><em>Conrad</em></span>
+            <span class="meta">
+              <svg class="voice-icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <span class="meta">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Tabs overflow</h2>
+            <p>A pinned collapsed-tab pill reports exactly how many terminals are hidden.</p>
+          </div>
+          <span class="state-index">02</span>
+        </div>
+        <div class="stage">
+          <div class="chrome">
+            <div class="tabs">
+              <div class="tab active"><i class="status"></i><span>Contacts</span></div>
+              <div class="tab"><i class="status done">✓</i><span>CodeRabbit</span></div>
+              <div class="tab"><i class="status idle"></i><span>Protect thinkpool</span></div>
+              <div class="fade"></div>
+              <button class="more" type="button" aria-label="Show 3 more terminals">+3</button>
+            </div>
+            <span class="meta" title="New terminal">+</span>
+            <span class="session"><b>NAHLAS</b><span>with</span><em>Conrad</em></span>
+            <span class="meta">
+              <svg class="voice-icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <span class="meta">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <article class="state open-state">
+        <div class="state-copy">
+          <div>
+            <h2>Terminal list open</h2>
+            <p>The same status language appears in a compact, keyboard-navigable menu. Selecting a row switches and scrolls its tab into view.</p>
+          </div>
+          <span class="state-index">03</span>
+        </div>
+        <div class="stage">
+          <div class="chrome">
+            <div class="tabs">
+              <div class="tab active"><i class="status"></i><span>Contacts</span></div>
+              <div class="tab"><i class="status done">✓</i><span>CodeRabbit</span></div>
+              <div class="tab"><i class="status idle"></i><span>Protect thinkpool</span></div>
+              <div class="fade"></div>
+              <button class="more open" type="button" aria-expanded="true">+3</button>
+            </div>
+            <span class="meta" title="New terminal">+</span>
+            <span class="session"><b>NAHLAS</b><span>with</span><em>Conrad</em></span>
+            <span class="meta">
+              <svg class="voice-icon" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <span class="meta">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+            </span>
+
+            <div class="menu" role="menu" aria-label="All terminals">
+              <div class="menu-head"><span>All terminals</span><span>6</span></div>
+              <button class="menu-item active" role="menuitem"><i class="status"></i><span class="name">Contacts</span><span class="state-label">Current</span></button>
+              <button class="menu-item" role="menuitem"><i class="status done">✓</i><span class="name">CodeRabbit</span><span class="state-label">Done</span></button>
+              <button class="menu-item" role="menuitem"><i class="status idle"></i><span class="name">Protect thinkpool</span><span class="state-label">Idle</span></button>
+              <button class="menu-item" role="menuitem"><i class="status spin"></i><span class="name">Polish thinkpool</span><span class="state-label">Working</span></button>
+              <button class="menu-item" role="menuitem"><i class="status waiting"></i><span class="name">Mallorca Weekend</span><span class="state-label">Waiting</span></button>
+              <button class="menu-item" role="menuitem"><i class="status idle"></i><span class="name">PRIMORDIAL PIVOT</span><span class="state-label">Idle</span></button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="note">Recommended behavior: render `+N` only when `scrollWidth &gt; clientWidth`; N is the number of terminals fully hidden beyond the visible strip. The row remains horizontally scrollable, and the menu is a discovery shortcut—not a second source of terminal state.</p>
+  </main>
+</body>
+</html>
