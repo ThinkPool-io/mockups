@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool — visual editing feature naming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-cobalt: #1A6EF4;
+    --agent: hsl(201 78% 64%);
+    --run: #3ad07f;
+    --partner: hsl(218 60% 72%);
+    --font-display: "Newsreader", Georgia, serif;
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    min-width: 320px;
+    margin: 0;
+    background:
+      radial-gradient(circle at 50% -8%, color-mix(in oklab, var(--pool-cobalt) 9%, transparent), transparent 31rem),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  .shell {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 64px 0 72px;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+  }
+
+  .wordmark span { color: var(--pool-cobalt); }
+
+  header {
+    padding: 48px 0 56px;
+    text-align: center;
+  }
+
+  .eyebrow,
+  .option-number,
+  .feature-name,
+  .context-label,
+  .recommendation {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
+
+  .eyebrow {
+    color: var(--faint);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+  }
+
+  h1 {
+    max-width: 760px;
+    margin: 18px auto 0;
+    font-family: var(--font-display);
+    font-size: clamp(42px, 6vw, 68px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .intro {
+    max-width: 660px;
+    margin: 20px auto 0;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .options {
+    display: grid;
+    gap: 24px;
+  }
+
+  .option {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--raised);
+  }
+
+  .option-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .option-id {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .option-number {
+    color: var(--faint);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+
+  .option-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink-soft);
+  }
+
+  .recommendation {
+    border: 1px solid color-mix(in oklab, var(--pool-cobalt) 45%, var(--line));
+    border-radius: 999px;
+    padding: 5px 9px;
+    color: var(--pool);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
+  }
+
+  .feature {
+    min-height: 224px;
+    padding: 25px 26px 27px;
+    background: var(--bg);
+  }
+
+  .feature.proposed {
+    background:
+      linear-gradient(180deg, color-mix(in oklab, var(--pool-cobalt) 5%, var(--bg)), var(--bg));
+    box-shadow: inset 0 2px 0 color-mix(in oklab, var(--pool-cobalt) 72%, transparent);
+  }
+
+  .feature-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--accent);
+  }
+
+  .icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
+
+  .feature-name {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+  }
+
+  h2 {
+    margin: 18px 0 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.16;
+    letter-spacing: -0.015em;
+  }
+
+  .feature p {
+    margin: 13px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .context-label {
+    margin: 30px 0 12px;
+    color: var(--faint);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-align: center;
+  }
+
+  footer {
+    margin-top: 40px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    .shell {
+      width: min(100% - 28px, 520px);
+      padding: 28px 0 48px;
+    }
+
+    header { padding: 44px 4px 40px; }
+    h1 { font-size: 42px; }
+    .intro { font-size: 15px; }
+    .option-head { align-items: flex-start; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .feature { min-height: auto; padding: 23px 22px 25px; }
+    .feature:not(.proposed) { display: none; }
+    h2 { font-size: 24px; }
+    .context-label { margin-top: 24px; }
+  }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <div class="wordmark" aria-label="thinkpool">think<span>pool</span></div>
+
+    <header>
+      <div class="eyebrow">Landing copy direction</div>
+      <h1>What should the visual editing loop be called?</h1>
+      <p class="intro">
+        Five names that explain the feature before a visitor knows thinkpool’s vocabulary.
+        Each direction is shown in the real Cascade and Review card context.
+      </p>
+    </header>
+
+    <div class="options">
+      <section class="option">
+        <div class="option-head">
+          <div class="option-id">
+            <span class="option-number">01</span>
+            <span class="option-name">Direct and immediately clear</span>
+          </div>
+          <span class="recommendation">Recommended</span>
+        </div>
+        <div class="feature-grid">
+          <article class="feature" style="--accent: var(--agent)">
+            <div class="feature-top">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><path d="M4 7h10M4 17h16M14 7l3-3m-3 3 3 3M10 17l-3-3m3 3-3 3"/></svg>
+              </span>
+              <span class="feature-name">Cascade</span>
+            </div>
+            <h2>Split the work. Keep control.</h2>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="feature" style="--accent: var(--run)">
+            <div class="feature-top">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg>
+              </span>
+              <span class="feature-name">Review</span>
+            </div>
+            <h2>Make every result prove itself.</h2>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="feature proposed" style="--accent: var(--partner)">
+            <div class="feature-top">
+              <span class="icon">
+                <svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              </span>
+              <span class="feature-name">Visual edit</span>
+            </div>
+            <h2>Edit the interface your agents built.</h2>
+            <p>Open a verified preview, select an element on the page, and request the change. The coding lane updates the real source, rebuilds it, and returns fresh desktop and mobile proof.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-head">
+          <div class="option-id">
+            <span class="option-number">02</span>
+            <span class="option-name">Familiar product category</span>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature" style="--accent: var(--agent)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 17h16M14 7l3-3m-3 3 3 3M10 17l-3-3m3 3-3 3"/></svg></span><span class="feature-name">Cascade</span></div>
+            <h2>Split the work. Keep control.</h2>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="feature" style="--accent: var(--run)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><span class="feature-name">Review</span></div>
+            <h2>Make every result prove itself.</h2>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="feature proposed" style="--accent: var(--partner)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><span class="feature-name">Preview editor</span></div>
+            <h2>Turn the working preview into an editor.</h2>
+            <p>Select the rendered interface, change copy or layout, and apply the batch. thinkpool sends the edits back to code and returns a newly verified preview.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-head">
+          <div class="option-id">
+            <span class="option-number">03</span>
+            <span class="option-name">Most ownable product noun</span>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature" style="--accent: var(--agent)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 17h16M14 7l3-3m-3 3 3 3M10 17l-3-3m3 3-3 3"/></svg></span><span class="feature-name">Cascade</span></div>
+            <h2>Split the work. Keep control.</h2>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="feature" style="--accent: var(--run)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><span class="feature-name">Review</span></div>
+            <h2>Make every result prove itself.</h2>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="feature proposed" style="--accent: var(--partner)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><span class="feature-name">Build canvas</span></div>
+            <h2>Shape the working build on canvas.</h2>
+            <p>Open the latest preview, point to what should change, and refine it visually. Every applied edit returns to the coding agent and comes back as a rebuilt interface.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-head">
+          <div class="option-id">
+            <span class="option-number">04</span>
+            <span class="option-name">Most human and action-led</span>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature" style="--accent: var(--agent)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 17h16M14 7l3-3m-3 3 3 3M10 17l-3-3m3 3-3 3"/></svg></span><span class="feature-name">Cascade</span></div>
+            <h2>Split the work. Keep control.</h2>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="feature" style="--accent: var(--run)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><span class="feature-name">Review</span></div>
+            <h2>Make every result prove itself.</h2>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="feature proposed" style="--accent: var(--partner)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><span class="feature-name">Point and change</span></div>
+            <h2>Show the agent exactly what to change.</h2>
+            <p>Select the element in the working page and describe the fix. thinkpool carries the instruction to the right source file, then returns the rebuilt result for review.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="option">
+        <div class="option-head">
+          <div class="option-id">
+            <span class="option-number">05</span>
+            <span class="option-name">Verification-first positioning</span>
+          </div>
+        </div>
+        <div class="feature-grid">
+          <article class="feature" style="--accent: var(--agent)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 17h16M14 7l3-3m-3 3 3 3M10 17l-3-3m3 3-3 3"/></svg></span><span class="feature-name">Cascade</span></div>
+            <h2>Split the work. Keep control.</h2>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="feature" style="--accent: var(--run)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><span class="feature-name">Review</span></div>
+            <h2>Make every result prove itself.</h2>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="feature proposed" style="--accent: var(--partner)">
+            <div class="feature-top"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><span class="feature-name">Verified canvas</span></div>
+            <h2>Edit visually. Keep every change verified.</h2>
+            <p>Work directly on the latest proven interface. Changes go back to source and return only after fresh desktop and mobile renders succeed.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <p class="context-label">On mobile, each direction shows only the proposed feature card.</p>
+    <footer>
+      The Cascade and Review copy is unchanged from the live landing page.<br>
+      This artifact changes naming and explanation only.
+    </footer>
+  </main>
+</body>
+</html>
