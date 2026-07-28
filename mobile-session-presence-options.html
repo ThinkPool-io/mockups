@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>thinkpool — mobile session presence options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: #0a0d10;
+      --k-panel-7: hsl(212 13% 7%);
+      --k-panel-14: hsl(212 14% 8%);
+      --line: hsl(212 7% 21%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --positive: hsl(152 28% 54%);
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -12%, hsl(218 60% 72% / 0.08), transparent 34rem),
+        var(--k-bg);
+      color: var(--ink);
+      font-family: var(--font-mono);
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+
+    .lede {
+      max-width: 760px;
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .spec {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      color: var(--faint);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .option {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--k-panel-7);
+    }
+
+    .option-copy {
+      display: flex;
+      min-height: 72px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 11px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .option-copy h2 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .option-copy p {
+      margin: 5px 0 0;
+      color: var(--faint);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .option-index {
+      flex: 0 0 auto;
+      color: var(--partner);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
+    .recommended {
+      display: inline-block;
+      margin-left: 7px;
+      color: var(--partner);
+      font-size: 7.5px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stage {
+      padding: 36px 12px;
+      background: var(--k-bg);
+    }
+
+    .mobile-chrome {
+      position: relative;
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      height: 58px;
+      align-items: stretch;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--k-bg);
+    }
+
+    .terminal-name {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .terminal-state {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 7px var(--positive);
+    }
+
+    .terminal-name span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chrome-cell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      width: 48px;
+      height: 58px;
+      flex: 0 0 48px;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+    }
+
+    .list-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .voice-icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .gear {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .rail .mobile-chrome::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: color-mix(in oklab, var(--partner) 78%, transparent);
+      box-shadow: 0 0 8px color-mix(in oklab, var(--partner) 42%, transparent);
+    }
+
+    .outline .mobile-chrome {
+      border-color: color-mix(in oklab, var(--partner) 64%, var(--line));
+      box-shadow:
+        inset 0 0 0 1px color-mix(in oklab, var(--partner) 16%, transparent),
+        0 0 10px color-mix(in oklab, var(--partner) 9%, transparent);
+    }
+
+    .wash .mobile-chrome::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--partner) 11%, transparent),
+        color-mix(in oklab, var(--partner) 4%, transparent)
+      );
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--faint);
+      font-size: 8.5px;
+      line-height: 1.4;
+    }
+
+    .legend-line {
+      width: 17px;
+      height: 2px;
+      flex: 0 0 auto;
+      background: var(--partner);
+      box-shadow: 0 0 5px color-mix(in oklab, var(--partner) 45%, transparent);
+    }
+
+    .note {
+      margin: 15px 0 0;
+      padding: 10px 12px;
+      border-left: 2px solid var(--partner);
+      background: color-mix(in oklab, var(--partner) 5%, var(--k-panel-7));
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        width: min(100% - 24px, 390px);
+        padding-top: 22px;
+      }
+
+      .intro { display: block; margin-bottom: 16px; }
+      .spec { display: none; }
+      h1 { font-size: 20px; }
+      .lede { font-size: 10px; line-height: 1.55; }
+      .grid { grid-template-columns: 1fr; gap: 10px; }
+      .option-copy { min-height: 62px; }
+      .stage { padding: 23px 10px; }
+      .note { font-size: 8.5px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Mobile chrome · whole-session presence</p>
+        <h1>Presence without another dot.</h1>
+        <p class="lede">The signal belongs to the whole session header. The Whispers icon stays visually quiet until the partner is viewing, typing, or has sent something unread.</p>
+      </div>
+      <div class="spec">48px cells · no extra control</div>
+    </header>
+
+    <section class="grid" aria-label="Whole-session presence options">
+      <article class="option rail">
+        <div class="option-copy">
+          <div>
+            <h2>Presence rail <span class="recommended">Recommended</span></h2>
+            <p>A two-pixel cornflower line binds the full session row without competing with controls.</p>
+          </div>
+          <span class="option-index">01</span>
+        </div>
+        <div class="stage">
+          <div class="mobile-chrome">
+            <div class="terminal-name"><span class="terminal-state"></span><span>Terminal 32</span></div>
+            <span class="chrome-cell">
+              <svg class="list-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="5" cy="6" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="5" cy="18" r="1.5" fill="currentColor"/>
+                <path d="M9 6h11M9 12h8M9 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="voice-icon" viewBox="0 0 24 25" aria-hidden="true">
+                <path d="M20 13a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="legend"><span class="legend-line"></span><span>Conrad is active in this session</span></div>
+        </div>
+      </article>
+
+      <article class="option outline">
+        <div class="option-copy">
+          <div>
+            <h2>Perimeter outline</h2>
+            <p>The complete header becomes the presence object, with a quiet cornflower edge.</p>
+          </div>
+          <span class="option-index">02</span>
+        </div>
+        <div class="stage">
+          <div class="mobile-chrome">
+            <div class="terminal-name"><span class="terminal-state"></span><span>Terminal 32</span></div>
+            <span class="chrome-cell">
+              <svg class="list-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="5" cy="6" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="5" cy="18" r="1.5" fill="currentColor"/>
+                <path d="M9 6h11M9 12h8M9 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="voice-icon" viewBox="0 0 24 25" aria-hidden="true">
+                <path d="M20 13a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="legend"><span class="legend-line"></span><span>Conrad is active in this session</span></div>
+        </div>
+      </article>
+
+      <article class="option wash">
+        <div class="option-copy">
+          <div>
+            <h2>Session wash</h2>
+            <p>A low-opacity cornflower atmosphere makes presence ambient rather than badge-like.</p>
+          </div>
+          <span class="option-index">03</span>
+        </div>
+        <div class="stage">
+          <div class="mobile-chrome">
+            <div class="terminal-name"><span class="terminal-state"></span><span>Terminal 32</span></div>
+            <span class="chrome-cell">
+              <svg class="list-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="5" cy="6" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="5" cy="18" r="1.5" fill="currentColor"/>
+                <path d="M9 6h11M9 12h8M9 18h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="voice-icon" viewBox="0 0 24 25" aria-hidden="true">
+                <path d="M20 13a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="chrome-cell">
+              <svg class="gear" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V20.3h-3v-.09a1.7 1.7 0 0 0-1.03-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.55-1.03H5.4v-3h.05A1.7 1.7 0 0 0 7 9.94a1.7 1.7 0 0 0-.34-1.88L6.6 8l2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.7 4.7v-.08h3v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06L19.8 8l-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.95 11h.09v3h-.09A1.7 1.7 0 0 0 19.4 15Z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="legend"><span class="legend-line"></span><span>Conrad is active in this session</span></div>
+        </div>
+      </article>
+    </section>
+
+    <p class="note">Recommendation: Presence rail. It communicates a session-wide state without adding a symbol, moving any control, or making the Whispers icon carry two unrelated meanings.</p>
+  </main>
+</body>
+</html>
