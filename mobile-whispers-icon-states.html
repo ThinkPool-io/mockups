@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>thinkpool — combined Whispers icon states</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: hsl(212 13% 5%);
+      --k-panel-7: hsl(212 13% 7%);
+      --k-panel-14: hsl(212 14% 8%);
+      --line: hsl(212 7% 21%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -12%, hsl(218 60% 72% / 0.08), transparent 34rem),
+        var(--k-bg);
+      color: var(--ink);
+      font-family: var(--font-mono);
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 42px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--pool);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(21px, 3vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.15;
+    }
+
+    .lede {
+      max-width: 680px;
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .spec {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      color: var(--faint);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .state {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--k-panel-7);
+    }
+
+    .state-copy {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 9px 11px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .state-copy h2 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .state-copy p {
+      margin: 4px 0 0;
+      color: var(--faint);
+      font-size: 8.5px;
+      line-height: 1.35;
+    }
+
+    .state-index {
+      flex: 0 0 auto;
+      color: var(--partner);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
+    .mobile-chrome {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+      height: 58px;
+      align-items: stretch;
+      background: var(--k-bg);
+    }
+
+    .terminal-name {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .terminal-state {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: hsl(152 40% 58%);
+      box-shadow: 0 0 7px hsl(152 40% 58%);
+    }
+
+    .terminal-name span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chrome-cell {
+      display: grid;
+      width: 48px;
+      height: 58px;
+      flex: 0 0 48px;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+    }
+
+    .list-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .whispers {
+      position: relative;
+      display: grid;
+      width: 48px;
+      height: 58px;
+      place-items: center;
+      color: var(--faint);
+    }
+
+    .whispers.active {
+      background: var(--k-panel-14);
+      color: var(--partner);
+      filter: drop-shadow(0 0 5px var(--partner));
+    }
+
+    .voice-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .voice-icon {
+      display: block;
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .presence {
+      position: absolute;
+      right: -4px;
+      bottom: -4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--partner);
+      box-shadow: 0 0 6px var(--partner);
+    }
+
+    .typing {
+      position: absolute;
+      bottom: 5px;
+      display: flex;
+      gap: 2px;
+      color: var(--partner);
+    }
+
+    .typing i {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: type-pulse 1.1s ease-in-out infinite;
+    }
+
+    .typing i:nth-child(2) { animation-delay: 160ms; }
+    .typing i:nth-child(3) { animation-delay: 320ms; }
+
+    .unread {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      display: grid;
+      min-width: 14px;
+      height: 14px;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--pool);
+      color: hsl(212 13% 5%);
+      font-size: 8px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .gear {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .note {
+      margin: 15px 0 0;
+      padding: 10px 12px;
+      border-left: 2px solid var(--partner);
+      background: color-mix(in oklab, var(--partner) 5%, var(--k-panel-7));
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    @keyframes type-pulse {
+      0%, 100% { opacity: 0.35; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-1px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .typing i { animation: none; opacity: 1; }
+    }
+
+    @media (max-width: 700px) {
+      main {
+        width: 100%;
+        padding: 20px 12px 26px;
+      }
+
+      .intro {
+        display: block;
+        margin-bottom: 14px;
+      }
+
+      .lede { font-size: 10px; }
+      .spec { display: none; }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .state-copy {
+        min-height: 46px;
+        padding: 7px 9px;
+      }
+
+      .mobile-chrome { height: 52px; }
+      .chrome-cell,
+      .whispers {
+        height: 52px;
+      }
+
+      .note {
+        margin-top: 10px;
+        font-size: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="intro">
+      <div>
+        <p class="eyebrow">Mobile chrome · combined Whispers control</p>
+        <h1>One icon, four signals.</h1>
+        <p class="lede">The speech bubble stays geometrically centered. Presence, active viewing, typing, and unread state are overlays—never separate header cells.</p>
+      </div>
+      <div class="spec">48px tap target · 22px icon</div>
+    </div>
+
+    <section class="grid" aria-label="Whispers icon states">
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Idle</h2>
+            <p>Whispers available; partner inactive.</p>
+          </div>
+          <span class="state-index">01</span>
+        </div>
+        <div class="mobile-chrome">
+          <div class="terminal-name"><i class="terminal-state"></i><span>Terminal 32</span></div>
+          <div class="chrome-cell">
+            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h8M9 18h10"/>
+            </svg>
+          </div>
+          <div class="chrome-cell">
+            <div class="whispers">
+              <span class="voice-wrap">
+                <svg class="voice-icon" viewBox="0 0.5 24 24">
+                  <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Partner here</h2>
+            <p>Small cornflower presence dot.</p>
+          </div>
+          <span class="state-index">02</span>
+        </div>
+        <div class="mobile-chrome">
+          <div class="terminal-name"><i class="terminal-state"></i><span>Terminal 32</span></div>
+          <div class="chrome-cell">
+            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h8M9 18h10"/>
+            </svg>
+          </div>
+          <div class="chrome-cell">
+            <div class="whispers">
+              <span class="voice-wrap">
+                <svg class="voice-icon" viewBox="0 0.5 24 24">
+                  <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+                <i class="presence"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Viewing Whispers</h2>
+            <p>Partner color and a soft glow.</p>
+          </div>
+          <span class="state-index">03</span>
+        </div>
+        <div class="mobile-chrome">
+          <div class="terminal-name"><i class="terminal-state"></i><span>Terminal 32</span></div>
+          <div class="chrome-cell">
+            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h8M9 18h10"/>
+            </svg>
+          </div>
+          <div class="chrome-cell">
+            <div class="whispers active">
+              <span class="voice-wrap">
+                <svg class="voice-icon" viewBox="0 0.5 24 24">
+                  <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+                <i class="presence"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Whispering</h2>
+            <p>Glow plus three animated dots.</p>
+          </div>
+          <span class="state-index">04</span>
+        </div>
+        <div class="mobile-chrome">
+          <div class="terminal-name"><i class="terminal-state"></i><span>Terminal 32</span></div>
+          <div class="chrome-cell">
+            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h8M9 18h10"/>
+            </svg>
+          </div>
+          <div class="chrome-cell">
+            <div class="whispers active">
+              <span class="voice-wrap">
+                <svg class="voice-icon" viewBox="0 0.5 24 24">
+                  <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </span>
+              <span class="typing"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="state">
+        <div class="state-copy">
+          <div>
+            <h2>Unread</h2>
+            <p>Count top-right; presence remains below.</p>
+          </div>
+          <span class="state-index">05</span>
+        </div>
+        <div class="mobile-chrome">
+          <div class="terminal-name"><i class="terminal-state"></i><span>Terminal 32</span></div>
+          <div class="chrome-cell">
+            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="5" cy="18" r="1.5" fill="currentColor" stroke="none"/><path d="M9 6h11M9 12h8M9 18h10"/>
+            </svg>
+          </div>
+          <div class="chrome-cell">
+            <div class="whispers">
+              <span class="voice-wrap">
+                <svg class="voice-icon" viewBox="0 0.5 24 24">
+                  <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+                <i class="presence"></i>
+              </span>
+              <span class="unread">3</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="note">Recommended system: keep the icon’s center fixed in every state. Presence, typing, and unread badges are absolutely positioned overlays, so the header never shifts and the full 48px cell remains the tap target.</p>
+  </main>
+</body>
+</html>
