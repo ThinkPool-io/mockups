@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool — Current Whispers icon states</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --k-bg: #0a0d10;
+    --k-card: #06090c;
+    --k-panel-7: hsl(212 13% 7%);
+    --k-panel-10: hsl(212 13% 10%);
+    --k-panel-14: hsl(212 14% 8%);
+    --k-pool: hsl(201 78% 64%);
+    --partner: hsl(218 60% 72%);
+    --line: hsl(212 7% 21%);
+    --line-soft: hsl(212 7% 21% / 0.6);
+    --ink: hsl(212 14% 95%);
+    --soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --ink-inv: #1a1410;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    --identity: "Space Grotesk", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--k-bg); }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--k-pool) 8%, transparent), transparent 38%),
+      var(--k-bg);
+    font-family: var(--mono);
+  }
+
+  .page {
+    width: min(1320px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 48px 0 40px;
+  }
+
+  header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow,
+  .section-label,
+  .axis-label {
+    color: var(--k-pool);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 8px 0 0;
+    font-family: var(--identity);
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+
+  .intro {
+    width: min(470px, 44vw);
+    margin: 0;
+    color: var(--faint);
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .matrix-head {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+    margin-top: 26px;
+    padding: 0 4px 8px;
+  }
+
+  .column-title {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .column-title span {
+    display: block;
+    margin-top: 3px;
+    color: var(--faint);
+    font-size: 9px;
+  }
+
+  .state-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .state-meta,
+  .state-card {
+    min-height: 152px;
+    border: 1px solid var(--line-soft);
+    background: color-mix(in oklab, var(--k-panel-7) 82%, transparent);
+  }
+
+  .state-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px;
+  }
+
+  .state-number {
+    color: var(--faint);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .state-meta h2 {
+    margin: 0;
+    font-family: var(--identity);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .state-meta p {
+    margin: 5px 0 0;
+    color: var(--faint);
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  code {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+  }
+
+  .state-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .sample {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+  }
+
+  .sample-label {
+    color: var(--faint);
+    font-size: 8px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .chrome {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--line-soft);
+    background: var(--k-bg);
+  }
+
+  .chrome::before,
+  .chrome::after {
+    content: "";
+    display: block;
+    width: 22px;
+    border-right: 1px solid var(--line-soft);
+  }
+
+  .chrome::after {
+    width: 19px;
+    border-right: 0;
+    border-left: 1px solid var(--line-soft);
+  }
+
+  .chrome.mobile::before { width: 30px; }
+  .chrome.mobile::after { width: 24px; }
+
+  .whisper-control {
+    position: relative;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--faint);
+  }
+
+  .whisper-control.desktop { width: 36px; height: 36px; }
+  .whisper-control.mobile { width: 48px; height: 48px; }
+
+  .icon-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  .presence-halo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: radial-gradient(circle, color-mix(in oklab, var(--partner) 9%, transparent), transparent 68%);
+    transform: translate(-50%, -50%);
+  }
+
+  .mobile .presence-halo { width: 46px; height: 46px; }
+
+  .whisper-icon {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 22px;
+    height: 22px;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .whisper-icon rect {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .state-online,
+  .state-engaged {
+    color: var(--partner);
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--partner) 30%, transparent));
+  }
+
+  .state-engaged { background: var(--k-panel-7); }
+
+  .state-open.mobile {
+    color: var(--k-pool);
+    background: var(--k-panel-14);
+  }
+
+  .state-open.desktop {
+    color: var(--k-pool);
+    background: var(--k-panel-10);
+  }
+
+  .unread {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    z-index: 2;
+    display: grid;
+    min-width: 14px;
+    height: 14px;
+    place-items: center;
+    border-radius: 999px;
+    padding: 0 2px;
+    color: var(--ink-inv);
+    background: var(--k-pool);
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .desktop .unread { right: 2px; top: 2px; }
+
+  .same-visual {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    color: var(--partner);
+    font-size: 9px;
+  }
+
+  .same-visual::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 99px;
+    background: currentColor;
+  }
+
+  .notes {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .note {
+    min-height: 106px;
+    padding: 18px;
+    border: 1px solid var(--line-soft);
+    background: var(--k-card);
+  }
+
+  .note p {
+    margin: 8px 0 0;
+    color: var(--faint);
+    font-size: 10px;
+    line-height: 1.65;
+  }
+
+  .badge-range {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 13px;
+  }
+
+  .badge-demo {
+    position: static;
+  }
+
+  .logic {
+    color: var(--muted);
+  }
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
+    color: var(--faint);
+    font-size: 9px;
+  }
+
+  @media (max-width: 720px) {
+    .page {
+      width: min(100% - 24px, 390px);
+      padding: 24px 0 28px;
+    }
+
+    header {
+      display: block;
+      padding-bottom: 18px;
+    }
+
+    h1 {
+      margin-top: 6px;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+
+    .intro {
+      width: auto;
+      margin-top: 14px;
+      font-size: 10px;
+    }
+
+    .matrix-head { display: none; }
+
+    .state-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .state-meta {
+      grid-column: 1 / -1;
+      min-height: auto;
+      padding: 14px;
+    }
+
+    .state-meta > div:first-child {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .state-meta p { margin-left: auto; }
+    .state-meta code { display: none; }
+
+    .state-card {
+      grid-template-columns: 1fr;
+      min-height: 164px;
+      padding: 13px 8px;
+    }
+
+    .state-card::before {
+      content: attr(data-column);
+      color: var(--faint);
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .notes { grid-template-columns: 1fr; }
+    footer { display: block; line-height: 1.7; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div>
+      <div class="eyebrow">Shipped state inventory</div>
+      <h1>Current Whispers icon states</h1>
+    </div>
+    <p class="intro">Every persistent visual combination produced by the current room-chrome logic. Each cell shows the real 36px desktop control and 48px mobile control.</p>
+  </header>
+
+  <div class="matrix-head" aria-hidden="true">
+    <div class="axis-label">Base state</div>
+    <div class="column-title">No unread <span>roomChatUnread = 0</span></div>
+    <div class="column-title">With unread <span>roomChatUnread &gt; 0</span></div>
+  </div>
+
+  <section class="state-row">
+    <div class="state-meta">
+      <div>
+        <span class="state-number">01</span>
+        <div>
+          <h2>Partner away</h2>
+          <p>Resting, neutral icon.</p>
+        </div>
+      </div>
+      <code>!partnerActive</code>
+    </div>
+    <div class="state-card" data-column="No unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop" aria-label="Open Whispers">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile" aria-label="Open Whispers">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="state-card" data-column="With unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop" aria-label="Open Whispers, 3 unread">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile" aria-label="Open Whispers, 3 unread">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="state-row">
+    <div class="state-meta">
+      <div>
+        <span class="state-number">02</span>
+        <div>
+          <h2>Partner online</h2>
+          <p>Cornflower icon + presence halo.</p>
+        </div>
+      </div>
+      <code>partnerActive</code>
+    </div>
+    <div class="state-card" data-column="No unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-online" aria-label="Open Whispers">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-online" aria-label="Open Whispers">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="state-card" data-column="With unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-online" aria-label="Open Whispers, 3 unread">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-online" aria-label="Open Whispers, 3 unread">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="state-row">
+    <div class="state-meta">
+      <div>
+        <span class="state-number">03</span>
+        <div>
+          <h2>Partner in Whispers</h2>
+          <p>Viewing and typing merge here.</p>
+          <span class="same-visual">Same visual treatment</span>
+        </div>
+      </div>
+      <code>partnerWhisperTyping || partnerViewingRoomChat</code>
+    </div>
+    <div class="state-card" data-column="No unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-engaged" aria-label="Open Whispers, Conrad is viewing">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-engaged" aria-label="Open Whispers, Conrad is viewing">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="state-card" data-column="With unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-engaged" aria-label="Open Whispers, 3 unread, Conrad is whispering">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-engaged" aria-label="Open Whispers, 3 unread, Conrad is whispering">
+            <span class="icon-wrap">
+              <span class="presence-halo"></span>
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="state-row">
+    <div class="state-meta">
+      <div>
+        <span class="state-number">04</span>
+        <div>
+          <h2>Whispers open</h2>
+          <p>Glacier icon + selected cell.</p>
+        </div>
+      </div>
+      <code>roomChatLaneSelected</code>
+    </div>
+    <div class="state-card" data-column="No unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-open" aria-label="Close Whispers" aria-pressed="true">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-open" aria-label="Close Whispers" aria-pressed="true">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="state-card" data-column="With unread">
+      <div class="sample">
+        <span class="sample-label">Desktop · 36</span>
+        <div class="chrome">
+          <button class="whisper-control desktop state-open" aria-label="Close Whispers, 3 unread" aria-pressed="true">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+      <div class="sample">
+        <span class="sample-label">Mobile · 48</span>
+        <div class="chrome mobile">
+          <button class="whisper-control mobile state-open" aria-label="Close Whispers, 3 unread" aria-pressed="true">
+            <span class="icon-wrap">
+              <svg class="whisper-icon" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4"/>
+              </svg>
+            </span>
+            <span class="unread">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="note">
+      <div class="section-label">Visual precedence</div>
+      <p class="logic">Open overrides presence and activity. Partner-in-Whispers overrides online. The unread badge overlays whichever base state wins. That produces exactly 4 × 2 persistent visual combinations.</p>
+    </div>
+    <div class="note">
+      <div class="section-label">Unread badge range</div>
+      <div class="badge-range" aria-label="Unread badge examples">
+        <span class="unread badge-demo">1</span>
+        <span class="unread badge-demo">12</span>
+        <span class="unread badge-demo">99+</span>
+      </div>
+      <p>Counts above 99 clamp to 99+.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Source-backed from room.jsx + WhisperLaneIcon</span>
+    <span>Current shipped logic · no proposed redesign</span>
+  </footer>
+</main>
+</body>
+</html>
