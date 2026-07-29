@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Whispers active bubble treatments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: #0a0d10;
+      --k-panel-7: hsl(212 13% 7%);
+      --k-panel-10: hsl(212 13% 10%);
+      --k-panel-14: hsl(212 14% 8%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 29%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 76%);
+      --faint: hsl(212 12% 60%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--k-bg); }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        linear-gradient(90deg, transparent 0 49.95%, color-mix(in oklab, var(--line) 28%, transparent) 50%, transparent 50.05%),
+        var(--k-bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 24px 40px;
+    }
+
+    .board-header {
+      display: flex;
+      max-width: 1392px;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 2.8vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .brief {
+      max-width: 525px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .brief strong {
+      color: var(--partner);
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      max-width: 1392px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 auto;
+    }
+
+    .option {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--k-panel-7);
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--partner) 55%, var(--line));
+      box-shadow: inset 0 2px 0 var(--partner);
+    }
+
+    .meta {
+      display: grid;
+      min-height: 104px;
+      grid-template-columns: 29px 1fr;
+      gap: 10px;
+      padding: 13px 13px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .number {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .option h2 {
+      margin: 1px 0 4px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .option-note {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .recommend {
+      display: inline-block;
+      margin-top: 7px;
+      color: var(--partner);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .product {
+      background: var(--k-bg);
+    }
+
+    .terminal-strip {
+      display: flex;
+      height: 42px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-title {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      color: var(--soft);
+      font-size: 9px;
+    }
+
+    .terminal-title::before {
+      width: 6px;
+      height: 6px;
+      flex: none;
+      border: 1px solid var(--pool);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .session {
+      display: flex;
+      align-items: center;
+      padding: 0 7px;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 7px;
+    }
+
+    .icon-cell,
+    .gear-cell {
+      position: relative;
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex: none;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+    }
+
+    .icon-cell {
+      background: var(--k-panel-14);
+    }
+
+    .bubble {
+      width: 23px;
+      height: 23px;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+    .bubble .pixel {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .gear {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .comparison {
+      display: grid;
+      min-height: 340px;
+      align-content: center;
+      padding: 30px 12px 28px;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .state {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .state-label {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .state.active .state-label {
+      color: var(--partner);
+    }
+
+    .zoom {
+      position: relative;
+      display: grid;
+      width: min(100%, 88px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--k-panel-10);
+    }
+
+    .zoom::after {
+      position: absolute;
+      right: 8px;
+      bottom: 7px;
+      color: color-mix(in oklab, var(--faint) 62%, transparent);
+      content: "3×";
+      font-family: var(--font-mono);
+      font-size: 7px;
+    }
+
+    .zoom .bubble {
+      width: 52px;
+      height: 52px;
+      stroke-width: 1.55;
+    }
+
+    .away-icon {
+      color: var(--faint);
+    }
+
+    .active-ink {
+      color: var(--partner);
+      stroke-width: 2.15;
+    }
+
+    .active-ink .pixel {
+      fill: var(--ink);
+    }
+
+    .active-solid {
+      color: var(--partner);
+      fill: var(--partner);
+      stroke: var(--partner);
+      stroke-width: 1.8;
+    }
+
+    .active-solid .pixel {
+      fill: var(--k-bg);
+    }
+
+    .active-split {
+      stroke-width: 2.15;
+    }
+
+    .active-split .pixel-left {
+      fill: var(--pool);
+    }
+
+    .active-split .pixel-right {
+      fill: var(--partner);
+    }
+
+    .active-cursor {
+      color: var(--partner);
+      stroke-width: 2.05;
+    }
+
+    .active-cursor .pixel-left {
+      fill: var(--ink);
+    }
+
+    .active-cursor .cursor {
+      fill: var(--ink);
+      stroke: none;
+      transform-origin: center;
+      animation: cursor-blink 1.15s steps(1, end) infinite;
+    }
+
+    .active-echo {
+      color: var(--faint);
+      stroke-width: 1.75;
+    }
+
+    .active-echo .echo {
+      fill: none;
+      stroke: var(--partner);
+      stroke-dasharray: 16 34;
+      stroke-dashoffset: -9;
+      stroke-linecap: round;
+      stroke-width: 3.35;
+    }
+
+    .active-echo .pixel-left,
+    .active-echo .pixel-right {
+      fill: var(--partner);
+    }
+
+    @keyframes cursor-blink {
+      0%, 54% { opacity: 1; }
+      55%, 100% { opacity: 0.3; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .active-cursor .cursor { animation: none; }
+    }
+
+    .rule {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 7.5px;
+      line-height: 1.45;
+    }
+
+    .rule strong {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .unchanged {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      gap: 5px;
+      color: var(--partner);
+      white-space: nowrap;
+    }
+
+    .unchanged::before {
+      width: 5px;
+      height: 5px;
+      border-radius: 1px;
+      background: var(--partner);
+      content: "";
+    }
+
+    .board-footer {
+      display: flex;
+      max-width: 1392px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin: 15px auto 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .board-footer strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    @media (max-width: 920px) {
+      .board {
+        padding: 22px 16px 32px;
+      }
+
+      .board-header {
+        display: block;
+        margin-bottom: 18px;
+      }
+
+      .brief {
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .option {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .meta {
+        min-height: 0;
+      }
+
+      .comparison {
+        min-height: 290px;
+        padding: 24px 15px 22px;
+      }
+
+      .pair {
+        gap: 16px;
+      }
+
+      .zoom {
+        width: min(100%, 112px);
+      }
+
+      .board-footer {
+        display: block;
+      }
+
+      .board-footer span {
+        display: block;
+        margin-top: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-header">
+      <div>
+        <p class="eyebrow">Whispers · active partner state</p>
+        <h1>Only the bubble changes.</h1>
+      </div>
+      <p class="brief"><strong>Away</strong> is the untouched production icon. Each <strong>Active</strong> treatment changes only the bubble artwork — no dots, badges, rings, tiles, or surrounding UI.</p>
+    </header>
+
+    <section class="grid" aria-label="Five active bubble treatments">
+      <article class="option recommended">
+        <div class="meta">
+          <span class="number">01</span>
+          <div>
+            <h2>Partner ink</h2>
+            <p class="option-note">The whole mark switches to partner color with brighter terminal pixels.</p>
+            <span class="recommend">cleanest signal</span>
+          </div>
+        </div>
+        <div class="product">
+          <div class="terminal-strip">
+            <div class="terminal-title">T1</div>
+            <span class="session">ROOM</span>
+            <div class="icon-cell">
+              <svg class="bubble active-ink" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="comparison">
+            <div class="pair">
+              <div class="state">
+                <span class="state-label">Away</span>
+                <div class="zoom">
+                  <svg class="bubble away-icon" viewBox="0 0.5 24 24" aria-label="Whispers away">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+              <div class="state active">
+                <span class="state-label">Active</span>
+                <div class="zoom">
+                  <svg class="bubble active-ink" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="rule"><strong>Color + weight</strong><span class="unchanged">bubble only</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">02</span>
+          <div>
+            <h2>Solid live</h2>
+            <p class="option-note">The outline becomes a compact filled mark; pixels cut through in black.</p>
+          </div>
+        </div>
+        <div class="product">
+          <div class="terminal-strip">
+            <div class="terminal-title">T1</div>
+            <span class="session">ROOM</span>
+            <div class="icon-cell">
+              <svg class="bubble active-solid" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="comparison">
+            <div class="pair">
+              <div class="state">
+                <span class="state-label">Away</span>
+                <div class="zoom">
+                  <svg class="bubble away-icon" viewBox="0 0.5 24 24" aria-label="Whispers away">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+              <div class="state active">
+                <span class="state-label">Active</span>
+                <div class="zoom">
+                  <svg class="bubble active-solid" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="rule"><strong>Fill inversion</strong><span class="unchanged">bubble only</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">03</span>
+          <div>
+            <h2>Two-person trace</h2>
+            <p class="option-note">One continuous outline blends pool blue into partner cornflower.</p>
+          </div>
+        </div>
+        <div class="product">
+          <div class="terminal-strip">
+            <div class="terminal-title">T1</div>
+            <span class="session">ROOM</span>
+            <div class="icon-cell">
+              <svg class="bubble active-split" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                <defs><linearGradient id="split-a" x1="3" y1="18" x2="21" y2="6"><stop stop-color="hsl(201 78% 64%)"/><stop offset=".55" stop-color="hsl(218 60% 72%)"/></linearGradient></defs>
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" stroke="url(#split-a)" />
+                <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".4" />
+                <rect class="pixel pixel-right" x="14" y="11" width="2" height="2" rx=".4" />
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="comparison">
+            <div class="pair">
+              <div class="state">
+                <span class="state-label">Away</span>
+                <div class="zoom">
+                  <svg class="bubble away-icon" viewBox="0 0.5 24 24" aria-label="Whispers away">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+              <div class="state active">
+                <span class="state-label">Active</span>
+                <div class="zoom">
+                  <svg class="bubble active-split" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                    <defs><linearGradient id="split-b" x1="3" y1="18" x2="21" y2="6"><stop stop-color="hsl(201 78% 64%)"/><stop offset=".55" stop-color="hsl(218 60% 72%)"/></linearGradient></defs>
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" stroke="url(#split-b)" />
+                    <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel pixel-right" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="rule"><strong>Two-tone stroke</strong><span class="unchanged">bubble only</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">04</span>
+          <div>
+            <h2>Cursor eye</h2>
+            <p class="option-note">The right terminal pixel becomes a live caret inside the same bubble.</p>
+          </div>
+        </div>
+        <div class="product">
+          <div class="terminal-strip">
+            <div class="terminal-title">T1</div>
+            <span class="session">ROOM</span>
+            <div class="icon-cell">
+              <svg class="bubble active-cursor" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".35" />
+                <rect class="cursor" x="14.1" y="10.25" width="1.75" height="3.5" rx=".35" />
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="comparison">
+            <div class="pair">
+              <div class="state">
+                <span class="state-label">Away</span>
+                <div class="zoom">
+                  <svg class="bubble away-icon" viewBox="0 0.5 24 24" aria-label="Whispers away">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+              <div class="state active">
+                <span class="state-label">Active</span>
+                <div class="zoom">
+                  <svg class="bubble active-cursor" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".35" />
+                    <rect class="cursor" x="14.1" y="10.25" width="1.75" height="3.5" rx=".35" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="rule"><strong>Terminal motion</strong><span class="unchanged">bubble only</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">05</span>
+          <div>
+            <h2>Live segment</h2>
+            <p class="option-note">The original mark stays neutral; a bold partner-color trace runs through it.</p>
+          </div>
+        </div>
+        <div class="product">
+          <div class="terminal-strip">
+            <div class="terminal-title">T1</div>
+            <span class="session">ROOM</span>
+            <div class="icon-cell">
+              <svg class="bubble active-echo" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                <path class="echo" d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" pathLength="50" />
+                <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".4" />
+                <rect class="pixel pixel-right" x="14" y="11" width="2" height="2" rx=".4" />
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="comparison">
+            <div class="pair">
+              <div class="state">
+                <span class="state-label">Away</span>
+                <div class="zoom">
+                  <svg class="bubble away-icon" viewBox="0 0.5 24 24" aria-label="Whispers away">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+              <div class="state active">
+                <span class="state-label">Active</span>
+                <div class="zoom">
+                  <svg class="bubble active-echo" viewBox="0 0.5 24 24" aria-label="Whispers active">
+                    <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+                    <path class="echo" d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" pathLength="50" />
+                    <rect class="pixel pixel-left" x="8" y="11" width="2" height="2" rx=".4" />
+                    <rect class="pixel pixel-right" x="14" y="11" width="2" height="2" rx=".4" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="rule"><strong>Stroke segment</strong><span class="unchanged">bubble only</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="board-footer">
+      <strong>Every Away icon is the same untouched production SVG.</strong>
+      <span>The top strip shows each treatment at its real 23px product size.</span>
+    </footer>
+  </main>
+</body>
+</html>
