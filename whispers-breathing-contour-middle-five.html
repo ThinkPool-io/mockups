@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Five contours that visibly breathe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    body {
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--bg);
+      background-size: 56px 56px;
+      background-position: -1px -1px;
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 26px 24px 22px;
+      background: color-mix(in oklab, var(--bg) 94%, transparent);
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(430px, 650px);
+      align-items: end;
+      gap: 40px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow,
+    .brief,
+    .family,
+    .note,
+    .motion-label,
+    .state-label,
+    .metrics,
+    .verdict,
+    .footer {
+      font-family: var(--mono);
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--pool);
+      font-size: 9px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(30px, 3.2vw, 43px);
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .98;
+    }
+
+    .brief {
+      margin: 0;
+      color: var(--faint);
+      font-size: 9px;
+      line-height: 1.55;
+      text-align: right;
+    }
+
+    .brief strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--raised);
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--partner) 58%, var(--line));
+      box-shadow: inset 0 2px 0 color-mix(in oklab, var(--partner) 84%, transparent);
+    }
+
+    .meta {
+      min-height: 88px;
+      padding: 11px 12px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .family {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--partner);
+      font-size: 6.8px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 3px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -.015em;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--faint);
+      font-size: 7.3px;
+      line-height: 1.4;
+    }
+
+    .live-header {
+      display: flex;
+      height: 42px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .terminal {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      padding: 0 10px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 7px;
+    }
+
+    .icon-cell {
+      position: relative;
+      display: grid;
+      width: 42px;
+      height: 41px;
+      flex: none;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--partner);
+      isolation: isolate;
+    }
+
+    .bubble-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .bubble {
+      position: relative;
+      z-index: 2;
+      width: 22px;
+      height: 22px;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+      filter: drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 62%, transparent));
+      will-change: opacity, transform;
+    }
+
+    .pixel {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .ghost {
+      position: absolute;
+      z-index: 1;
+      color: var(--partner);
+      stroke-width: 2.25;
+      filter: drop-shadow(0 0 5px color-mix(in oklab, var(--partner) 76%, transparent));
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .study {
+      position: relative;
+      display: grid;
+      min-height: 214px;
+      place-items: center;
+      padding: 18px;
+      background: var(--bg);
+    }
+
+    .motion-label {
+      position: absolute;
+      top: 8px;
+      left: 9px;
+      color: var(--faint);
+      font-size: 6px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .study-cell {
+      position: relative;
+      display: grid;
+      width: 126px;
+      height: 126px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      isolation: isolate;
+    }
+
+    .study .bubble {
+      width: 68px;
+      height: 68px;
+      stroke-width: 1.75;
+    }
+
+    .study .ghost {
+      width: 68px;
+      height: 68px;
+      stroke-width: 1.75;
+    }
+
+    .endpoints {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .endpoint {
+      display: grid;
+      min-height: 66px;
+      grid-template-columns: 1fr 42px;
+      align-items: center;
+      gap: 4px;
+      padding: 7px 8px;
+    }
+
+    .endpoint + .endpoint {
+      border-left: 1px solid var(--line);
+    }
+
+    .state-label {
+      color: var(--faint);
+      font-size: 5.8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .endpoint-icon {
+      position: relative;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .endpoint-icon .bubble {
+      width: 25px;
+      height: 25px;
+      animation: none !important;
+    }
+
+    .endpoint-icon .ghost {
+      width: 25px;
+      height: 25px;
+      animation: none !important;
+    }
+
+    .endpoint.low .bubble { transform: scale(.998); opacity: .92; }
+    .endpoint.low .ghost { transform: scale(1.02); opacity: .18; }
+    .endpoint.high .bubble { transform: scale(1.018); opacity: 1; }
+    .endpoint.high .ghost { transform: scale(var(--peak-scale)); opacity: var(--peak-opacity); }
+
+    .metrics {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 6.5px;
+    }
+
+    .metrics strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    .verdict {
+      min-height: 40px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 7px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .verdict strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    /*
+      Ambient breathing uses ease-in-out intentionally. The canonical settle
+      curve is asymmetric and creates a visible lurch at the loop seam.
+    */
+
+    .balanced {
+      --peak-scale: 1.10;
+      --peak-opacity: .55;
+    }
+
+    .balanced .ghost { animation: balanced-ghost 2.8s ease-in-out infinite; }
+    .balanced .bubble:not(.ghost) { animation: balanced-body 2.8s ease-in-out infinite; }
+
+    @keyframes balanced-ghost {
+      0%, 100% { opacity: .18; transform: scale(1.02); }
+      50% { opacity: .55; transform: scale(1.10); }
+    }
+
+    @keyframes balanced-body {
+      0%, 100% { opacity: .92; transform: scale(.998); }
+      50% { opacity: 1; transform: scale(1.018); }
+    }
+
+    .slow-full {
+      --peak-scale: 1.105;
+      --peak-opacity: .58;
+    }
+
+    .slow-full .ghost { animation: slow-full-ghost 3.8s ease-in-out infinite; }
+    .slow-full .bubble:not(.ghost) { animation: slow-full-body 3.8s ease-in-out infinite; }
+
+    @keyframes slow-full-ghost {
+      0%, 100% { opacity: .17; transform: scale(1.02); }
+      50% { opacity: .58; transform: scale(1.105); }
+    }
+
+    @keyframes slow-full-body {
+      0%, 100% { opacity: .91; transform: scale(.998); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    .shallow-alive {
+      --peak-scale: 1.09;
+      --peak-opacity: .54;
+    }
+
+    .shallow-alive .ghost { animation: shallow-ghost 2.45s ease-in-out infinite; }
+    .shallow-alive .bubble:not(.ghost) { animation: shallow-body 2.45s ease-in-out infinite; }
+
+    @keyframes shallow-ghost {
+      0%, 100% { opacity: .21; transform: scale(1.025); }
+      50% { opacity: .54; transform: scale(1.09); }
+    }
+
+    @keyframes shallow-body {
+      0%, 100% { opacity: .93; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.014); }
+    }
+
+    .long-exhale {
+      --peak-scale: 1.105;
+      --peak-opacity: .57;
+    }
+
+    .long-exhale .ghost { animation: long-exhale-ghost 3.4s ease-in-out infinite; }
+    .long-exhale .bubble:not(.ghost) { animation: long-exhale-body 3.4s ease-in-out infinite; }
+
+    @keyframes long-exhale-ghost {
+      0%, 100% { opacity: .18; transform: scale(1.02); }
+      34% { opacity: .57; transform: scale(1.105); }
+    }
+
+    @keyframes long-exhale-body {
+      0%, 100% { opacity: .92; transform: scale(.998); }
+      34% { opacity: 1; transform: scale(1.019); }
+    }
+
+    .breath-rest {
+      --peak-scale: 1.10;
+      --peak-opacity: .58;
+    }
+
+    .breath-rest .ghost { animation: breath-rest-ghost 5.2s linear infinite; }
+    .breath-rest .bubble:not(.ghost) { animation: breath-rest-body 5.2s linear infinite; }
+
+    @keyframes breath-rest-ghost {
+      0%, 4% { opacity: .18; transform: scale(1.02); }
+      24% { opacity: .58; transform: scale(1.10); animation-timing-function: var(--ease-settle); }
+      48%, 100% { opacity: .18; transform: scale(1.02); }
+    }
+
+    @keyframes breath-rest-body {
+      0%, 4% { opacity: .92; transform: scale(.998); }
+      24% { opacity: 1; transform: scale(1.018); animation-timing-function: var(--ease-settle); }
+      48%, 100% { opacity: .92; transform: scale(.998); }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: 13px;
+      color: var(--faint);
+      font-size: 8px;
+      line-height: 1.5;
+    }
+
+    .footer strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ghost,
+      .bubble:not(.ghost) {
+        animation: none !important;
+      }
+
+      .ghost {
+        opacity: .30;
+        transform: scale(1.06);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .board { padding: 19px 16px 22px; }
+      .intro { display: block; margin-bottom: 15px; }
+      h1 { font-size: 31px; }
+      .brief {
+        max-width: 680px;
+        margin-top: 9px;
+        text-align: left;
+      }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 430px) {
+      body { background-size: 40px 40px; }
+      .board { padding: 13px 10px 12px; }
+      .eyebrow { margin-bottom: 3px; font-size: 7px; }
+      h1 { font-size: 24px; }
+      .brief { margin-top: 6px; font-size: 7px; line-height: 1.35; }
+      .grid { grid-template-columns: 1fr; gap: 6px; }
+      .option {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 76px 104px;
+        grid-template-rows: 33px 33px;
+      }
+      .meta {
+        min-height: 0;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        padding: 7px 8px 6px;
+        border-right: 1px solid var(--line);
+        border-bottom: 0;
+      }
+      .family { margin-bottom: 1px; font-size: 5.4px; }
+      h2 { margin-bottom: 1px; font-size: 10.5px; }
+      .note { font-size: 5.8px; line-height: 1.2; }
+      .live-header {
+        grid-column: 2;
+        grid-row: 1;
+        height: 33px;
+      }
+      .terminal { padding: 0 6px; font-size: 5.5px; }
+      .icon-cell { width: 33px; height: 32px; }
+      .study {
+        grid-column: 2;
+        grid-row: 2;
+        min-height: 33px;
+        padding: 0;
+        border-top: 1px solid var(--line);
+      }
+      .motion-label { display: none; }
+      .study-cell {
+        width: 34px;
+        height: 32px;
+        border: 0;
+        background: transparent;
+      }
+      .study .bubble,
+      .study .ghost {
+        width: 24px;
+        height: 24px;
+        stroke-width: 1.8;
+      }
+      .endpoints {
+        grid-column: 3;
+        grid-row: 1 / span 2;
+        border-top: 0;
+        border-left: 1px solid var(--line);
+      }
+      .endpoint {
+        min-height: 66px;
+        grid-template-columns: 1fr;
+        place-items: center;
+        gap: 1px;
+        padding: 3px 2px;
+      }
+      .endpoint-icon { width: 27px; height: 27px; }
+      .endpoint-icon .bubble,
+      .endpoint-icon .ghost {
+        width: 19px;
+        height: 19px;
+      }
+      .state-label { font-size: 4.4px; }
+      .metrics,
+      .verdict { display: none; }
+      .footer { margin-top: 8px; font-size: 6.1px; line-height: 1.3; }
+      .footer span:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Whispers · breathing contour · corrected middle</p>
+        <h1>These actually breathe.</h1>
+      </div>
+      <p class="brief"><strong>Measured correction:</strong> original contour travel 11.9%; over-muted pass 3.5%; these land at 6.5–8.5%. Every card includes the animated 22px header icon plus fixed exhale/inhale endpoints, so the movement remains judgeable even in a frozen frame.</p>
+    </header>
+
+    <section class="grid" id="options" aria-label="Five visibly breathing contour variations"></section>
+
+    <footer class="footer">
+      <span><strong>My pick: 05 Breath + pause.</strong> Full readable breath, half the cycle quiet.</span>
+      <span>Preview the live card or browser page to judge rhythm.</span>
+    </footer>
+  </main>
+
+  <template id="option-template">
+    <article class="option">
+      <header class="meta">
+        <span class="family"></span>
+        <h2></h2>
+        <p class="note"></p>
+      </header>
+      <div class="live-header">
+        <span class="terminal">T1</span>
+        <span class="icon-cell"></span>
+      </div>
+      <div class="study">
+        <span class="motion-label">Live motion · 3×</span>
+        <div class="study-cell"></div>
+      </div>
+      <div class="endpoints">
+        <div class="endpoint low">
+          <span class="state-label">Exhale</span>
+          <span class="endpoint-icon"></span>
+        </div>
+        <div class="endpoint high">
+          <span class="state-label">Inhale</span>
+          <span class="endpoint-icon"></span>
+        </div>
+      </div>
+      <div class="metrics">
+        <span>Travel <strong class="travel"></strong></span>
+        <span>Cycle <strong class="cycle"></strong></span>
+      </div>
+      <div class="verdict"></div>
+    </article>
+  </template>
+
+  <script>
+    const profiles = [
+      {
+        cls: "balanced",
+        family: "Middle amplitude",
+        title: "01 · Balanced breath",
+        note: "A clear inhale and exhale without the original flare.",
+        travel: "8%",
+        cycle: "2.8s",
+        verdict: "<strong>Best continuous default.</strong>",
+        recommended: true
+      },
+      {
+        cls: "slow-full",
+        family: "Slower rhythm",
+        title: "02 · Slow full breath",
+        note: "The clearest expansion, slowed enough to feel calm.",
+        travel: "8.5%",
+        cycle: "3.8s",
+        verdict: "<strong>Most natural breathing rhythm.</strong>"
+      },
+      {
+        cls: "shallow-alive",
+        family: "Smaller + quicker",
+        title: "03 · Shallow alive",
+        note: "Less travel, but enough luminance to remain alive.",
+        travel: "6.5%",
+        cycle: "2.45s",
+        verdict: "<strong>Smallest unmistakable breath.</strong>"
+      },
+      {
+        cls: "long-exhale",
+        family: "Asymmetric rhythm",
+        title: "04 · Long exhale",
+        note: "A quicker inhale and a calmer release.",
+        travel: "8.5%",
+        cycle: "3.4s",
+        verdict: "<strong>Most organic cadence.</strong>"
+      },
+      {
+        cls: "breath-rest",
+        family: "Breath + stillness",
+        title: "05 · Breath + pause",
+        note: "One readable breath, then quiet for half the cycle.",
+        travel: "8%",
+        cycle: "5.2s",
+        verdict: "<strong>Recommended for the terminal.</strong>",
+        recommended: true
+      }
+    ];
+
+    const iconMarkup = `
+      <span class="bubble-wrap" aria-hidden="true">
+        <svg class="bubble ghost" viewBox="0 0.5 24 24">
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+        </svg>
+        <svg class="bubble" viewBox="0 0.5 24 24">
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+          <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4"/>
+          <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4"/>
+        </svg>
+      </span>`;
+
+    const grid = document.querySelector("#options");
+    const template = document.querySelector("#option-template");
+
+    profiles.forEach((profile) => {
+      const fragment = template.content.cloneNode(true);
+      const card = fragment.querySelector(".option");
+      card.classList.add(profile.cls);
+      if (profile.recommended) card.classList.add("recommended");
+      fragment.querySelector(".family").textContent = profile.family;
+      fragment.querySelector("h2").textContent = profile.title;
+      fragment.querySelector(".note").textContent = profile.note;
+      fragment.querySelector(".travel").textContent = profile.travel;
+      fragment.querySelector(".cycle").textContent = profile.cycle;
+      fragment.querySelector(".verdict").innerHTML = profile.verdict;
+      fragment.querySelectorAll(".icon-cell, .study-cell, .endpoint-icon").forEach((cell) => {
+        cell.insertAdjacentHTML("beforeend", iconMarkup);
+      });
+      grid.appendChild(fragment);
+    });
+  </script>
+</body>
+</html>
