@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>thinkpool — Five Whisper icon eye variations</title>
+  <title>thinkpool — Five eye variations in the unchanged Whisper bubble</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -431,59 +431,57 @@
 </head>
 <body>
   <svg aria-hidden="true" width="0" height="0" style="position:absolute">
-    <symbol id="eyes-shut" viewBox="0 0 24 24">
-      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
-      <path d="M8.2 12.4c.7-.7 1.7-.7 2.4 0M13.4 12.4c.7-.7 1.7-.7 2.4 0" />
+    <symbol id="hollow-pair" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <circle cx="9" cy="12" r="1.15" />
+      <circle cx="15" cy="12" r="1.15" />
     </symbol>
-    <symbol id="blindfold" viewBox="0 0 24 24">
-      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
-      <path d="M7.4 11.2c3-1.2 6.2-1.2 9.2 0v2.8c-3-.9-6.2-.9-9.2 0Z" />
-      <path d="m7.4 12.4-1.7-.9M16.6 12.4l1.7-.9" />
+    <symbol id="tight-dots" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <circle cx="9.7" cy="12" r="0.85" fill="currentColor" stroke="none" />
+      <circle cx="14.3" cy="12" r="0.85" fill="currentColor" stroke="none" />
     </symbol>
-    <symbol id="no-view-eye" viewBox="0 0 24 24">
-      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
-      <path d="M7.3 12.6c2.7-2.8 6.7-2.8 9.4 0-2.7 2.8-6.7 2.8-9.4 0Z" />
-      <circle cx="12" cy="12.6" r="1.2" />
-      <path d="m6.8 7.5 10.4 10.4" />
+    <symbol id="terminal-pixels" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <rect x="8.15" y="11.1" width="1.9" height="1.9" rx="0.45" fill="currentColor" stroke="none" />
+      <rect x="13.95" y="11.1" width="1.9" height="1.9" rx="0.45" fill="currentColor" stroke="none" />
     </symbol>
-    <symbol id="crossed-gaze" viewBox="0 0 24 24">
-      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
-      <circle cx="9.5" cy="12.6" r="0.9" fill="currentColor" stroke="none" />
-      <circle cx="14.5" cy="12.6" r="0.9" fill="currentColor" stroke="none" />
-      <path d="m6.5 7.2 11 11" />
+    <symbol id="closed-lids" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <path d="M8 12.35c.7-.7 1.7-.7 2.5 0M13.5 12.35c.7-.7 1.7-.7 2.5 0" />
     </symbol>
-    <symbol id="quiet-wink" viewBox="0 0 24 24">
-      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
-      <circle cx="9.4" cy="12.5" r="0.9" fill="currentColor" stroke="none" />
-      <path d="M13.3 12.7c.8-.7 1.7-.7 2.5 0M9.7 16c1.4.8 3.2.8 4.6 0" />
+    <symbol id="single-wink" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <circle cx="9.3" cy="12" r="0.95" fill="currentColor" stroke="none" />
+      <path d="M13.6 12.3c.7-.7 1.7-.7 2.4 0" />
     </symbol>
   </svg>
 
   <main class="board">
     <header class="header">
       <div>
-        <p class="eyebrow">Whisper icon · eye directions</p>
-        <h1>Five ways for Pool not to look</h1>
+        <p class="eyebrow">Whisper icon · eye-only directions</p>
+        <h1>Same bubble, five pairs of eyes</h1>
       </div>
-      <p class="header-note">The Pool-drop silhouette is unchanged. Each candidate appears at 22px in the real tab, 40px in the empty state, and 48px for close inspection.</p>
+      <p class="header-note">The shipped chat-bubble outline is byte-for-byte unchanged. Only the two marks inside it vary at 22px, 40px, and 48px.</p>
     </header>
 
     <section class="grid" aria-label="Five Whisper icon variations">
       <article class="card">
         <header class="card-head">
           <span class="key">A</span>
-          <div><h2>Eyes shut</h2><p class="card-note">Calm, immediate, and the least dependent on a prohibition slash.</p></div>
+          <div><h2>Hollow pair</h2><p class="card-note">The current spacing with lighter, open eyes instead of solid dots.</p></div>
         </header>
         <div class="phone">
           <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
           <div class="room-nav">
             <div class="room-title"><span class="back">‹</span><span>T1</span></div>
-            <div class="nav-control active"><svg class="nav-icon"><use href="#eyes-shut"></use></svg></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#hollow-pair"></use></svg></div>
             <div class="nav-control">⚙</div>
           </div>
           <div class="empty">
             <div class="empty-inner">
-              <span class="icon-focus"><svg><use href="#eyes-shut"></use></svg></span>
+              <span class="icon-focus"><svg><use href="#hollow-pair"></use></svg></span>
               <h3>Your room notes</h3>
               <p>Keep context here while you work. Pool and agents stay out.</p>
             </div>
@@ -493,24 +491,24 @@
             <div class="home"></div>
           </div>
         </div>
-        <div class="detail"><span class="detail-label">Closed lids<br>48px detail</span><svg><use href="#eyes-shut"></use></svg></div>
+        <div class="detail"><span class="detail-label">Open circles<br>48px detail</span><svg><use href="#hollow-pair"></use></svg></div>
       </article>
 
       <article class="card">
         <header class="card-head">
           <span class="key">B</span>
-          <div><h2>Soft blindfold</h2><p class="card-note">Literal privacy signal, but heavier and more character-like.</p></div>
+          <div><h2>Tighter dots</h2><p class="card-note">The current eyes pulled inward and reduced slightly.</p></div>
         </header>
         <div class="phone">
           <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
           <div class="room-nav">
             <div class="room-title"><span class="back">‹</span><span>T1</span></div>
-            <div class="nav-control active"><svg class="nav-icon"><use href="#blindfold"></use></svg></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#tight-dots"></use></svg></div>
             <div class="nav-control">⚙</div>
           </div>
           <div class="empty">
             <div class="empty-inner">
-              <span class="icon-focus"><svg><use href="#blindfold"></use></svg></span>
+              <span class="icon-focus"><svg><use href="#tight-dots"></use></svg></span>
               <h3>Your room notes</h3>
               <p>Keep context here while you work. Pool and agents stay out.</p>
             </div>
@@ -520,24 +518,24 @@
             <div class="home"></div>
           </div>
         </div>
-        <div class="detail"><span class="detail-label">Wrapped band<br>48px detail</span><svg><use href="#blindfold"></use></svg></div>
+        <div class="detail"><span class="detail-label">Closer pupils<br>48px detail</span><svg><use href="#tight-dots"></use></svg></div>
       </article>
 
       <article class="card">
         <header class="card-head">
           <span class="key">C</span>
-          <div><h2>No-view eye</h2><p class="card-note">The clearest privacy semantics, with the most internal geometry.</p></div>
+          <div><h2>Terminal pixels</h2><p class="card-note">Rounded-square eyes tuned to the angular Code chrome.</p></div>
         </header>
         <div class="phone">
           <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
           <div class="room-nav">
             <div class="room-title"><span class="back">‹</span><span>T1</span></div>
-            <div class="nav-control active"><svg class="nav-icon"><use href="#no-view-eye"></use></svg></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#terminal-pixels"></use></svg></div>
             <div class="nav-control">⚙</div>
           </div>
           <div class="empty">
             <div class="empty-inner">
-              <span class="icon-focus"><svg><use href="#no-view-eye"></use></svg></span>
+              <span class="icon-focus"><svg><use href="#terminal-pixels"></use></svg></span>
               <h3>Your room notes</h3>
               <p>Keep context here while you work. Pool and agents stay out.</p>
             </div>
@@ -547,24 +545,24 @@
             <div class="home"></div>
           </div>
         </div>
-        <div class="detail"><span class="detail-label">Eye + slash<br>48px detail</span><svg><use href="#no-view-eye"></use></svg></div>
+        <div class="detail"><span class="detail-label">Soft squares<br>48px detail</span><svg><use href="#terminal-pixels"></use></svg></div>
       </article>
 
       <article class="card">
         <header class="card-head">
           <span class="key">D</span>
-          <div><h2>Crossed gaze</h2><p class="card-note">Two familiar eyes preserve the current diagonal no-view cue.</p></div>
+          <div><h2>Closed lids</h2><p class="card-note">Two small curves make the bubble feel private without adding a slash.</p></div>
         </header>
         <div class="phone">
           <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
           <div class="room-nav">
             <div class="room-title"><span class="back">‹</span><span>T1</span></div>
-            <div class="nav-control active"><svg class="nav-icon"><use href="#crossed-gaze"></use></svg></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#closed-lids"></use></svg></div>
             <div class="nav-control">⚙</div>
           </div>
           <div class="empty">
             <div class="empty-inner">
-              <span class="icon-focus"><svg><use href="#crossed-gaze"></use></svg></span>
+              <span class="icon-focus"><svg><use href="#closed-lids"></use></svg></span>
               <h3>Your room notes</h3>
               <p>Keep context here while you work. Pool and agents stay out.</p>
             </div>
@@ -574,24 +572,24 @@
             <div class="home"></div>
           </div>
         </div>
-        <div class="detail"><span class="detail-label">Dots + slash<br>48px detail</span><svg><use href="#crossed-gaze"></use></svg></div>
+        <div class="detail"><span class="detail-label">Curved lids<br>48px detail</span><svg><use href="#closed-lids"></use></svg></div>
       </article>
 
       <article class="card">
         <header class="card-head">
           <span class="key">E</span>
-          <div><h2>Quiet wink</h2><p class="card-note">Friendliest direction. Distinctive, but less literal about privacy.</p></div>
+          <div><h2>Single wink</h2><p class="card-note">One dot, one lid. Friendlier, but still restrained without a smile.</p></div>
         </header>
         <div class="phone">
           <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
           <div class="room-nav">
             <div class="room-title"><span class="back">‹</span><span>T1</span></div>
-            <div class="nav-control active"><svg class="nav-icon"><use href="#quiet-wink"></use></svg></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#single-wink"></use></svg></div>
             <div class="nav-control">⚙</div>
           </div>
           <div class="empty">
             <div class="empty-inner">
-              <span class="icon-focus"><svg><use href="#quiet-wink"></use></svg></span>
+              <span class="icon-focus"><svg><use href="#single-wink"></use></svg></span>
               <h3>Your room notes</h3>
               <p>Keep context here while you work. Pool and agents stay out.</p>
             </div>
@@ -601,12 +599,12 @@
             <div class="home"></div>
           </div>
         </div>
-        <div class="detail"><span class="detail-label">Wink + smile<br>48px detail</span><svg><use href="#quiet-wink"></use></svg></div>
+        <div class="detail"><span class="detail-label">Dot + lid<br>48px detail</span><svg><use href="#single-wink"></use></svg></div>
       </article>
     </section>
 
     <footer class="footer">
-      <span>Source reference: current WhisperIcon drop path + Code icon stroke system.</span>
+      <span>Source reference: current TwoVoicesIcon bubble path + Code icon stroke system.</span>
       <span>Judge the 22px tab first. The 48px row is diagnosis, not the product size.</span>
     </footer>
   </main>
