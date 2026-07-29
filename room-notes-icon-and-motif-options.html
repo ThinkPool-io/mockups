@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Room notes icon and empty-state motif options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --panel-7: hsl(212 13% 7%);
+      --panel-10: hsl(212 13% 10%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --viewer: hsl(163 28% 54%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 50% -10%, color-mix(in oklab, var(--pool) 7%, transparent), transparent 34rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 28px 24px 34px;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1392px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 3vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .header-note {
+      max-width: 460px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .section {
+      max-width: 1392px;
+      margin: 0 auto;
+    }
+
+    .section + .section {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .section h2 {
+      margin: 0;
+      color: var(--soft);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+
+    .section-note {
+      max-width: 480px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.55;
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--panel-7) 86%, transparent);
+    }
+
+    .card-head {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 9px;
+      min-height: 64px;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .key {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .card h3 {
+      margin: 1px 0 3px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .icon-stage {
+      display: grid;
+      min-height: 172px;
+      grid-template-rows: 46px 1fr 26px;
+      place-items: center;
+      padding: 12px;
+    }
+
+    .tab-preview {
+      display: grid;
+      width: 54px;
+      height: 46px;
+      place-items: center;
+      border-right: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--panel-7);
+      color: var(--pool);
+    }
+
+    .tab-preview svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .large-icon {
+      display: grid;
+      width: 68px;
+      height: 68px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--bg);
+      color: var(--muted);
+    }
+
+    .large-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .size-note {
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.65;
+    }
+
+    .motif-stage {
+      display: grid;
+      min-height: 250px;
+      place-items: center;
+      padding: 10px 12px 14px;
+      text-align: center;
+    }
+
+    .motif-wrap {
+      position: relative;
+      display: grid;
+      width: 132px;
+      height: 132px;
+      place-items: center;
+    }
+
+    .motif-icon {
+      position: relative;
+      z-index: 4;
+      width: 31px;
+      height: 31px;
+      color: var(--muted);
+    }
+
+    .motif-copy {
+      margin-top: 7px;
+    }
+
+    .motif-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .motif-copy span {
+      display: block;
+      max-width: 180px;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    /* T1: no circle, just a radial wash */
+    .halo {
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        color-mix(in oklab, var(--viewer) 13%, transparent) 0,
+        color-mix(in oklab, var(--viewer) 6%, transparent) 34%,
+        transparent 68%);
+    }
+
+    /* T2: open concentric arcs */
+    .arc {
+      position: absolute;
+      border: 1px solid transparent;
+      border-top-color: color-mix(in oklab, var(--viewer) 34%, transparent);
+      border-right-color: color-mix(in oklab, var(--viewer) 15%, transparent);
+      border-radius: 50%;
+      transform: rotate(-28deg);
+    }
+
+    .arc.one {
+      inset: 22px;
+    }
+
+    .arc.two {
+      inset: 10px;
+      transform: rotate(145deg);
+      opacity: 0.62;
+    }
+
+    /* T3: a second page behind the notebook */
+    .ghost-page {
+      position: absolute;
+      width: 60px;
+      height: 74px;
+      border: 1px solid color-mix(in oklab, var(--viewer) 24%, var(--line));
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--viewer) 5%, var(--panel-7));
+      transform: translate(9px, -6px) rotate(7deg);
+    }
+
+    .ghost-page.front {
+      z-index: 2;
+      transform: translate(-5px, 5px) rotate(-3deg);
+      background: var(--panel-7);
+    }
+
+    /* T4: open corner marks, no enclosed shape */
+    .corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+    }
+
+    .corner.tl {
+      top: 23px;
+      left: 23px;
+      border-top: 1px solid var(--viewer);
+      border-left: 1px solid var(--viewer);
+    }
+
+    .corner.tr {
+      top: 23px;
+      right: 23px;
+      border-top: 1px solid var(--viewer);
+      border-right: 1px solid var(--viewer);
+    }
+
+    .corner.bl {
+      bottom: 23px;
+      left: 23px;
+      border-bottom: 1px solid var(--viewer);
+      border-left: 1px solid var(--viewer);
+    }
+
+    .corner.br {
+      right: 23px;
+      bottom: 23px;
+      border-right: 1px solid var(--viewer);
+      border-bottom: 1px solid var(--viewer);
+    }
+
+    /* T5: ruled notebook field */
+    .rule-line {
+      position: absolute;
+      left: 20px;
+      width: 92px;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        color-mix(in oklab, var(--viewer) 38%, transparent) 18%,
+        color-mix(in oklab, var(--viewer) 38%, transparent) 82%,
+        transparent);
+    }
+
+    .rule-line.one { top: 44px; }
+    .rule-line.two { top: 66px; opacity: 0.7; }
+    .rule-line.three { top: 88px; opacity: 0.4; }
+
+    .rules .motif-icon {
+      padding: 5px;
+      background: var(--bg);
+      box-sizing: content-box;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 1392px;
+      margin: 18px auto 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .board {
+        padding: 22px 16px 30px;
+      }
+
+      .header,
+      .section-head {
+        display: block;
+      }
+
+      .header-note,
+      .section-note {
+        margin-top: 9px;
+        text-align: left;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .motif-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-head {
+        min-height: 76px;
+      }
+
+      .motif-grid .card-head {
+        min-height: 64px;
+      }
+
+      .motif-stage {
+        min-height: 230px;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="icon-a" viewBox="0 0 24 24">
+      <rect x="6" y="3.5" width="13" height="17" rx="2" />
+      <path d="M9.5 4v16M4.5 7h3M4.5 12h3M4.5 17h3M12.5 9h3.5M12.5 13h3.5" />
+    </symbol>
+    <symbol id="icon-b" viewBox="0 0 24 24">
+      <path d="M6 3.5h8l4 4v13H6Z" />
+      <path d="M14 3.5V8h4M9 11h6M9 15h6M9 18h4" />
+    </symbol>
+    <symbol id="icon-c" viewBox="0 0 24 24">
+      <rect x="4.5" y="4.5" width="15" height="15" rx="2.5" />
+      <path d="M8.5 5v14M6.5 8h4M6.5 12h4M6.5 16h4M12 9h4.5M12 13h3.5" />
+    </symbol>
+    <symbol id="icon-d" viewBox="0 0 24 24">
+      <path d="M12 7c-2-1.7-4.7-2.1-7-1.2v12.8c2.3-.9 5-.5 7 1.2Z" />
+      <path d="M12 7c2-1.7 4.7-2.1 7-1.2v12.8c-2.3-.9-5-.5-7 1.2Z" />
+      <path d="M8 9.5c1.2 0 2.1.2 3 .7M16 9.5c-1.2 0-2.1.2-3 .7" />
+    </symbol>
+    <symbol id="icon-e" viewBox="0 0 24 24">
+      <rect x="5" y="5" width="14" height="15" rx="2" />
+      <path d="M9 2.5v5M15 2.5v5M8.5 11h7M8.5 15h5" />
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Room notes · direction round</p>
+        <h1>Five notebook icons, five quieter motifs</h1>
+      </div>
+      <p class="header-note">Icons are shown at the real 22px tab size and a 34px empty-state size. Motifs remove the orbit dots entirely.</p>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Part one</p>
+          <h2>Notebook icon directions</h2>
+        </div>
+        <p class="section-note">Judge silhouette first. A notebook glyph has to survive the tab before it earns the larger empty state.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <header class="card-head">
+            <span class="key">A</span>
+            <div><h3>Side stitch</h3><p>Bound notebook with visible loops and a quiet writing field.</p></div>
+          </header>
+          <div class="icon-stage">
+            <span class="tab-preview"><svg><use href="#icon-a"></use></svg></span>
+            <span class="large-icon"><svg><use href="#icon-a"></use></svg></span>
+            <span class="size-note">22px · 34px</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">B</span>
+            <div><h3>Folded note</h3><p>A single saved page. Cleanest silhouette, least “book” literal.</p></div>
+          </header>
+          <div class="icon-stage">
+            <span class="tab-preview"><svg><use href="#icon-b"></use></svg></span>
+            <span class="large-icon"><svg><use href="#icon-b"></use></svg></span>
+            <span class="size-note">22px · 34px</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">C</span>
+            <div><h3>Field book</h3><p>Compact bound volume with a heavier, terminal-native shape.</p></div>
+          </header>
+          <div class="icon-stage">
+            <span class="tab-preview"><svg><use href="#icon-c"></use></svg></span>
+            <span class="large-icon"><svg><use href="#icon-c"></use></svg></span>
+            <span class="size-note">22px · 34px</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">D</span>
+            <div><h3>Open pages</h3><p>The only two-page direction. Softer and more reflective.</p></div>
+          </header>
+          <div class="icon-stage">
+            <span class="tab-preview"><svg><use href="#icon-d"></use></svg></span>
+            <span class="large-icon"><svg><use href="#icon-d"></use></svg></span>
+            <span class="size-note">22px · 34px</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">E</span>
+            <div><h3>Pocket pad</h3><p>Top-bound notes. Familiar at a glance without looking like contacts.</p></div>
+          </header>
+          <div class="icon-stage">
+            <span class="tab-preview"><svg><use href="#icon-e"></use></svg></span>
+            <span class="large-icon"><svg><use href="#icon-e"></use></svg></span>
+            <span class="size-note">22px · 34px</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Part two</p>
+          <h2>Alternatives to perimeter dots</h2>
+        </div>
+        <p class="section-note">All five use icon E only as a neutral constant. The final motif can pair with whichever glyph wins above.</p>
+      </div>
+
+      <div class="grid motif-grid">
+        <article class="card">
+          <header class="card-head">
+            <span class="key">1</span>
+            <div><h3>Quiet halo</h3><p>No geometry to inspect. Just a soft eucalyptus wash.</p></div>
+          </header>
+          <div class="motif-stage">
+            <div>
+              <div class="motif-wrap halo">
+                <svg class="motif-icon"><use href="#icon-e"></use></svg>
+              </div>
+              <div class="motif-copy"><strong>Your room notebook</strong><span>Keep context here while you work.</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">2</span>
+            <div><h3>Open ripples</h3><p>Two partial arcs imply still water without drawing a target.</p></div>
+          </header>
+          <div class="motif-stage">
+            <div>
+              <div class="motif-wrap">
+                <span class="arc one"></span>
+                <span class="arc two"></span>
+                <svg class="motif-icon"><use href="#icon-e"></use></svg>
+              </div>
+              <div class="motif-copy"><strong>Your room notebook</strong><span>Keep context here while you work.</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">3</span>
+            <div><h3>Ghost pages</h3><p>The notebook casts a paper echo instead of sitting in a circle.</p></div>
+          </header>
+          <div class="motif-stage">
+            <div>
+              <div class="motif-wrap">
+                <span class="ghost-page"></span>
+                <span class="ghost-page front"></span>
+                <svg class="motif-icon"><use href="#icon-e"></use></svg>
+              </div>
+              <div class="motif-copy"><strong>Your room notebook</strong><span>Keep context here while you work.</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">4</span>
+            <div><h3>Open corners</h3><p>A quiet focus frame with no enclosed badge or perimeter.</p></div>
+          </header>
+          <div class="motif-stage">
+            <div>
+              <div class="motif-wrap">
+                <span class="corner tl"></span><span class="corner tr"></span>
+                <span class="corner bl"></span><span class="corner br"></span>
+                <svg class="motif-icon"><use href="#icon-e"></use></svg>
+              </div>
+              <div class="motif-copy"><strong>Your room notebook</strong><span>Keep context here while you work.</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header class="card-head">
+            <span class="key">5</span>
+            <div><h3>Ruled field</h3><p>Three fading writing lines. Notebook meaning without another container.</p></div>
+          </header>
+          <div class="motif-stage">
+            <div>
+              <div class="motif-wrap rules">
+                <span class="rule-line one"></span>
+                <span class="rule-line two"></span>
+                <span class="rule-line three"></span>
+                <svg class="motif-icon"><use href="#icon-e"></use></svg>
+              </div>
+              <div class="motif-copy"><strong>Your room notebook</strong><span>Keep context here while you work.</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Source reference: selected Room notes direction 02 + current Code icon stroke system.</span>
+      <span>Likely finalists after render: D/E for glyph, 1/2/5 for motif.</span>
+    </footer>
+  </main>
+</body>
+</html>
