@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Whispers empty state, five directions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-k-bg: hsl(212 13% 5%);
+      --color-k-panel-7: hsl(212 13% 7%);
+      --color-k-panel-10: hsl(212 13% 10%);
+      --color-k-panel-14: hsl(212 14% 8%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-k-pool: hsl(201 78% 64%);
+      --color-k-partner: hsl(218 60% 72%);
+      --color-k-whisper-viewer: hsl(163 28% 54%);
+      --color-k-ink-inv: hsl(24 23% 8%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--color-k-bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 50% -10%, color-mix(in oklab, var(--color-k-pool) 7%, transparent), transparent 38rem),
+        var(--color-k-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 32px 24px 40px;
+    }
+
+    .board-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1392px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--color-k-pool);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-size: clamp(24px, 2.3vw, 34px);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+    }
+
+    .brief {
+      max-width: 500px;
+      margin: 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 1392px;
+      margin: 0 auto;
+    }
+
+    .option {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--color-line);
+      background: color-mix(in oklab, var(--color-k-panel-7) 84%, transparent);
+    }
+
+    .option-meta {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 9px;
+      min-height: 64px;
+      margin-bottom: 11px;
+    }
+
+    .option-number {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 7px;
+      color: var(--color-k-pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .option h2 {
+      margin: 1px 0 3px;
+      color: var(--color-ink-soft);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .option-note {
+      margin: 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.45;
+    }
+
+    .phone {
+      position: relative;
+      display: flex;
+      width: 100%;
+      aspect-ratio: 390 / 844;
+      min-height: 0;
+      overflow: hidden;
+      flex-direction: column;
+      border: 1px solid var(--color-line);
+      border-radius: 22px;
+      background: var(--color-k-bg);
+      box-shadow: 0 20px 48px hsl(212 20% 2% / 0.38);
+    }
+
+    .status {
+      display: flex;
+      height: 7.2%;
+      flex: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6.8%;
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-size: clamp(8px, 0.95vw, 14px);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .signal {
+      display: flex;
+      height: 13px;
+      align-items: end;
+      gap: 2px;
+    }
+
+    .signal i {
+      display: block;
+      width: 3px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .signal i:nth-child(1) { height: 5px; }
+    .signal i:nth-child(2) { height: 8px; }
+    .signal i:nth-child(3) { height: 11px; opacity: 0.45; }
+    .signal i:nth-child(4) { height: 13px; opacity: 0.25; }
+
+    .wifi {
+      position: relative;
+      width: 15px;
+      height: 11px;
+      border-top: 2px solid currentColor;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .wifi::before,
+    .wifi::after {
+      position: absolute;
+      left: 50%;
+      content: "";
+      transform: translateX(-50%);
+      border-top: 2px solid currentColor;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .wifi::before {
+      top: 2px;
+      width: 10px;
+      height: 7px;
+    }
+
+    .wifi::after {
+      top: 6px;
+      width: 3px;
+      height: 3px;
+    }
+
+    .battery {
+      display: grid;
+      min-width: 22px;
+      height: 13px;
+      place-items: center;
+      border-radius: 4px;
+      background: hsl(48 91% 53%);
+      color: var(--color-k-ink-inv);
+      font-family: var(--font-sans);
+      font-size: 8px;
+      font-weight: 600;
+    }
+
+    .room-nav {
+      display: grid;
+      height: 7.8%;
+      flex: none;
+      grid-template-columns: 1fr 16% 16%;
+      align-items: stretch;
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .room-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 6.2%;
+      color: var(--color-ink-soft);
+      font-family: var(--font-mono);
+      font-size: clamp(8px, 0.95vw, 13px);
+    }
+
+    .back {
+      color: var(--color-k-pool);
+      font-family: var(--font-sans);
+      font-size: 1.65em;
+      line-height: 1;
+    }
+
+    .nav-control {
+      display: grid;
+      place-items: center;
+      border-left: 1px solid transparent;
+      color: var(--color-faint);
+    }
+
+    .nav-control.active {
+      border-left-color: var(--color-line);
+      border-right: 1px solid var(--color-line);
+      background: var(--color-k-panel-7);
+      color: var(--color-k-pool);
+    }
+
+    .two-voices,
+    .whisper-drop,
+    .lock,
+    .gear {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+    .empty {
+      position: relative;
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      overflow: hidden;
+      padding: 8%;
+    }
+
+    .composer-wrap {
+      flex: none;
+      padding: 2% 3% 3%;
+      background: var(--color-k-bg);
+    }
+
+    .composer {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      padding: 1.4% 1.4% 1.4% 3%;
+      border: 1px solid color-mix(in oklab, var(--color-k-partner) 45%, var(--color-line));
+      border-radius: 9px;
+      background: var(--color-k-bg);
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: clamp(6.5px, 0.76vw, 11px);
+    }
+
+    .placeholder {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .send {
+      display: grid;
+      width: 12%;
+      aspect-ratio: 1;
+      flex: none;
+      place-items: center;
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--color-k-partner) 36%, var(--color-k-panel-10));
+      color: var(--color-k-bg);
+      opacity: 0.7;
+    }
+
+    .send svg {
+      width: 55%;
+      height: 55%;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 3;
+    }
+
+    .home-indicator {
+      width: 36%;
+      height: 4px;
+      margin: 2.2% auto 0;
+      border-radius: 99px;
+      background: var(--color-muted);
+      opacity: 0.85;
+    }
+
+    .empty-copy h3 {
+      margin: 0 0 7px;
+      color: var(--color-ink-soft);
+      font-family: var(--font-sans);
+      font-size: clamp(9px, 1.15vw, 17px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .empty-copy p {
+      margin: 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: clamp(6.2px, 0.72vw, 10.5px);
+      line-height: 1.65;
+    }
+
+    /* 01: privacy first */
+    .privacy-first {
+      align-items: flex-start;
+    }
+
+    .privacy-card {
+      width: 100%;
+      margin-top: 9%;
+      padding: 8%;
+      border: 1px solid color-mix(in oklab, var(--color-k-partner) 22%, var(--color-line));
+      border-radius: 10px;
+      background: linear-gradient(145deg,
+        color-mix(in oklab, var(--color-k-partner) 7%, var(--color-k-panel-7)),
+        var(--color-k-panel-7));
+    }
+
+    .privacy-lock {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 12%;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--color-k-partner) 35%, var(--color-line));
+      border-radius: 9px;
+      color: var(--color-k-partner);
+      background: color-mix(in oklab, var(--color-k-partner) 8%, transparent);
+    }
+
+    .privacy-lock svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .privacy-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 13%;
+    }
+
+    .privacy-list span {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: clamp(5.8px, 0.66vw, 9.5px);
+    }
+
+    .privacy-list i {
+      display: block;
+      width: 5px;
+      height: 5px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--color-k-whisper-viewer);
+    }
+
+    /* 02: centered invitation */
+    .centered {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .orbit {
+      position: relative;
+      display: grid;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 15%;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--color-k-partner) 18%, transparent);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        color-mix(in oklab, var(--color-k-partner) 9%, transparent),
+        transparent 66%);
+    }
+
+    .orbit::before,
+    .orbit::after {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      content: "";
+      border-radius: 50%;
+    }
+
+    .orbit::before {
+      top: 9px;
+      left: 17px;
+      background: var(--color-k-whisper-viewer);
+      box-shadow: 0 0 14px color-mix(in oklab, var(--color-k-whisper-viewer) 48%, transparent);
+    }
+
+    .orbit::after {
+      right: 14px;
+      bottom: 13px;
+      background: var(--color-k-partner);
+      box-shadow: 0 0 14px color-mix(in oklab, var(--color-k-partner) 48%, transparent);
+    }
+
+    .orbit svg {
+      width: 30px;
+      height: 30px;
+      color: var(--color-muted);
+    }
+
+    .centered .empty-copy {
+      max-width: 86%;
+    }
+
+    /* 03: composer cue */
+    .composer-cue {
+      align-items: flex-end;
+      padding-bottom: 4%;
+    }
+
+    .cue-line {
+      position: relative;
+      width: 100%;
+      padding: 0 4% 13%;
+    }
+
+    .cue-line::after {
+      position: absolute;
+      right: 8%;
+      bottom: 0;
+      width: 28%;
+      height: 22px;
+      content: "";
+      border-right: 1px solid color-mix(in oklab, var(--color-k-partner) 45%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--color-k-partner) 45%, transparent);
+      border-radius: 0 0 13px 0;
+      transform: skewY(18deg);
+      transform-origin: right bottom;
+    }
+
+    .cue-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      color: var(--color-k-partner);
+      font-family: var(--font-mono);
+      font-size: clamp(5.8px, 0.66vw, 9.5px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cue-kicker svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* 04: starters */
+    .starters {
+      align-items: center;
+    }
+
+    .starter-stack {
+      width: 100%;
+    }
+
+    .starter-stack .empty-copy {
+      margin-bottom: 13%;
+    }
+
+    .starter-list {
+      display: grid;
+      gap: 7px;
+    }
+
+    .starter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: var(--color-k-panel-7);
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: clamp(5.5px, 0.63vw, 9px);
+      line-height: 1.35;
+    }
+
+    .starter::before {
+      width: 4px;
+      height: 4px;
+      flex: none;
+      content: "";
+      border-radius: 50%;
+      background: var(--color-k-whisper-viewer);
+    }
+
+    /* 05: ambient minimal */
+    .ambient {
+      align-items: flex-end;
+    }
+
+    .ambient-mark {
+      position: absolute;
+      top: 10%;
+      right: -20%;
+      width: 94%;
+      height: auto;
+      color: var(--color-k-partner);
+      opacity: 0.055;
+      transform: rotate(-8deg);
+    }
+
+    .ambient-copy {
+      position: relative;
+      width: 100%;
+      padding: 0 4% 9%;
+    }
+
+    .ambient-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: clamp(6px, 0.7vw, 10px);
+    }
+
+    .ambient-label svg {
+      width: 15px;
+      height: 15px;
+      color: var(--color-faint);
+    }
+
+    .ambient-copy p {
+      margin: 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: clamp(5.8px, 0.66vw, 9.5px);
+      line-height: 1.55;
+    }
+
+    .board-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 1392px;
+      margin: 18px auto 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .board {
+        padding: 24px 16px 32px;
+      }
+
+      .board-header {
+        display: block;
+        margin-bottom: 20px;
+      }
+
+      .brief {
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .option {
+        padding: 14px;
+      }
+
+      .option-meta {
+        min-height: auto;
+        margin-bottom: 12px;
+      }
+
+      .phone {
+        width: min(100%, 358px);
+        margin: 0 auto;
+      }
+
+      .status {
+        font-size: 13px;
+      }
+
+      .room-title {
+        font-size: 12px;
+      }
+
+      .composer {
+        font-size: 10.5px;
+      }
+
+      .empty-copy h3 {
+        font-size: 16px;
+      }
+
+      .empty-copy p {
+        font-size: 10px;
+      }
+
+      .privacy-list span,
+      .cue-kicker,
+      .ambient-copy p {
+        font-size: 9px;
+      }
+
+      .starter {
+        font-size: 8.5px;
+      }
+
+      .board-footer {
+        display: block;
+      }
+
+      .board-footer span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .orbit::before {
+        animation: breathe 3.6s var(--ease-settle) infinite alternate;
+      }
+
+      .orbit::after {
+        animation: breathe 3.6s 0.7s var(--ease-settle) infinite alternate;
+      }
+
+      @keyframes breathe {
+        from { opacity: 0.5; transform: scale(0.85); }
+        to { opacity: 1; transform: scale(1.08); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="icon-two-voices" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
+    </symbol>
+    <symbol id="icon-whisper" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <line x1="5" y1="5" x2="19" y2="19" />
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10" width="14" height="10" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+      <path d="M12 14v2" />
+    </symbol>
+    <symbol id="icon-gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19 13.5v-3l-2-.6a7.2 7.2 0 0 0-.7-1.7l1-1.8-2.1-2.1-1.8 1a7.2 7.2 0 0 0-1.7-.7L11 2.5H8l-.6 2.1a7.2 7.2 0 0 0-1.7.7l-1.8-1-2.1 2.1 1 1.8a7.2 7.2 0 0 0-.7 1.7L0 10.5v3l2.1.6a7.2 7.2 0 0 0 .7 1.7l-1 1.8 2.1 2.1 1.8-1a7.2 7.2 0 0 0 1.7.7l.6 2.1h3l.6-2.1a7.2 7.2 0 0 0 1.7-.7l1.8 1 2.1-2.1-1-1.8a7.2 7.2 0 0 0 .7-1.7Z" transform="translate(2.5 0)" />
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="board-header">
+      <div>
+        <p class="eyebrow">Whispers · empty state</p>
+        <h1>Five directions for the quiet screen</h1>
+      </div>
+      <p class="brief">Real room chrome and composer held constant. Only the blank state changes. Mobile target: 390 × 844.</p>
+    </header>
+
+    <section class="options" aria-label="Five Whispers empty-state options">
+      <article class="option">
+        <div class="option-meta">
+          <span class="option-number">01</span>
+          <div>
+            <h2>Privacy first</h2>
+            <p class="option-note">Answers the first question before asking for a message.</p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="gear"><use href="#icon-gear"></use></svg></div>
+          </div>
+          <div class="empty privacy-first">
+            <div class="privacy-card">
+              <span class="privacy-lock"><svg class="lock"><use href="#icon-lock"></use></svg></span>
+              <div class="empty-copy">
+                <h3>This stays between you two</h3>
+                <p>Pool and agents never see this chat.</p>
+              </div>
+              <div class="privacy-list">
+                <span><i></i>You and Conrad only</span>
+                <span><i></i>Separate from the room transcript</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="option-meta">
+          <span class="option-number">02</span>
+          <div>
+            <h2>Centered invitation</h2>
+            <p class="option-note">Balances the canvas and makes the lane feel intentional.</p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="gear"><use href="#icon-gear"></use></svg></div>
+          </div>
+          <div class="empty centered">
+            <div class="empty-copy">
+              <div class="orbit"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+              <h3>A private line to Conrad</h3>
+              <p>Start a thought that stays out of the room.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="option-meta">
+          <span class="option-number">03</span>
+          <div>
+            <h2>Composer cue</h2>
+            <p class="option-note">Uses the blank space to point at the one useful action.</p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="gear"><use href="#icon-gear"></use></svg></div>
+          </div>
+          <div class="empty composer-cue">
+            <div class="cue-line">
+              <span class="cue-kicker"><svg class="whisper-drop"><use href="#icon-whisper"></use></svg>Whispers are private</span>
+              <div class="empty-copy">
+                <h3>Say it outside the room</h3>
+                <p>Write to Conrad below. Pool and agents stay out.</p>
+              </div>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="option-meta">
+          <span class="option-number">04</span>
+          <div>
+            <h2>Conversation starters</h2>
+            <p class="option-note">Gives the private lane a few concrete jobs.</p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="gear"><use href="#icon-gear"></use></svg></div>
+          </div>
+          <div class="empty starters">
+            <div class="starter-stack">
+              <div class="empty-copy">
+                <h3>What needs a quiet aside?</h3>
+                <p>Whisper to Conrad without adding it to the room.</p>
+              </div>
+              <div class="starter-list">
+                <div class="starter">Can you check this before I send it?</div>
+                <div class="starter">I’m about to change the plan.</div>
+                <div class="starter">Look at terminal 2 when you can.</div>
+              </div>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="option-meta">
+          <span class="option-number">05</span>
+          <div>
+            <h2>Ambient minimal</h2>
+            <p class="option-note">Keeps the terminal quiet, but no longer abandoned.</p>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="two-voices"><use href="#icon-two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="gear"><use href="#icon-gear"></use></svg></div>
+          </div>
+          <div class="empty ambient">
+            <svg class="ambient-mark whisper-drop"><use href="#icon-whisper"></use></svg>
+            <div class="ambient-copy">
+              <span class="ambient-label"><svg class="whisper-drop"><use href="#icon-whisper"></use></svg>No whispers yet</span>
+              <p>Start below. Only Conrad sees it.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="board-footer">
+      <span>Source reference: current Whispers lane screenshot + RoomChatLane.jsx + theme.css</span>
+      <span>Recommendation to judge after render: 02 for warmth, 03 for utility, 05 for restraint</span>
+    </footer>
+  </main>
+</body>
+</html>
