@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Five Whisper icon eye variations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --panel-7: hsl(212 13% 7%);
+      --panel-10: hsl(212 13% 10%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 50% -8%, color-mix(in oklab, var(--pool) 7%, transparent), transparent 34rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 24px 36px;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1392px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 3vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .header-note {
+      max-width: 480px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 1392px;
+      margin: 0 auto;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--panel-7) 86%, transparent);
+    }
+
+    .card-head {
+      display: grid;
+      min-height: 66px;
+      grid-template-columns: 26px 1fr;
+      gap: 9px;
+      margin-bottom: 11px;
+    }
+
+    .key {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .card h2 {
+      margin: 1px 0 3px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .card-note {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .phone {
+      position: relative;
+      display: flex;
+      width: 100%;
+      aspect-ratio: 390 / 720;
+      overflow: hidden;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--bg);
+      box-shadow: 0 18px 44px hsl(212 22% 2% / 0.38);
+    }
+
+    .status {
+      display: flex;
+      height: 9%;
+      flex: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6.8%;
+      color: var(--ink);
+      font-size: clamp(8px, 0.85vw, 12px);
+      font-weight: 600;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--soft);
+      font-family: var(--font-mono);
+      font-size: 7px;
+    }
+
+    .room-nav {
+      display: grid;
+      height: 9%;
+      flex: none;
+      grid-template-columns: 1fr 18% 18%;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .room-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 6.2%;
+      color: var(--soft);
+      font-family: var(--font-mono);
+      font-size: clamp(7px, 0.8vw, 11px);
+    }
+
+    .back {
+      color: var(--pool);
+      font-family: var(--font-sans);
+      font-size: 1.6em;
+      line-height: 1;
+    }
+
+    .nav-control {
+      display: grid;
+      place-items: center;
+      color: var(--faint);
+    }
+
+    .nav-control.active {
+      border-right: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--panel-7);
+      color: var(--pool);
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.65;
+    }
+
+    .empty {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      padding: 8%;
+      text-align: center;
+    }
+
+    .empty-inner {
+      width: 100%;
+    }
+
+    .icon-focus {
+      display: grid;
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 22px;
+      place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        color-mix(in oklab, var(--partner) 10%, transparent),
+        color-mix(in oklab, var(--partner) 4%, transparent) 42%,
+        transparent 70%);
+    }
+
+    .icon-focus svg {
+      width: 40px;
+      height: 40px;
+      color: var(--muted);
+    }
+
+    .empty h3 {
+      margin: 0 0 7px;
+      color: var(--soft);
+      font-size: clamp(10px, 1.1vw, 16px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .empty p {
+      max-width: 190px;
+      margin: 0 auto;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: clamp(6px, 0.68vw, 9.5px);
+      line-height: 1.6;
+    }
+
+    .composer-wrap {
+      flex: none;
+      padding: 2% 3% 3%;
+    }
+
+    .composer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 1.6% 1.6% 1.6% 3%;
+      border: 1px solid color-mix(in oklab, var(--partner) 45%, var(--line));
+      border-radius: 8px;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: clamp(6px, 0.66vw, 9px);
+    }
+
+    .placeholder {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .send {
+      display: grid;
+      width: 13%;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 7px;
+      background: color-mix(in oklab, var(--partner) 36%, var(--panel-10));
+      color: var(--bg);
+      opacity: 0.7;
+    }
+
+    .send svg {
+      width: 55%;
+      height: 55%;
+      stroke-width: 3;
+    }
+
+    .home {
+      width: 34%;
+      height: 3px;
+      margin: 2.4% auto 0;
+      border-radius: 99px;
+      background: var(--muted);
+      opacity: 0.8;
+    }
+
+    .detail {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .detail-label {
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      line-height: 1.4;
+    }
+
+    .detail svg {
+      width: 48px;
+      height: 48px;
+      color: var(--soft);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 1392px;
+      margin: 17px auto 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .board {
+        padding: 22px 16px 30px;
+      }
+
+      .header {
+        display: block;
+      }
+
+      .header-note {
+        margin-top: 9px;
+        text-align: left;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .card-head {
+        min-height: auto;
+      }
+
+      .phone {
+        width: min(100%, 358px);
+        margin: 0 auto;
+      }
+
+      .status {
+        font-size: 12px;
+      }
+
+      .room-title {
+        font-size: 11px;
+      }
+
+      .empty h3 {
+        font-size: 16px;
+      }
+
+      .empty p {
+        font-size: 9.5px;
+      }
+
+      .composer {
+        font-size: 9px;
+      }
+
+      .detail {
+        max-width: 358px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="eyes-shut" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <path d="M8.2 12.4c.7-.7 1.7-.7 2.4 0M13.4 12.4c.7-.7 1.7-.7 2.4 0" />
+    </symbol>
+    <symbol id="blindfold" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <path d="M7.4 11.2c3-1.2 6.2-1.2 9.2 0v2.8c-3-.9-6.2-.9-9.2 0Z" />
+      <path d="m7.4 12.4-1.7-.9M16.6 12.4l1.7-.9" />
+    </symbol>
+    <symbol id="no-view-eye" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <path d="M7.3 12.6c2.7-2.8 6.7-2.8 9.4 0-2.7 2.8-6.7 2.8-9.4 0Z" />
+      <circle cx="12" cy="12.6" r="1.2" />
+      <path d="m6.8 7.5 10.4 10.4" />
+    </symbol>
+    <symbol id="crossed-gaze" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <circle cx="9.5" cy="12.6" r="0.9" fill="currentColor" stroke="none" />
+      <circle cx="14.5" cy="12.6" r="0.9" fill="currentColor" stroke="none" />
+      <path d="m6.5 7.2 11 11" />
+    </symbol>
+    <symbol id="quiet-wink" viewBox="0 0 24 24">
+      <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" />
+      <circle cx="9.4" cy="12.5" r="0.9" fill="currentColor" stroke="none" />
+      <path d="M13.3 12.7c.8-.7 1.7-.7 2.5 0M9.7 16c1.4.8 3.2.8 4.6 0" />
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Whisper icon · eye directions</p>
+        <h1>Five ways for Pool not to look</h1>
+      </div>
+      <p class="header-note">The Pool-drop silhouette is unchanged. Each candidate appears at 22px in the real tab, 40px in the empty state, and 48px for close inspection.</p>
+    </header>
+
+    <section class="grid" aria-label="Five Whisper icon variations">
+      <article class="card">
+        <header class="card-head">
+          <span class="key">A</span>
+          <div><h2>Eyes shut</h2><p class="card-note">Calm, immediate, and the least dependent on a prohibition slash.</p></div>
+        </header>
+        <div class="phone">
+          <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#eyes-shut"></use></svg></div>
+            <div class="nav-control">⚙</div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <span class="icon-focus"><svg><use href="#eyes-shut"></use></svg></span>
+              <h3>Your room notes</h3>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer"><span class="placeholder">Add a note…</span><span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <div class="detail"><span class="detail-label">Closed lids<br>48px detail</span><svg><use href="#eyes-shut"></use></svg></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head">
+          <span class="key">B</span>
+          <div><h2>Soft blindfold</h2><p class="card-note">Literal privacy signal, but heavier and more character-like.</p></div>
+        </header>
+        <div class="phone">
+          <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#blindfold"></use></svg></div>
+            <div class="nav-control">⚙</div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <span class="icon-focus"><svg><use href="#blindfold"></use></svg></span>
+              <h3>Your room notes</h3>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer"><span class="placeholder">Add a note…</span><span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <div class="detail"><span class="detail-label">Wrapped band<br>48px detail</span><svg><use href="#blindfold"></use></svg></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head">
+          <span class="key">C</span>
+          <div><h2>No-view eye</h2><p class="card-note">The clearest privacy semantics, with the most internal geometry.</p></div>
+        </header>
+        <div class="phone">
+          <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#no-view-eye"></use></svg></div>
+            <div class="nav-control">⚙</div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <span class="icon-focus"><svg><use href="#no-view-eye"></use></svg></span>
+              <h3>Your room notes</h3>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer"><span class="placeholder">Add a note…</span><span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <div class="detail"><span class="detail-label">Eye + slash<br>48px detail</span><svg><use href="#no-view-eye"></use></svg></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head">
+          <span class="key">D</span>
+          <div><h2>Crossed gaze</h2><p class="card-note">Two familiar eyes preserve the current diagonal no-view cue.</p></div>
+        </header>
+        <div class="phone">
+          <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#crossed-gaze"></use></svg></div>
+            <div class="nav-control">⚙</div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <span class="icon-focus"><svg><use href="#crossed-gaze"></use></svg></span>
+              <h3>Your room notes</h3>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer"><span class="placeholder">Add a note…</span><span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <div class="detail"><span class="detail-label">Dots + slash<br>48px detail</span><svg><use href="#crossed-gaze"></use></svg></div>
+      </article>
+
+      <article class="card">
+        <header class="card-head">
+          <span class="key">E</span>
+          <div><h2>Quiet wink</h2><p class="card-note">Friendliest direction. Distinctive, but less literal about privacy.</p></div>
+        </header>
+        <div class="phone">
+          <div class="status"><span>03:35</span><span class="status-icons">▮▮▮ ◔ 46</span></div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#quiet-wink"></use></svg></div>
+            <div class="nav-control">⚙</div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <span class="icon-focus"><svg><use href="#quiet-wink"></use></svg></span>
+              <h3>Your room notes</h3>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer"><span class="placeholder">Add a note…</span><span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></div>
+            <div class="home"></div>
+          </div>
+        </div>
+        <div class="detail"><span class="detail-label">Wink + smile<br>48px detail</span><svg><use href="#quiet-wink"></use></svg></div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span>Source reference: current WhisperIcon drop path + Code icon stroke system.</span>
+      <span>Judge the 22px tab first. The 48px row is diagnosis, not the product size.</span>
+    </footer>
+  </main>
+</body>
+</html>
