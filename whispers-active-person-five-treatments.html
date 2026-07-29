@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Active partner signal on Whispers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: #0a0d10;
+      --k-panel-7: hsl(212 13% 7%);
+      --k-panel-10: hsl(212 13% 10%);
+      --k-panel-14: hsl(212 14% 8%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --partner-wash: color-mix(in oklab, var(--partner) 13%, transparent);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--k-bg); }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--k-bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 24px 40px;
+    }
+
+    .board-header {
+      display: flex;
+      max-width: 1392px;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 2.8vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .brief {
+      max-width: 510px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      max-width: 1392px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 auto;
+    }
+
+    .option {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: var(--k-panel-7);
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--partner) 48%, var(--line));
+      box-shadow: inset 0 2px 0 color-mix(in oklab, var(--partner) 66%, transparent);
+    }
+
+    .meta {
+      display: grid;
+      min-height: 78px;
+      grid-template-columns: 28px 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .number {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .option h2 {
+      margin: 1px 0 4px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .option-note {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .recommend {
+      display: inline-block;
+      margin-top: 6px;
+      color: var(--partner);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .surface {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--k-bg);
+    }
+
+    .terminal-strip {
+      display: flex;
+      height: 36px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-mono);
+    }
+
+    .terminal-title {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      color: var(--soft);
+      font-size: 9px;
+    }
+
+    .terminal-title::before {
+      width: 6px;
+      height: 6px;
+      flex: none;
+      border: 1px solid var(--pool);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .session {
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 7.5px;
+    }
+
+    .icon-cell,
+    .gear-cell {
+      position: relative;
+      display: grid;
+      width: 36px;
+      height: 36px;
+      flex: none;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+    }
+
+    .icon-cell.selected {
+      background: var(--k-panel-14);
+      color: var(--pool);
+    }
+
+    .bubble {
+      position: relative;
+      z-index: 2;
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+    .gear {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .active-demo {
+      display: grid;
+      min-height: 242px;
+      place-items: center;
+      padding: 20px 10px 16px;
+    }
+
+    .state-pair {
+      display: flex;
+      align-items: start;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .state {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+    }
+
+    .state-label {
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .icon-zoom {
+      position: relative;
+      display: grid;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--k-bg);
+      color: var(--faint);
+    }
+
+    .icon-zoom.selected {
+      background: var(--k-panel-14);
+      color: var(--pool);
+    }
+
+    .icon-zoom .bubble {
+      width: 30px;
+      height: 30px;
+      stroke-width: 1.55;
+    }
+
+    .active-copy {
+      margin: 18px 0 0;
+      color: var(--partner);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* 01 · corner beacon */
+    .treatment-1::after {
+      position: absolute;
+      z-index: 3;
+      top: 8px;
+      left: 8px;
+      width: 7px;
+      height: 7px;
+      border: 2px solid var(--k-bg);
+      border-radius: 50%;
+      background: var(--partner);
+      content: "";
+    }
+
+    .icon-zoom.treatment-1::after {
+      top: 12px;
+      left: 12px;
+      width: 9px;
+      height: 9px;
+    }
+
+    /* 02 · presence rail */
+    .treatment-2::after {
+      position: absolute;
+      z-index: 3;
+      bottom: 0;
+      left: 50%;
+      width: 20px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--partner);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .icon-zoom.treatment-2::after {
+      width: 32px;
+      height: 3px;
+    }
+
+    /* 03 · crisp ring */
+    .treatment-3::before {
+      position: absolute;
+      z-index: 1;
+      width: 30px;
+      height: 30px;
+      border: 1px solid color-mix(in oklab, var(--partner) 78%, var(--line));
+      border-radius: 50%;
+      content: "";
+    }
+
+    .icon-zoom.treatment-3::before {
+      width: 46px;
+      height: 46px;
+      border-width: 1.5px;
+    }
+
+    /* 04 · terminal brackets */
+    .bracket-a,
+    .bracket-b {
+      position: absolute;
+      z-index: 3;
+      width: 8px;
+      height: 8px;
+      border-color: var(--partner);
+      border-style: solid;
+    }
+
+    .bracket-a {
+      top: 7px;
+      left: 7px;
+      border-width: 1.5px 0 0 1.5px;
+    }
+
+    .bracket-b {
+      right: 7px;
+      bottom: 7px;
+      border-width: 0 1.5px 1.5px 0;
+    }
+
+    .icon-zoom .bracket-a {
+      top: 10px;
+      left: 10px;
+      width: 11px;
+      height: 11px;
+    }
+
+    .icon-zoom .bracket-b {
+      right: 10px;
+      bottom: 10px;
+      width: 11px;
+      height: 11px;
+    }
+
+    /* 05 · partner tile */
+    .treatment-5::before {
+      position: absolute;
+      z-index: 1;
+      width: 29px;
+      height: 29px;
+      border: 1px solid color-mix(in oklab, var(--partner) 45%, var(--line));
+      border-radius: 8px;
+      background: var(--partner-wash);
+      content: "";
+    }
+
+    .treatment-5 .bubble {
+      color: var(--partner);
+    }
+
+    .icon-zoom.treatment-5::before {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+    }
+
+    .legend {
+      display: flex;
+      max-width: 1392px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 18px auto 0;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    .legend strong {
+      color: var(--partner);
+      font-weight: 500;
+    }
+
+    @media (max-width: 900px) {
+      .board {
+        padding: 22px 14px 34px;
+      }
+
+      .board-header {
+        display: block;
+        margin-bottom: 18px;
+      }
+
+      .brief {
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .option {
+        padding: 13px;
+      }
+
+      .meta {
+        min-height: 0;
+      }
+
+      .option-note {
+        font-size: 9.5px;
+      }
+
+      .surface {
+        max-width: 440px;
+        margin: 0 auto;
+      }
+
+      .active-demo {
+        min-height: 190px;
+      }
+
+      .legend {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-header">
+      <div>
+        <p class="eyebrow">Whispers · partner active</p>
+        <h1>Five treatments for the top bubble</h1>
+      </div>
+      <p class="brief">
+        Only the active-person signal changes. The bubble outline, terminal-pixel eyes,
+        selected state, unread badge, and whisper typing treatment stay intact.
+      </p>
+    </header>
+
+    <section class="grid" aria-label="Five active partner icon treatments">
+      <article class="option recommended">
+        <div class="meta">
+          <span class="number">01</span>
+          <div>
+            <h2>Corner beacon</h2>
+            <p class="option-note">A solid partner-color presence pip at the free top-left corner.</p>
+            <span class="recommend">Recommended</span>
+          </div>
+        </div>
+        <div class="surface">
+          <div class="terminal-strip">
+            <div class="terminal-title">Terminal 2</div>
+            <div class="session">session</div>
+            <div class="icon-cell treatment-1" aria-label="Partner active">
+              <svg class="bubble" viewBox="0 0.5 24 24" aria-hidden="true">
+                <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+                <rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/>
+                <rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="active-demo">
+            <div>
+              <div class="state-pair">
+                <div class="state">
+                  <div class="icon-zoom treatment-1"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div>
+                  <span class="state-label">Closed</span>
+                </div>
+                <div class="state">
+                  <div class="icon-zoom selected treatment-1"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div>
+                  <span class="state-label">Open</span>
+                </div>
+              </div>
+              <p class="active-copy">Conrad is active in this session</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">02</span>
+          <div>
+            <h2>Presence rail</h2>
+            <p class="option-note">A terminal-native partner rail anchored to the bottom of the control.</p>
+          </div>
+        </div>
+        <div class="surface">
+          <div class="terminal-strip">
+            <div class="terminal-title">Terminal 2</div>
+            <div class="session">session</div>
+            <div class="icon-cell treatment-2" aria-label="Partner active">
+              <svg class="bubble" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="active-demo">
+            <div>
+              <div class="state-pair">
+                <div class="state"><div class="icon-zoom treatment-2"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Closed</span></div>
+                <div class="state"><div class="icon-zoom selected treatment-2"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Open</span></div>
+              </div>
+              <p class="active-copy">Conrad is active in this session</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">03</span>
+          <div>
+            <h2>Crisp ring</h2>
+            <p class="option-note">A plain partner-color ring around the bubble. No glow or orbiting dots.</p>
+          </div>
+        </div>
+        <div class="surface">
+          <div class="terminal-strip">
+            <div class="terminal-title">Terminal 2</div>
+            <div class="session">session</div>
+            <div class="icon-cell treatment-3" aria-label="Partner active">
+              <svg class="bubble" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="active-demo">
+            <div>
+              <div class="state-pair">
+                <div class="state"><div class="icon-zoom treatment-3"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Closed</span></div>
+                <div class="state"><div class="icon-zoom selected treatment-3"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Open</span></div>
+              </div>
+              <p class="active-copy">Conrad is active in this session</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">04</span>
+          <div>
+            <h2>Terminal brackets</h2>
+            <p class="option-note">Two precise corner marks frame the bubble like an active terminal target.</p>
+          </div>
+        </div>
+        <div class="surface">
+          <div class="terminal-strip">
+            <div class="terminal-title">Terminal 2</div>
+            <div class="session">session</div>
+            <div class="icon-cell" aria-label="Partner active">
+              <span class="bracket-a"></span><span class="bracket-b"></span>
+              <svg class="bubble" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="active-demo">
+            <div>
+              <div class="state-pair">
+                <div class="state"><div class="icon-zoom"><span class="bracket-a"></span><span class="bracket-b"></span><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Closed</span></div>
+                <div class="state"><div class="icon-zoom selected"><span class="bracket-a"></span><span class="bracket-b"></span><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Open</span></div>
+              </div>
+              <p class="active-copy">Conrad is active in this session</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <div class="meta">
+          <span class="number">05</span>
+          <div>
+            <h2>Partner tile</h2>
+            <p class="option-note">A partner-tinted inner tile gives the active state maximum contrast.</p>
+          </div>
+        </div>
+        <div class="surface">
+          <div class="terminal-strip">
+            <div class="terminal-title">Terminal 2</div>
+            <div class="session">session</div>
+            <div class="icon-cell treatment-5" aria-label="Partner active">
+              <svg class="bubble" viewBox="0 0.5 24 24" aria-hidden="true"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="gear-cell"><span class="gear"></span></div>
+          </div>
+          <div class="active-demo">
+            <div>
+              <div class="state-pair">
+                <div class="state"><div class="icon-zoom treatment-5"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Closed</span></div>
+                <div class="state"><div class="icon-zoom selected treatment-5"><svg class="bubble" viewBox="0 0.5 24 24"><path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/><rect x="8" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/><rect x="14" y="11" width="2" height="2" rx=".4" fill="currentColor" stroke="none"/></svg></div><span class="state-label">Open</span></div>
+              </div>
+              <p class="active-copy">Conrad is active in this session</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <aside class="legend">
+      <span><strong>Partner color</strong> means active in the session. Pool blue still means the Whispers lane is open.</span>
+      <span>Unread stays top-right · whisper typing stays bottom-center · no treatment changes the bubble outline.</span>
+    </aside>
+  </main>
+</body>
+</html>
