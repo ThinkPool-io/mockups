@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Whispers presence without a dot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    body {
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--bg);
+      background-size: 56px 56px;
+      background-position: -1px -1px;
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 22px 24px 20px;
+      background: color-mix(in oklab, var(--bg) 94%, transparent);
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(420px, 610px);
+      align-items: end;
+      gap: 40px;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow,
+    .research,
+    .state-label,
+    .family,
+    .note,
+    .verdict,
+    .footer {
+      font-family: var(--mono);
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: var(--pool);
+      font-size: 9px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(28px, 3.2vw, 43px);
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .98;
+    }
+
+    .research {
+      margin: 0;
+      color: var(--faint);
+      font-size: 9.5px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .research strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--raised);
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--partner) 58%, var(--line));
+      box-shadow: inset 0 2px 0 color-mix(in oklab, var(--partner) 82%, transparent);
+    }
+
+    .meta {
+      min-height: 68px;
+      padding: 10px 11px 9px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .family {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--partner);
+      font-size: 6.5px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 2px;
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -.015em;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--faint);
+      font-size: 7.2px;
+      line-height: 1.35;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .state {
+      min-width: 0;
+      padding: 7px 7px 8px;
+    }
+
+    .state + .state {
+      border-left: 1px solid var(--line);
+    }
+
+    .state-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--faint);
+      font-size: 6px;
+      letter-spacing: .1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .mini-header {
+      display: flex;
+      height: 34px;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .terminal {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      padding: 0 7px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 6.5px;
+    }
+
+    .icon-cell {
+      position: relative;
+      display: grid;
+      width: 34px;
+      height: 32px;
+      flex: none;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--faint);
+      isolation: isolate;
+    }
+
+    .bubble-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .bubble {
+      position: relative;
+      z-index: 2;
+      width: 22px;
+      height: 22px;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .fill-shape {
+      display: none;
+      fill: color-mix(in oklab, var(--partner) 22%, transparent);
+      stroke: none;
+    }
+
+    .pixel {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .ghost {
+      position: absolute;
+      z-index: 1;
+      display: none;
+      color: var(--partner);
+      pointer-events: none;
+    }
+
+    .focus {
+      display: grid;
+      min-height: 112px;
+      place-items: center;
+      padding: 10px;
+      background: var(--bg);
+    }
+
+    .focus-cell {
+      position: relative;
+      display: grid;
+      width: 86px;
+      height: 86px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      isolation: isolate;
+    }
+
+    .focus .bubble {
+      width: 52px;
+      height: 52px;
+      stroke-width: 1.7;
+    }
+
+    .focus .ghost {
+      width: 52px;
+      height: 52px;
+      stroke-width: 1.7;
+    }
+
+    .verdict {
+      min-height: 36px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 7px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .verdict strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    /* 01 — a much stronger version of the only previous direction that survived. */
+    .strong-keyline .online .bubble,
+    .strong-keyline .focus .bubble {
+      color: var(--partner);
+      stroke-width: 2.45;
+      filter:
+        drop-shadow(0 0 1px var(--partner))
+        drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 92%, transparent))
+        drop-shadow(0 0 7px color-mix(in oklab, var(--partner) 60%, transparent));
+    }
+
+    /* 02 — collaborator-colored outer keyline, following the icon rather than orbiting it. */
+    .double-trace .online .ghost,
+    .double-trace .focus .ghost {
+      display: block;
+      opacity: .62;
+      transform: scale(1.17);
+      filter: drop-shadow(0 0 4px color-mix(in oklab, var(--partner) 58%, transparent));
+    }
+
+    .double-trace .online .bubble,
+    .double-trace .focus .bubble {
+      color: var(--soft);
+    }
+
+    /* 03 — assistant-style light held inside the existing outline. */
+    .inner-field .online .fill-shape,
+    .inner-field .focus .fill-shape {
+      display: block;
+    }
+
+    .inner-field .online .bubble,
+    .inner-field .focus .bubble {
+      color: var(--partner);
+      filter: drop-shadow(0 0 5px color-mix(in oklab, var(--partner) 52%, transparent));
+    }
+
+    /* 04 — selected-control treatment applied to the whole tab cell. */
+    .active-tile .online.icon-cell,
+    .active-tile .focus-cell {
+      color: var(--partner);
+      background:
+        radial-gradient(circle at 50% 48%, color-mix(in oklab, var(--partner) 22%, transparent), transparent 65%),
+        var(--surface);
+      box-shadow:
+        inset 0 0 0 1px color-mix(in oklab, var(--partner) 54%, transparent),
+        inset 0 0 13px color-mix(in oklab, var(--partner) 15%, transparent);
+    }
+
+    .active-tile .online .bubble,
+    .active-tile .focus .bubble {
+      filter: drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 72%, transparent));
+    }
+
+    /* 05 — active-tab convention, but expressed as a pool-like light shelf. */
+    .underlight .online.icon-cell::after,
+    .underlight .focus-cell::after {
+      position: absolute;
+      bottom: 2px;
+      width: 22px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--partner);
+      box-shadow:
+        0 0 3px var(--partner),
+        0 -3px 9px color-mix(in oklab, var(--partner) 72%, transparent);
+      content: "";
+    }
+
+    .underlight .online .bubble,
+    .underlight .focus .bubble {
+      color: var(--soft);
+      filter: drop-shadow(0 0 2px color-mix(in oklab, var(--partner) 52%, transparent));
+    }
+
+    /* 06 — live framing without a badge: two quiet rails clamp the icon. */
+    .side-rails .online.icon-cell::before,
+    .side-rails .online.icon-cell::after,
+    .side-rails .focus-cell::before,
+    .side-rails .focus-cell::after {
+      position: absolute;
+      top: 50%;
+      width: 2px;
+      height: 15px;
+      border-radius: 999px;
+      background: var(--partner);
+      box-shadow: 0 0 5px color-mix(in oklab, var(--partner) 78%, transparent);
+      content: "";
+      transform: translateY(-50%);
+    }
+
+    .side-rails .online.icon-cell::before,
+    .side-rails .focus-cell::before { left: 4px; }
+
+    .side-rails .online.icon-cell::after,
+    .side-rails .focus-cell::after { right: 4px; }
+
+    .side-rails .online .bubble,
+    .side-rails .focus .bubble { color: var(--soft); }
+
+    /* 07 — the two terminal pixels carry the live state. */
+    .live-pixels .online .bubble,
+    .live-pixels .focus .bubble { color: var(--soft); }
+
+    .live-pixels .online .pixel,
+    .live-pixels .focus .pixel {
+      fill: var(--partner);
+      filter:
+        drop-shadow(0 0 1px var(--partner))
+        drop-shadow(0 0 4px var(--partner))
+        drop-shadow(0 0 9px color-mix(in oklab, var(--partner) 86%, transparent));
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(1.34);
+    }
+
+    /* 08 — a narrow horizontal beam, derived from assistant listening fields. */
+    .light-beam .online.icon-cell::before,
+    .light-beam .focus-cell::before {
+      position: absolute;
+      z-index: 0;
+      width: 88%;
+      height: 12px;
+      background: linear-gradient(90deg,
+        transparent,
+        color-mix(in oklab, var(--partner) 38%, transparent) 28%,
+        color-mix(in oklab, var(--partner) 62%, transparent) 50%,
+        color-mix(in oklab, var(--partner) 38%, transparent) 72%,
+        transparent);
+      content: "";
+      filter: blur(3px);
+    }
+
+    .light-beam .online .bubble,
+    .light-beam .focus .bubble {
+      color: var(--ink);
+      filter: drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 64%, transparent));
+    }
+
+    /* 09 — filled active control: unmistakable without relying on blur. */
+    .solid-signal .online .fill-shape,
+    .solid-signal .focus .fill-shape {
+      display: block;
+      fill: var(--partner);
+    }
+
+    .solid-signal .online .bubble,
+    .solid-signal .focus .bubble {
+      color: var(--partner);
+      filter: drop-shadow(0 0 6px color-mix(in oklab, var(--partner) 68%, transparent));
+    }
+
+    .solid-signal .online .pixel,
+    .solid-signal .focus .pixel {
+      fill: var(--bg);
+    }
+
+    /* 10 — one motion option: the exact contour breathes, never an outer ring. */
+    .breathing-contour .online .bubble:not(.ghost),
+    .breathing-contour .focus .bubble:not(.ghost) {
+      color: var(--partner);
+      filter: drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 62%, transparent));
+    }
+
+    .breathing-contour .online .ghost,
+    .breathing-contour .focus .ghost {
+      display: block;
+      color: var(--partner);
+      stroke-width: 2.35;
+      filter: drop-shadow(0 0 5px color-mix(in oklab, var(--partner) 76%, transparent));
+      animation: contour-breathe 1.8s ease-in-out infinite;
+    }
+
+    @keyframes contour-breathe {
+      0%, 100% {
+        opacity: .18;
+        transform: scale(1.02);
+      }
+      50% {
+        opacity: .72;
+        transform: scale(1.14);
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 13px;
+      color: var(--faint);
+      font-size: 8px;
+      line-height: 1.5;
+    }
+
+    .footer strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .breathing-contour .online .ghost,
+      .breathing-contour .focus .ghost {
+        animation: none;
+        opacity: .48;
+        transform: scale(1.09);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .board { padding: 18px 16px 22px; }
+      .intro { display: block; margin-bottom: 13px; }
+      h1 { font-size: 30px; }
+      .research {
+        max-width: 650px;
+        margin-top: 9px;
+        text-align: left;
+      }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 430px) {
+      body { background-size: 40px 40px; }
+      .board { padding: 13px 10px 12px; }
+      .eyebrow { margin-bottom: 3px; font-size: 7px; }
+      h1 { max-width: 350px; font-size: 24px; line-height: 1; }
+      .research { margin-top: 6px; font-size: 7.2px; line-height: 1.4; }
+      .grid { gap: 6px; }
+      .meta { min-height: 51px; padding: 7px 7px 6px; }
+      .family { font-size: 5.5px; }
+      h2 { margin-bottom: 0; font-size: 10.5px; }
+      .note { font-size: 5.8px; line-height: 1.25; }
+      .state { padding: 5px 4px 6px; }
+      .state-label { margin-bottom: 3px; font-size: 5px; }
+      .mini-header { height: 28px; }
+      .terminal { padding: 0 4px; font-size: 5.5px; }
+      .icon-cell { width: 28px; height: 26px; }
+      .bubble { width: 20px; height: 20px; }
+      .focus { display: none; }
+      .verdict { min-height: 26px; padding: 5px 6px; font-size: 5.7px; }
+      .footer { margin-top: 8px; font-size: 6.4px; line-height: 1.35; }
+      .footer span:last-child { display: none; }
+      .side-rails .online.icon-cell::before { left: 2px; }
+      .side-rails .online.icon-cell::after { right: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Whispers · partner online · round two</p>
+        <h1>Presence without a dot.</h1>
+      </div>
+      <p class="research"><strong>What current apps teach:</strong> chat products default to a dot; collaborative tools use identity-coloured keylines; assistant/listening interfaces use a contained field or breathing contour. This board keeps the exact Whispers outline and tests the latter patterns at the real 22px size.</p>
+    </header>
+
+    <section class="grid" id="options" aria-label="Ten no-dot presence treatments"></section>
+
+    <footer class="footer">
+      <span><strong>Invariant:</strong> same bubble, same terminal pixels, no status dot, no orbiting decoration.</span>
+      <span>Offline → online is shown in every card.</span>
+    </footer>
+  </main>
+
+  <template id="option-template">
+    <article class="option">
+      <header class="meta">
+        <span class="family"></span>
+        <h2></h2>
+        <p class="note"></p>
+      </header>
+      <div class="compare">
+        <div class="state offline">
+          <span class="state-label">Offline</span>
+          <div class="mini-header"><span class="terminal">T1</span><span class="icon-cell"></span></div>
+        </div>
+        <div class="state online">
+          <span class="state-label">Online</span>
+          <div class="mini-header"><span class="terminal">T1</span><span class="icon-cell"></span></div>
+        </div>
+      </div>
+      <div class="focus"><div class="focus-cell"></div></div>
+      <div class="verdict"></div>
+    </article>
+  </template>
+
+  <script>
+    const treatments = [
+      { cls: "strong-keyline", family: "Contrast + glow", title: "01 · Strong keyline", note: "The acceptable halo, made unmistakable.", verdict: "<strong>Clearest icon-only answer.</strong>", recommended: true },
+      { cls: "double-trace", family: "Collaborator keyline", title: "02 · Double trace", note: "A second bubble-shaped contour, not a ring.", verdict: "<strong>Specific</strong> · keeps light attached to shape" },
+      { cls: "inner-field", family: "Assistant field", title: "03 · Inner field", note: "Light is held inside the bubble.", verdict: "<strong>Calm</strong> · no header spill", recommended: true },
+      { cls: "active-tile", family: "Selected control", title: "04 · Active tile", note: "The whole tab becomes an active surface.", verdict: "<strong>Highest state clarity.</strong>", recommended: true },
+      { cls: "underlight", family: "Active navigation", title: "05 · Underlight", note: "A short pool-like shelf under the bubble.", verdict: "<strong>Quiet</strong> · familiar tab grammar" },
+      { cls: "side-rails", family: "Live framing", title: "06 · Side rails", note: "Two bars frame the live control.", verdict: "<strong>Structural</strong> · zero blur dependency" },
+      { cls: "live-pixels", family: "Terminal identity", title: "07 · Live pixels", note: "Only the two terminal eyes light up.", verdict: "<strong>Most thinkpool-specific.</strong>" },
+      { cls: "light-beam", family: "Assistant field", title: "08 · Light beam", note: "A narrow listening field behind the mark.", verdict: "<strong>Visible</strong> · softer than a tile" },
+      { cls: "solid-signal", family: "Filled active icon", title: "09 · Solid signal", note: "The bubble fills; the pixels knock out.", verdict: "<strong>Maximum contrast</strong> · least subtle" },
+      { cls: "breathing-contour", family: "Restrained motion", title: "10 · Breathing contour", note: "The existing outline quietly gains weight.", verdict: "<strong>Best live behavior</strong> · still reads paused" }
+    ];
+
+    const iconMarkup = `
+      <span class="bubble-wrap" aria-hidden="true">
+        <svg class="bubble ghost" viewBox="0 0.5 24 24">
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+        </svg>
+        <svg class="bubble" viewBox="0 0.5 24 24">
+          <path class="fill-shape" d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+          <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4"/>
+          <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4"/>
+        </svg>
+      </span>`;
+
+    const grid = document.querySelector("#options");
+    const template = document.querySelector("#option-template");
+
+    treatments.forEach((treatment) => {
+      const fragment = template.content.cloneNode(true);
+      const card = fragment.querySelector(".option");
+      card.classList.add(treatment.cls);
+      if (treatment.recommended) card.classList.add("recommended");
+      fragment.querySelector(".family").textContent = treatment.family;
+      fragment.querySelector("h2").textContent = treatment.title;
+      fragment.querySelector(".note").textContent = treatment.note;
+      fragment.querySelector(".verdict").innerHTML = treatment.verdict;
+      fragment.querySelectorAll(".icon-cell, .focus-cell").forEach((cell) => {
+        cell.insertAdjacentHTML("beforeend", iconMarkup);
+      });
+      grid.appendChild(fragment);
+    });
+  </script>
+</body>
+</html>
