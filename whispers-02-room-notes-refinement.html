@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Whispers 02, solo room notes refinement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --panel-7: hsl(212 13% 7%);
+      --panel-10: hsl(212 13% 10%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --viewer: hsl(163 28% 54%);
+      --inverse: hsl(24 23% 8%);
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 50% -5%, color-mix(in oklab, var(--pool) 8%, transparent), transparent 36rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+    }
+
+    .board {
+      width: min(100%, 1280px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 28px 24px 36px;
+    }
+
+    .header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(25px, 3vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .header-note {
+      max-width: 440px;
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+    }
+
+    .state {
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--panel-7) 84%, transparent);
+    }
+
+    .state-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .mode {
+      margin: 0;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mode-detail {
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+    }
+
+    .phone {
+      position: relative;
+      display: flex;
+      width: min(100%, 340px);
+      aspect-ratio: 390 / 844;
+      margin: 0 auto;
+      overflow: hidden;
+      flex-direction: column;
+      border: 1px solid var(--line-strong);
+      border-radius: 24px;
+      background: var(--bg);
+      box-shadow: 0 20px 54px hsl(212 22% 2% / 0.44);
+    }
+
+    .status {
+      display: flex;
+      height: 7.2%;
+      flex: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6.8%;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .signal {
+      display: flex;
+      height: 13px;
+      align-items: end;
+      gap: 2px;
+    }
+
+    .signal i {
+      display: block;
+      width: 3px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .signal i:nth-child(1) { height: 5px; }
+    .signal i:nth-child(2) { height: 8px; }
+    .signal i:nth-child(3) { height: 11px; opacity: 0.45; }
+    .signal i:nth-child(4) { height: 13px; opacity: 0.25; }
+
+    .wifi {
+      position: relative;
+      width: 15px;
+      height: 11px;
+      border-top: 2px solid currentColor;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .wifi::before,
+    .wifi::after {
+      position: absolute;
+      left: 50%;
+      content: "";
+      transform: translateX(-50%);
+      border-top: 2px solid currentColor;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .wifi::before {
+      top: 2px;
+      width: 10px;
+      height: 7px;
+    }
+
+    .wifi::after {
+      top: 6px;
+      width: 3px;
+      height: 3px;
+    }
+
+    .battery {
+      display: grid;
+      min-width: 22px;
+      height: 13px;
+      place-items: center;
+      border-radius: 4px;
+      background: hsl(48 91% 53%);
+      color: var(--inverse);
+      font-size: 8px;
+      font-weight: 600;
+    }
+
+    .room-nav {
+      display: grid;
+      height: 7.8%;
+      flex: none;
+      grid-template-columns: 1fr 16% 16%;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .room-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 6.2%;
+      color: var(--soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .back {
+      color: var(--pool);
+      font-family: var(--font-sans);
+      font-size: 1.65em;
+      line-height: 1;
+    }
+
+    .nav-control {
+      display: grid;
+      place-items: center;
+      color: var(--faint);
+    }
+
+    .nav-control.active {
+      border-right: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--panel-7);
+      color: var(--pool);
+    }
+
+    svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      stroke-width: 1.7;
+    }
+
+    .empty {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      padding: 8%;
+      text-align: center;
+    }
+
+    .empty-inner {
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .orbit {
+      position: relative;
+      display: grid;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 30px;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--partner) 18%, transparent);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        color-mix(in oklab, var(--partner) 9%, transparent),
+        transparent 66%);
+    }
+
+    .solo .orbit {
+      border-color: color-mix(in oklab, var(--viewer) 22%, transparent);
+      background: radial-gradient(circle,
+        color-mix(in oklab, var(--viewer) 8%, transparent),
+        transparent 66%);
+    }
+
+    .orbit::before,
+    .orbit::after {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      content: "";
+      border-radius: 50%;
+    }
+
+    .paired .orbit::before {
+      top: 10px;
+      left: 18px;
+      background: var(--viewer);
+      box-shadow: 0 0 14px color-mix(in oklab, var(--viewer) 48%, transparent);
+    }
+
+    .paired .orbit::after {
+      right: 15px;
+      bottom: 14px;
+      background: var(--partner);
+      box-shadow: 0 0 14px color-mix(in oklab, var(--partner) 48%, transparent);
+    }
+
+    .solo .orbit::before {
+      top: 11px;
+      left: 18px;
+      background: var(--viewer);
+      box-shadow: 0 0 14px color-mix(in oklab, var(--viewer) 48%, transparent);
+    }
+
+    .solo .orbit::after {
+      right: 16px;
+      bottom: 14px;
+      border: 1px dashed color-mix(in oklab, var(--faint) 55%, transparent);
+      background: var(--bg);
+    }
+
+    .orbit svg {
+      width: 31px;
+      height: 31px;
+      color: var(--muted);
+      stroke-width: 1.6;
+    }
+
+    .empty h2 {
+      margin: 0 0 9px;
+      color: var(--soft);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+
+    .empty p {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .disclosure {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      margin-top: 22px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-7);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .disclosure svg {
+      width: 14px;
+      height: 14px;
+      flex: none;
+      color: var(--viewer);
+      stroke-width: 1.7;
+    }
+
+    .composer-wrap {
+      flex: none;
+      padding: 2% 3% 3%;
+      background: var(--bg);
+    }
+
+    .composer {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      padding: 1.4% 1.4% 1.4% 3%;
+      border: 1px solid color-mix(in oklab, var(--partner) 45%, var(--line));
+      border-radius: 9px;
+      background: var(--bg);
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+    }
+
+    .solo .composer {
+      border-color: color-mix(in oklab, var(--viewer) 46%, var(--line));
+    }
+
+    .placeholder {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .send {
+      display: grid;
+      width: 12%;
+      aspect-ratio: 1;
+      flex: none;
+      place-items: center;
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--partner) 36%, var(--panel-10));
+      color: var(--bg);
+      opacity: 0.7;
+    }
+
+    .solo .send {
+      background: color-mix(in oklab, var(--viewer) 42%, var(--panel-10));
+    }
+
+    .send svg {
+      width: 55%;
+      height: 55%;
+      stroke-width: 3;
+    }
+
+    .home-indicator {
+      width: 36%;
+      height: 4px;
+      margin: 2.2% auto 0;
+      border-radius: 99px;
+      background: var(--muted);
+      opacity: 0.85;
+    }
+
+    .rule {
+      position: relative;
+      padding: 18px 15px;
+      border: 1px solid var(--line);
+      background: var(--panel-7);
+    }
+
+    .rule::before,
+    .rule::after {
+      position: absolute;
+      top: 50%;
+      width: 17px;
+      height: 1px;
+      content: "";
+      background: var(--line-strong);
+    }
+
+    .rule::before {
+      left: -17px;
+    }
+
+    .rule::after {
+      right: -17px;
+    }
+
+    .rule-kicker {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 10px;
+      color: var(--pool);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .rule-kicker svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.7;
+    }
+
+    .rule h2 {
+      margin: 0 0 10px;
+      color: var(--soft);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .rule p {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.65;
+    }
+
+    .rule-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .rule-list span {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      line-height: 1.45;
+    }
+
+    .rule-list i {
+      display: block;
+      width: 5px;
+      height: 5px;
+      margin-top: 4px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--viewer);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 860px) {
+      .board {
+        padding: 22px 16px 30px;
+      }
+
+      .header {
+        display: block;
+      }
+
+      .header-note {
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .comparison {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .rule {
+        order: 2;
+      }
+
+      .paired {
+        order: 3;
+      }
+
+      .rule::before,
+      .rule::after {
+        display: none;
+      }
+
+      .phone {
+        width: min(100%, 358px);
+      }
+
+      .state-meta {
+        max-width: 358px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .orbit::before {
+        animation: breathe 3.6s var(--ease) infinite alternate;
+      }
+
+      .paired .orbit::after {
+        animation: breathe 3.6s 0.7s var(--ease) infinite alternate;
+      }
+
+      @keyframes breathe {
+        from { opacity: 0.5; transform: scale(0.85); }
+        to { opacity: 1; transform: scale(1.08); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute">
+    <symbol id="two-voices" viewBox="0 0.5 24 24">
+      <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z" />
+      <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
+    </symbol>
+    <symbol id="notebook" viewBox="0 0 24 24">
+      <rect x="5" y="3.5" width="14" height="17" rx="2" />
+      <path d="M9 3.5v17M12 8h4M12 12h4M12 16h3" />
+      <path d="M3.5 7h3M3.5 12h3M3.5 17h3" />
+    </symbol>
+    <symbol id="gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19 13.5v-3l-2-.6a7 7 0 0 0-.7-1.7l1-1.8-2.1-2.1-1.8 1a7 7 0 0 0-1.7-.7L11 2.5H8l-.6 2.1a7 7 0 0 0-1.7.7l-1.8-1-2.1 2.1 1 1.8a7 7 0 0 0-.7 1.7L0 10.5v3l2.1.6a7 7 0 0 0 .7 1.7l-1 1.8 2.1 2.1 1.8-1a7 7 0 0 0 1.7.7l.6 2.1h3l.6-2.1a7 7 0 0 0 1.7-.7l1.8 1 2.1-2.1-1-1.8a7 7 0 0 0 .7-1.7Z" transform="translate(2.5 0)" />
+    </symbol>
+    <symbol id="info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v6M12 7.5v.5" />
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="header">
+      <div>
+        <p class="eyebrow">Selected direction 02 · refined</p>
+        <h1>One quiet lane, two useful modes</h1>
+      </div>
+      <p class="header-note">The orbit stays. The job and language change with the room’s human roster.</p>
+    </header>
+
+    <section class="comparison" aria-label="Solo and paired states">
+      <article class="state solo">
+        <div class="state-meta">
+          <h2 class="mode">Solo · Room notes</h2>
+          <span class="mode-detail">one person</span>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#notebook"></use></svg></div>
+            <div class="nav-control"><svg class="nav-icon"><use href="#gear"></use></svg></div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <div class="orbit"><svg><use href="#notebook"></use></svg></div>
+              <h2>Your room notebook</h2>
+              <p>Keep context here while you work. Pool and agents stay out.</p>
+              <div class="disclosure">
+                <svg><use href="#info"></use></svg>
+                <span>A partner you invite later can read these notes.</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Add a room note…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+
+      <aside class="rule">
+        <p class="rule-kicker"><svg><use href="#info"></use></svg>Sharing rule</p>
+        <h2>No surprise handoff</h2>
+        <p>Room notes are private from Pool and agents, not from a partner you invite later.</p>
+        <div class="rule-list">
+          <span><i></i>Saved with the room</span>
+          <span><i></i>Visible to a partner after they join</span>
+          <span><i></i>The lane becomes Whispers automatically</span>
+        </div>
+      </aside>
+
+      <article class="state paired">
+        <div class="state-meta">
+          <h2 class="mode">Paired · Whispers</h2>
+          <span class="mode-detail">Maks + Conrad</span>
+        </div>
+        <div class="phone">
+          <div class="status">
+            <span>03:35</span>
+            <span class="status-icons">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery">46</span>
+            </span>
+          </div>
+          <div class="room-nav">
+            <div class="room-title"><span class="back">‹</span><span>T1</span></div>
+            <div class="nav-control active"><svg class="nav-icon"><use href="#two-voices"></use></svg></div>
+            <div class="nav-control"><svg class="nav-icon"><use href="#gear"></use></svg></div>
+          </div>
+          <div class="empty">
+            <div class="empty-inner">
+              <div class="orbit"><svg><use href="#two-voices"></use></svg></div>
+              <h2>A private line to Conrad</h2>
+              <p>Start a thought that stays out of the room.</p>
+              <div class="disclosure">
+                <svg><use href="#info"></use></svg>
+                <span>Only the two people in this room can read Whispers.</span>
+              </div>
+            </div>
+          </div>
+          <div class="composer-wrap">
+            <div class="composer">
+              <span class="placeholder">Whisper to Conrad…</span>
+              <span class="send"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span>Solo history stays in place when the room becomes paired.</span>
+      <span>Recommended product rule: disclose future-partner visibility before the first note.</span>
+    </footer>
+  </main>
+</body>
+</html>
