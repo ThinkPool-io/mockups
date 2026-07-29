@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>thinkpool — Design artifact load test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:hsl(212 14% 6%); --surface:hsl(212 12% 9%); --raised:hsl(212 12% 7%);
+    --line:hsl(212 8% 18%); --line-strong:hsl(212 7% 28%);
+    --ink:hsl(210 14% 95%); --muted:hsl(210 14% 78%); --faint:hsl(210 12% 62%);
+    --pool:hsl(202 56% 48%); --pool-hi:hsl(200 64% 60%); --pool-dim:hsl(204 48% 32%);
+    --maks:hsl(40 48% 58%); --con:hsl(172 22% 52%);
+    --font-display:"Newsreader",Georgia,serif; --font-mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--font-display);padding:32px 24px}
+  .shell{width:min(980px,100%);margin:0 auto}
+  .eyebrow{color:var(--pool-hi);font:500 11px/1.4 var(--font-mono);letter-spacing:.14em;text-transform:uppercase}
+  .hero{margin-top:18px;border:1px solid var(--line-strong);border-radius:20px;background:var(--surface);padding:clamp(28px,6vw,72px)}
+  h1{max-width:760px;font-size:clamp(52px,8vw,92px);font-weight:500;line-height:.9;letter-spacing:-.04em}
+  .sub{max-width:630px;margin-top:24px;color:var(--muted);font:400 clamp(16px,2.2vw,21px)/1.5 var(--font-mono)}
+  .action{display:inline-flex;min-height:48px;align-items:center;margin-top:32px;border:1px solid var(--pool);border-radius:10px;background:var(--pool);padding:0 20px;color:var(--bg);font:500 13px/1 var(--font-mono)}
+  .checks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+  .check{min-height:130px;border:1px solid var(--line);border-radius:14px;background:var(--raised);padding:18px}
+  .swatch{width:28px;height:8px;border-radius:99px;background:var(--pool-hi)}
+  .check:nth-child(2) .swatch{background:var(--maks)}
+  .check:nth-child(3) .swatch{background:var(--con)}
+  .check strong{display:block;margin-top:24px;font:500 12px/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+  .check p{margin-top:7px;color:var(--faint);font:400 12px/1.5 var(--font-mono)}
+  .footer{margin-top:24px;color:var(--faint);font:400 10px/1.5 var(--font-mono);letter-spacing:.08em;text-align:center}
+  @media(max-width:600px){
+    body{padding:18px 14px}
+    .hero{padding:30px 22px}
+    h1{font-size:54px}
+    .sub{font-size:14px}
+    .action{width:100%;justify-content:center}
+    .checks{grid-template-columns:1fr}
+    .check{min-height:108px}
+  }
+</style>
+</head>
+<body>
+
+<main class="shell">
+  <p class="eyebrow">thinkpool Design diagnostic</p>
+  <section class="hero">
+    <h1>Artifact loaded.</h1>
+    <p class="sub">If this page appears after you tap Edit in Design, the artifact-loading path works. Select this headline, the button, or any test block below.</p>
+    <button class="action" type="button">Select me in Design</button>
+  </section>
+  <section class="checks" aria-label="Selection test targets">
+    <article class="check">
+      <div class="swatch"></div>
+      <strong>Text target</strong>
+      <p>Edit this sentence to test a text draft.</p>
+    </article>
+    <article class="check">
+      <div class="swatch"></div>
+      <strong>Move target</strong>
+      <p>Drag this block to test bounded movement.</p>
+    </article>
+    <article class="check">
+      <div class="swatch"></div>
+      <strong>Prompt target</strong>
+      <p>Select this block and request any visual change.</p>
+    </article>
+  </section>
+  <p class="footer">design-artifact-load-test · standalone HTML</p>
+</main>
+
+</body>
+</html>
