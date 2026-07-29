@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Five quieter breathing contours</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(201 78% 64%);
+      --partner: hsl(218 60% 72%);
+      --sans: "Hanken Grotesk", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    body {
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px),
+        var(--bg);
+      background-size: 56px 56px;
+      background-position: -1px -1px;
+    }
+
+    .board {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 30px 24px 24px;
+      background: color-mix(in oklab, var(--bg) 94%, transparent);
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(410px, 620px);
+      align-items: end;
+      gap: 40px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow,
+    .brief,
+    .family,
+    .note,
+    .specs,
+    .state-label,
+    .recommendation,
+    .footer {
+      font-family: var(--mono);
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--pool);
+      font-size: 9px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(30px, 3.25vw, 44px);
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: .98;
+    }
+
+    .brief {
+      margin: 0;
+      color: var(--faint);
+      font-size: 9.5px;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .brief strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--raised);
+    }
+
+    .option.recommended {
+      border-color: color-mix(in oklab, var(--partner) 58%, var(--line));
+      box-shadow: inset 0 2px 0 color-mix(in oklab, var(--partner) 84%, transparent);
+    }
+
+    .meta {
+      min-height: 92px;
+      padding: 12px 13px 11px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .family {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--partner);
+      font-size: 7px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 4px;
+      color: var(--soft);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -.015em;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--faint);
+      font-size: 7.5px;
+      line-height: 1.4;
+    }
+
+    .live-header {
+      display: flex;
+      height: 42px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--line);
+      background: var(--bg);
+    }
+
+    .terminal {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      align-items: center;
+      padding: 0 10px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 7px;
+    }
+
+    .icon-cell {
+      position: relative;
+      display: grid;
+      width: 42px;
+      height: 41px;
+      flex: none;
+      place-items: center;
+      border-left: 1px solid var(--line);
+      color: var(--partner);
+      isolation: isolate;
+    }
+
+    .bubble-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .bubble {
+      position: relative;
+      z-index: 2;
+      width: 22px;
+      height: 22px;
+      overflow: visible;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+      filter: drop-shadow(0 0 3px color-mix(in oklab, var(--partner) 60%, transparent));
+    }
+
+    .pixel {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    .ghost {
+      position: absolute;
+      z-index: 1;
+      color: var(--partner);
+      stroke-width: 2.25;
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .focus {
+      position: relative;
+      display: grid;
+      min-height: 226px;
+      place-items: center;
+      padding: 18px;
+      background: var(--bg);
+    }
+
+    .focus-cell {
+      position: relative;
+      display: grid;
+      width: 138px;
+      height: 138px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      isolation: isolate;
+    }
+
+    .focus .bubble {
+      width: 72px;
+      height: 72px;
+      stroke-width: 1.7;
+    }
+
+    .focus .ghost {
+      width: 72px;
+      height: 72px;
+      stroke-width: 1.7;
+    }
+
+    .state-label {
+      position: absolute;
+      top: 8px;
+      left: 9px;
+      color: var(--faint);
+      font-size: 6px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .spec {
+      padding: 9px 10px;
+    }
+
+    .spec + .spec {
+      border-left: 1px solid var(--line);
+    }
+
+    .spec span {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--faint);
+      font-size: 6px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .spec strong {
+      color: var(--soft);
+      font-size: 8px;
+      font-weight: 500;
+    }
+
+    .recommendation {
+      min-height: 44px;
+      padding: 9px 10px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 7.2px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .recommendation strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    /*
+      These are ambient comparisons, so ease-in-out is intentional: the
+      canonical settle curve makes a repeated breath visibly lurch at the seam.
+      Product shipping still requires the motion-canon audit noted on the board.
+    */
+
+    /* 01 — same idea, dramatically less travel and opacity change. */
+    .micro .ghost {
+      animation: micro-breath 2.8s ease-in-out infinite;
+    }
+
+    @keyframes micro-breath {
+      0%, 100% { opacity: .15; transform: scale(1.02); }
+      50% { opacity: .34; transform: scale(1.055); }
+    }
+
+    /* 02 — keeps the original contour geometry but moves far more slowly. */
+    .slow .ghost {
+      animation: slow-tide 4.4s ease-in-out infinite;
+    }
+
+    @keyframes slow-tide {
+      0%, 100% { opacity: .14; transform: scale(1.02); }
+      50% { opacity: .38; transform: scale(1.07); }
+    }
+
+    /* 03 — light changes, geometry does not. */
+    .luminance .ghost {
+      transform: scale(1.045);
+      animation: luminance-breath 3.2s ease-in-out infinite;
+    }
+
+    @keyframes luminance-breath {
+      0%, 100% { opacity: .13; }
+      50% { opacity: .38; }
+    }
+
+    /* 04 — one small breath, then the icon rests for most of the cycle. */
+    .rest .ghost {
+      animation: pulse-rest 5.6s linear infinite;
+    }
+
+    @keyframes pulse-rest {
+      0%, 5% { opacity: .14; transform: scale(1.02); }
+      20% { opacity: .40; transform: scale(1.065); animation-timing-function: var(--ease-settle); }
+      36%, 100% { opacity: .16; transform: scale(1.025); }
+    }
+
+    /* 05 — no echo expansion; only the actual line subtly gains weight. */
+    .stroke .ghost {
+      display: none;
+    }
+
+    .stroke .bubble {
+      animation: stroke-inhale 3.4s ease-in-out infinite;
+    }
+
+    @keyframes stroke-inhale {
+      0%, 100% {
+        opacity: .82;
+        stroke-width: 1.9;
+        filter: drop-shadow(0 0 2px color-mix(in oklab, var(--partner) 44%, transparent));
+      }
+      50% {
+        opacity: 1;
+        stroke-width: 2.25;
+        filter: drop-shadow(0 0 4px color-mix(in oklab, var(--partner) 66%, transparent));
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: 14px;
+      color: var(--faint);
+      font-size: 8px;
+      line-height: 1.5;
+    }
+
+    .footer strong {
+      color: var(--soft);
+      font-weight: 500;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ghost,
+      .stroke .bubble {
+        animation: none !important;
+      }
+
+      .ghost {
+        opacity: .22;
+        transform: scale(1.035);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .board { padding: 20px 16px 24px; }
+      .intro { display: block; margin-bottom: 16px; }
+      h1 { font-size: 31px; }
+      .brief {
+        max-width: 650px;
+        margin-top: 10px;
+        text-align: left;
+      }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 430px) {
+      body { background-size: 40px 40px; }
+      .board { padding: 14px 10px 13px; }
+      .eyebrow { margin-bottom: 3px; font-size: 7px; }
+      h1 { font-size: 24px; }
+      .brief { margin-top: 6px; font-size: 7.2px; line-height: 1.4; }
+      .grid { grid-template-columns: 1fr; gap: 6px; }
+      .meta { min-height: 0; padding: 7px 9px 6px; }
+      .family { margin-bottom: 1px; font-size: 5.6px; }
+      h2 { margin-bottom: 1px; font-size: 11px; }
+      .note { font-size: 6px; line-height: 1.25; }
+      .live-header { height: 31px; }
+      .terminal { padding: 0 7px; font-size: 6px; }
+      .icon-cell { width: 34px; height: 30px; }
+      .focus {
+        display: grid;
+        min-height: 58px;
+        place-items: center;
+        padding: 4px;
+      }
+      .focus-cell {
+        width: 48px;
+        height: 48px;
+      }
+      .focus .bubble,
+      .focus .ghost {
+        width: 31px;
+        height: 31px;
+        stroke-width: 1.8;
+      }
+      .state-label { display: none; }
+      .specs { position: absolute; left: -9999px; }
+      .recommendation { min-height: 25px; padding: 5px 7px; font-size: 5.8px; }
+      .option {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 80px 58px;
+        grid-template-rows: auto auto;
+      }
+      .meta { grid-column: 1; grid-row: 1 / span 2; border-bottom: 0; border-right: 1px solid var(--line); }
+      .live-header { grid-column: 2; grid-row: 1; }
+      .focus { grid-column: 3; grid-row: 1 / span 2; border-left: 1px solid var(--line); }
+      .recommendation { grid-column: 2; grid-row: 2; border-top: 1px solid var(--line); }
+      .footer { margin-top: 8px; font-size: 6.2px; line-height: 1.35; }
+      .footer span:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="intro">
+      <div>
+        <p class="eyebrow">Whispers · breathing contour · quieter pass</p>
+        <h1>Five ways to breathe less.</h1>
+      </div>
+      <p class="brief"><strong>Same contour, same colour, same 22px icon.</strong> Each variation changes one temporal variable: travel, speed, luminance, rest time, or stroke weight. Watch the real header sample—not only the enlargement.</p>
+    </header>
+
+    <section class="grid" id="options" aria-label="Five quieter breathing-contour variations"></section>
+
+    <footer class="footer">
+      <span><strong>My pick: 04 Pulse + rest.</strong> It reads alive, then gets out of the terminal’s way.</span>
+      <span>Reduced-motion mode resolves every option to a static contour.</span>
+    </footer>
+  </main>
+
+  <template id="option-template">
+    <article class="option">
+      <header class="meta">
+        <span class="family"></span>
+        <h2></h2>
+        <p class="note"></p>
+      </header>
+      <div class="live-header">
+        <span class="terminal">T1</span>
+        <span class="icon-cell"></span>
+      </div>
+      <div class="focus">
+        <span class="state-label">3.3× motion study</span>
+        <div class="focus-cell"></div>
+      </div>
+      <div class="specs">
+        <div class="spec amplitude"><span>Travel</span><strong></strong></div>
+        <div class="spec duration"><span>Cycle</span><strong></strong></div>
+      </div>
+      <div class="recommendation"></div>
+    </article>
+  </template>
+
+  <script>
+    const profiles = [
+      {
+        cls: "micro",
+        family: "Lower amplitude",
+        title: "01 · Micro breath",
+        note: "The original motion, reduced to a small inhale.",
+        travel: "3.5%",
+        cycle: "2.8s",
+        recommendation: "<strong>Balanced.</strong> Safest direct refinement.",
+        recommended: true
+      },
+      {
+        cls: "slow",
+        family: "Lower frequency",
+        title: "02 · Slow tide",
+        note: "Similar contour travel, almost half the urgency.",
+        travel: "5%",
+        cycle: "4.4s",
+        recommendation: "<strong>Calmest loop.</strong> Still always moving."
+      },
+      {
+        cls: "luminance",
+        family: "Zero travel",
+        title: "03 · Luminance only",
+        note: "The contour brightens without changing size.",
+        travel: "0%",
+        cycle: "3.2s",
+        recommendation: "<strong>Least physical.</strong> No visual pumping."
+      },
+      {
+        cls: "rest",
+        family: "Lower duty cycle",
+        title: "04 · Pulse + rest",
+        note: "One small breath, followed by a long quiet hold.",
+        travel: "4.5%",
+        cycle: "5.6s",
+        recommendation: "<strong>Recommended.</strong> Motion only 31% of cycle.",
+        recommended: true
+      },
+      {
+        cls: "stroke",
+        family: "No echo",
+        title: "05 · Outline inhale",
+        note: "Only the existing line gains a little weight.",
+        travel: "0%",
+        cycle: "3.4s",
+        recommendation: "<strong>Most restrained.</strong> Barely an animation."
+      }
+    ];
+
+    const iconMarkup = `
+      <span class="bubble-wrap" aria-hidden="true">
+        <svg class="bubble ghost" viewBox="0 0.5 24 24">
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+        </svg>
+        <svg class="bubble" viewBox="0 0.5 24 24">
+          <path d="M20 12.5a8 8 0 0 1-12 7l-5 1 1-5a8 8 0 1 1 16-3Z"/>
+          <rect class="pixel" x="8" y="11" width="2" height="2" rx=".4"/>
+          <rect class="pixel" x="14" y="11" width="2" height="2" rx=".4"/>
+        </svg>
+      </span>`;
+
+    const grid = document.querySelector("#options");
+    const template = document.querySelector("#option-template");
+
+    profiles.forEach((profile) => {
+      const fragment = template.content.cloneNode(true);
+      const card = fragment.querySelector(".option");
+      card.classList.add(profile.cls);
+      if (profile.recommended) card.classList.add("recommended");
+      fragment.querySelector(".family").textContent = profile.family;
+      fragment.querySelector("h2").textContent = profile.title;
+      fragment.querySelector(".note").textContent = profile.note;
+      fragment.querySelector(".amplitude strong").textContent = profile.travel;
+      fragment.querySelector(".duration strong").textContent = profile.cycle;
+      fragment.querySelector(".recommendation").innerHTML = profile.recommendation;
+      fragment.querySelectorAll(".icon-cell, .focus-cell").forEach((cell) => {
+        cell.insertAdjacentHTML("beforeend", iconMarkup);
+      });
+      grid.appendChild(fragment);
+    });
+  </script>
+</body>
+</html>
