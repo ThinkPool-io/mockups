@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0d10" />
+<title>thinkpool — Thinking power truncation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --k-bg: #0a0d10;
+    --k-card: #06090c;
+    --k-panel: hsl(212 13% 8%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(201 78% 64%);
+    --pool-hi: hsl(217 85% 70%);
+    --positive: hsl(152 40% 58%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body { min-height: 100%; }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--k-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  button { font: inherit; }
+
+  .page {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .proof-header {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 72px;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--k-bg) 94%, transparent);
+  }
+
+  .eyebrow {
+    margin: 0 0 4px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -.02em;
+  }
+
+  .allocation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .allocation strong {
+    color: var(--pool);
+    font-weight: 500;
+  }
+
+  .terminal {
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, transparent 0 68%, color-mix(in srgb, var(--k-bg) 90%, transparent) 100%),
+      var(--k-bg);
+  }
+
+  .terminal-chrome {
+    height: 62px;
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--k-card) 88%, transparent);
+  }
+
+  .terminal-name {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 12px;
+    padding: 0 22px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--positive);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--positive) 65%, transparent);
+  }
+
+  .chrome-cell {
+    width: 62px;
+    display: grid;
+    place-items: center;
+    border-left: 1px solid var(--line);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 16px;
+  }
+
+  .transcript {
+    max-width: 900px;
+    padding: 34px 48px 190px;
+    color: var(--ink-soft);
+    font-size: clamp(18px, 2.1vw, 28px);
+    line-height: 1.52;
+  }
+
+  .transcript p {
+    max-width: 680px;
+    margin: 0 0 28px;
+  }
+
+  .transcript .muted-line { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+
+  .transcript code {
+    padding: .08em .28em;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--pool);
+    font-family: var(--font-mono);
+    font-size: .86em;
+  }
+
+  .composer {
+    position: absolute;
+    inset: auto 18px 16px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--k-card) 92%, transparent);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 15px;
+  }
+
+  .composer-plus {
+    color: var(--muted);
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .send {
+    width: 46px;
+    height: 46px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 9px;
+    background: var(--pool);
+    color: #071017;
+    font-size: 25px;
+  }
+
+  .model-menu {
+    position: absolute;
+    z-index: 10;
+    right: 28px;
+    bottom: 100px;
+    width: min(260px, calc(100vw - 16px));
+    max-height: calc(100dvh - 104px);
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    padding: 4px 0;
+    border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    border-radius: 8px;
+    background: var(--k-panel);
+    box-shadow: 0 24px 64px -20px rgba(0, 0, 0, .7);
+    font-family: var(--font-mono);
+  }
+
+  .menu-label {
+    padding: 11px 12px 8px;
+    color: var(--faint);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .menu-label .divider {
+    display: inline-block;
+    width: 1px;
+    height: .9em;
+    margin: 0 8px;
+    vertical-align: -.08em;
+    background: var(--line-strong);
+  }
+
+  .menu-divider {
+    height: 1px;
+    margin: 4px 0;
+    background: var(--line);
+  }
+
+  .menu-row {
+    width: 100%;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+  }
+
+  .menu-row.selected {
+    color: var(--pool-hi);
+    background: color-mix(in oklab, var(--pool) 8%, transparent);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, var(--pool) 20%, transparent),
+      0 0 18px color-mix(in oklab, var(--pool) 9%, transparent);
+  }
+
+  .check {
+    width: 16px;
+    flex: none;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .model-name {
+    min-width: 0;
+    overflow: hidden;
+    flex: 1;
+    color: inherit;
+    font-size: 14px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effort-layout {
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    line-height: 1.25;
+  }
+
+  .effort-name {
+    min-width: 0;
+    max-width: 55%;
+    overflow: hidden;
+    flex-shrink: 1;
+    color: inherit;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effort-hint {
+    min-width: 0;
+    overflow: hidden;
+    flex: 1;
+    color: var(--faint);
+    font-size: 11px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .decision-note {
+    position: absolute;
+    z-index: 11;
+    right: 304px;
+    bottom: 120px;
+    width: 250px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--pool);
+    background: color-mix(in srgb, var(--k-panel) 92%, transparent);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .decision-note strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  @media (max-width: 620px) {
+    .proof-header {
+      min-height: 58px;
+      padding: 11px 14px;
+    }
+
+    .eyebrow { margin-bottom: 2px; font-size: 8px; }
+    h1 { max-width: 245px; font-size: 12px; }
+    .allocation { display: none; }
+
+    .terminal-chrome { height: 52px; }
+    .terminal-name { gap: 9px; padding: 0 14px; font-size: 12px; }
+    .chrome-cell { width: 52px; }
+
+    .transcript {
+      padding: 24px 22px 150px;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .transcript p { margin-bottom: 24px; }
+    .transcript .desktop-only { display: none; }
+
+    .composer {
+      inset: auto 10px 10px;
+      height: 64px;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .send {
+      width: 44px;
+      height: 44px;
+    }
+
+    .model-menu {
+      right: 8px;
+      bottom: 86px;
+      width: 260px;
+      max-height: calc(100dvh - 126px);
+    }
+
+    .decision-note { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="proof-header">
+    <div>
+      <p class="eyebrow">Mobile menu · proposed</p>
+      <h1>Keep the choice; truncate the explanation</h1>
+    </div>
+    <div class="allocation" aria-label="Column allocation">
+      <strong>55% choice</strong><span>·</span><span>remaining detail</span>
+    </div>
+  </header>
+
+  <section class="terminal" aria-label="thinkpool terminal preview">
+    <div class="terminal-chrome" aria-hidden="true">
+      <div class="terminal-name"><span class="live-dot"></span><span>T7</span></div>
+      <div class="chrome-cell">◌</div>
+      <div class="chrome-cell">⚙</div>
+    </div>
+
+    <div class="transcript" aria-hidden="true">
+      <p><code>thinkpool</code> is live on the final SHA; the npm bridge is published.</p>
+      <p class="muted-line">Ultra Cascade is available to independent top-level Codex terminals.</p>
+      <p class="desktop-only muted-line">Workers, sibling terminals, and review lanes keep their existing bounded modes.</p>
+    </div>
+
+    <aside class="decision-note">
+      <strong>Truncation priority reversed</strong>
+      “Max thinking” and “Ultra Cascade” stay intact. Secondary detail now owns the flexible column and receives the ellipsis.
+    </aside>
+
+    <div class="model-menu" role="menu" aria-label="Switch model, provider or thinking power">
+      <div class="menu-label">Codex<span class="divider"></span>OpenAI</div>
+      <button class="menu-row selected" type="button" role="menuitem" aria-current="true">
+        <span class="check" aria-hidden="true">✓</span><span class="model-name">GPT-5.6-Sol</span>
+      </button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.6-Terra</span></button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.6-Luna</span></button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.5</span></button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.4</span></button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.4-Mini</span></button>
+      <button class="menu-row" type="button" role="menuitem"><span class="model-name">GPT-5.3-Codex-Spark</span></button>
+
+      <div class="menu-divider" aria-hidden="true"></div>
+      <div class="menu-label">Thinking power</div>
+
+      <button class="menu-row" type="button" role="menuitem">
+        <span class="effort-layout">
+          <span class="effort-name">Max speed</span>
+          <span class="effort-hint" title="lightest reasoning">lightest reasoning</span>
+        </span>
+      </button>
+      <button class="menu-row" type="button" role="menuitem">
+        <span class="effort-layout">
+          <span class="effort-name">Balanced</span>
+          <span class="effort-hint" title="speed + depth">speed + depth</span>
+        </span>
+      </button>
+      <button class="menu-row" type="button" role="menuitem">
+        <span class="effort-layout">
+          <span class="effort-name">Think hard</span>
+          <span class="effort-hint" title="deeper reasoning">deeper reasoning</span>
+        </span>
+      </button>
+      <button class="menu-row" type="button" role="menuitem">
+        <span class="effort-layout">
+          <span class="effort-name">Think harder</span>
+          <span class="effort-hint" title="long-horizon work">long-horizon work</span>
+        </span>
+      </button>
+      <button class="menu-row selected" type="button" role="menuitem" aria-current="true">
+        <span class="effort-layout">
+          <span class="effort-name">Max thinking</span>
+          <span class="effort-hint" title="deepest single agent">deepest single agent</span>
+        </span>
+      </button>
+      <button class="menu-row" type="button" role="menuitem">
+        <span class="effort-layout">
+          <span class="effort-name">Ultra Cascade</span>
+          <span class="effort-hint" title="max + visible lanes">max + visible lanes</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="composer" aria-hidden="true">
+      <span class="composer-plus">+</span>
+      <span>Message agent…</span>
+      <button class="send" type="button" tabindex="-1">→</button>
+    </div>
+  </section>
+</main>
+</body>
+</html>
