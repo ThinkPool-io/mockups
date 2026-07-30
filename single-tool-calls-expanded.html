@@ -147,6 +147,10 @@
     border-radius:9px;
     background:var(--card);
   }
+  .normal-call{
+    border-left:2px solid hsl(201 78% 64% / .42);
+    padding-left:8px;
+  }
   .tool-header{
     min-height:44px;
     width:100%;
@@ -180,6 +184,7 @@
     text-overflow:ellipsis;
     white-space:nowrap;
   }
+  .mobile-label{display:none}
   .meta{
     flex:none;
     padding:1px 7px;
@@ -201,6 +206,12 @@
     font:400 11px/1.55 var(--font-mono);
     white-space:pre-wrap;
     overflow-wrap:anywhere;
+  }
+  .normal-call .tool-body{
+    margin:0 0 4px 16px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:7px;
   }
   .section-label{
     color:var(--ink-soft);
@@ -243,6 +254,8 @@
     .message{font-size:13px}
     .tool-header,.summary{font-size:11.5px}
     .command{max-width:none}
+    .desktop-label{display:none}
+    .mobile-label{display:block}
     .meta{padding-inline:5px}
   }
 </style>
@@ -270,11 +283,12 @@
           <span>Production now reports the expected revision. I’m running the final route and contract checks.</span>
         </div>
 
-        <div class="tool">
+        <div class="normal-call">
           <div class="tool-header">
             <span class="triangle">▼</span>
             <span class="tool-name">Bash</span>
-            <span class="command">/bin/zsh -lc '.claude/skills/post-push-qa/scripts/check.sh'</span>
+            <span class="command desktop-label">Post-push QA · verify deploy and launch contracts</span>
+            <span class="command mobile-label">Post-push QA</span>
             <span class="meta">146s</span>
             <span class="meta pass">✓</span>
           </div>
@@ -293,11 +307,12 @@ Launch contracts: HELD</div>
           <span>The release gate is held. I’m checking the rendered room once more at both viewports.</span>
         </div>
 
-        <div class="tool">
+        <div class="normal-call">
           <div class="tool-header">
             <span class="triangle">▼</span>
             <span class="tool-name">Read</span>
-            <span class="command">src/pages/code/structured.jsx</span>
+            <span class="command desktop-label">Inspect the structured tool renderer</span>
+            <span class="command mobile-label">Tool renderer</span>
             <span class="meta">3ms</span>
             <span class="meta pass">✓</span>
           </div>
