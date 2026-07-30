@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>thinkpool — Single tool calls, fully open</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --term:hsl(200 36% 2%);
+    --card:hsl(200 26% 5%);
+    --surface:hsl(199 20% 11%);
+    --line:hsl(199 24% 17%);
+    --line-strong:hsl(194 30% 26%);
+    --ink:hsl(190 26% 96%);
+    --ink-soft:hsl(190 22% 88%);
+    --muted:hsl(192 16% 76%);
+    --faint:hsl(196 16% 60%);
+    --glacier:hsl(201 78% 64%);
+    --glacier-hi:hsl(201 82% 70%);
+    --positive:hsl(150 66% 56%);
+    --positive-bg:hsl(150 66% 56% / 0.12);
+    --font-sans:"Hanken Grotesk",system-ui,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--term);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    padding:32px 24px 40px;
+  }
+  button{font:inherit}
+  .page{max-width:1180px;margin:0 auto}
+  .eyebrow{
+    color:var(--glacier);
+    font:600 11px/1.4 var(--font-mono);
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  h1{
+    margin:8px 0 6px;
+    color:var(--ink);
+    font-size:30px;
+    line-height:1.1;
+    font-weight:600;
+    letter-spacing:-.025em;
+  }
+  .sub{
+    margin:0;
+    color:var(--faint);
+    font:400 13px/1.55 var(--font-mono);
+  }
+  .contract{
+    margin-top:26px;
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(300px,.8fr);
+    gap:16px;
+    align-items:start;
+  }
+  .mode{
+    min-width:0;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--card);
+  }
+  .mode-primary{
+    border-color:var(--line-strong);
+    box-shadow:0 0 0 1px hsl(201 78% 64% / .06);
+  }
+  .mode-head{
+    min-height:58px;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid var(--line);
+    background:hsl(199 20% 11% / .34);
+  }
+  .mode-copy{min-width:0;flex:1}
+  .mode-title{
+    margin:0;
+    color:var(--ink-soft);
+    font:600 12px/1.35 var(--font-mono);
+  }
+  .mode-note{
+    margin:2px 0 0;
+    color:var(--faint);
+    font:400 10px/1.4 var(--font-mono);
+  }
+  .toggle{
+    width:38px;
+    height:22px;
+    flex:none;
+    padding:2px;
+    border:1px solid var(--line-strong);
+    border-radius:999px;
+    background:var(--term);
+  }
+  .toggle::after{
+    content:"";
+    display:block;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:var(--faint);
+  }
+  .toggle.on{
+    border-color:hsl(201 78% 64% / .48);
+    background:hsl(201 78% 64% / .14);
+  }
+  .toggle.on::after{
+    margin-left:16px;
+    background:var(--glacier-hi);
+  }
+  .transcript{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .message{
+    display:grid;
+    grid-template-columns:10px minmax(0,1fr);
+    gap:7px;
+    align-items:start;
+    padding:3px 3px 5px;
+    color:var(--ink-soft);
+    font-size:14px;
+    line-height:1.5;
+  }
+  .glowdot{
+    width:6px;
+    height:6px;
+    margin-top:8px;
+    border-radius:50%;
+    background:var(--glacier);
+    box-shadow:0 0 9px hsl(201 78% 64% / .72);
+  }
+  .tool{
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:var(--card);
+  }
+  .tool-header{
+    min-height:44px;
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:7px 10px 7px 0;
+    border:0;
+    background:transparent;
+    color:var(--ink);
+    text-align:left;
+    font:400 12px/1.45 var(--font-mono);
+  }
+  .triangle{
+    width:17px;
+    margin-left:4px;
+    color:var(--glacier);
+    text-align:center;
+    font-size:10px;
+  }
+  .tool-name{
+    flex:none;
+    color:var(--glacier-hi);
+    font-weight:600;
+  }
+  .command{
+    min-width:0;
+    flex:1;
+    overflow:hidden;
+    color:var(--muted);
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .meta{
+    flex:none;
+    padding:1px 7px;
+    border-radius:999px;
+    color:var(--faint);
+    font-size:10px;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .pass{
+    color:var(--positive);
+    background:var(--positive-bg);
+  }
+  .tool-body{
+    border-top:1px solid var(--line);
+    background:var(--term);
+    padding:8px 10px 10px;
+    color:var(--muted);
+    font:400 11px/1.55 var(--font-mono);
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+  }
+  .section-label{
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+  .summary{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    min-height:44px;
+    padding:7px 10px 7px 0;
+    color:var(--ink);
+    font:400 12px/1.45 var(--font-mono);
+  }
+  .calls{
+    color:var(--glacier-hi);
+    font-weight:600;
+  }
+  .divider{color:var(--line-strong)}
+  .explain{
+    margin:2px 3px 0;
+    padding:10px 11px;
+    border-left:2px solid hsl(201 78% 64% / .45);
+    color:var(--faint);
+    font:400 11px/1.55 var(--font-mono);
+  }
+  .footer{
+    margin-top:18px;
+    color:var(--faint);
+    text-align:center;
+    font:400 10px/1.5 var(--font-mono);
+  }
+  @media (max-width:700px){
+    body{padding:22px 12px 28px}
+    h1{font-size:24px}
+    .sub{font-size:11px}
+    .contract{margin-top:18px;grid-template-columns:1fr}
+    .mode-head{padding-inline:12px}
+    .transcript{padding:8px}
+    .message{font-size:13px}
+    .tool-header,.summary{font-size:11.5px}
+    .command{max-width:none}
+    .meta{padding-inline:5px}
+  }
+</style>
+</head>
+<body>
+
+<main class="page">
+  <div class="eyebrow">Tool-row behavior</div>
+  <h1>Single calls open when compact mode is off.</h1>
+  <p class="sub">The summary pill remains a compact-mode pattern. Normal mode shows the real input and output inline.</p>
+
+  <div class="contract">
+    <section class="mode mode-primary" aria-label="Normal tool rows">
+      <header class="mode-head">
+        <div class="mode-copy">
+          <p class="mode-title">Compact tool rows</p>
+          <p class="mode-note">Off · individual calls, expanded by default</p>
+        </div>
+        <span class="toggle" aria-label="Off"></span>
+      </header>
+
+      <div class="transcript">
+        <div class="message">
+          <span class="glowdot"></span>
+          <span>Production now reports the expected revision. I’m running the final route and contract checks.</span>
+        </div>
+
+        <div class="tool">
+          <div class="tool-header">
+            <span class="triangle">▼</span>
+            <span class="tool-name">Bash</span>
+            <span class="command">/bin/zsh -lc '.claude/skills/post-push-qa/scripts/check.sh'</span>
+            <span class="meta">146s</span>
+            <span class="meta pass">✓</span>
+          </div>
+          <div class="tool-body"><span class="section-label">Input</span>
+{
+  "command": "/bin/zsh -lc '.claude/skills/post-push-qa/scripts/check.sh'"
+}
+
+<span class="section-label">Output</span>
+Deploy identity, live routes, redirects, and database smoke passed.
+Launch contracts: HELD</div>
+        </div>
+
+        <div class="message">
+          <span class="glowdot"></span>
+          <span>The release gate is held. I’m checking the rendered room once more at both viewports.</span>
+        </div>
+
+        <div class="tool">
+          <div class="tool-header">
+            <span class="triangle">▼</span>
+            <span class="tool-name">Read</span>
+            <span class="command">src/pages/code/structured.jsx</span>
+            <span class="meta">3ms</span>
+            <span class="meta pass">✓</span>
+          </div>
+          <div class="tool-body"><span class="section-label">Input</span>
+{
+  "file_path": "src/pages/code/structured.jsx"
+}
+
+<span class="section-label">Output</span>
+ToolCard · call header, status, and complete result body.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mode" aria-label="Compact tool rows">
+      <header class="mode-head">
+        <div class="mode-copy">
+          <p class="mode-title">Compact tool rows</p>
+          <p class="mode-note">On · summaries stay collapsed</p>
+        </div>
+        <span class="toggle on" aria-label="On"></span>
+      </header>
+
+      <div class="transcript">
+        <div class="tool">
+          <div class="summary">
+            <span class="triangle">▶</span>
+            <span class="calls">3 calls</span>
+            <span class="divider">│</span>
+            <span class="command">2 Bash · 1 Read</span>
+            <span class="meta">58s</span>
+            <span class="meta pass">✓</span>
+          </div>
+        </div>
+
+        <div class="tool">
+          <div class="summary">
+            <span class="triangle">▶</span>
+            <span class="tool-name">Bash</span>
+            <span class="command">/bin/zsh -lc 'npm run build'</span>
+            <span class="meta">12s</span>
+            <span class="meta pass">✓</span>
+          </div>
+        </div>
+
+        <p class="explain">Compact mode keeps the existing quick-scan treatment: grouped runs become summary pills, while a singleton remains a closed disclosure row.</p>
+      </div>
+    </section>
+  </div>
+
+  <p class="footer">Chosen behavior · ungrouped + expanded off · grouped + collapsed on</p>
+</main>
+
+</body>
+</html>
