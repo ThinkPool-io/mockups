@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thinkpool · Work Done pill · classic shell</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 9% 9%);
+      --raised: hsl(212 8% 12%);
+      --surface: hsl(212 8% 14%);
+      --float: hsl(212 7% 17%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(200 64% 60%);
+      --pool-hi: hsl(200 70% 70%);
+      --positive: hsl(152 28% 54%);
+      --viewer: hsl(161 48% 58%);
+      --danger: hsl(350 85% 63%);
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --font-identity: "Space Grotesk", "Hanken Grotesk", system-ui, sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      overflow-x: clip;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      text-size-adjust: 100%;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    :focus-visible { outline: 2px solid var(--pool); outline-offset: 2px; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 48px minmax(0, 1fr) auto;
+      background:
+        linear-gradient(180deg, color-mix(in oklab, var(--pool) 2%, transparent), transparent 170px),
+        var(--bg);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in oklab, var(--bg) 94%, transparent);
+    }
+
+    .tabs {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .tab {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      border-right: 1px solid var(--line);
+      color: var(--faint);
+      font: 500 11px var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      position: relative;
+      color: var(--ink);
+    }
+
+    .tab.active::after {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: var(--pool);
+      content: "";
+    }
+
+    .presence {
+      width: 7px;
+      height: 7px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 8px color-mix(in oklab, var(--positive) 72%, transparent);
+    }
+
+    .top-actions {
+      display: flex;
+      flex: none;
+      align-items: stretch;
+    }
+
+    .icon-button {
+      width: 48px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: transparent;
+      color: var(--faint);
+      cursor: pointer;
+      font: 500 18px var(--font-mono);
+    }
+
+    .transcript {
+      width: min(100%, 1040px);
+      margin: 0 auto;
+      padding: 38px 28px 30px;
+    }
+
+    .assistant-copy {
+      max-width: 840px;
+      margin-left: 30px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.62;
+    }
+
+    .assistant-copy p { margin: 0 0 16px; }
+
+    .assistant-copy ul {
+      margin: 0 0 26px;
+      padding-left: 22px;
+    }
+
+    .assistant-copy li { margin: 8px 0; }
+
+    .work-wrap { margin: 26px 0 28px; }
+
+    .work-card {
+      overflow: hidden;
+      border: 1px solid var(--ink-soft);
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--raised) 92%, transparent);
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ink) 4%, transparent);
+    }
+
+    .work-head {
+      display: grid;
+      min-width: 0;
+      grid-template-columns: minmax(0, 1fr) 116px;
+      align-items: stretch;
+    }
+
+    .work-summary {
+      display: grid;
+      min-width: 0;
+      min-height: 84px;
+      grid-template-columns: 32px minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 12px;
+      align-content: center;
+      border: 0;
+      background: transparent;
+      padding: 13px 18px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .status-seal {
+      grid-row: 1 / 3;
+      display: grid;
+      place-items: center;
+      align-self: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--positive);
+      border-radius: 50%;
+      color: var(--positive);
+      font: 500 18px/1 var(--font-mono);
+    }
+
+    .status-line {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      font: 600 11px var(--font-mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .status { color: var(--positive); }
+    .caret { color: var(--faint); transition: transform .18s var(--ease); }
+    .work-card[data-open="true"] .caret { transform: rotate(90deg); }
+
+    .proof-rail {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--faint);
+      font: 500 9.5px var(--font-mono);
+      letter-spacing: 0;
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .proof-rail .verified { color: var(--positive); }
+
+    .outcome {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--ink);
+      font: 500 15px/1.45 var(--font-mono);
+      letter-spacing: .005em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .details-button {
+      min-height: 44px;
+      border: 0;
+      border-left: 1px solid var(--pool);
+      background: transparent;
+      color: var(--pool);
+      cursor: pointer;
+      font: 600 12px var(--font-mono);
+      letter-spacing: .02em;
+    }
+
+    .details-button:hover,
+    .work-summary:hover {
+      background: color-mix(in oklab, var(--pool) 5%, transparent);
+    }
+
+    .work-body {
+      display: none;
+      border-top: 1px solid var(--line-strong);
+      padding: 0 18px 16px 62px;
+    }
+
+    .work-card[data-open="true"] .work-body { display: block; }
+
+    .evidence-title {
+      margin: 15px 0 9px;
+      color: var(--faint);
+      font: 600 9.5px var(--font-mono);
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .evidence-item {
+      min-width: 0;
+      padding: 11px 12px 12px 0;
+      border-right: 1px solid var(--line);
+    }
+
+    .evidence-item + .evidence-item { padding-left: 12px; }
+    .evidence-item:last-child { border-right: 0; }
+
+    .evidence-label {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--faint);
+      font: 500 9px var(--font-mono);
+      text-transform: uppercase;
+    }
+
+    .evidence-value {
+      display: block;
+      overflow: hidden;
+      color: var(--ink-soft);
+      font: 500 11px var(--font-mono);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .evidence-value.good { color: var(--positive); }
+
+    .provenance {
+      margin-top: 8px;
+      color: var(--faint);
+      font: 500 10px var(--font-mono);
+    }
+
+    .provenance summary {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      list-style: none;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+    }
+
+    .provenance summary::-webkit-details-marker { display: none; }
+
+    .provenance-copy {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 2px 0 6px;
+    }
+
+    .provenance-copy strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--faint);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .provenance-copy p {
+      margin: 0;
+      color: var(--muted);
+      font: 500 11px/1.55 var(--font-mono);
+    }
+
+    .user-row {
+      display: flex;
+      min-height: 54px;
+      align-items: center;
+      gap: 10px;
+      margin: 0 -28px;
+      padding: 0 28px;
+      border-left: 4px solid var(--viewer);
+      background: color-mix(in oklab, var(--viewer) 12%, transparent);
+      font: 600 16px var(--font-identity);
+    }
+
+    .drop {
+      width: 16px;
+      height: 20px;
+      flex: none;
+      border: 2px solid var(--viewer);
+      border-radius: 55% 55% 58% 58% / 62% 62% 42% 42%;
+      transform: rotate(45deg);
+    }
+
+    .user-row .name { color: var(--viewer); }
+    .user-row .time {
+      margin-left: auto;
+      color: var(--faint);
+      font: 500 11px var(--font-mono);
+    }
+
+    .thinking {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 68px;
+      color: var(--faint);
+      font: 500 14px var(--font-mono);
+    }
+
+    .thinking .spark { color: var(--pool); }
+
+    .dock {
+      width: min(100%, 1040px);
+      margin: 0 auto;
+      padding: 0 28px 22px;
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      color: var(--danger);
+      font: 500 12px var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .mode-row .context { margin-left: auto; color: var(--faint); }
+    .mode-row .model { color: var(--pool); }
+
+    .composer {
+      display: grid;
+      min-height: 58px;
+      grid-template-columns: 34px minmax(0, 1fr) 44px 44px;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      padding: 6px;
+      background: var(--raised);
+    }
+
+    .plus, .send, .bolt {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--faint);
+      font: 500 22px var(--font-mono);
+    }
+
+    .plus { width: 34px; }
+    .bolt { border: 1px solid var(--pool); color: var(--pool); }
+    .send { background: var(--pool); color: var(--bg); }
+
+    .placeholder {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--faint);
+      font: 500 14px var(--font-mono);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .app { grid-template-rows: 48px minmax(0, 1fr) auto; }
+      .tab { display: none; }
+      .tab.active {
+        display: flex;
+        flex: 1;
+        border-right: 0;
+        padding: 0 15px;
+      }
+      .top-actions .icon-button:first-child { display: none; }
+      .transcript { padding: 28px 12px 20px; }
+      .assistant-copy {
+        margin-left: 18px;
+        font-size: 15px;
+        line-height: 1.52;
+      }
+      .assistant-copy p:first-child { display: none; }
+      .assistant-copy ul {
+        margin-bottom: 22px;
+        padding-left: 18px;
+      }
+      .assistant-copy li:nth-child(n+3) { display: none; }
+      .work-wrap { margin: 22px 0 22px; }
+      .work-head { grid-template-columns: minmax(0, 1fr) 84px; }
+      .work-summary {
+        min-height: 84px;
+        grid-template-columns: 28px minmax(0, 1fr);
+        column-gap: 10px;
+        padding: 12px 12px;
+      }
+      .status-seal { width: 25px; height: 25px; font-size: 16px; }
+      .status-line { gap: 6px; font-size: 10px; }
+      .proof-rail { font-size: 8.5px; }
+      .outcome { font-size: 13.5px; }
+      .details-button { font-size: 11px; }
+      .work-body { padding: 0 12px 14px; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .evidence-item,
+      .evidence-item + .evidence-item {
+        padding: 9px 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .evidence-item:last-child { border-bottom: 0; }
+      .provenance-copy { grid-template-columns: 1fr; gap: 12px; }
+      .user-row {
+        min-height: 52px;
+        margin: 0 -12px;
+        padding: 0 12px;
+        font-size: 15px;
+      }
+      .thinking { min-height: 58px; font-size: 12px; }
+      .dock { padding: 0 12px 10px; }
+      .mode-row { font-size: 10.5px; }
+      .composer { min-height: 54px; grid-template-columns: 30px minmax(0, 1fr) 40px 40px; }
+      .plus, .send, .bolt { width: 40px; height: 40px; }
+      .plus { width: 30px; }
+      .placeholder { font-size: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .001ms !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <nav class="tabs" aria-label="Open terminals">
+        <div class="tab"><span class="presence"></span>WHISPERS DESIGN</div>
+        <div class="tab"><span class="presence"></span>MCP</div>
+        <div class="tab active"><span class="presence"></span>WORK DONE PILL</div>
+        <div class="tab"><span class="presence"></span>Call Pills Collapse</div>
+      </nav>
+      <div class="top-actions">
+        <button class="icon-button" aria-label="New terminal">+</button>
+        <button class="icon-button" aria-label="Whispers">◌</button>
+        <button class="icon-button" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <main class="transcript">
+      <section class="assistant-copy" aria-label="Agent response">
+        <p>The first version had the right shape: one clear result, a visible outcome, and a separate action.</p>
+        <ul>
+          <li>Bring back the strong outlined shell and green completion seal.</li>
+          <li>Keep the outcome readable before any internal metadata.</li>
+          <li>Retain changed files, review proof, and provenance inside Details.</li>
+        </ul>
+      </section>
+
+      <section class="work-wrap" aria-label="Work Done pill proposal">
+        <article class="work-card" id="work-card" data-open="false">
+          <div class="work-head">
+            <button class="work-summary" id="summary-button" type="button" aria-expanded="false" aria-controls="work-details">
+              <span class="status-seal" aria-hidden="true">✓</span>
+              <span class="status-line">
+                <span class="status">Done</span>
+                <span class="caret" aria-hidden="true">›</span>
+                <span class="proof-rail">10 files · <span class="verified">verified</span></span>
+              </span>
+              <span class="outcome">Restored the original Work Done pill while keeping useful proof.</span>
+            </button>
+            <button class="details-button" id="details-button" type="button" aria-expanded="false" aria-controls="work-details">Details</button>
+          </div>
+
+          <div class="work-body" id="work-details">
+            <p class="evidence-title">Evidence</p>
+            <div class="evidence-grid">
+              <div class="evidence-item">
+                <span class="evidence-label">Files</span>
+                <span class="evidence-value">10 changed</span>
+              </div>
+              <div class="evidence-item">
+                <span class="evidence-label">Code</span>
+                <span class="evidence-value">a55485f4 · clean</span>
+              </div>
+              <div class="evidence-item">
+                <span class="evidence-label">Review</span>
+                <span class="evidence-value good">Passed</span>
+              </div>
+            </div>
+            <details class="provenance">
+              <summary>›&nbsp;&nbsp;Provenance</summary>
+              <div class="provenance-copy">
+                <div>
+                  <strong>Request</strong>
+                  <p>Bring back the first Done pill design without losing the useful information.</p>
+                </div>
+                <div>
+                  <strong>Agent report</strong>
+                  <p>The strong original shell now carries the new outcome, evidence, and review model.</p>
+                </div>
+              </div>
+            </details>
+          </div>
+        </article>
+      </section>
+
+      <section class="user-row" aria-label="Maks message">
+        <span class="drop" aria-hidden="true"></span>
+        <span class="name">Maks @agent</span>
+        <span>Mock it up again</span>
+        <span class="time">09:12</span>
+      </section>
+
+      <div class="thinking"><span class="spark">✹</span>Thinking… <span>(high effort)</span></div>
+    </main>
+
+    <footer class="dock">
+      <div class="mode-row">
+        <span>▢</span>
+        <span>Bypass permissions</span>
+        <span class="context">ctx 78%</span>
+        <span class="model">5.6-Sol High</span>
+      </div>
+      <div class="composer">
+        <button class="plus" aria-label="Add attachment">＋</button>
+        <div class="placeholder">Message agent…</div>
+        <button class="bolt" aria-label="Quick action">ϟ</button>
+        <button class="send" aria-label="Send message">→</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const card = document.getElementById("work-card");
+    const summary = document.getElementById("summary-button");
+    const details = document.getElementById("details-button");
+
+    function setOpen(next) {
+      card.dataset.open = String(next);
+      summary.setAttribute("aria-expanded", String(next));
+      details.setAttribute("aria-expanded", String(next));
+      details.textContent = next ? "Close" : "Details";
+    }
+
+    summary.addEventListener("click", () => setOpen(card.dataset.open !== "true"));
+    details.addEventListener("click", () => setOpen(card.dataset.open !== "true"));
+  </script>
+</body>
+</html>
