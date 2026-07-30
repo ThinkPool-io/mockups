@@ -284,30 +284,28 @@
     min-width: 0;
     width: 100%;
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
     line-height: 1.25;
   }
 
   .effort-name {
     min-width: 0;
-    overflow: hidden;
-    flex: 1;
+    flex: none;
     color: inherit;
     font-size: 14px;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .effort-hint {
     min-width: 0;
-    overflow: hidden;
     flex: none;
     color: var(--faint);
     font-size: 11px;
-    text-align: right;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.4;
+    text-align: left;
+    white-space: normal;
   }
 
   .decision-note {
@@ -383,7 +381,7 @@
   <header class="proof-header">
     <div>
       <p class="eyebrow">Mobile menu · revised</p>
-      <h1>Keep every choice and explanation visible</h1>
+      <h1>Explain when to use every effort level</h1>
     </div>
     <div class="allocation" aria-label="Measured menu width">
       <strong>280px panel</strong><span>·</span><span>269px measured minimum</span>
@@ -404,8 +402,8 @@
     </div>
 
     <aside class="decision-note">
-      <strong>No truncation at 280px</strong>
-      The longest row needs 269px with the production font. The extra 11px keeps every current choice and explanation fully visible.
+      <strong>Outcome-first descriptions</strong>
+      Each row now explains the kind of work it suits. Max and Ultra describe their actual execution difference instead of internal jargon.
     </aside>
 
     <div class="model-menu" role="menu" aria-label="Switch model, provider or thinking power">
@@ -426,37 +424,37 @@
       <button class="menu-row" type="button" role="menuitem">
         <span class="effort-layout">
           <span class="effort-name">Max speed</span>
-          <span class="effort-hint" title="lightest reasoning">lightest reasoning</span>
+          <span class="effort-hint">For quick, well-scoped tasks.</span>
         </span>
       </button>
       <button class="menu-row" type="button" role="menuitem">
         <span class="effort-layout">
           <span class="effort-name">Balanced</span>
-          <span class="effort-hint" title="speed + depth">speed + depth</span>
+          <span class="effort-hint">The default for everyday coding work.</span>
         </span>
       </button>
       <button class="menu-row" type="button" role="menuitem">
         <span class="effort-layout">
           <span class="effort-name">Think hard</span>
-          <span class="effort-hint" title="deeper reasoning">deeper reasoning</span>
+          <span class="effort-hint">For difficult tasks with several steps.</span>
         </span>
       </button>
       <button class="menu-row" type="button" role="menuitem">
         <span class="effort-layout">
           <span class="effort-name">Think harder</span>
-          <span class="effort-hint" title="long-horizon work">long-horizon work</span>
+          <span class="effort-hint">For complex tasks with several sources or tradeoffs.</span>
         </span>
       </button>
       <button class="menu-row selected" type="button" role="menuitem" aria-current="true">
         <span class="effort-layout">
           <span class="effort-name">Max thinking</span>
-          <span class="effort-hint" title="deepest single agent">deepest single agent</span>
+          <span class="effort-hint">One agent gets more time for the hardest problems.</span>
         </span>
       </button>
       <button class="menu-row" type="button" role="menuitem">
         <span class="effort-layout">
           <span class="effort-name">Ultra Cascade</span>
-          <span class="effort-hint" title="max + visible lanes">max + visible lanes</span>
+          <span class="effort-hint">A lead agent splits complex work across visible workers.</span>
         </span>
       </button>
     </div>
