@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool | Whisper composer color directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --k-bg: hsl(212 23% 5%);
+    --k-panel-7: hsl(212 13% 7%);
+    --k-panel-9: hsl(212 13% 9%);
+    --k-panel-12: hsl(212 13% 12%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(201 78% 64%);
+    --pool-cobalt: hsl(217 85% 62%);
+    --current: hsl(172 30% 58%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--k-bg); }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background:
+      linear-gradient(180deg, color-mix(in oklab, var(--pool) 3%, transparent), transparent 230px),
+      var(--k-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    padding: 28px 24px 38px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button { font: inherit; }
+
+  .shell {
+    width: min(1384px, 100%);
+    margin: 0 auto;
+  }
+
+  .mast {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 26px;
+    padding: 0 2px 20px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--pool);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 820px;
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(30px, 3vw, 44px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .lede {
+    max-width: 770px;
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .rule {
+    max-width: 360px;
+    margin: 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  .rule strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .current-strip {
+    display: grid;
+    grid-template-columns: minmax(165px, 0.42fr) minmax(300px, 1fr) minmax(190px, 0.5fr);
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 13px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--k-panel-7);
+    padding: 13px 15px;
+  }
+
+  .current-kicker,
+  .rank {
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .current-kicker strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--current);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .current-note {
+    margin: 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1.5;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .concept {
+    --accent: var(--pool);
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 250px;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    background: var(--k-panel-7);
+    padding: 15px;
+  }
+
+  .concept.shortlist {
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--line));
+    background:
+      linear-gradient(180deg, color-mix(in oklab, var(--accent) 5%, transparent), transparent 105px),
+      var(--k-panel-7);
+  }
+
+  .concept.shortlist::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    content: "";
+    background: color-mix(in oklab, var(--accent) 76%, transparent);
+  }
+
+  .concept-head {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+  }
+
+  .swatch {
+    width: 34px;
+    height: 34px;
+    border: 1px solid color-mix(in oklab, var(--accent) 70%, white 8%);
+    border-radius: 9px;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 4px color-mix(in oklab, var(--k-bg) 12%, transparent);
+  }
+
+  .rank strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h2 {
+    min-width: 0;
+    margin: 2px 0 0;
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+  }
+
+  .value {
+    margin: 10px 0 7px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    line-height: 1.4;
+  }
+
+  .composer {
+    display: flex;
+    min-width: 0;
+    min-height: 42px;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid color-mix(in oklab, var(--accent) 45%, var(--line));
+    border-radius: 9px;
+    background: var(--k-bg);
+    padding: 5px;
+  }
+
+  .composer-copy {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .brief-button,
+  .send-button {
+    display: grid;
+    width: 29px;
+    height: 29px;
+    flex: none;
+    place-items: center;
+    border-radius: 7px;
+  }
+
+  .brief-button {
+    border: 1px solid color-mix(in oklab, var(--accent) 58%, var(--line));
+    background: color-mix(in oklab, var(--accent) 13%, var(--k-panel-9));
+    color: var(--accent);
+  }
+
+  .send-button {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--k-bg);
+  }
+
+  .brief-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .send-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .logic {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 7px;
+  }
+
+  .logic span {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 7px;
+    line-height: 1;
+    padding: 5px 3px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .logic .quiet {
+    border-color: color-mix(in oklab, var(--accent) 34%, var(--line));
+  }
+
+  .logic .tinted {
+    border-color: color-mix(in oklab, var(--accent) 48%, var(--line));
+    background: color-mix(in oklab, var(--accent) 10%, var(--k-panel-9));
+    color: color-mix(in oklab, var(--accent) 78%, var(--ink));
+  }
+
+  .logic .solid {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--k-bg);
+  }
+
+  .tradeoff {
+    display: flex;
+    min-height: 31px;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 11px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    line-height: 1.4;
+  }
+
+  .tradeoff::before {
+    width: 5px;
+    height: 5px;
+    flex: none;
+    margin-top: 3px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--accent) 65%, var(--line));
+    content: "";
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: auto repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--line);
+  }
+
+  .legend > div {
+    background: var(--k-panel-7);
+    padding: 12px 14px;
+  }
+
+  .legend-title {
+    display: grid;
+    align-content: center;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .finalist strong {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .finalist span {
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  svg.icon {
+    display: block;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  @media (max-width: 1120px) {
+    .board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 20px 14px 28px; }
+
+    .mast {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding-bottom: 18px;
+    }
+
+    .rule { text-align: left; }
+
+    .current-strip {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 13px;
+    }
+
+    .board { grid-template-columns: 1fr; }
+
+    .concept { min-height: 238px; }
+
+    .composer {
+      min-height: 58px;
+      gap: 7px;
+      padding: 6px;
+    }
+
+    .composer-copy {
+      padding-left: 5px;
+      font-size: 11px;
+    }
+
+    .brief-button,
+    .send-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 9px;
+    }
+
+    .brief-button svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .send-button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .legend { grid-template-columns: 1fr; }
+    .legend-title { min-height: 42px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <symbol id="i-brief" viewBox="0 0 24 24">
+      <path d="M4 9v6M7.5 6v12M11 8v8" />
+      <path d="M15 7h5M15 12h5M15 17h3.5" />
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 24 24">
+      <path d="M5 12h14M14 7l5 5-5 5" />
+    </symbol>
+  </defs>
+</svg>
+
+<main class="shell">
+  <header class="mast">
+    <div>
+      <p class="eyebrow">Whisper composer study</p>
+      <h1>Ten colors to replace the off-green.</h1>
+      <p class="lede">
+        Each option uses the same hierarchy: a quiet composer outline, a tinted Brief control, and a solid Send control.
+      </p>
+    </div>
+    <p class="rule">
+      <strong>Product rule</strong><br>
+      The accent should feel native to Code, stay clear on the dark surface, and avoid warning or status semantics.
+    </p>
+  </header>
+
+  <section class="current-strip" aria-label="Current composer reference">
+    <div class="current-kicker">
+      Current - retire
+      <strong>Off-green · hsl(172 30% 58%)</strong>
+    </div>
+    <div class="composer" style="--accent: var(--current)">
+      <span class="composer-copy">Whisper to Conrad…</span>
+      <button class="brief-button" style="border-color:var(--line);background:transparent;color:var(--muted)" aria-label="Brief">
+        <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+      </button>
+      <button class="send-button" aria-label="Send">
+        <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+      </button>
+    </div>
+    <p class="current-note">The outline and Send action read as partner green. Brief has no feature identity.</p>
+  </section>
+
+  <section class="board" aria-label="Ten new composer color options">
+    <article class="concept shortlist" style="--accent:hsl(201 78% 64%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank"><strong>01 · strongest</strong></div>
+          <h2>Glacier</h2>
+        </div>
+      </div>
+      <p class="value">hsl(201 78% 64%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Bright, crisp, and already native to the product system.</div>
+    </article>
+
+    <article class="concept shortlist" style="--accent:hsl(217 85% 62%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank"><strong>02 · brand</strong></div>
+          <h2>Cobalt</h2>
+        </div>
+      </div>
+      <p class="value">hsl(217 85% 62%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Most recognizably thinkpool. Stronger and more electric.</div>
+    </article>
+
+    <article class="concept shortlist" style="--accent:hsl(218 60% 72%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank"><strong>03 · calm</strong></div>
+          <h2>Cornflower</h2>
+        </div>
+      </div>
+      <p class="value">hsl(218 60% 72%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Soft and collaborative without drifting back toward green.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(207 30% 60%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">04 · quiet</div>
+          <h2>Steel blue</h2>
+        </div>
+      </div>
+      <p class="value">hsl(207 30% 60%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Subtle and durable. Less obvious as a primary action.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(220 40% 55%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">05 · grounded</div>
+          <h2>Denim</h2>
+        </div>
+      </div>
+      <p class="value">hsl(220 40% 55%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Feels technical and stable, but has less night-mode lift.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(248 46% 68%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">06 · agentic</div>
+          <h2>Iris</h2>
+        </div>
+      </div>
+      <p class="value">hsl(248 46% 68%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Signals AI clearly. Risks looking like a separate product.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(268 42% 66%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">07 · expressive</div>
+          <h2>Violet</h2>
+        </div>
+      </div>
+      <p class="value">hsl(268 42% 66%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Distinctive and creative. Less connected to the pool palette.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(342 34% 65%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">08 · warm</div>
+          <h2>Dusty rose</h2>
+        </div>
+      </div>
+      <p class="value">hsl(342 34% 65%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Human and conversational. Pulls away from Code identity.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(40 48% 62%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">09 · warm signal</div>
+          <h2>Amber</h2>
+        </div>
+      </div>
+      <p class="value">hsl(40 48% 62%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Highly legible, but competes with warning and attention roles.</div>
+    </article>
+
+    <article class="concept" style="--accent:hsl(212 12% 72%)">
+      <div class="concept-head">
+        <span class="swatch" aria-hidden="true"></span>
+        <div>
+          <div class="rank">10 · neutral</div>
+          <h2>Silver</h2>
+        </div>
+      </div>
+      <p class="value">hsl(212 12% 72%)</p>
+      <div class="composer">
+        <span class="composer-copy">Whisper to Conrad…</span>
+        <button class="brief-button" aria-label="Create a Brief"><svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg></button>
+        <button class="send-button" aria-label="Send whisper"><svg class="icon" aria-hidden="true"><use href="#i-send"/></svg></button>
+      </div>
+      <div class="logic"><span class="quiet">outline</span><span class="tinted">Brief</span><span class="solid">Send</span></div>
+      <div class="tradeoff">Maximum neutrality. Weakest feature ownership of the set.</div>
+    </article>
+  </section>
+
+  <section class="legend" aria-label="Recommended shortlist">
+    <div class="legend-title">Shortlist</div>
+    <div class="finalist">
+      <strong>1. Glacier</strong>
+      <span>Best product fit and contrast.</span>
+    </div>
+    <div class="finalist">
+      <strong>2. Cobalt</strong>
+      <span>Best thinkpool brand signal.</span>
+    </div>
+    <div class="finalist">
+      <strong>3. Cornflower</strong>
+      <span>Best calm, social tone.</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>
