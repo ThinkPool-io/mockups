@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool | Whisper composer outline directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --k-bg: hsl(212 23% 5%);
+    --k-card: hsl(212 22% 3%);
+    --k-panel-7: hsl(212 13% 7%);
+    --k-panel-9: hsl(212 13% 9%);
+    --k-panel-12: hsl(212 13% 12%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --hair: hsl(212 14% 16%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(201 78% 64%);
+    --whisper: hsl(218 60% 72%);
+    --whisper-ink: hsl(212 23% 5%);
+    --positive: hsl(152 40% 58%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--k-bg); }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background: var(--k-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    padding: 26px 24px 32px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  textarea { font: inherit; }
+
+  button:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--pool);
+    outline-offset: 2px;
+  }
+
+  .shell {
+    width: min(1384px, 100%);
+    margin: 0 auto;
+  }
+
+  .mast {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 480px);
+    align-items: end;
+    gap: 42px;
+    padding: 0 2px 20px;
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--whisper);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 760px;
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(32px, 3.4vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+
+  .lede {
+    max-width: 720px;
+    margin: 13px 0 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  .finding {
+    border-left: 2px solid color-mix(in oklab, var(--whisper) 52%, var(--line));
+    padding: 2px 0 2px 16px;
+  }
+
+  .finding-label {
+    margin: 0 0 7px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .finding p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.55;
+  }
+
+  .finding strong {
+    color: var(--whisper);
+    font-weight: 600;
+  }
+
+  .baseline {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+    gap: 1px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--line);
+  }
+
+  .measure,
+  .current {
+    min-width: 0;
+    background: var(--k-panel-7);
+    padding: 13px 15px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 9px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .section-label strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .axis-list {
+    display: grid;
+    gap: 6px;
+  }
+
+  .axis-row {
+    display: grid;
+    grid-template-columns: 58px 1fr 42px;
+    align-items: center;
+    gap: 10px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+  }
+
+  .axis-track {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .axis-box {
+    display: grid;
+    width: 27px;
+    height: 27px;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--whisper) 34%, var(--line));
+    border-radius: 7px;
+    color: var(--whisper);
+  }
+
+  .axis-box.solid {
+    border-color: var(--whisper);
+    background: var(--whisper);
+    color: var(--whisper-ink);
+  }
+
+  .axis-gap {
+    display: grid;
+    height: 27px;
+    place-items: center;
+    color: var(--faint);
+    font-size: 8px;
+  }
+
+  .axis-gap.main { width: 6px; }
+  .axis-gap.side { width: 8px; color: var(--whisper); }
+
+  .axis-row.fixed .axis-gap { width: 6px; }
+
+  .axis-value {
+    text-align: right;
+  }
+
+  .current-composer,
+  .composer {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 9px;
+    background: var(--k-bg);
+    padding: 6px;
+  }
+
+  .current-composer {
+    border-color: color-mix(in oklab, var(--whisper) 45%, var(--line));
+  }
+
+  .composer-copy {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    padding-left: 4px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .brief-button,
+  .send-button {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    place-items: center;
+    border-radius: 9px;
+    padding: 0;
+  }
+
+  .brief-button {
+    border: 1px solid color-mix(in oklab, var(--whisper) 55%, var(--line));
+    background: color-mix(in oklab, var(--whisper) 10%, var(--k-panel-9));
+    color: var(--whisper);
+  }
+
+  .send-button {
+    border: 1px solid var(--whisper);
+    background: var(--whisper);
+    color: var(--whisper-ink);
+  }
+
+  .brief-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .send-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .concept {
+    --concept-line: var(--line);
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 362px;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 13px;
+    background: var(--k-panel-7);
+  }
+
+  .concept.recommended {
+    border-color: color-mix(in oklab, var(--whisper) 32%, var(--line));
+  }
+
+  .concept-head {
+    min-height: 104px;
+    padding: 14px 14px 12px;
+  }
+
+  .option-no {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pick {
+    border: 1px solid color-mix(in oklab, var(--whisper) 35%, var(--line));
+    border-radius: 999px;
+    color: var(--whisper);
+    padding: 3px 6px;
+    letter-spacing: 0.06em;
+  }
+
+  h2 {
+    margin: 11px 0 5px;
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  .method {
+    margin: 0;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    line-height: 1.45;
+  }
+
+  .mini-chat {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    border-top: 1px solid var(--hair);
+    background: var(--k-bg);
+  }
+
+  .message {
+    border-bottom: 1px solid var(--hair);
+    background: var(--k-panel-9);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-style: italic;
+    line-height: 1.55;
+    padding: 8px 10px;
+  }
+
+  .message.alt {
+    border-left: 2px solid color-mix(in oklab, var(--whisper) 40%, var(--line));
+    background: var(--k-panel-7);
+  }
+
+  .name {
+    margin-right: 5px;
+    color: var(--whisper);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .time {
+    border-bottom: 1px solid var(--hair);
+    color: color-mix(in oklab, var(--whisper) 58%, var(--faint));
+    font-family: var(--font-mono);
+    font-size: 7.5px;
+    padding: 3px 10px 4px;
+  }
+
+  .composer-wrap {
+    margin-top: auto;
+    padding: 10px;
+  }
+
+  .composer {
+    position: relative;
+    min-height: 52px;
+    transition:
+      border-color 140ms ease-out,
+      box-shadow 140ms ease-out,
+      background-color 140ms ease-out;
+  }
+
+  .option-1 .composer {
+    border-color: color-mix(in oklab, var(--line) 94%, var(--whisper) 6%);
+  }
+
+  .option-2 .composer {
+    border-color: color-mix(in oklab, var(--line) 82%, var(--whisper) 18%);
+  }
+
+  .option-3 .composer {
+    border-color: var(--line);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--whisper) 8%, transparent);
+  }
+
+  .option-4 .composer {
+    border-color: color-mix(in oklab, var(--line) 86%, transparent);
+  }
+
+  .option-4 .composer:focus-within {
+    border-color: color-mix(in oklab, var(--line) 70%, var(--whisper) 30%);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--whisper) 6%, transparent);
+  }
+
+  .option-5 .composer {
+    border-color: color-mix(in oklab, var(--line) 92%, transparent);
+  }
+
+  .option-5 .composer::after {
+    position: absolute;
+    right: 18px;
+    bottom: -1px;
+    left: 18px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--whisper) 24%, transparent),
+      transparent
+    );
+    content: "";
+  }
+
+  .composer-input {
+    min-width: 0;
+    height: 24px;
+    flex: 1;
+    resize: none;
+    overflow: hidden;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1.4;
+  }
+
+  .composer-input::placeholder { color: var(--faint); }
+
+  .note {
+    min-height: 55px;
+    margin: 0;
+    border-top: 1px solid var(--hair);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    line-height: 1.45;
+    padding: 10px 14px 12px;
+  }
+
+  .note strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 14px;
+    border-top: 1px solid var(--hair);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.5;
+    padding: 12px 2px 0;
+  }
+
+  .foot strong {
+    color: var(--whisper);
+    font-weight: 500;
+  }
+
+  svg.icon {
+    display: block;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .send-button svg.icon { stroke-width: 3.25; }
+
+  @media (max-width: 1120px) {
+    .board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 20px 13px 28px; }
+
+    .mast {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding-bottom: 17px;
+    }
+
+    h1 {
+      max-width: 330px;
+      font-size: 36px;
+      line-height: 0.98;
+    }
+
+    .lede { font-size: 10.5px; }
+
+    .baseline {
+      grid-template-columns: 1fr;
+      margin-bottom: 12px;
+    }
+
+    .axis-row {
+      grid-template-columns: 52px 1fr 38px;
+      gap: 7px;
+    }
+
+    .board { grid-template-columns: 1fr; }
+
+    .concept {
+      min-height: 344px;
+    }
+
+    .concept-head { min-height: 94px; }
+
+    .message { font-size: 10.5px; }
+
+    .composer-input {
+      font-size: 11px;
+    }
+
+    .foot {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <symbol id="i-brief" viewBox="0 0 24 24">
+      <path d="M4 9v6M7.5 6v12M11 8v8" />
+      <path d="M15 7h5M15 12h5M15 17h3.5" />
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 24 24">
+      <path d="M5 12h13" />
+      <path d="M12 5l7 7-7 7" />
+    </symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24">
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+    </symbol>
+  </defs>
+</svg>
+
+<main class="shell">
+  <header class="mast">
+    <div>
+      <p class="eyebrow">Whisper composer study</p>
+      <h1>Quiet the frame. Fix the axis.</h1>
+      <p class="lede">
+        Five dimmer outline treatments using the chosen Cornflower accent. Brief and Send keep their identity while the composer stops competing with them.
+      </p>
+    </div>
+    <aside class="finding">
+      <p class="finding-label">Measured cause</p>
+      <p>
+        Main groups Agent and Send at <strong>6 px</strong>. Side chat leaves <strong>8 px</strong> between Brief and Send. Both boxes are equal, so Brief lands 2 px farther left.
+      </p>
+    </aside>
+  </header>
+
+  <section class="baseline" aria-label="Current alignment and outline reference">
+    <div class="measure">
+      <p class="section-label">
+        Control axis
+        <strong>desktop measurement</strong>
+      </p>
+      <div class="axis-list">
+        <div class="axis-row">
+          <span>Main</span>
+          <span class="axis-track">
+            <span class="axis-box"><svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-zap"/></svg></span>
+            <span class="axis-gap main">6</span>
+            <span class="axis-box solid"><svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-send"/></svg></span>
+          </span>
+          <span class="axis-value">60 px</span>
+        </div>
+        <div class="axis-row">
+          <span>Side now</span>
+          <span class="axis-track">
+            <span class="axis-box"><svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-brief"/></svg></span>
+            <span class="axis-gap side">8</span>
+            <span class="axis-box solid"><svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-send"/></svg></span>
+          </span>
+          <span class="axis-value">62 px</span>
+        </div>
+        <div class="axis-row fixed">
+          <span>Side fix</span>
+          <span class="axis-track">
+            <span class="axis-box"><svg class="icon" width="15" height="15" aria-hidden="true"><use href="#i-brief"/></svg></span>
+            <span class="axis-gap">6</span>
+            <span class="axis-box solid"><svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-send"/></svg></span>
+          </span>
+          <span class="axis-value">60 px</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="current">
+      <p class="section-label">
+        Current outline
+        <strong>45% Cornflower mixed into line</strong>
+      </p>
+      <div class="current-composer">
+        <span class="composer-copy">Whisper to Conrad...</span>
+        <span class="actions">
+          <button class="brief-button" type="button" aria-label="Create a Brief">
+            <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+          </button>
+          <button class="send-button" type="button" aria-label="Send whisper">
+            <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+          </button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="board" aria-label="Five dimmer whisper composer outline options">
+    <article class="concept option-1">
+      <header class="concept-head">
+        <div class="option-no"><span>01</span><span>quietest</span></div>
+        <h2>Smoke</h2>
+        <p class="method">6% Cornflower in the base line</p>
+      </header>
+      <div class="mini-chat">
+        <div class="message"><span class="name">Maks</span>this should feel quieter</div>
+        <div class="time">11:42</div>
+        <div class="message alt"><span class="name">Conrad</span>barely there, still intentional</div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea class="composer-input" rows="1" aria-label="Whisper message for Smoke option" placeholder="Whisper to Conrad..."></textarea>
+            <span class="actions">
+              <button class="brief-button" type="button" aria-label="Create a Brief">
+                <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+              </button>
+              <button class="send-button" type="button" aria-label="Send whisper">
+                <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note"><strong>Best for:</strong> maximum calm. The controls carry all feature identity.</p>
+    </article>
+
+    <article class="concept option-2">
+      <header class="concept-head">
+        <div class="option-no"><span>02</span><span>balanced</span></div>
+        <h2>Mist</h2>
+        <p class="method">18% Cornflower in the base line</p>
+      </header>
+      <div class="mini-chat">
+        <div class="message"><span class="name">Maks</span>this should feel quieter</div>
+        <div class="time">11:42</div>
+        <div class="message alt"><span class="name">Conrad</span>soft color, easy to locate</div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea class="composer-input" rows="1" aria-label="Whisper message for Mist option" placeholder="Whisper to Conrad..."></textarea>
+            <span class="actions">
+              <button class="brief-button" type="button" aria-label="Create a Brief">
+                <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+              </button>
+              <button class="send-button" type="button" aria-label="Send whisper">
+                <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note"><strong>Best for:</strong> retaining a visible Side chat signature without the bright frame.</p>
+    </article>
+
+    <article class="concept option-3">
+      <header class="concept-head">
+        <div class="option-no"><span>03</span><span>layered</span></div>
+        <h2>Inner echo</h2>
+        <p class="method">Neutral edge with an 8% inset trace</p>
+      </header>
+      <div class="mini-chat">
+        <div class="message"><span class="name">Maks</span>this should feel quieter</div>
+        <div class="time">11:42</div>
+        <div class="message alt"><span class="name">Conrad</span>the color sits inside the frame</div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea class="composer-input" rows="1" aria-label="Whisper message for Inner echo option" placeholder="Whisper to Conrad..."></textarea>
+            <span class="actions">
+              <button class="brief-button" type="button" aria-label="Create a Brief">
+                <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+              </button>
+              <button class="send-button" type="button" aria-label="Send whisper">
+                <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note"><strong>Best for:</strong> subtle depth. More crafted, but slightly busier up close.</p>
+    </article>
+
+    <article class="concept option-4 recommended">
+      <header class="concept-head">
+        <div class="option-no"><span>04</span><span class="pick">recommended</span></div>
+        <h2>Focus reveal</h2>
+        <p class="method">Neutral at rest, 30% Cornflower on focus</p>
+      </header>
+      <div class="mini-chat">
+        <div class="message"><span class="name">Maks</span>this should feel quieter</div>
+        <div class="time">11:42</div>
+        <div class="message alt"><span class="name">Conrad</span>color arrives only when needed</div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea class="composer-input" rows="1" aria-label="Whisper message for Focus reveal option" placeholder="Tap here to reveal focus"></textarea>
+            <span class="actions">
+              <button class="brief-button" type="button" aria-label="Create a Brief">
+                <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+              </button>
+              <button class="send-button" type="button" aria-label="Send whisper">
+                <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note"><strong>Best for:</strong> clean hierarchy. Quiet when idle, clear during interaction.</p>
+    </article>
+
+    <article class="concept option-5">
+      <header class="concept-head">
+        <div class="option-no"><span>05</span><span>signature</span></div>
+        <h2>Low tide</h2>
+        <p class="method">Neutral frame with a faint bottom signal</p>
+      </header>
+      <div class="mini-chat">
+        <div class="message"><span class="name">Maks</span>this should feel quieter</div>
+        <div class="time">11:42</div>
+        <div class="message alt"><span class="name">Conrad</span>one whisper of color at the base</div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <textarea class="composer-input" rows="1" aria-label="Whisper message for Low tide option" placeholder="Whisper to Conrad..."></textarea>
+            <span class="actions">
+              <button class="brief-button" type="button" aria-label="Create a Brief">
+                <svg class="icon" aria-hidden="true"><use href="#i-brief"/></svg>
+              </button>
+              <button class="send-button" type="button" aria-label="Send whisper">
+                <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note"><strong>Best for:</strong> a distinct whisper signature without tracing the whole composer.</p>
+    </article>
+  </section>
+
+  <footer class="foot">
+    <span>Every option uses the corrected <strong>6 px control cluster</strong> and the same 6 px right inset as the main composer.</span>
+    <span>Real mobile control size: 38 x 38 px</span>
+  </footer>
+</main>
+</body>
+</html>
