@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>thinkpool — Bridge update state</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --ink-soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(217 85% 62%);
+      --pool-hi: hsl(217 85% 70%);
+      --pool-cobalt: #1A6EF4;
+      --glacier: hsl(201 78% 64%);
+      --positive: hsl(152 40% 58%);
+      --font-display: "Newsreader", Georgia, serif;
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { color: inherit; font: inherit; }
+
+    .topnav {
+      height: 64px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in oklab, var(--raised) 92%, transparent);
+    }
+
+    .topnav-inner {
+      width: min(1024px, calc(100% - 48px));
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wordmark {
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      user-select: none;
+    }
+
+    .wordmark .pool { color: var(--pool-cobalt); }
+
+    .settings {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    main {
+      width: min(1024px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    h1 {
+      margin: 0;
+      font: 500 32px/1.05 var(--font-display);
+      letter-spacing: -0.02em;
+    }
+
+    .lede {
+      margin: 11px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .stack { margin-top: 20px; display: grid; gap: 10px; }
+
+    .bridge-card {
+      position: relative;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid color-mix(in oklab, var(--glacier) 35%, transparent);
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--surface) 50%, transparent);
+      overflow: hidden;
+    }
+
+    .bridge-mark {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+    }
+
+    .bridge-mark svg { width: 48px; height: 48px; position: absolute; inset: -3px; }
+
+    .bridge-copy { min-width: 0; flex: 1; }
+
+    .bridge-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .bridge-title > span:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+    .spinner {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 13px;
+      border: 2px solid color-mix(in oklab, var(--glacier) 24%, transparent);
+      border-top-color: var(--glacier);
+      border-radius: 50%;
+      animation: spin 900ms linear infinite;
+    }
+
+    .bridge-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      min-width: 0;
+      margin-top: 3px;
+      color: var(--faint);
+      font: 400 11px/1.45 var(--font-mono);
+    }
+
+    .bridge-meta .machine { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bridge-meta .promise { flex: 0 0 auto; color: var(--muted); }
+    .middot { color: var(--line-strong); }
+
+    .agents {
+      width: 72px;
+      height: 36px;
+      flex: 0 0 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--faint);
+    }
+
+    .agents .count {
+      min-width: 23px;
+      height: 23px;
+      padding: 0 6px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: color-mix(in oklab, var(--pool) 16%, transparent);
+      color: var(--pool-hi);
+      font: 500 11px/1 var(--font-mono);
+    }
+
+    .session-card,
+    .new-session {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--surface) 50%, transparent);
+    }
+
+    .new-session {
+      border: 1px dashed color-mix(in oklab, var(--pool) 45%, transparent);
+      text-align: left;
+    }
+
+    .session-card { border: 1px solid color-mix(in oklab, var(--positive) 35%, transparent); }
+
+    .new-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklab, var(--pool) 45%, transparent);
+      border-radius: 6px;
+      background: color-mix(in oklab, var(--pool) 10%, transparent);
+      color: var(--pool-hi);
+      font-size: 29px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .new-copy, .session-copy { min-width: 0; flex: 1; }
+    .new-title, .session-title { font-size: 14.5px; line-height: 1.3; color: var(--ink); }
+    .host { margin-left: 8px; color: var(--faint); font: 400 11px/1.4 var(--font-mono); }
+    .host b { color: var(--pool-hi); font-weight: 400; }
+    .new-sub, .session-sub { margin-top: 4px; color: var(--faint); font: 400 11px/1.45 var(--font-mono); }
+
+    .session-menu {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--faint);
+      font-size: 17px;
+    }
+
+    .live { color: var(--positive); letter-spacing: .08em; }
+
+    .design-note {
+      margin-top: 18px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font: 400 10px/1.6 var(--font-mono);
+    }
+
+    .design-note strong { color: var(--glacier); font-weight: 500; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation: none; }
+    }
+
+    @media (max-width: 600px) {
+      .topnav { height: 56px; }
+      .topnav-inner, main { width: calc(100% - 32px); }
+      .wordmark { font-size: 20px; }
+      main { padding-top: 24px; }
+      h1 { font-size: 28px; }
+      .lede { margin-top: 10px; }
+      .stack { margin-top: 20px; }
+      .bridge-card { min-height: 76px; gap: 10px; }
+      .bridge-mark { width: 38px; height: 38px; flex-basis: 38px; }
+      .bridge-mark svg { width: 44px; height: 44px; }
+      .agents { width: 64px; flex-basis: 64px; }
+      .bridge-meta .promise { display: none; }
+      .bridge-meta .middot { display: none; }
+      .new-title { display: block; }
+      .host { margin-left: 0; display: block; margin-top: 2px; }
+      .design-note { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topnav">
+    <div class="topnav-inner">
+      <div class="wordmark" aria-label="thinkpool"><span>think</span><span class="pool">pool</span></div>
+      <button class="settings" aria-label="Settings">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.82 2.82-.06-.06A1.7 1.7 0 0 0 15 19.36a1.7 1.7 0 0 0-1 .64 1.7 1.7 0 0 0-.36 1.06V21h-4v-.08A1.7 1.7 0 0 0 8.6 19.36a1.7 1.7 0 0 0-1.88.34l-.06.06-2.82-2.82.06-.06A1.7 1.7 0 0 0 4.24 15a1.7 1.7 0 0 0-.64-1A1.7 1.7 0 0 0 2.54 13H2v-4h.54A1.7 1.7 0 0 0 4.24 8a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.82-2.82.06.06A1.7 1.7 0 0 0 8.6 3.64 1.7 1.7 0 0 0 9.6 3V2h4v1a1.7 1.7 0 0 0 1 .64 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.82 2.82-.06.06A1.7 1.7 0 0 0 19 8a1.7 1.7 0 0 0 .64 1H22v4h-2.36a1.7 1.7 0 0 0-.24 2Z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <h1>Code sessions</h1>
+    <p class="lede">One room for directing coding agents.</p>
+
+    <div class="stack">
+      <section class="bridge-card" aria-label="Bridge update in progress">
+        <div class="bridge-mark" aria-hidden="true">
+          <svg viewBox="0 0 512 512">
+            <rect width="512" height="512" rx="112" fill="hsl(212 18% 10%)"/>
+            <circle cx="256" cy="256" r="172" fill="none" stroke="var(--pool-cobalt)" stroke-width="40"/>
+            <g transform="translate(107.2 107.2) scale(12.4)">
+              <path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="var(--pool-cobalt)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bridge-copy">
+          <div class="bridge-title">
+            <span>Updating bridge</span>
+            <span class="spinner" aria-hidden="true"></span>
+          </div>
+          <div class="bridge-meta">
+            <span class="machine">Maxs-MacBook-Pro-3</span>
+            <span class="middot">·</span>
+            <span class="promise">sessions stay open and resume automatically</span>
+          </div>
+        </div>
+        <button class="agents" aria-label="4 agents">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="m12 3 8 4.5-8 4.5-8-4.5L12 3Z"></path>
+            <path d="m4 12 8 4.5 8-4.5M4 16.5 12 21l8-4.5"></path>
+          </svg>
+          <span class="count">4</span>
+        </button>
+      </section>
+
+      <button class="new-session" type="button">
+        <span class="new-icon" aria-hidden="true">＋</span>
+        <span class="new-copy">
+          <span class="new-title">Start a code session <span class="host">hosted by <b>you</b></span></span>
+          <span class="new-sub">Open a room, invite your partner…</span>
+        </span>
+      </button>
+
+      <section class="session-card">
+        <div class="session-copy">
+          <div class="session-title">🧙🏼‍♂️ <span class="host">hosted by <b>you</b></span></div>
+          <div class="session-sub"><span style="color:var(--pool-hi)">KV0PLJL1</span> <span class="middot">|</span> 30 Jul 2026</div>
+          <div class="session-sub"><span class="live">■ LIVE</span> &nbsp; ● Conrad &nbsp; <span style="color:var(--glacier)">? agent needs you</span></div>
+        </div>
+        <div class="session-menu" aria-label="Session actions">⋮</div>
+      </section>
+
+      <section class="session-card">
+        <div class="session-copy">
+          <div class="session-title">brainrot <span class="host">hosted by <b>you</b></span></div>
+          <div class="session-sub"><span style="color:var(--pool-hi)">6AHP7V0U</span> <span class="middot">|</span> 29 Jul 2026</div>
+          <div class="session-sub"><span class="live">■ LIVE</span> &nbsp; ● Conrad &nbsp; ○ agent idle</div>
+        </div>
+        <div class="session-menu" aria-label="Session actions">⋮</div>
+      </section>
+    </div>
+
+    <p class="design-note"><strong>Update-state rule:</strong> one spinner in the status title; no disabled “Updating…” button. A missing acknowledgement becomes “Still reconnecting” in this same neutral card—not a red error—until an explicit refusal is received.</p>
+  </main>
+</body>
+</html>
