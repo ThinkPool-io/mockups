@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>thinkpool — The Macaron heist, made thinkpool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d10;--card:#06090c;--rail:#10161d;--rail-bg:#0d1218;
+    --surface:#11171d;--surface-2:#141c24;--line:#26313a;--line-strong:#3a4854;
+    --ink:#f0f3f5;--ink-soft:#d7dde2;--muted:#a8b2ba;--faint:#6f7d88;
+    --pool:#64bce8;--pool-deep:#1a6ef4;--pool-ink:#061019;--ok:#65d6a7;
+    --warn:#e3bb6d;--danger:#ff657f;--conrad:#83c9ba;--max:#8eaaf7;
+    --sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",monospace;
+    --identity:"Space Grotesk",system-ui,sans-serif;--display:"Newsreader",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg);color-scheme:dark;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh}
+  button,input{font:inherit}
+  .topbar{height:37px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:0;background:#080b0e;position:sticky;top:0;z-index:20;overflow:hidden}
+  .brand{height:100%;display:flex;align-items:center;gap:8px;padding:0 14px;font:500 12px var(--mono);letter-spacing:.02em;border-right:1px solid var(--line);white-space:nowrap}
+  .brand-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 7px var(--ok)}
+  .blue{color:var(--pool-deep)}
+  .tabline{display:flex;align-items:center;min-width:0;flex:1;height:100%;overflow:hidden}
+  .room-tab{height:100%;display:flex;align-items:center;gap:7px;padding:0 12px;border-right:1px solid #1b242b;color:var(--muted);font:11px var(--mono);white-space:nowrap}
+  .room-tab.active{color:var(--ink);box-shadow:inset 0 -2px var(--pool)}
+  .tiny-dot{width:5px;height:5px;border-radius:50%;background:var(--ok);box-shadow:0 0 5px var(--ok)}
+  .session{height:100%;padding:0 14px;display:flex;align-items:center;font:11px var(--mono);color:var(--muted);white-space:nowrap;border-left:1px solid var(--line)}
+
+  main{max-width:1380px;margin:0 auto;padding:38px 30px 52px}
+  .hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.65fr);gap:72px;align-items:end;border-bottom:1px solid var(--line);padding:0 4px 28px}
+  .eyebrow{font:600 10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pool);margin:0 0 14px}
+  h1{font:400 clamp(36px,5vw,68px)/.98 var(--display);letter-spacing:-.045em;margin:0;max-width:820px;text-wrap:balance}
+  .hero-note{border-left:1px solid var(--pool-deep);padding-left:20px;color:var(--muted);font-size:15px;line-height:1.55}
+  .hero-note strong{display:block;color:var(--ink);font:600 13px var(--identity);letter-spacing:.02em;margin-bottom:7px}
+  .steal-line{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+  .pill{border:1px solid var(--line);border-radius:99px;padding:6px 9px;color:var(--faint);font:10px var(--mono);background:var(--card)}
+  .pill strong{color:var(--ink-soft);font-weight:500}
+
+  .tour{margin-top:26px;position:relative}
+  .tour>input{position:absolute;opacity:0;pointer-events:none}
+  .step-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--line);background:var(--card)}
+  .step{min-height:112px;padding:15px 14px 13px;border-right:1px solid var(--line);cursor:pointer;position:relative;transition:background .16s ease,color .16s ease}
+  .step:last-child{border-right:0}
+  .step:hover{background:var(--rail-bg)}
+  .step-num{font:10px var(--mono);color:var(--faint);display:flex;align-items:center;gap:7px}
+  .step-num:after{content:"";height:1px;background:var(--line);flex:1}
+  .step strong{font:600 13px/1.2 var(--identity);display:block;margin-top:12px;color:var(--ink-soft)}
+  .step span:last-child{display:block;margin-top:5px;color:var(--faint);font:10.5px/1.35 var(--mono)}
+  #view-1:checked~.step-grid label[for=view-1],
+  #view-2:checked~.step-grid label[for=view-2],
+  #view-3:checked~.step-grid label[for=view-3],
+  #view-4:checked~.step-grid label[for=view-4],
+  #view-5:checked~.step-grid label[for=view-5],
+  #view-6:checked~.step-grid label[for=view-6]{background:var(--rail);box-shadow:inset 0 2px var(--pool);color:var(--pool)}
+  #view-1:checked~.step-grid label[for=view-1] .step-num,
+  #view-2:checked~.step-grid label[for=view-2] .step-num,
+  #view-3:checked~.step-grid label[for=view-3] .step-num,
+  #view-4:checked~.step-grid label[for=view-4] .step-num,
+  #view-5:checked~.step-grid label[for=view-5] .step-num,
+  #view-6:checked~.step-grid label[for=view-6] .step-num{color:var(--pool)}
+
+  .goal-line{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin:18px 0;color:var(--faint);font:10px var(--mono);letter-spacing:.07em;text-transform:uppercase}
+  .goal-line i{height:1px;background:linear-gradient(90deg,var(--pool-deep),var(--pool),var(--line));position:relative}
+  .goal-line i:after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--pool);box-shadow:0 0 12px var(--pool)}
+  .goal-line b{font-weight:500;color:var(--pool)}
+
+  .panel{display:none;grid-template-columns:minmax(0,1.55fr) minmax(300px,.55fr);border:1px solid var(--line);min-height:565px;background:var(--card)}
+  #view-1:checked~.panels .panel:nth-child(1),
+  #view-2:checked~.panels .panel:nth-child(2),
+  #view-3:checked~.panels .panel:nth-child(3),
+  #view-4:checked~.panels .panel:nth-child(4),
+  #view-5:checked~.panels .panel:nth-child(5),
+  #view-6:checked~.panels .panel:nth-child(6){display:grid}
+
+  .stage{padding:20px;background:
+    linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px),#080c0f;
+    background-size:24px 24px;min-width:0}
+  .explain{border-left:1px solid var(--line);padding:30px 28px;display:flex;flex-direction:column;background:var(--rail-bg)}
+  .explain-kicker{font:600 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pool)}
+  .explain h2{font:500 30px/1.02 var(--display);letter-spacing:-.025em;margin:13px 0 14px}
+  .explain>p{color:var(--muted);font-size:14px;line-height:1.55;margin:0}
+  .benefits{display:grid;gap:0;margin:24px 0 0;border-top:1px solid var(--line)}
+  .benefit{padding:13px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:76px 1fr;gap:12px;font-size:12px;line-height:1.45}
+  .benefit dt{font:500 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .benefit dd{margin:0;color:var(--ink-soft)}
+  .not-yet{margin-top:auto;padding-top:22px;color:var(--faint);font:10px/1.45 var(--mono)}
+  .not-yet b{color:var(--warn);font-weight:500}
+
+  .room{height:100%;min-height:523px;border:1px solid var(--line-strong);background:var(--bg);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 16px 50px rgba(0,0,0,.28)}
+  .room-head{height:35px;display:flex;align-items:center;border-bottom:1px solid var(--line);background:#080b0e;padding:0 12px;font:10px var(--mono);color:var(--faint);gap:8px}
+  .room-head strong{font:500 11px var(--identity);color:var(--ink);margin-right:auto}
+  .avatar{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;color:#081013;font:600 9px var(--identity)}
+  .avatar.max{background:var(--max)}.avatar.conrad{background:var(--conrad)}
+  .transcript{flex:1;padding:20px 22px;overflow:hidden;min-width:0}
+  .msg{font:12px/1.55 var(--mono);color:var(--ink-soft);margin-bottom:18px;max-width:92%}
+  .msg .by{color:var(--pool);font-weight:600}.msg .time{color:var(--faint);font-size:9px;margin-left:6px}
+  .receipt{border:1px solid var(--line);background:var(--card);margin:13px 0 0;overflow:hidden}
+  .receipt-top{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:1px solid var(--line);font:10px var(--mono)}
+  .receipt-top b{font:600 11px var(--identity);color:var(--ink);margin-right:auto}
+  .receipt-body{padding:13px}
+  .mono-label{font:500 9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+  .terminal-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid #1c252c;font:10.5px var(--mono);align-items:center}
+  .terminal-row:last-child{border-bottom:0}.terminal-row strong{color:var(--ink);font-weight:500}.terminal-row span{color:var(--faint)}
+  .status{display:inline-flex;align-items:center;gap:6px;color:var(--ok)!important}
+  .status:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+  .composer{min-height:44px;border-top:1px solid var(--line);padding:8px 10px;display:flex;align-items:center;gap:8px;color:var(--faint);font:11px var(--mono);background:#080b0e}
+  .composer span{flex:1;border:1px solid var(--line);min-height:29px;padding:6px 9px}
+  .send{width:29px;height:29px;border:0;background:var(--pool-deep);color:#fff;display:grid;place-items:center}
+  .button{min-height:31px;border:1px solid var(--line-strong);background:transparent;color:var(--ink-soft);padding:0 11px;font:10px var(--mono);cursor:pointer}
+  .button.primary{background:var(--pool);border-color:var(--pool);color:var(--pool-ink);font-weight:600}
+  .button.pool{border-color:rgba(100,188,232,.55);color:var(--pool)}
+  .button:focus-visible,.step:focus-visible,input:focus-visible{outline:2px solid var(--pool);outline-offset:2px}
+
+  /* 01 route */
+  .route-line{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:12px 0 15px}
+  .route-node{border:1px solid var(--line);padding:10px;position:relative;background:var(--rail-bg);font:9px var(--mono);color:var(--faint)}
+  .route-node+ .route-node{border-left:0}
+  .route-node:before{content:"";position:absolute;left:-1px;top:-1px;width:24px;height:2px;background:var(--pool)}
+  .route-node b{display:block;font:600 11px var(--identity);color:var(--ink);margin-bottom:4px}
+  .contract-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:5px}
+  .contract-cell{padding:10px;border-right:1px solid var(--line);font:9px/1.4 var(--mono);color:var(--muted)}
+  .contract-cell:last-child{border-right:0}.contract-cell b{display:block;color:var(--faint);font-size:8px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  .actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+
+  /* 02 generated UI */
+  .compare{display:grid;grid-template-columns:1.25fr repeat(3,.75fr);border:1px solid var(--line);margin-top:10px}
+  .compare>div{padding:8px 9px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font:9.5px var(--mono);color:var(--muted)}
+  .compare>div:nth-child(4n){border-right:0}.compare>div:nth-last-child(-n+4){border-bottom:0}
+  .compare .head{background:var(--rail);color:var(--ink);font-weight:500}.compare .win{color:var(--ok)}
+  .control{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+  .control-line{display:flex;justify-content:space-between;font:9px var(--mono);color:var(--faint);margin-bottom:7px}
+  input[type=range]{width:100%;accent-color:var(--pool-deep)}
+  .shared{display:flex;align-items:center;gap:7px;color:var(--faint);font:9px var(--mono);margin-left:auto}
+
+  /* 03 action sheet */
+  .action-sheet{max-width:510px;margin:32px auto 0;border:1px solid var(--line-strong);background:var(--card);box-shadow:0 18px 60px #000}
+  .action-title{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+  .action-title i{width:26px;height:26px;background:rgba(100,188,232,.12);color:var(--pool);display:grid;place-items:center;font-style:normal}
+  .action-title b{font:600 13px var(--identity);display:block}.action-title span{font:9px var(--mono);color:var(--faint)}
+  .action-fields{padding:4px 16px}.action-field{display:grid;grid-template-columns:90px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font:10px/1.45 var(--mono)}
+  .action-field:last-child{border:0}.action-field dt{color:var(--faint)}.action-field dd{margin:0;color:var(--ink-soft)}
+  .action-foot{border-top:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:8px}
+  .confirm{font:9px var(--mono);color:var(--warn);margin-right:auto}
+
+  /* 04 promote */
+  .skill-card{max-width:620px;margin:12px auto 0;border:1px solid var(--line-strong);background:var(--card)}
+  .skill-hero{padding:18px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:start}
+  .skill-glyph{width:36px;height:36px;border:1px solid rgba(100,188,232,.45);display:grid;place-items:center;color:var(--pool);font:16px var(--mono)}
+  .skill-hero h3{font:600 14px var(--identity);margin:1px 0 4px}.skill-hero p{font:10px/1.4 var(--mono);color:var(--muted);margin:0}
+  .evidence{padding:12px 18px}.evidence-row{display:grid;grid-template-columns:18px 1fr auto;gap:9px;padding:9px 0;border-bottom:1px solid var(--line);font:9.5px var(--mono);align-items:center}
+  .evidence-row:last-child{border:0}.check{color:var(--ok)}.evidence-row span:last-child{color:var(--faint)}
+  .skill-scope{padding:12px 18px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .scope-box{border:1px solid var(--line);padding:9px;font:9px/1.5 var(--mono);color:var(--muted)}.scope-box b{display:block;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;font-size:8px}
+  .pair-approve{padding:12px 18px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}.pair-approve .copy{font:9px var(--mono);color:var(--faint);margin-right:auto}
+
+  /* 05 context */
+  .handoff{display:grid;grid-template-columns:1fr 54px 1fr;gap:0;margin:26px auto 0;max-width:680px;align-items:stretch}
+  .runtime-card{border:1px solid var(--line-strong);background:var(--card);padding:15px}
+  .runtime-head{display:flex;align-items:center;gap:8px;padding-bottom:11px;border-bottom:1px solid var(--line);font:10px var(--mono)}
+  .runtime-head b{font:600 12px var(--identity);margin-right:auto}.runtime-head span{color:var(--ok)}
+  .payload{margin-top:10px;display:grid;gap:7px}.payload div{display:grid;grid-template-columns:76px 1fr;gap:8px;font:9px/1.45 var(--mono)}.payload dt{color:var(--faint)}.payload dd{margin:0;color:var(--ink-soft)}
+  .handoff-arrow{display:grid;place-items:center;color:var(--pool);font:19px var(--mono);position:relative}.handoff-arrow:before{content:"";position:absolute;width:100%;height:1px;background:var(--pool);opacity:.45}
+  .handoff-arrow span{position:relative;background:#080c0f;padding:4px}
+  .context-seal{margin:14px auto 0;max-width:680px;border:1px dashed rgba(100,188,232,.45);padding:9px 11px;display:flex;justify-content:space-between;gap:12px;font:9px var(--mono);color:var(--faint)}.context-seal b{color:var(--pool);font-weight:500}
+
+  /* 06 adapters */
+  .adapter-map{max-width:700px;margin:10px auto 0;display:grid;grid-template-columns:1fr 180px 1fr;gap:18px;align-items:center}
+  .adapter-side{display:grid;gap:9px}.adapter{border:1px solid var(--line);background:var(--card);padding:11px 12px;display:flex;align-items:center;gap:10px;font:10px var(--mono);color:var(--muted)}
+  .adapter i{width:22px;height:22px;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--pool);font-style:normal}.adapter b{display:block;color:var(--ink);font:500 11px var(--identity)}.adapter small{display:block;color:var(--faint);font-size:8px;margin-top:2px}
+  .core{width:180px;height:180px;border-radius:50%;border:1px solid rgba(100,188,232,.5);display:grid;place-items:center;text-align:center;background:radial-gradient(circle,rgba(26,110,244,.12),transparent 67%);box-shadow:0 0 60px rgba(26,110,244,.08)}
+  .core b{font:600 16px var(--identity);display:block}.core span{font:9px/1.5 var(--mono);color:var(--faint);display:block;margin-top:5px}
+  .later{display:inline-block;margin-top:4px;padding:3px 6px;border:1px solid rgba(227,187,109,.35);color:var(--warn);font:8px var(--mono);text-transform:uppercase;letter-spacing:.08em}
+
+  .foot{display:flex;justify-content:space-between;gap:24px;margin-top:22px;color:var(--faint);font:9px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.1em}
+  .foot b{color:var(--ink-soft);font-weight:500}
+
+  @media(max-width:820px){
+    .topbar{height:46px}.room-tab{display:none}.room-tab.active{display:flex}.session{margin-left:auto;font-size:0}.session:after{content:"Conrad";font-size:10px}
+    main{padding:24px 12px 38px}
+    .hero{grid-template-columns:1fr;gap:22px;padding:0 4px 22px}
+    h1{font-size:41px;max-width:350px}
+    .hero-note{font-size:13px}
+    .steal-line{display:none}
+    .step-grid{grid-template-columns:repeat(2,1fr)}
+    .step{min-height:87px;padding:11px}.step:nth-child(2n){border-right:0}.step:nth-child(-n+4){border-bottom:1px solid var(--line)}
+    .step strong{margin-top:8px;font-size:12px}.step span:last-child{display:none}
+    .goal-line{font-size:8px;margin:13px 0}
+    .panel{grid-template-columns:1fr;min-height:0}
+    .stage{padding:10px}.explain{border-left:0;border-top:1px solid var(--line);padding:23px 19px}
+    .explain h2{font-size:29px}.not-yet{margin-top:20px}
+    .room{min-height:500px}.transcript{padding:15px 12px}.msg{font-size:10.5px;max-width:100%}
+    .route-line{grid-template-columns:1fr}.route-node+.route-node{border-left:1px solid var(--line);border-top:0}
+    .contract-grid{grid-template-columns:1fr}.contract-cell{border-right:0;border-bottom:1px solid var(--line)}.contract-cell:last-child{border-bottom:0}
+    .compare{grid-template-columns:1.25fr repeat(3,.7fr)}.compare>div{padding:7px 4px;font-size:7.5px}
+    .action-sheet{margin-top:16px}.action-field{grid-template-columns:72px 1fr}.action-foot{flex-wrap:wrap}.confirm{width:100%}
+    .skill-card{margin-top:2px}.skill-hero{grid-template-columns:36px 1fr}.skill-hero>.status{grid-column:2}.skill-scope{grid-template-columns:1fr}.pair-approve{flex-wrap:wrap}.pair-approve .copy{width:calc(100% - 52px)}
+    .handoff{grid-template-columns:1fr;margin-top:5px}.handoff-arrow{height:42px;transform:rotate(90deg)}.runtime-card{padding:12px}
+    .adapter-map{grid-template-columns:1fr}.adapter-side{grid-template-columns:1fr 1fr}.core{width:150px;height:150px;margin:auto}.adapter-map .adapter-side:last-child{order:3}
+    .foot{flex-direction:column;gap:7px}
+  }
+  @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-dot"></span><span>think<span class="blue">pool</span> 🥷</span></div>
+    <div class="tabline">
+      <div class="room-tab"><span class="tiny-dot"></span>SAAS</div>
+      <div class="room-tab"><span class="tiny-dot"></span>WHISPERS DESIGN</div>
+      <div class="room-tab active"><span class="tiny-dot"></span>MACARON HEIST</div>
+      <div class="room-tab"><span class="tiny-dot"></span>CODEX ULTRA CASCADE</div>
+    </div>
+    <div class="session">🧌&nbsp; session with Conrad</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Competitive translation · Macaron V1</p>
+        <h1>One goal in. A visible system out.</h1>
+      </div>
+      <div>
+        <div class="hero-note">
+          <strong>The heist, translated</strong>
+          Macaron’s strongest idea is not “more agents.” It is one front door that chooses the right capability and can generate the interface the task needs. thinkpool can take that idea further by making the route shared, inspectable, and safe.
+        </div>
+        <div class="steal-line">
+          <span class="pill"><strong>Lift</strong> capability routing</span>
+          <span class="pill"><strong>Lift</strong> task-shaped UI</span>
+          <span class="pill"><strong>Improve</strong> pair visibility</span>
+          <span class="pill"><strong>Reject</strong> opaque autonomy</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tour">
+      <input type="radio" name="tour" id="view-1" checked>
+      <input type="radio" name="tour" id="view-2">
+      <input type="radio" name="tour" id="view-3">
+      <input type="radio" name="tour" id="view-4">
+      <input type="radio" name="tour" id="view-5">
+      <input type="radio" name="tour" id="view-6">
+
+      <nav class="step-grid" aria-label="Six proposed thinkpool additions">
+        <label class="step" for="view-1" tabindex="0"><span class="step-num">01</span><strong>Visible routing</strong><span>Show the chosen path before work starts.</span></label>
+        <label class="step" for="view-2" tabindex="0"><span class="step-num">02</span><strong>Interactive answers</strong><span>Generate the right shared surface for the task.</span></label>
+        <label class="step" for="view-3" tabindex="0"><span class="step-num">03</span><strong>Action contracts</strong><span>Every click declares what it can do.</span></label>
+        <label class="step" for="view-4" tabindex="0"><span class="step-num">04</span><strong>Validated reuse</strong><span>Promote proven workflows with pair consent.</span></label>
+        <label class="step" for="view-5" tabindex="0"><span class="step-num">05</span><strong>Context envelope</strong><span>One canonical brief survives every handoff.</span></label>
+        <label class="step" for="view-6" tabindex="0"><span class="step-num">06</span><strong>Open adapters</strong><span>Let capabilities arrive without lock-in.</span></label>
+      </nav>
+
+      <div class="goal-line"><span>Goal enters once</span><i></i><b>Same intent · every surface</b></div>
+
+      <div class="panels">
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><div class="avatar max">M</div><div class="avatar conrad">C</div></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">Conrad@agent</span><span class="time">17:42</span><br>Compare three ways to roll out provider resilience, then give us the safest pilot.</div>
+                <div class="receipt">
+                  <div class="receipt-top"><span style="color:var(--pool)">⌁ ROUTE</span><b>Research → compare → review</b><span class="status">ready</span></div>
+                  <div class="receipt-body">
+                    <div class="mono-label">Chosen path</div>
+                    <div class="route-line">
+                      <div class="route-node"><b>Research</b>current repo + primary sources</div>
+                      <div class="route-node"><b>Compare</b>shared decision surface</div>
+                      <div class="route-node"><b>Review</b>adversarial read-only gate</div>
+                    </div>
+                    <div class="contract-grid">
+                      <div class="contract-cell"><b>Runtime</b>Codex · connected</div>
+                      <div class="contract-cell"><b>Authority</b>read workspace<br>no publish</div>
+                      <div class="contract-cell"><b>Proof</b>sources + test<br>pair-visible</div>
+                    </div>
+                    <div class="actions"><button class="button primary">Use this route</button><button class="button">Adjust</button><button class="button">Just answer</button></div>
+                  </div>
+                </div>
+              </div>
+              <div class="composer"><span>Message the room — @agent → direct · @pool → steer</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 01 · Now</span>
+            <h2>Make orchestration visible before it becomes work.</h2>
+            <p>thinkpool already has terminals, workers, Flow, and multiple runtimes. The new layer turns that machinery into one legible route card instead of asking people to choose infrastructure first.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>One front door for goals, with task shape, runtime, authority, and proof shown together.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>People can trust, adjust, or simplify the plan before tokens and side effects accumulate.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>The whole pair sees the same proposed route. It is not hidden inside an assistant’s private planner.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Boundary:</b> recommend a route; never silently expand authority.</p>
+          </aside>
+        </article>
+
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><span class="shared"><span class="status">source-backed</span></span><div class="avatar max">M</div><div class="avatar conrad">C</div></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">thinkpool@agent</span><span class="time">17:44</span><br>The answer is easier to decide than to read, so I made it interactive.</div>
+                <div class="receipt">
+                  <div class="receipt-top"><span style="color:var(--pool)">◫ ANSWER</span><b>Choose the resilience pilot</b><span class="shared"><span class="avatar max">M</span><span class="avatar conrad">C</span>shared in room</span></div>
+                  <div class="receipt-body">
+                    <div class="compare">
+                      <div class="head">Option</div><div class="head">Risk</div><div class="head">Speed</div><div class="head">Cost</div>
+                      <div>Failover proxy</div><div class="win">Low</div><div>3 d</div><div>Med</div>
+                      <div>Provider adapter</div><div>Med</div><div>6 d</div><div class="win">Low</div>
+                      <div>Full router</div><div>High</div><div>14 d</div><div>High</div>
+                    </div>
+                    <div class="control">
+                      <div class="control-line"><span>Risk tolerance</span><strong id="risk-value" style="color:var(--pool)">Conservative · 24%</strong></div>
+                      <input id="risk" type="range" min="0" max="100" value="24" aria-label="Risk tolerance">
+                    </div>
+                    <div class="actions"><button class="button primary" data-demo="Pilot selected · failover proxy">Select failover proxy</button><button class="button pool">Open in Design</button><button class="button">Show evidence</button></div>
+                    <div id="demo-status" aria-live="polite" style="min-height:14px;margin-top:8px;color:var(--ok);font:9px var(--mono)"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="composer"><span>Ask a follow-up or change the comparison…</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 02 · Now</span>
+            <h2>Let the answer become the interface it needs.</h2>
+            <p>Instead of forcing every result into prose, thinkpool can return a comparison, simulator, form, dashboard, or control surface directly in the room—and keep it editable by both people.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>Task-shaped, source-backed mini-apps inside the transcript.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>Decisions become faster because the pair can manipulate assumptions, not request another wall of text.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>Generated UI is shared, editable, revisioned, and attributable—not a disposable private widget.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Boundary:</b> rich surfaces only when interaction materially beats a concise answer.</p>
+          </aside>
+        </article>
+
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><span style="color:var(--warn);margin-left:auto;font:9px var(--mono)">confirmation required</span></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">Conrad@agent</span><span class="time">17:47</span><br>Publish the pilot plan when we agree.</div>
+                <section class="action-sheet" aria-label="Action contract">
+                  <div class="action-title"><i>→</i><div><b>Publish pilot plan</b><span>Generated action · inspect before run</span></div></div>
+                  <dl class="action-fields">
+                    <div class="action-field"><dt>Origin</dt><dd>“Choose the resilience pilot” · verified revision 3</dd></div>
+                    <div class="action-field"><dt>Reads</dt><dd>Selected option, room decision notes, current spec draft</dd></div>
+                    <div class="action-field"><dt>Execution</dt><dd>Create one repo spec and open a review lane. No push, deploy, or external message.</dd></div>
+                    <div class="action-field"><dt>Model visibility</dt><dd>Button label, selected state, and bounded context envelope only</dd></div>
+                    <div class="action-field"><dt>Receipt</dt><dd>Changed files + review result returned to this room</dd></div>
+                  </dl>
+                  <div class="action-foot"><span class="confirm">Pair confirmation · 1 of 2</span><button class="button">Cancel</button><button class="button primary" data-demo="Action approved · waiting for partner">Approve action</button></div>
+                </section>
+              </div>
+              <div class="composer"><span>Actions remain inert until the contract is approved</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 03 · Foundation</span>
+            <h2>Give every generated interaction a visible action contract.</h2>
+            <p>Macaron-style interfaces are powerful only if clicking them is predictable. The contract makes state, reads, execution, visibility, and proof explicit before the action runs.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>A common safety model for buttons, forms, toggles, and future generated components.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>No opaque <code>onClick</code> that quietly widens what the model can see or change.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>Pair approval and room receipts make UI actions social and auditable.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Dependency:</b> ship this contract before arbitrary generated actions.</p>
+          </aside>
+        </article>
+
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><span style="margin-left:auto;color:var(--ok);font:9px var(--mono)">2 verified runs</span></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">thinkpool@agent</span><span class="time">17:54</span><br>This workflow worked twice with the same bounded contract. Keep it for the room?</div>
+                <section class="skill-card">
+                  <div class="skill-hero">
+                    <div class="skill-glyph">⌁</div>
+                    <div><h3>Provider resilience comparison</h3><p>Research → interactive comparison → adversarial review</p></div>
+                    <span class="status">eligible</span>
+                  </div>
+                  <div class="evidence">
+                    <div class="evidence-row"><span class="check">✓</span><span>Run 01 · failover pilot decision</span><span>verified 17:44</span></div>
+                    <div class="evidence-row"><span class="check">✓</span><span>Run 02 · payment provider contingency</span><span>verified yesterday</span></div>
+                    <div class="evidence-row"><span class="check">✓</span><span>Same scope · no authority drift</span><span>contract held</span></div>
+                  </div>
+                  <div class="skill-scope">
+                    <div class="scope-box"><b>Available in</b>This room only · invoke by goal, not hotword</div>
+                    <div class="scope-box"><b>Can do</b>Read repo + web · create comparison · request review</div>
+                  </div>
+                  <div class="pair-approve"><div class="avatar max">M</div><div class="avatar conrad">C</div><span class="copy">Both people can inspect, revise, or revoke later.</span><button class="button">Not now</button><button class="button primary" data-demo="Promotion staged · waiting for pair approval">Keep as room skill</button></div>
+                </section>
+              </div>
+              <div class="composer"><span>The room learns only when the pair says so</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 04 · Next</span>
+            <h2>Turn repeated success into a governed room capability.</h2>
+            <p>Successful compositions can become reusable skills—but only after evidence, stable scope, and explicit pair approval. This captures learning without silent self-modification.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>A compose → validate → promote → reuse → audit lifecycle.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>thinkpool compounds what actually worked instead of accumulating prompts nobody trusts.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>Skills are room-owned, inspectable, revocable, and backed by real receipts.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Boundary:</b> no autonomous skill creation; promotion is a pair decision.</p>
+          </aside>
+        </article>
+
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><span style="margin-left:auto;color:var(--pool);font:9px var(--mono)">handoff capsule</span></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">thinkpool@agent</span><span class="time">17:58</span><br>The review lane gets the same goal and boundaries, projected into its runtime—not a second improvised brief.</div>
+                <div class="handoff">
+                  <section class="runtime-card">
+                    <div class="runtime-head"><b>Codex · conductor</b><span>connected</span></div>
+                    <dl class="payload">
+                      <div><dt>Goal</dt><dd>Choose safest provider resilience pilot</dd></div>
+                      <div><dt>Authority</dt><dd>Read + draft in bounded scope</dd></div>
+                      <div><dt>Evidence</dt><dd>3 sources · revision 3 · tests</dd></div>
+                      <div><dt>Decision</dt><dd>Failover proxy · provisional</dd></div>
+                    </dl>
+                  </section>
+                  <div class="handoff-arrow"><span>→</span></div>
+                  <section class="runtime-card">
+                    <div class="runtime-head"><b>Codex · review</b><span>read-only</span></div>
+                    <dl class="payload">
+                      <div><dt>Task</dt><dd>Attack the proposed pilot</dd></div>
+                      <div><dt>Authority</dt><dd>No edits · no publish</dd></div>
+                      <div><dt>Must verify</dt><dd>Failure modes + rollback</dd></div>
+                      <div><dt>Return</dt><dd>Pass / fail + cited findings</dd></div>
+                    </dl>
+                  </section>
+                </div>
+                <div class="context-seal"><span>Canonical context envelope · <b>ctx_01HV…9K</b></span><span>no drift · 12 fields projected</span></div>
+              </div>
+              <div class="composer"><span>One source of truth survives terminal and runtime boundaries</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 05 · Foundation</span>
+            <h2>Carry one canonical context contract through every handoff.</h2>
+            <p>Today, every runtime and worker can receive its own dialect of the brief. A canonical envelope keeps the goal, authority, evidence, decisions, and return contract stable while adapters project only what each lane needs.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>A single source of truth for conductor, worker, review, Design, and future runtimes.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>Less handoff drift, fewer duplicated prompts, clearer receipts.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>Runtime choice remains flexible without making context semantics provider-specific.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Boundary:</b> project the minimum fields each lane needs; do not spray full transcripts.</p>
+          </aside>
+        </article>
+
+        <article class="panel">
+          <div class="stage">
+            <div class="room">
+              <div class="room-head"><span class="tiny-dot"></span><strong>Macaron Heist</strong><span class="later" style="margin-left:auto">later</span></div>
+              <div class="transcript">
+                <div class="msg"><span class="by">thinkpool@agent</span><span class="time">18:03</span><br>Once the internal contracts hold, third-party capabilities can plug into the same visible route.</div>
+                <div class="adapter-map">
+                  <div class="adapter-side">
+                    <div class="adapter"><i>↘</i><div><b>Goal adapter</b><small>accept a bounded task shape</small></div></div>
+                    <div class="adapter"><i>↘</i><div><b>Context adapter</b><small>request declared state refs</small></div></div>
+                    <div class="adapter"><i>↘</i><div><b>UI adapter</b><small>return source-backed surface</small></div></div>
+                  </div>
+                  <div class="core"><div><b>thinkpool</b><span>route · contract<br>room · receipt</span><em class="later">open boundary</em></div></div>
+                  <div class="adapter-side">
+                    <div class="adapter"><i>↗</i><div><b>Proof adapter</b><small>return testable evidence</small></div></div>
+                    <div class="adapter"><i>↗</i><div><b>Action adapter</b><small>declare side effects</small></div></div>
+                    <div class="adapter"><i>↗</i><div><b>Skill adapter</b><small>promote only after validation</small></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="composer"><span>Capabilities plug in; trust stays with the room</span><button class="send" aria-label="Send">→</button></div>
+            </div>
+          </div>
+          <aside class="explain">
+            <span class="explain-kicker">Addition 06 · Later</span>
+            <h2>Open the capability boundary after the trust model is proven.</h2>
+            <p>Macaron hints at a broader agent ecosystem. thinkpool should expose the contracts—not the private guts—so external tools can join a route without owning the room, the context, or the approval model.</p>
+            <dl class="benefits">
+              <div class="benefit"><dt>Brings</dt><dd>Adapters for goals, context, interactive UI, actions, proof, and reusable skills.</dd></div>
+              <div class="benefit"><dt>Wins</dt><dd>New capabilities can arrive faster without binding thinkpool to one model or one vendor.</dd></div>
+              <div class="benefit"><dt>thinkpool edge</dt><dd>The ecosystem plugs into thinkpool’s shared-room trust boundary instead of replacing it.</dd></div>
+            </dl>
+            <p class="not-yet"><b>Sequence:</b> earn this with additions 01–05 first. Distribution comes after coherence.</p>
+          </aside>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot"><span><b>Proposal only</b> · no product code changed</span><span>Macaron V1 heist · 30 Jul 2026 · thinkpool Design source</span></footer>
+  </main>
+
+<script>
+  const range = document.querySelector('#risk');
+  const riskValue = document.querySelector('#risk-value');
+  if (range && riskValue) {
+    range.addEventListener('input', () => {
+      const n = Number(range.value);
+      const label = n < 34 ? 'Conservative' : n < 67 ? 'Balanced' : 'Aggressive';
+      riskValue.textContent = `${label} · ${n}%`;
+    });
+  }
+  document.querySelectorAll('[data-demo]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const status = button.closest('.receipt, .action-sheet, .skill-card')?.querySelector('#demo-status')
+        || document.querySelector('#demo-status');
+      if (status) status.textContent = button.dataset.demo;
+      button.textContent = '✓ ' + button.textContent.replace(/^✓ /, '');
+    });
+  });
+  document.querySelectorAll('.step').forEach((label) => {
+    label.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        document.getElementById(label.htmlFor).checked = true;
+      }
+    });
+  });
+  window.mockupReady = true;
+</script>
+</body>
+</html>
