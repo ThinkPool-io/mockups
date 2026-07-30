@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thinkpool · compact glacier Work done</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --k-bg: hsl(212 13% 5%);
+      --k-card: hsl(212 13% 7%);
+      --k-panel: hsl(212 13% 10%);
+      --k-line: hsl(212 7% 21%);
+      --k-line-strong: hsl(212 7% 28%);
+      --k-ink: hsl(212 14% 95%);
+      --k-ink-soft: hsl(212 14% 86%);
+      --k-muted: hsl(212 14% 78%);
+      --k-faint: hsl(212 12% 62%);
+      --k-glacier: hsl(201 78% 64%);
+      --k-glacier-hi: hsl(201 82% 74%);
+      --k-ok: hsl(152 40% 58%);
+      --k-warn: hsl(48 86% 60%);
+      --k-viewer: hsl(161 48% 58%);
+      --k-viewer-wash: color-mix(in oklab, var(--k-viewer) 12%, transparent);
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --font-identity: "Space Grotesk", "Hanken Grotesk", system-ui, sans-serif;
+      --ease-settle: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      overflow-x: clip;
+      background: var(--k-bg);
+      color: var(--k-ink);
+      font-family: var(--font-sans);
+      text-size-adjust: 100%;
+    }
+
+    button { color: inherit; font: inherit; }
+    button:focus-visible { outline: 2px solid var(--k-glacier); outline-offset: 2px; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 52px minmax(0, 1fr) auto;
+      background:
+        radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--k-glacier) 4%, transparent), transparent 34%),
+        var(--k-bg);
+    }
+
+    .topbar {
+      display: flex;
+      min-width: 0;
+      align-items: stretch;
+      border-bottom: 1px solid var(--k-line);
+      background: color-mix(in oklab, var(--k-bg) 96%, transparent);
+    }
+
+    .tabs {
+      display: flex;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .tab {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-right: 1px solid var(--k-line);
+      color: var(--k-faint);
+      font: 500 11px var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      position: relative;
+      color: var(--k-ink);
+    }
+
+    .tab.active::after {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: var(--k-glacier);
+      content: "";
+    }
+
+    .tab-dot {
+      width: 10px;
+      height: 10px;
+      flex: none;
+      border: 2px solid color-mix(in oklab, var(--k-glacier) 70%, var(--k-faint));
+      border-radius: 50%;
+      border-right-color: transparent;
+    }
+
+    .top-actions { display: flex; flex: none; align-items: stretch; }
+
+    .icon-button {
+      width: 52px;
+      border: 0;
+      border-left: 1px solid var(--k-line);
+      background: transparent;
+      color: var(--k-faint);
+      cursor: pointer;
+      font: 500 19px var(--font-mono);
+    }
+
+    .viewport {
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .transcript {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 26px 28px 34px;
+    }
+
+    .agent-copy {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0 18px;
+      color: var(--k-ink-soft);
+      font-size: 15px;
+      line-height: 1.58;
+    }
+
+    .agent-dot {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      margin-top: 8px;
+      border-radius: 50%;
+      background: var(--k-glacier);
+      box-shadow: 0 0 10px color-mix(in oklab, var(--k-glacier) 70%, transparent);
+    }
+
+    .status-line {
+      display: grid;
+      min-height: 38px;
+      grid-template-columns: 18px minmax(0, 1fr);
+      align-items: center;
+      color: color-mix(in oklab, var(--k-warn) 78%, transparent);
+      font: 500 12px var(--font-mono);
+      letter-spacing: .02em;
+    }
+
+    .user-row {
+      display: flex;
+      min-height: 54px;
+      align-items: center;
+      gap: 8px;
+      margin: 14px -28px 18px;
+      padding: 0 28px;
+      border-left: 4px solid var(--k-viewer);
+      background: var(--k-viewer-wash);
+      font: 500 16px var(--font-identity);
+    }
+
+    .drop {
+      width: 16px;
+      height: 20px;
+      flex: none;
+      border: 2px solid var(--k-viewer);
+      border-radius: 55% 55% 58% 58% / 62% 62% 42% 42%;
+      transform: rotate(45deg) scale(.74);
+    }
+
+    .user-row .name { color: var(--k-viewer); font-weight: 600; }
+    .user-row .mention { color: var(--k-glacier); font-weight: 600; }
+    .user-row .time { margin-left: auto; color: var(--k-faint); font: 500 11px var(--font-mono); }
+
+    .tool-card,
+    .work-card {
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid var(--k-line);
+      border-radius: 9px;
+      background: var(--k-card);
+    }
+
+    .compact-row {
+      display: flex;
+      min-width: 0;
+      min-height: 44px;
+      width: 100%;
+      align-items: center;
+      gap: 7px;
+      border: 0;
+      background: transparent;
+      padding: 7px 10px 7px 0;
+      text-align: left;
+      cursor: pointer;
+      font: 500 12px var(--font-mono);
+    }
+
+    .disclosure {
+      display: grid;
+      width: 28px;
+      min-height: 28px;
+      flex: none;
+      place-items: center;
+      color: var(--k-glacier);
+      transition: transform .18s var(--ease-settle);
+    }
+
+    [data-open="true"] > .compact-row .disclosure { transform: rotate(90deg); }
+
+    .tool-card .primary,
+    .work-card .primary {
+      flex: none;
+      color: var(--k-glacier);
+      font-weight: 600;
+    }
+
+    .divider { width: 1px; height: 16px; flex: none; background: var(--k-line-strong); }
+    .meta { min-width: 0; flex: 1; overflow: hidden; color: var(--k-muted); text-overflow: ellipsis; white-space: nowrap; }
+
+    .duration {
+      flex: none;
+      padding: 1px 7px;
+      border-radius: 999px;
+      color: var(--k-faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .verdict {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      place-items: center;
+      border-radius: 999px;
+      background: color-mix(in oklab, var(--k-ok) 12%, transparent);
+      color: var(--k-ok);
+      font-size: 11px;
+    }
+
+    .work-card {
+      position: relative;
+      border-color: color-mix(in oklab, var(--k-glacier) 30%, var(--k-line));
+      background:
+        linear-gradient(90deg, color-mix(in oklab, var(--k-glacier) 10%, transparent), transparent 42%),
+        var(--k-card);
+      box-shadow:
+        inset 2px 0 0 color-mix(in oklab, var(--k-glacier) 72%, transparent),
+        0 0 18px -17px var(--k-glacier);
+    }
+
+    .work-card .primary { color: var(--k-glacier-hi); }
+    .work-card .meta { color: color-mix(in oklab, var(--k-glacier) 28%, var(--k-muted)); }
+
+    .detail {
+      display: none;
+      border-top: 1px solid color-mix(in oklab, var(--k-glacier) 22%, var(--k-line));
+      padding: 12px;
+    }
+
+    [data-open="true"] > .detail { display: grid; gap: 10px; }
+
+    .detail-kicker {
+      color: var(--k-faint);
+      font: 600 9px var(--font-mono);
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .detail p { margin: 0; color: var(--k-ink-soft); font: 500 11.5px/1.55 var(--font-mono); }
+
+    .receipt-list {
+      display: grid;
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--k-line);
+      border-radius: 7px;
+      background: var(--k-line);
+    }
+
+    .receipt {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 9px 10px;
+      background: var(--k-card);
+      color: var(--k-muted);
+      font: 500 10.5px var(--font-mono);
+    }
+
+    .receipt span:last-child { color: var(--k-ok); }
+
+    .quiet-note {
+      margin: 8px 0 4px 36px;
+      color: var(--k-faint);
+      font: 500 10px var(--font-mono);
+    }
+
+    .thinking {
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      border-top: 1px solid var(--k-line);
+      color: var(--k-faint);
+      font: 500 12px var(--font-mono);
+    }
+
+    .thinking .spark { color: var(--k-glacier); }
+
+    .dock {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 0 28px 18px;
+      background: linear-gradient(180deg, transparent, var(--k-bg) 18%);
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      color: hsl(352 84% 64%);
+      font: 500 12px var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .mode-row .model { margin-left: auto; color: var(--k-glacier); }
+    .mode-row .effort { color: var(--k-faint); }
+
+    .composer {
+      display: grid;
+      min-height: 58px;
+      grid-template-columns: 34px minmax(0, 1fr) 44px 44px;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid color-mix(in oklab, var(--k-glacier) 45%, var(--k-line));
+      border-radius: 10px;
+      padding: 6px;
+      background: var(--k-card);
+    }
+
+    .composer button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .plus { width: 34px !important; border: 0; color: var(--k-faint); font-size: 22px; }
+    .bolt { border: 1px solid color-mix(in oklab, var(--k-glacier) 58%, var(--k-line)); color: var(--k-glacier); font-size: 21px; }
+    .stop { border: 1px solid hsl(352 84% 64%); background: color-mix(in oklab, hsl(352 84% 64%) 18%, transparent) !important; color: hsl(352 84% 64%); font-size: 14px; }
+    .placeholder { min-width: 0; overflow: hidden; color: var(--k-faint); font: 500 14px var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+
+    @media (max-width: 700px) {
+      .app { grid-template-rows: 52px minmax(0, 1fr) auto; }
+      .tab { display: none; }
+      .tab.active { display: flex; flex: 1; border-right: 0; padding: 0 12px; }
+      .top-actions .icon-button:first-child { display: none; }
+      .transcript { padding: 14px 12px 18px; }
+      .agent-copy { font-size: 14px; line-height: 1.52; }
+      .user-row {
+        min-height: 50px;
+        margin: 12px -12px 14px;
+        padding: 0 12px;
+        font-size: 14px;
+      }
+      .user-row .time { font-size: 10px; }
+      .tool-card, .work-card { margin: 10px 0; }
+      .compact-row { gap: 6px; padding-right: 8px; font-size: 11.5px; }
+      .disclosure { width: 26px; }
+      .duration { display: none; }
+      .quiet-note { margin-left: 32px; }
+      .thinking { min-height: 46px; margin-top: 14px; }
+      .dock { padding: 0 12px 10px; }
+      .mode-row { font-size: 10.5px; }
+      .composer { min-height: 54px; grid-template-columns: 30px minmax(0, 1fr) 40px 40px; }
+      .composer button { width: 40px; height: 40px; }
+      .plus { width: 30px !important; }
+      .placeholder { font-size: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: .001ms !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <nav class="tabs" aria-label="Open terminals">
+        <div class="tab"><span class="tab-dot"></span>SAAS</div>
+        <div class="tab"><span class="tab-dot"></span>MCP</div>
+        <div class="tab active"><span class="tab-dot"></span>ORGANIC REDDIT</div>
+        <div class="tab"><span class="tab-dot"></span>WHISPERS DESIGN</div>
+      </nav>
+      <div class="top-actions">
+        <button class="icon-button" aria-label="New terminal">+</button>
+        <button class="icon-button" aria-label="Whispers">◌</button>
+        <button class="icon-button" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <div class="viewport">
+      <main class="transcript">
+        <section class="agent-copy" aria-label="Agent response">
+          <span class="agent-dot" aria-hidden="true"></span>
+          <div>It doesn’t. I checked the recovery boundary and the reply was not posted.</div>
+        </section>
+
+        <section class="user-row" aria-label="Maks message">
+          <span class="drop" aria-hidden="true"></span>
+          <span class="name">Maks</span>
+          <span class="mention">@agent</span>
+          <span>It doesn’t? Lol</span>
+          <span class="time">23:39</span>
+        </section>
+
+        <div class="status-line"><span>⎿</span><span>turn ended — aborted</span></div>
+
+        <section class="user-row" aria-label="Maks message">
+          <span class="drop" aria-hidden="true"></span>
+          <span class="name">Maks</span>
+          <span class="mention">@agent</span>
+          <span>Post it</span>
+          <span class="time">23:39</span>
+        </section>
+
+        <section class="agent-copy" aria-label="Agent response">
+          <span class="agent-dot" aria-hidden="true"></span>
+          <div>I’ll post that reply to the OpenDot comment now, with no em dashes.</div>
+        </section>
+
+        <article class="tool-card" data-open="false">
+          <button class="compact-row" type="button" aria-expanded="false">
+            <span class="disclosure" aria-hidden="true">▶</span>
+            <span class="primary">7 calls</span>
+            <span class="divider" aria-hidden="true"></span>
+            <span class="meta">7 JavaScript</span>
+            <span class="duration">6.2s</span>
+            <span class="verdict" aria-label="Completed successfully">✓</span>
+          </button>
+        </article>
+
+        <section class="agent-copy" aria-label="Agent response">
+          <span class="agent-dot" aria-hidden="true"></span>
+          <div>Posted and verified. The reply contains no em dashes.</div>
+        </section>
+
+        <article class="work-card" id="work-card" data-open="false">
+          <button class="compact-row" id="work-summary" type="button" aria-expanded="false" aria-controls="work-detail">
+            <span class="disclosure" aria-hidden="true">▶</span>
+            <span class="primary">Work done</span>
+            <span class="divider" aria-hidden="true"></span>
+            <span class="meta">ORGANIC REDDIT</span>
+            <span class="duration">2 turns</span>
+            <span class="verdict" aria-label="Completed successfully">✓</span>
+          </button>
+          <div class="detail" id="work-detail">
+            <span class="detail-kicker">Consolidated outcome</span>
+            <p>Posted and verified the OpenDot reply. Earlier completion receipts from this short exchange are folded into this one summary.</p>
+            <div class="receipt-list" aria-label="Consolidated work receipts">
+              <div class="receipt"><span>Checked recovery behavior</span><span>Done</span></div>
+              <div class="receipt"><span>Posted and verified reply</span><span>Done</span></div>
+            </div>
+          </div>
+        </article>
+
+        <p class="quiet-note">One compact summary for the burst · the aborted turn stays in the log</p>
+
+        <div class="thinking"><span class="spark">✹</span><span>Thinking… (6s with high effort)</span></div>
+      </main>
+    </div>
+
+    <footer class="dock">
+      <div class="mode-row">
+        <span>▢</span>
+        <span>Bypass permissions</span>
+        <span class="model">GPT-5.6-Sol</span>
+        <span class="effort">High</span>
+      </div>
+      <div class="composer">
+        <button class="plus" aria-label="Add attachment">＋</button>
+        <div class="placeholder">Message agent…</div>
+        <button class="bolt" aria-label="Quick action">ϟ</button>
+        <button class="stop" aria-label="Stop">■</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const workCard = document.getElementById("work-card");
+    const workSummary = document.getElementById("work-summary");
+
+    workSummary.addEventListener("click", () => {
+      const open = workCard.dataset.open !== "true";
+      workCard.dataset.open = String(open);
+      workSummary.setAttribute("aria-expanded", String(open));
+    });
+  </script>
+</body>
+</html>
