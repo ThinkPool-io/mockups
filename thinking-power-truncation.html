@@ -203,7 +203,7 @@
     z-index: 10;
     right: 28px;
     bottom: 100px;
-    width: min(260px, calc(100vw - 16px));
+    width: min(280px, calc(100vw - 16px));
     max-height: calc(100dvh - 104px);
     overflow: hidden auto;
     overscroll-behavior: contain;
@@ -291,9 +291,8 @@
 
   .effort-name {
     min-width: 0;
-    max-width: 55%;
     overflow: hidden;
-    flex-shrink: 1;
+    flex: 1;
     color: inherit;
     font-size: 14px;
     text-overflow: ellipsis;
@@ -303,7 +302,7 @@
   .effort-hint {
     min-width: 0;
     overflow: hidden;
-    flex: 1;
+    flex: none;
     color: var(--faint);
     font-size: 11px;
     text-align: right;
@@ -371,7 +370,7 @@
     .model-menu {
       right: 8px;
       bottom: 86px;
-      width: 260px;
+      width: 280px;
       max-height: calc(100dvh - 126px);
     }
 
@@ -383,11 +382,11 @@
 <main class="page">
   <header class="proof-header">
     <div>
-      <p class="eyebrow">Mobile menu · proposed</p>
-      <h1>Keep the choice; truncate the explanation</h1>
+      <p class="eyebrow">Mobile menu · revised</p>
+      <h1>Keep every choice and explanation visible</h1>
     </div>
-    <div class="allocation" aria-label="Column allocation">
-      <strong>55% choice</strong><span>·</span><span>remaining detail</span>
+    <div class="allocation" aria-label="Measured menu width">
+      <strong>280px panel</strong><span>·</span><span>269px measured minimum</span>
     </div>
   </header>
 
@@ -405,8 +404,8 @@
     </div>
 
     <aside class="decision-note">
-      <strong>Truncation priority reversed</strong>
-      “Max thinking” and “Ultra Cascade” stay intact. Secondary detail now owns the flexible column and receives the ellipsis.
+      <strong>No truncation at 280px</strong>
+      The longest row needs 269px with the production font. The extra 11px keeps every current choice and explanation fully visible.
     </aside>
 
     <div class="model-menu" role="menu" aria-label="Switch model, provider or thinking power">
