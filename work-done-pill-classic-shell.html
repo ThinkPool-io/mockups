@@ -157,90 +157,53 @@
       box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--ink) 4%, transparent);
     }
 
-    .work-head {
-      display: grid;
-      min-width: 0;
-      grid-template-columns: minmax(0, 1fr) 116px;
-      align-items: stretch;
-    }
+    .work-head { min-width: 0; }
 
     .work-summary {
-      display: grid;
+      display: flex;
       min-width: 0;
-      min-height: 84px;
-      grid-template-columns: 32px minmax(0, 1fr);
-      grid-template-rows: auto auto;
-      column-gap: 12px;
-      align-content: center;
+      min-height: 70px;
+      width: 100%;
+      align-items: center;
+      gap: 12px;
       border: 0;
       background: transparent;
-      padding: 13px 18px;
+      padding: 0 20px;
       text-align: left;
       cursor: pointer;
     }
 
-    .status-seal {
-      grid-row: 1 / 3;
-      display: grid;
-      place-items: center;
-      align-self: center;
-      width: 28px;
-      height: 28px;
-      border: 1px solid var(--positive);
-      border-radius: 50%;
-      color: var(--positive);
-      font: 500 18px/1 var(--font-mono);
+    .caret {
+      flex: none;
+      color: var(--pool);
+      font: 600 18px/1 var(--font-mono);
+      transition: transform .18s var(--ease);
     }
+    .work-card[data-open="true"] .caret { transform: rotate(90deg); }
 
-    .status-line {
-      display: flex;
-      min-width: 0;
-      align-items: center;
-      gap: 8px;
-      font: 600 11px var(--font-mono);
-      letter-spacing: .1em;
+    .work-label {
+      flex: none;
+      color: var(--pool);
+      font: 600 12px var(--font-mono);
+      letter-spacing: .12em;
       text-transform: uppercase;
     }
 
-    .status { color: var(--positive); }
-    .caret { color: var(--faint); transition: transform .18s var(--ease); }
-    .work-card[data-open="true"] .caret { transform: rotate(90deg); }
+    .status {
+      flex: none;
+      color: var(--positive);
+      font: 600 12px var(--font-mono);
+    }
 
-    .proof-rail {
+    .lane-name {
       min-width: 0;
       overflow: hidden;
       color: var(--faint);
-      font: 500 9.5px var(--font-mono);
-      letter-spacing: 0;
-      text-overflow: ellipsis;
-      text-transform: none;
-      white-space: nowrap;
-    }
-
-    .proof-rail .verified { color: var(--positive); }
-
-    .outcome {
-      min-width: 0;
-      overflow: hidden;
-      color: var(--ink);
-      font: 500 15px/1.45 var(--font-mono);
-      letter-spacing: .005em;
+      font: 500 13px var(--font-mono);
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    .details-button {
-      min-height: 44px;
-      border: 0;
-      border-left: 1px solid var(--pool);
-      background: transparent;
-      color: var(--pool);
-      cursor: pointer;
-      font: 600 12px var(--font-mono);
-      letter-spacing: .02em;
-    }
-
-    .details-button:hover,
     .work-summary:hover {
       background: color-mix(in oklab, var(--pool) 5%, transparent);
     }
@@ -248,7 +211,7 @@
     .work-body {
       display: none;
       border-top: 1px solid var(--line-strong);
-      padding: 0 18px 16px 62px;
+      padding: 0 20px 16px;
     }
 
     .work-card[data-open="true"] .work-body { display: block; }
@@ -259,6 +222,12 @@
       font: 600 9.5px var(--font-mono);
       letter-spacing: .11em;
       text-transform: uppercase;
+    }
+
+    .expanded-outcome {
+      margin: 0 0 15px;
+      color: var(--ink-soft);
+      font: 500 13px/1.55 var(--font-mono);
     }
 
     .evidence-grid {
@@ -453,18 +422,14 @@
       }
       .assistant-copy li:nth-child(n+3) { display: none; }
       .work-wrap { margin: 22px 0 22px; }
-      .work-head { grid-template-columns: minmax(0, 1fr) 84px; }
       .work-summary {
-        min-height: 84px;
-        grid-template-columns: 28px minmax(0, 1fr);
-        column-gap: 10px;
-        padding: 12px 12px;
+        min-height: 70px;
+        gap: 10px;
+        padding: 0 18px;
       }
-      .status-seal { width: 25px; height: 25px; font-size: 16px; }
-      .status-line { gap: 6px; font-size: 10px; }
-      .proof-rail { font-size: 8.5px; }
-      .outcome { font-size: 13.5px; }
-      .details-button { font-size: 11px; }
+      .caret { font-size: 17px; }
+      .work-label, .status { font-size: 11px; }
+      .lane-name { font-size: 12px; }
       .work-body { padding: 0 12px 14px; }
       .evidence-grid { grid-template-columns: 1fr; }
       .evidence-item,
@@ -506,7 +471,7 @@
       <nav class="tabs" aria-label="Open terminals">
         <div class="tab"><span class="presence"></span>WHISPERS DESIGN</div>
         <div class="tab"><span class="presence"></span>MCP</div>
-        <div class="tab active"><span class="presence"></span>WORK DONE PILL</div>
+        <div class="tab active"><span class="presence"></span>Retard GPT</div>
         <div class="tab"><span class="presence"></span>Call Pills Collapse</div>
       </nav>
       <div class="top-actions">
@@ -518,11 +483,11 @@
 
     <main class="transcript">
       <section class="assistant-copy" aria-label="Agent response">
-        <p>The first version had the right shape: one clear result, a visible outcome, and a separate action.</p>
+        <p>The chosen version is deliberately quiet: one compact Work rail that stays out of the transcript’s way.</p>
         <ul>
-          <li>Bring back the strong outlined shell and green completion seal.</li>
-          <li>Keep the outcome readable before any internal metadata.</li>
-          <li>Retain changed files, review proof, and provenance inside Details.</li>
+          <li>Keep the single outlined row with the blue Work label.</li>
+          <li>Show only completion state and lane name while collapsed.</li>
+          <li>Reveal outcome, changed files, review proof, and provenance on tap.</li>
         </ul>
       </section>
 
@@ -530,18 +495,16 @@
         <article class="work-card" id="work-card" data-open="false">
           <div class="work-head">
             <button class="work-summary" id="summary-button" type="button" aria-expanded="false" aria-controls="work-details">
-              <span class="status-seal" aria-hidden="true">✓</span>
-              <span class="status-line">
-                <span class="status">Done</span>
-                <span class="caret" aria-hidden="true">›</span>
-                <span class="proof-rail">10 files · <span class="verified">verified</span></span>
-              </span>
-              <span class="outcome">Restored the original Work Done pill while keeping useful proof.</span>
+              <span class="caret" aria-hidden="true">›</span>
+              <span class="work-label">Work</span>
+              <span class="status">Done</span>
+              <span class="lane-name">Retard GPT</span>
             </button>
-            <button class="details-button" id="details-button" type="button" aria-expanded="false" aria-controls="work-details">Details</button>
           </div>
 
           <div class="work-body" id="work-details">
+            <p class="evidence-title">Outcome</p>
+            <p class="expanded-outcome">Restored the sparse one-line Work rail while keeping useful proof in the expanded state.</p>
             <p class="evidence-title">Evidence</p>
             <div class="evidence-grid">
               <div class="evidence-item">
@@ -577,7 +540,7 @@
       <section class="user-row" aria-label="Maks message">
         <span class="drop" aria-hidden="true"></span>
         <span class="name">Maks @agent</span>
-        <span>Mock it up again</span>
+        <span>This is the version</span>
         <span class="time">09:12</span>
       </section>
 
@@ -603,17 +566,13 @@
   <script>
     const card = document.getElementById("work-card");
     const summary = document.getElementById("summary-button");
-    const details = document.getElementById("details-button");
 
     function setOpen(next) {
       card.dataset.open = String(next);
       summary.setAttribute("aria-expanded", String(next));
-      details.setAttribute("aria-expanded", String(next));
-      details.textContent = next ? "Close" : "Details";
     }
 
     summary.addEventListener("click", () => setOpen(card.dataset.open !== "true"));
-    details.addEventListener("click", () => setOpen(card.dataset.open !== "true"));
   </script>
 </body>
 </html>
