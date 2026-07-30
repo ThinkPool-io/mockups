@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0d10" />
+<title>thinkpool · Runtime thinking power and Cascade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-hi: hsl(217 85% 70%);
+    --positive: hsl(152 28% 54%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body { min-height: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+  }
+
+  button { font: inherit; }
+
+  .page {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .proof-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 84px;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+  }
+
+  .eyebrow,
+  .source-note,
+  .runtime-kicker,
+  .section-label,
+  .model-chip,
+  .native-id,
+  .layer-label {
+    font-family: var(--font-mono);
+  }
+
+  .eyebrow {
+    margin: 0 0 5px;
+    color: var(--faint);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: clamp(17px, 2vw, 24px);
+    font-weight: 500;
+    letter-spacing: -.035em;
+  }
+
+  .source-note {
+    max-width: 370px;
+    color: var(--faint);
+    font-size: 10px;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .source-note strong {
+    color: var(--pool-hi);
+    font-weight: 500;
+  }
+
+  .mobile-tabs {
+    display: none;
+  }
+
+  .board {
+    width: min(1384px, 100%);
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+
+  .runtime-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+
+  .runtime-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 22px 54px -34px color-mix(in srgb, black 90%, transparent);
+    font-family: var(--font-mono);
+  }
+
+  .runtime-card[data-runtime="claude"] {
+    --runtime-accent: hsl(24 62% 64%);
+  }
+
+  .runtime-card[data-runtime="codex"] {
+    --runtime-accent: var(--pool-hi);
+  }
+
+  .runtime-card[data-runtime="hermes"] {
+    --runtime-accent: hsl(165 44% 61%);
+  }
+
+  .card-header {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--raised);
+  }
+
+  .runtime-mark {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    flex: none;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--runtime-accent) 34%, var(--line));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--runtime-accent) 9%, var(--surface));
+    color: var(--runtime-accent);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .runtime-heading {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .runtime-kicker {
+    margin-bottom: 3px;
+    color: var(--runtime-accent);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+
+  .model-chip {
+    max-width: 150px;
+    overflow: hidden;
+    padding: 4px 7px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--faint);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px 7px;
+    color: var(--faint);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .section-label span:last-child {
+    color: color-mix(in srgb, var(--faint) 70%, transparent);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .effort-list {
+    margin: 0;
+    padding: 0 0 4px;
+    list-style: none;
+  }
+
+  .effort-row {
+    position: relative;
+    min-height: 46px;
+    display: grid;
+    grid-template-columns: minmax(82px, .42fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 7px 14px;
+    border-top: 1px solid color-mix(in srgb, var(--line) 48%, transparent);
+  }
+
+  .effort-row:first-child {
+    border-top-color: transparent;
+  }
+
+  .effort-row[aria-current="true"] {
+    background: color-mix(in oklab, var(--pool) 8%, transparent);
+    box-shadow:
+      inset 2px 0 0 color-mix(in oklab, var(--pool-hi) 72%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--pool) 18%, transparent);
+  }
+
+  .native-id {
+    min-width: 0;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .effort-row[aria-current="true"] .native-id {
+    color: var(--pool-hi);
+  }
+
+  .effort-description {
+    min-width: 0;
+    color: var(--faint);
+    font-size: 10px;
+    line-height: 1.38;
+  }
+
+  .provider-special {
+    color: var(--runtime-accent);
+  }
+
+  .layer-break {
+    position: relative;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(90deg, transparent, color-mix(in srgb, var(--pool) 7%, transparent), transparent),
+      var(--raised);
+  }
+
+  .layer-label {
+    position: relative;
+    z-index: 1;
+    padding: 0 8px;
+    background: var(--raised);
+    color: var(--pool-hi);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .layer-break::before,
+  .layer-break::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 68px);
+    height: 1px;
+    background: color-mix(in srgb, var(--pool) 30%, transparent);
+  }
+
+  .layer-break::before { left: 14px; }
+  .layer-break::after { right: 14px; }
+
+  .cascade-row {
+    min-height: 66px;
+    display: grid;
+    grid-template-columns: minmax(82px, .42fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 9px 14px 10px;
+    background: color-mix(in oklab, var(--pool) 8%, transparent);
+    box-shadow:
+      inset 2px 0 0 color-mix(in oklab, var(--pool-hi) 76%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--pool) 18%, transparent);
+  }
+
+  .cascade-row .native-id {
+    color: var(--pool-hi);
+  }
+
+  .cascade-row .effort-description {
+    color: var(--muted);
+  }
+
+  .card-foot {
+    min-height: 48px;
+    padding: 9px 14px 10px;
+    border-top: 1px solid var(--line);
+    background: var(--raised);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.45;
+  }
+
+  .card-foot strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .proof-footer {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 28px;
+    border-top: 1px solid var(--line);
+    background: var(--raised);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  .proof-footer strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .page {
+      grid-template-rows: auto auto 1fr auto;
+    }
+
+    .proof-header {
+      min-height: 76px;
+      padding: 13px 16px;
+    }
+
+    .source-note { display: none; }
+
+    .mobile-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin: 12px 10px 0;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--raised);
+    }
+
+    .mobile-tab {
+      min-height: 44px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    .mobile-tab[aria-selected="true"] {
+      background: var(--float);
+      color: var(--pool-hi);
+      box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--pool) 24%, transparent);
+    }
+
+    .board {
+      padding: 10px 10px 18px;
+    }
+
+    .runtime-grid {
+      display: block;
+    }
+
+    .runtime-card {
+      display: none;
+    }
+
+    .runtime-card.is-active {
+      display: block;
+    }
+
+    .proof-footer {
+      min-height: 38px;
+      padding: 8px 12px;
+      font-size: 8px;
+    }
+
+    .proof-footer span:last-child { display: none; }
+  }
+
+  @media (max-width: 420px) {
+    .proof-header {
+      min-height: 72px;
+      padding: 11px 12px;
+    }
+
+    .eyebrow {
+      margin-bottom: 3px;
+      font-size: 8px;
+    }
+
+    h1 {
+      max-width: 330px;
+      font-size: 14px;
+      line-height: 1.28;
+    }
+
+    .mobile-tabs {
+      margin-top: 8px;
+    }
+
+    .board {
+      padding-top: 8px;
+    }
+
+    .card-header {
+      min-height: 60px;
+      padding: 9px 11px;
+    }
+
+    .runtime-mark {
+      width: 30px;
+      height: 30px;
+    }
+
+    .model-chip {
+      max-width: 115px;
+      font-size: 8px;
+    }
+
+    .section-label {
+      padding: 8px 11px 5px;
+      font-size: 8px;
+    }
+
+    .effort-row {
+      min-height: 42px;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 8px;
+      padding: 6px 11px;
+    }
+
+    .native-id { font-size: 12px; }
+    .effort-description { font-size: 9px; }
+
+    .cascade-row {
+      min-height: 58px;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 8px;
+      padding: 7px 11px 8px;
+    }
+
+    .card-foot {
+      min-height: 42px;
+      padding: 7px 11px 8px;
+      font-size: 8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="proof-header">
+    <div>
+      <p class="eyebrow">Thinking power · runtime contract</p>
+      <h1>Native effort first. Cascade stays visible.</h1>
+    </div>
+    <div class="source-note">
+      <strong>Exact runtime labels</strong><br>
+      Model-aware native options, then one thinkpool coordination tier.
+    </div>
+  </header>
+
+  <nav class="mobile-tabs" role="tablist" aria-label="Choose runtime preview">
+    <button class="mobile-tab" type="button" role="tab" aria-selected="false" data-tab="codex">Codex</button>
+    <button class="mobile-tab" type="button" role="tab" aria-selected="false" data-tab="claude">Claude</button>
+    <button class="mobile-tab" type="button" role="tab" aria-selected="true" data-tab="hermes">Hermes</button>
+  </nav>
+
+  <section class="board" aria-label="Runtime thinking power comparison">
+    <div class="runtime-grid">
+      <article class="runtime-card" data-runtime="codex" aria-label="Codex thinking power">
+        <header class="card-header">
+          <div class="runtime-mark" aria-hidden="true">C</div>
+          <div class="runtime-heading">
+            <div class="runtime-kicker">OpenAI</div>
+            <h2>Codex</h2>
+          </div>
+          <div class="model-chip">GPT-5.6-Sol</div>
+        </header>
+
+        <div class="section-label"><span>Native effort</span><span>model-aware</span></div>
+        <ul class="effort-list">
+          <li class="effort-row"><span class="native-id">Light</span><span class="effort-description">Quick, clearly scoped tasks.</span></li>
+          <li class="effort-row"><span class="native-id">Medium</span><span class="effort-description">Routine coding with balanced speed and depth.</span></li>
+          <li class="effort-row"><span class="native-id">High</span><span class="effort-description">Complex debugging and multi-step changes.</span></li>
+          <li class="effort-row"><span class="native-id">Extra High</span><span class="effort-description">Large refactors and difficult technical decisions.</span></li>
+          <li class="effort-row"><span class="native-id">Max</span><span class="effort-description">Hard problems when extra time and tokens are justified.</span></li>
+        </ul>
+
+        <div class="layer-break"><span class="layer-label">thinkpool</span></div>
+        <div class="cascade-row" aria-current="true">
+          <span class="native-id">Ultra Cascade</span>
+          <span class="effort-description">A lead Codex terminal opens visible workers, reviews their work, and integrates the result.</span>
+        </div>
+        <footer class="card-foot"><strong>Approved Codex shape.</strong> Available only on eligible independent top-level terminals.</footer>
+      </article>
+
+      <article class="runtime-card" data-runtime="claude" aria-label="Claude Code thinking power">
+        <header class="card-header">
+          <div class="runtime-mark" aria-hidden="true">A</div>
+          <div class="runtime-heading">
+            <div class="runtime-kicker">Anthropic</div>
+            <h2>Claude Code</h2>
+          </div>
+          <div class="model-chip">model-selected</div>
+        </header>
+
+        <div class="section-label"><span>Native to Claude Code</span><span>exact labels</span></div>
+        <ul class="effort-list">
+          <li class="effort-row"><span class="native-id">low</span><span class="effort-description">Short, contained tasks where speed matters.</span></li>
+          <li class="effort-row"><span class="native-id">medium</span><span class="effort-description">Routine work with lower token use.</span></li>
+          <li class="effort-row"><span class="native-id">high</span><span class="effort-description">Complex coding with balanced cost and depth.</span></li>
+          <li class="effort-row"><span class="native-id">xhigh</span><span class="effort-description">Demanding coding and agent work at higher token use.</span></li>
+          <li class="effort-row"><span class="native-id">max</span><span class="effort-description">Hard problems when extra time and tokens are justified.</span></li>
+          <li class="effort-row">
+            <span class="native-id provider-special">ultracode</span>
+            <span class="effort-description">xhigh plus Claude’s own dynamic workflows.</span>
+          </li>
+        </ul>
+
+        <div class="layer-break"><span class="layer-label">thinkpool</span></div>
+        <div class="cascade-row" aria-current="true">
+          <span class="native-id">Cascade</span>
+          <span class="effort-description">A lead Claude terminal opens visible workers, reviews their work, and integrates the result.</span>
+        </div>
+        <footer class="card-foot"><strong>Do not rename ultracode.</strong> Cascade is separate because its worker lanes remain visible in the room.</footer>
+      </article>
+
+      <article class="runtime-card is-active" data-runtime="hermes" aria-label="Hermes Agent thinking power">
+        <header class="card-header">
+          <div class="runtime-mark" aria-hidden="true">H</div>
+          <div class="runtime-heading">
+            <div class="runtime-kicker">Nous Portal</div>
+            <h2>Hermes Agent</h2>
+          </div>
+          <div class="model-chip">model-selected</div>
+        </header>
+
+        <div class="section-label"><span>Native to Hermes</span><span>exact labels</span></div>
+        <ul class="effort-list">
+          <li class="effort-row"><span class="native-id">none</span><span class="effort-description">Disable model reasoning where supported.</span></li>
+          <li class="effort-row"><span class="native-id">minimal</span><span class="effort-description">Tiny tasks that need almost no analysis.</span></li>
+          <li class="effort-row"><span class="native-id">low</span><span class="effort-description">Simple tasks where speed and cost matter more.</span></li>
+          <li class="effort-row"><span class="native-id">medium</span><span class="effort-description">Everyday work with balanced speed and depth.</span></li>
+          <li class="effort-row"><span class="native-id">high</span><span class="effort-description">Difficult coding, debugging, or planning.</span></li>
+          <li class="effort-row"><span class="native-id">xhigh</span><span class="effort-description">Long, multi-step tasks that need extended analysis.</span></li>
+          <li class="effort-row"><span class="native-id">max</span><span class="effort-description">Hard tasks where extra latency and tokens are acceptable.</span></li>
+          <li class="effort-row">
+            <span class="native-id provider-special">ultra</span>
+            <span class="effort-description">The selected model’s highest supported reasoning setting.</span>
+          </li>
+        </ul>
+
+        <div class="layer-break"><span class="layer-label">thinkpool</span></div>
+        <div class="cascade-row" aria-current="true">
+          <span class="native-id">Cascade</span>
+          <span class="effort-description">A lead Hermes terminal opens visible workers, reviews their work, and integrates the result.</span>
+        </div>
+        <footer class="card-foot"><strong>Hermes ultra is not Cascade.</strong> Native rows must be filtered to the selected provider and model.</footer>
+      </article>
+    </div>
+  </section>
+
+  <footer class="proof-footer">
+    <span><strong>Recommended contract:</strong> native labels come from the runtime; Cascade comes from thinkpool.</span>
+    <span>Verified against current runtime documentation and installed CLIs · 30 Jul 2026</span>
+  </footer>
+</main>
+
+<script>
+  const tabs = [...document.querySelectorAll('[data-tab]')]
+  const cards = [...document.querySelectorAll('[data-runtime]')]
+
+  function selectRuntime(runtime) {
+    tabs.forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.tab === runtime)))
+    cards.forEach((card) => card.classList.toggle('is-active', card.dataset.runtime === runtime))
+  }
+
+  tabs.forEach((tab) => tab.addEventListener('click', () => selectRuntime(tab.dataset.tab)))
+</script>
+</body>
+</html>
