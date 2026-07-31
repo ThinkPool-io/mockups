@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool | Expanded tool call highlights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --glacier: hsl(201 78% 64%);
+    --glacier-hi: hsl(201 82% 72%);
+    --positive: hsl(152 28% 54%);
+    --caution: hsl(38 44% 60%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --font-identity: "Space Grotesk", "Hanken Grotesk", system-ui, sans-serif;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--bg); color-scheme: dark; }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background:
+      radial-gradient(circle at 50% -10%, color-mix(in oklab, var(--glacier) 7%, transparent), transparent 36rem),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  button { font: inherit; }
+
+  .shell {
+    width: min(1320px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 48px 0 56px;
+  }
+
+  .masthead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow,
+  .option-id,
+  .recommendation,
+  .legend,
+  .section-label,
+  .tool-head,
+  .transcript-line,
+  .footer {
+    font-family: var(--font-mono);
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--glacier);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    max-width: 790px;
+    color: var(--ink);
+    font-family: var(--font-identity);
+    font-size: clamp(30px, 4vw, 52px);
+    font-weight: 600;
+    letter-spacing: -.045em;
+    line-height: .98;
+  }
+
+  .dek {
+    max-width: 760px;
+    margin: 14px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .baseline {
+    width: 260px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--raised) 86%, transparent);
+  }
+
+  .baseline strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .baseline span {
+    display: block;
+    color: var(--faint);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-bottom: 20px;
+    color: var(--faint);
+    font-size: 10px;
+  }
+
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; background: var(--glacier); box-shadow: 0 0 12px color-mix(in oklab, var(--glacier) 52%, transparent); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .concept {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--raised);
+  }
+
+  .concept-meta {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .option-id {
+    color: var(--glacier);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .concept h2 {
+    min-width: 0;
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--font-identity);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+  }
+
+  .recommendation {
+    padding: 4px 7px;
+    border: 1px solid color-mix(in oklab, var(--glacier) 44%, var(--line));
+    border-radius: 999px;
+    color: var(--glacier-hi);
+    background: color-mix(in oklab, var(--glacier) 9%, transparent);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .stage {
+    padding: 14px;
+    background:
+      linear-gradient(to bottom, color-mix(in oklab, var(--bg) 98%, transparent), var(--bg)),
+      var(--bg);
+  }
+
+  .transcript-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 30px;
+    padding: 0 2px;
+    color: var(--faint);
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .transcript-line::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    flex: 0 0 5px;
+    border-radius: 50%;
+    background: var(--line-strong);
+  }
+
+  .tool {
+    position: relative;
+    margin: 3px 0 5px;
+    border-radius: 8px;
+    transition: border-color 180ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
+  }
+
+  .tool-head {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 10px;
+    border: 0;
+    color: var(--ink-soft);
+    background: transparent;
+    text-align: left;
+  }
+
+  .chevron { color: var(--glacier); font-size: 11px; }
+  .tool-icon { color: var(--glacier); font-size: 11px; }
+  .tool-name { color: var(--glacier-hi); font-size: 11px; font-weight: 600; }
+  .tool-summary { min-width: 0; overflow: hidden; color: var(--muted); font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .tool-time { color: var(--faint); font-size: 9.5px; }
+  .tool-ok {
+    display: grid;
+    width: 20px;
+    height: 20px;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--positive);
+    background: color-mix(in oklab, var(--positive) 10%, transparent);
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .tool-body {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 10px;
+    padding: 3px 10px 12px 28px;
+  }
+
+  .section {
+    min-width: 0;
+  }
+
+  .section-label {
+    margin-bottom: 5px;
+    color: var(--faint);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .02em;
+  }
+
+  pre {
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .rationale {
+    min-height: 44px;
+    padding: 10px 14px 12px;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .rationale strong {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  /* 01: a continuous rail ties the header to the expanded body. */
+  .v1 .tool {
+    border-left: 2px solid var(--glacier);
+    background: color-mix(in oklab, var(--glacier) 5%, transparent);
+  }
+
+  .v1 .tool::after {
+    content: "";
+    position: absolute;
+    inset: 8px auto 8px -2px;
+    width: 2px;
+    background: var(--glacier-hi);
+    filter: blur(3px);
+    opacity: .48;
+  }
+
+  /* 02: the entire open call becomes one bounded object. */
+  .v2 .tool {
+    border: 1px solid color-mix(in oklab, var(--glacier) 58%, var(--line));
+    background: color-mix(in oklab, var(--glacier) 3%, var(--bg));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--glacier) 7%, transparent);
+  }
+
+  /* 03: emphasize the header while leaving long output visually quiet. */
+  .v3 .tool {
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .v3 .tool-head {
+    background: linear-gradient(90deg, color-mix(in oklab, var(--glacier) 17%, var(--surface)), color-mix(in oklab, var(--glacier) 4%, var(--surface)));
+    border-bottom: 1px solid color-mix(in oklab, var(--glacier) 22%, var(--line));
+  }
+
+  /* 04: a literal state label makes expanded status unmistakable. */
+  .v4 .tool-head::after {
+    content: "OPEN";
+    position: absolute;
+    top: 5px;
+    left: 27px;
+    padding: 2px 5px;
+    border-radius: 999px;
+    color: var(--glacier-hi);
+    background: color-mix(in oklab, var(--glacier) 13%, var(--surface));
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: .08em;
+  }
+
+  .v4 .tool-name { padding-top: 11px; }
+  .v4 .tool-summary { padding-top: 11px; }
+
+  /* 05: lift the call as a temporary working surface. */
+  .v5 .tool {
+    border: 1px solid color-mix(in oklab, var(--glacier) 22%, var(--line));
+    background: var(--surface);
+    box-shadow:
+      0 10px 28px hsl(212 20% 2% / .56),
+      0 0 22px color-mix(in oklab, var(--glacier) 8%, transparent);
+    transform: translateY(-1px);
+  }
+
+  /* 06: corner brackets keep the middle open and technical. */
+  .v6 .tool::before,
+  .v6 .tool::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 8px;
+  }
+
+  .v6 .tool::before {
+    border-top: 1px solid var(--glacier);
+    border-left: 1px solid var(--glacier);
+    clip-path: polygon(0 0, 27% 0, 27% 1px, 1px 1px, 1px 27%, 0 27%);
+  }
+
+  .v6 .tool::after {
+    border-right: 1px solid var(--glacier);
+    border-bottom: 1px solid var(--glacier);
+    clip-path: polygon(73% calc(100% - 1px), calc(100% - 1px) calc(100% - 1px), calc(100% - 1px) 73%, 100% 73%, 100% 100%, 73% 100%);
+  }
+
+  /* 07: a beacon in the transcript gutter marks the whole expanded span. */
+  .v7 .tool {
+    margin-left: 14px;
+    border-left: 1px solid color-mix(in oklab, var(--glacier) 42%, var(--line));
+  }
+
+  .v7 .tool::before {
+    content: "";
+    position: absolute;
+    top: 16px;
+    bottom: 12px;
+    left: -15px;
+    width: 7px;
+    border-radius: 999px;
+    background: var(--glacier);
+    box-shadow: 0 0 14px color-mix(in oklab, var(--glacier) 66%, transparent);
+  }
+
+  /* 08: clarify the open body by grouping its Input and Output channels. */
+  .v8 .tool {
+    border: 1px solid var(--line);
+  }
+
+  .v8 .tool-body {
+    margin: 0 7px 8px;
+    padding: 9px 10px;
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--glacier) 6%, var(--surface));
+  }
+
+  .v8 .section + .section {
+    padding-top: 8px;
+    border-top: 1px solid color-mix(in oklab, var(--glacier) 17%, var(--line));
+  }
+
+  /* 09: a slim top register acts like an opened editor tab. */
+  .v9 .tool {
+    padding-top: 4px;
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--glacier) 2%, var(--bg));
+  }
+
+  .v9 .tool::before {
+    content: "";
+    position: absolute;
+    inset: -1px 18% auto 0;
+    height: 4px;
+    border-radius: 8px 999px 999px 0;
+    background: linear-gradient(90deg, var(--glacier), color-mix(in oklab, var(--glacier) 18%, transparent));
+  }
+
+  /* 10: an ambient field stays visible without introducing another hard line. */
+  .v10 .tool {
+    isolation: isolate;
+  }
+
+  .v10 .tool::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -8px -4px;
+    border-radius: 14px;
+    background:
+      radial-gradient(circle at 8% 12%, color-mix(in oklab, var(--glacier) 16%, transparent), transparent 42%),
+      linear-gradient(90deg, color-mix(in oklab, var(--glacier) 5%, transparent), transparent 68%);
+    border: 1px solid color-mix(in oklab, var(--glacier) 12%, transparent);
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 10px;
+  }
+
+  @media (max-width: 820px) {
+    .shell {
+      width: min(100% - 24px, 620px);
+      padding: 28px 0 36px;
+    }
+
+    .masthead {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .baseline { width: 100%; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .concept-meta { min-height: 50px; }
+    .stage { padding: 12px 9px; }
+    .tool-head { grid-template-columns: auto auto minmax(0, 1fr) auto auto; padding-inline: 7px; gap: 5px; }
+    .tool-time { display: none; }
+    .tool-body { padding-left: 24px; }
+    .rationale { min-height: 0; }
+    .footer { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">thinkpool Code · state visibility study</p>
+      <h1>Keep open calls in view.</h1>
+      <p class="dek">Ten treatments for expanded tool calls, using the real terminal geometry. Each option preserves the current tool color, type scale, 44px header, Input/Output structure, and quiet transcript rhythm.</p>
+    </div>
+    <aside class="baseline">
+      <strong>Current signal</strong>
+      <span>A 10px downward triangle carries almost all of the expanded-state meaning. Long Input and Output blocks visually merge into the transcript.</span>
+    </aside>
+  </header>
+
+  <div class="legend" aria-label="Comparison legend">
+    <span><i></i> Glacier marks the agent and tool role</span>
+    <span>All examples show the same expanded call</span>
+    <span>Recommendations balance visibility with terminal calm</span>
+  </div>
+
+  <section class="grid" aria-label="Ten expanded tool call highlight options">
+    <article class="concept v1">
+      <header class="concept-meta">
+        <span class="option-id">01</span>
+        <h2>Continuous spine</h2>
+        <span class="recommendation">Recommended</span>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Best balance.</strong> One persistent vertical signal connects the header and body without boxing every call.</div>
+    </article>
+
+    <article class="concept v2">
+      <header class="concept-meta">
+        <span class="option-id">02</span>
+        <h2>Focus perimeter</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Most explicit.</strong> The full frame makes open calls impossible to miss, but adds more rectangles to dense runs.</div>
+    </article>
+
+    <article class="concept v3">
+      <header class="concept-meta">
+        <span class="option-id">03</span>
+        <h2>Glacier header band</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Low-noise scan aid.</strong> The header remains easy to find, though very tall output can still drift away from it.</div>
+    </article>
+
+    <article class="concept v4">
+      <header class="concept-meta">
+        <span class="option-id">04</span>
+        <h2>Open-state badge</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Most literal.</strong> Adds no container weight, but consumes scarce header space and is less elegant on mobile.</div>
+    </article>
+
+    <article class="concept v5">
+      <header class="concept-meta">
+        <span class="option-id">05</span>
+        <h2>Raised working surface</h2>
+        <span class="recommendation">Recommended</span>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Best object separation.</strong> Reads as the active working layer; strongest for one or two open calls at a time.</div>
+    </article>
+
+    <article class="concept v6">
+      <header class="concept-meta">
+        <span class="option-id">06</span>
+        <h2>Terminal brackets</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Technical and light.</strong> Corners define the span while keeping the background untouched; slightly more decorative.</div>
+    </article>
+
+    <article class="concept v7">
+      <header class="concept-meta">
+        <span class="option-id">07</span>
+        <h2>Gutter beacon</h2>
+        <span class="recommendation">Recommended</span>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Strongest terminal-native signal.</strong> Extends the existing transcript-dot language into a persistent open-state marker.</div>
+    </article>
+
+    <article class="concept v8">
+      <header class="concept-meta">
+        <span class="option-id">08</span>
+        <h2>Input/output well</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Best for readability.</strong> Improves body parsing more than scan visibility; pairs well with a tiny header signal.</div>
+    </article>
+
+    <article class="concept v9">
+      <header class="concept-meta">
+        <span class="option-id">09</span>
+        <h2>Open tab register</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Compact and directional.</strong> A top register is easy to scan, but its signal weakens once the header scrolls away.</div>
+    </article>
+
+    <article class="concept v10">
+      <header class="concept-meta">
+        <span class="option-id">10</span>
+        <h2>Ambient Glacier field</h2>
+      </header>
+      <div class="stage">
+        <div class="transcript-line">I’m checking the current component before making the change.</div>
+        <div class="tool">
+          <button class="tool-head" type="button" aria-expanded="true">
+            <span class="chevron">▼</span><span class="tool-icon">◇</span><span><b class="tool-name">Bash</b> <span class="tool-summary">Check repository status</span></span><span class="tool-time">838ms</span><span class="tool-ok">✓</span>
+          </button>
+          <div class="tool-body">
+            <div class="section"><div class="section-label">Input</div><pre>{ "command": "git status --short" }</pre></div>
+            <div class="section"><div class="section-label">Output</div><pre>M src/pages/code/structured.jsx</pre></div>
+          </div>
+        </div>
+        <div class="transcript-line">The call is still open while I inspect its output.</div>
+      </div>
+      <div class="rationale"><strong>Softest intervention.</strong> Preserves the borderless terminal, but can be too subtle on dim displays.</div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span>Source: current authenticated thinkpool Code room · desktop 1440×900 · mobile 390×844</span>
+    <span>Shortlist: 01 spine · 05 raised surface · 07 gutter beacon</span>
+  </footer>
+</main>
+</body>
+</html>
