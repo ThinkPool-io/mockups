@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thinkpool — Founding lifetime landing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --soft: hsl(212 14% 86%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --cobalt: #1a6ef4;
+      --cobalt-ink: #2e78ff;
+      --glacier: hsl(201 78% 64%);
+      --run: #3ad07f;
+      --partner: hsl(218 60% 72%);
+      --viewer: hsl(161 48% 58%);
+      --danger: hsl(352 84% 64%);
+      --k-bg: #0a0d10;
+      --k-card: #06090c;
+      --k-hair: rgba(255,255,255,.08);
+      --k-hair-hi: rgba(255,255,255,.15);
+      --k-slate: #6b7681;
+      --k-slate-2: #8b96a2;
+      --display: "Newsreader", Georgia, "Times New Roman", serif;
+      --sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 500;
+    }
+    a, button { color: inherit; font: inherit; }
+    a { text-decoration: none; }
+    button { cursor: pointer; }
+
+    .nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in oklab, var(--bg) 92%, transparent);
+    }
+    .wordmark {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -.045em;
+      line-height: 1;
+    }
+    .wordmark span:last-child { color: var(--cobalt); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .nav-link {
+      padding: 11px 12px;
+      color: var(--faint);
+    }
+    .outline-button {
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid var(--cobalt);
+      border-radius: 9px;
+      background: transparent;
+      color: hsl(217 85% 70%);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -260px;
+      left: 50%;
+      width: 840px;
+      height: 650px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in oklab, var(--cobalt) 12%, transparent), transparent 67%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      width: min(100% - 48px, 1088px);
+      margin: 0 auto;
+      padding: 72px 0 32px;
+    }
+    .thesis {
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .drop-wrap {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 22px;
+    }
+    .drop-wrap::before,
+    .drop-wrap::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border: 1px solid color-mix(in oklab, var(--cobalt) 12%, transparent);
+      border-radius: 50%;
+    }
+    .drop-wrap::after {
+      width: 510px;
+      height: 510px;
+      border-color: color-mix(in oklab, var(--cobalt) 7%, transparent);
+    }
+    .drop {
+      position: relative;
+      z-index: 1;
+      width: 18px;
+      height: 23px;
+      border-radius: 55% 45% 58% 42% / 68% 61% 39% 32%;
+      background: var(--cobalt-ink);
+      transform: rotate(45deg);
+    }
+    .eyebrow,
+    .section-label {
+      margin: 0;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 24px 0 0;
+      font-family: var(--display);
+      font-size: clamp(56px, 6.9vw, 80px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -.025em;
+      text-wrap: balance;
+    }
+    .accent { color: var(--cobalt-ink); }
+    .lede {
+      max-width: 700px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.58;
+      text-wrap: pretty;
+    }
+
+    .proof { margin-top: 48px; }
+    .console {
+      overflow: hidden;
+      border: 1px solid var(--k-hair-hi);
+      border-radius: 14px;
+      background: var(--k-bg);
+      box-shadow: 0 28px 70px -38px #000;
+    }
+    .tabs {
+      min-height: 39px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--k-hair);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .tab-set { min-width: 0; flex: 1; display: flex; padding-left: 8px; }
+    .tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      white-space: nowrap;
+    }
+    .tab.secondary { color: var(--k-slate-2); }
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      right: 8px;
+      bottom: 0;
+      left: 8px;
+      height: 2px;
+      background: var(--glacier);
+      box-shadow: 0 0 6px color-mix(in oklab, var(--glacier) 60%, transparent);
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--run);
+      box-shadow: 0 0 5px var(--run);
+    }
+    .chrome-cell {
+      min-width: 39px;
+      display: grid;
+      place-items: center;
+      border-left: 1px solid var(--k-hair);
+      color: var(--k-slate-2);
+    }
+    .launch {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border-left: 1px solid var(--k-hair);
+      color: var(--muted);
+    }
+    .launch strong { color: var(--glacier); }
+    .ensemble {
+      min-height: 39px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--k-hair);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .ensemble-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 12px;
+      font-weight: 600;
+    }
+    .ensemble-title span { color: var(--glacier); }
+    .lane {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      border-left: 1px solid var(--k-hair);
+      color: var(--k-slate-2);
+    }
+    .spin {
+      width: 10px;
+      height: 10px;
+      border: 1px solid color-mix(in oklab, var(--glacier) 30%, transparent);
+      border-top-color: var(--glacier);
+      border-radius: 50%;
+    }
+    .transcript {
+      min-height: 250px;
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .turn {
+      margin: 0 -12px;
+      padding: 5px 14px;
+      border-left: 2px solid;
+    }
+    .turn + .turn { margin-top: 1px; }
+    .turn.conrad {
+      border-color: var(--partner);
+      background: color-mix(in oklab, var(--partner) 5%, transparent);
+    }
+    .turn.maks {
+      border-color: var(--viewer);
+      background: color-mix(in oklab, var(--viewer) 5%, transparent);
+    }
+    .turn .name { margin-right: 7px; font-weight: 600; }
+    .turn.conrad .name { color: var(--partner); }
+    .turn.maks .name { color: var(--viewer); }
+    .turn .copy { color: var(--muted); font-family: var(--sans); }
+    .turn .time {
+      margin-left: 5px;
+      color: var(--k-slate);
+      font-size: 8px;
+      letter-spacing: .08em;
+    }
+    .dispatch {
+      margin: 10px 0 0;
+      padding: 9px 12px;
+      border: 1px solid var(--k-hair);
+      border-radius: 8px;
+      background: var(--k-card);
+      color: var(--k-slate-2);
+    }
+    .dispatch strong { color: var(--glacier); }
+    .agent-line {
+      display: flex;
+      gap: 8px;
+      margin-top: 11px;
+      color: var(--muted);
+      font-family: var(--sans);
+    }
+    .agent-glow {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--glacier);
+      box-shadow: 0 0 8px var(--glacier);
+    }
+    .status {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 14px;
+      color: var(--k-slate-2);
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .status span:first-child { color: var(--danger); }
+    .status span:last-child { color: var(--glacier); }
+    .composer {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 12px 12px;
+      padding: 0 7px 0 13px;
+      border: 1px solid var(--k-hair-hi);
+      border-radius: 9px;
+      color: var(--k-slate-2);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+    .placeholder { flex: 1; }
+    .send {
+      width: 33px;
+      height: 33px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 8px;
+      background: var(--cobalt);
+      color: var(--k-card);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .why {
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .section-inner {
+      width: min(100% - 48px, 1088px);
+      margin: 0 auto;
+      padding: 72px 0;
+      text-align: center;
+    }
+    h2 {
+      max-width: 720px;
+      margin: 18px auto 0;
+      font-family: var(--display);
+      font-size: clamp(38px, 4.2vw, 52px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -.015em;
+      text-wrap: balance;
+    }
+    .section-copy {
+      max-width: 700px;
+      margin: 16px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+    .moves {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 44px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+      text-align: left;
+    }
+    .move {
+      padding: 25px;
+      background: var(--bg);
+    }
+    .move-kicker {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--glacier);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .move-kicker::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+    }
+    .move:nth-child(2) .move-kicker { color: var(--run); }
+    .move:nth-child(3) .move-kicker { color: var(--partner); }
+    .move h3 {
+      margin: 13px 0 0;
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+    .move p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .pricing {
+      width: min(100% - 48px, 900px);
+      margin: 0 auto;
+      padding: 80px 0 72px;
+      text-align: center;
+    }
+    .pricing h2 { max-width: 620px; }
+    .plans {
+      display: grid;
+      grid-template-columns: .78fr 1.42fr;
+      gap: 1px;
+      margin-top: 40px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+      text-align: left;
+    }
+    .plan {
+      min-width: 0;
+      padding: 28px;
+      background: var(--surface);
+    }
+    .plan-plus {
+      position: relative;
+      border-left: 2px solid var(--cobalt);
+    }
+    .plan-label {
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .plan-plus .plan-label { color: var(--cobalt-ink); }
+    .price {
+      margin-top: 12px;
+      font-family: var(--display);
+      font-size: 48px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .price small {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+    .plan-copy {
+      margin: 19px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .payment-label {
+      margin: 24px 0 10px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .payment-options {
+      display: grid;
+      grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+      gap: 10px;
+    }
+    .payment {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--raised);
+    }
+    .payment.founding {
+      position: relative;
+      overflow: hidden;
+      border-color: color-mix(in oklab, var(--cobalt) 58%, var(--line));
+      background: color-mix(in oklab, var(--cobalt) 7%, var(--raised));
+    }
+    .payment.founding::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: var(--cobalt);
+    }
+    .payment-kicker {
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .founding .payment-kicker { color: hsl(217 85% 70%); }
+    .payment-price {
+      margin-top: 9px;
+      font-family: var(--display);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .payment-price small {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .payment-copy {
+      flex: 1;
+      margin: 12px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .availability {
+      margin-top: 15px;
+      padding-top: 13px;
+      border-top: 1px solid color-mix(in oklab, var(--cobalt) 25%, var(--line));
+    }
+    .availability-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .availability-row strong {
+      color: var(--ink);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+    .availability-track {
+      height: 2px;
+      margin-top: 9px;
+      background: var(--line-strong);
+    }
+    .availability-fill {
+      width: 0;
+      height: 100%;
+      background: var(--cobalt);
+    }
+    .payment-button {
+      width: 100%;
+      min-height: 36px;
+      margin-top: 15px;
+      padding: 8px 11px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .founding .payment-button {
+      border-color: var(--cobalt);
+      color: hsl(217 85% 70%);
+    }
+    .capacity {
+      max-width: 780px;
+      margin: 15px auto 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .cta {
+      width: min(100% - 48px, 760px);
+      margin: 0 auto;
+      padding: 76px 0 84px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+    .cta h2 { max-width: 470px; }
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .ghost-button {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .footer {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px 26px;
+      padding: 28px 24px;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      font-size: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .nav { height: 56px; padding: 0 12px; }
+      .wordmark { font-size: 19px; }
+      .nav-link { display: none; }
+      .outline-button { min-height: 34px; padding: 0 12px; font-size: 10px; }
+      .hero-inner { width: min(100% - 24px, 1088px); padding: 46px 0 20px; }
+      .drop-wrap { margin-bottom: 16px; }
+      .drop-wrap::before { width: 240px; height: 240px; }
+      .drop-wrap::after { display: none; }
+      .eyebrow { font-size: 8px; letter-spacing: .16em; }
+      h1 { margin-top: 17px; font-size: 40px; line-height: 1.02; }
+      .lede { margin-top: 17px; font-size: 13px; line-height: 1.5; }
+      .proof { margin-top: 25px; }
+      .console { border-radius: 10px; }
+      .tabs { min-height: 35px; font-size: 9px; }
+      .tab { padding: 0 7px; }
+      .tab.secondary { max-width: 52px; overflow: hidden; }
+      .launch { display: none; }
+      .chrome-cell { min-width: 34px; }
+      .ensemble { min-height: 35px; font-size: 9px; }
+      .ensemble-title { padding: 0 8px; }
+      .lane { min-width: 0; padding: 0 9px; overflow: hidden; white-space: nowrap; }
+      .transcript { min-height: 228px; font-size: 9px; }
+      .turn .copy { font-size: 10px; }
+      .agent-line { font-size: 10px; }
+      .dispatch { font-size: 9px; }
+      .status { font-size: 8px; }
+      .composer { min-height: 40px; font-size: 9px; }
+      .send { width: 29px; height: 29px; font-size: 16px; }
+      .section-inner { width: min(100% - 32px, 1088px); padding: 60px 0; }
+      .section-label { font-size: 9px; }
+      h2 { margin-top: 15px; font-size: 34px; }
+      .section-copy { font-size: 14px; line-height: 1.58; }
+      .moves { grid-template-columns: 1fr; margin-top: 34px; }
+      .move { padding: 22px; }
+      .pricing { width: min(100% - 24px, 900px); padding: 60px 0 56px; }
+      .plans { grid-template-columns: 1fr; margin-top: 32px; }
+      .plan { padding: 23px; }
+      .plan-plus { border-top: 2px solid var(--cobalt); border-left: 0; }
+      .payment-options { grid-template-columns: 1fr; }
+      .payment { padding: 16px; }
+      .capacity { padding: 0 6px; font-size: 10px; }
+      .cta { width: min(100% - 32px, 760px); padding: 60px 0 66px; }
+      .cta-actions { align-items: stretch; flex-direction: column; }
+      .footer { gap: 13px 19px; font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Marketing navigation">
+    <a class="wordmark" href="#"><span>think</span><span>pool</span></a>
+    <div class="nav-actions">
+      <a class="nav-link" href="#">Sign in</a>
+      <button class="outline-button" type="button">Start free</button>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="thesis">
+          <div class="drop-wrap" aria-hidden="true"><span class="drop"></span></div>
+          <p class="eyebrow">Multiple agents. Under control.</p>
+          <h1>Your agents do the work.<br><span class="accent">You direct the build.</span></h1>
+          <p class="lede">Run Claude Code, Codex, and Hermes Agent side by side. Give each task a clear lane, follow every handoff, and decide what moves forward.</p>
+        </div>
+
+        <div class="proof">
+          <div class="console" role="img" aria-label="A thinkpool room directing several coding agents">
+            <div class="tabs">
+              <div class="tab-set">
+                <div class="tab active"><span class="live-dot"></span><span>landing direction⌄</span></div>
+                <div class="tab secondary"><span class="live-dot"></span><span>Terminal 2</span></div>
+              </div>
+              <div class="chrome-cell">＋</div>
+              <div class="launch"><strong>Launch</strong>&nbsp; session</div>
+              <div class="chrome-cell">⬡</div>
+            </div>
+            <div class="ensemble">
+              <div class="ensemble-title">Ensemble <span>⬡1</span></div>
+              <div class="lane"><span class="spin"></span>Opus 4.8&nbsp; proof review</div>
+            </div>
+            <div class="transcript">
+              <div class="turn conrad"><span class="name">Conrad</span><span class="copy">the homepage still reads like shared terminal access</span><span class="time">20:36</span></div>
+              <div class="turn conrad"><span class="name">Conrad</span><span class="copy">the agent room is buried under the pair story</span><span class="time">20:37</span></div>
+              <div class="turn maks"><span class="name">Maks</span><span class="copy">lead with the orchestration we actually use</span><span class="time">20:38</span></div>
+              <div class="turn maks"><span class="name">Maks</span><span class="copy">Make the whole build the point. Pairing comes after.</span><span class="time">20:39</span></div>
+              <div class="turn maks"><span class="name">Maks</span><span class="copy"><strong style="color:var(--cobalt-ink)">@pool</strong></span><span class="time">20:40</span></div>
+              <div class="dispatch">◆ <strong>Pool</strong>&nbsp; dispatched to agent</div>
+              <div class="agent-line"><span class="agent-glow"></span><span>I’m tracing the hero, metadata, and product proof back to the new room anchor.</span></div>
+              <div class="dispatch">▸ <strong>⬡ thinkpool Dispatch</strong>&nbsp; Claude Opus 4.8 · proof review <span style="float:right;color:var(--run)">✓</span></div>
+            </div>
+            <div class="status"><span>⏵⏵ Bypass permissions</span><span>GPT-5.6-Sol High</span></div>
+            <div class="composer"><span>＋</span><span class="placeholder">Message the room…</span><span>●</span><button class="send" type="button" aria-label="Send">→</button></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="why">
+      <div class="section-inner">
+        <p class="section-label">Why it’s different</p>
+        <h2>Spawning agents is easy. Coordinating the build is the work.</h2>
+        <p class="section-copy">thinkpool keeps terminals, handoffs, reviews, and visual proof in one visible <span style="color:var(--ink)">Ensemble</span>. One developer can run it. Invite a partner and both people can watch and steer the same live work without transferring context.</p>
+        <div class="moves">
+          <article class="move">
+            <div class="move-kicker">Cascade</div>
+            <h3>Split the work. Keep control.</h3>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="move">
+            <div class="move-kicker">Review</div>
+            <h3>Make every result prove itself.</h3>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="move">
+            <div class="move-kicker">Design</div>
+            <h3>Edit the working interface.</h3>
+            <p>Turn a verified preview into an editable Design surface. Changes return to the producing lane and come back as fresh desktop and mobile proof.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+      <p class="section-label">Pricing</p>
+      <h2>Free to start. <span class="accent">Choose how you go Plus.</span></h2>
+
+      <div class="plans">
+        <article class="plan">
+          <div class="plan-label">Free</div>
+          <div class="price">€0</div>
+          <p class="plan-copy">One active hosted room. Dispatch runs up to 3 active worker lanes per room. Parent terminals do not use that worker allowance.</p>
+        </article>
+
+        <article class="plan plan-plus">
+          <div class="plan-label">Plus</div>
+          <p class="plan-copy">No hosted-room count cap. Dispatch runs up to 6 active worker lanes per room. Parent terminals do not use that worker allowance.</p>
+
+          <div class="payment-label">Choose how to pay</div>
+          <div class="payment-options">
+            <section class="payment" aria-label="Monthly Plus">
+              <div class="payment-kicker">Monthly</div>
+              <div class="payment-price">€5 <small>/ month</small></div>
+              <p class="payment-copy">Stay flexible. Cancel when you want.</p>
+              <button class="payment-button" type="button">Choose monthly</button>
+            </section>
+
+            <section class="payment founding" aria-label="Founding lifetime Plus">
+              <div class="payment-kicker">Founding lifetime</div>
+              <div class="payment-price">€50 <small>once</small></div>
+              <p class="payment-copy">First 100 accounts. Pay once and keep Plus for the lifetime of thinkpool.</p>
+              <div class="availability">
+                <div class="availability-row"><span>Founding accounts</span><strong>0 / 100 claimed</strong></div>
+                <div class="availability-track" aria-hidden="true"><div class="availability-fill"></div></div>
+              </div>
+              <button class="payment-button" type="button">Claim founding lifetime</button>
+            </section>
+          </div>
+        </article>
+      </div>
+
+      <p class="capacity">Every parent and worker terminal shares a 12-live-lane safety ceiling on the bridge machine. New Dispatch work queues while the host is full or under memory pressure, then starts when capacity returns.</p>
+    </section>
+
+    <section class="cta">
+      <h2>Open a room.<br>Start the build.</h2>
+      <div class="cta-actions">
+        <button class="outline-button" type="button">Create your free account</button>
+        <button class="ghost-button" type="button">Sign in</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="#">About</a>
+    <a href="#">FAQ</a>
+    <a href="#">Data</a>
+    <a href="#">Privacy &amp; security</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </footer>
+</body>
+</html>
