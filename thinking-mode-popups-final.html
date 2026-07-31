@@ -347,7 +347,7 @@
     width: 100%;
     min-height: 38px;
     display: grid;
-    grid-template-columns: 16px minmax(0, 1fr) auto;
+    grid-template-columns: auto 14px minmax(0, 1fr);
     align-items: center;
     gap: 7px;
     padding: 4px 12px;
@@ -373,6 +373,7 @@
   }
 
   .model-name {
+    grid-column: 1;
     min-width: 0;
     overflow: hidden;
     color: var(--ink-soft);
@@ -391,6 +392,7 @@
   }
 
   .model-note {
+    grid-column: 3;
     max-width: 128px;
     overflow: hidden;
     color: var(--faint);
@@ -424,7 +426,7 @@
     width: 100%;
     min-height: 39px;
     display: grid;
-    grid-template-columns: 16px minmax(82px, .48fr) minmax(0, 1fr);
+    grid-template-columns: auto 14px minmax(0, 1fr);
     align-items: center;
     gap: 7px;
     padding: 5px 12px;
@@ -450,9 +452,12 @@
   }
 
   .check {
+    grid-column: 2;
+    grid-row: 1;
     width: 14px;
     color: transparent;
     font-size: 11px;
+    text-align: right;
   }
 
   .effort-row[aria-current="true"] .check {
@@ -460,6 +465,7 @@
   }
 
   .effort-name {
+    grid-column: 1;
     min-width: 0;
     overflow: hidden;
     color: var(--ink-soft);
@@ -474,6 +480,7 @@
   }
 
   .effort-hint {
+    grid-column: 3;
     min-width: 0;
     overflow: hidden;
     color: var(--faint);
@@ -594,14 +601,14 @@
 
     .effort-row {
       min-height: 44px;
-      grid-template-columns: 14px minmax(78px, .45fr) minmax(0, 1fr);
+      grid-template-columns: auto 14px minmax(0, 1fr);
       gap: 6px;
       padding: 4px 10px;
     }
 
     .model-row {
       min-height: 44px;
-      grid-template-columns: 14px minmax(0, 1fr) auto;
+      grid-template-columns: auto 14px minmax(0, 1fr);
       gap: 6px;
       padding: 4px 10px;
     }
