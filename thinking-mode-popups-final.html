@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0b0d10" />
+<title>thinkpool — Final thinking mode popups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-hi: hsl(217 85% 70%);
+    --positive: hsl(152 28% 54%);
+    --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+    --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html,
+  body { min-height: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  button { font: inherit; }
+
+  .page {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .page-header {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--line);
+    background: var(--raised);
+  }
+
+  .eyebrow {
+    margin: 0 0 5px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: clamp(18px, 2vw, 25px);
+    font-weight: 500;
+    letter-spacing: -.035em;
+  }
+
+  .header-contract {
+    max-width: 430px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.45;
+    text-align: right;
+  }
+
+  .prompt-glyph {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    flex: none;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--pool) 34%, var(--line));
+    border-radius: 8px;
+    background: color-mix(in oklab, var(--pool) 8%, var(--surface));
+    color: var(--pool-hi);
+    font-size: 14px;
+  }
+
+  .header-contract strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .board {
+    width: min(1400px, 100%);
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .runtime-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .runtime-stage {
+    position: relative;
+    min-width: 0;
+    height: 690px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 28px 74px -52px black;
+  }
+
+  .runtime-chrome {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 13px;
+    border-bottom: 1px solid var(--line);
+    background: var(--raised);
+    font-family: var(--font-mono);
+  }
+
+  .runtime-mark {
+    width: 27px;
+    height: 27px;
+    display: grid;
+    flex: none;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 7px;
+    background: var(--surface);
+    color: var(--pool-hi);
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .runtime-identity {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .runtime-name {
+    color: var(--ink-soft);
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .runtime-provider {
+    margin-top: 2px;
+    color: var(--faint);
+    font-size: 8px;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--faint);
+    font-size: 8px;
+  }
+
+  .live::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--positive);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--positive) 48%, transparent);
+  }
+
+  .ambient {
+    position: absolute;
+    inset: 54px 0 0;
+    padding: 30px 24px 120px;
+    font-family: var(--font-mono);
+  }
+
+  .ghost-line {
+    height: 8px;
+    margin-bottom: 16px;
+    border-radius: 99px;
+    background: color-mix(in oklab, var(--faint) 12%, transparent);
+  }
+
+  .ghost-line:nth-child(1) { width: 72%; }
+  .ghost-line:nth-child(2) { width: 48%; }
+  .ghost-line:nth-child(3) { width: 64%; margin-top: 42px; }
+  .ghost-line:nth-child(4) { width: 36%; }
+
+  .composer-wrap {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .mode-line {
+    min-height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 4px 5px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+  }
+
+  .mode-line span:first-child {
+    color: var(--ink-soft);
+  }
+
+  .mode-chip {
+    color: var(--pool-hi);
+  }
+
+  .composer {
+    height: 55px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: var(--raised);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+
+  .plus {
+    color: var(--ink-soft);
+    font-size: 18px;
+  }
+
+  .send {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    margin-left: auto;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--pool) 62%, var(--line));
+    border-radius: 8px;
+    background: color-mix(in oklab, var(--pool) 12%, var(--surface));
+    color: var(--pool-hi);
+  }
+
+  .thinking-popup {
+    position: absolute;
+    right: 12px;
+    bottom: 105px;
+    left: 12px;
+    z-index: 2;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    border-radius: 9px;
+    background: var(--raised);
+    box-shadow: 0 24px 64px -20px color-mix(in oklab, black 70%, transparent);
+    font-family: var(--font-mono);
+    transform-origin: bottom right;
+    animation: menu-in .3s var(--ease-settle) both;
+  }
+
+  @keyframes menu-in {
+    from { opacity: 0; transform: translateY(4px) scale(.96); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .popup-head {
+    min-height: 49px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .popup-agent {
+    color: var(--ink-soft);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .popup-provider {
+    margin-top: 3px;
+    color: var(--faint);
+    font-size: 8px;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .model-chip {
+    max-width: 136px;
+    overflow: hidden;
+    padding: 4px 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--faint);
+    font-size: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .popup-label {
+    min-height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 12px 5px;
+    color: var(--faint);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  .popup-label span:last-child {
+    color: color-mix(in oklab, var(--faint) 72%, transparent);
+    font-size: 8px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .effort-list {
+    margin: 0;
+    padding: 0 0 4px;
+    list-style: none;
+  }
+
+  .effort-row {
+    position: relative;
+    width: 100%;
+    min-height: 43px;
+    display: grid;
+    grid-template-columns: 16px minmax(82px, .48fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .15s ease;
+  }
+
+  .effort-row:hover {
+    background: var(--float);
+  }
+
+  .effort-row[aria-current="true"],
+  .effort-row[aria-current="true"]:hover {
+    background: color-mix(in oklab, var(--pool) 8%, transparent);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, var(--pool) 20%, transparent),
+      0 0 18px color-mix(in oklab, var(--pool) 9%, transparent);
+  }
+
+  .check {
+    width: 14px;
+    color: transparent;
+    font-size: 11px;
+  }
+
+  .effort-row[aria-current="true"] .check {
+    color: var(--pool-hi);
+  }
+
+  .effort-name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effort-row[aria-current="true"] .effort-name {
+    color: var(--pool-hi);
+  }
+
+  .effort-hint {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--faint);
+    font-size: 8px;
+    line-height: 1.25;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .contract {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 10px 28px;
+    border-top: 1px solid var(--line);
+    background: var(--raised);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  .contract strong {
+    color: var(--pool-hi);
+    font-weight: 500;
+  }
+
+  .contract span:last-child {
+    text-align: right;
+  }
+
+  @media (max-width: 1050px) {
+    .runtime-grid {
+      grid-template-columns: 1fr;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .runtime-stage {
+      height: auto;
+      overflow: visible;
+    }
+
+    .ambient,
+    .composer-wrap {
+      display: none;
+    }
+
+    .thinking-popup {
+      position: static;
+      margin: 12px;
+      animation: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .page-header {
+      min-height: 72px;
+      padding: 11px 12px;
+    }
+
+    .eyebrow {
+      margin-bottom: 3px;
+      font-size: 8px;
+    }
+
+    h1 {
+      max-width: 330px;
+      font-size: 14px;
+      line-height: 1.28;
+    }
+
+    .header-contract {
+      display: none;
+    }
+
+    .board {
+      padding: 10px;
+    }
+
+    .runtime-grid {
+      gap: 10px;
+    }
+
+    .runtime-chrome {
+      height: 49px;
+      padding: 0 10px;
+    }
+
+    .runtime-mark {
+      width: 25px;
+      height: 25px;
+    }
+
+    .thinking-popup {
+      margin: 8px;
+    }
+
+    .popup-head {
+      min-height: 46px;
+      padding: 8px 10px;
+    }
+
+    .popup-label {
+      min-height: 29px;
+      padding: 6px 10px 4px;
+      font-size: 8px;
+    }
+
+    .effort-row {
+      min-height: 44px;
+      grid-template-columns: 14px minmax(78px, .45fr) minmax(0, 1fr);
+      gap: 6px;
+      padding: 4px 10px;
+    }
+
+    .effort-name { font-size: 10.5px; }
+    .effort-hint { font-size: 8px; }
+
+    .contract {
+      min-height: 42px;
+      padding: 8px 12px;
+      font-size: 8px;
+    }
+
+    .contract span:last-child {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: .01ms !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Final control · three runtimes</p>
+      <h1>Thinking power stays native to the agent.</h1>
+    </div>
+    <div class="header-contract">
+      <span class="prompt-glyph" aria-hidden="true">›_</span>
+      <span><strong>Cascade stays spoken.</strong><br>Ask for it in the prompt; no popup row or button.</span>
+    </div>
+  </header>
+
+  <section class="board" aria-label="Final thinking mode popup comparison">
+    <div class="runtime-grid">
+      <article class="runtime-stage" data-runtime="claude" aria-label="Claude Code thinking power popup">
+        <header class="runtime-chrome">
+          <div class="runtime-mark" aria-hidden="true">A</div>
+          <div class="runtime-identity">
+            <div class="runtime-name">Claude Code</div>
+            <div class="runtime-provider">Anthropic</div>
+          </div>
+          <span class="live">live</span>
+        </header>
+
+        <div class="ambient" aria-hidden="true">
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+        </div>
+
+        <div class="thinking-popup" role="menu" aria-label="Claude Code thinking power">
+          <div class="popup-head">
+            <div>
+              <div class="popup-agent">Claude Code</div>
+              <div class="popup-provider">Anthropic</div>
+            </div>
+            <div class="model-chip">Fable 5</div>
+          </div>
+          <div class="popup-label"><span>Thinking power</span><span>5 native levels</span></div>
+          <ul class="effort-list">
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max speed</span><span class="effort-hint">lightest reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Balanced</span><span class="effort-hint">speed + depth</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="effort-name">Think hard</span><span class="effort-hint">deeper reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Think harder</span><span class="effort-hint">long-horizon work</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max thinking</span><span class="effort-hint">deepest single agent</span></button></li>
+          </ul>
+        </div>
+
+        <div class="composer-wrap" aria-hidden="true">
+          <div class="mode-line"><span>Bypass permissions</span><span class="mode-chip">Fable 5&nbsp; High</span></div>
+          <div class="composer"><span class="plus">+</span><span>Message the room…</span><span class="send">↑</span></div>
+        </div>
+      </article>
+
+      <article class="runtime-stage" data-runtime="codex" aria-label="Codex thinking power popup">
+        <header class="runtime-chrome">
+          <div class="runtime-mark" aria-hidden="true">C</div>
+          <div class="runtime-identity">
+            <div class="runtime-name">Codex</div>
+            <div class="runtime-provider">OpenAI</div>
+          </div>
+          <span class="live">live</span>
+        </header>
+
+        <div class="ambient" aria-hidden="true">
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+        </div>
+
+        <div class="thinking-popup" role="menu" aria-label="Codex thinking power">
+          <div class="popup-head">
+            <div>
+              <div class="popup-agent">Codex</div>
+              <div class="popup-provider">OpenAI</div>
+            </div>
+            <div class="model-chip">GPT-5.6-Sol</div>
+          </div>
+          <div class="popup-label"><span>Thinking power</span><span>model-aware</span></div>
+          <ul class="effort-list">
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max speed</span><span class="effort-hint">lightest reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Balanced</span><span class="effort-hint">speed + depth</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Think hard</span><span class="effort-hint">deeper reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Think harder</span><span class="effort-hint">long-horizon work</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max thinking</span><span class="effort-hint">deepest single agent</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="effort-name">Ultra</span><span class="effort-hint">max + native delegation</span></button></li>
+          </ul>
+        </div>
+
+        <div class="composer-wrap" aria-hidden="true">
+          <div class="mode-line"><span>Bypass permissions</span><span class="mode-chip">GPT-5.6-Sol&nbsp; Ultra</span></div>
+          <div class="composer"><span class="plus">+</span><span>Message the room…</span><span class="send">↑</span></div>
+        </div>
+      </article>
+
+      <article class="runtime-stage" data-runtime="hermes" aria-label="Hermes Agent thinking power popup">
+        <header class="runtime-chrome">
+          <div class="runtime-mark" aria-hidden="true">H</div>
+          <div class="runtime-identity">
+            <div class="runtime-name">Hermes Agent</div>
+            <div class="runtime-provider">ACP</div>
+          </div>
+          <span class="live">live</span>
+        </header>
+
+        <div class="ambient" aria-hidden="true">
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+          <div class="ghost-line"></div>
+        </div>
+
+        <div class="thinking-popup" role="menu" aria-label="Hermes Agent thinking power">
+          <div class="popup-head">
+            <div>
+              <div class="popup-agent">Hermes Agent</div>
+              <div class="popup-provider">ACP · model filtered</div>
+            </div>
+            <div class="model-chip">GLM-5.2</div>
+          </div>
+          <div class="popup-label"><span>Thinking power</span><span>provider-aware</span></div>
+          <ul class="effort-list">
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Off</span><span class="effort-hint">no model reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Minimal</span><span class="effort-hint">nearly instant</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max speed</span><span class="effort-hint">light reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Balanced</span><span class="effort-hint">speed + depth</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="effort-name">Think hard</span><span class="effort-hint">deeper reasoning</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Think harder</span><span class="effort-hint">long-horizon work</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max thinking</span><span class="effort-hint">provider maximum</span></button></li>
+            <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Ultra</span><span class="effort-hint">model’s top setting</span></button></li>
+          </ul>
+        </div>
+
+        <div class="composer-wrap" aria-hidden="true">
+          <div class="mode-line"><span>Normal</span><span class="mode-chip">GLM-5.2&nbsp; High</span></div>
+          <div class="composer"><span class="plus">+</span><span>Message the room…</span><span class="send">↑</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="contract">
+    <span><strong>No Cascade control.</strong> “Use Cascade” remains prompt intent and room-level orchestration.</span>
+    <span>Each popup shows only levels supported by its active runtime, provider, and model.</span>
+  </footer>
+</main>
+
+<script>
+  document.querySelectorAll('.effort-row').forEach((row) => {
+    row.addEventListener('click', () => {
+      const list = row.closest('.effort-list')
+      list.querySelectorAll('.effort-row').forEach((item) => item.removeAttribute('aria-current'))
+      row.setAttribute('aria-current', 'true')
+
+      const stage = row.closest('.runtime-stage')
+      const model = stage.querySelector('.model-chip').textContent.trim()
+      const effort = row.querySelector('.effort-name').textContent.trim()
+      stage.querySelector('.mode-chip').textContent = `${model} ${effort}`
+    })
+  })
+</script>
+</body>
+</html>
