@@ -293,12 +293,12 @@
   }
 
   .popup-head {
-    min-height: 49px;
+    min-height: 39px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 9px 12px;
+    padding: 8px 12px;
     border-bottom: 1px solid var(--line);
   }
 
@@ -310,22 +310,16 @@
   }
 
   .popup-provider {
-    margin-top: 3px;
+    margin-top: 2px;
     color: var(--faint);
     font-size: 8px;
     letter-spacing: .11em;
     text-transform: uppercase;
   }
 
-  .model-chip {
-    max-width: 136px;
-    overflow: hidden;
-    padding: 4px 6px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
+  .popup-scope {
     color: var(--faint);
     font-size: 8px;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
@@ -341,6 +335,75 @@
     font-weight: 500;
     letter-spacing: .13em;
     text-transform: uppercase;
+  }
+
+  .model-list {
+    margin: 0;
+    padding: 0 0 3px;
+    list-style: none;
+  }
+
+  .model-row {
+    width: 100%;
+    min-height: 38px;
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .15s ease;
+  }
+
+  .model-row:hover {
+    background: var(--float);
+  }
+
+  .model-row[aria-current="true"],
+  .model-row[aria-current="true"]:hover {
+    background: color-mix(in oklab, var(--pool) 8%, transparent);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, var(--pool) 20%, transparent),
+      0 0 18px color-mix(in oklab, var(--pool) 9%, transparent);
+  }
+
+  .model-name {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-soft);
+    font-size: 10px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .model-row[aria-current="true"] .model-name {
+    color: var(--pool-hi);
+  }
+
+  .model-row[aria-current="true"] .check {
+    color: var(--pool-hi);
+  }
+
+  .model-note {
+    max-width: 128px;
+    overflow: hidden;
+    color: var(--faint);
+    font-size: 8px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .menu-divider {
+    height: 1px;
+    margin: 4px 0;
+    background: var(--line);
   }
 
   .popup-label span:last-child {
@@ -359,7 +422,7 @@
   .effort-row {
     position: relative;
     width: 100%;
-    min-height: 43px;
+    min-height: 39px;
     display: grid;
     grid-template-columns: 16px minmax(82px, .48fr) minmax(0, 1fr);
     align-items: center;
@@ -445,6 +508,12 @@
     text-align: right;
   }
 
+  @media (min-width: 1051px) {
+    .runtime-stage[data-runtime="hermes"] .effort-row {
+      min-height: 36px;
+    }
+  }
+
   @media (max-width: 1050px) {
     .runtime-grid {
       grid-template-columns: 1fr;
@@ -513,7 +582,7 @@
     }
 
     .popup-head {
-      min-height: 46px;
+      min-height: 40px;
       padding: 8px 10px;
     }
 
@@ -530,6 +599,15 @@
       padding: 4px 10px;
     }
 
+    .model-row {
+      min-height: 44px;
+      grid-template-columns: 14px minmax(0, 1fr) auto;
+      gap: 6px;
+      padding: 4px 10px;
+    }
+
+    .model-name { font-size: 10.5px; }
+    .model-note { max-width: 150px; font-size: 8px; }
     .effort-name { font-size: 10.5px; }
     .effort-hint { font-size: 8px; }
 
@@ -593,8 +671,15 @@
               <div class="popup-agent">Claude Code</div>
               <div class="popup-provider">Anthropic</div>
             </div>
-            <div class="model-chip">Fable 5</div>
+            <div class="popup-scope">model + effort</div>
           </div>
+          <div class="popup-label"><span>Model</span><span>session models</span></div>
+          <ul class="model-list">
+            <li><button class="model-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="model-name">Fable 5</span><span class="model-note">most capable</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">Opus 4.8</span><span class="model-note">deep agent work</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">Sonnet 4.6</span><span class="model-note">balanced</span></button></li>
+          </ul>
+          <div class="menu-divider" aria-hidden="true"></div>
           <div class="popup-label"><span>Thinking power</span><span>5 native levels</span></div>
           <ul class="effort-list">
             <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max speed</span><span class="effort-hint">lightest reasoning</span></button></li>
@@ -634,8 +719,15 @@
               <div class="popup-agent">Codex</div>
               <div class="popup-provider">OpenAI</div>
             </div>
-            <div class="model-chip">GPT-5.6-Sol</div>
+            <div class="popup-scope">model + effort</div>
           </div>
+          <div class="popup-label"><span>Model</span><span>native catalog</span></div>
+          <ul class="model-list">
+            <li><button class="model-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="model-name">GPT-5.6-Sol</span><span class="model-note">deep review</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">GPT-5.6-Terra</span><span class="model-note">everyday coding</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">GPT-5.6-Luna</span><span class="model-note">quick tasks</span></button></li>
+          </ul>
+          <div class="menu-divider" aria-hidden="true"></div>
           <div class="popup-label"><span>Thinking power</span><span>model-aware</span></div>
           <ul class="effort-list">
             <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Max speed</span><span class="effort-hint">lightest reasoning</span></button></li>
@@ -676,8 +768,15 @@
               <div class="popup-agent">Hermes Agent</div>
               <div class="popup-provider">ACP · model filtered</div>
             </div>
-            <div class="model-chip">GLM-5.2</div>
+            <div class="popup-scope">recommended · browse all</div>
           </div>
+          <div class="popup-label"><span>Model</span><span>Nous Portal</span></div>
+          <ul class="model-list">
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">Luna</span><span class="model-note">routine work</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem" aria-current="true"><span class="check">✓</span><span class="model-name">Terra</span><span class="model-note">everyday coding</span></button></li>
+            <li><button class="model-row" type="button" role="menuitem"><span class="check">✓</span><span class="model-name">Sol</span><span class="model-note">deep review</span></button></li>
+          </ul>
+          <div class="menu-divider" aria-hidden="true"></div>
           <div class="popup-label"><span>Thinking power</span><span>provider-aware</span></div>
           <ul class="effort-list">
             <li><button class="effort-row" type="button" role="menuitem"><span class="check">✓</span><span class="effort-name">Off</span><span class="effort-hint">no model reasoning</span></button></li>
@@ -692,7 +791,7 @@
         </div>
 
         <div class="composer-wrap" aria-hidden="true">
-          <div class="mode-line"><span>Normal</span><span class="mode-chip">GLM-5.2&nbsp; High</span></div>
+          <div class="mode-line"><span>Normal</span><span class="mode-chip">Terra&nbsp; High</span></div>
           <div class="composer"><span class="plus">+</span><span>Message the room…</span><span class="send">↑</span></div>
         </div>
       </article>
@@ -706,16 +805,27 @@
 </main>
 
 <script>
+  function syncModeChip(stage) {
+    const model = stage.querySelector('.model-row[aria-current="true"] .model-name')?.textContent.trim()
+    const effort = stage.querySelector('.effort-row[aria-current="true"] .effort-name')?.textContent.trim()
+    if (model && effort) stage.querySelector('.mode-chip').textContent = `${model} ${effort}`
+  }
+
+  document.querySelectorAll('.model-row').forEach((row) => {
+    row.addEventListener('click', () => {
+      const list = row.closest('.model-list')
+      list.querySelectorAll('.model-row').forEach((item) => item.removeAttribute('aria-current'))
+      row.setAttribute('aria-current', 'true')
+      syncModeChip(row.closest('.runtime-stage'))
+    })
+  })
+
   document.querySelectorAll('.effort-row').forEach((row) => {
     row.addEventListener('click', () => {
       const list = row.closest('.effort-list')
       list.querySelectorAll('.effort-row').forEach((item) => item.removeAttribute('aria-current'))
       row.setAttribute('aria-current', 'true')
-
-      const stage = row.closest('.runtime-stage')
-      const model = stage.querySelector('.model-chip').textContent.trim()
-      const effort = row.querySelector('.effort-name').textContent.trim()
-      stage.querySelector('.mode-chip').textContent = `${model} ${effort}`
+      syncModeChip(row.closest('.runtime-stage'))
     })
   })
 </script>
