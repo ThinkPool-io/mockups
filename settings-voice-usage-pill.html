@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thinkpool — Settings voice usage pill</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-dim: hsl(212 26% 21%);
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { color-scheme: dark; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-weight: 500;
+    }
+
+    button, input { font: inherit; }
+
+    .topbar {
+      height: 65px;
+      border-bottom: 1px solid var(--color-line);
+      background: var(--color-raised);
+    }
+
+    .topbar-inner {
+      width: min(100% - 32px, 978px);
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wordmark {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.045em;
+    }
+
+    .wordmark span { color: var(--color-pool); }
+
+    .back {
+      color: var(--color-faint);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .back::first-letter { color: var(--color-pool); }
+
+    main {
+      width: min(100% - 32px, 624px);
+      margin: 0 auto;
+      padding: 40px 0 64px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid var(--color-line);
+      border-radius: 10px;
+      background: var(--color-surface);
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-row .eyebrow { margin: 0; }
+
+    .label {
+      margin: 0 0 8px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .body {
+      color: var(--color-muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 20px 0;
+      background: var(--color-line);
+    }
+
+    .input {
+      width: 100%;
+      height: 42px;
+      padding: 0 13px;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 8px;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-size: 14px;
+    }
+
+    .button {
+      min-height: 34px;
+      margin-top: 12px;
+      padding: 0 13px;
+      border: 1px solid var(--color-pool);
+      border-radius: 7px;
+      background: transparent;
+      color: var(--color-pool-hi);
+      font-size: 12px;
+    }
+
+    .partner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: color-mix(in oklab, var(--color-bg) 65%, transparent);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--color-pool-dim);
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .partner-copy { min-width: 0; flex: 1; }
+    .partner-name { font-size: 13px; color: var(--color-ink); }
+    .partner-meta { margin-top: 2px; font-family: var(--font-mono); font-size: 9px; color: var(--color-faint); }
+
+    .voice-pill {
+      position: relative;
+      min-width: 218px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+      padding: 0 12px 0 9px;
+      border: 1px solid color-mix(in oklab, var(--color-pool) 42%, var(--color-line));
+      border-radius: var(--radius-pill);
+      background: var(--color-float);
+      isolation: isolate;
+    }
+
+    .voice-pill::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0 auto 0 0;
+      width: 34%;
+      background: color-mix(in oklab, var(--color-pool) 14%, transparent);
+      border-right: 1px solid color-mix(in oklab, var(--color-pool) 30%, transparent);
+    }
+
+    .voice-icon {
+      width: 20px;
+      height: 20px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: color-mix(in oklab, var(--color-pool) 16%, transparent);
+      color: var(--color-pool-hi);
+    }
+
+    .voice-icon svg { width: 12px; height: 12px; }
+
+    .voice-label {
+      color: var(--color-ink-soft);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .voice-value {
+      margin-left: auto;
+      color: var(--color-ink);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .voice-detail {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .runtime-note {
+      padding-top: 16px;
+      border-top: 1px solid var(--color-line);
+      color: var(--color-muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .plan {
+      min-height: 127px;
+      padding: 16px;
+      border: 1px solid var(--color-line);
+      border-radius: 10px;
+    }
+
+    .plan.current {
+      border-color: var(--color-pool);
+      background: color-mix(in oklab, var(--color-pool) 6%, transparent);
+      box-shadow: 0 0 22px color-mix(in oklab, var(--color-pool) 8%, transparent);
+    }
+
+    .plan-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+    }
+
+    .plan-name { color: var(--color-ink); font-size: 15px; font-weight: 600; }
+    .current .plan-name { color: var(--color-pool-hi); }
+    .plan-price { margin-left: auto; color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; }
+
+    .chip {
+      padding: 3px 7px;
+      border-radius: 5px;
+      background: color-mix(in oklab, var(--color-pool) 15%, transparent);
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .feature {
+      display: flex;
+      gap: 6px;
+      margin-top: 7px;
+      color: var(--color-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .check { color: var(--color-pool); }
+
+    @media (max-width: 560px) {
+      .topbar-inner, main { width: calc(100% - 24px); }
+      main { padding: 24px 0 40px; }
+      .stack { gap: 16px; }
+      .card { padding: 20px; }
+      .eyebrow-row { align-items: stretch; flex-direction: column; gap: 12px; }
+      .voice-pill { width: 100%; min-width: 0; height: 38px; }
+      .voice-detail { flex-direction: column; gap: 2px; }
+      .plans { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="wordmark">think<span>pool</span></div>
+      <a class="back" href="#" aria-label="Back to Code">← Code</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="stack">
+      <section class="card" aria-labelledby="profile-title">
+        <h2 class="eyebrow" id="profile-title">Profile</h2>
+        <p class="label">Email&nbsp;&nbsp; <span style="color:var(--color-muted)">Unverified</span></p>
+        <div class="body" style="color:var(--color-ink)">maxgorelchenko@gmail.com</div>
+        <div class="divider"></div>
+        <label class="label" for="display-name">Display name</label>
+        <input class="input" id="display-name" value="Maks" readonly>
+        <button class="button" type="button">Save name</button>
+      </section>
+
+      <section class="card" aria-labelledby="partners-title">
+        <h2 class="eyebrow" id="partners-title">Partners</h2>
+        <p class="body" style="margin:0 0 12px">People paired with this account. Invitations and relationship controls live here.</p>
+        <button class="button" type="button" style="margin:0 0 20px">Add partner</button>
+        <p class="label">Current partners</p>
+        <div class="partner">
+          <div class="avatar">CO</div>
+          <div class="partner-copy">
+            <div class="partner-name">Conrad</div>
+            <div class="partner-meta">Email unavailable</div>
+          </div>
+          <span aria-hidden="true" style="color:var(--color-faint)">⊙</span>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="usage-title">
+        <div class="eyebrow-row">
+          <h2 class="eyebrow" id="usage-title">AI usage</h2>
+          <div class="voice-pill" role="meter" aria-label="Voice usage: 1 hour 42 minutes of 5 hours used" aria-valuemin="0" aria-valuemax="300" aria-valuenow="102">
+            <span class="voice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 15.5a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v5.5a4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="voice-label">Voice</span>
+            <span class="voice-value">1h 42m / 5h</span>
+          </div>
+        </div>
+        <div class="voice-detail">
+          <span>Resets 1 Aug</span>
+          <span>Up to 5 transcriptions per minute</span>
+        </div>
+        <p class="runtime-note">Usage is temporarily unavailable. It will refresh when this tab is active again.</p>
+      </section>
+
+      <section class="card" aria-labelledby="plan-title">
+        <h2 class="eyebrow" id="plan-title">Plan</h2>
+        <div class="plans">
+          <div class="plan">
+            <div class="plan-head">
+              <span class="plan-name">Free</span>
+              <span class="plan-price">Free</span>
+            </div>
+            <div class="feature"><span class="check">✓</span><span>1 active hosted room</span></div>
+            <div class="feature"><span class="check">✓</span><span>Dispatch — up to 3 active worker lanes per room</span></div>
+          </div>
+          <div class="plan current">
+            <div class="plan-head">
+              <span class="plan-name">Plus</span>
+              <span class="chip">Your plan</span>
+              <span class="plan-price">€5/mo</span>
+            </div>
+            <div class="feature"><span class="check">✓</span><span>No hosted-room count cap</span></div>
+            <div class="feature"><span class="check">✓</span><span>Dispatch — up to 6 active worker lanes per room</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
