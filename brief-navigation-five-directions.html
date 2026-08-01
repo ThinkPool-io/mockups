@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool | Five lighter Brief navigation patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --k-bg: hsl(212 23% 5%);
+    --k-card: hsl(212 22% 3%);
+    --k-panel-7: hsl(212 13% 7%);
+    --k-panel-9: hsl(212 13% 9%);
+    --k-panel-12: hsl(212 13% 12%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --whisper: hsl(218 60% 72%);
+    --whisper-ink: hsl(212 23% 5%);
+    --viewer: hsl(163 28% 54%);
+    --positive: hsl(152 40% 58%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--k-bg); }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background: var(--k-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    padding: 28px 24px 36px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  summary { font: inherit; }
+
+  button { cursor: pointer; }
+
+  button:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--whisper);
+    outline-offset: 2px;
+  }
+
+  svg { display: block; }
+
+  .shell {
+    width: min(1392px, 100%);
+    margin: 0 auto;
+  }
+
+  .mast {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 480px);
+    align-items: end;
+    gap: 42px;
+    padding: 0 2px 22px;
+  }
+
+  .eyebrow,
+  .option-no,
+  .micro-label,
+  .meta,
+  .brief-label,
+  .proof,
+  .footer {
+    font-family: var(--font-mono);
+  }
+
+  .eyebrow {
+    margin: 0 0 8px;
+    color: var(--whisper);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    max-width: 780px;
+    margin: 0;
+    color: var(--ink);
+    font-size: clamp(32px, 3.4vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .lede {
+    max-width: 760px;
+    margin: 13px 0 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  .finding {
+    border-left: 2px solid color-mix(in oklab, var(--whisper) 50%, var(--line));
+    padding: 2px 0 2px 16px;
+  }
+
+  .finding-label {
+    margin: 0 0 7px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .finding p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.55;
+  }
+
+  .finding strong {
+    color: var(--whisper);
+    font-weight: 600;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .concept {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--k-panel-7);
+  }
+
+  .concept.recommended {
+    border-color: color-mix(in oklab, var(--whisper) 42%, var(--line));
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--whisper) 11%, transparent);
+  }
+
+  .concept-head {
+    min-height: 128px;
+    padding: 15px 16px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .option-no {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 9px;
+    color: var(--faint);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .recommended .option-no { color: var(--whisper); }
+
+  .pick {
+    border: 1px solid color-mix(in oklab, var(--whisper) 36%, var(--line));
+    border-radius: 999px;
+    padding: 3px 7px;
+    color: var(--whisper);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .concept h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+
+  .concept-copy {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    line-height: 1.55;
+  }
+
+  .phone {
+    position: relative;
+    min-height: 488px;
+    overflow: hidden;
+    background: var(--k-bg);
+    font-family: var(--font-mono);
+  }
+
+  .terminal-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px 48px;
+    height: 52px;
+    border-bottom: 1px solid var(--line);
+    background: var(--k-card);
+  }
+
+  .terminal-name,
+  .terminal-action {
+    display: flex;
+    align-items: center;
+  }
+
+  .terminal-name {
+    min-width: 0;
+    gap: 9px;
+    padding: 0 12px;
+    color: var(--ink-soft);
+    font-size: 10px;
+  }
+
+  .terminal-name span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .back { color: var(--whisper); font-size: 18px; }
+
+  .terminal-action {
+    justify-content: center;
+    border-left: 1px solid var(--line);
+    color: var(--faint);
+  }
+
+  .terminal-action.active { color: var(--whisper); }
+
+  .timeline {
+    position: relative;
+    min-height: 360px;
+    padding: 14px 12px 70px;
+  }
+
+  .whisper-line {
+    border-left: 2px solid color-mix(in oklab, var(--viewer) 70%, transparent);
+    background: color-mix(in oklab, var(--viewer) 10%, var(--k-panel-7));
+    padding: 7px 9px;
+    color: var(--ink-soft);
+    font-size: 9px;
+    font-style: italic;
+    line-height: 1.55;
+  }
+
+  .whisper-line strong {
+    color: var(--viewer);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .date-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 14px 0 10px;
+    color: var(--faint);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .brief-card {
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 11px;
+    background: var(--k-panel-7);
+  }
+
+  .brief-top {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: start;
+    padding: 11px;
+  }
+
+  .brief-icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--whisper) 50%, var(--line));
+    border-radius: 8px;
+    color: var(--whisper);
+  }
+
+  .brief-label {
+    margin-bottom: 5px;
+    color: var(--whisper);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .brief-title {
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .meta {
+    margin-top: 5px;
+    color: var(--faint);
+    font-size: 7.5px;
+  }
+
+  .quiet-button,
+  .pill,
+  .menu-row,
+  .shelf,
+  .index-chip,
+  .lens {
+    min-height: 44px;
+    border: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  .quiet-button {
+    display: grid;
+    min-width: 44px;
+    place-items: center;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .composer {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42px 42px;
+    gap: 6px;
+    align-items: center;
+    min-height: 54px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--k-bg);
+    padding: 5px;
+  }
+
+  .composer-copy {
+    overflow: hidden;
+    padding-left: 6px;
+    color: var(--faint);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .composer-button {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--whisper) 45%, var(--line));
+    border-radius: 9px;
+    background: color-mix(in oklab, var(--whisper) 8%, var(--k-panel-9));
+    color: var(--whisper);
+  }
+
+  .composer-button.send {
+    border-color: var(--whisper);
+    background: var(--whisper);
+    color: var(--whisper-ink);
+  }
+
+  .shelf {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    background: var(--k-panel-7);
+    padding: 0 13px;
+    font-size: 9px;
+  }
+
+  .shelf strong { color: var(--whisper); font-weight: 500; }
+
+  details { position: relative; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+
+  .popover {
+    position: absolute;
+    z-index: 4;
+    top: calc(100% + 6px);
+    right: 10px;
+    left: 10px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--k-panel-9);
+    box-shadow: 0 18px 46px color-mix(in oklab, var(--k-card) 78%, transparent);
+  }
+
+  .menu-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+    padding: 0 12px;
+    font-size: 9px;
+    text-align: left;
+  }
+
+  .menu-row:last-child { border-bottom: 0; }
+  .menu-row.active { color: var(--whisper); }
+  .menu-row small { color: var(--faint); font-size: 8px; }
+
+  .date-index {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 13px 0 9px;
+  }
+
+  .date-index .date-line { margin: 0; }
+
+  .index-chip,
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--k-panel-7);
+    padding: 0 11px;
+    color: var(--whisper);
+    font-size: 8px;
+    white-space: nowrap;
+  }
+
+  .index-popover { top: calc(100% + 4px); right: 0; left: auto; width: min(250px, calc(100vw - 72px)); }
+
+  .drawer-handle {
+    position: absolute;
+    z-index: 3;
+    top: 114px;
+    right: 0;
+    display: flex;
+    width: 40px;
+    min-height: 94px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklab, var(--whisper) 32%, var(--line));
+    border-right: 0;
+    border-radius: 10px 0 0 10px;
+    background: var(--k-panel-9);
+    color: var(--whisper);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    writing-mode: vertical-rl;
+  }
+
+  .drawer-preview {
+    position: absolute;
+    z-index: 4;
+    top: 54px;
+    right: 0;
+    bottom: 70px;
+    width: 80%;
+    border-left: 1px solid var(--line-strong);
+    background: var(--k-panel-7);
+    box-shadow: -18px 0 48px color-mix(in oklab, var(--k-card) 72%, transparent);
+    transform: translateX(calc(100% - 40px));
+  }
+
+  .drawer-sheet {
+    display: none;
+    height: 100%;
+    padding: 15px 12px;
+  }
+
+  .drawer-preview:hover,
+  .drawer-preview:focus-within { transform: translateX(0); }
+  .drawer-preview:hover .drawer-sheet,
+  .drawer-preview:focus-within .drawer-sheet { display: block; }
+  .drawer-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 13px;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .drawer-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .drawer-tabs .pill { min-height: 34px; padding: 0 9px; color: var(--faint); }
+  .drawer-tabs .pill.active { color: var(--whisper); }
+
+  .drawer-item {
+    border-top: 1px solid var(--line);
+    padding: 11px 2px;
+    color: var(--ink-soft);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .drawer-item small {
+    display: block;
+    margin-top: 5px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 8px;
+  }
+
+  .tray {
+    position: absolute;
+    z-index: 4;
+    right: 10px;
+    bottom: 70px;
+    left: 10px;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--whisper) 31%, var(--line));
+    border-radius: 11px;
+    background: var(--k-panel-9);
+    box-shadow: 0 16px 44px color-mix(in oklab, var(--k-card) 76%, transparent);
+  }
+
+  .tray-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 43px;
+    border-bottom: 1px solid var(--line);
+    padding: 0 12px;
+    color: var(--whisper);
+    font-size: 9px;
+  }
+
+  .tray .menu-row { min-height: 42px; }
+
+  .lens-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 44px;
+    padding: 5px 11px 0;
+  }
+
+  .lens {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--k-panel-7);
+    padding: 0 12px;
+    color: var(--faint);
+    font-size: 8.5px;
+  }
+
+  .lens strong { color: var(--whisper); font-weight: 500; }
+
+  .lens-popover {
+    top: 50px;
+    right: 11px;
+    left: auto;
+    width: 230px;
+  }
+
+  .proof {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    border-top: 1px solid var(--line);
+    padding: 0 15px;
+    color: var(--faint);
+    font-size: 8px;
+    line-height: 1.4;
+  }
+
+  .proof strong { color: var(--muted); font-weight: 500; }
+
+  .concept.wide { grid-column: span 2; }
+  .concept.wide .phone { min-height: 420px; }
+
+  .footer {
+    margin: 30px 0 0;
+    color: var(--faint);
+    font-size: 9px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  @media (max-width: 1080px) {
+    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .concept.wide { grid-column: auto; }
+  }
+
+  @media (max-width: 720px) {
+    body { padding: 22px 12px 28px; }
+    .mast { grid-template-columns: 1fr; gap: 18px; padding-bottom: 18px; }
+    h1 { font-size: 34px; }
+    .board { grid-template-columns: 1fr; gap: 12px; }
+    .concept-head { min-height: 0; }
+    .phone { min-height: 500px; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="mast">
+    <div>
+      <p class="eyebrow">Brief navigation · five directions</p>
+      <h1>Make Briefs available, not ambient.</h1>
+      <p class="lede">Every option removes the four-way filter rail, keeps the terminal header exactly as shipped, and moves iPhone setup behind a secondary action.</p>
+    </div>
+    <aside class="finding">
+      <p class="finding-label">Observed in the real route</p>
+      <p>The current filter strip takes a full content row before the timeline begins. <strong>Brief browsing is occasional</strong>, so its resting weight should be closer to metadata than navigation.</p>
+    </aside>
+  </header>
+
+  <section class="board" aria-label="Five Brief navigation options">
+    <article class="concept">
+      <header class="concept-head">
+        <div class="option-no"><span>01 · Accordion shelf</span></div>
+        <h2>One quiet “Briefs” shelf</h2>
+        <p class="concept-copy">A single 44px shelf replaces four filters. Open it only when browsing saved Briefs. Setup lives at the bottom of its menu.</p>
+      </header>
+      <div class="phone">
+        <div class="terminal-row">
+          <div class="terminal-name"><span class="back">‹</span><span>Terminal 3</span></div>
+          <div class="terminal-action active" aria-label="Side Chat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5A7.5 7.5 0 0 1 18.6 11c0 4.1-3.3 7.5-7.5 7.5-1.1 0-2.2-.2-3.1-.7L4 19l1.2-3.7A7.4 7.4 0 0 1 5 6.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/></svg>
+          </div>
+          <div class="terminal-action" aria-label="Settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+          </div>
+        </div>
+        <details>
+          <summary class="shelf"><span><strong>Briefs</strong> · 1 saved</span><span>⌄</span></summary>
+          <div class="popover">
+            <button class="menu-row active"><span>All activity</span><small>1 Brief</small></button>
+            <button class="menu-row"><span>Inbox</span><small>1</small></button>
+            <button class="menu-row"><span>Pinned</span><small>0</small></button>
+            <button class="menu-row"><span>Archive</span><small>0</small></button>
+            <button class="menu-row"><span>Capture from iPhone</span><small>Setup</small></button>
+          </div>
+        </details>
+        <div class="timeline">
+          <div class="whisper-line"><strong>Maks</strong> Keep the notebook available to agents, but quiet for people.</div>
+          <div class="date-line"><span>1 August 2026</span></div>
+          <div class="brief-card">
+            <div class="brief-top">
+              <div class="brief-icon">≋</div>
+              <div><div class="brief-label">Brief</div><div class="brief-title">Simplify the Brief notebook controls</div><div class="meta">Maks · 05:09 · Saved</div></div>
+              <button class="quiet-button" aria-label="Brief actions">•••</button>
+            </div>
+          </div>
+        </div>
+        <div class="composer"><span class="composer-copy">Whisper to Conrad…</span><button class="composer-button" aria-label="Create Brief">≋</button><button class="composer-button send" aria-label="Send">→</button></div>
+      </div>
+      <div class="proof"><span>Resting cost</span><strong>44px, one label</strong></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head">
+        <div class="option-no"><span>02 · Date-line index</span></div>
+        <h2>Briefs live in the timeline</h2>
+        <p class="concept-copy">No top control at all. A small count appears beside the date only when that period contains Briefs. Its menu handles filters and setup.</p>
+      </header>
+      <div class="phone">
+        <div class="terminal-row">
+          <div class="terminal-name"><span class="back">‹</span><span>Terminal 3</span></div>
+          <div class="terminal-action active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5A7.5 7.5 0 0 1 18.6 11c0 4.1-3.3 7.5-7.5 7.5-1.1 0-2.2-.2-3.1-.7L4 19l1.2-3.7A7.4 7.4 0 0 1 5 6.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/></svg></div>
+          <div class="terminal-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+        </div>
+        <div class="timeline">
+          <div class="whisper-line"><strong>Maks</strong> Ideas should sit naturally beside the conversation.</div>
+          <div class="date-index">
+            <div class="date-line"><span>1 August 2026</span></div>
+            <details>
+              <summary class="index-chip">≋ 1 Brief</summary>
+              <div class="popover index-popover">
+                <button class="menu-row active"><span>Show this day</span><small>1</small></button>
+                <button class="menu-row"><span>Browse all Briefs</span><small>1</small></button>
+                <button class="menu-row"><span>Pinned and archived</span><small>0</small></button>
+                <button class="menu-row"><span>Capture from iPhone</span><small>Setup</small></button>
+              </div>
+            </details>
+          </div>
+          <div class="brief-card">
+            <div class="brief-top">
+              <div class="brief-icon">≋</div>
+              <div><div class="brief-label">Brief</div><div class="brief-title">Simplify the Brief notebook controls</div><div class="meta">Maks · 05:09 · Saved</div></div>
+              <button class="quiet-button" aria-label="Brief actions">•••</button>
+            </div>
+          </div>
+        </div>
+        <div class="composer"><span class="composer-copy">Whisper to Conrad…</span><button class="composer-button">≋</button><button class="composer-button send">→</button></div>
+      </div>
+      <div class="proof"><span>Resting cost</span><strong>Zero extra rows</strong></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head">
+        <div class="option-no"><span>03 · Edge drawer</span></div>
+        <h2>A notebook beside the chat</h2>
+        <p class="concept-copy">The timeline stays untouched. A slim edge tab opens a dedicated Brief list. Setup becomes a drawer utility, not global navigation.</p>
+      </header>
+      <div class="phone">
+        <div class="terminal-row">
+          <div class="terminal-name"><span class="back">‹</span><span>Terminal 3</span></div>
+          <div class="terminal-action active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5A7.5 7.5 0 0 1 18.6 11c0 4.1-3.3 7.5-7.5 7.5-1.1 0-2.2-.2-3.1-.7L4 19l1.2-3.7A7.4 7.4 0 0 1 5 6.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/></svg></div>
+          <div class="terminal-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+        </div>
+        <div class="timeline">
+          <div class="whisper-line"><strong>Maks</strong> This keeps the notebook feeling like a second layer.</div>
+          <div class="date-line"><span>1 August 2026</span></div>
+          <div class="brief-card">
+            <div class="brief-top">
+              <div class="brief-icon">≋</div>
+              <div><div class="brief-label">Brief</div><div class="brief-title">Simplify the Brief notebook controls</div><div class="meta">Maks · 05:09 · Saved</div></div>
+              <button class="quiet-button">•••</button>
+            </div>
+          </div>
+        </div>
+        <div class="drawer-preview" tabindex="0">
+          <span class="drawer-handle">Briefs · 1</span>
+          <div class="drawer-sheet">
+            <div class="drawer-title"><span>Briefs</span><span style="color:var(--faint);font-family:var(--font-mono);font-size:9px">•••</span></div>
+            <div class="drawer-tabs"><button class="pill active">Inbox</button><button class="pill">Pinned</button><button class="pill">Archive</button></div>
+            <div class="drawer-item">Simplify the Brief notebook controls<small>Today · 05:09 · Saved</small></div>
+            <button class="menu-row" style="margin-top:12px;border:1px solid var(--line);border-radius:8px"><span>Capture from iPhone</span><small>Setup</small></button>
+          </div>
+        </div>
+        <div class="composer"><span class="composer-copy">Whisper to Conrad…</span><button class="composer-button">≋</button><button class="composer-button send">→</button></div>
+      </div>
+      <div class="proof"><span>Resting cost</span><strong>40px edge handle</strong></div>
+    </article>
+
+    <article class="concept recommended wide">
+      <header class="concept-head">
+        <div class="option-no"><span>04 · Composer pocket</span><span class="pick">Recommended</span></div>
+        <h2>The Brief button becomes its home</h2>
+        <p class="concept-copy">One existing button owns record, browse, and iPhone setup. Nothing new is permanently added above the timeline.</p>
+      </header>
+      <div class="phone">
+        <div class="terminal-row">
+          <div class="terminal-name"><span class="back">‹</span><span>Terminal 3</span></div>
+          <div class="terminal-action active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5A7.5 7.5 0 0 1 18.6 11c0 4.1-3.3 7.5-7.5 7.5-1.1 0-2.2-.2-3.1-.7L4 19l1.2-3.7A7.4 7.4 0 0 1 5 6.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/></svg></div>
+          <div class="terminal-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+        </div>
+        <div class="timeline">
+          <div class="whisper-line"><strong>Maks</strong> Tap the Brief button when you want the notebook. Otherwise it disappears.</div>
+          <div class="date-line"><span>1 August 2026</span></div>
+          <div class="brief-card">
+            <div class="brief-top">
+              <div class="brief-icon">≋</div>
+              <div><div class="brief-label">Brief</div><div class="brief-title">Simplify the Brief notebook controls</div><div class="meta">Maks · 05:09 · Saved</div></div>
+              <button class="quiet-button">•••</button>
+            </div>
+          </div>
+        </div>
+        <div class="tray" aria-label="Brief menu shown after tapping the composer Brief button">
+          <div class="tray-head"><span>Briefs</span><span>1 saved</span></div>
+          <button class="menu-row active"><span>Record a Brief</span><small>Voice</small></button>
+          <button class="menu-row"><span>Browse saved Briefs</span><small>1</small></button>
+          <button class="menu-row"><span>Capture from iPhone</span><small>Setup</small></button>
+        </div>
+        <div class="composer"><span class="composer-copy">Whisper to Conrad…</span><button class="composer-button" aria-label="Brief menu">≋</button><button class="composer-button send">→</button></div>
+      </div>
+      <div class="proof"><span>Resting cost</span><strong>No new UI</strong></div>
+    </article>
+
+    <article class="concept">
+      <header class="concept-head">
+        <div class="option-no"><span>05 · View lens</span></div>
+        <h2>One compact view control</h2>
+        <p class="concept-copy">A small “Everything” lens replaces the full rail. It stays at content level and opens one menu for saved views and setup.</p>
+      </header>
+      <div class="phone">
+        <div class="terminal-row">
+          <div class="terminal-name"><span class="back">‹</span><span>Terminal 3</span></div>
+          <div class="terminal-action active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6.5A7.5 7.5 0 0 1 18.6 11c0 4.1-3.3 7.5-7.5 7.5-1.1 0-2.2-.2-3.1-.7L4 19l1.2-3.7A7.4 7.4 0 0 1 5 6.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01" stroke-linecap="round"/></svg></div>
+          <div class="terminal-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg></div>
+        </div>
+        <details>
+          <summary class="lens-wrap"><span class="lens">View · <strong>Everything</strong> ⌄</span></summary>
+          <div class="popover lens-popover">
+            <button class="menu-row active"><span>Everything</span><small>✓</small></button>
+            <button class="menu-row"><span>Brief inbox</span><small>1</small></button>
+            <button class="menu-row"><span>Pinned Briefs</span><small>0</small></button>
+            <button class="menu-row"><span>Archive</span><small>0</small></button>
+            <button class="menu-row"><span>Capture from iPhone</span><small>Setup</small></button>
+          </div>
+        </details>
+        <div class="timeline" style="padding-top:8px">
+          <div class="whisper-line"><strong>Maks</strong> A filter should read like a temporary lens, not permanent navigation.</div>
+          <div class="date-line"><span>1 August 2026</span></div>
+          <div class="brief-card">
+            <div class="brief-top">
+              <div class="brief-icon">≋</div>
+              <div><div class="brief-label">Brief</div><div class="brief-title">Simplify the Brief notebook controls</div><div class="meta">Maks · 05:09 · Saved</div></div>
+              <button class="quiet-button">•••</button>
+            </div>
+          </div>
+        </div>
+        <div class="composer"><span class="composer-copy">Whisper to Conrad…</span><button class="composer-button">≋</button><button class="composer-button send">→</button></div>
+      </div>
+      <div class="proof"><span>Resting cost</span><strong>One 44px chip</strong></div>
+    </article>
+  </section>
+
+  <p class="footer">All five preserve the shipped terminal header and keep the Brief cards available to room agents. Option 04 spends zero new space until the person asks for Briefs.</p>
+</main>
+</body>
+</html>
