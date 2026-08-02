@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>thinkpool · full-access early access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-cobalt: #1a6ef4;
+      --color-pool-cobalt-ink: #2e78ff;
+      --color-positive: hsl(152 32% 60%);
+      --color-mind-a: hsl(145 40% 58%);
+      --color-mind-b: hsl(218 60% 72%);
+      --color-k-bg: #0a0d10;
+      --color-k-card: #06090c;
+      --color-k-ink-inv: #1a1410;
+      --color-k-pool: hsl(201 78% 64%);
+      --color-k-agent: var(--color-k-pool);
+      --color-k-ok: hsl(152 40% 58%);
+      --color-k-bypass: hsl(352 84% 64%);
+      --color-k-run: #3ad07f;
+      --color-k-slate: #6b7681;
+      --color-k-slate2: #8b96a2;
+      --color-k-txt: #d8dee6;
+      --color-k-hair: rgba(255, 255, 255, 0.08);
+      --color-k-hair-hi: rgba(255, 255, 255, 0.15);
+      --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+      --font-identity: "Space Grotesk", "Hanken Grotesk", system-ui, sans-serif;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--color-bg); }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-feature-settings: "ss01";
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { color: inherit; font: inherit; }
+    ::selection { background: color-mix(in oklab, var(--color-pool) 32%, transparent); }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid color-mix(in oklab, var(--color-line) 70%, transparent);
+      background: color-mix(in oklab, var(--color-bg) 80%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .nav-inner {
+      width: min(100% - 48px, 1024px);
+      height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-group { display: flex; min-width: 0; align-items: center; gap: 14px; }
+    .wordmark {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: baseline;
+      border-radius: 4px;
+      font-family: var(--font-sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .wordmark-pool, .brand-inline-pool { color: var(--color-pool-cobalt); }
+    .nav-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding-left: 14px;
+      border-left: 1px solid var(--color-line);
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--color-k-run);
+      box-shadow: 0 0 7px color-mix(in oklab, var(--color-k-run) 72%, transparent);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 6px; }
+    .nav-link, .nav-cta {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1;
+    }
+    .nav-link { padding: 0 10px; color: var(--color-muted); }
+    .nav-cta {
+      padding: 0 16px;
+      border: 1px solid var(--color-pool-cobalt);
+      color: var(--color-pool-hi);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .nav-link:hover { color: var(--color-ink); }
+    .nav-cta:hover { background: color-mix(in oklab, var(--color-pool) 12%, transparent); }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -265px;
+      left: 50%;
+      width: 830px;
+      height: 680px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(closest-side, color-mix(in oklab, var(--color-pool-cobalt) 20%, transparent), transparent);
+      filter: blur(92px);
+      opacity: 0.56;
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      width: min(100% - 64px, 1152px);
+      margin: 0 auto;
+      padding: 64px 0 32px;
+    }
+    .thesis { max-width: 810px; margin: 0 auto; text-align: center; }
+    .drop-wrap {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 24px;
+      display: grid;
+      place-items: center;
+      color: var(--color-pool-cobalt-ink);
+    }
+    .ripple {
+      position: absolute;
+      width: 176px;
+      height: 176px;
+      border: 1px solid color-mix(in oklab, var(--color-pool-cobalt) 18%, transparent);
+      border-radius: 50%;
+      animation: ripple 8s var(--ease-settle) infinite;
+    }
+    .ripple:nth-child(2) { animation-delay: -4s; }
+    .drop-icon { position: relative; z-index: 1; width: 30px; height: 30px; }
+    .eyebrow {
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-block-start: 0; }
+    h1 {
+      margin: 24px 0 0;
+      font-family: var(--font-display);
+      font-size: clamp(43px, 7vw, 80px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+    h1 .accent { color: var(--color-pool-cobalt-ink); }
+    .lede {
+      max-width: 700px;
+      margin: 24px auto 0;
+      color: var(--color-muted);
+      font-size: clamp(16px, 2.1vw, 19px);
+      line-height: 1.62;
+      text-wrap: pretty;
+    }
+
+    .access-ledger {
+      width: min(100%, 1088px);
+      min-height: 68px;
+      margin: 40px auto 0;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--color-line);
+      border-top-color: var(--color-pool-cobalt);
+      border-radius: 10px;
+      background: color-mix(in oklab, var(--color-raised) 88%, transparent);
+      box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-pool-cobalt) 34%, transparent);
+      text-align: left;
+    }
+    .ledger-status, .ledger-main, .ledger-price {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+    .ledger-status {
+      gap: 9px;
+      border-right: 1px solid var(--color-line);
+      color: var(--color-k-run);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .ledger-main {
+      justify-content: center;
+      color: var(--color-ink-soft);
+      font-family: var(--font-display);
+      font-size: 23px;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+    .ledger-price {
+      gap: 10px;
+      justify-content: flex-end;
+      border-left: 1px solid var(--color-line);
+      white-space: nowrap;
+    }
+    .ledger-price strong {
+      color: var(--color-pool-cobalt-ink);
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .ledger-price span {
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .proof { margin-top: 32px; }
+    .console {
+      overflow: hidden;
+      border: 1px solid var(--color-k-hair-hi);
+      border-radius: 14px;
+      background: var(--color-k-bg);
+      box-shadow: 0 22px 60px -30px rgba(0, 0, 0, 0.9);
+    }
+    .tabs {
+      min-height: 38px;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid var(--color-k-hair);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .tab-set { min-width: 0; flex: 1; display: flex; overflow: hidden; padding-left: 6px; }
+    .tab {
+      position: relative;
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 7px;
+      color: var(--color-k-slate2);
+      white-space: nowrap;
+    }
+    .tab.active { color: var(--color-ink); }
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      right: 6px;
+      bottom: 0;
+      left: 6px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--color-k-pool);
+      box-shadow: 0 0 6px color-mix(in oklab, var(--color-k-pool) 60%, transparent);
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--color-k-run);
+      box-shadow: 0 0 5px var(--color-k-run);
+    }
+    .caret { width: 8px; height: 5px; color: var(--color-k-slate2); opacity: 0.8; }
+    .tab-cell {
+      min-width: 36px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border-left: 1px solid var(--color-k-hair);
+      color: var(--color-k-slate2);
+    }
+    .session-name {
+      display: flex;
+      align-items: center;
+      padding: 0 13px;
+      border-left: 1px solid var(--color-k-hair);
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .session-name strong { color: var(--color-k-pool); }
+    .ensemble {
+      min-height: 36px;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      border-bottom: 1px solid var(--color-k-hair);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .ensemble-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+    .hex { width: 16px; height: 16px; color: var(--color-k-pool); }
+    .lane {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border-left: 1px solid var(--color-k-hair);
+      color: var(--color-muted);
+    }
+    .lane-model { color: var(--color-k-pool); }
+    .spinner {
+      width: 12px;
+      height: 12px;
+      flex: 0 0 auto;
+      border: 1.5px solid color-mix(in oklab, var(--color-k-pool) 25%, transparent);
+      border-top-color: var(--color-k-pool);
+      border-radius: 50%;
+    }
+    .transcript {
+      position: relative;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .turn {
+      margin: 0 -12px;
+      padding: 4px 14px 4px 12px;
+      border-left: 2px solid;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .turn.whisper {
+      border-color: var(--color-k-hair-hi);
+      color: var(--color-k-slate2);
+      font-style: italic;
+    }
+    .turn.conrad {
+      border-color: var(--color-mind-b);
+      background: linear-gradient(90deg, color-mix(in oklab, var(--color-mind-b) 12%, transparent), transparent 70%);
+    }
+    .turn.maks {
+      border-color: var(--color-mind-a);
+      background: linear-gradient(90deg, color-mix(in oklab, var(--color-mind-a) 12%, transparent), transparent 70%);
+    }
+    .turn.pool {
+      border-color: var(--color-pool-cobalt);
+      background: linear-gradient(90deg, color-mix(in oklab, var(--color-pool-cobalt) 13%, transparent), transparent 70%);
+    }
+    .turn .glyph { display: inline-block; width: 15px; margin-right: 1px; text-align: center; }
+    .turn .name {
+      margin-right: 6px;
+      font-family: var(--font-identity);
+      font-weight: 600;
+      font-style: normal;
+    }
+    .turn.conrad .name { color: var(--color-mind-b); }
+    .turn.maks .name { color: var(--color-mind-a); }
+    .turn.pool .name, .pool-token { color: var(--color-pool-cobalt-ink); }
+    .turn .text { color: var(--color-ink-soft); font-family: var(--font-sans); font-style: normal; }
+    .turn.whisper .text { color: var(--color-k-slate2); font-style: italic; }
+    .turn .time {
+      margin-left: 6px;
+      color: var(--color-k-slate);
+      font-size: 9px;
+      font-style: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .narration {
+      display: flex;
+      gap: 8px;
+      padding: 8px 2px 5px;
+      color: var(--color-ink-soft);
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .agent-glow {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--color-k-pool);
+      box-shadow: 0 0 7px var(--color-k-pool);
+    }
+    .tool-card {
+      margin-top: 5px;
+      overflow: hidden;
+      border: 1px solid color-mix(in oklab, var(--color-k-pool) 22%, var(--color-k-hair));
+      border-radius: 8px;
+      background: var(--color-k-card);
+      color: var(--color-k-slate2);
+    }
+    .tool-row {
+      min-height: 33px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+    .tool-row strong { color: var(--color-k-pool); }
+    .tool-meta { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tool-ok { color: var(--color-k-ok); white-space: nowrap; }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 12px 4px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    .permissions { color: var(--color-k-bypass); }
+    .model { min-width: 0; margin-left: auto; overflow: hidden; color: var(--color-k-pool); text-overflow: ellipsis; white-space: nowrap; }
+    .model span { margin-left: 0.3em; color: var(--color-faint); }
+    .composer {
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 1px 12px 12px;
+      padding: 6px 6px 6px 10px;
+      border: 1px solid var(--color-k-hair-hi);
+      border-radius: 8px;
+      color: var(--color-k-slate2);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .composer-placeholder { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mode-button, .send-button {
+      width: 29px;
+      height: 29px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 7px;
+    }
+    .mode-button { border: 1px solid color-mix(in oklab, var(--color-pool-cobalt) 50%, var(--color-line)); color: var(--color-pool-cobalt); }
+    .send-button { background: var(--color-pool-cobalt); color: var(--color-k-ink-inv); font-size: 17px; font-weight: 700; }
+
+    .why {
+      border-bottom: 1px solid var(--color-line);
+      background: var(--color-surface);
+    }
+    #how, #access, #start { scroll-margin-top: 64px; }
+    .section-inner {
+      width: min(100% - 64px, 1152px);
+      margin: 0 auto;
+      padding: 72px 0;
+      text-align: center;
+    }
+    .section-label {
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h2 {
+      max-width: 760px;
+      margin: 20px auto 0;
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4vw, 43px);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+    .section-copy {
+      max-width: 690px;
+      margin: 16px auto 0;
+      color: var(--color-muted);
+      font-size: 16px;
+      line-height: 1.7;
+      text-wrap: pretty;
+    }
+    .moves {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 48px;
+      overflow: hidden;
+      border: 1px solid var(--color-line);
+      border-radius: 16px;
+      background: var(--color-line);
+      text-align: left;
+    }
+    .move { min-height: 230px; padding: 28px; background: var(--color-bg); }
+    .move-head { display: flex; align-items: center; gap: 10px; }
+    .move-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--color-line);
+      border-radius: 8px;
+      background: var(--color-surface);
+    }
+    .move:nth-child(1) .move-icon, .move:nth-child(1) .move-label { color: var(--color-k-pool); }
+    .move:nth-child(2) .move-icon, .move:nth-child(2) .move-label { color: var(--color-k-ok); }
+    .move:nth-child(3) .move-icon, .move:nth-child(3) .move-label { color: var(--color-mind-b); }
+    .move-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .move h3 {
+      margin: 14px 0 0;
+      font-family: var(--font-display);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+    }
+    .move p { margin: 12px 0 0; color: var(--color-muted); font-size: 14px; line-height: 1.7; }
+
+    .access-section { border-bottom: 1px solid var(--color-line); }
+    .access-section .section-inner { width: min(100% - 64px, 960px); padding-block: 80px; }
+    .access-heading .accent { color: var(--color-pool-cobalt-ink); }
+    .access-card {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+      margin-top: 44px;
+      overflow: hidden;
+      border: 1px solid var(--color-line);
+      border-top: 2px solid var(--color-pool-cobalt);
+      border-radius: 16px;
+      background: var(--color-raised);
+      text-align: left;
+      box-shadow: 0 24px 70px -48px color-mix(in oklab, var(--color-pool-cobalt) 55%, transparent);
+    }
+    .access-summary {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 34px;
+      padding: 36px;
+      border-right: 1px solid var(--color-line);
+      background: linear-gradient(145deg, color-mix(in oklab, var(--color-pool-cobalt) 8%, var(--color-raised)), var(--color-raised) 64%);
+    }
+    .open-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--color-k-run);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .access-price {
+      margin-top: 18px;
+      color: var(--color-pool-cobalt-ink);
+      font-family: var(--font-display);
+      font-size: clamp(58px, 7vw, 80px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+    }
+    .access-price span {
+      display: block;
+      margin-top: 12px;
+      color: var(--color-muted);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.6;
+      letter-spacing: 0;
+    }
+    .primary-cta {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      padding: 0 18px;
+      border: 1px solid var(--color-pool-cobalt);
+      border-radius: 9px;
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .primary-cta:hover { background: color-mix(in oklab, var(--color-pool) 12%, transparent); }
+    .entitlements { padding: 16px 32px; }
+    .entitlement {
+      display: grid;
+      grid-template-columns: minmax(135px, 0.55fr) minmax(0, 1fr);
+      gap: 24px;
+      padding: 20px 4px;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .entitlement:last-child { border-bottom: 0; }
+    .entitlement dt {
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .entitlement dd {
+      margin: 0;
+      color: var(--color-ink-soft);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .access-note {
+      max-width: 780px;
+      margin: 20px auto 0;
+      color: var(--color-faint);
+      font-size: 12px;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      background: color-mix(in oklab, var(--color-pool-cobalt) 4%, var(--color-bg));
+    }
+    .closing::before {
+      content: "";
+      position: absolute;
+      bottom: -260px;
+      left: 50%;
+      width: 640px;
+      height: 420px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in oklab, var(--color-pool-cobalt) 10%, transparent), transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .closing-inner {
+      position: relative;
+      width: min(100% - 48px, 720px);
+      margin: 0 auto;
+      padding: 76px 0 84px;
+      text-align: center;
+    }
+    .closing h2 { max-width: 520px; font-size: clamp(40px, 5vw, 52px); letter-spacing: -0.02em; }
+    .closing-copy { margin: 18px auto 0; color: var(--color-muted); font-size: 16px; line-height: 1.65; }
+    .closing-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+    .secondary-cta {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid var(--color-line-strong);
+      border-radius: 9px;
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .secondary-cta:hover { border-color: color-mix(in oklab, var(--color-pool-cobalt) 60%, var(--color-line)); color: var(--color-ink); }
+
+    footer { border-top: 1px solid var(--color-line); }
+    .footer-links {
+      width: min(100% - 40px, 1152px);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 24px;
+      padding: 28px 0;
+      color: var(--color-muted);
+      font-size: 14px;
+    }
+    .footer-links a:hover { color: var(--color-pool); }
+
+    @keyframes ripple {
+      0% { opacity: 0; transform: scale(0.46); }
+      18% { opacity: 0.55; }
+      68%, 100% { opacity: 0; transform: scale(1.45); }
+    }
+
+    @media (max-width: 720px) {
+      .nav-inner { width: calc(100% - 32px); height: 56px; }
+      .nav-link { display: none; }
+      .brand-group { gap: 10px; }
+      .nav-status { padding-left: 10px; font-size: 8.5px; letter-spacing: 0.1em; }
+      .nav-status .status-dot { display: none; }
+      .nav-cta { min-height: 44px; padding-inline: 14px; }
+      #how, #access, #start { scroll-margin-top: 56px; }
+      .hero-inner { width: calc(100% - 40px); padding: 56px 0 28px; }
+      .drop-wrap { margin-bottom: 22px; }
+      .ripple { width: 136px; height: 136px; }
+      .eyebrow { font-size: 11px; letter-spacing: 0.13em; }
+      h1 { margin-top: 24px; font-size: 40px; line-height: 1.01; }
+      h1 .accent { white-space: nowrap; }
+      .lede { margin-top: 26px; font-size: 16px; line-height: 1.55; }
+      .access-ledger { grid-template-columns: 1fr auto; margin-top: 32px; }
+      .ledger-status { min-height: 44px; grid-column: 1 / -1; justify-content: center; border-right: 0; border-bottom: 1px solid var(--color-line); padding-inline: 16px; }
+      .ledger-main { min-height: 60px; justify-content: flex-start; padding-inline: 16px; font-size: 19px; text-align: left; }
+      .ledger-price { min-height: 60px; padding-inline: 16px; }
+      .ledger-price strong { font-size: 28px; }
+      .ledger-price span { display: none; }
+      .proof { margin-top: 24px; }
+      .console { border-radius: 12px; }
+      .tabs { min-height: 48px; font-size: 12px; }
+      .tab { padding-inline: 7px; }
+      .tab.secondary .full-label { display: none; }
+      .tab-cell { min-width: 46px; }
+      .session-name { display: none; }
+      .ensemble { min-height: 48px; }
+      .lane { padding-inline: 8px; }
+      .lane-model { max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .transcript { min-height: 0; padding-top: 9px; font-size: 12px; }
+      .turn { padding-right: 10px; padding-left: 10px; }
+      .turn .text { font-size: 12.5px; }
+      .turn .time { font-size: 8px; }
+      .narration { font-size: 12.5px; }
+      .tool-card { display: none; }
+      .status-row { padding-top: 18px; font-size: 11px; }
+      .permissions { max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .composer { min-height: 49px; font-size: 13px; }
+      .mode-button, .send-button { width: 38px; height: 38px; }
+      .section-inner { width: calc(100% - 40px); padding: 64px 0; }
+      h2 { margin-top: 18px; font-size: 36px; line-height: 1.12; }
+      .section-copy { font-size: 15.5px; }
+      .moves { grid-template-columns: 1fr; margin-top: 40px; }
+      .move { min-height: 0; padding: 24px; }
+      .access-section .section-inner { width: calc(100% - 40px); padding-block: 68px; }
+      .access-card { grid-template-columns: 1fr; margin-top: 38px; }
+      .access-summary { gap: 28px; padding: 28px; border-right: 0; border-bottom: 1px solid var(--color-line); }
+      .access-price { font-size: 66px; }
+      .primary-cta { width: 100%; }
+      .entitlements { padding: 4px 24px; }
+      .entitlement { grid-template-columns: 1fr; gap: 7px; padding: 18px 0; }
+      .access-note { margin-top: 18px; }
+      .closing-inner { width: calc(100% - 40px); padding-block: 64px 72px; }
+      .closing h2 { font-size: 42px; }
+      .closing-actions { flex-direction: column; }
+      .closing-actions a { width: 100%; }
+      .footer-links { gap: 10px 18px; font-size: 13px; }
+    }
+
+    @media (max-width: 375px) {
+      .nav-status { display: none; }
+      .wordmark { font-size: 25px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .ripple { opacity: 0.2; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Marketing navigation">
+    <div class="nav-inner">
+      <div class="brand-group">
+        <a class="wordmark" href="#top" aria-label="thinkpool home"><span>think</span><span class="wordmark-pool">pool</span></a>
+        <span class="nav-status"><span class="status-dot" aria-hidden="true"></span>Early access</span>
+      </div>
+      <div class="nav-actions">
+        <a class="nav-link" href="#signin">Sign in</a>
+        <a class="nav-cta" href="#start">Start free</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="thesis">
+          <div class="drop-wrap" aria-hidden="true">
+            <span class="ripple"></span>
+            <span class="ripple"></span>
+            <svg class="drop-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z"/></svg>
+          </div>
+          <div class="eyebrow">Multiple agents. Under control.</div>
+          <h1>Your agents<br class="mobile-break"> do the work.<br><span class="accent">You direct the build.</span></h1>
+          <p class="lede">Run Claude Code, Codex, and Hermes Agent side by side. Give each task a clear lane, follow every handoff, and decide what moves forward.</p>
+
+          <a class="access-ledger" href="#access" aria-label="See what full access includes">
+            <span class="ledger-status"><span class="status-dot" aria-hidden="true"></span>Open access</span>
+            <span class="ledger-main">Every current feature is included.</span>
+            <span class="ledger-price"><strong>€0</strong><span>No card</span></span>
+          </a>
+        </div>
+
+        <div class="proof">
+          <div class="console" role="img" aria-label="Example thinkpool Code room with shared direction, visible agent work, and a dispatched proof review">
+            <div class="tabs">
+              <div class="tab-set">
+                <div class="tab active"><span class="live-dot"></span><span>landing direction</span><svg class="caret" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0 5 6 10 0Z" fill="currentColor"/></svg></div>
+                <div class="tab secondary"><span class="live-dot"></span><span class="full-label">Terminal 2</span><span class="short-label">T2</span></div>
+              </div>
+              <span class="tab-cell" aria-hidden="true">＋</span>
+              <span class="session-name"><strong>Launch</strong>&nbsp; session</span>
+              <span class="tab-cell" aria-hidden="true">⚙</span>
+            </div>
+            <div class="ensemble">
+              <span class="ensemble-label">Ensemble
+                <svg class="hex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20 7v10l-8 4.5L4 17V7Z"/><text x="12" y="12" text-anchor="middle" dy="0.35em" font-size="10" font-weight="700" stroke="none" fill="currentColor">1</text></svg>
+              </span>
+              <span class="lane"><span class="spinner" aria-hidden="true"></span><span class="lane-model">Opus 4.8</span><span>proof review</span></span>
+            </div>
+            <div class="transcript">
+              <div class="turn whisper"><span class="glyph">⌁</span><span class="name">Conrad</span><span class="text">the homepage still reads like shared terminal access</span><span class="time">20:36</span></div>
+              <div class="turn conrad"><span class="glyph">♢</span><span class="name">Conrad</span><span class="text">the agent room is buried under the pair story</span><span class="time">20:37</span></div>
+              <div class="turn maks"><span class="glyph">♢</span><span class="name">Maks</span><span class="text">lead with the orchestration we actually use</span><span class="time">20:38</span></div>
+              <div class="turn maks"><span class="glyph">♢</span><span class="name">Maks</span><span class="text">Make the whole build the point. Pairing comes after.</span><span class="time">20:39</span></div>
+              <div class="turn maks"><span class="glyph">♢</span><span class="name">Maks</span><span class="pool-token">@pool</span><span class="time">20:40</span></div>
+              <div class="turn pool"><span class="glyph">♦</span><span class="name">Pool</span><span class="text">dispatched to <strong style="color:var(--color-k-agent)">agent</strong></span></div>
+              <div class="narration"><span class="agent-glow" aria-hidden="true"></span><span>I’m tracing the hero, metadata, and product proof back to the new room anchor.</span></div>
+              <div class="tool-card"><div class="tool-row"><span>▸</span><strong>3 calls</strong><span class="tool-meta">2 Read&nbsp;&nbsp; 1 Grep</span><span>4.1s</span><span class="tool-ok">✓</span></div></div>
+              <div class="narration"><span class="agent-glow" aria-hidden="true"></span><span>The room now leads in <strong style="font-family:var(--font-mono);color:var(--color-k-pool)">Landing.jsx</strong>. I’m sending the full pass to Opus before it ships.</span></div>
+              <div class="tool-card"><div class="tool-row"><span>▸</span><strong>thinkpool Dispatch</strong><span class="tool-meta">Claude Opus 4.8&nbsp;&nbsp; proof review</span><span>1.2s</span><span class="tool-ok">✓</span></div></div>
+            </div>
+            <div class="status-row"><span class="permissions">⏵⏵ Bypass permissions</span><span class="model">GPT-5.6-Sol<span>High</span></span></div>
+            <div class="composer"><span aria-hidden="true">＋</span><span class="composer-placeholder">Message the room…</span><span class="mode-button" aria-hidden="true">♦</span><span class="send-button" aria-hidden="true">→</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="why" id="how">
+      <div class="section-inner">
+        <div class="section-label">Why it’s different</div>
+        <h2>Spawning agents is easy. Coordinating the build is the work.</h2>
+        <p class="section-copy"><span>think</span><span class="brand-inline-pool">pool</span> keeps terminals, handoffs, reviews, and visual proof in one visible Ensemble. One developer can run it. Invite a partner and both people can watch and steer the same live work without transferring context.</p>
+        <div class="moves">
+          <article class="move">
+            <div class="move-head"><span class="move-icon" aria-hidden="true">⇵</span><span class="move-label">Cascade</span></div>
+            <h3>Split the work. Keep control.</h3>
+            <p>A conductor investigates, sends defined slices to visible worker lanes, then collects and verifies what comes back.</p>
+          </article>
+          <article class="move">
+            <div class="move-head"><span class="move-icon" aria-hidden="true">✓</span><span class="move-label">Review</span></div>
+            <h3>Make every result prove itself.</h3>
+            <p>Reviewer lanes try to break the work before it lands. Builds, tests, evidence, and handoffs stay in the same room.</p>
+          </article>
+          <article class="move">
+            <div class="move-head"><span class="move-icon" aria-hidden="true">◉</span><span class="move-label">Design</span></div>
+            <h3>Edit the working interface.</h3>
+            <p>Turn a verified preview into an editable Design surface. Changes return to the producing lane as fresh desktop and mobile proof.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="access-section" id="access">
+      <div class="section-inner">
+        <div class="section-label">Early access</div>
+        <h2 class="access-heading">The full room is open. <span class="accent">No paid plan.</span></h2>
+        <p class="section-copy">Every current feature is included while <span>think</span><span class="brand-inline-pool">pool</span> is in early access. Start alone, invite a partner, and run the whole build without meeting an upgrade wall.</p>
+
+        <div class="access-card">
+          <div class="access-summary">
+            <div>
+              <div class="open-label"><span class="status-dot" aria-hidden="true"></span>Full access</div>
+              <div class="access-price">€0<span>No card. No trial clock.</span></div>
+            </div>
+            <a class="primary-cta" href="#start">Create your free account</a>
+          </div>
+          <dl class="entitlements">
+            <div class="entitlement"><dt>Hosted rooms</dt><dd>No hosted-room count cap.</dd></div>
+            <div class="entitlement"><dt>Dispatch</dt><dd>Run up to six active worker lanes per room. Parent terminals stay outside that worker allowance.</dd></div>
+            <div class="entitlement"><dt>Whole build</dt><dd>Cascade, bounded review, visual proof, and Design are included.</dd></div>
+            <div class="entitlement"><dt>Collaboration</dt><dd>Start alone or invite one partner into the same live room.</dd></div>
+            <div class="entitlement"><dt>Safety ceiling</dt><dd>Every parent and worker terminal still shares the bridge machine’s 12-live-lane ceiling. New Dispatch work queues when the host is full.</dd></div>
+          </dl>
+        </div>
+        <p class="access-note">Connect your own coding runtime and provider. Any provider charges remain separate. If pricing returns later, we will give at least 30 days’ notice before anything changes.</p>
+      </div>
+    </section>
+
+    <section class="closing" id="start">
+      <div class="closing-inner">
+        <div class="section-label">The room is open</div>
+        <h2>Open a room.<br>Start the build.</h2>
+        <p class="closing-copy">Use every current feature during early access. Bring a partner when the work needs two people.</p>
+        <div class="closing-actions">
+          <a class="primary-cta" href="#signup">Create your free account</a>
+          <a class="secondary-cta" href="#signin">Sign in</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="#data">Data</a>
+      <a href="#privacy">Privacy &amp; security</a>
+      <a href="#terms">Terms</a>
+      <a href="mailto:support@thinkpool.io?subject=thinkpool">Contact</a>
+    </nav>
+  </footer>
+</body>
+</html>
