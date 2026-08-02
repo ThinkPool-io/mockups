@@ -121,7 +121,6 @@
     background: transparent;
     color: var(--muted);
   }
-  .nav-icon.briefs { color: var(--pool-hi); }
   .nav-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .back-code {
     height: 44px;
@@ -182,12 +181,7 @@
   .view-map dd { margin: 0; color: var(--faint); font-size: 12.5px; line-height: 1.45; }
 
   .briefs-content { padding: 30px 28px 34px; }
-  .briefs-head {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 18px;
-    align-items: start;
-  }
+  .briefs-head { display: block; }
   .briefs-copy p {
     max-width: 540px;
     margin: 8px 0 0;
@@ -195,28 +189,47 @@
     font-size: 14px;
     line-height: 1.55;
   }
-  .direct-actions {
-    min-height: 44px;
-    display: flex;
+  .iphone-setup-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 3px;
+    gap: 18px;
+    margin-top: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--raised);
   }
-  .direct-action {
+  .iphone-copy strong {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .iphone-copy span {
+    display: block;
+    margin-top: 4px;
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.55;
+  }
+  .iphone-action {
     min-height: 40px;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 0 10px;
-    border: 0;
+    justify-content: center;
+    padding: 0 14px;
+    border: 1px solid color-mix(in oklab, var(--pool) 45%, var(--line));
     border-radius: 8px;
-    background: transparent;
+    background: var(--surface);
     color: var(--pool-hi);
     font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
   }
-  .direct-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .action-divider { width: 1px; height: 20px; background: var(--line); }
+  .iphone-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
   .record-card,
   .empty-card {
@@ -334,10 +347,10 @@
     .wordmark { font-size: 24px; }
     .dashboard-body { padding: 20px 16px 22px; }
     .briefs-content { padding: 24px 16px 26px; }
-    .briefs-head { grid-template-columns: 1fr; gap: 10px; }
-    .direct-actions { margin-left: -8px; }
     .record-card { grid-template-columns: 1fr; gap: 10px; }
     .record-button { width: 100%; }
+    .iphone-setup-row { grid-template-columns: 1fr; gap: 12px; }
+    .iphone-action { width: 100%; }
     .browse-row { grid-template-columns: minmax(0, 1fr) auto; }
     .recent { min-width: 104px; padding-left: 10px; }
     .empty-card { min-height: 218px; }
@@ -412,17 +425,6 @@
               <h2 class="briefs-title">Briefs</h2>
               <p>One place for ideas captured anywhere. Agents can read this notebook when your prompt needs it.</p>
             </div>
-            <div class="direct-actions" aria-label="Brief actions">
-              <button class="direct-action">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-                <span>New Brief</span>
-              </button>
-              <span class="action-divider" aria-hidden="true"></span>
-              <button class="direct-action">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 17h4"/></svg>
-                <span>iPhone setup</span>
-              </button>
-            </div>
           </header>
 
           <section class="record-card">
@@ -430,7 +432,18 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="10" rx="3"/><path d="M6 12a6 6 0 0 0 12 0M12 18v3M9 21h6"/></svg>
               <span>Record a Brief</span>
             </button>
-            <p>Saved immediately. Cleanup uses your connected coding agent when available.</p>
+            <p>Raw text is saved immediately. Cleanup is completed by your connected coding agent when available.</p>
+          </section>
+
+          <section class="iphone-setup-row">
+            <div class="iphone-copy">
+              <strong>Capture from iPhone</strong>
+              <span>Install the Shortcut once, then record Briefs with the Action Button or Siri.</span>
+            </div>
+            <button class="iphone-action">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 17h4"/></svg>
+              <span>iPhone setup</span>
+            </button>
           </section>
 
           <div class="browse-row">
