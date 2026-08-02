@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>thinkpool — Briefs navigation proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-hi: hsl(217 85% 70%);
+    --pool-wash: color-mix(in oklab, var(--pool) 9%, transparent);
+    --font-display: "Newsreader", Georgia, serif;
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: dark; }
+  body {
+    min-width: 320px;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  button, input { font: inherit; }
+  button { color: inherit; }
+  svg { display: block; }
+
+  .proposal {
+    width: min(1240px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 36px 0 52px;
+  }
+  .proposal-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+  .proposal-kicker,
+  .frame-label,
+  .view-map dt {
+    color: var(--pool-hi);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .proposal-head h1 {
+    margin: 5px 0 0;
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: -.02em;
+  }
+  .proposal-summary {
+    max-width: 510px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: minmax(300px, .78fr) minmax(580px, 1.42fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .column { display: grid; gap: 20px; }
+  .frame-label { margin: 0 0 9px 2px; color: var(--faint); }
+  .frame {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg);
+    box-shadow: 0 20px 60px color-mix(in oklab, black 34%, transparent);
+  }
+  .topbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 22px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in oklab, var(--raised) 88%, transparent);
+  }
+  .wordmark {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+  .wordmark b { color: var(--pool); font-weight: inherit; }
+  .nav-actions { display: flex; align-items: center; gap: 2px; }
+  .nav-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+  }
+  .nav-icon.briefs { color: var(--pool-hi); }
+  .nav-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .back-code {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .back-code span:first-child { color: var(--pool); font-size: 20px; }
+
+  .dashboard-body { padding: 24px 22px 28px; }
+  .dashboard-body h2,
+  .briefs-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -.02em;
+  }
+  .dashboard-body > p { margin: 8px 0 20px; color: var(--muted); font-size: 14px; }
+  .session-stub {
+    display: grid;
+    grid-template-columns: 38px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  .session-stub + .session-stub { margin-top: 10px; }
+  .stub-icon {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid color-mix(in oklab, var(--pool) 45%, var(--line));
+    border-radius: 6px;
+    color: var(--pool-hi);
+  }
+  .stub-copy strong { display: block; font-size: 14px; font-weight: 500; }
+  .stub-copy span { display: block; margin-top: 3px; color: var(--faint); font-family: var(--font-mono); font-size: 10px; }
+  .more { color: var(--faint); font-family: var(--font-mono); letter-spacing: 2px; }
+
+  .view-map {
+    margin: 0;
+    padding: 19px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--raised);
+  }
+  .view-map dl { display: grid; gap: 12px; margin: 15px 0 0; }
+  .view-map div { display: grid; grid-template-columns: 86px 1fr; gap: 12px; }
+  .view-map dt { color: var(--ink-soft); letter-spacing: .08em; }
+  .view-map dd { margin: 0; color: var(--faint); font-size: 12.5px; line-height: 1.45; }
+
+  .briefs-content { padding: 30px 28px 34px; }
+  .briefs-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: start;
+  }
+  .briefs-copy p {
+    max-width: 540px;
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .direct-actions {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .direct-action {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--pool-hi);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .direct-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .action-divider { width: 1px; height: 20px; background: var(--line); }
+
+  .record-card,
+  .empty-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  .record-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 16px;
+  }
+  .record-button {
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 18px;
+    border: 1px solid var(--pool);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--pool-hi);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .record-button svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .record-card p { margin: 0; color: var(--faint); font-family: var(--font-mono); font-size: 10px; line-height: 1.6; }
+
+  .browse-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .search {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    color: var(--faint);
+  }
+  .search svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .search span { font-size: 14px; }
+  .recent {
+    min-width: 118px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 10px 0 12px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--raised);
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .recent small { color: var(--faint); font-family: var(--font-mono); font-size: 10px; }
+  .recent .chev { color: var(--faint); font-size: 11px; }
+
+  .empty-card {
+    min-height: 256px;
+    display: grid;
+    place-items: center;
+    margin-top: 12px;
+    padding: 36px 24px;
+    text-align: center;
+  }
+  .empty-inner { max-width: 360px; }
+  .brief-glyph {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto;
+    border: 1px solid color-mix(in oklab, var(--pool) 45%, var(--line));
+    border-radius: 6px;
+    background: var(--pool-wash);
+    color: var(--pool-hi);
+  }
+  .brief-glyph svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .empty-card h3 { margin: 14px 0 0; font-size: 15px; font-weight: 500; }
+  .empty-card p { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+  .decision-note {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-left: 2px solid var(--pool);
+    background: var(--pool-wash);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.55;
+  }
+  .decision-note strong { color: var(--pool-hi); font-weight: 500; }
+
+  @media (max-width: 840px) {
+    .proposal { width: min(100% - 28px, 560px); padding: 24px 0 36px; }
+    .proposal-head { display: block; margin-bottom: 16px; }
+    .proposal-head h1 { font-size: 26px; }
+    .proposal-summary { margin-top: 8px; font-size: 12px; }
+    .board { grid-template-columns: 1fr; gap: 18px; }
+    .column { gap: 18px; }
+    .topbar { height: 58px; padding: 0 14px; }
+    .wordmark { font-size: 24px; }
+    .dashboard-body { padding: 20px 16px 22px; }
+    .briefs-content { padding: 24px 16px 26px; }
+    .briefs-head { grid-template-columns: 1fr; gap: 10px; }
+    .direct-actions { margin-left: -8px; }
+    .record-card { grid-template-columns: 1fr; gap: 10px; }
+    .record-button { width: 100%; }
+    .browse-row { grid-template-columns: minmax(0, 1fr) auto; }
+    .recent { min-width: 104px; padding-left: 10px; }
+    .empty-card { min-height: 218px; }
+    .view-map div { grid-template-columns: 78px 1fr; }
+  }
+</style>
+</head>
+<body>
+<main class="proposal">
+  <header class="proposal-head">
+    <div>
+      <div class="proposal-kicker">Navigation proposal</div>
+      <h1>Briefs, without the inbox metaphor.</h1>
+    </div>
+    <p class="proposal-summary">One quiet dashboard entry, direct capture actions on the notebook, and view names based on how ideas are used.</p>
+  </header>
+
+  <div class="board">
+    <div class="column">
+      <section>
+        <div class="frame-label">Code sessions header</div>
+        <div class="frame">
+          <div class="topbar">
+            <div class="wordmark">think<b>pool</b></div>
+            <div class="nav-actions">
+              <button class="nav-icon briefs" aria-label="Briefs">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6M7.5 6v12M11 8v8"/><path d="M15 7h5M15 12h5M15 17h3.5"/></svg>
+              </button>
+              <button class="nav-icon" aria-label="Settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.96 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.6 8.96a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 20.92 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="dashboard-body">
+            <h2>Code sessions</h2>
+            <p>One room for directing coding agents.</p>
+            <div class="session-stub">
+              <span class="stub-icon">+</span>
+              <span class="stub-copy"><strong>Start a code session</strong><span>Open a room, invite your partner…</span></span>
+              <span class="more">···</span>
+            </div>
+            <div class="session-stub">
+              <span class="stub-icon">P</span>
+              <span class="stub-copy"><strong>Product</strong><span>LIVE · 2 agents working</span></span>
+              <span class="more">···</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="view-map">
+        <div class="frame-label">View vocabulary</div>
+        <dl>
+          <div><dt>Recent</dt><dd>Default. Current, non-archived ideas in capture order.</dd></div>
+          <div><dt>Pinned</dt><dd>The small set worth keeping close.</dd></div>
+          <div><dt>Archive</dt><dd>Ideas intentionally put away.</dd></div>
+          <div><dt>Everything</dt><dd>The complete account notebook.</dd></div>
+        </dl>
+      </aside>
+    </div>
+
+    <section>
+      <div class="frame-label">Briefs page</div>
+      <div class="frame">
+        <div class="topbar">
+          <div class="wordmark">think<b>pool</b></div>
+          <button class="back-code"><span aria-hidden="true">←</span><span>Code</span></button>
+        </div>
+        <div class="briefs-content">
+          <header class="briefs-head">
+            <div class="briefs-copy">
+              <h2 class="briefs-title">Briefs</h2>
+              <p>One place for ideas captured anywhere. Agents can read this notebook when your prompt needs it.</p>
+            </div>
+            <div class="direct-actions" aria-label="Brief actions">
+              <button class="direct-action">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                <span>New Brief</span>
+              </button>
+              <span class="action-divider" aria-hidden="true"></span>
+              <button class="direct-action">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 17h4"/></svg>
+                <span>iPhone setup</span>
+              </button>
+            </div>
+          </header>
+
+          <section class="record-card">
+            <button class="record-button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="10" rx="3"/><path d="M6 12a6 6 0 0 0 12 0M12 18v3M9 21h6"/></svg>
+              <span>Record a Brief</span>
+            </button>
+            <p>Saved immediately. Cleanup uses your connected coding agent when available.</p>
+          </section>
+
+          <div class="browse-row">
+            <div class="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>
+              <span>Search Briefs</span>
+            </div>
+            <button class="recent"><span>Recent</span><small>0</small><span class="chev">⌄</span></button>
+          </div>
+
+          <section class="empty-card">
+            <div class="empty-inner">
+              <span class="brief-glyph">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6M7.5 6v12M11 8v8"/><path d="M15 7h5M15 12h5M15 17h3.5"/></svg>
+              </span>
+              <h3>No Briefs yet</h3>
+              <p>Record a thought or write one. Your latest ideas will appear here.</p>
+            </div>
+          </section>
+
+          <div class="decision-note"><strong>Removed:</strong><span>the top overflow menu, the “Inbox” label, and the duplicate iPhone setup button in the empty state.</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>
