@@ -189,48 +189,6 @@
     font-size: 14px;
     line-height: 1.55;
   }
-  .iphone-setup-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 18px;
-    margin-top: 12px;
-    padding: 14px 16px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: var(--raised);
-  }
-  .iphone-copy strong {
-    display: block;
-    color: var(--ink-soft);
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .iphone-copy span {
-    display: block;
-    margin-top: 4px;
-    color: var(--faint);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    line-height: 1.55;
-  }
-  .iphone-action {
-    min-height: 40px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    justify-content: center;
-    padding: 0 14px;
-    border: 1px solid color-mix(in oklab, var(--pool) 45%, var(--line));
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--pool-hi);
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .iphone-action svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
   .record-card,
   .empty-card {
     border: 1px solid var(--line);
@@ -261,6 +219,13 @@
   }
   .record-button svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .record-card p { margin: 0; color: var(--faint); font-family: var(--font-mono); font-size: 10px; line-height: 1.6; }
+  .mobile-shortcut-link {
+    display: none;
+    color: var(--pool-hi);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--pool) 55%, transparent);
+    text-underline-offset: 3px;
+  }
 
   .browse-row {
     display: grid;
@@ -349,8 +314,7 @@
     .briefs-content { padding: 24px 16px 26px; }
     .record-card { grid-template-columns: 1fr; gap: 10px; }
     .record-button { width: 100%; }
-    .iphone-setup-row { grid-template-columns: 1fr; gap: 12px; }
-    .iphone-action { width: 100%; }
+    .mobile-shortcut-link { display: inline; }
     .browse-row { grid-template-columns: minmax(0, 1fr) auto; }
     .recent { min-width: 104px; padding-left: 10px; }
     .empty-card { min-height: 218px; }
@@ -432,18 +396,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="10" rx="3"/><path d="M6 12a6 6 0 0 0 12 0M12 18v3M9 21h6"/></svg>
               <span>Record a Brief</span>
             </button>
-            <p>Raw text is saved immediately. Cleanup is completed by your connected coding agent when available.</p>
-          </section>
-
-          <section class="iphone-setup-row">
-            <div class="iphone-copy">
-              <strong>Capture from iPhone</strong>
-              <span>Install the Shortcut once, then record Briefs with the Action Button or Siri.</span>
-            </div>
-            <button class="iphone-action">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 17h4"/></svg>
-              <span>iPhone setup</span>
-            </button>
+            <p>Raw text is saved immediately. Cleanup is completed by your connected coding agent when available. <a class="mobile-shortcut-link" href="#iphone-shortcut">Set up the iPhone Shortcut.</a></p>
           </section>
 
           <div class="browse-row">
@@ -464,7 +417,7 @@
             </div>
           </section>
 
-          <div class="decision-note"><strong>Removed:</strong><span>the top overflow menu, the “Inbox” label, and the duplicate iPhone setup button in the empty state.</span></div>
+          <div class="decision-note"><strong>Removed:</strong><span>the top overflow menu, the “Inbox” label, and the duplicate setup action in the empty state.</span></div>
         </div>
       </div>
     </section>
