@@ -183,8 +183,9 @@
     .usage-summary {
       display: flex;
       align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .usage-amount {
       color: var(--ink);
@@ -220,10 +221,10 @@
     .voice-title { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .feature-caption { display: block; margin-top: 3px; color: var(--faint); font-size: 11.5px; line-height: 1.45; }
     .voice-count {
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 400;
+      color: inherit;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
       font-variant-numeric: tabular-nums;
     }
 
