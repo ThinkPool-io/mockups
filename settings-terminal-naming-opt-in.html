@@ -203,7 +203,6 @@
       margin-bottom: 20px;
     }
     .managed-card-head .eyebrow { margin: 0; }
-    .managed-provider { color: var(--faint); font-family: var(--font-mono); font-size: 10px; }
     .feature-list {
       overflow: hidden;
       border: 1px solid var(--line);
@@ -218,12 +217,13 @@
       padding: 14px;
     }
     .feature-name { display: block; color: var(--ink); font-size: 13px; font-weight: 600; }
+    .voice-title { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
     .feature-caption { display: block; margin-top: 3px; color: var(--faint); font-size: 11.5px; line-height: 1.45; }
     .voice-count {
-      flex: none;
       color: var(--muted);
       font-family: var(--font-mono);
       font-size: 12px;
+      font-weight: 400;
       font-variant-numeric: tabular-nums;
     }
 
@@ -243,16 +243,6 @@
       padding: 14px;
     }
     .naming-copy { min-width: 0; }
-    .state {
-      margin-left: 6px;
-      color: var(--faint);
-      font-family: var(--font-mono);
-      font-size: 9px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .naming-wrap[data-on="true"] .state { color: var(--pool-hi); }
     .switch {
       position: relative;
       flex: none;
@@ -402,22 +392,20 @@
       <section class="card" aria-labelledby="managed-heading">
         <div class="managed-card-head">
           <h2 class="eyebrow" id="managed-heading">Managed features</h2>
-          <span class="managed-provider">via Groq</span>
         </div>
 
         <div class="feature-list">
           <div class="voice-row">
             <div>
-              <span class="feature-name">Voice transcription</span>
+              <span class="feature-name voice-title">Voice transcription <span class="voice-count">0:00 this month</span></span>
               <span class="feature-caption">Audio is sent through thinkpool to Groq only when you record. thinkpool does not intentionally retain the clip.</span>
             </div>
-            <span class="voice-count">0:00 this month</span>
           </div>
 
           <div class="naming-wrap" id="naming-wrap" data-on="false">
             <div class="naming-row">
               <div class="naming-copy">
-                <span class="feature-name">Automatic terminal names <span class="state" id="state">Off</span></span>
+                <span class="feature-name">Automatic terminal names</span>
                 <span class="feature-caption">Generate a short name from the first task in each new terminal.</span>
                 <span class="saved" id="saved">Preference saved</span>
               </div>
@@ -441,12 +429,10 @@
   <script>
     const control = document.getElementById('naming-switch');
     const wrap = document.getElementById('naming-wrap');
-    const state = document.getElementById('state');
     control.addEventListener('click', () => {
       const on = control.getAttribute('aria-checked') !== 'true';
       control.setAttribute('aria-checked', String(on));
       wrap.dataset.on = String(on);
-      state.textContent = on ? 'On' : 'Off';
     });
   </script>
 </body>
