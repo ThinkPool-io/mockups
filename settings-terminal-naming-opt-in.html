@@ -195,19 +195,14 @@
     }
     .usage-note { margin: 8px 0 0; }
 
-    .managed {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
-    }
-    .managed-head {
+    .managed-card-head {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
-    .managed-title { color: var(--soft); font-size: 14px; font-weight: 600; }
+    .managed-card-head .eyebrow { margin: 0; }
     .managed-provider { color: var(--faint); font-family: var(--font-mono); font-size: 10px; }
     .feature-list {
       overflow: hidden;
@@ -402,36 +397,36 @@
           <span class="usage-amount">~€0.00</span>
         </div>
         <p class="body-faint usage-note">No runtime usage logged yet this month.</p>
+      </section>
 
-        <div class="managed">
-          <div class="managed-head">
-            <span class="managed-title">Managed features</span>
-            <span class="managed-provider">via Groq</span>
+      <section class="card" aria-labelledby="managed-heading">
+        <div class="managed-card-head">
+          <h2 class="eyebrow" id="managed-heading">Managed features</h2>
+          <span class="managed-provider">via Groq</span>
+        </div>
+
+        <div class="feature-list">
+          <div class="voice-row">
+            <div>
+              <span class="feature-name">Voice transcription</span>
+              <span class="feature-caption">Audio is sent through thinkpool to Groq only when you record. thinkpool does not intentionally retain the clip.</span>
+            </div>
+            <span class="voice-count">0:00 this month</span>
           </div>
 
-          <div class="feature-list">
-            <div class="voice-row">
-              <div>
-                <span class="feature-name">Voice transcription</span>
-                <span class="feature-caption">Audio is sent through thinkpool to Groq only when you record. thinkpool does not intentionally retain the clip.</span>
+          <div class="naming-wrap" id="naming-wrap" data-on="false">
+            <div class="naming-row">
+              <div class="naming-copy">
+                <span class="feature-name">Automatic terminal names <span class="state" id="state">Off</span></span>
+                <span class="feature-caption">Generate a short name from the first task in each new terminal.</span>
+                <span class="saved" id="saved">Preference saved</span>
               </div>
-              <span class="voice-count">0:00 this month</span>
+              <button class="switch" id="naming-switch" type="button" role="switch" aria-checked="false" aria-label="Automatic terminal names"></button>
             </div>
 
-            <div class="naming-wrap" id="naming-wrap" data-on="false">
-              <div class="naming-row">
-                <div class="naming-copy">
-                  <span class="feature-name">Automatic terminal names <span class="state" id="state">Off</span></span>
-                  <span class="feature-caption">Generate a short name from the first task in each new terminal.</span>
-                  <span class="saved" id="saved">Preference saved</span>
-                </div>
-                <button class="switch" id="naming-switch" type="button" role="switch" aria-checked="false" aria-label="Automatic terminal names"></button>
-              </div>
-
-              <p class="privacy-copy">
-                <strong>What leaves the room:</strong> when this is on, thinkpool sends a cleaned excerpt of the first task to Groq. The task itself is already stored in your room transcript. The repository, full transcript, room code, terminal ID, email, and partner identity are not sent. The generated name is stored with the room. <a class="privacy-link" href="#">Privacy &amp; security</a>
-              </p>
-            </div>
+            <p class="privacy-copy">
+              <strong>What leaves the room:</strong> when this is on, thinkpool sends a cleaned excerpt of the first task to Groq. The task itself is already stored in your room transcript. The repository, full transcript, room code, terminal ID, email, and partner identity are not sent. The generated name is stored with the room. <a class="privacy-link" href="#">Privacy &amp; security</a>
+            </p>
           </div>
         </div>
       </section>
