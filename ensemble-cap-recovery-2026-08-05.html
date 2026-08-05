@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>thinkpool · Ensemble capacity recovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-hi: hsl(217 85% 70%);
+    --pool-fill: hsl(217 87% 53%);
+    --pool-ink: hsl(212 13% 7%);
+    --agent: hsl(198 54% 64%);
+    --agent-dim: hsl(198 26% 18%);
+    --caution: hsl(38 44% 60%);
+    --positive: hsl(152 32% 60%);
+    --danger: hsl(8 52% 62%);
+    --me: hsl(40 48% 58%);
+    --partner: hsl(172 22% 52%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; min-height: 100%; background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font-sans); font-weight: 500; overflow: hidden; }
+  button { font: inherit; }
+
+  .app {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: 48px 42px minmax(0, 1fr);
+    background:
+      radial-gradient(circle at 38% 72%, color-mix(in oklab, var(--agent) 5%, transparent), transparent 32%),
+      var(--bg);
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 18px;
+    border-bottom: 1px solid color-mix(in oklab, var(--line) 70%, transparent);
+    background: color-mix(in oklab, var(--raised) 94%, transparent);
+  }
+  .wordmark { font-size: 18px; font-weight: 700; letter-spacing: -.035em; white-space: nowrap; }
+  .wordmark span { color: var(--pool-fill); }
+  .room-name { color: var(--muted); font-family: var(--font-mono); font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 9px; }
+  .avatar { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--me) 55%, var(--line)); color: var(--me); font: 600 11px var(--font-mono); background: color-mix(in oklab, var(--me) 10%, var(--raised)); }
+  .avatar.partner { margin-left: -13px; color: var(--partner); border-color: color-mix(in oklab, var(--partner) 55%, var(--line)); background: color-mix(in oklab, var(--partner) 10%, var(--raised)); }
+  .share { border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink-soft); padding: 7px 12px; font-size: 12px; }
+
+  .tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    overflow: hidden;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--raised);
+    font-family: var(--font-mono);
+  }
+  .tab { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; padding: 0 10px; color: var(--faint); font-size: 12px; white-space: nowrap; }
+  .tab.active { color: var(--ink); background: color-mix(in oklab, var(--surface) 72%, transparent); }
+  .tab.active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; border-radius: 2px 2px 0 0; background: var(--agent); box-shadow: 0 0 7px color-mix(in oklab, var(--agent) 65%, transparent); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--line-strong); }
+  .tab.active .dot { border: 0; background: var(--positive); box-shadow: 0 0 5px color-mix(in oklab, var(--positive) 60%, transparent); }
+
+  .stage { min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 360px; }
+  .terminal { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto auto; border-right: 1px solid var(--line); }
+  .transcript { min-height: 0; overflow: hidden; padding: 38px clamp(24px, 5vw, 72px) 32px; }
+  .turn { max-width: 780px; margin: 0 auto 30px; font-family: var(--font-mono); }
+  .speaker { display: flex; gap: 8px; align-items: center; margin-bottom: 9px; color: var(--faint); font-size: 11px; letter-spacing: .04em; }
+  .speaker .status { width: 7px; height: 7px; border-radius: 50%; background: var(--me); box-shadow: 0 0 6px color-mix(in oklab, var(--me) 55%, transparent); }
+  .speaker.agent { color: var(--agent); }
+  .speaker.agent .status { background: var(--agent); box-shadow: 0 0 6px color-mix(in oklab, var(--agent) 60%, transparent); }
+  .message { color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+  .message.user { color: var(--ink); }
+  .message code { color: var(--agent); }
+  .tool-line { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; background: var(--raised); color: var(--muted); font-size: 11px; }
+  .tool-line .warning { color: var(--caution); }
+
+  .composer { margin: 0 14px 10px; min-height: 52px; display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--float); color: var(--faint); font: 12px var(--font-mono); }
+  .composer .send { margin-left: auto; display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 10px; color: var(--pool-ink); background: var(--pool-fill); font-size: 16px; }
+
+  .ensemble {
+    height: 42px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    background: var(--raised);
+    font: 12px var(--font-mono);
+  }
+  .ensemble-label { display: flex; align-items: center; gap: 7px; padding: 0 13px; border-right: 1px solid var(--line); color: var(--ink); white-space: nowrap; }
+  .hex { color: var(--agent); font-size: 14px; }
+  .lane { display: flex; align-items: center; gap: 7px; padding: 0 9px; color: var(--faint); white-space: nowrap; }
+  .done { color: var(--agent); font-size: 12px; }
+  .lane strong { color: var(--agent); font-weight: 500; }
+  .lane .x { color: var(--faint); opacity: .65; }
+
+  .side {
+    min-width: 0;
+    padding: 28px 22px;
+    background: color-mix(in oklab, var(--raised) 88%, transparent);
+  }
+  .side-label { color: var(--faint); font: 10px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+  .side h2 { margin: 10px 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+  .side p { margin: 0; color: var(--faint); font: 12px/1.55 var(--font-mono); }
+  .mini-lanes { margin-top: 24px; display: grid; gap: 8px; }
+  .mini-lane { display: flex; align-items: center; gap: 10px; border: 1px solid color-mix(in oklab, var(--line) 75%, transparent); border-radius: 9px; padding: 11px; color: var(--muted); font: 11px var(--font-mono); }
+  .mini-lane .mini-status { margin-left: auto; color: var(--faint); }
+
+  .veil { position: fixed; inset: 90px 360px 0 0; z-index: 4; background: color-mix(in oklab, var(--bg) 44%, transparent); backdrop-filter: blur(2px); }
+  .capacity-card {
+    position: fixed;
+    z-index: 5;
+    left: calc((100vw - 360px) / 2);
+    top: 52%;
+    transform: translate(-50%, -50%);
+    width: min(540px, calc(100vw - 440px));
+    max-height: calc(100dvh - 136px);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: 0 28px 80px color-mix(in oklab, var(--bg) 80%, transparent), 0 0 0 1px color-mix(in oklab, var(--caution) 7%, transparent);
+    overflow: hidden;
+  }
+  .capacity-head { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 13px; padding: 20px 20px 16px; }
+  .warn-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: var(--caution); background: color-mix(in oklab, var(--caution) 10%, var(--raised)); border: 1px solid color-mix(in oklab, var(--caution) 25%, var(--line)); font: 600 18px var(--font-mono); }
+  .capacity-title { display: flex; align-items: baseline; gap: 10px; }
+  .capacity-title h1 { margin: 1px 0 0; font-size: 18px; line-height: 1.25; font-weight: 600; letter-spacing: -.02em; }
+  .count-pill { border: 1px solid color-mix(in oklab, var(--caution) 28%, var(--line)); border-radius: 999px; padding: 2px 7px; color: var(--caution); background: color-mix(in oklab, var(--caution) 8%, transparent); font: 10px var(--font-mono); white-space: nowrap; }
+  .capacity-copy { margin: 7px 0 0; color: var(--muted); font: 12px/1.55 var(--font-mono); }
+  .safe-copy { margin-top: 5px; color: var(--faint); font: 10.5px/1.45 var(--font-mono); }
+  .safe-copy b { color: var(--positive); font-weight: 500; }
+
+  .list-label { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px 8px; border-top: 1px solid var(--line); color: var(--faint); font: 10px var(--font-mono); letter-spacing: .09em; text-transform: uppercase; }
+  .list-label button { border: 0; background: none; padding: 4px; color: var(--agent); font: 10px var(--font-mono); cursor: pointer; }
+  .lane-list { margin: 0 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--raised); overflow: auto; }
+  .lane-row { min-height: 46px; display: grid; grid-template-columns: 16px 72px minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 8px 10px; border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent); font: 11px var(--font-mono); }
+  .lane-row:last-child { border-bottom: 0; }
+  .check { color: var(--agent); font-size: 13px; }
+  .kind { color: var(--agent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lane-name { color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lane-time { color: var(--faint); white-space: nowrap; }
+
+  .actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 16px 20px 20px; }
+  .button { min-height: 42px; border-radius: 999px; padding: 0 16px; cursor: pointer; font: 600 12px var(--font-sans); transition: transform .16s var(--ease), background .16s var(--ease); }
+  .button:active { transform: scale(.98); }
+  .button.secondary { border: 1px solid var(--line); background: transparent; color: var(--muted); }
+  .button.primary { border: 1px solid color-mix(in oklab, var(--pool-fill) 72%, var(--line)); background: var(--pool-fill); color: var(--pool-ink); box-shadow: 0 7px 24px color-mix(in oklab, var(--pool-fill) 18%, transparent); }
+  .button.primary:hover { background: var(--pool-hi); }
+
+  .success { display: none; padding: 28px 24px 24px; text-align: center; }
+  .success-icon { margin: 0 auto 14px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; color: var(--positive); border: 1px solid color-mix(in oklab, var(--positive) 30%, var(--line)); background: color-mix(in oklab, var(--positive) 10%, var(--raised)); font: 600 18px var(--font-mono); }
+  .success h2 { margin: 0 0 7px; font-size: 18px; }
+  .success p { margin: 0; color: var(--muted); font: 12px/1.55 var(--font-mono); }
+  .success .button { margin-top: 20px; }
+  .capacity-card.resolved .capacity-view { display: none; }
+  .capacity-card.resolved .success { display: block; }
+
+  @media (max-width: 800px) {
+    .app { grid-template-rows: 48px 42px minmax(0, 1fr); }
+    .topbar { padding: 0 12px; gap: 12px; }
+    .room-name { display: none; }
+    .share { display: none; }
+    .tabs { padding: 0 7px; }
+    .tab { padding: 0 8px; }
+    .tab:nth-child(n+4) { display: none; }
+    .stage { display: block; }
+    .terminal { height: calc(100dvh - 90px); border-right: 0; }
+    .side { display: none; }
+    .transcript { padding: 22px 18px; }
+    .turn { margin-bottom: 24px; }
+    .message { font-size: 12.5px; line-height: 1.6; }
+    .turn:nth-child(3) { display: none; }
+    .composer { margin: 0 8px 8px; }
+    .ensemble { height: 44px; }
+    .ensemble-label { padding: 0 11px; }
+    .lane { display: none; }
+    .lane:first-of-type { display: flex; min-width: 0; }
+    .veil { inset: 90px 0 0; background: color-mix(in oklab, var(--bg) 55%, transparent); }
+    .capacity-card {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      transform: none;
+      width: 100%;
+      max-height: calc(100dvh - 78px);
+      border-radius: 18px 18px 0 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+      box-shadow: 0 -28px 70px -36px var(--bg);
+    }
+    .capacity-card::before { content: ""; width: 34px; height: 4px; border-radius: 999px; background: var(--line-strong); margin: 8px auto -2px; }
+    .capacity-head { grid-template-columns: 36px minmax(0, 1fr); gap: 11px; padding: 14px 14px 12px; }
+    .warn-icon { width: 36px; height: 36px; border-radius: 11px; }
+    .capacity-title { display: block; }
+    .capacity-title h1 { font-size: 17px; }
+    .count-pill { display: inline-block; margin-top: 5px; }
+    .capacity-copy { font-size: 11.5px; }
+    .list-label { padding: 9px 14px 7px; }
+    .lane-list { margin: 0 8px; max-height: 258px; }
+    .lane-row { min-height: 43px; grid-template-columns: 15px 60px minmax(0, 1fr); gap: 7px; padding: 7px 9px; font-size: 10.5px; }
+    .lane-time { display: none; }
+    .actions { display: grid; grid-template-columns: 1fr; gap: 7px; padding: 12px 14px calc(14px + env(safe-area-inset-bottom)); }
+    .button { min-height: 46px; width: 100%; }
+    .button.primary { grid-row: 1; }
+    .button.secondary { grid-row: 2; border-color: transparent; min-height: 40px; }
+    .success { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="wordmark">think<span>pool</span></div>
+    <div class="room-name">DEPENDENCY MAINTENANCE · room 5cf87abc</div>
+    <div class="top-actions">
+      <div class="avatar">M</div><div class="avatar partner">C</div>
+      <button class="share">Invite</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Terminals">
+    <div class="tab active"><span class="dot"></span><span>main · migrations</span></div>
+    <div class="tab"><span class="dot"></span><span>terminal · audit</span></div>
+    <div class="tab"><span class="dot"></span><span>terminal · QA</span></div>
+    <div class="tab"><span class="dot"></span><span>terminal · copy</span></div>
+  </nav>
+
+  <section class="stage">
+    <section class="terminal">
+      <div class="transcript">
+        <article class="turn">
+          <div class="speaker"><span class="status"></span><span>MAKS</span></div>
+          <div class="message user">Do the TanStack Table 9 migration and routine package updates with Lunas.</div>
+        </article>
+        <article class="turn">
+          <div class="speaker agent"><span class="status"></span><span>CODEX</span></div>
+          <div class="message">I’ll start the routine updates first, then run the table migration against that result.</div>
+          <div class="tool-line"><span class="warning">△</span><span>spawn_terminal · capacity reached</span></div>
+        </article>
+        <article class="turn">
+          <div class="speaker"><span class="status"></span><span>MAKS</span></div>
+          <div class="message user">They’re not actively working. Start the workers.</div>
+        </article>
+      </div>
+
+      <div class="composer"><span>Message Codex or @pool…</span><button class="send">↑</button></div>
+
+      <nav class="ensemble" aria-label="Ensemble lanes">
+        <div class="ensemble-label"><span>Ensemble</span><span class="hex">⬡</span><span>6</span></div>
+        <div class="lane"><span class="done">✓</span><strong>Side</strong><span>DEAD REDDIT</span><span class="x">×</span></div>
+        <div class="lane"><span class="done">✓</span><strong>Side</strong><span>thinkpool Brief</span><span class="x">×</span></div>
+        <div class="lane"><span class="done">✓</span><strong>Cascade</strong><span>Brief icon parity</span><span class="x">×</span></div>
+      </nav>
+    </section>
+
+    <aside class="side">
+      <div class="side-label">Room now</div>
+      <h2>Ensemble</h2>
+      <p>Completed lanes remain visible for review until dismissed.</p>
+      <div class="mini-lanes">
+        <div class="mini-lane"><span class="done">✓</span><span>DEAD REDDIT</span><span class="mini-status">Done</span></div>
+        <div class="mini-lane"><span class="done">✓</span><span>thinkpool Brief</span><span class="mini-status">Done</span></div>
+        <div class="mini-lane"><span class="done">✓</span><span>Brief icon parity</span><span class="mini-status">Done</span></div>
+        <div class="mini-lane"><span class="done">✓</span><span>Review Brief feedback</span><span class="mini-status">Done</span></div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div class="veil" aria-hidden="true"></div>
+<section class="capacity-card" id="capacity-card" role="dialog" aria-modal="true" aria-labelledby="capacity-title">
+  <div class="capacity-view">
+    <header class="capacity-head">
+      <div class="warn-icon">!</div>
+      <div>
+        <div class="capacity-title">
+          <h1 id="capacity-title">Room is at capacity</h1>
+          <span class="count-pill">12 / 12 lanes</span>
+        </div>
+        <p class="capacity-copy">Six finished Ensemble lanes are still using machine slots. Dismiss them here to continue.</p>
+        <p class="safe-copy"><b>Working lanes are protected.</b> Only the finished lanes listed below will close.</p>
+      </div>
+    </header>
+
+    <div class="list-label"><span>Finished lanes using slots</span><button type="button">Review in Ensemble</button></div>
+    <div class="lane-list" role="list">
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Side</span><span class="lane-name">DEAD REDDIT</span><span class="lane-time">Done</span></div>
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Side</span><span class="lane-name">thinkpool Brief</span><span class="lane-time">Done</span></div>
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Cascade</span><span class="lane-name">Brief icon parity</span><span class="lane-time">Done</span></div>
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Cascade</span><span class="lane-name">Review Brief feedback</span><span class="lane-time">Done</span></div>
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Cascade</span><span class="lane-name">Repair history hydration</span><span class="lane-time">Done</span></div>
+      <div class="lane-row" role="listitem"><span class="check">✓</span><span class="kind">Cascade</span><span class="lane-name">Fix active status marker</span><span class="lane-time">Done</span></div>
+    </div>
+
+    <footer class="actions">
+      <button class="button secondary" type="button">Not now</button>
+      <button class="button primary" id="dismiss-all" type="button">Dismiss 6 finished lanes and retry</button>
+    </footer>
+  </div>
+
+  <div class="success" aria-live="polite">
+    <div class="success-icon">✓</div>
+    <h2>Capacity freed</h2>
+    <p>Six finished lanes were dismissed. Starting the Luna worker now.</p>
+    <button class="button secondary" id="reset" type="button">Show blocked state</button>
+  </div>
+</section>
+
+<script>
+  const card = document.getElementById('capacity-card');
+  document.getElementById('dismiss-all').addEventListener('click', () => card.classList.add('resolved'));
+  document.getElementById('reset').addEventListener('click', () => card.classList.remove('resolved'));
+</script>
+</body>
+</html>
