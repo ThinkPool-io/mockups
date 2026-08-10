@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>thinkpool | Run the whole build in one room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-cobalt: #1A6EF4;
+      --color-k-bg: #0a0d10;
+      --color-k-card: #06090c;
+      --color-k-rail: #10161d;
+      --color-k-hair: rgba(255, 255, 255, 0.08);
+      --color-k-hair-hi: rgba(255, 255, 255, 0.15);
+      --color-k-txt: #d8dee6;
+      --color-k-slate: #6b7681;
+      --color-k-slate2: #8b96a2;
+      --color-k-agent: hsl(201 78% 64%);
+      --color-k-run: #3ad07f;
+      --color-k-ok: hsl(152 40% 58%);
+      --color-k-bypass: hsl(352 84% 64%);
+      --color-k-partner: hsl(218 60% 72%);
+      --font-display: "Newsreader", Georgia, serif;
+      --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      background: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--color-pool); outline-offset: 3px; }
+    ::selection { background: color-mix(in oklab, var(--color-pool) 32%, transparent); }
+
+    .shell { min-height: 100vh; }
+    .wrap { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+    .mono { font-family: var(--font-mono); }
+    .display { font-family: var(--font-display); }
+    .accent { color: var(--color-pool-hi); }
+    .muted { color: var(--color-muted); }
+    .faint { color: var(--color-faint); }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--color-line);
+      background: color-mix(in oklab, var(--color-bg) 94%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .nav-inner {
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      color: var(--color-ink);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .wordmark span { color: var(--color-pool-cobalt); }
+    .nav-actions { display: flex; align-items: center; gap: 18px; }
+    .nav-link {
+      color: var(--color-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .nav-link:hover { color: var(--color-ink); }
+    .button-link {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-pool-cobalt);
+      border-radius: 9px;
+      padding: 0 18px;
+      color: var(--color-pool-hi);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      transition: border-color 220ms var(--ease-settle), background 220ms var(--ease-settle), transform 220ms var(--ease-settle);
+    }
+    .button-link:hover {
+      border-color: var(--color-pool-hi);
+      background: color-mix(in oklab, var(--color-pool) 10%, transparent);
+      transform: translateY(-2px);
+    }
+    .button-link.secondary {
+      border-color: var(--color-line-strong);
+      color: var(--color-muted);
+    }
+    .button-link.secondary:hover {
+      border-color: var(--color-muted);
+      background: var(--color-raised);
+      color: var(--color-ink);
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--color-line);
+      padding: 72px 0 64px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.42fr);
+      gap: 56px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      width: 28px;
+      height: 1px;
+      background: var(--color-pool-cobalt);
+      content: "";
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 {
+      max-width: 650px;
+      margin-bottom: 24px;
+      font-family: var(--font-display);
+      font-size: clamp(3.35rem, 5.4vw, 5.7rem);
+      font-weight: 400;
+      letter-spacing: -0.035em;
+      line-height: 0.94;
+      text-wrap: balance;
+    }
+    .hero-copy {
+      max-width: 570px;
+      margin-bottom: 30px;
+      color: var(--color-muted);
+      font-size: 17px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-note {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 36px;
+      border-top: 1px solid var(--color-line);
+    }
+    .hero-note span {
+      padding: 14px 14px 0 0;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+    .hero-note strong { display: block; margin-bottom: 2px; color: var(--color-ink-soft); font-weight: 500; }
+
+    .room-wrap { min-width: 0; }
+    .room-kicker {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .room {
+      overflow: hidden;
+      border: 1px solid var(--color-k-hair-hi);
+      border-radius: 12px;
+      background: var(--color-k-bg);
+      color: var(--color-k-txt);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .room-top {
+      display: flex;
+      min-height: 38px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--color-k-hair);
+    }
+    .tabs { display: flex; min-width: 0; flex: 1; align-items: stretch; overflow: hidden; }
+    .tab {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      color: var(--color-k-txt);
+      white-space: nowrap;
+    }
+    .tab.secondary { color: var(--color-k-slate2); }
+    .tab.active::after {
+      position: absolute;
+      right: 8px;
+      bottom: 0;
+      left: 8px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--color-k-agent);
+      content: "";
+    }
+    .status-dot { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--color-k-run); }
+    .room-control {
+      display: grid;
+      width: 38px;
+      place-items: center;
+      border-left: 1px solid var(--color-k-hair);
+      color: var(--color-k-slate2);
+      font-size: 16px;
+    }
+    .room-title { display: flex; align-items: center; border-left: 1px solid var(--color-k-hair); padding: 0 11px; white-space: nowrap; }
+    .room-title strong { color: var(--color-k-agent); font-weight: 600; }
+    .ensemble {
+      display: flex;
+      min-height: 36px;
+      align-items: stretch;
+      border-bottom: 1px solid var(--color-k-hair);
+    }
+    .ensemble-label { display: flex; align-items: center; gap: 7px; border-right: 1px solid var(--color-k-hair); padding: 0 10px; font-weight: 600; }
+    .hex { color: var(--color-k-agent); font-size: 14px; }
+    .lane { display: flex; min-width: 0; align-items: center; gap: 8px; padding: 0 10px; }
+    .lane-ring { width: 12px; height: 12px; flex: none; border: 1.5px solid var(--color-k-agent); border-radius: 50%; }
+    .lane span:nth-child(2) { color: var(--color-k-agent); }
+    .lane span:last-child { overflow: hidden; color: var(--color-k-txt); text-overflow: ellipsis; white-space: nowrap; }
+    .transcript { padding: 8px 10px 6px; }
+    .turn {
+      display: grid;
+      grid-template-columns: 14px auto minmax(0, 1fr) auto;
+      gap: 5px;
+      align-items: baseline;
+      margin: 0 -10px;
+      padding: 5px 10px;
+      line-height: 1.45;
+    }
+    .turn.owner { border-left: 2px solid var(--color-k-run); background: color-mix(in oklab, var(--color-k-run) 7%, transparent); }
+    .turn.partner { border-left: 2px solid var(--color-k-partner); background: color-mix(in oklab, var(--color-k-partner) 7%, transparent); }
+    .turn.pool { border-left: 2px solid var(--color-pool-cobalt); background: color-mix(in oklab, var(--color-pool-cobalt) 7%, transparent); }
+    .turn.whisper { color: var(--color-k-slate2); font-style: italic; }
+    .drop { color: inherit; font-size: 10px; }
+    .name { color: var(--color-k-partner); font-style: normal; font-weight: 600; }
+    .owner .name { color: var(--color-k-run); }
+    .pool .name { color: var(--color-pool-hi); }
+    .turn .message { min-width: 0; color: var(--color-k-txt); }
+    .turn.whisper .message { color: var(--color-k-slate2); }
+    .time { color: var(--color-k-slate); font-size: 8px; font-style: normal; }
+    .narration { display: grid; grid-template-columns: 14px 1fr; gap: 5px; padding: 6px 0; color: var(--color-k-txt); line-height: 1.45; }
+    .narration .dot { color: var(--color-k-agent); }
+    .tool {
+      display: flex;
+      min-height: 31px;
+      align-items: center;
+      gap: 8px;
+      margin: 2px 0 6px;
+      overflow: hidden;
+      border: 1px solid var(--color-k-hair-hi);
+      border-radius: 8px;
+      background: var(--color-k-card);
+      padding: 0 9px;
+      white-space: nowrap;
+    }
+    .tool strong { color: var(--color-k-txt); }
+    .tool-meta { min-width: 0; flex: 1; overflow: hidden; color: var(--color-k-slate2); text-overflow: ellipsis; }
+    .tool-ok { color: var(--color-k-ok); }
+    .dispatch strong { color: var(--color-pool-hi); }
+    .room-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid var(--color-k-hair);
+      padding: 7px 10px 3px;
+      color: var(--color-k-bypass);
+    }
+    .room-status .model { margin-left: auto; color: var(--color-k-agent); }
+    .composer {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 9px;
+      margin: 6px 10px 10px;
+      border: 1px solid var(--color-k-hair-hi);
+      border-radius: 8px;
+      padding: 0 7px 0 10px;
+      color: var(--color-k-slate2);
+    }
+    .composer .placeholder { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .composer .send { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 7px; background: var(--color-pool-cobalt); color: var(--color-k-bg); font-weight: 700; }
+
+    .proof-strip { border-bottom: 1px solid var(--color-line); background: var(--color-raised); }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .proof-item { display: grid; grid-template-columns: auto 1fr; gap: 13px; padding: 22px 26px; border-right: 1px solid var(--color-line); }
+    .proof-item:last-child { border-right: 0; }
+    .proof-num { color: var(--color-pool-hi); font-family: var(--font-mono); font-size: 11px; }
+    .proof-item strong { display: block; margin-bottom: 4px; color: var(--color-ink); font-size: 14px; }
+    .proof-item p { margin: 0; color: var(--color-faint); font-size: 13px; line-height: 1.5; }
+
+    .section { padding: 88px 0; border-bottom: 1px solid var(--color-line); }
+    .section-head { display: grid; grid-template-columns: 0.72fr 1.28fr; gap: 48px; margin-bottom: 42px; }
+    .section h2 {
+      max-width: 670px;
+      margin-bottom: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 4vw, 4.4rem);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+    .section-lede { max-width: 560px; align-self: end; margin: 0; color: var(--color-muted); font-size: 16px; line-height: 1.65; }
+    .moves { border-top: 1px solid var(--color-line-strong); }
+    .move { display: grid; grid-template-columns: 90px 0.7fr 1.3fr; gap: 28px; align-items: start; border-bottom: 1px solid var(--color-line); padding: 28px 0; }
+    .move-index { color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; }
+    .move-title { margin: 0; font-family: var(--font-display); font-size: 25px; font-weight: 400; letter-spacing: -0.015em; line-height: 1.1; }
+    .move-copy { margin: 0; color: var(--color-muted); font-size: 15px; line-height: 1.65; }
+    .move-copy strong { color: var(--color-ink-soft); font-weight: 600; }
+
+    .pair-section { background: var(--color-surface); }
+    .pair-box { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-line-strong); border-radius: 12px; overflow: hidden; }
+    .pair-copy { padding: 48px; }
+    .pair-copy h2 { max-width: 520px; margin-bottom: 20px; }
+    .pair-copy p { max-width: 520px; margin-bottom: 0; color: var(--color-muted); font-size: 16px; line-height: 1.65; }
+    .pair-sequence { display: grid; align-content: center; border-left: 1px solid var(--color-line); background: var(--color-bg); }
+    .pair-step { display: grid; grid-template-columns: 50px 1fr; gap: 16px; padding: 22px 28px; border-bottom: 1px solid var(--color-line); }
+    .pair-step:last-child { border-bottom: 0; }
+    .pair-step span { color: var(--color-pool-hi); font-family: var(--font-mono); font-size: 11px; }
+    .pair-step strong { display: block; margin-bottom: 4px; color: var(--color-ink); font-size: 14px; }
+    .pair-step p { margin: 0; color: var(--color-faint); font-size: 13px; line-height: 1.5; }
+
+    .pricing { max-width: 930px; }
+    .pricing-head { text-align: center; }
+    .pricing-head .eyebrow { justify-content: center; }
+    .pricing-head h2 { margin-inline: auto; }
+    .plans { display: grid; grid-template-columns: 1fr 1fr; margin-top: 44px; border: 1px solid var(--color-line-strong); border-radius: 12px; overflow: hidden; }
+    .plan { display: flex; flex-direction: column; min-height: 330px; padding: 34px; background: var(--color-surface); }
+    .plan + .plan { border-left: 1px solid var(--color-line-strong); }
+    .plan-label { margin-bottom: 16px; color: var(--color-faint); font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+    .price { margin-bottom: 24px; font-family: var(--font-display); font-size: 48px; letter-spacing: -0.03em; line-height: 1; }
+    .price span { color: var(--color-faint); font-family: var(--font-sans); font-size: 14px; letter-spacing: 0; }
+    .plan p { margin-bottom: 28px; color: var(--color-muted); font-size: 14px; line-height: 1.65; }
+    .plan .button-link { width: 100%; margin-top: auto; }
+    .plan.plus { border-top: 2px solid var(--color-pool-cobalt); }
+    .plan.plus .plan-label, .plan.plus .price { color: var(--color-pool-hi); }
+    .capacity { max-width: 760px; margin: 18px auto 0; color: var(--color-faint); font-size: 12px; line-height: 1.6; text-align: center; }
+
+    .final { padding: 88px 0; text-align: center; }
+    .final h2 { max-width: 600px; margin: 0 auto 28px; font-family: var(--font-display); font-size: clamp(3rem, 5vw, 5.3rem); font-weight: 400; letter-spacing: -0.035em; line-height: 0.95; text-wrap: balance; }
+    .final-actions { display: flex; justify-content: center; gap: 12px; }
+    footer { border-top: 1px solid var(--color-line); }
+    .footer-inner { display: flex; min-height: 82px; align-items: center; justify-content: space-between; gap: 24px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 22px; }
+    .footer-links a { color: var(--color-muted); font-size: 13px; text-decoration: none; }
+    .footer-links a:hover { color: var(--color-ink); }
+    .footer-note { color: var(--color-faint); font-family: var(--font-mono); font-size: 10px; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 42px; }
+      .hero-copy { max-width: 680px; }
+      .section-head { grid-template-columns: 1fr; gap: 18px; }
+      .pair-box { grid-template-columns: 1fr; }
+      .pair-sequence { border-top: 1px solid var(--color-line); border-left: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 32px, 1180px); }
+      .nav-inner { min-height: 56px; }
+      .wordmark { font-size: 22px; }
+      .nav-actions { gap: 10px; }
+      .nav-actions .nav-link { display: none; }
+      .button-link { min-height: 44px; padding-inline: 15px; }
+      .hero { padding: 48px 0 40px; }
+      .hero-grid { gap: 34px; }
+      .eyebrow { margin-bottom: 18px; font-size: 9px; letter-spacing: 0.12em; }
+      .hero h1 { margin-bottom: 20px; font-size: clamp(3.2rem, 15vw, 4.15rem); line-height: 0.92; }
+      .hero-copy { margin-bottom: 24px; font-size: 16px; line-height: 1.58; }
+      .hero-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .hero-note { margin-top: 28px; }
+      .hero-note span { padding-right: 8px; font-size: 8px; }
+      .room-kicker { font-size: 8px; }
+      .room { border-radius: 10px; font-size: 9px; }
+      .room-top { min-height: 42px; }
+      .tab { gap: 5px; padding: 0 8px; }
+      .tab.secondary .full { display: none; }
+      .room-control { width: 42px; }
+      .room-title { display: none; }
+      .ensemble { min-height: 40px; }
+      .ensemble-label, .lane { padding-inline: 8px; }
+      .turn { grid-template-columns: 12px auto minmax(0, 1fr); gap: 4px; padding-block: 5px; }
+      .turn .time { display: none; }
+      .tool { gap: 6px; }
+      .room-status .model { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .proof-item { border-right: 0; border-bottom: 1px solid var(--color-line); padding: 18px 16px; }
+      .proof-item:last-child { border-bottom: 0; }
+      .section { padding: 64px 0; }
+      .section h2 { font-size: 3rem; }
+      .move { grid-template-columns: 42px 1fr; gap: 14px; }
+      .move-copy { grid-column: 2; }
+      .pair-copy { padding: 28px 22px; }
+      .pair-copy h2 { font-size: 2.75rem; }
+      .pair-step { grid-template-columns: 36px 1fr; padding: 18px 20px; }
+      .plans { grid-template-columns: 1fr; }
+      .plan { min-height: 285px; padding: 28px 24px; }
+      .plan + .plan { border-top: 1px solid var(--color-line-strong); border-left: 0; }
+      .plan.plus { border-top: 2px solid var(--color-pool-cobalt); }
+      .final { padding: 72px 0; }
+      .final-actions { display: grid; grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; padding: 26px 0; }
+      .footer-links { gap: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav" aria-label="Primary navigation">
+      <div class="wrap nav-inner">
+        <a class="wordmark" href="#top" aria-label="thinkpool home">think<span>pool</span></a>
+        <div class="nav-actions">
+          <a class="nav-link" href="#pricing">Pricing</a>
+          <a class="nav-link" href="https://thinkpool.io/auth?mode=signin">Sign in</a>
+          <a class="button-link" href="https://thinkpool.io/auth?mode=signup">Start free</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="top">
+      <header class="hero">
+        <div class="wrap hero-grid">
+          <div class="hero-content">
+            <p class="eyebrow">The room for directing coding agents</p>
+            <h1>Run the whole build in one room.</h1>
+            <p class="hero-copy">Connect a small bridge on the machine that holds your project. Direct Claude Code, Codex, or Hermes Agent across visible terminals. Review what comes back before it lands.</p>
+            <div class="hero-actions">
+              <a class="button-link" href="https://thinkpool.io/auth?mode=signup">Start free</a>
+              <a class="button-link secondary" href="#room-proof">See the room</a>
+            </div>
+            <div class="hero-note" aria-label="Product summary">
+              <span><strong>One room</strong>Plan, work, proof</span>
+              <span><strong>Your runtime</strong>Claude, Codex, Hermes</span>
+              <span><strong>Optional partner</strong>Same live context</span>
+            </div>
+          </div>
+
+          <div class="room-wrap" id="room-proof">
+            <div class="room-kicker"><span>thinkpool Code room</span><span>Build in progress</span></div>
+            <div class="room" role="img" aria-label="Example thinkpool Code room showing a shared brief, agent work, review dispatch, build proof, and the room composer.">
+              <div class="room-top">
+                <div class="tabs">
+                  <div class="tab active"><span class="status-dot"></span><span>landing direction</span><span>▾</span></div>
+                  <div class="tab secondary"><span class="status-dot"></span><span class="full">Terminal </span><span>2</span></div>
+                </div>
+                <div class="room-control">+</div>
+                <div class="room-title"><strong>Launch</strong>&nbsp; session</div>
+                <div class="room-control">⚙</div>
+              </div>
+              <div class="ensemble">
+                <div class="ensemble-label">Ensemble <span class="hex">⬡</span></div>
+                <div class="lane"><span class="lane-ring"></span><span>Opus 4.8</span><span>proof review</span></div>
+              </div>
+              <div class="transcript">
+                <div class="turn whisper"><span class="drop">♧</span><span class="name">Conrad</span><span class="message">the homepage still reads like shared terminal access</span><span class="time">20:36</span></div>
+                <div class="turn partner"><span class="drop">◊</span><span class="name">Conrad</span><span class="message">the agent room is buried under the pair story</span><span class="time">20:37</span></div>
+                <div class="turn owner"><span class="drop">◊</span><span class="name">Maks</span><span class="message">lead with the orchestration we actually use</span><span class="time">20:38</span></div>
+                <div class="turn owner"><span class="drop">◊</span><span class="name">Maks</span><span class="message">Make the whole build the point. Pairing comes after.</span><span class="time">20:39</span></div>
+                <div class="turn owner"><span class="drop">◊</span><span class="name">Maks</span><span class="message"><span class="accent">@pool</span></span><span class="time">20:40</span></div>
+                <div class="turn pool"><span class="drop">◆</span><span class="name">Pool</span><span class="message">dispatched to <span style="color:var(--color-k-agent);font-weight:600">agent</span></span><span class="time"></span></div>
+                <div class="narration"><span class="dot">●</span><span>I’m tracing the hero, metadata, and product proof back to the new room anchor.</span></div>
+                <div class="tool"><span>▸</span><span style="color:var(--color-k-agent)">⛁</span><strong>3 calls</strong><span class="tool-meta">2 Read&nbsp;&nbsp;1 Grep</span><span class="tool-ok">✓</span></div>
+                <div class="narration"><span class="dot">●</span><span>The room now leads in <span class="accent">Landing.jsx</span>. I’m sending the full pass to Opus before it ships.</span></div>
+                <div class="tool"><span>▸</span><span style="color:var(--color-k-agent)">⛁</span><strong>3 calls</strong><span class="tool-meta">1 Edit&nbsp;&nbsp;2 Bash</span><span class="tool-ok">✓ build passed</span></div>
+                <div class="tool dispatch"><span>▸</span><span>⬡</span><strong>thinkpool Dispatch</strong><span class="tool-meta">Claude Opus 4.8&nbsp;&nbsp;proof review</span><span class="tool-ok">✓</span></div>
+              </div>
+              <div class="room-status"><span>▱</span><strong>Bypass permissions</strong><span class="model">GPT-5.6-Sol&nbsp; High</span></div>
+              <div class="composer"><span>＋</span><span class="placeholder">Message the room…</span><span class="accent">◆</span><span class="send">→</span></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="proof-strip">
+        <div class="wrap proof-grid">
+          <div class="proof-item"><span class="proof-num">01</span><div><strong>Visible work</strong><p>Every top-level terminal and dispatched lane stays in the room.</p></div></div>
+          <div class="proof-item"><span class="proof-num">02</span><div><strong>Review before merge</strong><p>Tests, reviewer findings, and handoffs sit beside the work they judge.</p></div></div>
+          <div class="proof-item"><span class="proof-num">03</span><div><strong>Working interface</strong><p>Design edits return to the producing lane with fresh desktop and mobile proof.</p></div></div>
+        </div>
+      </div>
+
+      <section class="section" id="how">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="eyebrow">What the room adds</p>
+            <div>
+              <h2>The hard part is keeping the build coherent.</h2>
+              <p class="section-lede">Coding agents can already fan work out. thinkpool keeps the plan, worker lanes, review, and working interface connected while the build moves.</p>
+            </div>
+          </div>
+          <div class="moves">
+            <article class="move">
+              <span class="move-index">01 / Cascade</span>
+              <h3 class="move-title">Split the work. Keep control.</h3>
+              <p class="move-copy"><strong>A conductor owns the whole task.</strong> It sends defined slices to visible worker lanes, then collects and verifies what returns.</p>
+            </article>
+            <article class="move">
+              <span class="move-index">02 / Review</span>
+              <h3 class="move-title">Make every result prove itself.</h3>
+              <p class="move-copy"><strong>Reviewer lanes try to break the work before it lands.</strong> Builds, tests, evidence, and handoffs stay in the same room.</p>
+            </article>
+            <article class="move">
+              <span class="move-index">03 / Design</span>
+              <h3 class="move-title">Edit the working interface.</h3>
+              <p class="move-copy"><strong>Turn a verified preview into an editable Design surface.</strong> Changes return to the producing lane and come back as fresh proof.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section pair-section">
+        <div class="wrap pair-box">
+          <div class="pair-copy">
+            <p class="eyebrow">Collaboration when you need it</p>
+            <h2>Start alone. Bring in a partner.</h2>
+            <p>They enter the same room, see the same terminals, and can steer the same build. No screen share. No keyboard handoff. No context rebuild.</p>
+          </div>
+          <div class="pair-sequence" aria-label="Collaboration sequence">
+            <div class="pair-step"><span>01</span><div><strong>Open the room</strong><p>Run the build yourself from your browser.</p></div></div>
+            <div class="pair-step"><span>02</span><div><strong>Invite a partner</strong><p>They join with their own free account.</p></div></div>
+            <div class="pair-step"><span>03</span><div><strong>Share control</strong><p>Both people see the same work and can direct it.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="wrap pricing">
+          <div class="pricing-head">
+            <p class="eyebrow">Pricing</p>
+            <h2>Free to start. €5 for more.</h2>
+          </div>
+          <div class="plans">
+            <article class="plan">
+              <span class="plan-label">Free</span>
+              <div class="price">€0</div>
+              <p>One active hosted room. Up to three subagents can work at once in each room. Terminals you open yourself do not count toward the subagent limit.</p>
+              <a class="button-link secondary" href="https://thinkpool.io/auth?mode=signup">Start with Free</a>
+            </article>
+            <article class="plan plus">
+              <span class="plan-label">Plus</span>
+              <div class="price">€5 <span>/ month</span></div>
+              <p>No hosted-room count cap. Up to six subagents can work at once in each room. Terminals you open yourself do not count toward the subagent limit.</p>
+              <a class="button-link" href="https://thinkpool.io/auth?mode=signup">Choose Plus</a>
+            </article>
+          </div>
+          <p class="capacity">Every terminal shares a safety ceiling of 12 open terminals on the bridge machine. New Dispatch work queues while the host is full or under memory pressure, then starts when capacity returns.</p>
+        </div>
+      </section>
+
+      <section class="final">
+        <div class="wrap">
+          <h2>Open a room. Start the build.</h2>
+          <div class="final-actions">
+            <a class="button-link" href="https://thinkpool.io/auth?mode=signup">Create your free account</a>
+            <a class="button-link secondary" href="https://thinkpool.io/auth?mode=signin">Sign in</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap footer-inner">
+        <div class="footer-links">
+          <a href="https://thinkpool.io/about">About</a>
+          <a href="https://thinkpool.io/faq">FAQ</a>
+          <a href="https://thinkpool.io/data">Data</a>
+          <a href="https://thinkpool.io/privacy">Privacy</a>
+          <a href="https://thinkpool.io/terms">Terms</a>
+          <a href="mailto:support@thinkpool.io?subject=thinkpool">Contact</a>
+        </div>
+        <span class="footer-note">The room for directing coding agents.</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
