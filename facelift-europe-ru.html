@@ -159,6 +159,7 @@
     font-size: 18px;
   }
   .notice strong { color: var(--ink-soft); }
+  .notice.price-note { margin: -4px 0 24px; }
 
   .section { padding: 56px 0; border-top: 1px solid var(--line); }
   .section-head {
@@ -256,6 +257,26 @@
   .badge.wait { background: color-mix(in oklab, var(--caution) 14%, var(--surface)); color: var(--caution); }
   .badge.light { background: var(--raised); color: var(--faint); }
   .doctor-card p { margin: 16px 0; color: var(--muted); font-size: 15px; }
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid color-mix(in oklab, var(--pool-hi) 28%, var(--line));
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--pool) 7%, var(--surface));
+  }
+  .price-label { color: var(--faint); font-size: 12px; }
+  .price-value {
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+  .price-source { color: var(--pool-hi); font-size: 11px; font-weight: 600; }
   .fact-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
   .fact {
     padding: 6px 9px;
@@ -365,6 +386,8 @@
     .section { padding: 42px 0; }
     .section-head { grid-template-columns: 1fr; gap: 14px; }
     .doctor-card { grid-template-columns: 44px 1fr; gap: 12px; padding: 18px; }
+    .price-row { align-items: flex-start; flex-direction: column; gap: 4px; }
+    .price-value { text-align: left; }
     .rank { width: 44px; height: 44px; border-radius: 13px; font-size: 24px; }
     .card-top { display: block; }
     .badge { display: inline-flex; margin-top: 10px; }
@@ -454,7 +477,11 @@
     <div class="shell">
       <div class="section-head">
         <h2>Все 10 врачей</h2>
-        <p>Порядок отражает силу открытых доказательств для первой консультации, а не обещание результата операции.</p>
+        <p>Порядок отражает силу открытых доказательств для первой консультации, а не обещание результата операции. Цены округлены в евро и проверены 10 августа 2026 года.</p>
+      </div>
+      <div class="notice price-note">
+        <span class="notice-icon" aria-hidden="true">€</span>
+        <div><strong>Как читать цены:</strong> это ориентир для подтяжки лица, часто вместе с шеей. Итог может отдельно включать наркоз, операционную, анализы, ночь в клинике, лекарства, гостиницу и поездки. Просите письменную полную смету и правила оплаты лечения осложнений.</div>
       </div>
       <div class="doctor-grid">
 
@@ -463,6 +490,7 @@
           <div>
             <div class="card-top"><div><h3>Rajiv Grover</h3><div class="location">Лондон · Великобритания</div></div><span class="badge">Начать здесь</span></div>
             <p>Специалист по пластической хирургии в реестре GMC, бывший президент BAAPS, стажировка по хирургии лица в Гарварде.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Клиника не публикует прайс</div></div><div class="price-value">≈ €45 000–65 000</div></div>
             <div class="fact-list"><span class="fact">36 отзывов PHIN</span><span class="fact">100% рекомендуют</span><span class="fact">Наблюдение 6 месяцев</span></div>
             <div class="caveat">Уточнить, возможна ли первая консультация по видео. PHIN указывает стоимость £300–£450.</div>
             <div class="links">
@@ -478,6 +506,7 @@
           <div>
             <div class="card-top"><div><h3>Georgios Orfaniotis</h3><div class="location">Лондон · Великобритания</div></div><span class="badge wait">Заявки закрыты</span></div>
             <p>GMC, FRCS(Plast), EBOPRAS, BAAPS и BAPRAS. Практика почти полностью посвящена хирургии лица и шеи.</p>
+            <div class="price-row"><div><div class="price-label">Лицо и шея, цена от</div><a class="price-source" href="https://orfaniotis.co.uk/deep-plane-facelift/" target="_blank" rel="noopener">Официальный прайс ↗</a></div><div class="price-value">£42 000 · ≈ €49 000</div></div>
             <div class="fact-list"><span class="fact">Пластический хирург</span><span class="fact">Глубокая подтяжка</span><span class="fact">Свежие отзывы</span></div>
             <div class="caveat">На официальном сайте сейчас указано, что новые заявки временно не принимаются.</div>
             <div class="links">
@@ -493,6 +522,7 @@
           <div>
             <div class="card-top"><div><h3>Tunç Tiryaki</h3><div class="location">Лондон и Стамбул</div></div><span class="badge">Видео</span></div>
             <p>Специалист GMC, консультант по пластической хирургии, длительная практика в хирургии лица и участие в ISAPS.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Стамбул обычно дешевле Лондона</div></div><div class="price-value">≈ €18 000–35 000</div></div>
             <div class="fact-list"><span class="fact">82 отзыва RealSelf</span><span class="fact">Оценка 4,7</span><span class="fact">Лондон или Стамбул</span></div>
             <div class="caveat">Сравнить условия операции и послеоперационного ухода в двух странах, особенно после возвращения домой.</div>
             <div class="links">
@@ -508,6 +538,7 @@
           <div>
             <div class="card-top"><div><h3>Alexandre Marchac</h3><div class="location">Париж · Франция</div></div><span class="badge">Сильный выбор</span></div>
             <p>Пластическая, реконструктивная и эстетическая хирургия, EBOPRAS, активный член EURAPS, бывший больничный консультант.</p>
+            <div class="price-row"><div><div class="price-label">Deep plane, лицо и шея</div><a class="price-source" href="https://www.mablouseblanche.fr/pro/A10100075455/docteur-marchac-alexandre-chirurgie-plastique-reconstructrice-et-esthetique-paris" target="_blank" rel="noopener">Опубликованный диапазон ↗</a></div><div class="price-value">€12 000–18 000</div></div>
             <div class="fact-list"><span class="fact">EBOPRAS</span><span class="fact">EURAPS</span><span class="fact">Парижская школа</span></div>
             <div class="caveat">Отзывов много, но не все относятся именно к подтяжке лица. Просить показать долгосрочные результаты похожих случаев.</div>
             <div class="links">
@@ -523,6 +554,7 @@
           <div>
             <div class="card-top"><div><h3>Berend van der Lei</h3><div class="location">Харен и Гронинген · Нидерланды</div></div><span class="badge light">Академический</span></div>
             <p>Профессор пластической хирургии с фокусом на эстетической хирургии, автор исследований анатомии лица и лифтинга.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Сторонний диапазон, подтвердить</div></div><div class="price-value">≈ €16 000–20 000</div></div>
             <div class="fact-list"><span class="fact">Профессор</span><span class="fact">74 оценки</span><span class="fact">Средняя 9,3</span></div>
             <div class="caveat">На собственных страницах встречаются разные цифры объёма операций. Попросить официальную статистику по подтяжкам и осложнениям.</div>
             <div class="links">
@@ -538,6 +570,7 @@
           <div>
             <div class="card-top"><div><h3>Patrick Tonnard</h3><div class="location">Гент · Бельгия</div></div><span class="badge light">Пионер MACS</span></div>
             <p>Официально признанный бельгийский пластический хирург и один из создателей техники MACS-лифтинга.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Публичного свежего прайса нет</div></div><div class="price-value">≈ €20 000–30 000</div></div>
             <div class="fact-list"><span class="fact">RBSPS</span><span class="fact">MACS-лифтинг</span><span class="fact">Научный вклад</span></div>
             <div class="caveat">Независимых отзывов неожиданно мало. Один подробный отзыв положительный в целом, но упоминает недостатки результата и резкую манеру общения.</div>
             <div class="links">
@@ -553,6 +586,7 @@
           <div>
             <div class="card-top"><div><h3>Francisco Gómez Bravo</h3><div class="location">Мадрид · Испания</div></div><span class="badge light">Университет</span></div>
             <p>Испанский специалист по пластической хирургии, университетский преподаватель и бывший президент профессионального общества.</p>
+            <div class="price-row"><div><div class="price-label">Операция, оценка по Мадриду</div><a class="price-source" href="https://deepplane.com/madrid" target="_blank" rel="noopener">Рыночный диапазон ↗</a></div><div class="price-value">≈ €11 000–16 000</div></div>
             <div class="fact-list"><span class="fact">SECPRE</span><span class="fact">Профессор</span><span class="fact">Лицо и шея</span></div>
             <div class="caveat">Проверенные отзывы хорошие, но открытая выборка именно по подтяжке лица небольшая и в основном не новая.</div>
             <div class="links">
@@ -568,6 +602,7 @@
           <div>
             <div class="card-top"><div><h3>Kshem Yapa</h3><div class="location">Лондон · Великобритания</div></div><span class="badge">Видео</span></div>
             <p>GMC, FRCS(Plast), BAAPS. Частная практика в значительной степени посвящена омоложению лица.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Cadogan даёт цену после осмотра</div></div><div class="price-value">≈ €20 000–35 000</div></div>
             <div class="fact-list"><span class="fact">£250</span><span class="fact">Видеоконсультация</span><span class="fact">Свежие отзывы</span></div>
             <div class="caveat">Публичная история отзывов короче, чем у Grover, Tiryaki или De Silva, поэтому особенно важны долгосрочные примеры.</div>
             <div class="links">
@@ -583,6 +618,7 @@
           <div>
             <div class="card-top"><div><h3>Julian De Silva</h3><div class="location">Лондон · Великобритания</div></div><span class="badge light">Другая подготовка</span></div>
             <p>Практика только на лице. В реестре GMC его специальность указана как офтальмология, а не пластическая хирургия.</p>
+            <div class="price-row"><div><div class="price-label">Операция, грубая оценка</div><div class="price-source">Письменная смета после осмотра</div></div><div class="price-value">≈ €25 000–45 000</div></div>
             <div class="fact-list"><span class="fact">308 отзывов</span><span class="fact">36 по лицу и шее</span><span class="fact">Клиника CQC</span></div>
             <div class="caveat">Негативные отзывы, найденные в исследовании, в основном касались ринопластики. Звонок с ассистентом за £25 не является консультацией с хирургом.</div>
             <div class="links">
@@ -598,6 +634,7 @@
           <div>
             <div class="card-top"><div><h3>Dirk Richter</h3><div class="location">Бергиш-Гладбах · Германия</div></div><span class="badge light">Сильные регалии</span></div>
             <p>Специалист по пластической хирургии, бывший президент ISAPS и руководитель больничного отделения, преподаватель хирургии лица.</p>
+            <div class="price-row"><div><div class="price-label">Deep plane с шеей, ориентир</div><a class="price-source" href="https://institut-uniq.com/wp-content/uploads/2025/08/Preisliste-INSTITUT-UNIQ-Stand-12.2024.pdf" target="_blank" rel="noopener">Прайс клиники ↗</a></div><div class="price-value">≈ €22 000–26 000</div></div>
             <div class="fact-list"><span class="fact">Past President ISAPS</span><span class="fact">Ревизионная хирургия</span><span class="fact">Лицо и веки</span></div>
             <div class="caveat">Квалификация очень сильная, но публичных отзывов мало. На Estheticon есть три отзыва и отдельный негативный опыт по хирургии век.</div>
             <div class="links">
