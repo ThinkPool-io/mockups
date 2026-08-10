@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Проверенный список европейских хирургов для первой консультации по подтяжке лица." />
+<title>Подтяжка лица в Европе: 10 врачей для консультации</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: hsl(212 13% 5%);
+    --raised: hsl(212 11% 8%);
+    --surface: hsl(212 10% 10%);
+    --float: hsl(212 9% 13%);
+    --line: hsl(212 7% 21%);
+    --line-strong: hsl(212 7% 28%);
+    --ink: hsl(212 14% 95%);
+    --ink-soft: hsl(212 14% 86%);
+    --muted: hsl(212 14% 78%);
+    --faint: hsl(212 12% 62%);
+    --pool: hsl(217 85% 62%);
+    --pool-hi: hsl(217 85% 70%);
+    --pool-dim: hsl(212 26% 21%);
+    --positive: hsl(152 28% 54%);
+    --caution: hsl(38 44% 60%);
+    --danger: hsl(8 52% 62%);
+    --font-display: "Newsreader", Georgia, serif;
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    color: var(--pool-hi);
+    background: var(--surface);
+  }
+  .brand-mark svg { width: 17px; height: 17px; }
+  .nav { display: flex; align-items: center; gap: 8px; }
+  .nav a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 14px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .nav a:hover { color: var(--ink); background: var(--float); }
+
+  .hero { padding: 88px 0 56px; }
+  .eyebrow {
+    color: var(--pool-hi);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 {
+    max-width: 900px;
+    margin: 18px 0 22px;
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 84px);
+    font-weight: 500;
+    line-height: .98;
+    letter-spacing: -.035em;
+  }
+  .hero-copy {
+    max-width: 720px;
+    margin-bottom: 30px;
+    color: var(--muted);
+    font-size: clamp(18px, 2vw, 21px);
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .button {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--float);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .button:hover { transform: translateY(-1px); border-color: var(--pool-hi); }
+  .button.primary { border-color: var(--pool); background: var(--pool); color: var(--bg); }
+  .button svg, .link svg { width: 16px; height: 16px; flex: 0 0 auto; }
+
+  .notice {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    margin-top: 42px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--raised);
+    color: var(--muted);
+  }
+  .notice-icon {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--pool-dim);
+    color: var(--pool-hi);
+    font-family: var(--font-display);
+    font-size: 18px;
+  }
+  .notice strong { color: var(--ink-soft); }
+
+  .section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr minmax(280px, 500px);
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 30px;
+  }
+  h2 {
+    margin-bottom: 0;
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -.025em;
+  }
+  .section-head p { margin-bottom: 0; color: var(--muted); }
+
+  .starter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .starter {
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+  .starter-number {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 28px;
+    border-radius: 50%;
+    background: var(--pool-dim);
+    color: var(--pool-hi);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .starter h3 {
+    margin-bottom: 4px;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .starter .place { margin-bottom: 12px; color: var(--faint); font-size: 14px; }
+  .starter p { color: var(--muted); font-size: 15px; }
+  .starter .link { margin-top: auto; }
+
+  .doctor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .doctor-card {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+  .doctor-card:hover { border-color: var(--line-strong); }
+  .rank {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--raised);
+    color: var(--pool-hi);
+    font-family: var(--font-display);
+    font-size: 28px;
+    border: 1px solid var(--line);
+  }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .doctor-card h3 {
+    margin-bottom: 2px;
+    font-family: var(--font-display);
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .location { color: var(--faint); font-size: 14px; }
+  .badge {
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--pool-dim);
+    color: var(--pool-hi);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .badge.wait { background: color-mix(in oklab, var(--caution) 14%, var(--surface)); color: var(--caution); }
+  .badge.light { background: var(--raised); color: var(--faint); }
+  .doctor-card p { margin: 16px 0; color: var(--muted); font-size: 15px; }
+  .fact-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .fact {
+    padding: 6px 9px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .caveat {
+    margin-bottom: 18px;
+    padding-left: 12px;
+    border-left: 2px solid var(--caution);
+    color: var(--faint);
+    font-size: 13px;
+  }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .link {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .link:hover { border-color: var(--pool-hi); color: var(--ink); }
+
+  .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .method {
+    padding: 20px;
+    border-top: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+  .method strong { display: block; margin-bottom: 8px; color: var(--ink); }
+  .method span { color: var(--pool-hi); font-family: var(--font-mono); font-size: 12px; }
+
+  .questions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: q;
+  }
+  .questions li {
+    min-height: 96px;
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    counter-increment: q;
+  }
+  .questions li::before {
+    content: counter(q, decimal-leading-zero);
+    color: var(--pool-hi);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .safety-card {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 48px;
+    padding: 34px;
+    border: 1px solid var(--line-strong);
+    border-radius: 22px;
+    background: var(--raised);
+  }
+  .safety-card h2 { font-size: clamp(34px, 4vw, 48px); }
+  .safety-card p { margin: 18px 0 0; color: var(--muted); }
+  .safety-links { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+  .safety-links .link { justify-content: space-between; border-radius: 12px; padding: 0 16px; }
+
+  .footer { padding: 40px 0 60px; border-top: 1px solid var(--line); }
+  .footer-inner { display: flex; justify-content: space-between; gap: 32px; color: var(--faint); font-size: 13px; }
+  .footer p { max-width: 760px; margin-bottom: 0; }
+  .stamp { flex: 0 0 auto; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+
+  @media (max-width: 900px) {
+    .starter-grid { grid-template-columns: 1fr; }
+    .starter { min-height: auto; }
+    .starter-number { margin-bottom: 18px; }
+    .doctor-grid { grid-template-columns: 1fr; }
+    .method-grid { grid-template-columns: repeat(2, 1fr); }
+    .safety-card { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+  @media (max-width: 640px) {
+    .shell { width: min(100% - 28px, 1180px); }
+    .topbar-inner { min-height: 58px; }
+    .nav a:not(:last-child) { display: none; }
+    .nav a { min-height: 44px; padding: 0 12px; }
+    .hero { padding: 58px 0 40px; }
+    h1 { font-size: 49px; }
+    .hero-copy { font-size: 18px; }
+    .hero-actions { display: grid; }
+    .button { width: 100%; }
+    .notice { margin-top: 30px; padding: 16px; }
+    .section { padding: 42px 0; }
+    .section-head { grid-template-columns: 1fr; gap: 14px; }
+    .doctor-card { grid-template-columns: 44px 1fr; gap: 12px; padding: 18px; }
+    .rank { width: 44px; height: 44px; border-radius: 13px; font-size: 24px; }
+    .card-top { display: block; }
+    .badge { display: inline-flex; margin-top: 10px; }
+    .links { display: grid; }
+    .link { min-height: 46px; justify-content: space-between; }
+    .method-grid { grid-template-columns: 1fr; }
+    .questions { grid-template-columns: 1fr; }
+    .questions li { min-height: auto; }
+    .safety-card { padding: 22px; }
+    .footer-inner { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .button { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="#top" aria-label="В начало">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3.5c3.4 4.1 5.1 7.2 5.1 9.5a5.1 5.1 0 0 1-10.2 0c0-2.3 1.7-5.4 5.1-9.5Z"/><path d="M9.5 14.2c.5 1.1 1.3 1.7 2.5 1.8"/></svg>
+      </span>
+      <span>Для мамы</span>
+    </a>
+    <nav class="nav" aria-label="Навигация">
+      <a href="#rating">Все врачи</a>
+      <a href="#questions">Вопросы</a>
+      <a href="#start">С чего начать</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="shell">
+      <div class="eyebrow">Исследование по Европе · 10 августа 2026</div>
+      <h1>Мам, вот кого стоит рассмотреть для подтяжки лица</h1>
+      <p class="hero-copy">Мы сравнили квалификацию, специализацию на лице, отзывы пациентов и возможность записаться на первую консультацию. Это не выбор врача за тебя, а спокойный и проверяемый список для начала.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#start">Посмотреть первые 3 консультации</a>
+        <a class="button" href="#rating">Открыть весь рейтинг</a>
+      </div>
+      <div class="notice">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <div><strong>Главное:</strong> известность и красивые фото не заменяют проверку лицензии, статистики осложнений и плана наблюдения после возвращения в Литву. Любое решение принимается только после личной консультации с хирургом.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="start">
+    <div class="shell">
+      <div class="section-head">
+        <h2>С кого начать</h2>
+        <p>Три разных сильных варианта. У каждого можно получить самостоятельное мнение и сравнить подходы, не принимая решение после одной встречи.</p>
+      </div>
+      <div class="starter-grid">
+        <article class="starter">
+          <div class="starter-number">01</div>
+          <h3>Rajiv Grover</h3>
+          <div class="place">Лондон, Великобритания</div>
+          <p>Самый ровный баланс подтверждённой квалификации, специализации на лице, независимых отзывов и длительного послеоперационного наблюдения.</p>
+          <a class="link" href="https://www.rajivgrover.co.uk/" target="_blank" rel="noopener">Открыть сайт врача <span>↗</span></a>
+        </article>
+        <article class="starter">
+          <div class="starter-number">02</div>
+          <h3>Tunç Tiryaki</h3>
+          <div class="place">Лондон и Стамбул</div>
+          <p>Сильная специализация на омоложении лица, много свежих отзывов и доступная видеоконсультация из Вильнюса.</p>
+          <a class="link" href="https://tunctiryaki.co.uk/surgery-in-turkey/planning-your-journey-to-istanbul" target="_blank" rel="noopener">Записаться на видеоконсультацию <span>↗</span></a>
+        </article>
+        <article class="starter">
+          <div class="starter-number">03</div>
+          <h3>Alexandre Marchac</h3>
+          <div class="place">Париж, Франция</div>
+          <p>Европейская сертификация, университетская и больничная подготовка, активная практика и независимый французский массив отзывов.</p>
+          <a class="link" href="https://www.drmarchac.com/contact/" target="_blank" rel="noopener">Записаться на консультацию <span>↗</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="rating">
+    <div class="shell">
+      <div class="section-head">
+        <h2>Все 10 врачей</h2>
+        <p>Порядок отражает силу открытых доказательств для первой консультации, а не обещание результата операции.</p>
+      </div>
+      <div class="doctor-grid">
+
+        <article class="doctor-card">
+          <div class="rank">1</div>
+          <div>
+            <div class="card-top"><div><h3>Rajiv Grover</h3><div class="location">Лондон · Великобритания</div></div><span class="badge">Начать здесь</span></div>
+            <p>Специалист по пластической хирургии в реестре GMC, бывший президент BAAPS, стажировка по хирургии лица в Гарварде.</p>
+            <div class="fact-list"><span class="fact">36 отзывов PHIN</span><span class="fact">100% рекомендуют</span><span class="fact">Наблюдение 6 месяцев</span></div>
+            <div class="caveat">Уточнить, возможна ли первая консультация по видео. PHIN указывает стоимость £300–£450.</div>
+            <div class="links">
+              <a class="link" href="https://www.rajivgrover.co.uk/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.phin.org.uk/profiles/consultants/mr-rajiv-grover-106141" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.realself.com/dr/rajiv-grover-london-united-kingdom" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">2</div>
+          <div>
+            <div class="card-top"><div><h3>Georgios Orfaniotis</h3><div class="location">Лондон · Великобритания</div></div><span class="badge wait">Заявки закрыты</span></div>
+            <p>GMC, FRCS(Plast), EBOPRAS, BAAPS и BAPRAS. Практика почти полностью посвящена хирургии лица и шеи.</p>
+            <div class="fact-list"><span class="fact">Пластический хирург</span><span class="fact">Глубокая подтяжка</span><span class="fact">Свежие отзывы</span></div>
+            <div class="caveat">На официальном сайте сейчас указано, что новые заявки временно не принимаются.</div>
+            <div class="links">
+              <a class="link" href="https://orfaniotis.co.uk/contact/" target="_blank" rel="noopener">Статус записи ↗</a>
+              <a class="link" href="https://baaps.org.uk/patients/surgeons/60a81718-4d45-46e8-9201-959a984615b2/" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.realself.com/dr/georgios-orfaniotis-london-united-kingdom" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">3</div>
+          <div>
+            <div class="card-top"><div><h3>Tunç Tiryaki</h3><div class="location">Лондон и Стамбул</div></div><span class="badge">Видео</span></div>
+            <p>Специалист GMC, консультант по пластической хирургии, длительная практика в хирургии лица и участие в ISAPS.</p>
+            <div class="fact-list"><span class="fact">82 отзыва RealSelf</span><span class="fact">Оценка 4,7</span><span class="fact">Лондон или Стамбул</span></div>
+            <div class="caveat">Сравнить условия операции и послеоперационного ухода в двух странах, особенно после возвращения домой.</div>
+            <div class="links">
+              <a class="link" href="https://tunctiryaki.co.uk/surgery-in-turkey/planning-your-journey-to-istanbul" target="_blank" rel="noopener">Видеоконсультация ↗</a>
+              <a class="link" href="https://www.cadoganclinic.com/about-us/our-consultants/mr-tunc-tiryaki/" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.realself.com/dr/tunc-tiryaki-london-united-kingdom" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">4</div>
+          <div>
+            <div class="card-top"><div><h3>Alexandre Marchac</h3><div class="location">Париж · Франция</div></div><span class="badge">Сильный выбор</span></div>
+            <p>Пластическая, реконструктивная и эстетическая хирургия, EBOPRAS, активный член EURAPS, бывший больничный консультант.</p>
+            <div class="fact-list"><span class="fact">EBOPRAS</span><span class="fact">EURAPS</span><span class="fact">Парижская школа</span></div>
+            <div class="caveat">Отзывов много, но не все относятся именно к подтяжке лица. Просить показать долгосрочные результаты похожих случаев.</div>
+            <div class="links">
+              <a class="link" href="https://www.drmarchac.com/contact/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.drmarchac.com/docteur-marchac/biographie/" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://citoofrance.com/chirurgien/paris/dr-alexandre-marchac/" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">5</div>
+          <div>
+            <div class="card-top"><div><h3>Berend van der Lei</h3><div class="location">Харен и Гронинген · Нидерланды</div></div><span class="badge light">Академический</span></div>
+            <p>Профессор пластической хирургии с фокусом на эстетической хирургии, автор исследований анатомии лица и лифтинга.</p>
+            <div class="fact-list"><span class="fact">Профессор</span><span class="fact">74 оценки</span><span class="fact">Средняя 9,3</span></div>
+            <div class="caveat">На собственных страницах встречаются разные цифры объёма операций. Попросить официальную статистику по подтяжкам и осложнениям.</div>
+            <div class="links">
+              <a class="link" href="https://profaesthetics.nl/deep-plane-facelift" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.rug.nl/staff/b.van.der.lei/?lang=en" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.zorgkaartnederland.nl/zorgverlener/plastisch-chirurg-lei-b-van-der-146358/waardering" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">6</div>
+          <div>
+            <div class="card-top"><div><h3>Patrick Tonnard</h3><div class="location">Гент · Бельгия</div></div><span class="badge light">Пионер MACS</span></div>
+            <p>Официально признанный бельгийский пластический хирург и один из создателей техники MACS-лифтинга.</p>
+            <div class="fact-list"><span class="fact">RBSPS</span><span class="fact">MACS-лифтинг</span><span class="fact">Научный вклад</span></div>
+            <div class="caveat">Независимых отзывов неожиданно мало. Один подробный отзыв положительный в целом, но упоминает недостатки результата и резкую манеру общения.</div>
+            <div class="links">
+              <a class="link" href="https://tonnardverpaele.com/en" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.rbsps.org/fr/chirurgien&#45;&#45;dr-tonnard-patrick&#45;&#45;119.html" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.realself.com/review/belgium-smas-facelift-dr-patrick-tonnard" target="_blank" rel="noopener">Отзыв ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">7</div>
+          <div>
+            <div class="card-top"><div><h3>Francisco Gómez Bravo</h3><div class="location">Мадрид · Испания</div></div><span class="badge light">Университет</span></div>
+            <p>Испанский специалист по пластической хирургии, университетский преподаватель и бывший президент профессионального общества.</p>
+            <div class="fact-list"><span class="fact">SECPRE</span><span class="fact">Профессор</span><span class="fact">Лицо и шея</span></div>
+            <div class="caveat">Проверенные отзывы хорошие, но открытая выборка именно по подтяжке лица небольшая и в основном не новая.</div>
+            <div class="links">
+              <a class="link" href="https://www.clinicagomezbravo.com/en/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.theaestheticsociety.org/select-surgeon/francisco-g-bravo-md-phd" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.doctoralia.es/francisco-gomez-bravo/cirujano-plastico/madrid" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">8</div>
+          <div>
+            <div class="card-top"><div><h3>Kshem Yapa</h3><div class="location">Лондон · Великобритания</div></div><span class="badge">Видео</span></div>
+            <p>GMC, FRCS(Plast), BAAPS. Частная практика в значительной степени посвящена омоложению лица.</p>
+            <div class="fact-list"><span class="fact">£250</span><span class="fact">Видеоконсультация</span><span class="fact">Свежие отзывы</span></div>
+            <div class="caveat">Публичная история отзывов короче, чем у Grover, Tiryaki или De Silva, поэтому особенно важны долгосрочные примеры.</div>
+            <div class="links">
+              <a class="link" href="https://yapaplasticsurgery.com/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://baaps.org.uk/patients/surgeons/f5a34940-38a7-439c-bfd8-40da7928db54/" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.realself.com/dr/kshem-senarath-yapa-london-united-kingdom" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">9</div>
+          <div>
+            <div class="card-top"><div><h3>Julian De Silva</h3><div class="location">Лондон · Великобритания</div></div><span class="badge light">Другая подготовка</span></div>
+            <p>Практика только на лице. В реестре GMC его специальность указана как офтальмология, а не пластическая хирургия.</p>
+            <div class="fact-list"><span class="fact">308 отзывов</span><span class="fact">36 по лицу и шее</span><span class="fact">Клиника CQC</span></div>
+            <div class="caveat">Негативные отзывы, найденные в исследовании, в основном касались ринопластики. Звонок с ассистентом за £25 не является консультацией с хирургом.</div>
+            <div class="links">
+              <a class="link" href="https://londonfacialplasticsurgery.co.uk/contact-us/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.gmc-uk.org/api/gmc/print/registrant?no=4644389" target="_blank" rel="noopener">Реестр GMC ↗</a>
+              <a class="link" href="https://www.realself.com/dr/julian-de-silva-london-united-kingdom" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="doctor-card">
+          <div class="rank">10</div>
+          <div>
+            <div class="card-top"><div><h3>Dirk Richter</h3><div class="location">Бергиш-Гладбах · Германия</div></div><span class="badge light">Сильные регалии</span></div>
+            <p>Специалист по пластической хирургии, бывший президент ISAPS и руководитель больничного отделения, преподаватель хирургии лица.</p>
+            <div class="fact-list"><span class="fact">Past President ISAPS</span><span class="fact">Ревизионная хирургия</span><span class="fact">Лицо и веки</span></div>
+            <div class="caveat">Квалификация очень сильная, но публичных отзывов мало. На Estheticon есть три отзыва и отдельный негативный опыт по хирургии век.</div>
+            <div class="links">
+              <a class="link" href="https://www.dr-richter-plastische-wesseling.de/" target="_blank" rel="noopener">Запись ↗</a>
+              <a class="link" href="https://www.isaps.org/education/residents-program/isaps-fellowship-program/germany-koeln/" target="_blank" rel="noopener">Квалификация ↗</a>
+              <a class="link" href="https://www.estheticon.de/chirurgen/richter-dirk" target="_blank" rel="noopener">Отзывы ↗</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <h2>Как составлялся список</h2>
+        <p>Отзывы помогают заметить закономерности, но сами по себе не доказывают качество операции.</p>
+      </div>
+      <div class="method-grid">
+        <div class="method"><span>01</span><strong>Лицензия и специальность</strong>Национальные реестры, признанные общества и хирургическая сертификация.</div>
+        <div class="method"><span>02</span><strong>Фокус на лице</strong>Подтяжка лица и шеи должна быть значимой частью практики, а не редкой услугой.</div>
+        <div class="method"><span>03</span><strong>Отзывы с деталями</strong>Важнее свежие отзывы о конкретной операции, чем общий рейтинг клиники.</div>
+        <div class="method"><span>04</span><strong>Наблюдение после операции</strong>Кто помогает после возвращения в Литву и что происходит при осложнении.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="questions">
+    <div class="shell">
+      <div class="section-head">
+        <h2>10 вопросов хирургу</h2>
+        <p>Можно отправить клинике заранее и попросить письменный ответ. Если отвечает только менеджер по продажам, это не считается консультацией.</p>
+      </div>
+      <ol class="questions">
+        <li>Сколько первичных подтяжек лица и шеи вы лично выполнили за каждый из последних трёх лет?</li>
+        <li>Какова ваша статистика гематом, инфекций, повреждения кожи и временной или постоянной слабости лицевого нерва?</li>
+        <li>Как часто требуется повторная операция или коррекция в течение двух лет?</li>
+        <li>Какую технику вы предлагаете именно для моего лица и почему?</li>
+        <li>Кто выполняет каждый этап операции и кто накладывает швы?</li>
+        <li>Где проходит операция, кто отвечает за анестезию и нужна ли ночь в стационаре?</li>
+        <li>Сколько дней нужно оставаться рядом с клиникой и когда безопасно лететь домой?</li>
+        <li>Кто будет осматривать меня на следующий день и в течение первой недели?</li>
+        <li>Кто лечит осложнение после возвращения в Литву и кто оплачивает лечение или коррекцию?</li>
+        <li>Можно ли увидеть неотретушированные результаты похожих пациентов через год и позже?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="safety-card">
+        <div>
+          <div class="eyebrow">Безопасность поездки</div>
+          <h2>Операция заканчивается не в операционной</h2>
+          <p>Перелёт после большой операции повышает риск тромбоза. До оплаты нужно получить письменный план наблюдения, сроки безопасного перелёта и контакт врача, который поможет после возвращения домой.</p>
+        </div>
+        <div class="safety-links">
+          <a class="link" href="https://www.nhs.uk/tests-and-treatments/cosmetic-procedures/advice/cosmetic-surgery-abroad/" target="_blank" rel="noopener">Рекомендации NHS <span>↗</span></a>
+          <a class="link" href="https://www.isaps.org/discover/patients-home/considering-your-procedure-abroad/make-a-plan/" target="_blank" rel="noopener">План поездки ISAPS <span>↗</span></a>
+          <a class="link" href="https://www.rcseng.ac.uk/patient-care/cosmetic-surgery/choosing-a-surgeon-and-hospital/" target="_blank" rel="noopener">Как выбрать хирурга и клинику <span>↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="shell footer-inner">
+    <p>Информационный материал для подготовки к консультации. Он не заменяет осмотр, медицинскую рекомендацию или повторную проверку лицензии врача перед оплатой. Отсутствие найденных дисциплинарных решений не означает официального подтверждения безопасности.</p>
+    <div class="stamp">Проверено 10.08.2026</div>
+  </div>
+</footer>
+
+</body>
+</html>
