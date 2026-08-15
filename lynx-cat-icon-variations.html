@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lynx cat icon variations</title>
+  <style>
+    :root { color-scheme: dark; --bg:#090d14; --panel:#111722; --line:#2c3442; --ink:#f2f5fa; --muted:#9eabc0; --blue:#2876f7; --cyan:#79dfff; }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; margin:0; background:var(--bg); color:var(--ink); font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { padding:30px; background:radial-gradient(circle at 50% -15%,rgba(40,118,247,.22),transparent 45%),var(--bg); }
+    main { width:min(1320px,100%); margin:0 auto; }
+    header { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:24px; }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(34px,4.4vw,62px); font-weight:400; letter-spacing:-.04em; line-height:.98; }
+    .sub { margin:9px 0 0; color:var(--muted); font-size:15px; }
+    .legend { color:#78aaff; font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; white-space:nowrap; }
+    .grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+    .card { position:relative; display:grid; min-width:0; place-items:center; border:1px solid var(--line); border-radius:22px; background:rgba(17,23,34,.9); padding:15px 14px 13px; box-shadow:0 22px 50px -40px #2876f7; }
+    .card.recommended { border-color:rgba(108,162,255,.75); background:linear-gradient(180deg,rgba(22,34,56,.98),rgba(17,23,34,.94)); }
+    .tag { position:absolute; top:10px; right:10px; border-radius:999px; background:rgba(40,118,247,.18); color:#8bb7ff; padding:4px 7px; font-size:8px; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .icon { width:min(150px,70%); aspect-ratio:1; filter:drop-shadow(0 13px 22px rgba(0,0,0,.35)); }
+    .meta { display:flex; width:100%; align-items:center; justify-content:space-between; gap:8px; margin-top:8px; }
+    .num { color:#6ca2ff; font-family:ui-monospace,"SFMono-Regular",Consolas,monospace; font-size:10px; font-weight:800; }
+    .name { overflow:hidden; color:#dbe4f2; font-size:13px; font-weight:750; text-overflow:ellipsis; white-space:nowrap; }
+    footer { margin-top:18px; color:#718097; font-size:12px; text-align:center; }
+    svg .head { fill:#0b1527; stroke:#438cf8; stroke-width:6; stroke-linejoin:round; }
+    svg .ear { fill:#5d9eff; opacity:.5; }
+    svg .soft { fill:none; stroke:#9eb1cb; stroke-linecap:round; stroke-linejoin:round; }
+    svg .bright { fill:none; stroke:#f3f7ff; stroke-linecap:round; stroke-linejoin:round; }
+    svg .accent { fill:none; stroke:#69a7ff; stroke-linecap:round; stroke-linejoin:round; }
+    svg .nose { fill:#79dfff; }
+    @media (max-width:700px) {
+      body { padding:16px 12px 18px; }
+      header { align-items:start; margin-bottom:14px; }
+      h1 { font-size:32px; }
+      .sub { margin-top:5px; font-size:12px; }
+      .legend { display:none; }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+      .card { border-radius:15px; padding:8px 8px 7px; }
+      .icon { width:88px; }
+      .meta { margin-top:3px; }
+      .name { font-size:10px; }
+      .num { font-size:8px; }
+      .tag { top:6px; right:6px; padding:3px 5px; font-size:6px; }
+      footer { margin-top:10px; font-size:10px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Lynx icon study</h1>
+        <p class="sub">Ten cleaner cat marks. Every eye pair shares one baseline.</p>
+      </div>
+      <div class="legend">Home-screen icon directions</div>
+    </header>
+    <section class="grid" aria-label="Ten Lynx cat icon variations">
+
+      <article class="card recommended">
+        <span class="tag">Strongest</span>
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Balanced arrows icon">
+          <defs><linearGradient id="b1" x1="25" y1="18" x2="180" y2="190"><stop stop-color="#173469"/><stop offset=".55" stop-color="#0a1427"/><stop offset="1" stop-color="#050912"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b1)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <path class="bright" stroke-width="8" d="M53 103h32m-11-11 11 11-11 11M147 103h-32m11-11-11 11 11 11"/><path class="nose" d="m100 128-8 7 8 7 8-7-8-7Z"/><path class="soft" stroke-width="5" d="M100 142v9m0 0q-9 10-20 6m20-6q9 10 20 6"/>
+        </svg>
+        <div class="meta"><span class="num">01</span><span class="name">Balanced arrows</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Split signal icon">
+          <defs><linearGradient id="b2" x1="20" y1="10" x2="175" y2="190"><stop stop-color="#12335c"/><stop offset="1" stop-color="#060a12"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b2)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <path fill="none" stroke="#62d993" stroke-width="8" stroke-linecap="round" d="M53 103h32m-10-10 10 10-10 10"/><path fill="none" stroke="#fa6687" stroke-width="8" stroke-linecap="round" d="M147 103h-32m10-10-10 10 10 10"/><circle cx="100" cy="136" r="7" fill="#79dfff"/><path class="soft" stroke-width="5" d="M100 143v9m0 0q-10 9-20 5m20-5q10 9 20 5"/>
+        </svg>
+        <div class="meta"><span class="num">02</span><span class="name">Split signal</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Linked eyes icon">
+          <defs><linearGradient id="b3" x1="18" y1="18" x2="184" y2="184"><stop stop-color="#182d53"/><stop offset="1" stop-color="#060a13"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b3)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <g fill="none" stroke="#eaf2ff" stroke-width="7"><rect x="51" y="91" width="37" height="24" rx="12"/><rect x="112" y="91" width="37" height="24" rx="12"/><path d="M84 103h32"/></g><path class="nose" d="m100 130-8 7 8 7 8-7-8-7Z"/><path class="soft" stroke-width="5" d="M100 144v10"/>
+        </svg>
+        <div class="meta"><span class="num">03</span><span class="name">Linked eyes</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Equalizer eyes icon">
+          <defs><linearGradient id="b4" x1="20" y1="5" x2="180" y2="200"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b4)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path class="nose" d="m100 128-8 7 8 7 8-7-8-7Z"/><path class="soft" stroke-width="5" d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5"/>
+        </svg>
+        <div class="meta"><span class="num">04</span><span class="name">Equalizer</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Lynx monogram eyes icon">
+          <defs><linearGradient id="b5" x1="10" y1="10" x2="190" y2="190"><stop stop-color="#102952"/><stop offset=".55" stop-color="#080f1e"/><stop offset="1" stop-color="#04070d"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b5)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <path d="M57 89v28h27" fill="none" stroke="#f3f7ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="M143 89v28h-27" fill="none" stroke="#6ca2ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path class="nose" d="m100 130-8 7 8 7 8-7-8-7Z"/>
+        </svg>
+        <div class="meta"><span class="num">05</span><span class="name">Mirror L</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Minimal lynx icon">
+          <defs><linearGradient id="b6" x1="10" y1="0" x2="190" y2="200"><stop stop-color="#163264"/><stop offset="1" stop-color="#050912"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b6)"/><path d="M45 78 57 38l33 24q10-4 20 0l33-24 12 40q14 20 9 47-7 36-64 44-57-8-64-44-5-27 9-47Z" fill="none" stroke="#62a0ff" stroke-width="8" stroke-linejoin="round"/>
+          <circle cx="71" cy="104" r="7" fill="#f3f7ff"/><circle cx="129" cy="104" r="7" fill="#f3f7ff"/><path class="nose" d="m100 127-8 7 8 7 8-7-8-7Z"/><path class="soft" stroke-width="5" d="M100 141v11m0 0q-10 9-20 4m20-4q10 9 20 4"/>
+        </svg>
+        <div class="meta"><span class="num">06</span><span class="name">Bare minimum</span></div>
+      </article>
+
+      <article class="card recommended">
+        <span class="tag">Strong</span>
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Transfer mask icon">
+          <defs><linearGradient id="b7" x1="15" y1="8" x2="185" y2="195"><stop stop-color="#183d75"/><stop offset=".52" stop-color="#091426"/><stop offset="1" stop-color="#050912"/></linearGradient><linearGradient id="g7" x1="48" y1="0" x2="152" y2="0"><stop stop-color="#79dfff"/><stop offset=".5" stop-color="#f3f7ff"/><stop offset="1" stop-color="#6ca2ff"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b7)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <path d="M50 89q50-14 100 0v28q-50 14-100 0Z" fill="#143a72" stroke="url(#g7)" stroke-width="5"/><path d="M58 103h26m-9-9 9 9-9 9M142 103h-26m9-9-9 9 9 9" fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path class="nose" d="m100 132-7 6 7 6 7-6-7-6Z"/>
+        </svg>
+        <div class="meta"><span class="num">07</span><span class="name">Transfer mask</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Negative space icon">
+          <defs><linearGradient id="b8" x1="12" y1="8" x2="188" y2="195"><stop stop-color="#246fda"/><stop offset="1" stop-color="#103669"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b8)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#f2f5fa"/>
+          <path d="M52 103h34m-11-11 11 11-11 11M148 103h-34m11-11-11 11 11 11" fill="none" stroke="#163c73" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="m100 130-8 7 8 7 8-7-8-7Z" fill="#2876f7"/><path d="M100 144v10m0 0q-10 9-20 4m20-4q10 9 20 4" fill="none" stroke="#7689a7" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <div class="meta"><span class="num">08</span><span class="name">Ice cat</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Orbital arrows icon">
+          <defs><radialGradient id="b9"><stop stop-color="#142d57"/><stop offset="1" stop-color="#050912"/></radialGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b9)"/><circle cx="100" cy="103" r="68" fill="#0b1527" stroke="#3d82ed" stroke-width="6"/><path d="M54 74 63 38l28 24m55 12-9-36-28 24" fill="#0b1527" stroke="#3d82ed" stroke-width="6" stroke-linejoin="round"/>
+          <path d="M51 104c14-28 36-38 49-38 28 0 49 19 49 38m-9-10 9 10-11 7M149 119c-14 25-35 33-49 33-27 0-47-17-49-35m-8 9 8-9 11 6" fill="none" stroke="#79dfff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="74" cy="104" r="5" fill="#f3f7ff"/><circle cx="126" cy="104" r="5" fill="#f3f7ff"/><path class="nose" d="m100 127-7 6 7 6 7-6-7-6Z"/>
+        </svg>
+        <div class="meta"><span class="num">09</span><span class="name">Orbit</span></div>
+      </article>
+
+      <article class="card">
+        <svg class="icon" viewBox="0 0 200 200" role="img" aria-label="Forward lynx icon">
+          <defs><linearGradient id="b10" x1="16" y1="0" x2="190" y2="200"><stop stop-color="#172f57"/><stop offset="1" stop-color="#050912"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#b10)"/><path class="head" d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z"/><path class="ear" d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z"/>
+          <path d="M52 103h36m-11-11 11 11-11 11M112 103h36m-11-11 11 11-11 11" fill="none" stroke="#f3f7ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path class="nose" d="m100 130-8 7 8 7 8-7-8-7Z"/><path class="soft" stroke-width="5" d="M100 144v10m0 0q-10 9-20 4m20-4q10 9 20 4"/>
+        </svg>
+        <div class="meta"><span class="num">10</span><span class="name">Forward</span></div>
+      </article>
+    </section>
+    <footer>Same Lynx silhouette, simplified geometry, level eyes, and cleaner small-size legibility.</footer>
+  </main>
+</body>
+</html>
