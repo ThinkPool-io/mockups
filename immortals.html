@@ -1303,6 +1303,13 @@
         height: 36px;
       }
 
+      .exercise-copy strong {
+        overflow: visible;
+        line-height: 1.2;
+        text-overflow: clip;
+        white-space: normal;
+      }
+
       .exercise-dose {
         grid-column: 2;
         margin-top: -20px;
@@ -1530,15 +1537,15 @@
     <section class="hero-grid" aria-labelledby="hero-title">
       <div class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Week 1 · Foundation</p>
-          <h1 id="hero-title">Strong for what comes next.</h1>
-          <p class="hero-lede">A clear plan for every gym day. Tap Start and follow one move at a time.</p>
+          <p class="eyebrow">Week 1 · Full Body A/B</p>
+          <h1 id="hero-title">Built for the long game.</h1>
+          <p class="hero-lede">Real machines. Real dumbbells. A simple plan that gets heavier as you get stronger.</p>
           <div class="hero-actions">
             <button class="primary-button" type="button" data-start aria-haspopup="dialog" aria-controls="workout-dialog">
-              Start Workout
+              <span data-start-label>Start Workout A</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5 13 10l-6 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
             </button>
-            <span class="session-meta">8 guided exercises · video cues</span>
+            <span class="session-meta">6 proper lifts · about 55 min</span>
           </div>
         </div>
 
@@ -1557,28 +1564,28 @@
       </div>
 
       <aside class="week-card" aria-labelledby="week-title">
-        <p class="section-kicker">Your rhythm</p>
-        <h2 id="week-title">Three strong days</h2>
+        <p class="section-kicker">Your split</p>
+        <h2 id="week-title">A / B / A this week</h2>
         <div class="day-list" role="group" aria-label="Training days">
-          <button class="day-button" type="button" aria-pressed="true" data-day="Monday">
+          <button class="day-button" type="button" aria-pressed="true" data-day="Monday" data-workout="A">
             <span class="day-date"><strong>17</strong><span>Mon</span></span>
-            <span class="day-name"><strong>Foundation 01</strong><span>Technique first</span></span>
-            <span class="day-duration">52 min</span>
+            <span class="day-name"><strong>Workout A</strong><span>Press · pull · hinge</span></span>
+            <span class="day-duration">55 min</span>
           </button>
-          <button class="day-button" type="button" aria-pressed="false" data-day="Wednesday">
+          <button class="day-button" type="button" aria-pressed="false" data-day="Wednesday" data-workout="B">
             <span class="day-date"><strong>19</strong><span>Wed</span></span>
-            <span class="day-name"><strong>Foundation 01</strong><span>Repeat and refine</span></span>
-            <span class="day-duration">52 min</span>
+            <span class="day-name"><strong>Workout B</strong><span>Squat · row · thrust</span></span>
+            <span class="day-duration">55 min</span>
           </button>
-          <button class="day-button" type="button" aria-pressed="false" data-day="Friday">
+          <button class="day-button" type="button" aria-pressed="false" data-day="Friday" data-workout="A">
             <span class="day-date"><strong>21</strong><span>Fri</span></span>
-            <span class="day-name"><strong>Foundation 01</strong><span>Finish the week</span></span>
-            <span class="day-duration">52 min</span>
+            <span class="day-name"><strong>Workout A</strong><span>Add reps if form is clean</span></span>
+            <span class="day-duration">55 min</span>
           </button>
         </div>
         <p class="rest-note">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v3m0 9v3m7.5-7.5h-3m-9 0h-3m12.8-5.3-2.1 2.1m-6.4 6.4-2.1 2.1m10.6 0-2.1-2.1M6.8 6.8 4.7 4.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.6" /><circle cx="10" cy="10" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          A rest day sits between every strength session.
+          Rest between sessions. Next week flips to B / A / B.
         </p>
       </aside>
     </section>
@@ -1587,11 +1594,11 @@
       <div class="session-panel">
         <header class="session-header">
           <div>
-            <p class="section-kicker" id="plan-owner">Mom’s plan · Monday</p>
-            <h2 id="session-title">Today’s 8 Moves</h2>
+            <p class="section-kicker" id="plan-owner">Mom’s plan · Monday · Workout A</p>
+            <h2 id="session-title">Full Body A</h2>
           </div>
           <div class="progress-wrap" aria-live="polite">
-            <div class="progress-ring" id="progress-ring"><span id="progress-count">0/8</span></div>
+            <div class="progress-ring" id="progress-ring"><span id="progress-count">0/6</span></div>
             <div class="progress-copy"><strong>Session progress</strong><span>Tap any move to open its guide</span></div>
           </div>
         </header>
@@ -1600,11 +1607,11 @@
           <span class="prep-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.8-1.3 4.3-4.8 5.5-9L12 3l1.2 6.2c.7 3.7 3 6.5 6.8 7.8M5 20h14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg>
           </span>
-          <span class="prep-copy"><strong>Warm up, then find your balance</strong><span>Easy walk, single-leg stance, and clock steps beside a rail</span></span>
-          <span class="prep-time">8 min</span>
+          <span class="prep-copy"><strong>Warm up like a lifter</strong><span>5 min easy cardio, then 2 lighter sets before the first big lift</span></span>
+          <span class="prep-time">7 min</span>
         </div>
 
-        <div class="exercise-list">
+        <div class="exercise-list" id="exercise-list">
           <details class="exercise" data-exercise>
             <summary aria-haspopup="dialog" aria-controls="workout-dialog">
               <span class="exercise-visual" style="--tone:#f5b39c">
@@ -1754,51 +1761,51 @@
       <aside class="support-column" id="why">
         <section class="support-card">
           <p class="section-kicker">Why this works</p>
-          <h3>Strength you can use</h3>
+          <h3>A proper full-body split</h3>
           <div class="benefit-list">
             <div class="benefit">
               <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20h12M8 17V9h8v8M9 9V5h6v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Stand and climb</strong><span>Leg strength for chairs, stairs, and hills.</span></span>
+              <span><strong>Big lower-body work</strong><span>Press, squat, hinge, curl, and thrust under load.</span></span>
             </div>
             <div class="benefit">
               <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-3 5h6L7 8Zm10 0-3 5h6l-3-5Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Catch your balance</strong><span>Stronger feet, ankles, hips, and reactions.</span></span>
+              <span><strong>Push and pull both ways</strong><span>Press forward and overhead. Pull down and back.</span></span>
             </div>
             <div class="benefit">
               <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10v11H7zM9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Carry your life</strong><span>Grip and trunk strength for bags and travel.</span></span>
+              <span><strong>Brace under real load</strong><span>Carries and Pallof presses build a stronger trunk.</span></span>
             </div>
           </div>
         </section>
 
         <section class="support-card coach-card">
-          <p>Finish every set with three good repetitions still available.</p>
-          <small>Coach note · Week 1</small>
+          <p>Own the top of the rep range, then add the smallest available weight.</p>
+          <small>Progression rule · Every week</small>
         </section>
 
         <section class="support-card safety-card">
           <p class="section-kicker">Train safely</p>
-          <p>Stop for chest pressure, faintness, sudden unusual breathlessness, or sharp pain. Adjust the plan around diagnoses, injuries, medication effects, and clinician guidance.</p>
+          <p>Train hard, never sloppy. Stop for chest pressure, faintness, sudden unusual breathlessness, or sharp pain. Adjust around diagnoses, injuries, medication effects, and clinician guidance.</p>
         </section>
       </aside>
     </section>
   </main>
 
   <footer class="site-footer page">
-    <span>Immortals · Foundation program</span>
-    <span>Built for confidence, strength, and a very long life.</span>
+    <span>Immortals · Full-body A/B program</span>
+    <span>Lift well. Get stronger. Keep going.</span>
   </footer>
 
   <div class="mobile-start">
-    <span id="mobile-progress" aria-live="polite">0 of 8 complete</span>
-    <button type="button" data-start aria-haspopup="dialog" aria-controls="workout-dialog">Start Workout</button>
+    <span id="mobile-progress" aria-live="polite">0 of 6 complete</span>
+    <button type="button" data-start aria-haspopup="dialog" aria-controls="workout-dialog"><span data-start-label>Start Workout A</span></button>
   </div>
 
   <dialog class="workout-dialog" id="workout-dialog" aria-labelledby="workout-title">
     <div class="workout-shell">
       <header class="workout-topbar">
         <button class="workout-close" id="workout-close" type="button">Leave Workout</button>
-        <span class="workout-step" id="workout-step" aria-live="polite">Exercise 1 of 8</span>
+        <span class="workout-step" id="workout-step" aria-live="polite">Exercise 1 of 6</span>
         <span class="workout-profile" id="workout-profile">Mom’s Plan</span>
       </header>
 
@@ -1829,7 +1836,7 @@
     </div>
   </dialog>
 
-  <script>
+  <script type="text/plain" id="legacy-immortals-script">
     const exerciseGuides = [
       {
         title: "Bench Sit-to-Stand",
@@ -2133,6 +2140,514 @@
 
     updatePlanLabel();
     updateProgress();
+  </script>
+
+  <script>
+    const exerciseIcons = {
+      legPress: '<circle cx="22" cy="14" r="5" /><path d="m25 19 10 11 8 4m-17-13-8 18m17-9-7 18m15-14 9 13M12 52h43M46 15l7 22M43 15h7" />',
+      chestPress: '<circle cx="23" cy="16" r="5" /><path d="M25 21v22m0-13 13-8m-13 8 13 8M16 49h30M12 43h28m2-27v29m-3-29h7" />',
+      latPulldown: '<circle cx="32" cy="14" r="5" /><path d="M32 20v20m0-13-10-9m10 9 10-9M16 8h32m-28 0 4 4m20-4-4 4M32 40l-9 13m9-13 9 13" />',
+      rdl: '<circle cx="34" cy="10" r="5" /><path d="m33 16-10 17 15 7m-5-24 9 17m-19 0-5 18m20-11 7 12M15 34h6m18 0h6M14 31v7m32-7v7" />',
+      shoulderPress: '<circle cx="32" cy="15" r="5" /><path d="M32 21v19m0-12-10-8m10 8 10-8M17 8v13m-5-13h10m25 0v13m-5-13h10M32 40l-9 13m9-13 9 13" />',
+      farmerCarry: '<circle cx="32" cy="10" r="5" /><path d="M32 16v23m0-15-11 13m11-13 11 13m-11 2-10 14m10-14 11 14M14 34v16m-5-16h10m31 0v16m-5-16h10" />',
+      hackSquat: '<circle cx="24" cy="14" r="5" /><path d="m27 19 10 11 8 4M28 21 19 39m18-9-7 19m15-15 8 13M12 52h44M48 13l7 30M44 13h8" />',
+      hipThrust: '<circle cx="18" cy="21" r="5" /><path d="m23 25 15 8 11-2m-11 2-8 13m19-15 6 15M11 50h46M12 28v22m0-21h12" />',
+      cableRow: '<circle cx="24" cy="14" r="5" /><path d="M24 20v20m0-13 15 4m-15-4-8 10m8 3-9 13m9-13 12 13M39 19v25m0-13h12m-4-4 4 4-4 4" />',
+      inclinePress: '<circle cx="24" cy="15" r="5" /><path d="m26 20 10 15 12-6M36 35l-7 14m19-20 7 15M13 52h44M14 29l15 22M12 28h8" />',
+      legCurl: '<circle cx="24" cy="15" r="5" /><path d="m25 21 12 10h14M37 31l-8 15m22-15v18M11 52h45M14 22v30m0-29h12" />',
+      pallof: '<circle cx="27" cy="13" r="5" /><path d="M27 19v21m0-13 12 3m-12-3-8 10m8 3-8 13m8-13 12 13M39 15v30m0-15h13m-4-4 4 4-4 4" />'
+    };
+
+    const programs = {
+      A: {
+        name: "Workout A",
+        heading: "Full Body A",
+        guides: [
+          {
+            title: "Leg Press",
+            category: "Quads · Glutes",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "2 reps left",
+            icon: "legPress",
+            tone: "#cddac8",
+            videoId: "UWLwsdErycg",
+            videoTitle: "Leg Press Demonstration",
+            source: "Nuffield Health",
+            duration: "2:26",
+            cues: [
+              "Set the seat so your hips and lower back stay supported.",
+              "Keep your knees tracking in the same direction as your toes.",
+              "Lower with control, then drive through your whole foot."
+            ]
+          },
+          {
+            title: "Machine Chest Press",
+            category: "Chest · Triceps",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "2 reps left",
+            icon: "chestPress",
+            tone: "#d8d8ef",
+            videoId: "iQYryL41HII",
+            videoTitle: "Machine Chest Press Demonstration",
+            source: "Nuffield Health",
+            duration: "1:51",
+            cues: [
+              "Set the handles near mid-chest and keep your back on the pad.",
+              "Keep your wrists straight and your shoulders relaxed.",
+              "Press smoothly, then control the return."
+            ]
+          },
+          {
+            title: "Lat Pulldown",
+            category: "Back · Biceps",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "2 reps left",
+            icon: "latPulldown",
+            tone: "#b9d8d6",
+            videoId: "JGeRYIZdojU",
+            videoTitle: "Lat Pulldown Demonstration",
+            source: "PureGym",
+            duration: "0:13",
+            cues: [
+              "Lock your thighs under the pads and sit tall.",
+              "Pull the bar toward your upper chest without swinging.",
+              "Control the return until your arms are long."
+            ]
+          },
+          {
+            title: "Romanian Deadlift",
+            cardTitle: "Dumbbell Romanian Deadlift",
+            category: "Glutes · Hamstrings",
+            dose: "2 Sets · 8–10 Reps",
+            cardDose: "2 × 8–10",
+            effort: "Clean reps",
+            icon: "rdl",
+            tone: "#dfff78",
+            videoId: "F5ZGAP-ZMaI",
+            videoTitle: "Dumbbell Romanian Deadlift Demonstration",
+            source: "E3 Rehab",
+            duration: "0:11",
+            cues: [
+              "Keep the dumbbells close to your thighs.",
+              "Soften your knees and send your hips backward.",
+              "Stand tall without leaning back at the top."
+            ]
+          },
+          {
+            title: "Machine Shoulder Press",
+            category: "Shoulders · Triceps",
+            dose: "2 Sets · 10–12 Reps",
+            cardDose: "2 × 10–12",
+            effort: "2 reps left",
+            icon: "shoulderPress",
+            tone: "#f5b39c",
+            videoId: "GcY6TZxfS0k",
+            videoTitle: "Machine Shoulder Press Demonstration",
+            source: "PureGym",
+            duration: "0:10",
+            cues: [
+              "Set the seat so the handles begin near shoulder height.",
+              "Keep your ribs down, back supported, and wrists stacked.",
+              "Press overhead without shrugging, then return slowly."
+            ]
+          },
+          {
+            title: "Farmer Carry",
+            category: "Grip · Core · Conditioning",
+            dose: "3 Sets · 20 m",
+            cardDose: "3 × 20 m",
+            effort: "Heavy and tidy",
+            icon: "farmerCarry",
+            tone: "#f4d8a8",
+            videoId: "-QSmQj9_CQo",
+            videoTitle: "Farmer Carry Demonstration",
+            source: "Continuous Motion Physical Therapy",
+            duration: "0:14",
+            cues: [
+              "Choose challenging dumbbells you can carry with tall posture.",
+              "Keep your shoulders quiet and take steady steps.",
+              "Turn under control and keep breathing."
+            ]
+          }
+        ]
+      },
+      B: {
+        name: "Workout B",
+        heading: "Full Body B",
+        guides: [
+          {
+            title: "Hack Squat",
+            category: "Quads · Glutes",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "2 reps left",
+            icon: "hackSquat",
+            tone: "#dfff78",
+            videoId: "scs5XcsZuc8",
+            videoTitle: "Hack Squat Demonstration",
+            source: "PureGym",
+            duration: "0:25",
+            cues: [
+              "Keep your back and shoulders firmly against the pads.",
+              "Let your knees travel in the same direction as your toes.",
+              "Drive the platform away without snapping your knees straight."
+            ]
+          },
+          {
+            title: "Hip Thrust Machine",
+            category: "Glutes · Hamstrings",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "Pause at top",
+            icon: "hipThrust",
+            tone: "#f5b39c",
+            videoId: "01rcKtWWvwE",
+            videoTitle: "Hip Thrust Machine Demonstration",
+            source: "Hype Training & Coaching",
+            duration: "0:38",
+            cues: [
+              "Place the pad securely across your hips and plant both feet.",
+              "Keep your chin tucked and your ribs down.",
+              "Drive your hips up, pause, then lower with control."
+            ]
+          },
+          {
+            title: "Seated Cable Row",
+            category: "Back · Biceps",
+            dose: "3 Sets · 8–10 Reps",
+            cardDose: "3 × 8–10",
+            effort: "2 reps left",
+            icon: "cableRow",
+            tone: "#b9d8d6",
+            videoId: "VmXBWEoIY5c",
+            videoTitle: "Seated Cable Row Demonstration",
+            source: "University of Alberta",
+            duration: "0:35",
+            cues: [
+              "Set your feet securely and sit tall.",
+              "Pull the handle toward your lower ribs.",
+              "Keep your torso quiet without rocking."
+            ]
+          },
+          {
+            title: "Incline Dumbbell Press",
+            category: "Chest · Shoulders",
+            dose: "2 Sets · 8–10 Reps",
+            cardDose: "2 × 8–10",
+            effort: "Clean reps",
+            icon: "inclinePress",
+            tone: "#d8d8ef",
+            videoId: "jMQA3XtJSgo",
+            videoTitle: "Incline Dumbbell Press Demonstration",
+            source: "OPEX Fitness",
+            duration: "0:13",
+            cues: [
+              "Set a low incline and plant both feet firmly.",
+              "Start the dumbbells just outside your upper chest.",
+              "Press them up together, then lower with control."
+            ]
+          },
+          {
+            title: "Seated Leg Curl",
+            category: "Hamstrings · Knees",
+            dose: "2 Sets · 10–12 Reps",
+            cardDose: "2 × 10–12",
+            effort: "Slow return",
+            icon: "legCurl",
+            tone: "#cddac8",
+            videoId: "hhzTWndsgTc",
+            videoTitle: "Seated Leg Curl Demonstration",
+            source: "Life Fitness",
+            duration: "0:24",
+            cues: [
+              "Align your knees with the machine pivot and secure the pads.",
+              "Keep your hips and back pressed into the seat.",
+              "Curl your heels down, squeeze, then return slowly."
+            ]
+          },
+          {
+            title: "Pallof Press",
+            category: "Core · Anti-Rotation",
+            dose: "2 Sets · 10 Each Side",
+            cardDose: "2 × 10",
+            effort: "Each side",
+            icon: "pallof",
+            tone: "#f4d8a8",
+            videoId: "lcVTzIaqkPE",
+            videoTitle: "Pallof Press Demonstration",
+            source: "Pursuit Physical Therapy",
+            duration: "0:31",
+            cues: [
+              "Stand side-on to the cable with a stable stance.",
+              "Press straight forward without letting your torso rotate.",
+              "Pause, breathe, then return under control."
+            ]
+          }
+        ]
+      }
+    };
+
+    const profileButtonsV2 = Array.from(document.querySelectorAll("[data-profile]"));
+    const dayButtonsV2 = Array.from(document.querySelectorAll("[data-day]"));
+    const startButtonsV2 = Array.from(document.querySelectorAll("[data-start]"));
+    const startLabelsV2 = Array.from(document.querySelectorAll("[data-start-label]"));
+    const exerciseListV2 = document.getElementById("exercise-list");
+    const planOwnerV2 = document.getElementById("plan-owner");
+    const sessionTitleV2 = document.getElementById("session-title");
+    const progressRingV2 = document.getElementById("progress-ring");
+    const progressCountV2 = document.getElementById("progress-count");
+    const mobileProgressV2 = document.getElementById("mobile-progress");
+    const workoutDialogV2 = document.getElementById("workout-dialog");
+    const workoutCloseV2 = document.getElementById("workout-close");
+    const workoutStepV2 = document.getElementById("workout-step");
+    const workoutProfileV2 = document.getElementById("workout-profile");
+    const workoutIconV2 = document.getElementById("workout-icon");
+    const workoutCategoryV2 = document.getElementById("workout-category");
+    const workoutDoseV2 = document.getElementById("workout-dose");
+    const workoutTitleV2 = document.getElementById("workout-title");
+    const workoutCuesV2 = document.getElementById("workout-cues");
+    const workoutPreviousV2 = document.getElementById("workout-previous");
+    const workoutNextV2 = document.getElementById("workout-next");
+    const videoSlotV2 = document.getElementById("video-slot");
+    const videoNoteV2 = document.getElementById("video-note");
+    const progressStateV2 = new Map();
+    let selectedProfileV2 = "Mom";
+    let selectedDayV2 = "Monday";
+    let selectedWorkoutV2 = "A";
+    let currentExerciseV2 = 0;
+    let exerciseCardsV2 = [];
+    let lastOpenerV2 = null;
+
+    function activeGuidesV2() {
+      return programs[selectedWorkoutV2].guides;
+    }
+
+    function progressKeyV2() {
+      return selectedProfileV2 + "|" + selectedDayV2;
+    }
+
+    function completionSetV2() {
+      const key = progressKeyV2();
+      if (!progressStateV2.has(key)) {
+        progressStateV2.set(key, new Set());
+      }
+      return progressStateV2.get(key);
+    }
+
+    function createVideoButtonV2(guide) {
+      const button = document.createElement("button");
+      const thumbnail = document.createElement("img");
+      const play = document.createElement("span");
+      const label = document.createElement("span");
+      const length = document.createElement("span");
+
+      button.type = "button";
+      button.className = "workout-video";
+      button.setAttribute("aria-label", "Play " + guide.videoTitle + ", " + guide.duration);
+      thumbnail.src = "https://i.ytimg.com/vi/" + guide.videoId + "/mqdefault.jpg";
+      thumbnail.alt = "";
+      thumbnail.width = 320;
+      thumbnail.height = 180;
+      play.className = "video-play";
+      play.setAttribute("aria-hidden", "true");
+      play.textContent = "▶";
+      label.className = "video-label";
+      length.className = "video-length";
+      length.textContent = guide.duration;
+      label.append(length);
+      button.append(thumbnail, play, label);
+
+      button.addEventListener("click", () => {
+        const frame = document.createElement("div");
+        const iframe = document.createElement("iframe");
+        frame.className = "video-frame";
+        iframe.src = "https://www.youtube-nocookie.com/embed/" + guide.videoId + "?autoplay=1&cc_load_policy=1&playsinline=1&rel=0";
+        iframe.title = guide.videoTitle;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        iframe.allowFullscreen = true;
+        frame.append(iframe);
+        videoSlotV2.replaceChildren(frame);
+        videoNoteV2.textContent = "YouTube player · captions available";
+      });
+
+      return button;
+    }
+
+    function createExerciseCardV2(guide, index) {
+      const card = document.createElement("details");
+      const summary = document.createElement("summary");
+      const visual = document.createElement("span");
+      const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      const copy = document.createElement("span");
+      const category = document.createElement("span");
+      const title = document.createElement("strong");
+      const dose = document.createElement("span");
+      const effort = document.createElement("span");
+      const view = document.createElement("span");
+
+      card.className = "exercise";
+      card.dataset.exercise = "";
+      summary.setAttribute("aria-haspopup", "dialog");
+      summary.setAttribute("aria-controls", "workout-dialog");
+      visual.className = "exercise-visual";
+      visual.style.setProperty("--tone", guide.tone);
+      icon.setAttribute("viewBox", "0 0 64 64");
+      icon.setAttribute("aria-hidden", "true");
+      icon.innerHTML = exerciseIcons[guide.icon];
+      copy.className = "exercise-copy";
+      category.textContent = guide.category;
+      title.textContent = guide.cardTitle || guide.title;
+      dose.className = "exercise-dose";
+      dose.append(document.createTextNode(guide.cardDose), effort);
+      effort.textContent = guide.effort;
+      view.className = "chevron";
+      view.setAttribute("aria-hidden", "true");
+      visual.append(icon);
+      copy.append(category, title);
+      summary.append(visual, copy, dose, view);
+      card.append(summary);
+
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+        card.removeAttribute("open");
+        openWorkoutV2(index);
+      });
+
+      return card;
+    }
+
+    function updatePlanLabelV2() {
+      const workoutName = programs[selectedWorkoutV2].name;
+      planOwnerV2.textContent = selectedProfileV2 + "’s plan · " + selectedDayV2 + " · " + workoutName;
+      sessionTitleV2.textContent = programs[selectedWorkoutV2].heading;
+      workoutProfileV2.textContent = selectedProfileV2 + "’s Plan · " + workoutName;
+      startLabelsV2.forEach((label) => {
+        label.textContent = "Start " + workoutName;
+      });
+    }
+
+    function updateProgressV2() {
+      const completed = completionSetV2();
+      const total = activeGuidesV2().length;
+      const percent = Math.round((completed.size / total) * 100);
+      progressRingV2.style.setProperty("--progress", String(percent));
+      progressCountV2.textContent = completed.size + "/" + total;
+      mobileProgressV2.textContent = completed.size === total
+        ? programs[selectedWorkoutV2].name + " complete ✓"
+        : completed.size + " of " + total + " complete";
+      exerciseCardsV2.forEach((card, index) => {
+        card.classList.toggle("is-complete", completed.has(index));
+      });
+    }
+
+    function renderExerciseListV2() {
+      exerciseListV2.replaceChildren();
+      exerciseCardsV2 = activeGuidesV2().map((guide, index) => createExerciseCardV2(guide, index));
+      exerciseCardsV2.forEach((card) => exerciseListV2.append(card));
+      updateProgressV2();
+    }
+
+    function renderProgramV2() {
+      updatePlanLabelV2();
+      renderExerciseListV2();
+    }
+
+    function setExerciseCompleteV2(index, isComplete) {
+      const completed = completionSetV2();
+      if (isComplete) {
+        completed.add(index);
+      } else {
+        completed.delete(index);
+      }
+      updateProgressV2();
+    }
+
+    function renderWorkoutV2(index) {
+      const guides = activeGuidesV2();
+      currentExerciseV2 = Math.max(0, Math.min(index, guides.length - 1));
+      const guide = guides[currentExerciseV2];
+      const visual = exerciseCardsV2[currentExerciseV2].querySelector(".exercise-visual").cloneNode(true);
+      workoutStepV2.textContent = programs[selectedWorkoutV2].name + " · " + (currentExerciseV2 + 1) + " of " + guides.length;
+      workoutCategoryV2.textContent = guide.category;
+      workoutDoseV2.textContent = guide.dose;
+      workoutTitleV2.textContent = guide.title;
+      workoutIconV2.replaceChildren(visual);
+      workoutCuesV2.replaceChildren();
+      guide.cues.forEach((cue) => {
+        const item = document.createElement("li");
+        item.textContent = cue;
+        workoutCuesV2.append(item);
+      });
+      videoSlotV2.replaceChildren(createVideoButtonV2(guide));
+      videoNoteV2.textContent = "Tap to play · " + guide.source;
+      workoutPreviousV2.disabled = currentExerciseV2 === 0;
+      workoutNextV2.textContent = currentExerciseV2 === guides.length - 1 ? "Finish Workout" : "Done, Next Exercise";
+    }
+
+    function openWorkoutV2(index) {
+      lastOpenerV2 = document.activeElement;
+      renderWorkoutV2(index);
+      if (!workoutDialogV2.open) {
+        workoutDialogV2.showModal();
+      }
+    }
+
+    profileButtonsV2.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedProfileV2 = button.dataset.profile;
+        profileButtonsV2.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        updatePlanLabelV2();
+        updateProgressV2();
+      });
+    });
+
+    dayButtonsV2.forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedDayV2 = button.dataset.day;
+        selectedWorkoutV2 = button.dataset.workout;
+        dayButtonsV2.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        renderProgramV2();
+      });
+    });
+
+    startButtonsV2.forEach((button) => {
+      button.addEventListener("click", () => {
+        const completed = completionSetV2();
+        const firstIncomplete = activeGuidesV2().findIndex((guide, index) => !completed.has(index));
+        openWorkoutV2(firstIncomplete === -1 ? 0 : firstIncomplete);
+      });
+    });
+
+    workoutCloseV2.addEventListener("click", () => {
+      workoutDialogV2.close("leave");
+    });
+
+    workoutPreviousV2.addEventListener("click", () => {
+      renderWorkoutV2(currentExerciseV2 - 1);
+    });
+
+    workoutNextV2.addEventListener("click", () => {
+      const guides = activeGuidesV2();
+      setExerciseCompleteV2(currentExerciseV2, true);
+      if (currentExerciseV2 === guides.length - 1) {
+        workoutDialogV2.close("complete");
+        return;
+      }
+      renderWorkoutV2(currentExerciseV2 + 1);
+    });
+
+    workoutDialogV2.addEventListener("close", () => {
+      videoSlotV2.replaceChildren();
+      if (lastOpenerV2 instanceof HTMLElement) {
+        lastOpenerV2.focus({ preventScroll: true });
+      }
+    });
+
+    renderProgramV2();
   </script>
 </body>
 </html>
