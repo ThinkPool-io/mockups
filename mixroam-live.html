@@ -1,0 +1,2550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MIXROAM · Free Hard Techno discovery</title>
+<meta name="theme-color" content="#07100f" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root {
+    --night: #07100f;
+    --deep: #0a1716;
+    --panel: rgba(10, 25, 23, 0.92);
+    --panel-solid: #0c1b19;
+    --line: rgba(216, 239, 230, 0.14);
+    --line-strong: rgba(216, 239, 230, 0.28);
+    --paper: #eaf0e8;
+    --muted: #94a8a0;
+    --dim: #5f746d;
+    --signal: #c8ff4d;
+    --signal-soft: rgba(200, 255, 77, 0.16);
+    --water: #7dd7e7;
+    --water-soft: rgba(125, 215, 231, 0.12);
+    --thinkpool-cobalt: #1a6ef4;
+    --danger: #ff5c75;
+    --display: "Archivo", Arial, sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+    --radius: 22px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    background: var(--night);
+    color: var(--paper);
+    font-family: var(--display);
+    overflow-x: hidden;
+  }
+
+  button, select { font: inherit; }
+  button { color: inherit; }
+
+  .shell {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 44%, rgba(55, 128, 121, 0.15), transparent 32%),
+      linear-gradient(135deg, #06100f 0%, #081412 48%, #06100f 100%);
+  }
+
+  .shell::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0.12;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E");
+  }
+
+  .topbar {
+    height: 78px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+    padding: 0 34px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 20;
+    background: rgba(7, 16, 15, 0.72);
+    backdrop-filter: blur(18px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    gap: 10px;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+  }
+
+  .brand-name { transform: translateY(-1px); }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(125, 215, 231, 0.42);
+    border-radius: 9px;
+    color: var(--cyan);
+    background:
+      radial-gradient(circle at 18% 82%, rgba(200, 255, 77, 0.12), transparent 36%),
+      linear-gradient(145deg, rgba(125, 215, 231, 0.12), rgba(10, 27, 25, 0.72));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025), 0 0 22px rgba(125, 215, 231, 0.08);
+  }
+
+  .brand-mark svg {
+    width: 23px;
+    height: 23px;
+    overflow: visible;
+  }
+
+  .brand-route {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.35;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .brand-origin { fill: var(--signal); }
+  .brand-destination { fill: var(--cyan); }
+
+  .brand-compass {
+    fill: none;
+    stroke: rgba(238, 247, 243, 0.7);
+    stroke-width: 1;
+    stroke-linecap: round;
+  }
+
+  .live-ticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 5px var(--signal-soft), 0 0 20px rgba(200, 255, 77, 0.45);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.45; transform: scale(0.84); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .text-action,
+  .icon-action {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease;
+  }
+
+  .text-action {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .icon-action {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+  .text-action:hover,
+  .icon-action:hover { border-color: var(--signal); background: var(--signal-soft); }
+
+  .chat-action {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid rgba(125, 215, 231, 0.24);
+    border-radius: 999px;
+    background: var(--water-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+
+  .chat-action:hover,
+  .chat-action[aria-expanded="true"] {
+    border-color: var(--water);
+    background: rgba(125, 215, 231, 0.18);
+  }
+
+  .chat-action:active { transform: translateY(1px); }
+
+  .chat-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 0 4px var(--water-soft), 0 0 16px rgba(125, 215, 231, 0.55);
+  }
+
+  .chat-action svg { display: none; }
+
+  .main {
+    min-height: calc(100vh - 78px);
+    display: grid;
+    grid-template-columns: minmax(390px, 38%) 1fr;
+    position: relative;
+  }
+
+  .player-column {
+    position: relative;
+    z-index: 12;
+    padding: 30px 0 30px 34px;
+  }
+
+  .player-card {
+    height: 100%;
+    min-height: 720px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--panel-solid);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.35);
+  }
+
+  .video {
+    min-height: 350px;
+    flex: 1 1 auto;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%),
+      linear-gradient(140deg, #183b38 0%, #0c201e 47%, #06100f 100%);
+    isolation: isolate;
+  }
+
+  .live-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+  }
+
+  .video.has-live-source .video-glow,
+  .video.has-live-source .dj,
+  .video.has-live-source .deck { display: none; }
+
+  .video.has-live-source .beam { opacity: 0.08; }
+
+  .video.switching .dj,
+  .video.switching .deck,
+  .video.switching .video-glow {
+    animation: arrival 440ms cubic-bezier(.16, 1, .3, 1);
+  }
+
+  @keyframes arrival {
+    from { opacity: 0; filter: blur(7px); }
+    to { opacity: 1; filter: blur(0); }
+  }
+
+  .video::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.34;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+    background-size: 34px 34px;
+    transform: perspective(480px) rotateX(58deg) scale(1.6) translateY(16%);
+    transform-origin: bottom center;
+  }
+
+  .video-glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+    background: rgba(200, 255, 77, 0.07);
+    border: 1px solid rgba(200, 255, 77, 0.14);
+    box-shadow: 0 0 70px rgba(200, 255, 77, 0.1);
+  }
+
+  .video-glow::before,
+  .video-glow::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(200, 255, 77, 0.11);
+    border-radius: 50%;
+    inset: 26px;
+  }
+
+  .video-glow::after { inset: 64px; }
+
+  .beam {
+    position: absolute;
+    width: 58%;
+    height: 150%;
+    top: -28%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.22;
+    filter: blur(7px);
+    transform-origin: top center;
+  }
+
+  .beam-a {
+    left: -14%;
+    transform: rotate(-21deg);
+    background: linear-gradient(90deg, transparent, rgba(125, 215, 231, 0.36), transparent 54%);
+  }
+
+  .beam-b {
+    right: -18%;
+    transform: rotate(24deg);
+    background: linear-gradient(90deg, transparent, rgba(200, 255, 77, 0.26), transparent 56%);
+  }
+
+  .fresh-badge {
+    position: absolute;
+    left: 18px;
+    top: 58px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 1px solid rgba(200, 255, 77, 0.22);
+    border-radius: 8px;
+    background: rgba(7, 16, 15, 0.46);
+    backdrop-filter: blur(12px);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .fresh-badge b { color: var(--signal); font-weight: 500; }
+
+  .deck {
+    position: absolute;
+    width: 280px;
+    height: 74px;
+    left: 50%;
+    bottom: 17%;
+    transform: translateX(-50%) skewX(-7deg);
+    border: 1px solid rgba(234, 240, 232, 0.25);
+    background: linear-gradient(180deg, rgba(21, 42, 39, 0.96), rgba(7, 16, 15, 0.98));
+    box-shadow: 0 24px 44px rgba(0,0,0,0.55);
+  }
+
+  .deck::before,
+  .deck::after {
+    content: "";
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 7px double rgba(125, 215, 231, 0.4);
+    top: 8px;
+  }
+
+  .deck::before { left: 17px; }
+  .deck::after { right: 17px; }
+
+  .mixer {
+    position: absolute;
+    left: 50%;
+    top: 15px;
+    width: 72px;
+    height: 43px;
+    transform: translateX(-50%);
+    border-left: 1px solid var(--line-strong);
+    border-right: 1px solid var(--line-strong);
+    background: repeating-linear-gradient(90deg, transparent 0 9px, rgba(200,255,77,0.5) 10px 11px);
+  }
+
+  .dj {
+    position: absolute;
+    left: 50%;
+    bottom: calc(17% + 58px);
+    width: 120px;
+    height: 180px;
+    transform: translateX(-50%);
+  }
+
+  .dj::before {
+    content: "";
+    position: absolute;
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    left: 31px;
+    top: 0;
+    background: #07100f;
+    border: 8px solid rgba(125, 215, 231, 0.16);
+    box-shadow: 0 0 32px rgba(125, 215, 231, 0.18);
+  }
+
+  .dj::after {
+    content: "";
+    position: absolute;
+    width: 118px;
+    height: 132px;
+    border-radius: 55px 55px 14px 14px;
+    left: 1px;
+    bottom: 0;
+    background: linear-gradient(100deg, #07100f, #102a27 60%, #07100f);
+    clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  }
+
+  .video-top {
+    position: absolute;
+    inset: 18px 18px auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .platform-badge,
+  .quality-badge {
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(234, 240, 232, 0.2);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(7, 16, 15, 0.5);
+    backdrop-filter: blur(10px);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .platform-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--danger);
+    box-shadow: 0 0 12px rgba(255, 92, 117, 0.7);
+  }
+
+  .wave {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 17px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    opacity: 0.8;
+  }
+
+  .bar {
+    flex: 1;
+    max-width: 5px;
+    min-width: 2px;
+    height: var(--h);
+    border-radius: 3px;
+    background: linear-gradient(to top, var(--water), var(--signal));
+    animation: meter var(--speed) ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+
+  @keyframes meter { to { transform: scaleY(0.28); opacity: 0.45; } }
+
+  .player-info {
+    padding: 24px 25px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .city-signal { color: var(--signal); }
+
+  .title-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 16px;
+  }
+
+  .set-title {
+    font-size: clamp(34px, 3.65vw, 54px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+    font-weight: 800;
+  }
+
+  .dj-name {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .follow-button {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .follow-button.active {
+    color: var(--night);
+    background: var(--paper);
+  }
+
+  .metadata {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .meta-pill {
+    min-height: 30px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta-pill.hot {
+    color: var(--signal);
+    border-color: rgba(200, 255, 77, 0.24);
+    background: var(--signal-soft);
+  }
+
+  .shuffle-button {
+    width: 100%;
+    min-height: 62px;
+    border: 0;
+    border-radius: 13px;
+    background: var(--signal);
+    color: #10190d;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    cursor: pointer;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+    transition: transform 160ms ease, filter 160ms ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shuffle-button::before {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border: 1px solid rgba(7, 16, 15, 0.15);
+    border-radius: 50%;
+    right: -53px;
+    top: -39px;
+  }
+
+  .shuffle-button::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    right: 48px;
+    top: 13px;
+    background: var(--night);
+    opacity: 0.72;
+  }
+
+  .shuffle-button span { position: relative; z-index: 1; }
+
+  .shuffle-button:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .shuffle-button:active { transform: translateY(1px); }
+
+  .shuffle-button span:last-child {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .maker-credit {
+    position: absolute;
+    left: 25px;
+    right: 25px;
+    bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .maker-credit > span:first-child { color: var(--muted); }
+  .credit-divider { color: var(--line-strong); }
+
+  .thinkpool-credit {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 160ms ease, border-color 160ms ease;
+  }
+
+  .thinkpool-credit:hover,
+  .thinkpool-credit:focus-visible {
+    color: var(--paper);
+    border-color: var(--thinkpool-cobalt);
+  }
+
+  .thinkpool-wordmark {
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-transform: lowercase;
+  }
+
+  .thinkpool-wordmark span:last-child { color: var(--thinkpool-cobalt); }
+  .thinkpool-arrow { color: var(--thinkpool-cobalt); }
+
+  .pilot-band,
+  .relay-proof {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+  }
+
+  .pilot-band {
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid rgba(200, 255, 77, 0.22);
+    border-radius: 9px;
+    color: var(--signal);
+    background: linear-gradient(90deg, rgba(200, 255, 77, 0.12), rgba(125, 215, 231, 0.04));
+    font-size: 9px;
+    letter-spacing: 0.07em;
+  }
+
+  .pilot-band span:last-child { color: var(--muted); }
+
+  .relay-proof {
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  .relay-proof > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .relay-proof i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 0 4px var(--water-soft);
+  }
+
+  .receipt-button {
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--paper);
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .receipt-button:hover { border-color: var(--signal); color: var(--signal); }
+
+  .map-column {
+    position: relative;
+    min-width: 0;
+    min-height: 720px;
+  }
+
+  .map-tools {
+    position: absolute;
+    z-index: 10;
+    left: 32px;
+    right: 34px;
+    top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px;
+    max-width: calc(100% - 182px);
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.72);
+    backdrop-filter: blur(18px);
+    scrollbar-width: none;
+  }
+
+  .filter-group::-webkit-scrollbar { display: none; }
+
+  .genre {
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .genre.active {
+    background: var(--signal);
+    color: var(--night);
+    box-shadow: 0 0 24px rgba(200, 255, 77, 0.14);
+  }
+
+  .region-select {
+    height: 49px;
+    min-width: 166px;
+    appearance: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0 42px 0 18px;
+    color: var(--paper);
+    background-color: rgba(7, 16, 15, 0.72);
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 19px) 21px, calc(100% - 14px) 21px;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    backdrop-filter: blur(18px);
+  }
+
+  .genre-picker {
+    height: 50px;
+    min-width: 240px;
+    padding: 0 14px 0 17px;
+    border: 1px solid rgba(200, 255, 77, 0.28);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    cursor: pointer;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 12px 38px rgba(0, 0, 0, 0.2);
+  }
+
+  .genre-picker-copy {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .genre-picker-copy small,
+  .genre-picker-count {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .genre-picker-copy strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--signal);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .genre-picker-count { color: var(--paper); white-space: nowrap; }
+
+  .genre-panel {
+    position: absolute;
+    z-index: 1200;
+    top: 90px;
+    left: 32px;
+    width: min(620px, calc(100% - 66px));
+    max-height: 520px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background: rgba(8, 20, 18, 0.97);
+    backdrop-filter: blur(28px);
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.58);
+  }
+
+  .genre-panel[hidden] { display: none; }
+
+  .genre-panel-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .genre-search {
+    width: 100%;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    outline: none;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .genre-search:focus { border-color: var(--signal); box-shadow: 0 0 0 3px var(--signal-soft); }
+
+  .genre-close {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .genre-catalog {
+    max-height: 444px;
+    overflow-y: auto;
+    padding: 4px 18px 22px;
+    scrollbar-color: var(--dim) transparent;
+  }
+
+  .genre-section { padding-top: 17px; }
+
+  .genre-section h3 {
+    margin-bottom: 10px;
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .genre-options { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .genre-choice {
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    cursor: pointer;
+  }
+
+  .genre-choice:hover,
+  .genre-choice.active {
+    border-color: var(--signal);
+    background: var(--signal);
+    color: var(--night);
+  }
+
+  .world-map {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #06100f;
+  }
+
+  .world-map::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    box-shadow: inset 0 0 110px 34px rgba(4, 13, 12, 0.82);
+  }
+
+  .leaflet-container { font-family: var(--display); }
+  .leaflet-tile-pane { filter: invert(1) hue-rotate(145deg) saturate(0.52) brightness(0.66) contrast(0.94); opacity: 0.72; }
+  .leaflet-control-container { position: relative; z-index: 800; }
+  .leaflet-top.leaflet-left { top: 84px; left: 18px; }
+  .leaflet-control-zoom { border: 1px solid var(--line-strong) !important; border-radius: 11px !important; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.28) !important; }
+  .leaflet-control-zoom a { width: 36px !important; height: 35px !important; line-height: 34px !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; background: rgba(7, 16, 15, 0.92) !important; color: var(--paper) !important; }
+  .leaflet-control-zoom a:last-child { border-bottom: 0 !important; }
+  .leaflet-control-attribution { padding: 3px 7px !important; background: rgba(7, 16, 15, 0.74) !important; color: var(--dim) !important; font-family: var(--mono); font-size: 7px !important; }
+  .leaflet-control-attribution a { color: var(--muted) !important; }
+
+  .signal-icon { background: transparent; border: 0; }
+
+  .signal-pin {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    border: 2px solid #08201c;
+    border-radius: 50% 50% 50% 6px;
+    background: var(--water);
+    transform: rotate(-45deg);
+    box-shadow: 0 0 0 6px rgba(125, 215, 231, 0.12), 0 0 24px rgba(125, 215, 231, 0.48);
+  }
+
+  .signal-pin::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    left: 5.5px;
+    top: 5.5px;
+    border-radius: 50%;
+    background: var(--night);
+  }
+
+  .signal-icon.active .signal-pin {
+    background: var(--signal);
+    box-shadow: 0 0 0 7px rgba(200, 255, 77, 0.15), 0 0 30px rgba(200, 255, 77, 0.66);
+  }
+
+  .signal-cluster-icon { background: transparent; border: 0; }
+
+  .signal-cluster {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(200, 255, 77, 0.62);
+    border-radius: 50%;
+    background: rgba(7, 16, 15, 0.9);
+    color: var(--signal);
+    box-shadow: 0 0 0 8px rgba(200, 255, 77, 0.09), 0 0 34px rgba(200, 255, 77, 0.36);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .signal-cluster-icon.active .signal-cluster { background: var(--signal); color: var(--night); }
+
+  .leaflet-tooltip.signal-label {
+    padding: 7px 9px;
+    border: 1px solid rgba(125, 215, 231, 0.2);
+    border-radius: 8px;
+    background: rgba(7, 16, 15, 0.9);
+    color: var(--paper);
+    box-shadow: 0 9px 24px rgba(0,0,0,0.3);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.25;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .leaflet-tooltip.signal-label::before { display: none; }
+  .leaflet-tooltip.signal-label span { display: block; margin-top: 3px; color: var(--signal); font-size: 7px; }
+  .leaflet-tooltip.signal-label.active { border-color: rgba(200, 255, 77, 0.52); }
+
+  .map-empty {
+    position: absolute;
+    z-index: 900;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(310px, calc(100% - 40px));
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 15px;
+    background: rgba(7, 16, 15, 0.92);
+    text-align: center;
+    backdrop-filter: blur(18px);
+  }
+
+  .map-empty[hidden] { display: none; }
+  .map-empty strong { display: block; margin-bottom: 5px; font-size: 16px; }
+  .map-empty span { color: var(--muted); font-size: 11px; }
+
+  .unmapped-panel {
+    position: absolute;
+    z-index: 900;
+    top: 96px;
+    right: 34px;
+    width: 244px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 15px;
+    background: rgba(7, 16, 15, 0.9);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+  }
+
+  .unmapped-panel[hidden] { display: none; }
+
+  .unmapped-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 12px 9px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .unmapped-head b { color: var(--signal); font-weight: 500; }
+
+  .unmapped-list { display: grid; padding: 6px; gap: 5px; }
+
+  .unmapped-card {
+    width: 100%;
+    min-height: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 9px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.025);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .unmapped-card:hover,
+  .unmapped-card.active { border-color: rgba(200, 255, 77, 0.35); background: var(--signal-soft); }
+
+  .unmapped-card strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+  .unmapped-card span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 7px; color: var(--muted); text-transform: uppercase; }
+  .unmapped-card b { color: var(--signal); font-family: var(--mono); font-size: 8px; font-weight: 500; }
+
+  .world {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .world::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.34;
+    background-image:
+      linear-gradient(rgba(125, 215, 231, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(125, 215, 231, 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .world::after {
+    content: "";
+    position: absolute;
+    width: 52vw;
+    height: 52vw;
+    max-width: 780px;
+    max-height: 780px;
+    min-width: 620px;
+    min-height: 620px;
+    left: 57%;
+    top: 53%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(125, 215, 231, 0.09);
+    border-radius: 50%;
+    box-shadow: 0 0 0 90px rgba(125, 215, 231, 0.015), 0 0 0 180px rgba(125, 215, 231, 0.01);
+  }
+
+  .map-svg {
+    position: absolute;
+    width: 112%;
+    height: 94%;
+    left: -3%;
+    top: 5%;
+    opacity: 0.68;
+    filter: drop-shadow(0 0 25px rgba(125, 215, 231, 0.06));
+  }
+
+  .map-svg path {
+    fill: rgba(18, 54, 50, 0.58);
+    stroke: rgba(125, 215, 231, 0.23);
+    stroke-width: 1.3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .map-svg .inner {
+    fill: none;
+    stroke: rgba(125, 215, 231, 0.09);
+    stroke-width: 0.8;
+  }
+
+  .map-label {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(148, 168, 160, 0.44);
+    z-index: 2;
+  }
+
+  .label-atlantic { left: 35%; top: 48%; transform: rotate(-83deg); }
+  .label-pacific { right: 6%; top: 42%; transform: rotate(84deg); }
+  .label-equator { right: 24%; top: 61%; }
+
+  .pin {
+    position: absolute;
+    z-index: 8;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 180ms ease;
+  }
+
+  .pin:hover { transform: scale(1.16); }
+
+  .pin::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    left: 12px;
+    top: 12px;
+    background: var(--water);
+    box-shadow: 0 0 0 6px rgba(125, 215, 231, 0.1), 0 0 18px rgba(125, 215, 231, 0.5);
+  }
+
+  .pin::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border: 1px solid rgba(125, 215, 231, 0.22);
+    border-radius: 50%;
+    animation: sonar 2.8s ease-out infinite;
+  }
+
+  .pin.active::before {
+    width: 13px;
+    height: 13px;
+    left: 10.5px;
+    top: 10.5px;
+    background: var(--signal);
+    box-shadow: 0 0 0 7px var(--signal-soft), 0 0 24px rgba(200, 255, 77, 0.65);
+  }
+
+  .pin.active::after { border-color: rgba(200, 255, 77, 0.55); }
+
+  @keyframes sonar {
+    0% { opacity: 0.9; transform: scale(0.5); }
+    80%, 100% { opacity: 0; transform: scale(1.45); }
+  }
+
+  .pin-card {
+    position: absolute;
+    z-index: 7;
+    min-width: 170px;
+    padding: 11px 12px;
+    border: 1px solid rgba(200, 255, 77, 0.28);
+    border-radius: 9px;
+    background: rgba(7, 16, 15, 0.88);
+    backdrop-filter: blur(14px);
+    transform: translate(18px, -50%);
+    pointer-events: none;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  }
+
+  .pin-card strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .pin-card span {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .map-bottom {
+    position: absolute;
+    z-index: 9;
+    left: 32px;
+    right: 34px;
+    bottom: 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .map-note {
+    max-width: 280px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .map-note strong { color: var(--paper); font-weight: 600; }
+
+  .crowd-proof {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 13px 10px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.58);
+    backdrop-filter: blur(14px);
+  }
+
+  .avatars { display: flex; padding-left: 6px; }
+
+  .avatar {
+    width: 25px;
+    height: 25px;
+    margin-left: -6px;
+    border: 2px solid #0a1716;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 32%, var(--paper) 0 16%, transparent 17%),
+      radial-gradient(circle at 50% 100%, var(--water) 0 42%, transparent 43%),
+      #214640;
+  }
+
+  .avatar:nth-child(2) {
+    background:
+      radial-gradient(circle at 50% 32%, #07100f 0 16%, transparent 17%),
+      radial-gradient(circle at 50% 100%, var(--signal) 0 42%, transparent 43%),
+      #dce9dc;
+  }
+
+  .avatar:nth-child(3) {
+    background:
+      radial-gradient(circle at 50% 32%, #dce9dc 0 16%, transparent 17%),
+      radial-gradient(circle at 50% 100%, #4b7d75 0 42%, transparent 43%),
+      #102825;
+  }
+
+  .crowd-proof p {
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.35;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .crowd-proof strong { color: var(--paper); font-weight: 500; }
+
+  .map-coords {
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    text-align: right;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .toast {
+    position: fixed;
+    z-index: 50;
+    right: 28px;
+    bottom: 28px;
+    padding: 14px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--night);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    transform: translateY(24px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  .chat-scrim {
+    position: fixed;
+    inset: 78px 0 0;
+    z-index: 1240;
+    background: rgba(2, 8, 7, 0.28);
+    backdrop-filter: blur(2px);
+  }
+
+  .chat-scrim[hidden],
+  .chat-drawer[hidden] { display: none; }
+
+  .chat-drawer {
+    position: fixed;
+    z-index: 1250;
+    top: 92px;
+    right: 18px;
+    bottom: 18px;
+    width: min(380px, calc(100vw - 36px));
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background: #081311;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.68);
+  }
+
+  .chat-head {
+    min-height: 70px;
+    padding: 15px 15px 13px 17px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .chat-head-copy span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    color: var(--water);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .chat-head-copy span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 10px rgba(125, 215, 231, 0.65);
+  }
+
+  .chat-head h2 {
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .chat-close {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .chat-close:hover { border-color: var(--water); background: var(--water-soft); }
+
+  .chat-relay-note {
+    min-height: 39px;
+    padding: 0 17px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .chat-relay-note strong { color: var(--signal); font-weight: 500; }
+
+  .chat-frame-wrap {
+    position: relative;
+    min-height: 0;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(125, 215, 231, 0.1), transparent 34%),
+      var(--night);
+  }
+
+  .chat-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--night);
+  }
+
+  .chat-loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 9px;
+    padding: 30px;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .chat-loading b { color: var(--water); font-weight: 500; }
+
+  .chat-footer {
+    min-height: 48px;
+    padding: 0 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .chat-footer a {
+    color: var(--water);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(125, 215, 231, 0.28);
+  }
+
+  .product-dialog {
+    width: min(520px, calc(100vw - 28px));
+    max-height: calc(100vh - 28px);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 22px;
+    background: #0a1716;
+    color: var(--paper);
+    box-shadow: 0 32px 110px rgba(0, 0, 0, 0.72);
+  }
+
+  .product-dialog::backdrop {
+    background: rgba(2, 8, 7, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .dialog-shell { padding: 25px; }
+
+  .dialog-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .dialog-kicker {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--signal);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dialog-head h2 {
+    max-width: 390px;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+  }
+
+  .dialog-close {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  .passport-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .passport-item,
+  .receipt-row {
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .passport-item { padding: 14px; }
+
+  .passport-item small,
+  .receipt-row span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .passport-item strong,
+  .receipt-row strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .privacy-options {
+    display: flex;
+    gap: 7px;
+    margin-top: 9px;
+  }
+
+  .privacy-options span {
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 8px;
+    text-transform: uppercase;
+  }
+
+  .privacy-options span:first-child {
+    border-color: rgba(200, 255, 77, 0.35);
+    color: var(--signal);
+    background: var(--signal-soft);
+  }
+
+  .dialog-note {
+    margin: 18px 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .dialog-cta {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 11px;
+    background: var(--signal);
+    color: var(--night);
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .receipt-list { display: grid; gap: 8px; }
+
+  .receipt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 13px 14px;
+  }
+
+  .receipt-row span { margin-bottom: 0; }
+  .receipt-row strong { text-align: right; }
+
+  .pilot-roadmap {
+    padding: 10px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.58);
+    backdrop-filter: blur(14px);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.45;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pilot-roadmap strong { color: var(--signal); font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .topbar {
+      height: 66px;
+      grid-template-columns: 1fr auto;
+      padding: 0 16px;
+    }
+
+    .live-ticker { display: none; }
+    .text-action { display: none; }
+    .brand { font-size: 19px; }
+
+    .chat-action {
+      width: 42px;
+      min-height: 42px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .chat-action .chat-label,
+    .chat-action .chat-pulse { display: none; }
+    .chat-action svg { display: block; }
+
+    .main {
+      min-height: calc(100vh - 66px);
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .map-column {
+      position: absolute;
+      inset: 0 0 auto 0;
+      min-height: 400px;
+      height: 46vh;
+    }
+
+    .world::after {
+      min-width: 430px;
+      min-height: 430px;
+      left: 52%;
+      top: 48%;
+    }
+
+    .map-svg {
+      width: 145%;
+      height: 100%;
+      left: -22%;
+      top: 1%;
+    }
+
+    .map-tools {
+      top: 14px;
+      left: 14px;
+      right: 14px;
+    }
+
+    .filter-group {
+      max-width: calc(100% - 50px);
+      border-radius: 12px;
+      padding: 5px;
+    }
+
+    .genre-picker {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: calc(100% - 50px);
+      height: 49px;
+      border-radius: 12px;
+    }
+
+    .genre-picker-copy small { display: none; }
+
+    .genre-panel {
+      position: fixed;
+      inset: auto 10px 10px;
+      width: auto;
+      max-height: 70vh;
+      border-radius: 20px;
+    }
+
+    .genre-catalog { max-height: calc(70vh - 81px); }
+
+    .leaflet-top.leaflet-left { top: 66px; left: 10px; }
+    .leaflet-tooltip.signal-label { font-size: 7px; padding: 5px 7px; }
+    .world-map::after { box-shadow: inset 0 0 54px 18px rgba(4, 13, 12, 0.72); }
+
+    .unmapped-panel {
+      top: 72px;
+      right: 14px;
+      width: 218px;
+      max-height: 112px;
+    }
+
+    .unmapped-head { padding: 8px 10px 6px; }
+    .unmapped-list { max-height: 76px; overflow-y: auto; }
+    .unmapped-card { min-height: 42px; padding: 6px 8px; }
+
+    .genre { height: 32px; padding: 0 12px; }
+
+    .region-select {
+      width: 42px;
+      min-width: 42px;
+      padding: 0;
+      color: transparent;
+      border-radius: 12px;
+      background-position: 16px 20px, 21px 20px;
+    }
+
+    .map-bottom,
+    .map-label,
+    .pin-card { display: none; }
+
+    .player-column {
+      width: 100%;
+      padding: 0 10px 10px;
+      margin-top: 34vh;
+    }
+
+    .player-card {
+      min-height: auto;
+      height: auto;
+      border-radius: 20px;
+      background: rgba(10, 25, 23, 0.97);
+      box-shadow: 0 -18px 50px rgba(0,0,0,0.45);
+    }
+
+    .video {
+      min-height: 238px;
+      flex: 0 0 238px;
+    }
+
+    .video-glow { width: 190px; height: 190px; }
+    .deck { width: 230px; bottom: 13%; }
+    .dj { transform: translateX(-50%) scale(0.75); transform-origin: bottom center; bottom: calc(13% + 56px); }
+    .wave { height: 26px; bottom: 12px; }
+
+    .player-info {
+      padding: 18px 18px 16px;
+      gap: 16px;
+    }
+
+    .maker-credit {
+      left: 18px;
+      right: 18px;
+      bottom: 3px;
+      gap: 5px;
+      font-size: 8px;
+    }
+
+    .title-row { align-items: center; }
+    .set-title { font-size: 37px; }
+    .dj-name { margin-top: 7px; }
+    .follow-button { width: 44px; padding: 0; font-size: 0; }
+    .follow-button::before { content: "+"; font-size: 19px; font-family: var(--mono); }
+    .follow-button.active::before { content: "✓"; font-size: 14px; }
+
+    .metadata { flex-wrap: nowrap; overflow: hidden; }
+    .meta-pill { flex: 0 0 auto; }
+    .pilot-band { font-size: 8px; }
+    .relay-proof { align-items: flex-start; line-height: 1.45; }
+    .shuffle-button { min-height: 58px; }
+    .toast { right: 16px; left: 16px; bottom: 16px; text-align: center; }
+    .fresh-badge { top: 56px; }
+    .crowd-proof { display: none; }
+
+    .dialog-shell { padding: 20px; }
+    .passport-grid { grid-template-columns: 1fr; }
+
+    .chat-scrim {
+      inset: 66px 0 0;
+      background: rgba(2, 8, 7, 0.58);
+      backdrop-filter: blur(6px);
+    }
+
+    .chat-drawer {
+      top: auto;
+      right: 10px;
+      bottom: 10px;
+      left: 10px;
+      width: auto;
+      height: min(70vh, 590px);
+      border-radius: 22px;
+    }
+
+    .chat-head { min-height: 64px; }
+    .chat-relay-note { padding: 0 15px; }
+  }
+
+  @media (max-width: 390px) and (max-height: 760px) {
+    .map-column { height: 41vh; }
+    .player-column { margin-top: 30vh; }
+    .video { min-height: 205px; flex-basis: 205px; }
+    .player-info { gap: 12px; padding-top: 14px; }
+    .metadata { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand" aria-label="Mixroam home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path class="brand-route" d="M5.5 21.5c3 0 3.3-11 7.2-11s4.1 11 7.5 11c3 0 3.4-7.2 6.3-7.2"/>
+          <circle class="brand-origin" cx="5.5" cy="21.5" r="2.25"/>
+          <circle class="brand-destination" cx="26.5" cy="14.3" r="1.8"/>
+          <path class="brand-compass" d="M23.8 7.2l1-2.2 1 2.2M24.8 5v4.8"/>
+        </svg>
+      </span>
+      <span class="brand-name">mixroam</span>
+    </div>
+    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">8</b> verified · Hard Techno pilot</span></div>
+    <div class="top-actions">
+      <button class="text-action" id="claimButton">DJ Passport · Free</button>
+      <button class="chat-action" id="chatButton" aria-label="Open live chat" aria-expanded="false" aria-controls="chatDrawer">
+        <span class="chat-pulse" aria-hidden="true"></span>
+        <span class="chat-label">Chat live</span>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M3 3.75h12v8.5H8.2L5 15v-2.75H3v-8.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M6 7h6M6 9.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="player-column" aria-label="Current live set">
+      <article class="player-card">
+        <div class="video" id="videoStage">
+          <div class="beam beam-a"></div>
+          <div class="beam beam-b"></div>
+          <div class="video-glow"></div>
+          <div class="dj"></div>
+          <div class="deck"><div class="mixer"></div></div>
+          <div class="video-top">
+            <span class="platform-badge" id="platform">Live on Twitch</span>
+            <span class="quality-badge">1080p</span>
+          </div>
+          <div class="fresh-badge"><span id="signalType">Verified live</span><b id="freshCity">Live from ASU</b></div>
+          <div class="wave" id="wave" aria-hidden="true"></div>
+        </div>
+
+        <div class="player-info">
+          <div class="eyebrow">
+            <span class="city-signal" id="location">Asunción, Paraguay</span>
+            <span id="localTime">Live now</span>
+          </div>
+
+          <div class="title-row">
+            <div>
+              <h1 class="set-title" id="setTitle">Hard Techno Acid</h1>
+              <p class="dj-name">with <span id="djName">Lamek</span></p>
+            </div>
+            <button class="follow-button" id="followButton">Follow DJ</button>
+          </div>
+
+          <div class="pilot-band">
+            <span>Everything free during build</span>
+            <span>No paid ranking</span>
+          </div>
+
+          <div class="metadata">
+            <span class="meta-pill hot" id="genreMeta">Hard Techno</span>
+            <span class="meta-pill" id="viewerMeta">28 watching</span>
+            <span class="meta-pill" id="proofMeta">Country-level pin</span>
+          </div>
+
+          <div class="relay-proof">
+            <span><i></i>Fair relay · audience size never sets rank</span>
+            <button class="receipt-button" id="receiptButton">Exposure receipt</button>
+          </div>
+
+          <button class="shuffle-button" id="shuffleButton">
+            <span>Relay me to another set</span>
+            <span>↗</span>
+          </button>
+
+          <div class="maker-credit" aria-label="Creator credit">
+            <span>By Conrad Bachman</span>
+            <span class="credit-divider" aria-hidden="true">·</span>
+            <a class="thinkpool-credit" href="https://thinkpool.io/" target="_blank" rel="noopener noreferrer" aria-label="Made with thinkpool, open thinkpool">
+              <span>Made with <span class="thinkpool-wordmark"><span>think</span><span>pool</span></span></span>
+              <span class="thinkpool-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="map-column" aria-label="World map of live DJ sets">
+      <div class="map-tools">
+        <button class="genre-picker" id="genrePicker" aria-expanded="false" aria-controls="genrePanel">
+          <span class="genre-picker-copy"><small>Pilot genre</small><strong id="genreCurrent">Hard Techno</strong></span>
+          <span class="genre-picker-count" id="genreCount">8 live · 127 genres</span>
+        </button>
+        <select class="region-select" id="regionSelect" aria-label="Select a region">
+          <option value="All">Anywhere</option>
+          <option value="Africa">Africa</option>
+          <option value="Asia">Asia</option>
+          <option value="Caribbean">Caribbean</option>
+          <option value="Europe">Europe</option>
+          <option value="Middle East">Middle East</option>
+          <option value="North America">North America</option>
+          <option value="Oceania">Oceania</option>
+          <option value="South America">South America</option>
+        </select>
+      </div>
+
+      <div class="genre-panel" id="genrePanel" hidden>
+        <div class="genre-panel-head">
+          <input class="genre-search" id="genreSearch" type="search" placeholder="Search 127 genres" autocomplete="off" aria-label="Search genres">
+          <button class="genre-close" id="genreClose" aria-label="Close genre catalog">×</button>
+        </div>
+        <div class="genre-catalog" id="genreCatalog"></div>
+      </div>
+
+      <div class="world-map" id="map" aria-label="Interactive map. Drag to move and use the controls to zoom."></div>
+      <div class="map-empty" id="mapEmpty" hidden><strong>This genre is being connected</strong><span>Try Hard Techno now or claim a free DJ Passport.</span></div>
+      <aside class="unmapped-panel" id="unmappedPanel" hidden>
+        <div class="unmapped-head"><span>Live · location hidden</span><b id="unmappedCount">0</b></div>
+        <div class="unmapped-list" id="unmappedList"></div>
+      </aside>
+
+      <div class="map-bottom">
+        <p class="map-note"><strong>Pins use DJ-published locations.</strong> Live streams without one stay playable but off-map.</p>
+        <p class="pilot-roadmap"><strong>Live now · Hard Techno</strong><br>Next · Schranz, industrial, acid</p>
+        <p class="map-coords" id="coordinates">48.2082° N<br>16.3738° E</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="chat-scrim" id="chatScrim" hidden></div>
+  <aside class="chat-drawer" id="chatDrawer" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
+    <header class="chat-head">
+      <div class="chat-head-copy">
+        <span>Official Twitch relay</span>
+        <h2 id="chatTitle">Chat with <span id="chatDjName">Lamek</span></h2>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close live chat">×</button>
+    </header>
+    <div class="chat-relay-note">
+      <span>Your message lands in the DJ’s room</span>
+      <strong>Direct</strong>
+    </div>
+    <div class="chat-frame-wrap" id="chatFrameWrap">
+      <p class="chat-loading" id="chatLoading"><b>Connecting to Twitch chat</b><span>Sign in there once, then talk directly to the streamer.</span></p>
+    </div>
+    <footer class="chat-footer">
+      <span>Twitch identity and moderation</span>
+      <a id="openChatExternal" href="https://www.twitch.tv/llamekk/chat" target="_blank" rel="noopener noreferrer">Open on Twitch ↗</a>
+    </footer>
+  </aside>
+
+  <dialog class="product-dialog" id="passportDialog">
+    <div class="dialog-shell">
+      <div class="dialog-head">
+        <div>
+          <span class="dialog-kicker">DJ Passport · Free pilot</span>
+          <h2>Your signal, not your follower count.</h2>
+        </div>
+        <button class="dialog-close" data-close="passportDialog" aria-label="Close DJ Passport">×</button>
+      </div>
+      <div class="passport-grid">
+        <div class="passport-item"><small>Stream</small><strong>Connect Twitch first</strong></div>
+        <div class="passport-item"><small>Taste identity</small><strong>Choose up to five genres</strong></div>
+        <div class="passport-item">
+          <small>Location control</small><strong>You choose the precision</strong>
+          <div class="privacy-options"><span>City</span><span>Country</span><span>Hidden</span></div>
+        </div>
+        <div class="passport-item"><small>Identity links</small><strong>Mixcloud · YouTube · SoundCloud</strong></div>
+      </div>
+      <p class="dialog-note">Discovery, claiming, follows, schedules, and exposure receipts stay free during the build. There are no paid boosts and no pay-to-win map positions.</p>
+      <button class="dialog-cta" id="passportPreviewButton">Preview my Hard Techno Passport</button>
+    </div>
+  </dialog>
+
+  <dialog class="product-dialog" id="receiptDialog">
+    <div class="dialog-shell">
+      <div class="dialog-head">
+        <div>
+          <span class="dialog-kicker">Transparent discovery</span>
+          <h2>Exposure receipt.</h2>
+        </div>
+        <button class="dialog-close" data-close="receiptDialog" aria-label="Close exposure receipt">×</button>
+      </div>
+      <div class="receipt-list">
+        <div class="receipt-row"><span>DJ</span><strong id="receiptDj">Lamek</strong></div>
+        <div class="receipt-row"><span>Discovery source</span><strong id="receiptGenre">Hard Techno relay</strong></div>
+        <div class="receipt-row"><span>Location precision</span><strong id="receiptLocation">Country only</strong></div>
+        <div class="receipt-row"><span>Ranking rule</span><strong>Viewer count ignored</strong></div>
+        <div class="receipt-row"><span>Current access</span><strong>Free</strong></div>
+      </div>
+      <p class="dialog-note">This receipt shows why the set entered the relay. Watch time, follows, and promoter saves will appear only after the measurement backend exists.</p>
+    </div>
+  </dialog>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  const sets = [
+    { id:"llamekk", title:"Hard Techno Acid", dj:"Lamek", city:"Germany", locationLabel:"Germany · country only", locationPrecision:"Country only", code:"DE", country:"", region:"Europe", genre:"Hard Techno", genres:["Hard Techno","Acid Techno","Peak Time Techno","Melodic Techno"], viewers:28, coords:["51.1657° N","10.4515° E"], lat:51.1657, lng:10.4515, channel:"llamekk", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_llamekk-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] },
+    { id:"hard_music_tv", title:"Hard Music Experience", dj:"Hard Music TV", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hardstyle","Hardcore"], viewers:208, lat:null, lng:null, channel:"hard_music_tv", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_hard_music_tv-640x360.jpg", colors:["#163d45","#0d2428","#07100f"] },
+    { id:"dj_bassqueen", title:"We Are TKNO", dj:"DJ BassQueen", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hypnotic Techno","Dark Techno"], viewers:37, lat:null, lng:null, channel:"dj_bassqueen", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_dj_bassqueen-640x360.jpg", colors:["#294641","#132824","#07100f"] },
+    { id:"mr_m0nsterr", title:"Frenchcore Signal", dj:"Mr M0nsterr", city:"Netherlands", locationLabel:"Netherlands · country only", locationPrecision:"Country only", code:"NL", country:"", region:"Europe", genre:"Hard Techno", genres:["Hard Techno","Hardcore","Gabber"], viewers:32, coords:["52.1326° N","5.2913° E"], lat:52.1326, lng:5.2913, channel:"mr_m0nsterr", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_mr_m0nsterr-640x360.jpg", colors:["#183f3b","#0c2421","#07100f"] },
+    { id:"djmista5", title:"House to Schranz", dj:"DJ Mista5", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Schranz","House","Speed Garage"], viewers:14, lat:null, lng:null, channel:"djmista5", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_djmista5-640x360.jpg", colors:["#294641","#132824","#07100f"] },
+    { id:"campwutz", title:"Hardtechno", dj:"CampWutz", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hardtekk","Techno"], viewers:1, lat:null, lng:null, channel:"campwutz", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_campwutz-640x360.jpg", colors:["#214b45","#102723","#07100f"] },
+    { id:"goldman0815", title:"Schranz at Bass Legion", dj:"Goldman0815", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Schranz","Progressive House"], viewers:3, lat:null, lng:null, channel:"goldman0815", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_goldman0815-640x360.jpg", colors:["#315044","#15271f","#07100f"] },
+    { id:"wamflive", title:"Schranz Weekend", dj:"WAMF Live", city:"Asunción", locationLabel:"Asunción, Paraguay", locationPrecision:"City", code:"ASU", country:"Paraguay", region:"South America", genre:"Hard Techno", genres:["Hard Techno","Schranz"], viewers:1, timeZone:"America/Asuncion", coords:["25.2637° S","57.5759° W"], lat:-25.2637, lng:-57.5759, channel:"wamflive", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_wamflive-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] }
+  ];
+
+  const genreGroups = {
+    "Pilot pressure": ["Hard Techno", "Schranz", "Industrial Techno", "Acid Techno", "Hardcore Techno", "Hardtekk", "Bounce", "240 KM/H"],
+    "Techno": ["Techno", "Detroit Techno", "Dub Techno", "Minimal Techno", "Melodic Techno", "Peak Time Techno", "Raw Techno", "Tribal Techno", "Hypnotic Techno", "Dark Techno", "Electro Techno", "Broken Techno"],
+    "House": ["House", "Deep House", "Tech House", "Afro House", "Amapiano", "Gqom", "Kwaito", "Progressive House", "Minimal House", "Microhouse", "Acid House", "Chicago House", "Disco House", "French House", "Soulful House", "Jackin House", "Organic House"],
+    "Bass and breaks": ["UK Garage", "2-Step", "Speed Garage", "Bassline", "Breakbeat", "Breaks", "Jungle", "Drum & Bass", "Liquid DnB", "Neurofunk", "Jump Up", "Dubstep", "Grime", "Footwork", "Juke", "Ghettotech", "UK Funky", "Future Garage", "Halftime"],
+    "Trance and hard dance": ["Trance", "Progressive Trance", "Psytrance", "Goa", "Hard Trance", "Tech Trance", "Uplifting Trance", "Hardcore", "Gabber", "Hardstyle", "Rawstyle", "Happy Hardcore", "Breakcore", "Makina", "Donk", "Hard House", "Eurodance"],
+    "Club and global": ["Baile Funk", "Jersey Club", "Baltimore Club", "Ballroom", "Vogue Beats", "Dancehall", "Reggaeton", "Dembow", "Latin Club", "Cumbia", "Kuduro", "Batida", "Afrobeat", "Afrobeats", "Highlife", "Coupé-Décalé", "Singeli", "Shangaan Electro", "K-Pop Club", "Desi Club"],
+    "Electronic and leftfield": ["Open Format", "Ambient", "Drone", "IDM", "Leftfield", "Experimental", "Downtempo", "Trip-Hop", "Electro", "EBM", "Synthwave", "Vaporwave", "Glitch", "Deconstructed Club", "Witch House", "Noise", "Darkwave"],
+    "Roots and selectors": ["Disco", "Italo Disco", "Hi-NRG", "Funk", "Soul", "R&B", "Hip-Hop", "Boom Bap", "Trap", "Jazz", "Broken Beat", "Future Beats", "Lo-fi", "Dub", "Reggae", "Salsa", "Zouk"]
+  };
+
+  const allGenres = ["All genres", ...new Set(Object.values(genreGroups).flat())];
+
+  let current = 0;
+  let selectedGenre = "Hard Techno";
+  let selectedRegion = "All";
+
+  const wave = document.getElementById("wave");
+  const title = document.getElementById("setTitle");
+  const dj = document.getElementById("djName");
+  const locationLabel = document.getElementById("location");
+  const localTime = document.getElementById("localTime");
+  const genreMeta = document.getElementById("genreMeta");
+  const viewerMeta = document.getElementById("viewerMeta");
+  const coordinates = document.getElementById("coordinates");
+  const platform = document.getElementById("platform");
+  const freshCity = document.getElementById("freshCity");
+  const signalType = document.getElementById("signalType");
+  const proofMeta = document.getElementById("proofMeta");
+  const stage = document.getElementById("videoStage");
+  const followButton = document.getElementById("followButton");
+  const toast = document.getElementById("toast");
+  const genrePicker = document.getElementById("genrePicker");
+  const genrePanel = document.getElementById("genrePanel");
+  const genreSearch = document.getElementById("genreSearch");
+  const genreCatalog = document.getElementById("genreCatalog");
+  const genreCurrent = document.getElementById("genreCurrent");
+  const genreCount = document.getElementById("genreCount");
+  const mapEmpty = document.getElementById("mapEmpty");
+  const unmappedPanel = document.getElementById("unmappedPanel");
+  const unmappedList = document.getElementById("unmappedList");
+  const unmappedCount = document.getElementById("unmappedCount");
+  const chatButton = document.getElementById("chatButton");
+  const chatDrawer = document.getElementById("chatDrawer");
+  const chatScrim = document.getElementById("chatScrim");
+  const chatClose = document.getElementById("chatClose");
+  const chatDjName = document.getElementById("chatDjName");
+  const chatFrameWrap = document.getElementById("chatFrameWrap");
+  const chatLoading = document.getElementById("chatLoading");
+  const openChatExternal = document.getElementById("openChatExternal");
+
+  document.getElementById("liveCount").textContent = sets.filter(set => set.channel).length;
+
+  const map = L.map("map", {
+    center: [25, 5],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 12,
+    zoomControl: false,
+    worldCopyJump: true,
+    zoomSnap: 0.5
+  });
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  L.control.zoom({ position: "topleft" }).addTo(map);
+  const markerLayer = L.layerGroup().addTo(map);
+
+  function renderWave() {
+    const pattern = [16, 27, 12, 31, 22, 18, 30, 13, 25, 34, 19, 27, 15, 32, 21, 28, 13, 25, 33, 17, 29, 12, 24, 31, 18, 26, 14, 30, 20, 34, 16, 27, 12, 31, 22, 18, 29, 15, 24, 32, 19, 28, 13, 26, 34, 17, 30, 14, 25, 31, 18, 27, 12, 29, 21, 33, 15, 26, 19, 30];
+    wave.innerHTML = pattern.map((height, index) => `<span class="bar" style="--h:${height}px;--speed:${0.55 + (index % 7) * 0.09}s"></span>`).join("");
+  }
+
+  function eligibleSets() {
+    return sets.filter(set =>
+      (selectedGenre === "All genres" || set.genres.includes(selectedGenre)) &&
+      (selectedRegion === "All" || set.region === selectedRegion)
+    );
+  }
+
+  function hasPublishedLocation(set) {
+    return Number.isFinite(set.lat) && Number.isFinite(set.lng);
+  }
+
+  function liveLabel(set) {
+    return "live";
+  }
+
+  function formatLocalTime(set) {
+    if (!set.timeZone) return `Checked ${set.verifiedAt}`;
+    return `${new Intl.DateTimeFormat("en-GB", {
+      timeZone: set.timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(new Date())} local`;
+  }
+
+  function loadLivePlayer(set) {
+    document.getElementById("livePlayer")?.remove();
+    stage.classList.toggle("has-live-source", true);
+    if (window.location.protocol === "file:") return;
+
+    const frame = document.createElement("iframe");
+    frame.id = "livePlayer";
+    frame.className = "live-frame";
+    frame.title = `${set.dj} live on Twitch`;
+    frame.src = `https://player.twitch.tv/?channel=${encodeURIComponent(set.channel)}&parent=${encodeURIComponent(window.location.hostname)}&autoplay=true&muted=true`;
+    frame.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture";
+    frame.referrerPolicy = "origin";
+    frame.allowFullscreen = true;
+    stage.appendChild(frame);
+  }
+
+  function renderUnmappedSignals() {
+    const pool = eligibleSets().filter(set => !hasPublishedLocation(set));
+    unmappedPanel.hidden = pool.length === 0;
+    unmappedCount.textContent = pool.length;
+    unmappedList.innerHTML = "";
+
+    pool.forEach(set => {
+      const index = sets.indexOf(set);
+      const button = document.createElement("button");
+      button.className = `unmapped-card${index === current ? " active" : ""}`;
+      button.type = "button";
+      button.innerHTML = `<span><strong></strong><span>Location not published</span></span><b>${set.viewers} live</b>`;
+      button.querySelector("strong").textContent = set.dj;
+      button.addEventListener("click", () => selectSet(index));
+      unmappedList.appendChild(button);
+    });
+  }
+
+  function markerLabel(title, detailText) {
+    const label = document.createElement("div");
+    const heading = document.createElement("strong");
+    const detail = document.createElement("span");
+    heading.textContent = title;
+    detail.textContent = detailText;
+    label.append(heading, detail);
+    return label;
+  }
+
+  function addSetMarker(set) {
+    const index = sets.indexOf(set);
+    const active = index === current;
+    const icon = L.divIcon({
+      className: `signal-icon${active ? " active" : ""}`,
+      html: '<div class="signal-pin"></div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 20],
+      tooltipAnchor: [0, -18]
+    });
+
+    L.marker([set.lat, set.lng], { icon, title: `${set.dj} in ${set.city}` })
+      .bindTooltip(markerLabel(set.city, `${set.dj} · ${set.viewers} ${liveLabel(set)}`), {
+        permanent: true,
+        direction: "top",
+        className: `signal-label${active ? " active" : ""}`,
+        opacity: 1
+      })
+      .on("click", () => selectSet(index, true))
+      .addTo(markerLayer);
+  }
+
+  function addRegionCluster(region, members) {
+    const active = members.includes(sets[current]);
+    const center = [
+      members.reduce((sum, set) => sum + set.lat, 0) / members.length,
+      members.reduce((sum, set) => sum + set.lng, 0) / members.length
+    ];
+    const icon = L.divIcon({
+      className: `signal-cluster-icon${active ? " active" : ""}`,
+      html: `<div class="signal-cluster">${members.length}</div>`,
+      iconSize: [38, 38],
+      iconAnchor: [19, 19],
+      tooltipAnchor: [0, -22]
+    });
+
+    L.marker(center, { icon, title: `${members.length} live sets in ${region}` })
+      .bindTooltip(markerLabel(region, `${members.length} ${selectedGenre} sets · zoom in`), {
+        permanent: true,
+        direction: window.innerWidth <= 900 ? "bottom" : "top",
+        className: `signal-label${active ? " active" : ""}`,
+        opacity: 1
+      })
+      .on("click", () => {
+        const bounds = L.latLngBounds(members.map(set => [set.lat, set.lng]));
+        map.flyToBounds(bounds, { padding: [70, 70], maxZoom: 6, duration: 0.8 });
+      })
+      .addTo(markerLayer);
+  }
+
+  function renderMapMarkers() {
+    markerLayer.clearLayers();
+    const pool = eligibleSets();
+    const mappable = pool.filter(hasPublishedLocation);
+    mapEmpty.hidden = mappable.length > 0 || pool.some(set => set.channel);
+    genreCurrent.textContent = selectedGenre;
+    genreCount.textContent = `${pool.length} live · ${allGenres.length - 1} genres`;
+
+    const grouped = Object.groupBy ? Object.groupBy(mappable, set => set.region) : mappable.reduce((result, set) => {
+      (result[set.region] ||= []).push(set);
+      return result;
+    }, {});
+
+    Object.entries(grouped).forEach(([region, members]) => {
+      if (map.getZoom() <= 2.75 && members.length >= 3) addRegionCluster(region, members);
+      else members.forEach(addSetMarker);
+    });
+    renderUnmappedSignals();
+  }
+
+  function fitFilteredSignals() {
+    const pool = eligibleSets().filter(hasPublishedLocation);
+    if (!pool.length) return;
+    if (pool.length === 1) {
+      map.flyTo([pool[0].lat, pool[0].lng], 6, { duration: 0.7 });
+      return;
+    }
+    const bounds = L.latLngBounds(pool.map(set => [set.lat, set.lng]));
+    map.flyToBounds(bounds, { padding: [58, 58], maxZoom: 5, duration: 0.8 });
+  }
+
+  function loadChat(set) {
+    document.getElementById("chatFrame")?.remove();
+    chatDjName.textContent = set.dj;
+    openChatExternal.href = `https://www.twitch.tv/${encodeURIComponent(set.channel)}/chat`;
+    chatLoading.hidden = false;
+    chatLoading.querySelector("b").textContent = "Connecting to Twitch";
+    chatLoading.querySelector("span").textContent = "Opening the DJ’s live room…";
+
+    if (window.location.protocol === "file:") {
+      chatLoading.querySelector("b").textContent = "Official Twitch chat";
+      chatLoading.querySelector("span").textContent = "Loads on the published page.";
+      return;
+    }
+
+    const frame = document.createElement("iframe");
+    frame.id = "chatFrame";
+    frame.className = "chat-frame";
+    frame.title = `${set.dj} Twitch chat`;
+    frame.src = `https://www.twitch.tv/embed/${encodeURIComponent(set.channel)}/chat?parent=${encodeURIComponent(window.location.hostname)}&darkpopout`;
+    frame.referrerPolicy = "origin";
+    frame.addEventListener("load", () => {
+      chatLoading.hidden = true;
+    });
+    chatFrameWrap.appendChild(frame);
+  }
+
+  function openChat() {
+    loadChat(sets[current]);
+    chatDrawer.hidden = false;
+    chatScrim.hidden = false;
+    chatButton.setAttribute("aria-expanded", "true");
+    chatClose.focus({ preventScroll: true });
+  }
+
+  function closeChat() {
+    chatDrawer.hidden = true;
+    chatScrim.hidden = true;
+    chatButton.setAttribute("aria-expanded", "false");
+    document.getElementById("chatFrame")?.remove();
+    chatLoading.hidden = false;
+    chatButton.focus({ preventScroll: true });
+  }
+
+  function selectSet(index, focusMap = false) {
+    current = index;
+    const set = sets[current];
+    title.textContent = set.title;
+    dj.textContent = set.dj;
+    locationLabel.textContent = set.locationLabel;
+    localTime.textContent = formatLocalTime(set);
+    genreMeta.textContent = set.genres.includes(selectedGenre) && selectedGenre !== "All genres" ? selectedGenre : set.genre;
+    viewerMeta.textContent = `${set.viewers} watching`;
+    coordinates.innerHTML = hasPublishedLocation(set) ? `${set.coords[0]}<br>${set.coords[1]}` : "PIN PENDING<br>DJ CLAIM";
+    platform.textContent = "Live on Twitch";
+    signalType.textContent = "Verified live";
+    freshCity.textContent = hasPublishedLocation(set) ? `Live from ${set.code}` : "DJ location hidden";
+    proofMeta.textContent = set.locationPrecision === "City" ? "DJ-published pin" : set.locationPrecision;
+    document.getElementById("receiptDj").textContent = set.dj;
+    document.getElementById("receiptGenre").textContent = `${selectedGenre === "All genres" ? set.genre : selectedGenre} relay`;
+    document.getElementById("receiptLocation").textContent = set.locationPrecision;
+    const previewLayer = set.preview ? `linear-gradient(rgba(7, 16, 15, 0.14), rgba(7, 16, 15, 0.3)), url("${set.preview}") center / cover, ` : "";
+    stage.style.background = `${previewLayer}radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%), linear-gradient(140deg, ${set.colors[0]} 0%, ${set.colors[1]} 47%, ${set.colors[2]} 100%)`;
+    loadLivePlayer(set);
+    stage.classList.remove("switching");
+    void stage.offsetWidth;
+    stage.classList.add("switching");
+    followButton.classList.remove("active");
+    followButton.textContent = "Follow DJ";
+    renderMapMarkers();
+    if (!chatDrawer.hidden) loadChat(set);
+    if (focusMap && hasPublishedLocation(set)) map.flyTo([set.lat, set.lng], Math.max(map.getZoom(), 5), { duration: 0.7 });
+  }
+
+  function shuffle() {
+    const pool = eligibleSets();
+    if (!pool.length) {
+      showToast(`No live ${selectedGenre} signal in ${selectedRegion === "All" ? "this map" : selectedRegion}`);
+      return;
+    }
+    const alternatives = pool.filter(set => sets.indexOf(set) !== current);
+    const candidates = alternatives.length ? alternatives : pool;
+    const next = candidates[Math.floor(Math.random() * candidates.length)];
+    selectSet(sets.indexOf(next), true);
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2200);
+  }
+
+  function renderGenreCatalog(query = "") {
+    const needle = query.trim().toLowerCase();
+    genreCatalog.innerHTML = "";
+    const groups = { "Browse everything": ["All genres"], ...genreGroups };
+
+    Object.entries(groups).forEach(([groupName, names]) => {
+      const matches = names.filter(name => name.toLowerCase().includes(needle));
+      if (!matches.length) return;
+      const section = document.createElement("section");
+      section.className = "genre-section";
+      const heading = document.createElement("h3");
+      heading.textContent = groupName;
+      const options = document.createElement("div");
+      options.className = "genre-options";
+
+      matches.forEach(name => {
+        const button = document.createElement("button");
+        const live = sets.filter(set => name === "All genres" || set.genres.includes(name)).length;
+        button.className = `genre-choice${name === selectedGenre ? " active" : ""}`;
+        button.textContent = live ? `${name} · ${live}` : name;
+        button.addEventListener("click", () => chooseGenre(name));
+        options.appendChild(button);
+      });
+
+      section.append(heading, options);
+      genreCatalog.appendChild(section);
+    });
+  }
+
+  function closeGenrePanel() {
+    genrePanel.hidden = true;
+    genrePicker.setAttribute("aria-expanded", "false");
+  }
+
+  function chooseGenre(name) {
+    selectedGenre = name;
+    closeGenrePanel();
+    const pool = eligibleSets();
+    if (pool.length) selectSet(sets.indexOf(pool[0]));
+    else {
+      renderMapMarkers();
+      showToast(`No ${name} set live right now`);
+    }
+    renderGenreCatalog(genreSearch.value);
+    fitFilteredSignals();
+  }
+
+  genrePicker.addEventListener("click", () => {
+    genrePanel.hidden = !genrePanel.hidden;
+    genrePicker.setAttribute("aria-expanded", String(!genrePanel.hidden));
+    if (!genrePanel.hidden) {
+      genreSearch.focus();
+      genreSearch.select();
+    }
+  });
+
+  document.getElementById("genreClose").addEventListener("click", closeGenrePanel);
+  genreSearch.addEventListener("input", event => renderGenreCatalog(event.target.value));
+  chatButton.addEventListener("click", () => chatDrawer.hidden ? openChat() : closeChat());
+  chatClose.addEventListener("click", closeChat);
+  chatScrim.addEventListener("click", closeChat);
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    closeGenrePanel();
+    if (!chatDrawer.hidden) closeChat();
+  });
+
+  document.getElementById("regionSelect").addEventListener("change", event => {
+    selectedRegion = event.target.value;
+    const pool = eligibleSets();
+    if (pool.length) selectSet(sets.indexOf(pool[0]));
+    else renderMapMarkers();
+    fitFilteredSignals();
+  });
+
+  document.getElementById("shuffleButton").addEventListener("click", shuffle);
+
+  followButton.addEventListener("click", () => {
+    const set = sets[current];
+    if (set.channel && window.location.protocol !== "file:") {
+      window.open(`https://www.twitch.tv/${set.channel}`, "_blank", "noopener,noreferrer");
+      return;
+    }
+    followButton.classList.toggle("active");
+    followButton.textContent = followButton.classList.contains("active") ? "Following" : "Follow DJ";
+    showToast(followButton.classList.contains("active") ? `Following ${sets[current].dj}` : `Unfollowed ${sets[current].dj}`);
+  });
+
+  const passportDialog = document.getElementById("passportDialog");
+  const receiptDialog = document.getElementById("receiptDialog");
+
+  document.getElementById("claimButton").addEventListener("click", () => passportDialog.showModal());
+  document.getElementById("receiptButton").addEventListener("click", () => receiptDialog.showModal());
+  document.getElementById("passportPreviewButton").addEventListener("click", () => {
+    passportDialog.close();
+    showToast("Prototype ready. Twitch OAuth is the next backend step.");
+  });
+
+  document.querySelectorAll("[data-close]").forEach(button => {
+    button.addEventListener("click", () => document.getElementById(button.dataset.close).close());
+  });
+
+  [passportDialog, receiptDialog].forEach(dialog => {
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+
+  genreSearch.placeholder = `Search ${allGenres.length - 1} genres`;
+  map.on("zoomend", renderMapMarkers);
+  renderWave();
+  renderGenreCatalog();
+  selectSet(0);
+  requestAnimationFrame(() => {
+    map.invalidateSize();
+    fitFilteredSignals();
+  });
+</script>
+</body>
+</html>
