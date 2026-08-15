@@ -223,6 +223,22 @@
     isolation: isolate;
   }
 
+  .live-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+  }
+
+  .video.has-live-source .video-glow,
+  .video.has-live-source .dj,
+  .video.has-live-source .deck { display: none; }
+
+  .video.has-live-source .beam { opacity: 0.08; }
+
   .video.switching .dj,
   .video.switching .deck,
   .video.switching .video-glow {
@@ -913,6 +929,61 @@
   .map-empty strong { display: block; margin-bottom: 5px; font-size: 16px; }
   .map-empty span { color: var(--muted); font-size: 11px; }
 
+  .unmapped-panel {
+    position: absolute;
+    z-index: 900;
+    top: 96px;
+    right: 34px;
+    width: 244px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 15px;
+    background: rgba(7, 16, 15, 0.9);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+  }
+
+  .unmapped-panel[hidden] { display: none; }
+
+  .unmapped-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 12px 9px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .unmapped-head b { color: var(--signal); font-weight: 500; }
+
+  .unmapped-list { display: grid; padding: 6px; gap: 5px; }
+
+  .unmapped-card {
+    width: 100%;
+    min-height: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 9px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.025);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .unmapped-card:hover,
+  .unmapped-card.active { border-color: rgba(200, 255, 77, 0.35); background: var(--signal-soft); }
+
+  .unmapped-card strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+  .unmapped-card span { display: block; margin-top: 3px; font-family: var(--mono); font-size: 7px; color: var(--muted); text-transform: uppercase; }
+  .unmapped-card b { color: var(--signal); font-family: var(--mono); font-size: 8px; font-weight: 500; }
+
   .world {
     position: absolute;
     inset: 0;
@@ -1242,6 +1313,17 @@
     .leaflet-tooltip.signal-label { font-size: 7px; padding: 5px 7px; }
     .world-map::after { box-shadow: inset 0 0 54px 18px rgba(4, 13, 12, 0.72); }
 
+    .unmapped-panel {
+      top: 72px;
+      right: 14px;
+      width: 218px;
+      max-height: 112px;
+    }
+
+    .unmapped-head { padding: 8px 10px 6px; }
+    .unmapped-list { max-height: 76px; overflow-y: auto; }
+    .unmapped-card { min-height: 42px; padding: 6px 8px; }
+
     .genre { height: 32px; padding: 0 12px; }
 
     .region-select {
@@ -1321,7 +1403,7 @@
       <span class="brand-mark" aria-hidden="true"></span>
       <span>WHERE/NOW</span>
     </div>
-    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">248</b> live signals</span></div>
+    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">2</b> verified Twitch signals</span></div>
     <div class="top-actions">
       <button class="text-action" id="claimButton">Claim your pin</button>
       <button class="icon-action" aria-label="Open menu">
@@ -1345,28 +1427,28 @@
             <span class="platform-badge" id="platform">Live on Twitch</span>
             <span class="quality-badge">1080p</span>
           </div>
-          <div class="fresh-badge"><span>Pilot signal</span><b id="freshCity">Live from VIE</b></div>
+          <div class="fresh-badge"><span id="signalType">Verified live</span><b id="freshCity">Live from ASU</b></div>
           <div class="wave" id="wave" aria-hidden="true"></div>
         </div>
 
         <div class="player-info">
           <div class="eyebrow">
-            <span class="city-signal" id="location">Vienna, Austria</span>
-            <span id="localTime">00:47 local</span>
+            <span class="city-signal" id="location">Asunción, Paraguay</span>
+            <span id="localTime">Live now</span>
           </div>
 
           <div class="title-row">
             <div>
-              <h1 class="set-title" id="setTitle">No Soft Landing</h1>
-              <p class="dj-name">with <span id="djName">Kora Vale</span></p>
+              <h1 class="set-title" id="setTitle">Schranz Weekend</h1>
+              <p class="dj-name">with <span id="djName">WAMF Live</span></p>
             </div>
             <button class="follow-button" id="followButton">Follow DJ</button>
           </div>
 
           <div class="metadata">
             <span class="meta-pill hot" id="genreMeta">Schranz</span>
-            <span class="meta-pill" id="viewerMeta">188 listening</span>
-            <span class="meta-pill">Live location</span>
+            <span class="meta-pill" id="viewerMeta">1 watching</span>
+            <span class="meta-pill" id="proofMeta">DJ-published pin</span>
           </div>
 
           <button class="shuffle-button" id="shuffleButton">
@@ -1406,9 +1488,13 @@
 
       <div class="world-map" id="map" aria-label="Interactive map. Drag to move and use the controls to zoom."></div>
       <div class="map-empty" id="mapEmpty" hidden><strong>No live signal here</strong><span>Try another region or widen the genre.</span></div>
+      <aside class="unmapped-panel" id="unmappedPanel" hidden>
+        <div class="unmapped-head"><span>Live · location hidden</span><b id="unmappedCount">0</b></div>
+        <div class="unmapped-list" id="unmappedList"></div>
+      </aside>
 
       <div class="map-bottom">
-        <p class="map-note"><strong>Every light is live.</strong> Jump into a set or narrow the world to the sound you want.</p>
+        <p class="map-note"><strong>Pins use DJ-published locations.</strong> Live streams without one stay playable but off-map.</p>
         <div class="crowd-proof" aria-label="Recent listeners">
           <div class="avatars" aria-hidden="true"><span class="avatar"></span><span class="avatar"></span><span class="avatar"></span></div>
           <p><strong>27 people</strong><br>landed here recently</p>
@@ -1424,14 +1510,11 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   const sets = [
-    { id:"vienna", title:"No Soft Landing", dj:"Kora Vale", city:"Vienna", code:"VIE", country:"Austria", region:"Europe", genre:"Schranz", viewers:188, time:"00:47", coords:["48.2082° N","16.3738° E"], lat:48.2082, lng:16.3738, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] },
-    { id:"berlin", title:"Body Mechanics", dj:"Nullform", city:"Berlin", code:"BER", country:"Germany", region:"Europe", genre:"Schranz", viewers:132, time:"00:47", coords:["52.5200° N","13.4050° E"], lat:52.52, lng:13.405, platform:"Live on Twitch", colors:["#294641","#132824","#07100f"] },
-    { id:"prague", title:"Steel Nerves", dj:"Mara Kicks", city:"Prague", code:"PRG", country:"Czechia", region:"Europe", genre:"Schranz", viewers:91, time:"00:47", coords:["50.0755° N","14.4378° E"], lat:50.0755, lng:14.4378, platform:"Live on YouTube", colors:["#183f3b","#0c2421","#07100f"] },
-    { id:"warsaw", title:"Redline Ritual", dj:"Vanta", city:"Warsaw", code:"WAW", country:"Poland", region:"Europe", genre:"Schranz", viewers:74, time:"00:47", coords:["52.2297° N","21.0122° E"], lat:52.2297, lng:21.0122, platform:"Live on Twitch", colors:["#214b45","#102723","#07100f"] },
-    { id:"rotterdam", title:"Pressure Vessel", dj:"Kessler Unit", city:"Rotterdam", code:"RTM", country:"Netherlands", region:"Europe", genre:"Schranz", viewers:63, time:"00:47", coords:["51.9244° N","4.4777° E"], lat:51.9244, lng:4.4777, platform:"Live on Twitch", colors:["#163d45","#0d2428","#07100f"] },
-    { id:"saopaulo", title:"Concrete Fever", dj:"Nina Brava", city:"São Paulo", code:"SAO", country:"Brazil", region:"South America", genre:"Schranz", viewers:47, time:"19:47", coords:["23.5505° S","46.6333° W"], lat:-23.5505, lng:-46.6333, platform:"Live on Twitch", colors:["#315044","#15271f","#07100f"] },
-    { id:"tokyo", title:"Torque Limit", dj:"Rin X", city:"Tokyo", code:"TYO", country:"Japan", region:"Asia", genre:"Schranz", viewers:58, time:"07:47", coords:["35.6762° N","139.6503° E"], lat:35.6762, lng:139.6503, platform:"Live on YouTube", colors:["#174451","#0c2730","#07100f"] },
-    { id:"newyork", title:"Hammer District", dj:"CTRL Burn", city:"New York", code:"NYC", country:"United States", region:"North America", genre:"Schranz", viewers:44, time:"18:47", coords:["40.7128° N","74.0060° W"], lat:40.7128, lng:-74.006, platform:"Live on Twitch", colors:["#244943","#102722","#07100f"] },
+    { id:"wamflive", title:"Schranz Weekend", dj:"WAMF Live", city:"Asunción", code:"ASU", country:"Paraguay", region:"South America", genre:"Schranz", viewers:1, timeZone:"America/Asuncion", coords:["25.2637° S","57.5759° W"], lat:-25.2637, lng:-57.5759, channel:"wamflive", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_wamflive-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] },
+    { id:"djmista5", title:"House to Schranz", dj:"DJ Mista5", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Schranz", viewers:18, lat:null, lng:null, channel:"djmista5", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_djmista5-640x360.jpg", colors:["#294641","#132824","#07100f"] },
+    { id:"snk_wav", title:"SNK Overdrive", dj:"SNK_wav", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", viewers:32, lat:null, lng:null, channel:"snk_wav", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_snk_wav-640x360.jpg", colors:["#183f3b","#0c2421","#07100f"] },
+    { id:"ladyponcho79", title:"Saturday Mix", dj:"Lady Poncho", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Open Format", viewers:22, lat:null, lng:null, channel:"ladyponcho79", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_ladyponcho79-640x360.jpg", colors:["#214b45","#102723","#07100f"] },
+    { id:"noobymcnoot", title:"Meow’Topia", dj:"NoobyMcNoot", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Psytrance", viewers:4, lat:null, lng:null, channel:"noobymcnoot", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_noobymcnoot-640x360.jpg", colors:["#163d45","#0d2428","#07100f"] },
     { id:"johannesburg", title:"Soft Pressure", dj:"Lerato.exe", city:"Johannesburg", code:"JHB", country:"South Africa", region:"Africa", genre:"Amapiano", viewers:62, time:"00:47", coords:["26.2041° S","28.0473° E"], lat:-26.2041, lng:28.0473, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] },
     { id:"london", title:"Sub Level", dj:"Mara Vale", city:"London", code:"LDN", country:"United Kingdom", region:"Europe", genre:"UK Garage", viewers:114, time:"23:47", coords:["51.5072° N","0.1276° W"], lat:51.5072, lng:-0.1276, platform:"Live on Twitch", colors:["#163d45","#0d2428","#07100f"] },
     { id:"detroit", title:"Machine Soul", dj:"Model Citizen", city:"Detroit", code:"DTT", country:"United States", region:"North America", genre:"Detroit Techno", viewers:83, time:"18:47", coords:["42.3314° N","83.0458° W"], lat:42.3314, lng:-83.0458, platform:"Live on YouTube", colors:["#294641","#132824","#07100f"] },
@@ -1453,7 +1536,7 @@
     "Bass and breaks": ["UK Garage", "2-Step", "Speed Garage", "Bassline", "Breakbeat", "Breaks", "Jungle", "Drum & Bass", "Liquid DnB", "Neurofunk", "Jump Up", "Dubstep", "Grime", "Footwork", "Juke", "Ghettotech", "UK Funky", "Future Garage", "Halftime"],
     "Trance and hard dance": ["Trance", "Progressive Trance", "Psytrance", "Goa", "Hard Trance", "Tech Trance", "Uplifting Trance", "Hardcore", "Gabber", "Hardstyle", "Rawstyle", "Happy Hardcore", "Breakcore", "Makina", "Donk", "Hard House", "Eurodance"],
     "Club and global": ["Baile Funk", "Jersey Club", "Baltimore Club", "Ballroom", "Vogue Beats", "Dancehall", "Reggaeton", "Dembow", "Latin Club", "Cumbia", "Kuduro", "Batida", "Afrobeat", "Afrobeats", "Highlife", "Coupé-Décalé", "Singeli", "Shangaan Electro", "K-Pop Club", "Desi Club"],
-    "Electronic and leftfield": ["Ambient", "Drone", "IDM", "Leftfield", "Experimental", "Downtempo", "Trip-Hop", "Electro", "EBM", "Synthwave", "Vaporwave", "Glitch", "Deconstructed Club", "Witch House", "Noise", "Darkwave"],
+    "Electronic and leftfield": ["Open Format", "Ambient", "Drone", "IDM", "Leftfield", "Experimental", "Downtempo", "Trip-Hop", "Electro", "EBM", "Synthwave", "Vaporwave", "Glitch", "Deconstructed Club", "Witch House", "Noise", "Darkwave"],
     "Roots and selectors": ["Disco", "Italo Disco", "Hi-NRG", "Funk", "Soul", "R&B", "Hip-Hop", "Boom Bap", "Trap", "Jazz", "Broken Beat", "Future Beats", "Lo-fi", "Dub", "Reggae", "Salsa", "Zouk"]
   };
 
@@ -1473,6 +1556,8 @@
   const coordinates = document.getElementById("coordinates");
   const platform = document.getElementById("platform");
   const freshCity = document.getElementById("freshCity");
+  const signalType = document.getElementById("signalType");
+  const proofMeta = document.getElementById("proofMeta");
   const stage = document.getElementById("videoStage");
   const followButton = document.getElementById("followButton");
   const toast = document.getElementById("toast");
@@ -1483,6 +1568,11 @@
   const genreCurrent = document.getElementById("genreCurrent");
   const genreCount = document.getElementById("genreCount");
   const mapEmpty = document.getElementById("mapEmpty");
+  const unmappedPanel = document.getElementById("unmappedPanel");
+  const unmappedList = document.getElementById("unmappedList");
+  const unmappedCount = document.getElementById("unmappedCount");
+
+  document.getElementById("liveCount").textContent = sets.filter(set => set.channel).length;
 
   const map = L.map("map", {
     center: [25, 5],
@@ -1514,6 +1604,58 @@
     );
   }
 
+  function hasPublishedLocation(set) {
+    return Number.isFinite(set.lat) && Number.isFinite(set.lng);
+  }
+
+  function liveLabel(set) {
+    return set.channel ? "live" : "concept";
+  }
+
+  function formatLocalTime(set) {
+    if (!set.timeZone) return set.channel ? `Checked ${set.verifiedAt}` : `${set.time} local`;
+    return `${new Intl.DateTimeFormat("en-GB", {
+      timeZone: set.timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(new Date())} local`;
+  }
+
+  function loadLivePlayer(set) {
+    document.getElementById("livePlayer")?.remove();
+    stage.classList.toggle("has-live-source", Boolean(set.channel));
+    if (!set.channel || window.location.protocol === "file:") return;
+
+    const frame = document.createElement("iframe");
+    frame.id = "livePlayer";
+    frame.className = "live-frame";
+    frame.title = `${set.dj} live on Twitch`;
+    frame.src = `https://player.twitch.tv/?channel=${encodeURIComponent(set.channel)}&parent=${encodeURIComponent(window.location.hostname)}&autoplay=true&muted=true`;
+    frame.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture";
+    frame.referrerPolicy = "origin";
+    frame.allowFullscreen = true;
+    stage.appendChild(frame);
+  }
+
+  function renderUnmappedSignals() {
+    const pool = eligibleSets().filter(set => set.channel && !hasPublishedLocation(set));
+    unmappedPanel.hidden = pool.length === 0;
+    unmappedCount.textContent = pool.length;
+    unmappedList.innerHTML = "";
+
+    pool.forEach(set => {
+      const index = sets.indexOf(set);
+      const button = document.createElement("button");
+      button.className = `unmapped-card${index === current ? " active" : ""}`;
+      button.type = "button";
+      button.innerHTML = `<span><strong></strong><span>Location not published</span></span><b>${set.viewers} live</b>`;
+      button.querySelector("strong").textContent = set.dj;
+      button.addEventListener("click", () => selectSet(index));
+      unmappedList.appendChild(button);
+    });
+  }
+
   function markerLabel(title, detailText) {
     const label = document.createElement("div");
     const heading = document.createElement("strong");
@@ -1536,7 +1678,7 @@
     });
 
     L.marker([set.lat, set.lng], { icon, title: `${set.dj} in ${set.city}` })
-      .bindTooltip(markerLabel(set.city, `${set.dj} · ${set.viewers} live`), {
+      .bindTooltip(markerLabel(set.city, `${set.dj} · ${set.viewers} ${liveLabel(set)}`), {
         permanent: true,
         direction: "top",
         className: `signal-label${active ? " active" : ""}`,
@@ -1577,11 +1719,13 @@
   function renderMapMarkers() {
     markerLayer.clearLayers();
     const pool = eligibleSets();
-    mapEmpty.hidden = pool.length > 0;
+    const mappable = pool.filter(hasPublishedLocation);
+    mapEmpty.hidden = mappable.length > 0 || pool.some(set => set.channel);
     genreCurrent.textContent = selectedGenre;
-    genreCount.textContent = `${pool.length} live · ${allGenres.length - 1} genres`;
+    const verified = pool.filter(set => set.channel).length;
+    genreCount.textContent = `${verified || pool.length} ${verified ? "live" : "mapped"} · ${allGenres.length - 1} genres`;
 
-    const grouped = Object.groupBy ? Object.groupBy(pool, set => set.region) : pool.reduce((result, set) => {
+    const grouped = Object.groupBy ? Object.groupBy(mappable, set => set.region) : mappable.reduce((result, set) => {
       (result[set.region] ||= []).push(set);
       return result;
     }, {});
@@ -1590,10 +1734,11 @@
       if (map.getZoom() <= 2.75 && members.length >= 3) addRegionCluster(region, members);
       else members.forEach(addSetMarker);
     });
+    renderUnmappedSignals();
   }
 
   function fitFilteredSignals() {
-    const pool = eligibleSets();
+    const pool = eligibleSets().filter(hasPublishedLocation);
     if (!pool.length) return;
     if (pool.length === 1) {
       map.flyTo([pool[0].lat, pool[0].lng], 6, { duration: 0.7 });
@@ -1608,21 +1753,25 @@
     const set = sets[current];
     title.textContent = set.title;
     dj.textContent = set.dj;
-    locationLabel.textContent = `${set.city}, ${set.country}`;
-    localTime.textContent = `${set.time} local`;
+    locationLabel.textContent = hasPublishedLocation(set) ? `${set.city}, ${set.country}` : "Location unverified";
+    localTime.textContent = formatLocalTime(set);
     genreMeta.textContent = set.genre;
-    viewerMeta.textContent = `${set.viewers} listening`;
-    coordinates.innerHTML = `${set.coords[0]}<br>${set.coords[1]}`;
-    platform.textContent = set.platform;
-    freshCity.textContent = `Live from ${set.code}`;
-    stage.style.background = `radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%), linear-gradient(140deg, ${set.colors[0]} 0%, ${set.colors[1]} 47%, ${set.colors[2]} 100%)`;
+    viewerMeta.textContent = `${set.viewers} ${set.channel ? "watching" : "demo listeners"}`;
+    coordinates.innerHTML = hasPublishedLocation(set) ? `${set.coords[0]}<br>${set.coords[1]}` : "PIN PENDING<br>DJ CLAIM";
+    platform.textContent = set.channel ? "Live on Twitch" : "Map concept";
+    signalType.textContent = set.channel ? "Verified live" : "Pilot signal";
+    freshCity.textContent = hasPublishedLocation(set) ? `Live from ${set.code}` : set.channel ? "DJ location hidden" : `Pilot from ${set.code}`;
+    proofMeta.textContent = set.channel ? (hasPublishedLocation(set) ? "DJ-published pin" : "Location unverified") : "Concept signal";
+    const previewLayer = set.preview ? `linear-gradient(rgba(7, 16, 15, 0.14), rgba(7, 16, 15, 0.3)), url("${set.preview}") center / cover, ` : "";
+    stage.style.background = `${previewLayer}radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%), linear-gradient(140deg, ${set.colors[0]} 0%, ${set.colors[1]} 47%, ${set.colors[2]} 100%)`;
+    loadLivePlayer(set);
     stage.classList.remove("switching");
     void stage.offsetWidth;
     stage.classList.add("switching");
     followButton.classList.remove("active");
     followButton.textContent = "Follow DJ";
     renderMapMarkers();
-    if (focusMap) map.flyTo([set.lat, set.lng], Math.max(map.getZoom(), 5), { duration: 0.7 });
+    if (focusMap && hasPublishedLocation(set)) map.flyTo([set.lat, set.lng], Math.max(map.getZoom(), 5), { duration: 0.7 });
   }
 
   function shuffle() {
@@ -1715,6 +1864,11 @@
   document.getElementById("shuffleButton").addEventListener("click", shuffle);
 
   followButton.addEventListener("click", () => {
+    const set = sets[current];
+    if (set.channel && window.location.protocol !== "file:") {
+      window.open(`https://www.twitch.tv/${set.channel}`, "_blank", "noopener,noreferrer");
+      return;
+    }
     followButton.classList.toggle("active");
     followButton.textContent = followButton.classList.contains("active") ? "Following" : "Follow DJ";
     showToast(followButton.classList.contains("active") ? `Following ${sets[current].dj}` : `Unfollowed ${sets[current].dj}`);
