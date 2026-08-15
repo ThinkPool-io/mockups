@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
   :root {
     --night: #07100f;
@@ -667,6 +668,251 @@
     backdrop-filter: blur(18px);
   }
 
+  .genre-picker {
+    height: 50px;
+    min-width: 240px;
+    padding: 0 14px 0 17px;
+    border: 1px solid rgba(200, 255, 77, 0.28);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    cursor: pointer;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 12px 38px rgba(0, 0, 0, 0.2);
+  }
+
+  .genre-picker-copy {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .genre-picker-copy small,
+  .genre-picker-count {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .genre-picker-copy strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--signal);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .genre-picker-count { color: var(--paper); white-space: nowrap; }
+
+  .genre-panel {
+    position: absolute;
+    z-index: 1200;
+    top: 90px;
+    left: 32px;
+    width: min(620px, calc(100% - 66px));
+    max-height: 520px;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background: rgba(8, 20, 18, 0.97);
+    backdrop-filter: blur(28px);
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.58);
+  }
+
+  .genre-panel[hidden] { display: none; }
+
+  .genre-panel-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .genre-search {
+    width: 100%;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    outline: none;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .genre-search:focus { border-color: var(--signal); box-shadow: 0 0 0 3px var(--signal-soft); }
+
+  .genre-close {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .genre-catalog {
+    max-height: 444px;
+    overflow-y: auto;
+    padding: 4px 18px 22px;
+    scrollbar-color: var(--dim) transparent;
+  }
+
+  .genre-section { padding-top: 17px; }
+
+  .genre-section h3 {
+    margin-bottom: 10px;
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .genre-options { display: flex; flex-wrap: wrap; gap: 7px; }
+
+  .genre-choice {
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    cursor: pointer;
+  }
+
+  .genre-choice:hover,
+  .genre-choice.active {
+    border-color: var(--signal);
+    background: var(--signal);
+    color: var(--night);
+  }
+
+  .world-map {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #06100f;
+  }
+
+  .world-map::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    box-shadow: inset 0 0 110px 34px rgba(4, 13, 12, 0.82);
+  }
+
+  .leaflet-container { font-family: var(--display); }
+  .leaflet-tile-pane { filter: invert(1) hue-rotate(145deg) saturate(0.52) brightness(0.66) contrast(0.94); opacity: 0.72; }
+  .leaflet-control-container { position: relative; z-index: 800; }
+  .leaflet-top.leaflet-left { top: 84px; left: 18px; }
+  .leaflet-control-zoom { border: 1px solid var(--line-strong) !important; border-radius: 11px !important; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.28) !important; }
+  .leaflet-control-zoom a { width: 36px !important; height: 35px !important; line-height: 34px !important; border: 0 !important; border-bottom: 1px solid var(--line) !important; background: rgba(7, 16, 15, 0.92) !important; color: var(--paper) !important; }
+  .leaflet-control-zoom a:last-child { border-bottom: 0 !important; }
+  .leaflet-control-attribution { padding: 3px 7px !important; background: rgba(7, 16, 15, 0.74) !important; color: var(--dim) !important; font-family: var(--mono); font-size: 7px !important; }
+  .leaflet-control-attribution a { color: var(--muted) !important; }
+
+  .signal-icon { background: transparent; border: 0; }
+
+  .signal-pin {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    border: 2px solid #08201c;
+    border-radius: 50% 50% 50% 6px;
+    background: var(--water);
+    transform: rotate(-45deg);
+    box-shadow: 0 0 0 6px rgba(125, 215, 231, 0.12), 0 0 24px rgba(125, 215, 231, 0.48);
+  }
+
+  .signal-pin::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    left: 5.5px;
+    top: 5.5px;
+    border-radius: 50%;
+    background: var(--night);
+  }
+
+  .signal-icon.active .signal-pin {
+    background: var(--signal);
+    box-shadow: 0 0 0 7px rgba(200, 255, 77, 0.15), 0 0 30px rgba(200, 255, 77, 0.66);
+  }
+
+  .signal-cluster-icon { background: transparent; border: 0; }
+
+  .signal-cluster {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(200, 255, 77, 0.62);
+    border-radius: 50%;
+    background: rgba(7, 16, 15, 0.9);
+    color: var(--signal);
+    box-shadow: 0 0 0 8px rgba(200, 255, 77, 0.09), 0 0 34px rgba(200, 255, 77, 0.36);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .signal-cluster-icon.active .signal-cluster { background: var(--signal); color: var(--night); }
+
+  .leaflet-tooltip.signal-label {
+    padding: 7px 9px;
+    border: 1px solid rgba(125, 215, 231, 0.2);
+    border-radius: 8px;
+    background: rgba(7, 16, 15, 0.9);
+    color: var(--paper);
+    box-shadow: 0 9px 24px rgba(0,0,0,0.3);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.25;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .leaflet-tooltip.signal-label::before { display: none; }
+  .leaflet-tooltip.signal-label span { display: block; margin-top: 3px; color: var(--signal); font-size: 7px; }
+  .leaflet-tooltip.signal-label.active { border-color: rgba(200, 255, 77, 0.52); }
+
+  .map-empty {
+    position: absolute;
+    z-index: 900;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(310px, calc(100% - 40px));
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 15px;
+    background: rgba(7, 16, 15, 0.92);
+    text-align: center;
+    backdrop-filter: blur(18px);
+  }
+
+  .map-empty[hidden] { display: none; }
+  .map-empty strong { display: block; margin-bottom: 5px; font-size: 16px; }
+  .map-empty span { color: var(--muted); font-size: 11px; }
+
   .world {
     position: absolute;
     inset: 0;
@@ -972,6 +1218,30 @@
       padding: 5px;
     }
 
+    .genre-picker {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: calc(100% - 50px);
+      height: 49px;
+      border-radius: 12px;
+    }
+
+    .genre-picker-copy small { display: none; }
+
+    .genre-panel {
+      position: fixed;
+      inset: auto 10px 10px;
+      width: auto;
+      max-height: 70vh;
+      border-radius: 20px;
+    }
+
+    .genre-catalog { max-height: calc(70vh - 81px); }
+
+    .leaflet-top.leaflet-left { top: 66px; left: 10px; }
+    .leaflet-tooltip.signal-label { font-size: 7px; padding: 5px 7px; }
+    .world-map::after { box-shadow: inset 0 0 54px 18px rgba(4, 13, 12, 0.72); }
+
     .genre { height: 32px; padding: 0 12px; }
 
     .region-select {
@@ -1075,27 +1345,27 @@
             <span class="platform-badge" id="platform">Live on Twitch</span>
             <span class="quality-badge">1080p</span>
           </div>
-          <div class="fresh-badge"><span>New to you</span><b id="freshCity">Live from JHB</b></div>
+          <div class="fresh-badge"><span>Pilot signal</span><b id="freshCity">Live from VIE</b></div>
           <div class="wave" id="wave" aria-hidden="true"></div>
         </div>
 
         <div class="player-info">
           <div class="eyebrow">
-            <span class="city-signal" id="location">Johannesburg, South Africa</span>
+            <span class="city-signal" id="location">Vienna, Austria</span>
             <span id="localTime">00:47 local</span>
           </div>
 
           <div class="title-row">
             <div>
-              <h1 class="set-title" id="setTitle">Soft Pressure</h1>
-              <p class="dj-name">with <span id="djName">Lerato.exe</span></p>
+              <h1 class="set-title" id="setTitle">No Soft Landing</h1>
+              <p class="dj-name">with <span id="djName">Kora Vale</span></p>
             </div>
             <button class="follow-button" id="followButton">Follow DJ</button>
           </div>
 
           <div class="metadata">
-            <span class="meta-pill hot" id="genreMeta">Amapiano</span>
-            <span class="meta-pill" id="viewerMeta">62 listening</span>
+            <span class="meta-pill hot" id="genreMeta">Schranz</span>
+            <span class="meta-pill" id="viewerMeta">188 listening</span>
             <span class="meta-pill">Live location</span>
           </div>
 
@@ -1109,41 +1379,33 @@
 
     <section class="map-column" aria-label="World map of live DJ sets">
       <div class="map-tools">
-        <div class="filter-group" role="group" aria-label="Select a genre">
-          <button class="genre active" data-genre="All">All signals</button>
-          <button class="genre" data-genre="House">House</button>
-          <button class="genre" data-genre="Techno">Techno</button>
-          <button class="genre" data-genre="Bass">Bass</button>
-          <button class="genre" data-genre="Amapiano">Amapiano</button>
-          <button class="genre" data-genre="Ambient">Ambient</button>
-        </div>
+        <button class="genre-picker" id="genrePicker" aria-expanded="false" aria-controls="genrePanel">
+          <span class="genre-picker-copy"><small>Genre</small><strong id="genreCurrent">Schranz</strong></span>
+          <span class="genre-picker-count" id="genreCount">8 live · 96 genres</span>
+        </button>
         <select class="region-select" id="regionSelect" aria-label="Select a region">
           <option value="All">Anywhere</option>
           <option value="Africa">Africa</option>
           <option value="Asia">Asia</option>
+          <option value="Caribbean">Caribbean</option>
           <option value="Europe">Europe</option>
           <option value="Middle East">Middle East</option>
+          <option value="North America">North America</option>
+          <option value="Oceania">Oceania</option>
           <option value="South America">South America</option>
         </select>
       </div>
 
-      <div class="world">
-        <svg class="map-svg" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-          <path d="M65 172L93 125l66-46 85-18 75 18 58 54 45 10 28 45-24 34-60 2-34 48-44 4-27 58-34 25-35-24-27-65-45-34-19-64z"/>
-          <path d="M308 363l48 15 47 54 17 61-14 72-31 50-35-15-6-72-30-63-18-55z"/>
-          <path d="M440 158l50-54 74-24 75 11 45 38 60-4 61 30 76 7 57 45-10 50-58 24-55-13-24 27-45-7-29 52-43 3-37-47-41 1-35-37-62 11-50-37-37-4-19-45z"/>
-          <path d="M511 297l55-26 71 31 42 70-18 74-47 68-45-22-29-59-33-52-18-51z"/>
-          <path d="M787 406l49-29 57 21 43 52-34 43-65-5-49-37z"/>
-          <path d="M494 91l14-38 41-20 45 28-12 36-44 17z"/>
-          <path class="inner" d="M131 143l105 62 92-54M185 275l88-47M343 396l57 36M492 187l92 72 83-120M567 274l72 25 64-67M602 348l-22 85 63 40M754 183l29 85 63-48M835 418l21 58"/>
-        </svg>
-
-        <span class="map-label label-atlantic">Atlantic</span>
-        <span class="map-label label-pacific">Pacific</span>
-        <span class="map-label label-equator">00° Equator</span>
-
-        <div id="pins"></div>
+      <div class="genre-panel" id="genrePanel" hidden>
+        <div class="genre-panel-head">
+          <input class="genre-search" id="genreSearch" type="search" placeholder="Search 96 genres" autocomplete="off" aria-label="Search genres">
+          <button class="genre-close" id="genreClose" aria-label="Close genre catalog">×</button>
+        </div>
+        <div class="genre-catalog" id="genreCatalog"></div>
       </div>
+
+      <div class="world-map" id="map" aria-label="Interactive map. Drag to move and use the controls to zoom."></div>
+      <div class="map-empty" id="mapEmpty" hidden><strong>No live signal here</strong><span>Try another region or widen the genre.</span></div>
 
       <div class="map-bottom">
         <p class="map-note"><strong>Every light is live.</strong> Jump into a set or narrow the world to the sound you want.</p>
@@ -1151,7 +1413,7 @@
           <div class="avatars" aria-hidden="true"><span class="avatar"></span><span class="avatar"></span><span class="avatar"></span></div>
           <p><strong>27 people</strong><br>landed here recently</p>
         </div>
-        <p class="map-coords" id="coordinates">26.2041° S<br>28.0473° E</p>
+        <p class="map-coords" id="coordinates">48.2082° N<br>16.3738° E</p>
       </div>
     </section>
   </main>
@@ -1159,127 +1421,48 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   const sets = [
-    {
-      id: "johannesburg",
-      title: "Soft Pressure",
-      dj: "Lerato.exe",
-      city: "Johannesburg",
-      code: "JHB",
-      country: "South Africa",
-      region: "Africa",
-      genre: "Amapiano",
-      viewers: 62,
-      time: "00:47",
-      coords: ["26.2041° S", "28.0473° E"],
-      pos: [56, 66],
-      platform: "Live on Twitch",
-      colors: ["#214f49", "#0b2420", "#07100f"]
-    },
-    {
-      id: "london",
-      title: "Sub Level",
-      dj: "Mara Vale",
-      city: "London",
-      code: "LDN",
-      country: "United Kingdom",
-      region: "Europe",
-      genre: "Bass",
-      viewers: 114,
-      time: "23:47",
-      coords: ["51.5072° N", "0.1276° W"],
-      pos: [47, 36],
-      platform: "Live on Twitch",
-      colors: ["#163d45", "#0d2428", "#07100f"]
-    },
-    {
-      id: "berlin",
-      title: "Concrete Bloom",
-      dj: "Nullform",
-      city: "Berlin",
-      code: "BER",
-      country: "Germany",
-      region: "Europe",
-      genre: "Techno",
-      viewers: 38,
-      time: "00:47",
-      coords: ["52.5200° N", "13.4050° E"],
-      pos: [51, 36],
-      platform: "Live on YouTube",
-      colors: ["#294641", "#132824", "#07100f"]
-    },
-    {
-      id: "tokyo",
-      title: "Blue Hours",
-      dj: "Mizu Signal",
-      city: "Tokyo",
-      code: "TYO",
-      country: "Japan",
-      region: "Asia",
-      genre: "Ambient",
-      viewers: 91,
-      time: "07:47",
-      coords: ["35.6762° N", "139.6503° E"],
-      pos: [83, 43],
-      platform: "Live on YouTube",
-      colors: ["#174451", "#0c2730", "#07100f"]
-    },
-    {
-      id: "saopaulo",
-      title: "Heat Index",
-      dj: "Nina Brava",
-      city: "São Paulo",
-      code: "SAO",
-      country: "Brazil",
-      region: "South America",
-      genre: "House",
-      viewers: 47,
-      time: "19:47",
-      coords: ["23.5505° S", "46.6333° W"],
-      pos: [37, 69],
-      platform: "Live on Twitch",
-      colors: ["#315044", "#15271f", "#07100f"]
-    },
-    {
-      id: "beirut",
-      title: "Afterimage",
-      dj: "Rana 909",
-      city: "Beirut",
-      code: "BEY",
-      country: "Lebanon",
-      region: "Middle East",
-      genre: "Techno",
-      viewers: 29,
-      time: "01:47",
-      coords: ["33.8938° N", "35.5018° E"],
-      pos: [57, 44],
-      platform: "Live on Twitch",
-      colors: ["#214b45", "#102723", "#07100f"]
-    },
-    {
-      id: "lagos",
-      title: "Palm Wine Data",
-      dj: "Teju B2B Mina",
-      city: "Lagos",
-      code: "LOS",
-      country: "Nigeria",
-      region: "Africa",
-      genre: "House",
-      viewers: 76,
-      time: "23:47",
-      coords: ["6.5244° N", "3.3792° E"],
-      pos: [49, 57],
-      platform: "Live on Twitch",
-      colors: ["#264d42", "#11271f", "#07100f"]
-    }
+    { id:"vienna", title:"No Soft Landing", dj:"Kora Vale", city:"Vienna", code:"VIE", country:"Austria", region:"Europe", genre:"Schranz", viewers:188, time:"00:47", coords:["48.2082° N","16.3738° E"], lat:48.2082, lng:16.3738, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] },
+    { id:"berlin", title:"Body Mechanics", dj:"Nullform", city:"Berlin", code:"BER", country:"Germany", region:"Europe", genre:"Schranz", viewers:132, time:"00:47", coords:["52.5200° N","13.4050° E"], lat:52.52, lng:13.405, platform:"Live on Twitch", colors:["#294641","#132824","#07100f"] },
+    { id:"prague", title:"Steel Nerves", dj:"Mara Kicks", city:"Prague", code:"PRG", country:"Czechia", region:"Europe", genre:"Schranz", viewers:91, time:"00:47", coords:["50.0755° N","14.4378° E"], lat:50.0755, lng:14.4378, platform:"Live on YouTube", colors:["#183f3b","#0c2421","#07100f"] },
+    { id:"warsaw", title:"Redline Ritual", dj:"Vanta", city:"Warsaw", code:"WAW", country:"Poland", region:"Europe", genre:"Schranz", viewers:74, time:"00:47", coords:["52.2297° N","21.0122° E"], lat:52.2297, lng:21.0122, platform:"Live on Twitch", colors:["#214b45","#102723","#07100f"] },
+    { id:"rotterdam", title:"Pressure Vessel", dj:"Kessler Unit", city:"Rotterdam", code:"RTM", country:"Netherlands", region:"Europe", genre:"Schranz", viewers:63, time:"00:47", coords:["51.9244° N","4.4777° E"], lat:51.9244, lng:4.4777, platform:"Live on Twitch", colors:["#163d45","#0d2428","#07100f"] },
+    { id:"saopaulo", title:"Concrete Fever", dj:"Nina Brava", city:"São Paulo", code:"SAO", country:"Brazil", region:"South America", genre:"Schranz", viewers:47, time:"19:47", coords:["23.5505° S","46.6333° W"], lat:-23.5505, lng:-46.6333, platform:"Live on Twitch", colors:["#315044","#15271f","#07100f"] },
+    { id:"tokyo", title:"Torque Limit", dj:"Rin X", city:"Tokyo", code:"TYO", country:"Japan", region:"Asia", genre:"Schranz", viewers:58, time:"07:47", coords:["35.6762° N","139.6503° E"], lat:35.6762, lng:139.6503, platform:"Live on YouTube", colors:["#174451","#0c2730","#07100f"] },
+    { id:"newyork", title:"Hammer District", dj:"CTRL Burn", city:"New York", code:"NYC", country:"United States", region:"North America", genre:"Schranz", viewers:44, time:"18:47", coords:["40.7128° N","74.0060° W"], lat:40.7128, lng:-74.006, platform:"Live on Twitch", colors:["#244943","#102722","#07100f"] },
+    { id:"johannesburg", title:"Soft Pressure", dj:"Lerato.exe", city:"Johannesburg", code:"JHB", country:"South Africa", region:"Africa", genre:"Amapiano", viewers:62, time:"00:47", coords:["26.2041° S","28.0473° E"], lat:-26.2041, lng:28.0473, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] },
+    { id:"london", title:"Sub Level", dj:"Mara Vale", city:"London", code:"LDN", country:"United Kingdom", region:"Europe", genre:"UK Garage", viewers:114, time:"23:47", coords:["51.5072° N","0.1276° W"], lat:51.5072, lng:-0.1276, platform:"Live on Twitch", colors:["#163d45","#0d2428","#07100f"] },
+    { id:"detroit", title:"Machine Soul", dj:"Model Citizen", city:"Detroit", code:"DTT", country:"United States", region:"North America", genre:"Detroit Techno", viewers:83, time:"18:47", coords:["42.3314° N","83.0458° W"], lat:42.3314, lng:-83.0458, platform:"Live on YouTube", colors:["#294641","#132824","#07100f"] },
+    { id:"bristol", title:"System Pressure", dj:"Asha B2B Rue", city:"Bristol", code:"BRS", country:"United Kingdom", region:"Europe", genre:"Jungle", viewers:105, time:"23:47", coords:["51.4545° N","2.5879° W"], lat:51.4545, lng:-2.5879, platform:"Live on Twitch", colors:["#183f3b","#0c2421","#07100f"] },
+    { id:"nairobi", title:"Red Earth", dj:"Nali", city:"Nairobi", code:"NBO", country:"Kenya", region:"Africa", genre:"Afro House", viewers:68, time:"02:47", coords:["1.2921° S","36.8219° E"], lat:-1.2921, lng:36.8219, platform:"Live on Twitch", colors:["#315044","#15271f","#07100f"] },
+    { id:"beirut", title:"Afterimage", dj:"Rana 909", city:"Beirut", code:"BEY", country:"Lebanon", region:"Middle East", genre:"Acid Techno", viewers:29, time:"01:47", coords:["33.8938° N","35.5018° E"], lat:33.8938, lng:35.5018, platform:"Live on Twitch", colors:["#214b45","#102723","#07100f"] },
+    { id:"lisbon", title:"Rua Quente", dj:"Luz Bruta", city:"Lisbon", code:"LIS", country:"Portugal", region:"Europe", genre:"Batida", viewers:52, time:"23:47", coords:["38.7223° N","9.1393° W"], lat:38.7223, lng:-9.1393, platform:"Live on YouTube", colors:["#264d42","#11271f","#07100f"] },
+    { id:"mumbai", title:"Third Eye Open", dj:"Rishi V", city:"Mumbai", code:"BOM", country:"India", region:"Asia", genre:"Psytrance", viewers:126, time:"04:17", coords:["19.0760° N","72.8777° E"], lat:19.076, lng:72.8777, platform:"Live on Twitch", colors:["#174451","#0c2730","#07100f"] },
+    { id:"kingston", title:"Sound System Yard", dj:"Sista Kai", city:"Kingston", code:"KIN", country:"Jamaica", region:"Caribbean", genre:"Dancehall", viewers:97, time:"18:47", coords:["18.0179° N","76.8099° W"], lat:18.0179, lng:-76.8099, platform:"Live on Twitch", colors:["#244943","#102722","#07100f"] },
+    { id:"mexicocity", title:"Club Sin Fronteras", dj:"Marea Alta", city:"Mexico City", code:"MEX", country:"Mexico", region:"North America", genre:"Latin Club", viewers:81, time:"17:47", coords:["19.4326° N","99.1332° W"], lat:19.4326, lng:-99.1332, platform:"Live on YouTube", colors:["#315044","#15271f","#07100f"] },
+    { id:"seoul", title:"Blue Hours", dj:"Mizu Signal", city:"Seoul", code:"SEL", country:"South Korea", region:"Asia", genre:"Ambient", viewers:91, time:"07:47", coords:["37.5665° N","126.9780° E"], lat:37.5665, lng:126.978, platform:"Live on YouTube", colors:["#174451","#0c2730","#07100f"] },
+    { id:"sydney", title:"Glass Coast", dj:"Arden", city:"Sydney", code:"SYD", country:"Australia", region:"Oceania", genre:"Progressive House", viewers:71, time:"08:47", coords:["33.8688° S","151.2093° E"], lat:-33.8688, lng:151.2093, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] }
   ];
 
+  const genreGroups = {
+    "Pilot pressure": ["Schranz", "Hard Techno", "Industrial Techno", "Acid Techno", "Hardcore Techno"],
+    "Techno": ["Detroit Techno", "Dub Techno", "Minimal Techno", "Melodic Techno", "Peak Time Techno", "Raw Techno", "Tribal Techno", "Hypnotic Techno", "Electro Techno", "Broken Techno"],
+    "House": ["House", "Deep House", "Tech House", "Afro House", "Amapiano", "Gqom", "Kwaito", "Progressive House", "Minimal House", "Microhouse", "Acid House", "Chicago House", "Disco House", "French House", "Soulful House", "Jackin House", "Organic House"],
+    "Bass and breaks": ["UK Garage", "2-Step", "Speed Garage", "Bassline", "Breakbeat", "Breaks", "Jungle", "Drum & Bass", "Liquid DnB", "Neurofunk", "Jump Up", "Dubstep", "Grime", "Footwork", "Juke", "Ghettotech", "UK Funky", "Future Garage", "Halftime"],
+    "Trance and hard dance": ["Trance", "Progressive Trance", "Psytrance", "Goa", "Hard Trance", "Tech Trance", "Uplifting Trance", "Hardcore", "Gabber", "Hardstyle", "Rawstyle", "Happy Hardcore", "Breakcore", "Makina", "Donk", "Hard House", "Eurodance"],
+    "Club and global": ["Baile Funk", "Jersey Club", "Baltimore Club", "Ballroom", "Vogue Beats", "Dancehall", "Reggaeton", "Dembow", "Latin Club", "Cumbia", "Kuduro", "Batida", "Afrobeat", "Afrobeats", "Highlife", "Coupé-Décalé", "Singeli", "Shangaan Electro", "K-Pop Club", "Desi Club"],
+    "Electronic and leftfield": ["Ambient", "Drone", "IDM", "Leftfield", "Experimental", "Downtempo", "Trip-Hop", "Electro", "EBM", "Synthwave", "Vaporwave", "Glitch", "Deconstructed Club", "Witch House", "Noise", "Darkwave"],
+    "Roots and selectors": ["Disco", "Italo Disco", "Hi-NRG", "Funk", "Soul", "R&B", "Hip-Hop", "Boom Bap", "Trap", "Jazz", "Broken Beat", "Future Beats", "Lo-fi", "Dub", "Reggae", "Salsa", "Zouk"]
+  };
+
+  const allGenres = ["All genres", ...new Set(Object.values(genreGroups).flat())];
+
   let current = 0;
-  let selectedGenre = "All";
+  let selectedGenre = "Schranz";
   let selectedRegion = "All";
 
-  const pins = document.getElementById("pins");
   const wave = document.getElementById("wave");
   const title = document.getElementById("setTitle");
   const dj = document.getElementById("djName");
@@ -1293,6 +1476,31 @@
   const stage = document.getElementById("videoStage");
   const followButton = document.getElementById("followButton");
   const toast = document.getElementById("toast");
+  const genrePicker = document.getElementById("genrePicker");
+  const genrePanel = document.getElementById("genrePanel");
+  const genreSearch = document.getElementById("genreSearch");
+  const genreCatalog = document.getElementById("genreCatalog");
+  const genreCurrent = document.getElementById("genreCurrent");
+  const genreCount = document.getElementById("genreCount");
+  const mapEmpty = document.getElementById("mapEmpty");
+
+  const map = L.map("map", {
+    center: [25, 5],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 12,
+    zoomControl: false,
+    worldCopyJump: true,
+    zoomSnap: 0.5
+  });
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  L.control.zoom({ position: "topleft" }).addTo(map);
+  const markerLayer = L.layerGroup().addTo(map);
 
   function renderWave() {
     const pattern = [16, 27, 12, 31, 22, 18, 30, 13, 25, 34, 19, 27, 15, 32, 21, 28, 13, 25, 33, 17, 29, 12, 24, 31, 18, 26, 14, 30, 20, 34, 16, 27, 12, 31, 22, 18, 29, 15, 24, 32, 19, 28, 13, 26, 34, 17, 30, 14, 25, 31, 18, 27, 12, 29, 21, 33, 15, 26, 19, 30];
@@ -1300,40 +1508,102 @@
   }
 
   function eligibleSets() {
-    const filtered = sets.filter(set =>
-      (selectedGenre === "All" || set.genre === selectedGenre) &&
+    return sets.filter(set =>
+      (selectedGenre === "All genres" || set.genre === selectedGenre) &&
       (selectedRegion === "All" || set.region === selectedRegion)
     );
-    return filtered.length ? filtered : sets;
   }
 
-  function renderPins() {
-    pins.innerHTML = "";
-    sets.forEach((set, index) => {
-      const visible = (selectedGenre === "All" || set.genre === selectedGenre) &&
-        (selectedRegion === "All" || set.region === selectedRegion);
-      if (!visible) return;
+  function markerLabel(title, detailText) {
+    const label = document.createElement("div");
+    const heading = document.createElement("strong");
+    const detail = document.createElement("span");
+    heading.textContent = title;
+    detail.textContent = detailText;
+    label.append(heading, detail);
+    return label;
+  }
 
-      const button = document.createElement("button");
-      button.className = `pin${index === current ? " active" : ""}`;
-      button.style.left = `${set.pos[0]}%`;
-      button.style.top = `${set.pos[1]}%`;
-      button.setAttribute("aria-label", `Play ${set.dj} live from ${set.city}`);
-      button.addEventListener("click", () => selectSet(index));
-      pins.appendChild(button);
+  function addSetMarker(set) {
+    const index = sets.indexOf(set);
+    const active = index === current;
+    const icon = L.divIcon({
+      className: `signal-icon${active ? " active" : ""}`,
+      html: '<div class="signal-pin"></div>',
+      iconSize: [20, 20],
+      iconAnchor: [10, 20],
+      tooltipAnchor: [0, -18]
+    });
 
-      if (index === current) {
-        const card = document.createElement("div");
-        card.className = "pin-card";
-        card.style.left = `${set.pos[0]}%`;
-        card.style.top = `${set.pos[1]}%`;
-        card.innerHTML = `<strong>${set.city}</strong><span>${set.genre} · live now</span>`;
-        pins.appendChild(card);
-      }
+    L.marker([set.lat, set.lng], { icon, title: `${set.dj} in ${set.city}` })
+      .bindTooltip(markerLabel(set.city, `${set.dj} · ${set.viewers} live`), {
+        permanent: true,
+        direction: "top",
+        className: `signal-label${active ? " active" : ""}`,
+        opacity: 1
+      })
+      .on("click", () => selectSet(index, true))
+      .addTo(markerLayer);
+  }
+
+  function addRegionCluster(region, members) {
+    const active = members.includes(sets[current]);
+    const center = [
+      members.reduce((sum, set) => sum + set.lat, 0) / members.length,
+      members.reduce((sum, set) => sum + set.lng, 0) / members.length
+    ];
+    const icon = L.divIcon({
+      className: `signal-cluster-icon${active ? " active" : ""}`,
+      html: `<div class="signal-cluster">${members.length}</div>`,
+      iconSize: [38, 38],
+      iconAnchor: [19, 19],
+      tooltipAnchor: [0, -22]
+    });
+
+    L.marker(center, { icon, title: `${members.length} live sets in ${region}` })
+      .bindTooltip(markerLabel(region, `${members.length} ${selectedGenre} sets · zoom in`), {
+        permanent: true,
+        direction: window.innerWidth <= 900 ? "bottom" : "top",
+        className: `signal-label${active ? " active" : ""}`,
+        opacity: 1
+      })
+      .on("click", () => {
+        const bounds = L.latLngBounds(members.map(set => [set.lat, set.lng]));
+        map.flyToBounds(bounds, { padding: [70, 70], maxZoom: 6, duration: 0.8 });
+      })
+      .addTo(markerLayer);
+  }
+
+  function renderMapMarkers() {
+    markerLayer.clearLayers();
+    const pool = eligibleSets();
+    mapEmpty.hidden = pool.length > 0;
+    genreCurrent.textContent = selectedGenre;
+    genreCount.textContent = `${pool.length} live · ${allGenres.length - 1} genres`;
+
+    const grouped = Object.groupBy ? Object.groupBy(pool, set => set.region) : pool.reduce((result, set) => {
+      (result[set.region] ||= []).push(set);
+      return result;
+    }, {});
+
+    Object.entries(grouped).forEach(([region, members]) => {
+      if (map.getZoom() <= 2.75 && members.length >= 3) addRegionCluster(region, members);
+      else members.forEach(addSetMarker);
     });
   }
 
-  function selectSet(index) {
+  function fitFilteredSignals() {
+    const pool = eligibleSets();
+    if (!pool.length) return;
+    if (pool.length === 1) {
+      map.flyTo([pool[0].lat, pool[0].lng], 6, { duration: 0.7 });
+      return;
+    }
+    const bounds = L.latLngBounds(pool.map(set => [set.lat, set.lng]));
+    map.flyToBounds(bounds, { padding: [58, 58], maxZoom: 5, duration: 0.8 });
+  }
+
+  function selectSet(index, focusMap = false) {
     current = index;
     const set = sets[current];
     title.textContent = set.title;
@@ -1351,15 +1621,20 @@
     stage.classList.add("switching");
     followButton.classList.remove("active");
     followButton.textContent = "Follow DJ";
-    renderPins();
+    renderMapMarkers();
+    if (focusMap) map.flyTo([set.lat, set.lng], Math.max(map.getZoom(), 5), { duration: 0.7 });
   }
 
   function shuffle() {
     const pool = eligibleSets();
+    if (!pool.length) {
+      showToast(`No live ${selectedGenre} signal in ${selectedRegion === "All" ? "this map" : selectedRegion}`);
+      return;
+    }
     const alternatives = pool.filter(set => sets.indexOf(set) !== current);
     const candidates = alternatives.length ? alternatives : pool;
     const next = candidates[Math.floor(Math.random() * candidates.length)];
-    selectSet(sets.indexOf(next));
+    selectSet(sets.indexOf(next), true);
   }
 
   function showToast(message) {
@@ -1369,20 +1644,72 @@
     showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2200);
   }
 
-  document.querySelectorAll(".genre").forEach(button => {
-    button.addEventListener("click", () => {
-      document.querySelectorAll(".genre").forEach(item => item.classList.remove("active"));
-      button.classList.add("active");
-      selectedGenre = button.dataset.genre;
-      const first = eligibleSets()[0];
-      selectSet(sets.indexOf(first));
+  function renderGenreCatalog(query = "") {
+    const needle = query.trim().toLowerCase();
+    genreCatalog.innerHTML = "";
+    const groups = { "Browse everything": ["All genres"], ...genreGroups };
+
+    Object.entries(groups).forEach(([groupName, names]) => {
+      const matches = names.filter(name => name.toLowerCase().includes(needle));
+      if (!matches.length) return;
+      const section = document.createElement("section");
+      section.className = "genre-section";
+      const heading = document.createElement("h3");
+      heading.textContent = groupName;
+      const options = document.createElement("div");
+      options.className = "genre-options";
+
+      matches.forEach(name => {
+        const button = document.createElement("button");
+        const live = sets.filter(set => name === "All genres" || set.genre === name).length;
+        button.className = `genre-choice${name === selectedGenre ? " active" : ""}`;
+        button.textContent = live ? `${name} · ${live}` : name;
+        button.addEventListener("click", () => chooseGenre(name));
+        options.appendChild(button);
+      });
+
+      section.append(heading, options);
+      genreCatalog.appendChild(section);
     });
+  }
+
+  function closeGenrePanel() {
+    genrePanel.hidden = true;
+    genrePicker.setAttribute("aria-expanded", "false");
+  }
+
+  function chooseGenre(name) {
+    selectedGenre = name;
+    closeGenrePanel();
+    const pool = eligibleSets();
+    if (pool.length) selectSet(sets.indexOf(pool[0]));
+    else {
+      renderMapMarkers();
+      showToast(`No ${name} set live right now`);
+    }
+    renderGenreCatalog(genreSearch.value);
+    fitFilteredSignals();
+  }
+
+  genrePicker.addEventListener("click", () => {
+    genrePanel.hidden = !genrePanel.hidden;
+    genrePicker.setAttribute("aria-expanded", String(!genrePanel.hidden));
+    if (!genrePanel.hidden) {
+      genreSearch.focus();
+      genreSearch.select();
+    }
   });
+
+  document.getElementById("genreClose").addEventListener("click", closeGenrePanel);
+  genreSearch.addEventListener("input", event => renderGenreCatalog(event.target.value));
+  document.addEventListener("keydown", event => { if (event.key === "Escape") closeGenrePanel(); });
 
   document.getElementById("regionSelect").addEventListener("change", event => {
     selectedRegion = event.target.value;
-    const first = eligibleSets()[0];
-    selectSet(sets.indexOf(first));
+    const pool = eligibleSets();
+    if (pool.length) selectSet(sets.indexOf(pool[0]));
+    else renderMapMarkers();
+    fitFilteredSignals();
   });
 
   document.getElementById("shuffleButton").addEventListener("click", shuffle);
@@ -1395,8 +1722,15 @@
 
   document.getElementById("claimButton").addEventListener("click", () => showToast("DJ claims open soon. Your city, your signal."));
 
+  genreSearch.placeholder = `Search ${allGenres.length - 1} genres`;
+  map.on("zoomend", renderMapMarkers);
   renderWave();
+  renderGenreCatalog();
   selectSet(0);
+  requestAnimationFrame(() => {
+    map.invalidateSize();
+    fitFilteredSignals();
+  });
 </script>
 </body>
 </html>
