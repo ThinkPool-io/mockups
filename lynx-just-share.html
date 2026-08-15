@@ -64,9 +64,9 @@
       .skip-link:focus { transform: translateY(0); }
       .glow { position: fixed; inset: 0 0 auto; height: 560px; pointer-events: none; background: radial-gradient(circle at 50% 0%, rgba(40, 118, 247, .18), transparent 65%); }
       
-      .topbar { position: relative; display: flex; width: min(1120px, 100%); flex: 0 0 auto; align-items: center; justify-content: space-between; margin: 0 auto; padding: 24px 28px; }
-      .brand { display: inline-flex; min-height: 44px; align-items: center; gap: 9px; border-radius: 12px; font-size: 17px; font-weight: 750; text-decoration: none; }
-      .brand-mark { display: grid; width: 29px; height: 29px; overflow: hidden; place-items: center; border: 1px solid rgba(108, 162, 255, .55); border-radius: 9px; background: rgba(40, 118, 247, .12); }
+      .topbar { position: relative; display: flex; width: min(1120px, 100%); flex: 0 0 auto; align-items: center; justify-content: center; margin: 0 auto; padding: 24px 28px; }
+      .brand { display: inline-flex; min-height: 44px; align-items: center; gap: 11px; border-radius: 12px; font-size: 21px; font-weight: 750; text-decoration: none; }
+      .brand-mark { display: grid; width: 38px; height: 38px; overflow: hidden; place-items: center; border: 1px solid rgba(108, 162, 255, .55); border-radius: 11px; background: rgba(40, 118, 247, .12); }
       .brand-mark img { display: block; width: 100%; height: 100%; }
       .service-rail { display: flex; align-items: center; gap: 9px; color: var(--faint); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
       .service-rail svg { width: 14px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
@@ -218,11 +218,6 @@
         </span>
         lynx
       </a>
-      <div class="service-rail" aria-label="Spotify and Apple Music">
-        <span>Spotify</span>
-        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
-        <span>Apple Music</span>
-      </div>
     </header>
 
     <main>
@@ -236,8 +231,8 @@
         </span>
       </div>
 
-      <h1>Just share the<br />damn song.</h1>
-      <p class="intro">Paste a Spotify or Apple Music track or album. Lynx finds it on the other service.</p>
+      <h1>Share the song,<br />not the service</h1>
+      <p class="intro">Paste a Spotify or Apple Music track or album<br />Lynx finds it on the other service</p>
 
       <section id="converter" class="converter" aria-label="Convert a track or album link">
         <form id="convert-form" novalidate>
@@ -252,7 +247,6 @@
             <svg class="external-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6 14 14 6M8 6h6v6" /></svg>
           </button>
           <div class="form-status" aria-live="polite">
-            <p id="helper-text">Paste works automatically. Nothing is saved.</p>
             <p id="error-text" role="alert" hidden></p>
           </div>
         </form>
@@ -282,7 +276,6 @@
       </section>
 
       <p class="footer-note">
-        Music links should not pick sides.
         <span class="credit">By Maksim Zeidler</span>
         <span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span>
       </p>
