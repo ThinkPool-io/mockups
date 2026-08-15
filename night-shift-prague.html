@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="NIGHT//SHIFT, Prague underground rave and metal events." />
+<title>NIGHT//SHIFT · Prague underground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#090c0f;--raised:#101419;--surface:#15191e;--float:#1a1f25;
+    --line:#30363d;--line-strong:#48515a;--ink:#f1f4f7;--soft:#d5dbe2;
+    --muted:#b7c0ca;--faint:#83909e;--rave:#4b8df7;--rave-hi:#80aef8;
+    --metal:#e9c44f;--metal-hi:#f4d875;--green:#81c6a4;
+    --sans:"Inter",Arial,sans-serif;--mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px}
+  button,input,summary{font:inherit}
+  a{color:inherit}
+  button{cursor:pointer}
+  .shell{max-width:1440px;margin:0 auto}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
+  .topbar{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+  .logo{font:800 20px/1 var(--mono);letter-spacing:-.09em}.logo i{font-style:normal;color:var(--rave)}
+  .descriptor{font:500 9px/1 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:var(--faint);border-left:1px solid var(--line);margin-left:16px;padding-left:16px}
+  .brand{display:flex;align-items:center}
+  .status{display:flex;align-items:center;gap:9px;color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+  .status:before{content:"";width:8px;height:8px;background:var(--green)}
+
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) 360px;border-bottom:1px solid var(--line);background:var(--raised)}
+  .hero-main{padding:42px 32px 52px;border-right:1px solid var(--line)}
+  .eyebrow{font:600 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--rave-hi);margin:0 0 20px}
+  h1{font-size:clamp(56px,6.3vw,92px);font-weight:900;letter-spacing:-.07em;line-height:.84;text-transform:uppercase;margin:0;max-width:900px}
+  h1 span{color:var(--metal)}
+  .dek{max-width:720px;font-size:18px;line-height:1.65;color:var(--muted);margin:28px 0 0}
+  .stats{display:grid}
+  .stat{padding:28px 24px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}.stat:last-child{border:0}
+  .stat b{font:800 34px/1 var(--mono)}.stat:nth-child(1) b{color:var(--rave)}.stat:nth-child(2) b{color:var(--metal)}
+  .stat small{margin-top:8px;color:var(--faint);font:500 9px/1.2 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+
+  .scene-bar{padding:22px 32px;border-bottom:1px solid var(--line)}
+  .micro{font:500 9px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+  .button-row{display:flex;gap:8px;overflow:auto;scrollbar-width:none}.button-row::-webkit-scrollbar{display:none}
+  .scene,.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);min-height:44px;padding:0 17px;white-space:nowrap;font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .scene{min-height:64px;font-size:16px;padding:0 30px}.scene.active,.chip.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .scene[data-filter="rave"].active{background:var(--rave);border-color:var(--rave)}
+  .scene[data-filter="metal"].active{background:var(--metal);border-color:var(--metal)}
+
+  .controls{padding:18px 32px;border-bottom:1px solid var(--line);background:rgba(9,12,15,.97);position:sticky;top:0;z-index:5}
+  .controls-grid{display:grid;grid-template-columns:minmax(260px,1fr) auto auto;gap:10px}
+  .search{min-height:46px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:12px;padding:0 16px}
+  .search svg{width:16px;color:var(--faint)}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);font-size:14px}.search input::placeholder{color:var(--faint)}
+  .subgenres{margin-top:10px}
+
+  .board{padding:36px 32px 72px}
+  .board-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+  .count{font:800 25px/1 var(--mono);text-transform:uppercase;letter-spacing:-.04em}.tz{color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .month{display:flex;align-items:center;gap:16px;margin:28px 0 12px;color:var(--faint);font:700 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}.month:after{content:"";height:1px;background:var(--line);flex:1}
+  .event-list{display:grid;gap:12px}
+  .event{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rave)}
+  .event.metal{border-left-color:var(--metal)}
+  .ticket-head{min-height:40px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+  .ticket-head b{color:var(--rave)}.event.metal .ticket-head b{color:var(--metal)}
+  .event-grid{display:grid;grid-template-columns:155px minmax(0,1fr) 200px}
+  .when{padding:22px;border-right:1px solid var(--line)}
+  .date{font:600 11px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}.time{font:700 40px/1 var(--mono);margin:13px 0 8px}.end{color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+  .event-main{padding:22px 24px}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}.tag{border:1px solid var(--line);background:var(--bg);padding:6px 10px;color:var(--muted);font:500 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  h2{font-size:38px;line-height:.96;letter-spacing:-.045em;text-transform:uppercase;margin:16px 0 14px;max-width:900px}
+  .note{color:var(--muted);line-height:1.6;margin:0;max-width:760px}
+  .facts{display:grid;grid-template-columns:1fr .75fr 1.25fr;gap:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:15px 0;margin-top:18px}
+  .fact small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.fact div{font-size:13px;color:var(--soft);line-height:1.4}.fact.price div{color:var(--rave);font-family:var(--mono)}.metal .fact.price div{color:var(--metal)}
+  details{margin-top:10px}summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--soft);font:600 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}summary::-webkit-details-marker{display:none}
+  .intel{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13px;line-height:1.55}.intel small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+  .action{border-left:1px solid var(--line);padding:18px;display:flex;align-items:flex-end}.ticket{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;background:var(--rave);color:#07101d;padding:0 16px;text-decoration:none;font:700 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}.metal .ticket{background:var(--metal);color:#161207}.ticket:hover{filter:brightness(1.08)}
+  .passport{margin-top:14px;padding:10px 12px;border:1px solid #325587;background:#142038;color:var(--rave-hi);font:600 9px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .empty{display:none;border:1px solid var(--line);background:var(--surface);padding:60px 20px;text-align:center}.empty b{font-size:28px;text-transform:uppercase}.empty p{color:var(--muted)}
+  footer{border-top:1px solid var(--line);padding:28px 32px;display:flex;justify-content:space-between;color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+
+  @media(max-width:900px){
+    .topbar{height:66px;padding:0 15px}.descriptor,.status span{display:none}
+    .hero{display:block}.hero-main{padding:32px 15px;border:0}.eyebrow{font-size:9px;margin-bottom:17px}h1{font-size:48px;line-height:.86}.dek{font-size:15px;line-height:1.75;margin-top:24px}
+    .stats{grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.stat{padding:20px 15px;border-right:1px solid var(--line);border-bottom:0}.stat:last-child{border:0}.stat b{font-size:30px}.stat small{font-size:8px}
+    .scene-bar{padding:20px 15px}.scene{min-height:56px;padding:0 22px;font-size:14px}
+    .controls{position:static;padding:14px 15px}.controls-grid{display:block}.controls-grid .button-row{margin-top:12px}.subgenres{margin-top:12px}
+    .board{padding:30px 15px 54px}.board-head{margin-bottom:24px}.count{font-size:21px}.tz{display:none}
+    .event-grid{display:block}.when{border-right:0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.time{font-size:36px}.event-main{padding:18px 16px}h2{font-size:28px;line-height:.98}.facts{grid-template-columns:1fr;gap:14px}.action{border-left:0;border-top:1px solid var(--line);padding:15px}.ticket{min-height:48px}.intel{grid-template-columns:1fr}
+    .ticket-head{padding:0 16px}.month{margin-top:25px}footer{padding:24px 15px;display:grid;gap:8px}
+  }
+</style>
+</head>
+<body>
+  <header class="topbar shell">
+    <div class="brand"><div class="logo">NIGHT<i>//</i>SHIFT</div><div class="descriptor">Prague underground index</div></div>
+    <div class="status"><span>Checked 15 Aug 2026</span></div>
+  </header>
+
+  <main>
+    <section class="hero shell">
+      <div class="hero-main">
+        <p class="eyebrow">Prague / Dresden / no beige nights</p>
+        <h1>One city.<br>Two kinds <span>of loud.</span></h1>
+        <p class="dek">Raves, riffs and the useful details buried across a dozen tabs. Every listing keeps its price, lineup, route and original source attached.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>17</b><small>Rave listings</small></div>
+        <div class="stat"><b>7</b><small>Metal listings</small></div>
+        <div class="stat"><b>17</b><small>Venues indexed</small></div>
+      </div>
+    </section>
+
+    <section class="scene-bar shell">
+      <div class="micro">Choose your damage</div>
+      <div class="button-row" id="sceneFilters">
+        <button class="scene active" data-filter="all">All noise</button>
+        <button class="scene" data-filter="rave">Rave</button>
+        <button class="scene" data-filter="metal">Metal</button>
+      </div>
+    </section>
+
+    <section class="controls shell">
+      <div class="controls-grid">
+        <label class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="search" type="search" placeholder="Artist, venue, subgenre…" aria-label="Search events">
+        </label>
+        <div class="button-row"><button class="chip active">All dates</button><button class="chip">Tonight</button><button class="chip">Next 7 days</button></div>
+        <div class="button-row"><button class="chip active" data-city="all">Prague + train trips</button><button class="chip" data-city="prague">Prague</button><button class="chip" data-city="dresden">Train trips</button></div>
+      </div>
+      <div class="button-row subgenres"><button class="chip">Techno</button><button class="chip">Drum & bass</button><button class="chip">Hardcore</button><button class="chip">House</button><button class="chip">Death metal</button></div>
+    </section>
+
+    <section class="board shell" id="board">
+      <div class="board-head"><div><div class="micro">The board</div><div class="count"><span id="count">8</span> matching events</div></div><div class="tz">Prague time / chronological</div></div>
+      <div class="month">August 2026</div>
+      <div class="event-list">
+        <article class="event rave" data-scene="rave" data-city="prague" data-search="fuchs2 helena hauff techno house breakbeat hard dance bike jesus stvanice">
+          <div class="ticket-head"><span><b>Rave</b> &nbsp;/&nbsp; Prague · Štvanice</span><span>#01</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Sat 15 Aug</div><div class="time">16:00</div><div class="end">Until 06:00</div></div></div><div class="event-main"><div class="tags"><span class="tag">Techno</span><span class="tag">House</span><span class="tag">Breakbeat</span></div><h2>Fuchs2 Day Rave + Afterparty</h2><p class="note">Open-air courts session followed by a two-club afterparty across Fuchs2 and Bike Jesus.</p><div class="facts"><div class="fact"><small>Venue</small><div>Fuchs2 + Bike Jesus</div></div><div class="fact price"><small>Damage</small><div>450–855 CZK</div></div><div class="fact"><small>Lineup</small><div>Helena Hauff · Nastya Muravyova · Nina Farrina · Midirama</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Day rave from 16:00. The afterparty continues indoors overnight.</div><div><small>Transport</small>Tram to Štvanice, then a short walk onto the island.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/en/fuchs2-day-rave%2Bafterparty/szhiily/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event metal" data-scene="metal" data-city="prague" data-search="speed no face no case mindgaze hyacinth hardcore metalcore cargo gallery smichov">
+          <div class="ticket-head"><span><b>Metal</b> &nbsp;/&nbsp; Prague · Smíchov riverfront</span><span>#02</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Sun 16 Aug</div><div class="time">19:00</div><div class="end">End TBA</div></div></div><div class="event-main"><div class="tags"><span class="tag">Hardcore</span><span class="tag">Metalcore</span><span class="tag">Crossover thrash</span></div><h2>SPEED + No Face No Case + MINDGAZE + Hyacinth</h2><p class="note">Sydney hardcore collides with three Czech crews on a boat venue at the Smíchov riverfront.</p><div class="facts"><div class="fact"><small>Venue</small><div>Cargo Gallery</div></div><div class="fact price"><small>Damage</small><div>690 CZK</div></div><div class="fact"><small>Lineup</small><div>SPEED · No Face No Case · MINDGAZE · Hyacinth</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Starts at 19:00. The organizer marks the show wheelchair accessible.</div><div><small>Transport</small>Tram to Zborovská or metro B to Anděl, then walk to the riverfront.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/cs/speed/szwtfky/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event rave" data-scene="rave" data-city="dresden" data-search="sachsentrance sommerfest dresden techno trance objekt klein a train trip">
+          <div class="ticket-head"><span><b>Rave</b> &nbsp;/&nbsp; Dresden · Germany</span><span>#03</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Fri 21 Aug</div><div class="time">21:00</div><div class="end">Until 06:00</div></div></div><div class="event-main"><div class="tags"><span class="tag">Techno</span><span class="tag">Trance</span></div><h2>Sachsentrance Sommerfest</h2><p class="note">An open-air-to-late-night summer session from one of Saxony’s faster trance and techno crews.</p><div class="facts"><div class="fact"><small>Venue</small><div>objekt klein a</div></div><div class="fact price"><small>Damage</small><div>15–20 EUR</div></div><div class="fact"><small>Lineup</small><div>Atreo · CARGO · GI.O · Ladybug.161 · Meta Chrom · Kirk</div></div></div><div class="passport">Passport night · about 2h20 direct from Prague</div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>18+. Plan the first morning train back rather than a late-night return.</div><div><small>Transport</small>Direct EuroCity or Railjet from Praha hl.n. to Dresden Hbf.</div></div></details></div><div class="action"><a class="ticket" href="https://ra.co/events/2480397" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event metal" data-scene="metal" data-city="prague" data-search="fughu cruel oxhole personal signet progressive metal rock cafe new town">
+          <div class="ticket-head"><span><b>Metal</b> &nbsp;/&nbsp; Prague · New Town</span><span>#04</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Fri 21 Aug</div><div class="time">18:30</div><div class="end">End TBA</div></div></div><div class="event-main"><div class="tags"><span class="tag">Progressive metal</span><span class="tag">Metal</span></div><h2>Fughu + Cruel + Oxhole + Personal Signet</h2><p class="note">An Argentina-meets-Prague progressive metal bill in Rock Café’s basement room.</p><div class="facts"><div class="fact"><small>Venue</small><div>Rock Café</div></div><div class="fact price"><small>Damage</small><div>250 CZK</div></div><div class="fact"><small>Lineup</small><div>Fughu · Cruel · Oxhole · Personal Signet</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Starts at 18:30. End time has not been published.</div><div><small>Transport</small>Metro B to Národní třída or tram to Národní divadlo.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/cs/fughu%2Bcruel%2Boxhole%2Bpersonal-signet/szpjxky/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+      </div>
+
+      <div class="month">September 2026</div>
+      <div class="event-list">
+        <article class="event rave" data-scene="rave" data-city="prague" data-search="komiks rave yanamaste bailey ibbs techno house breaks drum bass stvanice altenburg">
+          <div class="ticket-head"><span><b>Rave</b> &nbsp;/&nbsp; Prague · Štvanice</span><span>#05</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Sat 05 Sep</div><div class="time">13:00</div><div class="end">Until 07:00</div></div></div><div class="event-main"><div class="tags"><span class="tag">Techno</span><span class="tag">Breaks</span><span class="tag">Drum & bass</span></div><h2>Komiks Rave: Day & Night</h2><p class="note">Three daytime stages on Štvanice, followed by an overnight warehouse session at Altenburg.</p><div class="facts"><div class="fact"><small>Venue</small><div>Skatepark Štvanice + Altenburg</div></div><div class="fact price"><small>Damage</small><div>400–700 CZK</div></div><div class="fact"><small>Lineup</small><div>Yanamaste · Bailey Ibbs · Nina Farrina · Zuzana Hakl</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Day programme 13:00–22:00. Afterparty continues until 07:00.</div><div><small>Transport</small>Start on Štvanice. Check organizer updates for the Altenburg transfer.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/en/komiks-rave-day-and-night-yanamaste-bailey-ibbs-sj-yellow-zuzana-hakl%2Bmore/szbyjly/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event metal" data-scene="metal" data-city="prague" data-search="allegaeon gorod halysis technical death metal black pes klanovice">
+          <div class="ticket-head"><span><b>Metal</b> &nbsp;/&nbsp; Prague · Klánovice</span><span>#06</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Tue 22 Sep</div><div class="time">18:30</div><div class="end">End TBA</div></div></div><div class="event-main"><div class="tags"><span class="tag">Technical death metal</span><span class="tag">Melodic death metal</span></div><h2>Allegaeon + Gorod + Halysis</h2><p class="note">Three precision-heavy death metal bands from Colorado, Bordeaux and Helsinki.</p><div class="facts"><div class="fact"><small>Venue</small><div>Black Pes</div></div><div class="fact price"><small>Damage</small><div>701 CZK</div></div><div class="fact"><small>Lineup</small><div>Allegaeon · Gorod · Halysis</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Starts 18:30. Running order and end time remain pending.</div><div><small>Transport</small>Train to Praha-Klánovice, then local bus or taxi.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/cs/allegaeon%2Bgorod%2Babysmal-dawn/szpediy/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event metal" data-scene="metal" data-city="prague" data-search="spiritbox progressive metal metalcore forum karlin">
+          <div class="ticket-head"><span><b>Metal</b> &nbsp;/&nbsp; Prague · Karlín</span><span>#07</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Fri 25 Sep</div><div class="time">19:00</div><div class="end">End TBA</div></div></div><div class="event-main"><div class="tags"><span class="tag">Progressive metal</span><span class="tag">Metalcore</span></div><h2>Spiritbox</h2><p class="note">Spiritbox bring atmospheric, low-tuned progressive metal to Forum Karlín.</p><div class="facts"><div class="fact"><small>Venue</small><div>Forum Karlín</div></div><div class="fact price"><small>Damage</small><div>See ticket page</div></div><div class="fact"><small>Lineup</small><div>Spiritbox · support to be announced</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Support, running order and current ticket tier remain pending.</div><div><small>Transport</small>Metro B or tram to Křižíkova.</div></div></details></div><div class="action"><a class="ticket" href="https://goout.net/cs/spiritbox/szaibhy/" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+
+        <article class="event rave" data-scene="rave" data-city="prague" data-search="andy c mc tonn piper drum bass roxy old town">
+          <div class="ticket-head"><span><b>Rave</b> &nbsp;/&nbsp; Prague · Old Town</span><span>#08</span></div>
+          <div class="event-grid"><div class="when"><div><div class="date">Sat 26 Sep</div><div class="time">22:00</div><div class="end">End TBA</div></div></div><div class="event-main"><div class="tags"><span class="tag">Drum & bass</span></div><h2>Andy C & MC Tonn Piper</h2><p class="note">A full-pressure drum and bass headline night from one of the genre’s defining DJs.</p><div class="facts"><div class="fact"><small>Venue</small><div>Roxy</div></div><div class="fact price"><small>Damage</small><div>From 550 CZK</div></div><div class="fact"><small>Lineup</small><div>Andy C · MC Tonn Piper · support TBA</div></div></div><details><summary>Intel: doors, route, source +</summary><div class="intel"><div><small>Door notes</small>Doors at 22:00. End time has not been published.</div><div><small>Transport</small>Metro B to Náměstí Republiky or tram to Dlouhá třída.</div></div></details></div><div class="action"><a class="ticket" href="https://www.roxy.cz/en/events/detail/4968/andy-c-mc-tonn-piper" target="_blank" rel="noreferrer">Tickets / source <span>↗</span></a></div></div>
+        </article>
+      </div>
+      <div class="empty" id="empty"><b>Dead air.</b><p>Nothing matches that combination.</p></div>
+    </section>
+  </main>
+
+  <footer class="shell"><span>NIGHT//SHIFT · Prague underground index</span><span>No affiliate links. No filler.</span></footer>
+
+<script>
+  const state={scene:'all',city:'all',query:''};
+  const cards=[...document.querySelectorAll('.event')];
+  const count=document.getElementById('count');
+  const empty=document.getElementById('empty');
+  function apply(){
+    let visible=0;
+    cards.forEach(card=>{
+      const scene=state.scene==='all'||card.dataset.scene===state.scene;
+      const city=state.city==='all'||card.dataset.city===state.city;
+      const query=!state.query||card.dataset.search.includes(state.query);
+      const show=scene&&city&&query;
+      card.style.display=show?'block':'none';
+      if(show)visible++;
+    });
+    count.textContent=visible;
+    empty.style.display=visible?'none':'block';
+    document.querySelectorAll('.month').forEach(month=>{
+      const list=month.nextElementSibling;
+      month.style.display=[...list.children].some(card=>card.style.display!=='none')?'flex':'none';
+    });
+  }
+  document.querySelectorAll('.scene').forEach(button=>button.addEventListener('click',()=>{
+    document.querySelectorAll('.scene').forEach(item=>item.classList.remove('active'));
+    button.classList.add('active');state.scene=button.dataset.filter;apply();
+  }));
+  document.querySelectorAll('[data-city]').forEach(button=>button.addEventListener('click',()=>{
+    document.querySelectorAll('[data-city]').forEach(item=>item.classList.remove('active'));
+    button.classList.add('active');state.city=button.dataset.city;apply();
+  }));
+  document.getElementById('search').addEventListener('input',event=>{state.query=event.target.value.trim().toLowerCase();apply()});
+  document.querySelectorAll('.subgenres .chip').forEach(button=>button.addEventListener('click',()=>{
+    const active=button.classList.toggle('active');
+    document.getElementById('search').value=active?button.textContent:'';
+    state.query=active?button.textContent.toLowerCase():'';
+    document.querySelectorAll('.subgenres .chip').forEach(item=>{if(item!==button)item.classList.remove('active')});apply();
+  }));
+</script>
+</body>
+</html>
