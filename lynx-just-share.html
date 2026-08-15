@@ -14,7 +14,198 @@
     <title>Lynx, just share the damn song</title>
     <link rel="icon" type="image/svg+xml" href="https://lynx-music-links.vercel.app/icon.svg?v=3" />
     <link rel="apple-touch-icon" sizes="180x180" href="https://lynx-music-links.vercel.app/icon-equalizer-180.png" />
-    <link rel="stylesheet" href="https://lynx-music-links.vercel.app/styles.css" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --line-strong: #445065;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --thinkpool-cobalt: #1a6ef4;
+        --danger: #ef9387;
+        --positive: #72c69b;
+        --radius: 16px;
+        --ease-settle: cubic-bezier(.16, 1, .3, 1);
+        --motion-snap: 160ms;
+        --motion-fast: 320ms;
+        --motion-enter: 480ms;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      
+      * { box-sizing: border-box; }
+      html { height: 100%; background: var(--bg); }
+      body { display: flex; height: 100dvh; min-height: 100%; margin: 0; overflow: hidden; flex-direction: column; background: var(--bg); -webkit-font-smoothing: antialiased; }
+      button, input { font: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      button { cursor: pointer; }
+      a { color: inherit; }
+      
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      
+      .skip-link { position: fixed; z-index: 10; top: 12px; left: 12px; transform: translateY(-150%); border-radius: 10px; background: var(--blue); padding: 12px 16px; font-weight: 700; text-decoration: none; }
+      .skip-link:focus { transform: translateY(0); }
+      .glow { position: fixed; inset: 0 0 auto; height: 560px; pointer-events: none; background: radial-gradient(circle at 50% 0%, rgba(40, 118, 247, .18), transparent 65%); }
+      
+      .topbar { position: relative; display: flex; width: min(1120px, 100%); flex: 0 0 auto; align-items: center; justify-content: space-between; margin: 0 auto; padding: 24px 28px; }
+      .brand { display: inline-flex; min-height: 44px; align-items: center; gap: 9px; border-radius: 12px; font-size: 17px; font-weight: 750; text-decoration: none; }
+      .brand-mark { display: grid; width: 29px; height: 29px; overflow: hidden; place-items: center; border: 1px solid rgba(108, 162, 255, .55); border-radius: 9px; background: rgba(40, 118, 247, .12); }
+      .brand-mark img { display: block; width: 100%; height: 100%; }
+      .service-rail { display: flex; align-items: center; gap: 9px; color: var(--faint); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+      .service-rail svg { width: 14px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      
+      main { position: relative; display: flex; width: min(760px, 100%); min-height: 0; flex: 1 1 auto; margin: 0 auto; overflow-y: auto; padding: clamp(22px, 6vh, 54px) 28px clamp(20px, 5vh, 44px); flex-direction: column; align-items: center; text-align: center; scrollbar-width: none; }
+      main::-webkit-scrollbar { display: none; }
+      .service-icons { display: flex; align-items: center; gap: 14px; color: var(--muted); }
+      .service-icon { display: grid; width: 49px; height: 49px; place-items: center; border: 1px solid var(--line); border-radius: 15px; background: rgba(17, 23, 34, .85); }
+      .service-icon svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+      .service-icon svg.apple { fill: currentColor; stroke: none; }
+      .swap-icon { width: 19px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      
+      h1 { max-width: 680px; margin: 28px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(3rem, 7.8vw, 5.9rem); font-weight: 400; line-height: .94; letter-spacing: -.045em; text-wrap: balance; }
+      .intro { max-width: 590px; margin: 20px 0 0; color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 550; line-height: 1.65; }
+      
+      .converter { width: 100%; margin-top: 32px; border: 1px solid var(--line); border-radius: 21px; background: rgba(21, 27, 38, .9); padding: 16px; box-shadow: 0 30px 90px -52px var(--blue); backdrop-filter: blur(12px); }
+      #convert-form { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .input-shell { display: flex; min-height: 64px; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(9, 13, 20, .84); padding: 0 13px; }
+      .input-shell:focus-within { border-color: var(--blue-hi); box-shadow: 0 0 0 3px rgba(40, 118, 247, .18); }
+      .link-icon { width: 21px; flex: 0 0 auto; fill: none; stroke: var(--faint); stroke-width: 1.6; stroke-linecap: round; }
+      input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 16px; }
+      input::placeholder { color: var(--faint); }
+      .paste-button { min-width: 56px; min-height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--blue-hi); font-size: 13px; font-weight: 750; transition: background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle); }
+      .paste-button:hover { background: rgba(40, 118, 247, .12); }
+      .paste-button:active { transform: scale(.96); }
+      
+      .primary-button { display: inline-flex; min-height: 56px; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 14px; background: var(--blue); color: #07101d; font-size: 15px; font-weight: 780; text-decoration: none; transition: background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle); }
+      .primary-button:hover { background: var(--blue-hi); }
+      .primary-button:active { transform: translateY(1px) scale(.985); }
+      .primary-button:disabled { cursor: wait; opacity: .72; }
+      .external-icon { width: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .spinner { width: 16px; height: 16px; border: 2px solid rgba(7, 16, 29, .28); border-top-color: #07101d; border-radius: 50%; animation: spin .7s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .form-status { min-height: 24px; padding: 0 8px; text-align: left; }
+      .form-status p { margin: 0; color: var(--faint); font-size: 12px; line-height: 1.65; }
+      .form-status #error-text { color: var(--danger); font-size: 13px; }
+      
+      .result { padding: 12px; text-align: left; transform-origin: 50% 0; }
+      .track-row { display: flex; align-items: center; gap: 16px; }
+      .artwork-shell { position: relative; width: 96px; height: 96px; flex: 0 0 auto; overflow: hidden; border-radius: 13px; background: var(--raised); }
+      .artwork-shell img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: cover; }
+      .artwork-shell img:not([src]) { display: none; }
+      .artwork-fallback { position: absolute; inset: 29px; fill: none; stroke: var(--faint); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .track-copy { min-width: 0; }
+      .route-label { color: var(--blue-hi); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 10px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+      h2 { overflow: hidden; margin: 8px 0 0; color: var(--ink); font-size: 22px; line-height: 1.15; letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap; }
+      .track-copy p { overflow: hidden; margin: 5px 0 0; color: var(--muted); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+      .result-actions { display: grid; gap: 8px; margin-top: 18px; }
+      .copy-link-button svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .copy-link-button.copied { background: var(--positive); }
+      .secondary-link { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; border-radius: 11px; color: var(--muted); font-size: 13px; font-weight: 750; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; transition: color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle); }
+      .secondary-link:hover { color: var(--ink); }
+      .secondary-link:active { transform: scale(.985); }
+      .search-note { margin: 12px 0 0; color: var(--faint); font-size: 12px; line-height: 1.55; }
+      .reset-button { min-height: 44px; margin-top: 18px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; transition: color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle); }
+      .reset-button:hover { color: var(--ink); }
+      .reset-button:active { transform: scale(.97); }
+      .footer-note { margin: 26px 0 0; color: var(--faint); font-size: 12px; }
+      .credit { display: block; margin-top: 6px; color: var(--muted); font-weight: 700; }
+      .made-with { display: block; margin-top: 5px; }
+      .thinkpool-wordmark { font-weight: 750; letter-spacing: -.02em; }
+      .thinkpool-think { color: var(--ink); }
+      .thinkpool-pool { color: var(--thinkpool-cobalt); }
+      
+      :focus-visible { outline: 2px solid var(--blue-hi); outline-offset: 3px; }
+      [hidden] { display: none !important; }
+      
+      @keyframes lynx-enter-down {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes lynx-enter-up {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes lynx-mark-in {
+        from { opacity: 0; transform: scale(.76) rotate(-5deg); }
+        to { opacity: 1; transform: scale(1) rotate(0); }
+      }
+      
+      @keyframes lynx-result-in {
+        from { opacity: 0; transform: translateY(8px) scale(.985); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      
+      @keyframes lynx-confirm {
+        50% { transform: scale(1.02); }
+      }
+      
+      @media (prefers-reduced-motion: no-preference) {
+        .topbar { animation: lynx-enter-down var(--motion-fast) var(--ease-settle) both; }
+        .brand-mark { animation: lynx-mark-in var(--motion-enter) var(--ease-settle) 40ms both; }
+        .service-icons { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 60ms both; }
+        h1 { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 110ms both; }
+        .intro { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 160ms both; }
+        .converter { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 210ms both; }
+        .footer-note { animation: lynx-enter-up var(--motion-fast) var(--ease-settle) 280ms both; }
+        .result:not([hidden]) { animation: lynx-result-in var(--motion-fast) var(--ease-settle) both; }
+        .copy-link-button.copied { animation: lynx-confirm var(--motion-fast) var(--ease-settle); }
+      }
+      
+      @media (max-width: 600px) {
+        .topbar { padding: 8px 19px; }
+        .service-rail { gap: 7px; font-size: 9px; }
+        main { padding: 18px 19px 16px; }
+        h1 { margin-top: 18px; font-size: clamp(2.75rem, 13vw, 3.5rem); line-height: .98; }
+        .desktop-break { display: none; }
+        .intro { margin-top: 14px; font-size: 16px; line-height: 1.5; }
+        .converter { margin-top: 20px; padding: 12px; }
+        .input-shell { padding-inline: 11px; }
+        .result { padding: 7px; }
+        .artwork-shell { width: 77px; height: 77px; }
+        .artwork-fallback { inset: 22px; }
+        h2 { font-size: 19px; }
+        .footer-note { margin-top: 16px; }
+      }
+      
+      @media (min-width: 601px) and (max-height: 700px) {
+        .topbar { padding: 12px 28px; }
+        main { padding: 14px 28px 8px; }
+        .service-icons { gap: 12px; }
+        .service-icon { width: 44px; height: 44px; border-radius: 13px; }
+        .service-icon svg { width: 26px; height: 26px; }
+        .desktop-break { display: none; }
+        h1 { max-width: none; margin-top: 12px; font-size: 56px; line-height: .96; }
+        .intro { max-width: 760px; margin-top: 10px; font-size: 16px; line-height: 1.4; }
+        .converter { margin-top: 16px; padding: 12px; }
+        #convert-form { gap: 10px; }
+        .input-shell { min-height: 56px; }
+        .primary-button { min-height: 52px; }
+        .footer-note { margin-top: 12px; }
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+      }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#converter">Skip to converter</a>
