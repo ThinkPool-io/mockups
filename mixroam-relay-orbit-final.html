@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mixroam · Relay Orbit final color pass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #050b0c;
+      --panel: #091313;
+      --paper: #eef7f3;
+      --muted: #849892;
+      --line: rgba(153, 190, 181, 0.16);
+      --line-strong: rgba(153, 190, 181, 0.3);
+      --display: "Archivo", Arial, sans-serif;
+      --mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--ink); }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--paper);
+      font-family: var(--display);
+      background:
+        radial-gradient(circle at 7% 0%, rgba(77,184,255,0.09), transparent 25%),
+        radial-gradient(circle at 95% 100%, rgba(200,255,77,0.05), transparent 28%),
+        var(--ink);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 84%);
+    }
+
+    .svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    .board {
+      position: relative;
+      z-index: 1;
+      width: min(1372px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 28px 0 30px;
+    }
+
+    .board-head {
+      min-height: 108px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 430px;
+      align-items: end;
+      gap: 34px;
+      padding: 0 2px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .kicker,
+    .status,
+    .context-meta,
+    .color-label,
+    .palette-code,
+    .board-foot {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+    }
+
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+      color: #7dd7e7;
+      font-size: 10px;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #c8ff4d;
+      box-shadow: 0 0 16px rgba(200,255,77,0.72);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(35px, 4vw, 56px);
+      line-height: 0.95;
+      letter-spacing: -0.065em;
+      font-weight: 780;
+    }
+
+    .head-copy {
+      max-width: 430px;
+      margin: 0;
+      color: #9eafa9;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .head-copy strong { color: var(--paper); font-weight: 600; }
+
+    .context {
+      min-height: 202px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      margin-top: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background:
+        radial-gradient(circle at 30% 0%, rgba(47,123,255,0.11), transparent 35%),
+        linear-gradient(145deg, rgba(13,29,28,0.98), rgba(6,14,14,0.99));
+    }
+
+    .product-preview {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      border-right: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .product-preview::before,
+    .product-preview::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .product-preview::before {
+      inset: 24px;
+      border: 1px solid rgba(153,190,181,0.09);
+      border-radius: 13px;
+      background: rgba(3,9,9,0.44);
+    }
+
+    .product-preview::after {
+      width: 410px;
+      height: 410px;
+      border: 1px solid rgba(47,123,255,0.12);
+      border-radius: 50%;
+      right: -190px;
+      top: -265px;
+    }
+
+    .brand-lockup {
+      --primary: #c8ff4d;
+      --secondary: #2f7bff;
+      --word-accent: #4d9aff;
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--paper);
+    }
+
+    .brand-lockup .relay-mark {
+      width: 78px;
+      height: 78px;
+      flex: 0 0 78px;
+    }
+
+    .relay-mark svg { width: 100%; height: 100%; overflow: visible; }
+
+    .wordmark {
+      white-space: nowrap;
+      font-size: 45px;
+      line-height: 1;
+      font-weight: 470;
+      letter-spacing: -0.078em;
+      font-variation-settings: "wdth" 88;
+    }
+
+    .wordmark b { color: var(--word-accent); font-weight: 760; }
+
+    .context-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px 30px;
+    }
+
+    .status {
+      width: fit-content;
+      margin-bottom: 15px;
+      padding: 6px 9px 5px;
+      border: 1px solid rgba(200,255,77,0.3);
+      border-radius: 99px;
+      color: #c8ff4d;
+      font-size: 7px;
+    }
+
+    .context-copy h2 {
+      margin: 0 0 7px;
+      font-size: 21px;
+      letter-spacing: -0.04em;
+    }
+
+    .context-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .context-meta {
+      display: flex;
+      gap: 14px;
+      margin-top: 18px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      color: #7dd7e7;
+      font-size: 7px;
+    }
+
+    .colorways {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      padding-top: 14px;
+    }
+
+    .colorway {
+      --primary: #c8ff4d;
+      --secondary: #7dd7e7;
+      --word-accent: #7dd7e7;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(150deg, rgba(14,29,28,0.97), rgba(7,15,15,0.99));
+    }
+
+    .polar {
+      --primary: #c8ff4d;
+      --secondary: #2f7bff;
+      --word-accent: #4d9aff;
+    }
+
+    .mint {
+      --primary: #48f5ad;
+      --secondary: #4dc8e8;
+      --word-accent: #48f5ad;
+    }
+
+    .mono {
+      --primary: #eef7f3;
+      --secondary: #71857f;
+      --word-accent: #eef7f3;
+    }
+
+    .inverse {
+      --primary: #7dd7e7;
+      --secondary: #c8ff4d;
+      --word-accent: #7dd7e7;
+    }
+
+    .color-label {
+      min-height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 13px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 7px;
+    }
+
+    .color-label b { color: var(--paper); font-weight: 500; }
+
+    .recommended {
+      padding: 4px 6px 3px;
+      border: 1px solid rgba(200,255,77,0.3);
+      border-radius: 99px;
+      color: #c8ff4d;
+      font-size: 6px;
+    }
+
+    .color-stage {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      padding: 22px 10px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(3,9,9,0.62);
+    }
+
+    .color-stage .brand-lockup {
+      gap: 8px;
+      transform: scale(0.7);
+    }
+
+    .color-stage .brand-lockup .relay-mark {
+      width: 58px;
+      height: 58px;
+      flex-basis: 58px;
+    }
+
+    .color-stage .wordmark { font-size: 29px; }
+
+    .palette {
+      padding: 13px;
+    }
+
+    .swatches {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .swatch {
+      height: 22px;
+      flex: 1;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 6px;
+    }
+
+    .swatch.primary { background: var(--primary); }
+    .swatch.secondary { background: var(--secondary); }
+
+    .palette-code {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 6px;
+    }
+
+    .board-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 2px 0;
+      color: var(--muted);
+      font-size: 8px;
+    }
+
+    .board-foot strong { color: var(--paper); font-weight: 500; }
+
+    .ring { fill: none; stroke: var(--secondary); stroke-width: 1.5; opacity: 0.58; }
+    .route { fill: none; stroke: var(--paper); stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .endpoint { fill: var(--primary); }
+    .node { fill: var(--secondary); }
+    .center-node { fill: var(--paper); }
+    .arrow { fill: none; stroke: var(--primary); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    @media (max-width: 760px) {
+      .board {
+        width: calc(100% - 24px);
+        padding: 18px 0 20px;
+      }
+
+      .board-head {
+        min-height: 112px;
+        display: block;
+        padding: 0 2px 16px;
+      }
+
+      .kicker { margin-bottom: 8px; }
+      h1 { font-size: 34px; }
+      .head-copy { margin-top: 9px; font-size: 11px; line-height: 1.4; }
+
+      .context {
+        min-height: 174px;
+        display: grid;
+        grid-template-columns: 1fr;
+        margin-top: 10px;
+        border-radius: 14px;
+      }
+
+      .product-preview {
+        min-height: 102px;
+        padding: 20px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .product-preview::before { inset: 12px; }
+      .brand-lockup { gap: 11px; }
+      .brand-lockup .relay-mark { width: 54px; height: 54px; flex-basis: 54px; }
+      .wordmark { font-size: 32px; }
+
+      .context-copy {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 5px 10px;
+        padding: 12px 14px;
+      }
+
+      .status { grid-row: 1 / span 2; margin: 0; }
+      .context-copy h2 { margin: 0; font-size: 14px; }
+      .context-copy p { font-size: 9px; }
+      .context-meta { display: none; }
+
+      .colorways {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding-top: 8px;
+      }
+
+      .colorway {
+        min-height: 73px;
+        display: grid;
+        grid-template-columns: 104px minmax(0, 1fr) 78px;
+        grid-template-rows: 31px 42px;
+        border-radius: 11px;
+      }
+
+      .color-label {
+        grid-column: 1 / -1;
+        min-height: 31px;
+        padding: 0 9px;
+        font-size: 6px;
+      }
+
+      .color-stage {
+        grid-column: 1 / span 2;
+        min-height: 42px;
+        padding: 3px 6px;
+        border: 0;
+        border-right: 1px solid var(--line);
+      }
+
+      .color-stage .brand-lockup { transform: scale(0.56); }
+      .palette { display: grid; place-items: center; padding: 7px; }
+      .swatches { width: 100%; margin: 0; }
+      .swatch { height: 22px; }
+      .palette-code { display: none; }
+      .board-foot { padding-top: 10px; font-size: 7px; }
+      .board-foot span:last-child { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="svg-defs" aria-hidden="true">
+    <symbol id="relayOrbit" viewBox="0 0 64 64">
+      <circle class="ring" cx="32" cy="32" r="26"/>
+      <path class="route" d="M10 39l11-15 11 13 10-17 12 19"/>
+      <circle class="endpoint" cx="10" cy="39" r="4.5"/>
+      <circle class="node" cx="21" cy="24" r="3.5"/>
+      <circle class="center-node" cx="32" cy="37" r="3.5"/>
+      <circle class="node" cx="42" cy="20" r="3.5"/>
+      <circle class="endpoint" cx="54" cy="39" r="4.5"/>
+      <path class="arrow" d="M47 10l5-2-2 5"/>
+    </symbol>
+  </svg>
+
+  <main class="board">
+    <header class="board-head">
+      <div>
+        <div class="kicker">Mixroam final identity round</div>
+        <h1>Relay Orbit, recolored.</h1>
+      </div>
+      <p class="head-copy"><strong>4A clarity, 4C circle.</strong> The structure is fixed. This board tests five color systems without changing the logo underneath.</p>
+    </header>
+
+    <section class="context polar" aria-label="Relay Orbit logo in Mixroam product context">
+      <div class="product-preview">
+        <div class="brand-lockup">
+          <span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span>
+          <span class="wordmark">mix<b>r</b>oam</span>
+        </div>
+      </div>
+      <div class="context-copy">
+        <span class="status">Structure locked</span>
+        <h2>Relay Orbit 2.0</h2>
+        <p>One connected M, five live nodes, one broken orbit. The accent now belongs to Mixroam.</p>
+        <div class="context-meta"><span>App icon ready</span><span>Header ready</span><span>Motion ready</span></div>
+      </div>
+    </section>
+
+    <section class="colorways" aria-label="Five Relay Orbit color systems">
+      <article class="colorway original">
+        <div class="color-label"><b>A</b> Volt Ice</div>
+        <div class="color-stage">
+          <div class="brand-lockup"><span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span><span class="wordmark">mix<b>r</b>oam</span></div>
+        </div>
+        <div class="palette"><div class="swatches"><span class="swatch primary"></span><span class="swatch secondary"></span></div><div class="palette-code"><span>#C8FF4D</span><span>#7DD7E7</span></div></div>
+      </article>
+
+      <article class="colorway polar">
+        <div class="color-label"><b>B</b> Cobalt Acid <span class="recommended">Recommended</span></div>
+        <div class="color-stage">
+          <div class="brand-lockup"><span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span><span class="wordmark">mix<b>r</b>oam</span></div>
+        </div>
+        <div class="palette"><div class="swatches"><span class="swatch primary"></span><span class="swatch secondary"></span></div><div class="palette-code"><span>#C8FF4D</span><span>#2F7BFF</span></div></div>
+      </article>
+
+      <article class="colorway mint">
+        <div class="color-label"><b>C</b> Mint Static</div>
+        <div class="color-stage">
+          <div class="brand-lockup"><span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span><span class="wordmark">mix<b>r</b>oam</span></div>
+        </div>
+        <div class="palette"><div class="swatches"><span class="swatch primary"></span><span class="swatch secondary"></span></div><div class="palette-code"><span>#48F5AD</span><span>#4DC8E8</span></div></div>
+      </article>
+
+      <article class="colorway mono">
+        <div class="color-label"><b>D</b> Arctic Mono</div>
+        <div class="color-stage">
+          <div class="brand-lockup"><span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span><span class="wordmark">mix<b>r</b>oam</span></div>
+        </div>
+        <div class="palette"><div class="swatches"><span class="swatch primary"></span><span class="swatch secondary"></span></div><div class="palette-code"><span>#EEF7F3</span><span>#71857F</span></div></div>
+      </article>
+
+      <article class="colorway inverse">
+        <div class="color-label"><b>E</b> Ice Volt</div>
+        <div class="color-stage">
+          <div class="brand-lockup"><span class="relay-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#relayOrbit"/></svg></span><span class="wordmark">mix<b>r</b>oam</span></div>
+        </div>
+        <div class="palette"><div class="swatches"><span class="swatch primary"></span><span class="swatch secondary"></span></div><div class="palette-code"><span>#7DD7E7</span><span>#C8FF4D</span></div></div>
+      </article>
+    </section>
+
+    <footer class="board-foot">
+      <span><strong>Pick A–E.</strong> Then this exact logo goes into Mixroam.</span>
+      <span>No purple. No orange. No structural drift.</span>
+    </footer>
+  </main>
+</body>
+</html>
