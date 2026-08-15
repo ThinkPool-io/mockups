@@ -24,6 +24,7 @@
     --signal-soft: rgba(200, 255, 77, 0.16);
     --water: #7dd7e7;
     --water-soft: rgba(125, 215, 231, 0.12);
+    --thinkpool-cobalt: #1a6ef4;
     --danger: #ff5c75;
     --display: "Archivo", Arial, sans-serif;
     --mono: "IBM Plex Mono", monospace;
@@ -325,7 +326,7 @@
     background: rgba(7, 16, 15, 0.46);
     backdrop-filter: blur(12px);
     font-family: var(--mono);
-    font-size: 8px;
+    font-size: 9px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
@@ -470,6 +471,7 @@
     flex-direction: column;
     gap: 20px;
     border-top: 1px solid var(--line);
+    position: relative;
   }
 
   .eyebrow {
@@ -606,6 +608,54 @@
     font-size: 18px;
     font-weight: 500;
   }
+
+  .maker-credit {
+    position: absolute;
+    left: 25px;
+    right: 25px;
+    bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .maker-credit > span:first-child { color: var(--muted); }
+  .credit-divider { color: var(--line-strong); }
+
+  .thinkpool-credit {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 160ms ease, border-color 160ms ease;
+  }
+
+  .thinkpool-credit:hover,
+  .thinkpool-credit:focus-visible {
+    color: var(--paper);
+    border-color: var(--thinkpool-cobalt);
+  }
+
+  .thinkpool-wordmark {
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-transform: lowercase;
+  }
+
+  .thinkpool-wordmark span:last-child { color: var(--thinkpool-cobalt); }
+  .thinkpool-arrow { color: var(--thinkpool-cobalt); }
 
   .pilot-band,
   .relay-proof {
@@ -1581,6 +1631,14 @@
       gap: 16px;
     }
 
+    .maker-credit {
+      left: 18px;
+      right: 18px;
+      bottom: 3px;
+      gap: 5px;
+      font-size: 8px;
+    }
+
     .title-row { align-items: center; }
     .set-title { font-size: 37px; }
     .dj-name { margin-top: 7px; }
@@ -1683,6 +1741,15 @@
             <span>Relay me to another set</span>
             <span>↗</span>
           </button>
+
+          <div class="maker-credit" aria-label="Creator credit">
+            <span>By Conrad Bachman</span>
+            <span class="credit-divider" aria-hidden="true">·</span>
+            <a class="thinkpool-credit" href="https://thinkpool.io/" target="_blank" rel="noopener noreferrer" aria-label="Made with thinkpool, open thinkpool">
+              <span>Made with <span class="thinkpool-wordmark"><span>think</span><span>pool</span></span></span>
+              <span class="thinkpool-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </article>
     </section>
