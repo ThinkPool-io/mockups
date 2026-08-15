@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>WHERE/NOW · Live DJ discovery</title>
+<title>WHERE/NOW · Free Hard Techno discovery</title>
 <meta name="theme-color" content="#07100f" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -606,6 +606,62 @@
     font-size: 18px;
     font-weight: 500;
   }
+
+  .pilot-band,
+  .relay-proof {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+  }
+
+  .pilot-band {
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid rgba(200, 255, 77, 0.22);
+    border-radius: 9px;
+    color: var(--signal);
+    background: linear-gradient(90deg, rgba(200, 255, 77, 0.12), rgba(125, 215, 231, 0.04));
+    font-size: 9px;
+    letter-spacing: 0.07em;
+  }
+
+  .pilot-band span:last-child { color: var(--muted); }
+
+  .relay-proof {
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  .relay-proof > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .relay-proof i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 0 4px var(--water-soft);
+  }
+
+  .receipt-button {
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    background: transparent;
+    color: var(--paper);
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .receipt-button:hover { border-color: var(--signal); color: var(--signal); }
 
   .map-column {
     position: relative;
@@ -1239,6 +1295,163 @@
 
   .toast.show { opacity: 1; transform: translateY(0); }
 
+  .product-dialog {
+    width: min(520px, calc(100vw - 28px));
+    max-height: calc(100vh - 28px);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 22px;
+    background: #0a1716;
+    color: var(--paper);
+    box-shadow: 0 32px 110px rgba(0, 0, 0, 0.72);
+  }
+
+  .product-dialog::backdrop {
+    background: rgba(2, 8, 7, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .dialog-shell { padding: 25px; }
+
+  .dialog-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .dialog-kicker {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--signal);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dialog-head h2 {
+    max-width: 390px;
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+  }
+
+  .dialog-close {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+  }
+
+  .passport-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .passport-item,
+  .receipt-row {
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .passport-item { padding: 14px; }
+
+  .passport-item small,
+  .receipt-row span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .passport-item strong,
+  .receipt-row strong {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .privacy-options {
+    display: flex;
+    gap: 7px;
+    margin-top: 9px;
+  }
+
+  .privacy-options span {
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 8px;
+    text-transform: uppercase;
+  }
+
+  .privacy-options span:first-child {
+    border-color: rgba(200, 255, 77, 0.35);
+    color: var(--signal);
+    background: var(--signal-soft);
+  }
+
+  .dialog-note {
+    margin: 18px 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .dialog-cta {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 11px;
+    background: var(--signal);
+    color: var(--night);
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .receipt-list { display: grid; gap: 8px; }
+
+  .receipt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 13px 14px;
+  }
+
+  .receipt-row span { margin-bottom: 0; }
+  .receipt-row strong { text-align: right; }
+
+  .pilot-roadmap {
+    padding: 10px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.58);
+    backdrop-filter: blur(14px);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.45;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .pilot-roadmap strong { color: var(--signal); font-weight: 500; }
+
   @media (max-width: 900px) {
     .topbar {
       height: 66px;
@@ -1377,10 +1590,15 @@
 
     .metadata { flex-wrap: nowrap; overflow: hidden; }
     .meta-pill { flex: 0 0 auto; }
+    .pilot-band { font-size: 8px; }
+    .relay-proof { align-items: flex-start; line-height: 1.45; }
     .shuffle-button { min-height: 58px; }
     .toast { right: 16px; left: 16px; bottom: 16px; text-align: center; }
     .fresh-badge { top: 56px; }
     .crowd-proof { display: none; }
+
+    .dialog-shell { padding: 20px; }
+    .passport-grid { grid-template-columns: 1fr; }
   }
 
   @media (max-width: 390px) and (max-height: 760px) {
@@ -1403,9 +1621,9 @@
       <span class="brand-mark" aria-hidden="true"></span>
       <span>WHERE/NOW</span>
     </div>
-    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">2</b> verified Twitch signals</span></div>
+    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">8</b> verified · Hard Techno pilot</span></div>
     <div class="top-actions">
-      <button class="text-action" id="claimButton">Claim your pin</button>
+      <button class="text-action" id="claimButton">DJ Passport · Free</button>
       <button class="icon-action" aria-label="Open menu">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M2 4.5H14M2 8H10M2 11.5H14" stroke="currentColor" stroke-width="1.3"/>
@@ -1439,20 +1657,30 @@
 
           <div class="title-row">
             <div>
-              <h1 class="set-title" id="setTitle">Schranz Weekend</h1>
-              <p class="dj-name">with <span id="djName">WAMF Live</span></p>
+              <h1 class="set-title" id="setTitle">Hard Techno Acid</h1>
+              <p class="dj-name">with <span id="djName">Lamek</span></p>
             </div>
             <button class="follow-button" id="followButton">Follow DJ</button>
           </div>
 
+          <div class="pilot-band">
+            <span>Everything free during build</span>
+            <span>No paid ranking</span>
+          </div>
+
           <div class="metadata">
-            <span class="meta-pill hot" id="genreMeta">Schranz</span>
-            <span class="meta-pill" id="viewerMeta">1 watching</span>
-            <span class="meta-pill" id="proofMeta">DJ-published pin</span>
+            <span class="meta-pill hot" id="genreMeta">Hard Techno</span>
+            <span class="meta-pill" id="viewerMeta">28 watching</span>
+            <span class="meta-pill" id="proofMeta">Country-level pin</span>
+          </div>
+
+          <div class="relay-proof">
+            <span><i></i>Fair relay · audience size never sets rank</span>
+            <button class="receipt-button" id="receiptButton">Exposure receipt</button>
           </div>
 
           <button class="shuffle-button" id="shuffleButton">
-            <span>Take me somewhere else</span>
+            <span>Relay me to another set</span>
             <span>↗</span>
           </button>
         </div>
@@ -1462,8 +1690,8 @@
     <section class="map-column" aria-label="World map of live DJ sets">
       <div class="map-tools">
         <button class="genre-picker" id="genrePicker" aria-expanded="false" aria-controls="genrePanel">
-          <span class="genre-picker-copy"><small>Genre</small><strong id="genreCurrent">Schranz</strong></span>
-          <span class="genre-picker-count" id="genreCount">8 live · 96 genres</span>
+          <span class="genre-picker-copy"><small>Pilot genre</small><strong id="genreCurrent">Hard Techno</strong></span>
+          <span class="genre-picker-count" id="genreCount">8 live · 125 genres</span>
         </button>
         <select class="region-select" id="regionSelect" aria-label="Select a region">
           <option value="All">Anywhere</option>
@@ -1480,14 +1708,14 @@
 
       <div class="genre-panel" id="genrePanel" hidden>
         <div class="genre-panel-head">
-          <input class="genre-search" id="genreSearch" type="search" placeholder="Search 96 genres" autocomplete="off" aria-label="Search genres">
+          <input class="genre-search" id="genreSearch" type="search" placeholder="Search 125 genres" autocomplete="off" aria-label="Search genres">
           <button class="genre-close" id="genreClose" aria-label="Close genre catalog">×</button>
         </div>
         <div class="genre-catalog" id="genreCatalog"></div>
       </div>
 
       <div class="world-map" id="map" aria-label="Interactive map. Drag to move and use the controls to zoom."></div>
-      <div class="map-empty" id="mapEmpty" hidden><strong>No live signal here</strong><span>Try another region or widen the genre.</span></div>
+      <div class="map-empty" id="mapEmpty" hidden><strong>This genre is being connected</strong><span>Try Hard Techno now or claim a free DJ Passport.</span></div>
       <aside class="unmapped-panel" id="unmappedPanel" hidden>
         <div class="unmapped-head"><span>Live · location hidden</span><b id="unmappedCount">0</b></div>
         <div class="unmapped-list" id="unmappedList"></div>
@@ -1495,43 +1723,74 @@
 
       <div class="map-bottom">
         <p class="map-note"><strong>Pins use DJ-published locations.</strong> Live streams without one stay playable but off-map.</p>
-        <div class="crowd-proof" aria-label="Recent listeners">
-          <div class="avatars" aria-hidden="true"><span class="avatar"></span><span class="avatar"></span><span class="avatar"></span></div>
-          <p><strong>27 people</strong><br>landed here recently</p>
-        </div>
+        <p class="pilot-roadmap"><strong>Live now · Hard Techno</strong><br>Next · Schranz, industrial, acid</p>
         <p class="map-coords" id="coordinates">48.2082° N<br>16.3738° E</p>
       </div>
     </section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="product-dialog" id="passportDialog">
+    <div class="dialog-shell">
+      <div class="dialog-head">
+        <div>
+          <span class="dialog-kicker">DJ Passport · Free pilot</span>
+          <h2>Your signal, not your follower count.</h2>
+        </div>
+        <button class="dialog-close" data-close="passportDialog" aria-label="Close DJ Passport">×</button>
+      </div>
+      <div class="passport-grid">
+        <div class="passport-item"><small>Stream</small><strong>Connect Twitch first</strong></div>
+        <div class="passport-item"><small>Taste identity</small><strong>Choose up to five genres</strong></div>
+        <div class="passport-item">
+          <small>Location control</small><strong>You choose the precision</strong>
+          <div class="privacy-options"><span>City</span><span>Country</span><span>Hidden</span></div>
+        </div>
+        <div class="passport-item"><small>Identity links</small><strong>Mixcloud · YouTube · SoundCloud</strong></div>
+      </div>
+      <p class="dialog-note">Discovery, claiming, follows, schedules, and exposure receipts stay free during the build. There are no paid boosts and no pay-to-win map positions.</p>
+      <button class="dialog-cta" id="passportPreviewButton">Preview my Hard Techno Passport</button>
+    </div>
+  </dialog>
+
+  <dialog class="product-dialog" id="receiptDialog">
+    <div class="dialog-shell">
+      <div class="dialog-head">
+        <div>
+          <span class="dialog-kicker">Transparent discovery</span>
+          <h2>Exposure receipt.</h2>
+        </div>
+        <button class="dialog-close" data-close="receiptDialog" aria-label="Close exposure receipt">×</button>
+      </div>
+      <div class="receipt-list">
+        <div class="receipt-row"><span>DJ</span><strong id="receiptDj">Lamek</strong></div>
+        <div class="receipt-row"><span>Discovery source</span><strong id="receiptGenre">Hard Techno relay</strong></div>
+        <div class="receipt-row"><span>Location precision</span><strong id="receiptLocation">Country only</strong></div>
+        <div class="receipt-row"><span>Ranking rule</span><strong>Viewer count ignored</strong></div>
+        <div class="receipt-row"><span>Current access</span><strong>Free</strong></div>
+      </div>
+      <p class="dialog-note">This receipt shows why the set entered the relay. Watch time, follows, and promoter saves will appear only after the measurement backend exists.</p>
+    </div>
+  </dialog>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
   const sets = [
-    { id:"wamflive", title:"Schranz Weekend", dj:"WAMF Live", city:"Asunción", code:"ASU", country:"Paraguay", region:"South America", genre:"Schranz", viewers:1, timeZone:"America/Asuncion", coords:["25.2637° S","57.5759° W"], lat:-25.2637, lng:-57.5759, channel:"wamflive", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_wamflive-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] },
-    { id:"djmista5", title:"House to Schranz", dj:"DJ Mista5", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Schranz", viewers:18, lat:null, lng:null, channel:"djmista5", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_djmista5-640x360.jpg", colors:["#294641","#132824","#07100f"] },
-    { id:"snk_wav", title:"SNK Overdrive", dj:"SNK_wav", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", viewers:32, lat:null, lng:null, channel:"snk_wav", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_snk_wav-640x360.jpg", colors:["#183f3b","#0c2421","#07100f"] },
-    { id:"ladyponcho79", title:"Saturday Mix", dj:"Lady Poncho", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Open Format", viewers:22, lat:null, lng:null, channel:"ladyponcho79", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_ladyponcho79-640x360.jpg", colors:["#214b45","#102723","#07100f"] },
-    { id:"noobymcnoot", title:"Meow’Topia", dj:"NoobyMcNoot", city:"Location unverified", code:"UNM", country:"", region:"Unmapped", genre:"Psytrance", viewers:4, lat:null, lng:null, channel:"noobymcnoot", verifiedAt:"18:47 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_noobymcnoot-640x360.jpg", colors:["#163d45","#0d2428","#07100f"] },
-    { id:"johannesburg", title:"Soft Pressure", dj:"Lerato.exe", city:"Johannesburg", code:"JHB", country:"South Africa", region:"Africa", genre:"Amapiano", viewers:62, time:"00:47", coords:["26.2041° S","28.0473° E"], lat:-26.2041, lng:28.0473, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] },
-    { id:"london", title:"Sub Level", dj:"Mara Vale", city:"London", code:"LDN", country:"United Kingdom", region:"Europe", genre:"UK Garage", viewers:114, time:"23:47", coords:["51.5072° N","0.1276° W"], lat:51.5072, lng:-0.1276, platform:"Live on Twitch", colors:["#163d45","#0d2428","#07100f"] },
-    { id:"detroit", title:"Machine Soul", dj:"Model Citizen", city:"Detroit", code:"DTT", country:"United States", region:"North America", genre:"Detroit Techno", viewers:83, time:"18:47", coords:["42.3314° N","83.0458° W"], lat:42.3314, lng:-83.0458, platform:"Live on YouTube", colors:["#294641","#132824","#07100f"] },
-    { id:"bristol", title:"System Pressure", dj:"Asha B2B Rue", city:"Bristol", code:"BRS", country:"United Kingdom", region:"Europe", genre:"Jungle", viewers:105, time:"23:47", coords:["51.4545° N","2.5879° W"], lat:51.4545, lng:-2.5879, platform:"Live on Twitch", colors:["#183f3b","#0c2421","#07100f"] },
-    { id:"nairobi", title:"Red Earth", dj:"Nali", city:"Nairobi", code:"NBO", country:"Kenya", region:"Africa", genre:"Afro House", viewers:68, time:"02:47", coords:["1.2921° S","36.8219° E"], lat:-1.2921, lng:36.8219, platform:"Live on Twitch", colors:["#315044","#15271f","#07100f"] },
-    { id:"beirut", title:"Afterimage", dj:"Rana 909", city:"Beirut", code:"BEY", country:"Lebanon", region:"Middle East", genre:"Acid Techno", viewers:29, time:"01:47", coords:["33.8938° N","35.5018° E"], lat:33.8938, lng:35.5018, platform:"Live on Twitch", colors:["#214b45","#102723","#07100f"] },
-    { id:"lisbon", title:"Rua Quente", dj:"Luz Bruta", city:"Lisbon", code:"LIS", country:"Portugal", region:"Europe", genre:"Batida", viewers:52, time:"23:47", coords:["38.7223° N","9.1393° W"], lat:38.7223, lng:-9.1393, platform:"Live on YouTube", colors:["#264d42","#11271f","#07100f"] },
-    { id:"mumbai", title:"Third Eye Open", dj:"Rishi V", city:"Mumbai", code:"BOM", country:"India", region:"Asia", genre:"Psytrance", viewers:126, time:"04:17", coords:["19.0760° N","72.8777° E"], lat:19.076, lng:72.8777, platform:"Live on Twitch", colors:["#174451","#0c2730","#07100f"] },
-    { id:"kingston", title:"Sound System Yard", dj:"Sista Kai", city:"Kingston", code:"KIN", country:"Jamaica", region:"Caribbean", genre:"Dancehall", viewers:97, time:"18:47", coords:["18.0179° N","76.8099° W"], lat:18.0179, lng:-76.8099, platform:"Live on Twitch", colors:["#244943","#102722","#07100f"] },
-    { id:"mexicocity", title:"Club Sin Fronteras", dj:"Marea Alta", city:"Mexico City", code:"MEX", country:"Mexico", region:"North America", genre:"Latin Club", viewers:81, time:"17:47", coords:["19.4326° N","99.1332° W"], lat:19.4326, lng:-99.1332, platform:"Live on YouTube", colors:["#315044","#15271f","#07100f"] },
-    { id:"seoul", title:"Blue Hours", dj:"Mizu Signal", city:"Seoul", code:"SEL", country:"South Korea", region:"Asia", genre:"Ambient", viewers:91, time:"07:47", coords:["37.5665° N","126.9780° E"], lat:37.5665, lng:126.978, platform:"Live on YouTube", colors:["#174451","#0c2730","#07100f"] },
-    { id:"sydney", title:"Glass Coast", dj:"Arden", city:"Sydney", code:"SYD", country:"Australia", region:"Oceania", genre:"Progressive House", viewers:71, time:"08:47", coords:["33.8688° S","151.2093° E"], lat:-33.8688, lng:151.2093, platform:"Live on Twitch", colors:["#214f49","#0b2420","#07100f"] }
+    { id:"llamekk", title:"Hard Techno Acid", dj:"Lamek", city:"Germany", locationLabel:"Germany · country only", locationPrecision:"Country only", code:"DE", country:"", region:"Europe", genre:"Hard Techno", genres:["Hard Techno","Acid Techno","Peak Time Techno","Melodic Techno"], viewers:28, coords:["51.1657° N","10.4515° E"], lat:51.1657, lng:10.4515, channel:"llamekk", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_llamekk-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] },
+    { id:"hard_music_tv", title:"Hard Music Experience", dj:"Hard Music TV", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hardstyle","Hardcore"], viewers:208, lat:null, lng:null, channel:"hard_music_tv", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_hard_music_tv-640x360.jpg", colors:["#163d45","#0d2428","#07100f"] },
+    { id:"dj_bassqueen", title:"We Are TKNO", dj:"DJ BassQueen", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hypnotic Techno","Dark Techno"], viewers:37, lat:null, lng:null, channel:"dj_bassqueen", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_dj_bassqueen-640x360.jpg", colors:["#294641","#132824","#07100f"] },
+    { id:"mr_m0nsterr", title:"Frenchcore Signal", dj:"Mr M0nsterr", city:"Netherlands", locationLabel:"Netherlands · country only", locationPrecision:"Country only", code:"NL", country:"", region:"Europe", genre:"Hard Techno", genres:["Hard Techno","Hardcore","Gabber"], viewers:32, coords:["52.1326° N","5.2913° E"], lat:52.1326, lng:5.2913, channel:"mr_m0nsterr", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_mr_m0nsterr-640x360.jpg", colors:["#183f3b","#0c2421","#07100f"] },
+    { id:"djmista5", title:"House to Schranz", dj:"DJ Mista5", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Schranz","House","Speed Garage"], viewers:14, lat:null, lng:null, channel:"djmista5", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_djmista5-640x360.jpg", colors:["#294641","#132824","#07100f"] },
+    { id:"campwutz", title:"Hardtechno", dj:"CampWutz", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Hardtekk","Techno"], viewers:1, lat:null, lng:null, channel:"campwutz", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_campwutz-640x360.jpg", colors:["#214b45","#102723","#07100f"] },
+    { id:"goldman0815", title:"Schranz at Bass Legion", dj:"Goldman0815", city:"Location hidden", locationLabel:"Location hidden", locationPrecision:"Hidden", code:"UNM", country:"", region:"Unmapped", genre:"Hard Techno", genres:["Hard Techno","Schranz","Progressive House"], viewers:3, lat:null, lng:null, channel:"goldman0815", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_goldman0815-640x360.jpg", colors:["#315044","#15271f","#07100f"] },
+    { id:"wamflive", title:"Schranz Weekend", dj:"WAMF Live", city:"Asunción", locationLabel:"Asunción, Paraguay", locationPrecision:"City", code:"ASU", country:"Paraguay", region:"South America", genre:"Hard Techno", genres:["Hard Techno","Schranz"], viewers:1, timeZone:"America/Asuncion", coords:["25.2637° S","57.5759° W"], lat:-25.2637, lng:-57.5759, channel:"wamflive", verifiedAt:"19:16 UTC", preview:"https://static-cdn.jtvnw.net/previews-ttv/live_user_wamflive-640x360.jpg", colors:["#214f49","#0b2420","#07100f"] }
   ];
 
   const genreGroups = {
-    "Pilot pressure": ["Schranz", "Hard Techno", "Industrial Techno", "Acid Techno", "Hardcore Techno"],
-    "Techno": ["Detroit Techno", "Dub Techno", "Minimal Techno", "Melodic Techno", "Peak Time Techno", "Raw Techno", "Tribal Techno", "Hypnotic Techno", "Electro Techno", "Broken Techno"],
+    "Pilot pressure": ["Hard Techno", "Schranz", "Industrial Techno", "Acid Techno", "Hardcore Techno", "Hardtekk"],
+    "Techno": ["Techno", "Detroit Techno", "Dub Techno", "Minimal Techno", "Melodic Techno", "Peak Time Techno", "Raw Techno", "Tribal Techno", "Hypnotic Techno", "Dark Techno", "Electro Techno", "Broken Techno"],
     "House": ["House", "Deep House", "Tech House", "Afro House", "Amapiano", "Gqom", "Kwaito", "Progressive House", "Minimal House", "Microhouse", "Acid House", "Chicago House", "Disco House", "French House", "Soulful House", "Jackin House", "Organic House"],
     "Bass and breaks": ["UK Garage", "2-Step", "Speed Garage", "Bassline", "Breakbeat", "Breaks", "Jungle", "Drum & Bass", "Liquid DnB", "Neurofunk", "Jump Up", "Dubstep", "Grime", "Footwork", "Juke", "Ghettotech", "UK Funky", "Future Garage", "Halftime"],
     "Trance and hard dance": ["Trance", "Progressive Trance", "Psytrance", "Goa", "Hard Trance", "Tech Trance", "Uplifting Trance", "Hardcore", "Gabber", "Hardstyle", "Rawstyle", "Happy Hardcore", "Breakcore", "Makina", "Donk", "Hard House", "Eurodance"],
@@ -1543,7 +1802,7 @@
   const allGenres = ["All genres", ...new Set(Object.values(genreGroups).flat())];
 
   let current = 0;
-  let selectedGenre = "Schranz";
+  let selectedGenre = "Hard Techno";
   let selectedRegion = "All";
 
   const wave = document.getElementById("wave");
@@ -1599,7 +1858,7 @@
 
   function eligibleSets() {
     return sets.filter(set =>
-      (selectedGenre === "All genres" || set.genre === selectedGenre) &&
+      (selectedGenre === "All genres" || set.genres.includes(selectedGenre)) &&
       (selectedRegion === "All" || set.region === selectedRegion)
     );
   }
@@ -1609,11 +1868,11 @@
   }
 
   function liveLabel(set) {
-    return set.channel ? "live" : "concept";
+    return "live";
   }
 
   function formatLocalTime(set) {
-    if (!set.timeZone) return set.channel ? `Checked ${set.verifiedAt}` : `${set.time} local`;
+    if (!set.timeZone) return `Checked ${set.verifiedAt}`;
     return `${new Intl.DateTimeFormat("en-GB", {
       timeZone: set.timeZone,
       hour: "2-digit",
@@ -1624,8 +1883,8 @@
 
   function loadLivePlayer(set) {
     document.getElementById("livePlayer")?.remove();
-    stage.classList.toggle("has-live-source", Boolean(set.channel));
-    if (!set.channel || window.location.protocol === "file:") return;
+    stage.classList.toggle("has-live-source", true);
+    if (window.location.protocol === "file:") return;
 
     const frame = document.createElement("iframe");
     frame.id = "livePlayer";
@@ -1639,7 +1898,7 @@
   }
 
   function renderUnmappedSignals() {
-    const pool = eligibleSets().filter(set => set.channel && !hasPublishedLocation(set));
+    const pool = eligibleSets().filter(set => !hasPublishedLocation(set));
     unmappedPanel.hidden = pool.length === 0;
     unmappedCount.textContent = pool.length;
     unmappedList.innerHTML = "";
@@ -1722,8 +1981,7 @@
     const mappable = pool.filter(hasPublishedLocation);
     mapEmpty.hidden = mappable.length > 0 || pool.some(set => set.channel);
     genreCurrent.textContent = selectedGenre;
-    const verified = pool.filter(set => set.channel).length;
-    genreCount.textContent = `${verified || pool.length} ${verified ? "live" : "mapped"} · ${allGenres.length - 1} genres`;
+    genreCount.textContent = `${pool.length} live · ${allGenres.length - 1} genres`;
 
     const grouped = Object.groupBy ? Object.groupBy(mappable, set => set.region) : mappable.reduce((result, set) => {
       (result[set.region] ||= []).push(set);
@@ -1753,15 +2011,18 @@
     const set = sets[current];
     title.textContent = set.title;
     dj.textContent = set.dj;
-    locationLabel.textContent = hasPublishedLocation(set) ? `${set.city}, ${set.country}` : "Location unverified";
+    locationLabel.textContent = set.locationLabel;
     localTime.textContent = formatLocalTime(set);
-    genreMeta.textContent = set.genre;
-    viewerMeta.textContent = `${set.viewers} ${set.channel ? "watching" : "demo listeners"}`;
+    genreMeta.textContent = set.genres.includes(selectedGenre) && selectedGenre !== "All genres" ? selectedGenre : set.genre;
+    viewerMeta.textContent = `${set.viewers} watching`;
     coordinates.innerHTML = hasPublishedLocation(set) ? `${set.coords[0]}<br>${set.coords[1]}` : "PIN PENDING<br>DJ CLAIM";
-    platform.textContent = set.channel ? "Live on Twitch" : "Map concept";
-    signalType.textContent = set.channel ? "Verified live" : "Pilot signal";
-    freshCity.textContent = hasPublishedLocation(set) ? `Live from ${set.code}` : set.channel ? "DJ location hidden" : `Pilot from ${set.code}`;
-    proofMeta.textContent = set.channel ? (hasPublishedLocation(set) ? "DJ-published pin" : "Location unverified") : "Concept signal";
+    platform.textContent = "Live on Twitch";
+    signalType.textContent = "Verified live";
+    freshCity.textContent = hasPublishedLocation(set) ? `Live from ${set.code}` : "DJ location hidden";
+    proofMeta.textContent = set.locationPrecision === "City" ? "DJ-published pin" : set.locationPrecision;
+    document.getElementById("receiptDj").textContent = set.dj;
+    document.getElementById("receiptGenre").textContent = `${selectedGenre === "All genres" ? set.genre : selectedGenre} relay`;
+    document.getElementById("receiptLocation").textContent = set.locationPrecision;
     const previewLayer = set.preview ? `linear-gradient(rgba(7, 16, 15, 0.14), rgba(7, 16, 15, 0.3)), url("${set.preview}") center / cover, ` : "";
     stage.style.background = `${previewLayer}radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%), linear-gradient(140deg, ${set.colors[0]} 0%, ${set.colors[1]} 47%, ${set.colors[2]} 100%)`;
     loadLivePlayer(set);
@@ -1810,7 +2071,7 @@
 
       matches.forEach(name => {
         const button = document.createElement("button");
-        const live = sets.filter(set => name === "All genres" || set.genre === name).length;
+        const live = sets.filter(set => name === "All genres" || set.genres.includes(name)).length;
         button.className = `genre-choice${name === selectedGenre ? " active" : ""}`;
         button.textContent = live ? `${name} · ${live}` : name;
         button.addEventListener("click", () => chooseGenre(name));
@@ -1874,7 +2135,25 @@
     showToast(followButton.classList.contains("active") ? `Following ${sets[current].dj}` : `Unfollowed ${sets[current].dj}`);
   });
 
-  document.getElementById("claimButton").addEventListener("click", () => showToast("DJ claims open soon. Your city, your signal."));
+  const passportDialog = document.getElementById("passportDialog");
+  const receiptDialog = document.getElementById("receiptDialog");
+
+  document.getElementById("claimButton").addEventListener("click", () => passportDialog.showModal());
+  document.getElementById("receiptButton").addEventListener("click", () => receiptDialog.showModal());
+  document.getElementById("passportPreviewButton").addEventListener("click", () => {
+    passportDialog.close();
+    showToast("Prototype ready. Twitch OAuth is the next backend step.");
+  });
+
+  document.querySelectorAll("[data-close]").forEach(button => {
+    button.addEventListener("click", () => document.getElementById(button.dataset.close).close());
+  });
+
+  [passportDialog, receiptDialog].forEach(dialog => {
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
 
   genreSearch.placeholder = `Search ${allGenres.length - 1} genres`;
   map.on("zoomend", renderMapMarkers);
