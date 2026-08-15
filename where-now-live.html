@@ -188,6 +188,42 @@
   .text-action:hover,
   .icon-action:hover { border-color: var(--signal); background: var(--signal-soft); }
 
+  .chat-action {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid rgba(125, 215, 231, 0.24);
+    border-radius: 999px;
+    background: var(--water-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+
+  .chat-action:hover,
+  .chat-action[aria-expanded="true"] {
+    border-color: var(--water);
+    background: rgba(125, 215, 231, 0.18);
+  }
+
+  .chat-action:active { transform: translateY(1px); }
+
+  .chat-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 0 4px var(--water-soft), 0 0 16px rgba(125, 215, 231, 0.55);
+  }
+
+  .chat-action svg { display: none; }
+
   .main {
     min-height: calc(100vh - 78px);
     display: grid;
@@ -1345,6 +1381,157 @@
 
   .toast.show { opacity: 1; transform: translateY(0); }
 
+  .chat-scrim {
+    position: fixed;
+    inset: 78px 0 0;
+    z-index: 1240;
+    background: rgba(2, 8, 7, 0.28);
+    backdrop-filter: blur(2px);
+  }
+
+  .chat-scrim[hidden],
+  .chat-drawer[hidden] { display: none; }
+
+  .chat-drawer {
+    position: fixed;
+    z-index: 1250;
+    top: 92px;
+    right: 18px;
+    bottom: 18px;
+    width: min(380px, calc(100vw - 36px));
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background: #081311;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, 0.68);
+  }
+
+  .chat-head {
+    min-height: 70px;
+    padding: 15px 15px 13px 17px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .chat-head-copy span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    color: var(--water);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .chat-head-copy span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--water);
+    box-shadow: 0 0 10px rgba(125, 215, 231, 0.65);
+  }
+
+  .chat-head h2 {
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .chat-close {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--paper);
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .chat-close:hover { border-color: var(--water); background: var(--water-soft); }
+
+  .chat-relay-note {
+    min-height: 39px;
+    padding: 0 17px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .chat-relay-note strong { color: var(--signal); font-weight: 500; }
+
+  .chat-frame-wrap {
+    position: relative;
+    min-height: 0;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(125, 215, 231, 0.1), transparent 34%),
+      var(--night);
+  }
+
+  .chat-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--night);
+  }
+
+  .chat-loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 9px;
+    padding: 30px;
+    color: var(--muted);
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .chat-loading b { color: var(--water); font-weight: 500; }
+
+  .chat-footer {
+    min-height: 48px;
+    padding: 0 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .chat-footer a {
+    color: var(--water);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(125, 215, 231, 0.28);
+  }
+
   .product-dialog {
     width: min(520px, calc(100vw - 28px));
     max-height: calc(100vh - 28px);
@@ -1513,6 +1700,18 @@
     .text-action { display: none; }
     .brand { font-size: 19px; }
 
+    .chat-action {
+      width: 42px;
+      min-height: 42px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .chat-action .chat-label,
+    .chat-action .chat-pulse { display: none; }
+    .chat-action svg { display: block; }
+
     .main {
       min-height: calc(100vh - 66px);
       display: flex;
@@ -1657,6 +1856,25 @@
 
     .dialog-shell { padding: 20px; }
     .passport-grid { grid-template-columns: 1fr; }
+
+    .chat-scrim {
+      inset: 66px 0 0;
+      background: rgba(2, 8, 7, 0.58);
+      backdrop-filter: blur(6px);
+    }
+
+    .chat-drawer {
+      top: auto;
+      right: 10px;
+      bottom: 10px;
+      left: 10px;
+      width: auto;
+      height: min(70vh, 590px);
+      border-radius: 22px;
+    }
+
+    .chat-head { min-height: 64px; }
+    .chat-relay-note { padding: 0 15px; }
   }
 
   @media (max-width: 390px) and (max-height: 760px) {
@@ -1682,9 +1900,12 @@
     <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">8</b> verified · Hard Techno pilot</span></div>
     <div class="top-actions">
       <button class="text-action" id="claimButton">DJ Passport · Free</button>
-      <button class="icon-action" aria-label="Open menu">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M2 4.5H14M2 8H10M2 11.5H14" stroke="currentColor" stroke-width="1.3"/>
+      <button class="chat-action" id="chatButton" aria-label="Open live chat" aria-expanded="false" aria-controls="chatDrawer">
+        <span class="chat-pulse" aria-hidden="true"></span>
+        <span class="chat-label">Chat live</span>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M3 3.75h12v8.5H8.2L5 15v-2.75H3v-8.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+          <path d="M6 7h6M6 9.5h3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
@@ -1798,6 +2019,28 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <div class="chat-scrim" id="chatScrim" hidden></div>
+  <aside class="chat-drawer" id="chatDrawer" role="dialog" aria-modal="true" aria-labelledby="chatTitle" hidden>
+    <header class="chat-head">
+      <div class="chat-head-copy">
+        <span>Official Twitch relay</span>
+        <h2 id="chatTitle">Chat with <span id="chatDjName">Lamek</span></h2>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close live chat">×</button>
+    </header>
+    <div class="chat-relay-note">
+      <span>Your message lands in the DJ’s room</span>
+      <strong>Direct</strong>
+    </div>
+    <div class="chat-frame-wrap" id="chatFrameWrap">
+      <p class="chat-loading" id="chatLoading"><b>Connecting to Twitch chat</b><span>Sign in there once, then talk directly to the streamer.</span></p>
+    </div>
+    <footer class="chat-footer">
+      <span>Twitch identity and moderation</span>
+      <a id="openChatExternal" href="https://www.twitch.tv/llamekk/chat" target="_blank" rel="noopener noreferrer">Open on Twitch ↗</a>
+    </footer>
+  </aside>
+
   <dialog class="product-dialog" id="passportDialog">
     <div class="dialog-shell">
       <div class="dialog-head">
@@ -1897,6 +2140,14 @@
   const unmappedPanel = document.getElementById("unmappedPanel");
   const unmappedList = document.getElementById("unmappedList");
   const unmappedCount = document.getElementById("unmappedCount");
+  const chatButton = document.getElementById("chatButton");
+  const chatDrawer = document.getElementById("chatDrawer");
+  const chatScrim = document.getElementById("chatScrim");
+  const chatClose = document.getElementById("chatClose");
+  const chatDjName = document.getElementById("chatDjName");
+  const chatFrameWrap = document.getElementById("chatFrameWrap");
+  const chatLoading = document.getElementById("chatLoading");
+  const openChatExternal = document.getElementById("openChatExternal");
 
   document.getElementById("liveCount").textContent = sets.filter(set => set.channel).length;
 
@@ -2073,6 +2324,49 @@
     map.flyToBounds(bounds, { padding: [58, 58], maxZoom: 5, duration: 0.8 });
   }
 
+  function loadChat(set) {
+    document.getElementById("chatFrame")?.remove();
+    chatDjName.textContent = set.dj;
+    openChatExternal.href = `https://www.twitch.tv/${encodeURIComponent(set.channel)}/chat`;
+    chatLoading.hidden = false;
+    chatLoading.querySelector("b").textContent = "Connecting to Twitch";
+    chatLoading.querySelector("span").textContent = "Opening the DJ’s live room…";
+
+    if (window.location.protocol === "file:") {
+      chatLoading.querySelector("b").textContent = "Official Twitch chat";
+      chatLoading.querySelector("span").textContent = "Loads on the published page.";
+      return;
+    }
+
+    const frame = document.createElement("iframe");
+    frame.id = "chatFrame";
+    frame.className = "chat-frame";
+    frame.title = `${set.dj} Twitch chat`;
+    frame.src = `https://www.twitch.tv/embed/${encodeURIComponent(set.channel)}/chat?parent=${encodeURIComponent(window.location.hostname)}&darkpopout`;
+    frame.referrerPolicy = "origin";
+    frame.addEventListener("load", () => {
+      chatLoading.hidden = true;
+    });
+    chatFrameWrap.appendChild(frame);
+  }
+
+  function openChat() {
+    loadChat(sets[current]);
+    chatDrawer.hidden = false;
+    chatScrim.hidden = false;
+    chatButton.setAttribute("aria-expanded", "true");
+    chatClose.focus({ preventScroll: true });
+  }
+
+  function closeChat() {
+    chatDrawer.hidden = true;
+    chatScrim.hidden = true;
+    chatButton.setAttribute("aria-expanded", "false");
+    document.getElementById("chatFrame")?.remove();
+    chatLoading.hidden = false;
+    chatButton.focus({ preventScroll: true });
+  }
+
   function selectSet(index, focusMap = false) {
     current = index;
     const set = sets[current];
@@ -2099,6 +2393,7 @@
     followButton.classList.remove("active");
     followButton.textContent = "Follow DJ";
     renderMapMarkers();
+    if (!chatDrawer.hidden) loadChat(set);
     if (focusMap && hasPublishedLocation(set)) map.flyTo([set.lat, set.lng], Math.max(map.getZoom(), 5), { duration: 0.7 });
   }
 
@@ -2179,7 +2474,14 @@
 
   document.getElementById("genreClose").addEventListener("click", closeGenrePanel);
   genreSearch.addEventListener("input", event => renderGenreCatalog(event.target.value));
-  document.addEventListener("keydown", event => { if (event.key === "Escape") closeGenrePanel(); });
+  chatButton.addEventListener("click", () => chatDrawer.hidden ? openChat() : closeChat());
+  chatClose.addEventListener("click", closeChat);
+  chatScrim.addEventListener("click", closeChat);
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    closeGenrePanel();
+    if (!chatDrawer.hidden) closeChat();
+  });
 
   document.getElementById("regionSelect").addEventListener("change", event => {
     selectedRegion = event.target.value;
