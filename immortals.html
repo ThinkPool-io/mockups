@@ -1,2653 +1,893 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#17372d" />
-  <title>Immortals · Strength for the long game</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://i.ytimg.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f1ea">
+  <title>Immortals · Strength for life</title>
   <style>
     :root {
-      --paper: #f3f1ea;
-      --paper-strong: #e9e6dc;
-      --ink: #17251f;
-      --muted: #66736c;
-      --forest: #17372d;
-      --forest-soft: #244b3e;
-      --acid: #dfff78;
-      --sage: #cddac8;
-      --peach: #f5b39c;
-      --white: #fffef9;
-      --line: rgba(23, 55, 45, 0.14);
-      --shadow: 0 22px 55px rgba(28, 44, 37, 0.09);
-      --display: "DM Serif Display", Georgia, serif;
-      --sans: "Manrope", system-ui, sans-serif;
+      --paper: #f4f1ea;
+      --card: #fffdf8;
+      --ink: #1d1b18;
+      --muted: #716d66;
+      --line: #ded9cf;
+      --coral: #ed6049;
+      --coral-dark: #bd3d2c;
+      --sage: #b8c9ad;
+      --sage-soft: #dfe8d8;
+      --butter: #f0cb73;
+      --sky: #b8d2df;
+      --lavender: #cbc8df;
+      --peach: #efc2ab;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --shadow: 0 18px 50px rgba(38, 31, 23, .08);
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      overflow-x: hidden;
-      background: var(--paper);
       color: var(--ink);
-      font-family: var(--sans);
-      font-size: 17px;
-      line-height: 1.5;
+      background: var(--paper);
+      font-family: var(--font);
+      font-feature-settings: "cv02" 1, "cv03" 1, "cv11" 1;
+      -webkit-font-smoothing: antialiased;
     }
 
-    button,
-    summary {
-      font: inherit;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: rgba(23, 55, 45, 0.14);
-    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    img { display: block; max-width: 100%; }
 
-    button {
-      color: inherit;
-    }
-
-    button:focus-visible,
-    summary:focus-visible,
-    a:focus-visible {
-      outline: 3px solid #f18d69;
+    :focus-visible {
+      outline: 3px solid #1d1b18;
       outline-offset: 3px;
     }
 
-    .skip-link {
-      position: fixed;
-      z-index: 100;
-      top: 12px;
-      left: 12px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: var(--acid);
-      color: var(--forest);
-      font-weight: 800;
-      text-decoration: none;
-      transform: translateY(-150%);
-    }
-
-    .skip-link:focus {
-      transform: translateY(0);
-    }
-
-    .page {
-      width: min(100% - 40px, 1320px);
-      margin: 0 auto;
-    }
-
-    .site-header {
-      min-height: 86px;
+    .shell {
+      min-height: 100vh;
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 24px;
+      grid-template-columns: 248px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      min-height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: rgba(244, 241, 234, .96);
     }
 
     .brand {
-      min-height: 44px;
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 11px;
-      width: fit-content;
-      color: var(--ink);
-      text-decoration: none;
+      gap: 12px;
+      font-weight: 850;
+      letter-spacing: -.04em;
+      font-size: 22px;
     }
 
     .brand-mark {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      border-radius: 50%;
-      background: var(--forest);
-      color: var(--acid);
-      font-family: var(--display);
-      font-size: 23px;
-      line-height: 1;
+      background: var(--ink);
+      color: var(--card);
+      font-size: 18px;
+      letter-spacing: -.08em;
     }
 
-    .brand-name {
-      font-family: var(--display);
-      font-size: 25px;
-      letter-spacing: -0.02em;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 254, 249, 0.48);
-    }
-
-    .nav a {
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      border-radius: 999px;
+    .nav-label, .eyebrow, .section-kicker {
+      margin: 0;
       color: var(--muted);
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .nav a.active {
-      background: var(--white);
-      color: var(--ink);
-      box-shadow: 0 3px 12px rgba(23, 55, 45, 0.08);
-    }
-
-    .profile-switch {
-      justify-self: end;
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--paper-strong);
-    }
-
-    .profile-switch button {
-      min-width: 80px;
-      min-height: 48px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .profile-switch button[aria-pressed="true"] {
-      background: var(--forest);
-      color: var(--white);
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.7fr);
-      gap: 18px;
-    }
-
-    .hero {
-      min-height: 414px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: stretch;
-      border-radius: 30px;
-      background: var(--forest);
-      color: var(--white);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-copy {
-      position: relative;
-      z-index: 2;
-      width: 59%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 50px 0 46px 50px;
-    }
-
-    .eyebrow {
-      margin: 0 0 21px;
-      color: var(--acid);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: .09em;
       text-transform: uppercase;
     }
 
-    .hero h1 {
-      max-width: 570px;
+    .profile-stack { display: grid; gap: 10px; margin-top: 12px; }
+
+    .profile-button {
+      min-height: 56px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: 38px 1fr 20px;
+      gap: 10px;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .profile-button[aria-pressed="true"] {
+      background: var(--card);
+      border-color: var(--line);
+      box-shadow: 0 8px 24px rgba(38, 31, 23, .05);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--peach);
+      font-weight: 850;
+    }
+
+    .profile-button:nth-child(2) .avatar { background: var(--sky); }
+    .profile-name { display: block; font-size: 16px; font-weight: 750; }
+    .profile-note { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .profile-check { opacity: 0; font-weight: 900; }
+    .profile-button[aria-pressed="true"] .profile-check { opacity: 1; }
+
+    .side-rule {
+      margin-top: auto;
+      padding: 18px;
+      border-radius: 20px;
+      background: var(--sage-soft);
+    }
+
+    .side-rule strong { display: block; font-size: 18px; letter-spacing: -.02em; }
+    .side-rule span { display: block; margin-top: 6px; color: #4e5b48; font-size: 14px; line-height: 1.4; }
+
+    .main {
+      min-width: 0;
+      padding: 26px clamp(24px, 4vw, 64px) 60px;
+    }
+
+    .topbar {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .mobile-brand { display: none; }
+    .greeting { margin: 0; color: var(--muted); font-size: 16px; font-weight: 650; }
+
+    .help-button {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 18px;
+      background: var(--card);
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .dashboard {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .above-fold {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr);
+      gap: 16px;
+    }
+
+    .next-card, .week-card, .rules-card, .exercise-card {
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .next-card {
+      min-height: 320px;
+      padding: clamp(24px, 3.5vw, 44px);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .next-card::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      right: -82px;
+      top: -95px;
+      background: var(--butter);
+      opacity: .72;
+    }
+
+    .next-copy { position: relative; z-index: 1; max-width: 560px; }
+    .next-card .eyebrow { color: var(--coral-dark); }
+
+    .next-card h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(42px, 5.2vw, 72px);
+      line-height: .98;
+      letter-spacing: -.065em;
+      max-width: 700px;
+    }
+
+    .next-summary {
       margin: 0;
-      font-family: var(--display);
-      font-size: clamp(48px, 5vw, 74px);
-      font-weight: 400;
-      letter-spacing: -0.045em;
-      line-height: 0.96;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.45;
+      font-weight: 600;
     }
 
-    .hero-lede {
-      max-width: 47ch;
-      margin: 23px 0 29px;
-      color: rgba(255, 254, 249, 0.75);
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    .hero-actions {
+    .start-row {
+      position: relative;
+      z-index: 1;
+      margin-top: 30px;
       display: flex;
       align-items: center;
       gap: 16px;
     }
 
     .primary-button {
-      min-height: 58px;
+      min-height: 60px;
+      border: 0;
+      border-radius: 18px;
+      padding: 0 24px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 0 23px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--acid);
-      color: var(--forest);
+      gap: 12px;
+      background: var(--coral);
+      color: white;
+      font-size: 18px;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(237, 96, 73, .24);
       cursor: pointer;
-      font-size: 16px;
-      font-weight: 800;
-      box-shadow: 0 8px 20px rgba(10, 30, 24, 0.2);
     }
 
-    .primary-button svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    .session-meta {
-      color: rgba(255, 254, 249, 0.68);
-      font-size: 14px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .hero-art {
-      position: absolute;
-      z-index: 1;
-      right: -7px;
-      bottom: -8px;
-      width: 48%;
-      height: 100%;
-    }
+    .primary-button:hover { background: #db4e39; }
+    .primary-button svg { width: 20px; height: 20px; }
+    .duration { color: var(--muted); font-size: 15px; font-weight: 700; }
 
     .week-card {
-      min-height: 414px;
+      border-radius: var(--radius-lg);
+      padding: 26px;
       display: flex;
       flex-direction: column;
-      padding: 28px;
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      background: var(--white);
-      box-shadow: var(--shadow);
     }
 
-    .section-kicker {
-      margin: 0;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .week-card h2 {
-      margin: 5px 0 22px;
-      font-family: var(--display);
-      font-size: 34px;
-      font-weight: 400;
-      letter-spacing: -0.025em;
-    }
-
-    .day-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .day-button {
-      min-height: 72px;
-      display: grid;
-      grid-template-columns: 46px 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border: 1px solid transparent;
-      border-radius: 17px;
-      background: var(--paper);
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .day-button[aria-pressed="true"] {
-      border-color: var(--forest);
-      background: var(--sage);
-    }
-
-    .day-date {
-      display: grid;
-      place-items: center;
-      gap: 0;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .day-date strong {
-      font-family: var(--display);
-      font-size: 23px;
-      font-weight: 400;
-      line-height: 1;
-    }
-
-    .day-date span {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .day-name strong,
-    .day-name span {
-      display: block;
-    }
-
-    .day-name strong {
-      font-size: 14px;
-    }
-
-    .day-name span {
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .day-duration {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .rest-note {
+    .week-heading {
       display: flex;
-      align-items: center;
-      gap: 9px;
-      margin: auto 2px 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .rest-note svg {
-      flex: 0 0 auto;
-      width: 16px;
-      height: 16px;
-    }
-
-    .main-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.7fr);
-      gap: 18px;
-      margin: 74px 0 80px;
-    }
-
-    .session-panel {
-      min-width: 0;
-    }
-
-    .session-header {
-      display: flex;
-      align-items: flex-end;
+      align-items: start;
       justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 22px;
-    }
-
-    .session-header h2 {
-      margin: 5px 0 0;
-      font-family: var(--display);
-      font-size: 46px;
-      font-weight: 400;
-      letter-spacing: -0.035em;
-      line-height: 1;
-    }
-
-    .progress-wrap {
-      display: flex;
-      align-items: center;
       gap: 12px;
     }
 
-    .progress-ring {
-      --progress: 0;
-      width: 64px;
-      height: 64px;
-      display: grid;
-      place-items: center;
-      position: relative;
-      border-radius: 50%;
-      background: conic-gradient(var(--forest) calc(var(--progress) * 1%), var(--paper-strong) 0);
-    }
+    .week-heading h2 { margin: 7px 0 0; font-size: 25px; letter-spacing: -.04em; }
 
-    .progress-ring::after {
-      width: 48px;
-      height: 48px;
-      position: absolute;
-      border-radius: 50%;
-      background: var(--paper);
-      content: "";
-    }
-
-    .progress-ring span {
-      z-index: 1;
-      font-size: 13px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .progress-copy strong,
-    .progress-copy span {
-      display: block;
-    }
-
-    .progress-copy strong {
-      font-size: 16px;
-    }
-
-    .progress-copy span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .prep-card {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 11px;
-      min-height: 78px;
-      padding: 17px 19px;
-      border-radius: 19px;
-      background: var(--forest);
-      color: var(--white);
-    }
-
-    .prep-icon {
-      width: 50px;
+    .week-count {
+      min-width: 50px;
       height: 50px;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      background: var(--acid);
-      color: var(--forest);
-    }
-
-    .prep-icon svg {
-      width: 21px;
-      height: 21px;
-    }
-
-    .prep-copy strong,
-    .prep-copy span {
-      display: block;
-    }
-
-    .prep-copy strong {
-      font-size: 17px;
-    }
-
-    .prep-copy span {
-      margin-top: 2px;
-      color: rgba(255, 254, 249, 0.65);
-      font-size: 14px;
-    }
-
-    .prep-time {
-      color: var(--acid);
-      font-size: 12px;
-      font-weight: 800;
+      border-radius: 50%;
+      background: var(--sage-soft);
+      font-weight: 850;
       font-variant-numeric: tabular-nums;
     }
 
-    .exercise-list {
-      display: grid;
-      gap: 11px;
-    }
+    .days { display: grid; gap: 10px; margin-top: 24px; }
 
-    .exercise {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 21px;
-      background: var(--white);
-      transition: border-color 160ms ease, opacity 160ms ease;
-    }
-
-    .exercise[open] {
-      border-color: rgba(23, 55, 45, 0.38);
-    }
-
-    .exercise.is-complete {
-      opacity: 0.62;
-    }
-
-    .exercise summary {
-      min-height: 104px;
-      display: grid;
-      grid-template-columns: 64px minmax(0, 1fr) auto 72px;
-      align-items: center;
-      gap: 15px;
-      padding: 13px 15px;
-      cursor: pointer;
-      list-style: none;
-    }
-
-    .exercise summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .exercise-visual {
-      width: 64px;
-      height: 64px;
-      display: grid;
-      place-items: center;
+    .day-button {
+      min-height: 62px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
       border-radius: 16px;
-      background: var(--tone, var(--sage));
-      color: var(--forest);
-    }
-
-    .exercise-visual svg {
-      width: 42px;
-      height: 42px;
-      fill: none;
-      stroke: currentColor;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-width: 2.2;
-    }
-
-    .exercise-copy {
-      min-width: 0;
-    }
-
-    .exercise-copy span,
-    .exercise-copy strong {
-      display: block;
-    }
-
-    .exercise-copy span {
-      margin-bottom: 4px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .exercise-copy strong {
-      overflow: hidden;
-      font-size: 18px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .exercise-dose {
-      text-align: right;
-      font-size: 16px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .exercise-dose span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .chevron {
-      width: 72px;
-      height: 46px;
+      background: #f3f0e9;
       display: grid;
-      place-items: center;
-      border-radius: 13px;
-      background: var(--acid);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .chevron::after {
-      content: "View";
-    }
-
-    .chevron svg {
-      display: none;
-    }
-
-    .exercise-details {
-      display: none;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 22px;
-      margin: 0 15px 15px 88px;
-      padding: 17px 18px;
-      border-radius: 15px;
-      background: var(--paper);
-    }
-
-    .exercise-details p {
-      max-width: 62ch;
-      margin: 0;
-      color: #48574f;
-      font-size: 13px;
-      line-height: 1.65;
-    }
-
-    .cue-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 11px;
-    }
-
-    .cue-list span {
-      padding: 5px 9px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--white);
-      color: var(--forest);
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .complete-button {
-      min-height: 42px;
-      min-width: 126px;
-      padding: 0 14px;
-      border: 1px solid var(--forest);
-      border-radius: 12px;
-      background: transparent;
-      color: var(--forest);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .complete-button[aria-pressed="true"] {
-      background: var(--forest);
-      color: var(--white);
-    }
-
-    .support-column {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .support-card {
-      padding: 27px;
-      border: 1px solid var(--line);
-      border-radius: 25px;
-      background: var(--white);
-    }
-
-    .support-card h3 {
-      margin: 7px 0 19px;
-      font-family: var(--display);
-      font-size: 31px;
-      font-weight: 400;
-      letter-spacing: -0.025em;
-    }
-
-    .benefit-list {
-      display: grid;
-      gap: 18px;
-    }
-
-    .benefit {
-      display: grid;
-      grid-template-columns: 43px 1fr;
+      grid-template-columns: 42px 1fr 32px;
       align-items: center;
-      gap: 13px;
-    }
-
-    .benefit-icon {
-      width: 43px;
-      height: 43px;
-      display: grid;
-      place-items: center;
-      border-radius: 13px;
-      background: var(--paper);
-      color: var(--forest);
-    }
-
-    .benefit-icon svg {
-      width: 21px;
-      height: 21px;
-    }
-
-    .benefit strong,
-    .benefit span {
-      display: block;
-    }
-
-    .benefit strong {
-      font-size: 15px;
-    }
-
-    .benefit span {
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .coach-card {
-      position: relative;
-      overflow: hidden;
-      background: var(--peach);
-    }
-
-    .coach-card::after {
-      position: absolute;
-      right: -28px;
-      bottom: -48px;
-      width: 150px;
-      height: 150px;
-      border: 28px solid rgba(255, 254, 249, 0.34);
-      border-radius: 50%;
-      content: "";
-    }
-
-    .coach-card p {
-      position: relative;
-      z-index: 1;
-      max-width: 29ch;
-      margin: 0;
-      font-family: var(--display);
-      font-size: 25px;
-      line-height: 1.2;
-    }
-
-    .coach-card small {
-      position: relative;
-      z-index: 1;
-      display: block;
-      margin-top: 17px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .safety-card {
-      background: transparent;
-    }
-
-    .safety-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .site-footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 28px 0 38px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .mobile-start {
-      display: none;
-    }
-
-    .workout-dialog {
-      width: min(1040px, calc(100vw - 32px));
-      max-width: none;
-      max-height: min(900px, calc(100dvh - 32px));
-      padding: 0;
-      overflow: hidden;
-      border: 0;
-      border-radius: 30px;
-      background: var(--white);
-      color: var(--ink);
-      box-shadow: 0 36px 100px rgba(10, 30, 24, 0.35);
-      overscroll-behavior: contain;
-    }
-
-    .workout-dialog::backdrop {
-      background: rgba(15, 37, 29, 0.72);
-      backdrop-filter: blur(8px);
-    }
-
-    .workout-shell {
-      max-height: min(900px, calc(100dvh - 32px));
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
-    }
-
-    .workout-topbar {
-      min-height: 82px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 18px;
-      padding: 15px 22px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .workout-close {
-      min-height: 50px;
-      justify-self: start;
-      padding: 0 18px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--paper);
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .workout-step {
-      font-size: 16px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .workout-profile {
-      justify-self: end;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .workout-main {
-      min-height: 0;
-      overflow-y: auto;
-      display: grid;
-      grid-template-columns: minmax(340px, 0.86fr) minmax(380px, 1fr);
-      gap: 38px;
-      padding: 34px;
-      overscroll-behavior: contain;
-    }
-
-    .workout-media {
-      min-width: 0;
-    }
-
-    .workout-art {
-      display: none;
-    }
-
-    .workout-video {
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-      display: block;
-      aspect-ratio: 16 / 9;
-      padding: 0;
-      border: 0;
-      border-radius: 24px;
-      background: var(--forest);
-      cursor: pointer;
-      color: var(--white);
-    }
-
-    .workout-video img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .workout-video::after {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent 34%, rgba(10, 30, 24, 0.78));
-      content: "";
-    }
-
-    .video-play {
-      width: 68px;
-      height: 68px;
-      position: absolute;
-      z-index: 1;
-      top: 50%;
-      left: 50%;
-      display: grid;
-      place-items: center;
-      border: 4px solid rgba(255, 255, 255, 0.7);
-      border-radius: 50%;
-      background: var(--acid);
-      color: var(--forest);
-      font-size: 24px;
-      transform: translate(-50%, -50%);
-    }
-
-    .video-label {
-      position: absolute;
-      z-index: 1;
-      right: 20px;
-      bottom: 18px;
-      left: auto;
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
       gap: 12px;
       text-align: left;
+      cursor: pointer;
     }
 
-    .video-label strong,
-    .video-label small {
-      display: block;
-    }
+    .day-button[aria-pressed="true"] { border-color: var(--ink); background: var(--card); }
+    .day-date { color: var(--muted); font-size: 13px; font-weight: 750; text-align: center; }
+    .day-date strong { display: block; color: var(--ink); font-size: 19px; line-height: 1.1; }
+    .day-title { font-size: 16px; font-weight: 800; }
+    .day-subtitle { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; font-weight: 550; }
+    .day-arrow { font-size: 22px; }
 
-    .video-label strong {
-      font-size: 18px;
-    }
-
-    .video-label small {
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 12px;
-    }
-
-    .video-length {
-      flex: 0 0 auto;
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.16);
-      font-size: 12px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .video-frame {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      border-radius: 24px;
-      background: #000;
-    }
-
-    .video-frame iframe {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border: 0;
-    }
-
-    .video-note {
-      margin: 13px 2px 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .workout-copy {
-      min-width: 0;
-      align-self: center;
-    }
-
-    .workout-identity {
+    .section-head {
       display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 18px;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 34px 0 16px;
     }
 
-    .workout-icon .exercise-visual {
-      width: 68px;
-      height: 68px;
-    }
+    .section-head h2 { margin: 6px 0 0; font-size: 30px; letter-spacing: -.045em; }
+    .session-toggle { display: flex; padding: 4px; background: #e8e4dc; border-radius: 14px; }
 
-    .workout-category {
-      margin: 0 0 4px;
-      color: var(--muted);
-      font-size: 12px;
+    .session-tab {
+      min-width: 100px;
+      min-height: 46px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      cursor: pointer;
     }
 
-    .workout-dose {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
+    .session-tab[aria-pressed="true"] { background: var(--card); box-shadow: 0 4px 12px rgba(38, 31, 23, .08); }
 
-    .workout-copy h2 {
-      max-width: 15ch;
-      margin: 0 0 24px;
-      font-family: var(--display);
-      font-size: 52px;
-      font-weight: 400;
-      letter-spacing: -0.035em;
-      line-height: 0.98;
-      text-wrap: balance;
-    }
+    .exercise-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 
-    .workout-prompt {
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .workout-cues {
-      display: grid;
-      gap: 10px;
-      margin: 0;
+    .exercise-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      min-width: 0;
+      cursor: pointer;
       padding: 0;
-      list-style: none;
-      counter-reset: cues;
+      text-align: left;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
-    .workout-cues li {
-      min-height: 62px;
-      display: grid;
-      grid-template-columns: 38px 1fr;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--paper);
-      font-size: 17px;
-      font-weight: 600;
-      counter-increment: cues;
+    .exercise-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+    .exercise-media {
+      aspect-ratio: 16 / 8.8;
+      position: relative;
+      overflow: hidden;
+      background: var(--sage-soft);
     }
 
-    .workout-cues li::before {
+    .exercise-media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.78) contrast(.93); }
+    .exercise-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(0,0,0,.24)); }
+
+    .card-number {
+      position: absolute;
+      z-index: 1;
+      top: 12px;
+      left: 12px;
       width: 34px;
       height: 34px;
       display: grid;
       place-items: center;
       border-radius: 50%;
-      background: var(--sage);
-      color: var(--forest);
+      background: var(--card);
       font-size: 14px;
-      font-weight: 800;
-      content: counter(cues);
+      font-weight: 850;
     }
+
+    .card-play {
+      position: absolute;
+      z-index: 1;
+      right: 12px;
+      bottom: 12px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: white;
+      font-size: 14px;
+    }
+
+    .exercise-copy { padding: 17px 18px 18px; }
+    .exercise-copy h3 { margin: 0; font-size: 18px; line-height: 1.15; letter-spacing: -.025em; }
+    .exercise-meta { margin-top: 9px; display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; font-weight: 700; }
+    .exercise-meta strong { color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .rules-card {
+      margin-top: 34px;
+      padding: 26px;
+      border-radius: var(--radius-lg);
+      display: grid;
+      grid-template-columns: 1.05fr repeat(3, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .rules-intro { padding: 8px 16px 8px 4px; }
+    .rules-intro h2 { margin: 8px 0 6px; font-size: 26px; letter-spacing: -.04em; }
+    .rules-intro p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+
+    .rule {
+      min-height: 130px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #f3f0e9;
+    }
+
+    .rule:nth-child(2) { background: var(--sage-soft); }
+    .rule:nth-child(3) { background: #f7e9c7; }
+    .rule:nth-child(4) { background: #e6e3f1; }
+    .rule strong { display: block; font-size: 18px; letter-spacing: -.02em; }
+    .rule span { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.4; }
+
+    .mobile-profile { display: none; }
+
+    dialog {
+      width: min(1120px, calc(100vw - 32px));
+      height: min(780px, calc(100vh - 32px));
+      max-width: none;
+      max-height: none;
+      padding: 0;
+      border: 0;
+      border-radius: 30px;
+      color: var(--ink);
+      background: var(--card);
+      box-shadow: 0 32px 100px rgba(20, 17, 14, .3);
+      overflow: hidden;
+    }
+
+    dialog::backdrop { background: rgba(29, 27, 24, .62); backdrop-filter: blur(4px); }
+
+    .workout-shell { height: 100%; display: grid; grid-template-rows: 72px 1fr 88px; }
+
+    .workout-header {
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .icon-button {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--card);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    .workout-progress { text-align: center; }
+    .workout-progress strong { display: block; font-size: 16px; }
+    .workout-progress span { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+    .workout-body {
+      min-height: 0;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr);
+      gap: 34px;
+      padding: 28px;
+    }
+
+    .video-panel { min-width: 0; }
+    .video-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 24px; overflow: hidden; background: #ddd7cc; }
+
+    .video-button {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 24px;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #ddd7cc;
+    }
+
+    .video-button img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.82) contrast(.9); }
+    .video-button::after { content: ""; position: absolute; inset: 0; background: rgba(20, 17, 14, .18); }
+
+    .big-play {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--coral);
+      color: white;
+      box-shadow: 0 16px 36px rgba(0,0,0,.22);
+      font-size: 26px;
+    }
+
+    .video-source { margin: 12px 4px 0; color: var(--muted); font-size: 13px; font-weight: 650; }
+
+    .guide-copy { padding: 4px 4px 0; }
+    .guide-category { margin: 0; color: var(--coral-dark); font-size: 13px; line-height: 1; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    .guide-copy h2 { margin: 12px 0 10px; font-size: clamp(34px, 4vw, 54px); line-height: 1; letter-spacing: -.055em; }
+
+    .dose-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .dose-pill { min-height: 40px; padding: 0 14px; display: inline-flex; align-items: center; border-radius: 999px; background: var(--sage-soft); font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .dose-pill.secondary { background: #eeeae2; color: var(--muted); }
+
+    .cue-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; counter-reset: cue; }
+    .cue-list li { min-height: 58px; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; font-size: 17px; line-height: 1.35; font-weight: 650; }
+    .cue-list li::before { counter-increment: cue; content: counter(cue); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #eeeae2; font-size: 14px; font-weight: 850; }
 
     .workout-actions {
-      min-height: 88px;
-      display: grid;
-      grid-template-columns: minmax(130px, 0.35fr) minmax(240px, 1fr);
-      gap: 12px;
-      padding: 15px 22px;
+      padding: 14px 24px;
       border-top: 1px solid var(--line);
-      background: var(--white);
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 12px;
+      background: var(--card);
     }
 
-    .workout-actions button {
+    .secondary-button {
       min-height: 58px;
-      border-radius: 15px;
-      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
       font-size: 17px;
       font-weight: 800;
+      cursor: pointer;
     }
 
-    .workout-previous {
-      border: 1px solid var(--line);
-      background: var(--paper);
-      color: var(--forest);
+    .secondary-button:disabled { opacity: .42; cursor: default; }
+    .workout-actions .primary-button { width: 100%; }
+
+    .rules-dialog { width: min(680px, calc(100vw - 32px)); height: auto; max-height: calc(100vh - 32px); }
+    .rules-dialog-inner { padding: 30px; }
+    .rules-dialog-head { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+    .rules-dialog h2 { margin: 5px 0 0; font-size: 36px; letter-spacing: -.05em; }
+    .rules-dialog-grid { display: grid; gap: 12px; margin-top: 24px; }
+    .rule-detail { padding: 18px; border-radius: 18px; background: #f3f0e9; }
+    .rule-detail strong { display: block; font-size: 18px; }
+    .rule-detail p { margin: 7px 0 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
+    .safety-note { margin: 18px 0 0; padding: 16px 18px; border-left: 4px solid var(--coral); background: #fae6df; font-size: 15px; line-height: 1.45; }
+
+    .celebration {
+      position: fixed;
+      z-index: 20;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 14px 20px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .celebration.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1050px) {
+      .shell { grid-template-columns: 210px minmax(0, 1fr); }
+      .sidebar { padding-inline: 16px; }
+      .above-fold { grid-template-columns: 1fr; }
+      .week-card { min-height: 0; }
+      .days { grid-template-columns: repeat(3, 1fr); }
+      .day-button { grid-template-columns: 38px 1fr; }
+      .day-arrow { display: none; }
+      .exercise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rules-card { grid-template-columns: 1fr 1fr; }
+      .rules-intro { grid-column: 1 / -1; }
     }
 
-    .workout-previous:disabled {
-      opacity: 0.45;
-      cursor: default;
-    }
-
-    .workout-next {
-      border: 0;
-      background: var(--acid);
-      color: var(--forest);
-    }
-
-    @media (max-width: 980px) {
-      .site-header {
-        grid-template-columns: 1fr auto;
-      }
-
-      .nav {
-        display: none;
-      }
-
-      .hero-grid,
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-copy {
-        width: 65%;
-      }
-
-      .week-card {
-        min-height: auto;
-      }
-
-      .rest-note {
-        margin-top: 18px;
-      }
-
-      .support-column {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .safety-card {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding-bottom: calc(90px + env(safe-area-inset-bottom));
-      }
-
-      .page {
-        width: min(100% - 24px, 1320px);
-      }
-
-      .site-header {
-        min-height: 70px;
-      }
-
-      .brand-mark {
-        width: 31px;
-        height: 31px;
-        font-size: 21px;
-      }
-
-      .brand-name {
-        font-size: 22px;
-      }
-
-      .profile-switch button {
-        min-width: 64px;
-        min-height: 48px;
-        font-size: 14px;
-      }
-
-      .hero-grid {
-        gap: 12px;
-      }
-
-      .hero {
-        min-height: 392px;
-        border-radius: 23px;
-      }
-
-      .hero-copy {
-        width: 77%;
-        padding: 33px 0 31px 27px;
-      }
-
-      .hero h1 {
-        font-size: 48px;
-      }
-
-      .hero-lede {
-        max-width: 220px;
-        margin: 19px 0 23px;
-        font-size: 15px;
-        line-height: 1.5;
-      }
-
-      .hero-actions {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .primary-button {
-        min-height: 50px;
-      }
-
-      .hero-art {
-        right: -45px;
-        width: 66%;
-        opacity: 0.78;
-      }
-
-      .week-card {
-        padding: 22px 18px;
-        border-radius: 23px;
-      }
-
-      .week-card h2 {
-        margin-bottom: 16px;
-        font-size: 30px;
-      }
-
-      .day-list {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 7px;
-      }
-
-      .day-button {
-        min-height: 114px;
-        grid-template-columns: 1fr;
-        align-content: center;
-        justify-items: center;
-        gap: 8px;
-        padding: 9px 5px;
-        text-align: center;
-      }
-
-      .day-date {
-        display: flex;
-        align-items: baseline;
-        gap: 5px;
-      }
-
-      .day-name strong {
-        font-size: 12px;
-      }
-
-      .day-name span,
-      .day-duration {
-        display: none;
-      }
-
-      .main-grid {
-        gap: 38px;
-        margin: 52px 0 56px;
-      }
-
-      .session-header {
-        align-items: center;
-      }
-
-      .session-header h2 {
-        font-size: 37px;
-      }
-
-      .progress-copy {
-        display: none;
-      }
-
-      .prep-card {
-        grid-template-columns: auto 1fr;
-      }
-
-      .prep-time {
-        display: none;
-      }
-
-      .exercise summary {
-        min-height: 98px;
-        grid-template-columns: 56px minmax(0, 1fr) 66px;
-        gap: 11px;
-        padding: 11px;
-      }
-
-      .exercise-visual {
-        width: 56px;
-        height: 56px;
-        border-radius: 14px;
-      }
-
-      .exercise-visual svg {
-        width: 36px;
-        height: 36px;
-      }
-
-      .exercise-copy strong {
-        overflow: visible;
-        line-height: 1.2;
-        text-overflow: clip;
-        white-space: normal;
-      }
-
-      .exercise-dose {
-        grid-column: 2;
-        margin-top: -20px;
-        padding-top: 25px;
-        text-align: left;
-        font-size: 14px;
-      }
-
-      .exercise-dose span {
-        display: inline;
-        margin-left: 5px;
-      }
-
-      .chevron {
-        grid-column: 3;
-        grid-row: 1;
-        width: 66px;
-        height: 46px;
-      }
-
-      .exercise-details {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        margin: 0 11px 11px;
-      }
-
-      .complete-button {
-        width: 100%;
-      }
-
-      .support-column {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-
-      .safety-card {
-        grid-column: auto;
-      }
-
-      .site-footer {
-        flex-direction: column;
-      }
-
-      .mobile-start {
-        position: fixed;
-        z-index: 10;
-        right: 12px;
-        bottom: calc(12px + env(safe-area-inset-bottom));
-        left: 12px;
-        min-height: 58px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 0 13px 0 20px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 17px;
-        background: var(--forest);
-        color: var(--white);
-        box-shadow: 0 15px 35px rgba(23, 55, 45, 0.28);
-      }
-
-      .mobile-start span {
-        font-size: 14px;
-        font-weight: 800;
-      }
-
-      .mobile-start button {
-        min-height: 48px;
-        padding: 0 15px;
-        border: 0;
-        border-radius: 11px;
-        background: var(--acid);
-        color: var(--forest);
-        cursor: pointer;
-        font-size: 15px;
-        font-weight: 800;
-      }
-
-      .workout-dialog {
-        width: 100vw;
-        height: 100dvh;
-        max-height: 100dvh;
-        margin: 0;
-        border-radius: 0;
-      }
-
-      .workout-shell {
-        height: 100dvh;
-        max-height: 100dvh;
-      }
-
-      .workout-topbar {
-        min-height: 64px;
-        grid-template-columns: 1fr auto;
-        gap: 12px;
-        padding: 7px 14px;
-      }
-
-      .workout-close {
-        min-height: 50px;
-        padding: 0 14px;
-      }
-
-      .workout-step {
-        font-size: 15px;
-      }
-
-      .workout-profile {
-        display: none;
-      }
-
-      .workout-main {
-        grid-template-columns: 1fr;
-        align-content: start;
-        gap: 14px;
-        padding: 14px 20px 10px;
-      }
-
-      .workout-video,
-      .video-frame {
-        border-radius: 18px;
-      }
-
-      .video-play {
-        width: 58px;
-        height: 58px;
-        font-size: 21px;
-      }
-
-      .video-label {
-        right: 15px;
-        bottom: 13px;
-        left: auto;
-      }
-
-      .video-label strong {
-        font-size: 16px;
-      }
-
-      .video-note {
-        margin-top: 9px;
-        font-size: 12px;
-      }
-
-      .workout-copy {
-        align-self: start;
-      }
-
-      .workout-identity {
-        margin-bottom: 10px;
-      }
-
-      .workout-icon .exercise-visual {
-        width: 58px;
-        height: 58px;
-      }
-
-      .workout-dose {
-        font-size: 17px;
-      }
-
-      .workout-copy h2 {
-        margin-bottom: 15px;
-        font-size: 42px;
-      }
-
-      .workout-prompt {
-        margin-bottom: 8px;
-      }
-
-      .workout-cues li {
-        min-height: 64px;
-        font-size: 17px;
-      }
-
-      .workout-actions {
-        min-height: 80px;
-        grid-template-columns: minmax(104px, 0.42fr) minmax(190px, 1fr);
-        gap: 9px;
-        padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-      }
-
-      .workout-actions button {
-        min-height: 58px;
-        padding: 0 12px;
-        font-size: 15px;
-      }
+    @media (max-width: 720px) {
+      .shell { display: block; }
+      .sidebar { display: none; }
+      .main { padding: 12px 16px 36px; }
+      .dashboard { max-width: 100%; }
+      .topbar { margin-bottom: 12px; min-height: 50px; }
+      .mobile-brand { display: flex; align-items: center; gap: 9px; font-size: 18px; font-weight: 850; letter-spacing: -.04em; }
+      .mobile-brand .brand-mark { width: 34px; height: 34px; font-size: 15px; }
+      .greeting { display: none; }
+      .help-button { min-height: 46px; padding: 0 14px; }
+      .mobile-profile { display: flex; gap: 8px; overflow-x: auto; margin: 4px 0 14px; padding-bottom: 2px; }
+      .mobile-profile .profile-button { min-width: 130px; min-height: 52px; grid-template-columns: 34px 1fr; padding: 6px 9px; border-color: var(--line); }
+      .mobile-profile .avatar { width: 34px; height: 34px; }
+      .mobile-profile .profile-note, .mobile-profile .profile-check { display: none; }
+      .above-fold { display: block; }
+      .next-card { min-height: 308px; padding: 24px; border-radius: 24px; }
+      .next-card::after { width: 180px; height: 180px; right: -80px; top: -70px; }
+      .next-card h1 { margin-top: 12px; font-size: 47px; max-width: 290px; }
+      .next-summary { max-width: 270px; font-size: 16px; }
+      .start-row { display: block; margin-top: 24px; }
+      .start-row .primary-button { width: 100%; min-height: 60px; }
+      .duration { display: block; margin-top: 10px; text-align: center; }
+      .week-card { margin-top: 14px; padding: 20px; border-radius: 24px; }
+      .week-heading h2 { font-size: 23px; }
+      .week-count { width: 46px; min-width: 46px; height: 46px; }
+      .days { grid-template-columns: 1fr; margin-top: 18px; }
+      .day-button { min-height: 60px; grid-template-columns: 40px 1fr 26px; }
+      .day-arrow { display: block; }
+      .section-head { display: block; margin-top: 28px; }
+      .section-head h2 { font-size: 28px; }
+      .session-toggle { margin-top: 15px; }
+      .session-tab { flex: 1; min-height: 48px; }
+      .exercise-grid { grid-template-columns: 1fr; gap: 12px; }
+      .exercise-card { display: grid; grid-template-columns: 122px minmax(0, 1fr); min-height: 116px; }
+      .exercise-media { aspect-ratio: auto; height: 100%; }
+      .card-number { width: 30px; height: 30px; top: 9px; left: 9px; }
+      .card-play { width: 34px; height: 34px; right: 9px; bottom: 9px; }
+      .exercise-copy { align-self: center; padding: 16px; }
+      .exercise-copy h3 { font-size: 18px; }
+      .exercise-meta { display: block; margin-top: 8px; }
+      .exercise-meta span { display: block; margin-top: 3px; }
+      .rules-card { margin-top: 28px; padding: 18px; grid-template-columns: 1fr; border-radius: 24px; }
+      .rules-intro { padding: 4px 4px 8px; }
+      .rule { min-height: 0; }
+
+      dialog { width: 100vw; height: 100svh; border-radius: 0; }
+      .workout-shell { grid-template-rows: 64px 1fr 80px; }
+      .workout-header { padding: 0 14px; grid-template-columns: 44px 1fr 44px; }
+      .icon-button { width: 44px; height: 44px; }
+      .workout-body { display: block; padding: 16px 16px 22px; }
+      .video-button, .video-frame { border-radius: 18px; }
+      .big-play { width: 64px; height: 64px; }
+      .video-source { margin-top: 8px; font-size: 12px; }
+      .guide-copy { padding-top: 14px; }
+      .guide-copy h2 { margin: 8px 0; font-size: 34px; }
+      .dose-row { margin-bottom: 12px; }
+      .dose-pill { min-height: 36px; font-size: 14px; }
+      .cue-list { gap: 4px; }
+      .cue-list li { min-height: 48px; font-size: 16px; grid-template-columns: 30px 1fr; gap: 10px; }
+      .cue-list li::before { width: 30px; height: 30px; }
+      .workout-actions { padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); grid-template-columns: 108px 1fr; gap: 8px; }
+      .secondary-button, .workout-actions .primary-button { min-height: 56px; font-size: 16px; border-radius: 16px; }
+      .rules-dialog { width: 100vw; height: 100svh; max-height: none; }
+      .rules-dialog-inner { padding: 22px 18px 30px; overflow-y: auto; height: 100%; }
+      .rules-dialog h2 { font-size: 32px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#session">Skip to Today’s Workout</a>
-  <header class="site-header page">
-    <a class="brand" href="#top" aria-label="Immortals home">
-      <span class="brand-mark" aria-hidden="true">∞</span>
-      <span class="brand-name">Immortals</span>
-    </a>
-
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="active" href="#top">Today</a>
-      <a href="#session">Program</a>
-      <a href="#why">Learn</a>
-    </nav>
-
-    <div class="profile-switch" role="group" aria-label="Choose training profile">
-      <button type="button" data-profile="Mom" aria-pressed="true">Mom</button>
-      <button type="button" data-profile="Aunt" aria-pressed="false">Aunt</button>
-    </div>
-  </header>
-
-  <main id="top" class="page">
-    <section class="hero-grid" aria-labelledby="hero-title">
-      <div class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Week 1 · Full Body A/B</p>
-          <h1 id="hero-title">Built for the long game.</h1>
-          <p class="hero-lede">Real machines. Real dumbbells. A simple plan that gets heavier as you get stronger.</p>
-          <div class="hero-actions">
-            <button class="primary-button" type="button" data-start aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span data-start-label>Start Workout A</span>
-              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5 13 10l-6 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /></svg>
-            </button>
-            <span class="session-meta">6 proper lifts · about 55 min</span>
-          </div>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Profile selection">
+      <div class="brand"><span class="brand-mark">IM</span><span>IMMORTALS</span></div>
+      <div>
+        <p class="nav-label">Training for</p>
+        <div class="profile-stack">
+          <button class="profile-button" type="button" data-profile="Mom" aria-pressed="true">
+            <span class="avatar">M</span><span><span class="profile-name">Mom</span><span class="profile-note">Strong start</span></span><span class="profile-check">✓</span>
+          </button>
+          <button class="profile-button" type="button" data-profile="Aunt" aria-pressed="false">
+            <span class="avatar">A</span><span><span class="profile-name">Aunt</span><span class="profile-note">Strong start</span></span><span class="profile-check">✓</span>
+          </button>
         </div>
-
-        <svg class="hero-art" viewBox="0 0 440 420" role="img" aria-label="A strong person walking with two weights">
-          <path d="M94 420V198C94 89 166 34 270 34s170 57 170 166v220Z" fill="#285142" />
-          <circle cx="321" cy="105" r="78" fill="#dfff78" />
-          <path d="M125 352h279" stroke="#8aa08e" stroke-linecap="round" stroke-width="2" />
-          <circle cx="245" cy="114" r="24" fill="#fffef9" />
-          <path d="M244 141c-7 30-5 66 7 103m-6-84-57 73m61-72 68 67m-65 14-40 100m42-99 56 96" fill="none" stroke="#fffef9" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
-          <path d="M178 232h-27m177-4h-27" stroke="#17372d" stroke-linecap="round" stroke-width="8" />
-          <rect x="135" y="219" width="21" height="31" rx="5" fill="#f5b39c" />
-          <rect x="323" y="215" width="21" height="31" rx="5" fill="#f5b39c" />
-          <path d="M195 341h35m60-2h38" stroke="#fffef9" stroke-linecap="round" stroke-width="15" />
-          <text x="321" y="114" fill="#17372d" font-family="Manrope, sans-serif" font-size="15" font-weight="800" text-anchor="middle">KEEP GOING</text>
-        </svg>
       </div>
+      <div class="side-rule"><strong>Leave 2 good reps.</strong><span>Finish every set while the next two reps would still look clean.</span></div>
+    </aside>
 
-      <aside class="week-card" aria-labelledby="week-title">
-        <p class="section-kicker">Your split</p>
-        <h2 id="week-title">A / B / A this week</h2>
-        <div class="day-list" role="group" aria-label="Training days">
-          <button class="day-button" type="button" aria-pressed="true" data-day="Monday" data-workout="A">
-            <span class="day-date"><strong>17</strong><span>Mon</span></span>
-            <span class="day-name"><strong>Workout A</strong><span>Press · pull · hinge</span></span>
-            <span class="day-duration">55 min</span>
-          </button>
-          <button class="day-button" type="button" aria-pressed="false" data-day="Wednesday" data-workout="B">
-            <span class="day-date"><strong>19</strong><span>Wed</span></span>
-            <span class="day-name"><strong>Workout B</strong><span>Squat · row · thrust</span></span>
-            <span class="day-duration">55 min</span>
-          </button>
-          <button class="day-button" type="button" aria-pressed="false" data-day="Friday" data-workout="A">
-            <span class="day-date"><strong>21</strong><span>Fri</span></span>
-            <span class="day-name"><strong>Workout A</strong><span>Add reps if form is clean</span></span>
-            <span class="day-duration">55 min</span>
-          </button>
-        </div>
-        <p class="rest-note">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v3m0 9v3m7.5-7.5h-3m-9 0h-3m12.8-5.3-2.1 2.1m-6.4 6.4-2.1 2.1m10.6 0-2.1-2.1M6.8 6.8 4.7 4.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.6" /><circle cx="10" cy="10" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          Rest between sessions. Next week flips to B / A / B.
-        </p>
-      </aside>
-    </section>
-
-    <section class="main-grid" id="session" aria-labelledby="session-title">
-      <div class="session-panel">
-        <header class="session-header">
-          <div>
-            <p class="section-kicker" id="plan-owner">Mom’s plan · Monday · Workout A</p>
-            <h2 id="session-title">Full Body A</h2>
-          </div>
-          <div class="progress-wrap" aria-live="polite">
-            <div class="progress-ring" id="progress-ring"><span id="progress-count">0/6</span></div>
-            <div class="progress-copy"><strong>Session progress</strong><span>Tap any move to open its guide</span></div>
-          </div>
+    <main class="main">
+      <div class="dashboard">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark">IM</span><span>IMMORTALS</span></div>
+          <p class="greeting">Welcome back, <span data-owner>Mom</span>. Let us get stronger.</p>
+          <button class="help-button" type="button" data-rules>Training rules</button>
         </header>
 
-        <div class="prep-card">
-          <span class="prep-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.8-1.3 4.3-4.8 5.5-9L12 3l1.2 6.2c.7 3.7 3 6.5 6.8 7.8M5 20h14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg>
-          </span>
-          <span class="prep-copy"><strong>Warm up like a lifter</strong><span>5 min easy cardio, then 2 lighter sets before the first big lift</span></span>
-          <span class="prep-time">7 min</span>
+        <div class="mobile-profile" aria-label="Profile selection">
+          <button class="profile-button" type="button" data-profile="Mom" aria-pressed="true"><span class="avatar">M</span><span class="profile-name">Mom</span></button>
+          <button class="profile-button" type="button" data-profile="Aunt" aria-pressed="false"><span class="avatar">A</span><span class="profile-name">Aunt</span></button>
         </div>
 
-        <div class="exercise-list" id="exercise-list">
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#f5b39c">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="29" cy="11" r="5" /><path d="M28 17v17l10 10m-10-18-10 9m11-1-8 14m17-4v10M12 36h21v18H11" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Power · Daily life</span><strong>Bench sit-to-stand</strong></span>
-              <span class="exercise-dose">2 × 5<span>Easy effort</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Sit near the front of the bench. Place both feet firmly on the floor, lean slightly forward, and stand smoothly. Lower with control. From week three, stand with quick intent while keeping the descent slow.</p>
-                <div class="cue-list"><span>Whole foot down</span><span>Stand tall</span><span>Stop before fatigue</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
+        <section class="above-fold" aria-label="Next training session">
+          <article class="next-card">
+            <div class="next-copy">
+              <p class="eyebrow">Up next · Monday</p>
+              <h1 data-session-heading>Full Body A</h1>
+              <p class="next-summary"><span data-exercise-count>6 exercises</span> · Machines, dumbbells and a loaded carry.</p>
             </div>
-          </details>
+            <div class="start-row">
+              <button class="primary-button" type="button" data-start>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 7 8 5-8 5V7Z" fill="currentColor"/></svg>
+                Start workout
+              </button>
+              <span class="duration">About 50 minutes</span>
+            </div>
+          </article>
 
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#cddac8">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="22" cy="14" r="5" /><path d="m25 19 10 11 8 4m-17-13-8 18m17-9-7 18m15-14 9 13M12 52h43M46 15l7 22M43 15h7" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Legs · Hips</span><strong>Leg press</strong></span>
-              <span class="exercise-dose">2 × 8–12<span>3 reps left</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Set the seat so the hips and lower back remain supported. Place feet about hip-width apart. Lower only as far as feels comfortable, then push through the whole foot without locking the knees hard.</p>
-                <div class="cue-list"><span>Knees follow toes</span><span>Back supported</span><span>Exhale as you push</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
+          <aside class="week-card" aria-label="Weekly schedule">
+            <div class="week-heading">
+              <div><p class="section-kicker">This week</p><h2>Three strong days</h2></div>
+              <span class="week-count">0/3</span>
             </div>
-          </details>
+            <div class="days">
+              <button class="day-button" type="button" data-day="A" aria-pressed="true"><span class="day-date">MON<strong>17</strong></span><span class="day-title">Workout A<span class="day-subtitle">Full body · 6 lifts</span></span><span class="day-arrow">›</span></button>
+              <button class="day-button" type="button" data-day="B" aria-pressed="false"><span class="day-date">WED<strong>19</strong></span><span class="day-title">Workout B<span class="day-subtitle">Full body · 6 lifts</span></span><span class="day-arrow">›</span></button>
+              <button class="day-button" type="button" data-day="A" aria-pressed="false"><span class="day-date">FRI<strong>21</strong></span><span class="day-title">Workout A<span class="day-subtitle">Full body · 6 lifts</span></span><span class="day-arrow">›</span></button>
+            </div>
+          </aside>
+        </section>
 
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#dfff78">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="34" cy="10" r="5" /><path d="m33 16-10 17 15 7m-5-24 9 17m-19 0-5 18m20-11 7 12M15 34h6m18 0h6M14 31v7m32-7v7" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Glutes · Hamstrings</span><strong>Dumbbell hip hinge</strong></span>
-              <span class="exercise-dose">2 × 8–12<span>Light load</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Hold the weights close to the thighs. Soften the knees and send the hips backward as if closing a car door. Stop when the hamstrings feel loaded, then squeeze the floor and stand tall.</p>
-                <div class="cue-list"><span>Hips travel back</span><span>Weights stay close</span><span>Long spine</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#d8d8ef">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="16" r="5" /><path d="M25 21v22m0-13 13-8m-13 8 13 8M16 49h30M12 43h28m2-27v29m-3-29h7" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Chest · Arms</span><strong>Machine chest press</strong></span>
-              <span class="exercise-dose">2 × 8–12<span>3 reps left</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Adjust the seat so the handles sit around mid-chest. Keep the back against the pad and shoulders relaxed. Press forward smoothly, pause, and return without letting the stack slam.</p>
-                <div class="cue-list"><span>Wrists straight</span><span>Shoulders relaxed</span><span>Smooth return</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#b9d8d6">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="24" cy="14" r="5" /><path d="M24 20v20m0-13 15 4m-15-4-8 10m8 3-9 13m9-13 12 13M39 19v25m0-13h12m-4-4 4 4-4 4" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Back · Arms</span><strong>Seated cable row</strong></span>
-              <span class="exercise-dose">2 × 8–12<span>3 reps left</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Sit tall with feet secure. Begin with long arms, then pull the handle toward the lower ribs. Let the shoulder blades move naturally and keep the torso quiet throughout the repetition.</p>
-                <div class="cue-list"><span>Tall chest</span><span>Elbows travel back</span><span>No rocking</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#f4d8a8">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="29" cy="10" r="5" /><path d="M29 16v18m0-9-9 8m9-8 9 8m-9 1-8 14m8-14 10 8m-19 7h18v8H12m27-15h13v15H38" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Stairs · Balance</span><strong>Low step-up</strong></span>
-              <span class="exercise-dose">2 × 6<span>Each side</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Use a low step and keep a rail within easy reach. Place the whole foot on the step, lean slightly forward, and rise with control. Step down softly and reset before the next repetition.</p>
-                <div class="cue-list"><span>Whole foot on step</span><span>Quiet landing</span><span>Rail nearby</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#e0d1c5">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="31" cy="10" r="5" /><path d="M31 16v23m0-15-9 11m9-11 9 11m-9 4-8 12m8-12 8 12M14 53h36m-25-1v-7m12 7v-7" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Ankles · Calves</span><strong>Supported calf raise</strong></span>
-              <span class="exercise-dose">2 × 10–15<span>Slow control</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Stand tall with fingertips on a support. Rise onto the balls of both feet, pause briefly, and lower all the way with control. Keep pressure even across the big toe and little toe.</p>
-                <div class="cue-list"><span>Tall posture</span><span>Pause at top</span><span>Slow lower</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-
-          <details class="exercise" data-exercise>
-            <summary aria-haspopup="dialog" aria-controls="workout-dialog">
-              <span class="exercise-visual" style="--tone:#cddac8">
-                <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="10" r="5" /><path d="M32 16v23m0-15-11 13m11-13 11 13m-11 2-10 14m10-14 11 14M14 34v16m-5-16h10m31 0v16m-5-16h10" /></svg>
-              </span>
-              <span class="exercise-copy"><span>Grip · Core · Walking</span><strong>Suitcase carry</strong></span>
-              <span class="exercise-dose">2 × 20 m<span>Each side</span></span>
-              <span class="chevron"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" /></svg></span>
-            </summary>
-            <div class="exercise-details">
-              <div>
-                <p>Hold one manageable dumbbell at your side and walk at a natural pace. Stay tall without leaning toward or away from the weight. Turn carefully, switch hands, and repeat.</p>
-                <div class="cue-list"><span>Quiet shoulders</span><span>Short steady steps</span><span>No leaning</span></div>
-              </div>
-              <button class="complete-button" type="button" aria-pressed="false">Mark complete</button>
-            </div>
-          </details>
-        </div>
-      </div>
-
-      <aside class="support-column" id="why">
-        <section class="support-card">
-          <p class="section-kicker">Why this works</p>
-          <h3>A proper full-body split</h3>
-          <div class="benefit-list">
-            <div class="benefit">
-              <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20h12M8 17V9h8v8M9 9V5h6v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Big lower-body work</strong><span>Press, squat, hinge, curl, and thrust under load.</span></span>
-            </div>
-            <div class="benefit">
-              <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8l-3 5h6L7 8Zm10 0-3 5h6l-3-5Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Push and pull both ways</strong><span>Press forward and overhead. Pull down and back.</span></span>
-            </div>
-            <div class="benefit">
-              <span class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10v11H7zM9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" /></svg></span>
-              <span><strong>Brace under real load</strong><span>Carries and Pallof presses build a stronger trunk.</span></span>
+        <section aria-labelledby="session-title">
+          <div class="section-head">
+            <div><p class="section-kicker">Your session</p><h2 id="session-title">Workout A · 6 exercises</h2></div>
+            <div class="session-toggle" aria-label="Choose workout">
+              <button class="session-tab" type="button" data-tab="A" aria-pressed="true">Workout A</button>
+              <button class="session-tab" type="button" data-tab="B" aria-pressed="false">Workout B</button>
             </div>
           </div>
+          <div class="exercise-grid" id="exercise-grid"></div>
         </section>
 
-        <section class="support-card coach-card">
-          <p>Own the top of the rep range, then add the smallest available weight.</p>
-          <small>Progression rule · Every week</small>
+        <section class="rules-card" aria-labelledby="rules-title">
+          <div class="rules-intro"><p class="section-kicker">Simple progression</p><h2 id="rules-title">How to get stronger</h2><p>Keep the form tidy. The weight will follow.</p></div>
+          <div class="rule"><strong>1. Start steady</strong><span>Choose a weight you could lift for two more clean reps.</span></div>
+          <div class="rule"><strong>2. Own the range</strong><span>Reach the top of the rep range on every set.</span></div>
+          <div class="rule"><strong>3. Add a little</strong><span>Next time, use the smallest available weight increase.</span></div>
         </section>
-
-        <section class="support-card safety-card">
-          <p class="section-kicker">Train safely</p>
-          <p>Train hard, never sloppy. Stop for chest pressure, faintness, sudden unusual breathlessness, or sharp pain. Adjust around diagnoses, injuries, medication effects, and clinician guidance.</p>
-        </section>
-      </aside>
-    </section>
-  </main>
-
-  <footer class="site-footer page">
-    <span>Immortals · Full-body A/B program</span>
-    <span>Lift well. Get stronger. Keep going.</span>
-  </footer>
-
-  <div class="mobile-start">
-    <span id="mobile-progress" aria-live="polite">0 of 6 complete</span>
-    <button type="button" data-start aria-haspopup="dialog" aria-controls="workout-dialog"><span data-start-label>Start Workout A</span></button>
+      </div>
+    </main>
   </div>
 
-  <dialog class="workout-dialog" id="workout-dialog" aria-labelledby="workout-title">
+  <dialog id="workout-dialog" role="dialog" aria-modal="true" aria-labelledby="guide-title">
     <div class="workout-shell">
-      <header class="workout-topbar">
-        <button class="workout-close" id="workout-close" type="button">Leave Workout</button>
-        <span class="workout-step" id="workout-step" aria-live="polite">Exercise 1 of 6</span>
-        <span class="workout-profile" id="workout-profile">Mom’s Plan</span>
+      <header class="workout-header">
+        <button class="icon-button" type="button" data-close aria-label="Close workout">×</button>
+        <div class="workout-progress"><strong data-workout-name>Workout A</strong><span><span data-step>1</span> of 6</span></div>
+        <span aria-hidden="true"></span>
       </header>
-
-      <div class="workout-main">
-        <div class="workout-media">
-          <div id="video-slot"></div>
-          <p class="video-note" id="video-note"></p>
-        </div>
-
-        <div class="workout-copy">
-          <div class="workout-identity">
-            <div class="workout-icon" id="workout-icon" aria-hidden="true"></div>
-            <div>
-              <p class="workout-category" id="workout-category"></p>
-              <p class="workout-dose" id="workout-dose"></p>
-            </div>
-          </div>
-          <h2 id="workout-title"></h2>
-          <p class="workout-prompt">Remember 3 Things</p>
-          <ol class="workout-cues" id="workout-cues"></ol>
+      <div class="workout-body">
+        <div class="video-panel" id="video-panel"></div>
+        <div class="guide-copy">
+          <p class="guide-category" data-category>Quads · Glutes</p>
+          <h2 id="guide-title" data-guide-title>Leg Press</h2>
+          <div class="dose-row"><span class="dose-pill" data-dose>3 × 8–10</span><span class="dose-pill secondary" data-effort>2 reps left</span></div>
+          <ol class="cue-list" id="cue-list"></ol>
         </div>
       </div>
-
       <footer class="workout-actions">
-        <button class="workout-previous" id="workout-previous" type="button">Previous</button>
-        <button class="workout-next" id="workout-next" type="button">Done, Next Exercise</button>
+        <button class="secondary-button" type="button" data-previous>Previous</button>
+        <button class="primary-button" type="button" data-next>Done · Next exercise</button>
       </footer>
     </div>
   </dialog>
 
-  <script type="text/plain" id="legacy-immortals-script">
-    const exerciseGuides = [
-      {
-        title: "Bench Sit-to-Stand",
-        category: "Power · Daily Life",
-        dose: "2 Sets · 5 Reps",
-        videoId: "29WFLqHgYZ0",
-        videoTitle: "Sit-to-Stand Demonstration",
-        source: "NHS inform",
-        duration: "0:19",
-        cues: [
-          "Place both feet flat and sit near the front of the bench.",
-          "Lean slightly forward, then stand tall.",
-          "Lower slowly and stop well before fatigue."
-        ]
-      },
-      {
-        title: "Leg Press",
-        category: "Legs · Hips",
-        dose: "2 Sets · 8–12 Reps",
-        videoId: "UWLwsdErycg",
-        videoTitle: "Leg Press Demonstration",
-        source: "Nuffield Health",
-        duration: "2:26",
-        cues: [
-          "Keep your hips and back supported by the seat.",
-          "Let your knees follow the direction of your toes.",
-          "Push through the whole foot and avoid locking your knees."
-        ]
-      },
-      {
-        title: "Dumbbell Hip Hinge",
-        category: "Glutes · Hamstrings",
-        dose: "2 Sets · 8–12 Reps",
-        videoId: "F5ZGAP-ZMaI",
-        videoTitle: "Dumbbell Hip Hinge Demonstration",
-        source: "E3 Rehab",
-        duration: "0:11",
-        cues: [
-          "Keep the weights close to your thighs.",
-          "Soften your knees and send your hips backward.",
-          "Keep a long spine, then stand tall."
-        ]
-      },
-      {
-        title: "Machine Chest Press",
-        category: "Chest · Arms",
-        dose: "2 Sets · 8–12 Reps",
-        videoId: "iQYryL41HII",
-        videoTitle: "Machine Chest Press Demonstration",
-        source: "Nuffield Health",
-        duration: "1:51",
-        cues: [
-          "Set the handles near mid-chest and keep your back supported.",
-          "Keep your wrists straight and shoulders relaxed.",
-          "Press and return smoothly without letting the stack slam."
-        ]
-      },
-      {
-        title: "Seated Cable Row",
-        category: "Back · Arms",
-        dose: "2 Sets · 8–12 Reps",
-        videoId: "VmXBWEoIY5c",
-        videoTitle: "Seated Cable Row Demonstration",
-        source: "University of Alberta",
-        duration: "0:35",
-        cues: [
-          "Set your feet securely and sit tall.",
-          "Pull the handle toward your lower ribs.",
-          "Keep your torso quiet without rocking."
-        ]
-      },
-      {
-        title: "Low Step-Up",
-        category: "Stairs · Balance",
-        dose: "2 Sets · 6 Each Side",
-        videoId: "wfhXnLILqdk",
-        videoTitle: "Low Step-Up Demonstration",
-        source: "Cornerstone Physiotherapy",
-        duration: "0:13",
-        cues: [
-          "Place your whole foot on a low step with a rail nearby.",
-          "Lean slightly forward and rise with control.",
-          "Step down softly, then reset."
-        ]
-      },
-      {
-        title: "Supported Calf Raise",
-        category: "Ankles · Calves",
-        dose: "2 Sets · 10–15 Reps",
-        videoId: "JgK5HxxJ_Z0",
-        videoTitle: "Supported Calf Raise Demonstration",
-        source: "MANA Performance Therapy",
-        duration: "0:09",
-        cues: [
-          "Stand tall with your fingertips on a steady support.",
-          "Rise onto both feet and pause at the top.",
-          "Lower slowly with even pressure across each foot."
-        ]
-      },
-      {
-        title: "Suitcase Carry",
-        category: "Grip · Core · Walking",
-        dose: "2 Sets · 20 m Each Side",
-        videoId: "3RKKnZhhelE",
-        videoTitle: "Suitcase Carry Demonstration",
-        source: "Champion Physical Therapy",
-        duration: "0:19",
-        cues: [
-          "Choose one manageable dumbbell and stand tall.",
-          "Walk with short, steady steps without leaning.",
-          "Turn carefully, switch hands, and repeat."
-        ]
-      }
-    ];
+  <dialog class="rules-dialog" id="rules-dialog" role="dialog" aria-modal="true" aria-labelledby="rules-dialog-title">
+    <div class="rules-dialog-inner">
+      <div class="rules-dialog-head"><div><p class="section-kicker">Good training</p><h2 id="rules-dialog-title">The four rules</h2></div><button class="icon-button" type="button" data-rules-close aria-label="Close training rules">×</button></div>
+      <div class="rules-dialog-grid">
+        <div class="rule-detail"><strong>Keep two clean reps in reserve</strong><p>Stop the set while you could still perform about two more repetitions with the same form.</p></div>
+        <div class="rule-detail"><strong>Rest long enough</strong><p>Take 90–120 seconds between working sets. Start the next set when breathing feels settled.</p></div>
+        <div class="rule-detail"><strong>Progress in small steps</strong><p>When every set reaches the top of its rep range, add the smallest available weight next time.</p></div>
+        <div class="rule-detail"><strong>Control every repetition</strong><p>No bouncing, forced repetitions, maximal testing or grinding to failure.</p></div>
+      </div>
+      <p class="safety-note"><strong>Stop for sharp pain, dizziness or unusual shortness of breath.</strong> Ask gym staff or a clinician before continuing if something feels wrong.</p>
+    </div>
+  </dialog>
 
-    const profileButtons = Array.from(document.querySelectorAll("[data-profile]"));
-    const dayButtons = Array.from(document.querySelectorAll("[data-day]"));
-    const startButtons = Array.from(document.querySelectorAll("[data-start]"));
-    const exerciseCards = Array.from(document.querySelectorAll("[data-exercise]"));
-    const completionButtons = Array.from(document.querySelectorAll(".complete-button"));
-    const planOwner = document.getElementById("plan-owner");
-    const progressRing = document.getElementById("progress-ring");
-    const progressCount = document.getElementById("progress-count");
-    const mobileProgress = document.getElementById("mobile-progress");
-    const workoutDialog = document.getElementById("workout-dialog");
-    const workoutClose = document.getElementById("workout-close");
-    const workoutStep = document.getElementById("workout-step");
-    const workoutProfile = document.getElementById("workout-profile");
-    const workoutIcon = document.getElementById("workout-icon");
-    const workoutCategory = document.getElementById("workout-category");
-    const workoutDose = document.getElementById("workout-dose");
-    const workoutTitle = document.getElementById("workout-title");
-    const workoutCues = document.getElementById("workout-cues");
-    const workoutPrevious = document.getElementById("workout-previous");
-    const workoutNext = document.getElementById("workout-next");
-    const videoSlot = document.getElementById("video-slot");
-    const videoNote = document.getElementById("video-note");
-    let selectedProfile = "Mom";
-    let selectedDay = "Monday";
-    let currentExercise = 0;
-    let lastOpener = null;
-
-    function updatePlanLabel() {
-      planOwner.textContent = selectedProfile + "’s plan · " + selectedDay;
-      workoutProfile.textContent = selectedProfile + "’s Plan · " + selectedDay;
-    }
-
-    function updateProgress() {
-      const completed = completionButtons.filter((button) => button.getAttribute("aria-pressed") === "true").length;
-      const total = completionButtons.length;
-      const percent = Math.round((completed / total) * 100);
-      progressRing.style.setProperty("--progress", String(percent));
-      progressCount.textContent = completed + "/" + total;
-      mobileProgress.textContent = completed + " of " + total + " complete";
-    }
-
-    function setExerciseComplete(index, isComplete) {
-      const button = completionButtons[index];
-      button.setAttribute("aria-pressed", String(isComplete));
-      button.textContent = isComplete ? "Completed ✓" : "Mark Complete";
-      exerciseCards[index].classList.toggle("is-complete", isComplete);
-      updateProgress();
-    }
-
-    function createVideoButton(guide) {
-      const button = document.createElement("button");
-      const thumbnail = document.createElement("img");
-      const play = document.createElement("span");
-      const label = document.createElement("span");
-      const length = document.createElement("span");
-
-      button.type = "button";
-      button.className = "workout-video";
-      button.setAttribute("aria-label", "Play " + guide.videoTitle + ", " + guide.duration);
-
-      thumbnail.src = "https://i.ytimg.com/vi/" + guide.videoId + "/mqdefault.jpg";
-      thumbnail.alt = "";
-      thumbnail.width = 320;
-      thumbnail.height = 180;
-
-      play.className = "video-play";
-      play.setAttribute("aria-hidden", "true");
-      play.textContent = "▶";
-
-      label.className = "video-label";
-      length.className = "video-length";
-      length.textContent = guide.duration;
-      label.append(length);
-      button.append(thumbnail, play, label);
-
-      button.addEventListener("click", () => {
-        const frame = document.createElement("div");
-        const iframe = document.createElement("iframe");
-        frame.className = "video-frame";
-        iframe.src = "https://www.youtube-nocookie.com/embed/" + guide.videoId + "?autoplay=1&cc_load_policy=1&playsinline=1&rel=0";
-        iframe.title = guide.videoTitle;
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.referrerPolicy = "strict-origin-when-cross-origin";
-        iframe.allowFullscreen = true;
-        frame.append(iframe);
-        videoSlot.replaceChildren(frame);
-        videoNote.textContent = "YouTube player · captions available";
-      });
-
-      return button;
-    }
-
-    function renderWorkout(index) {
-      currentExercise = Math.max(0, Math.min(index, exerciseGuides.length - 1));
-      const guide = exerciseGuides[currentExercise];
-      const visual = exerciseCards[currentExercise].querySelector(".exercise-visual").cloneNode(true);
-
-      workoutStep.textContent = "Exercise " + (currentExercise + 1) + " of " + exerciseGuides.length;
-      workoutCategory.textContent = guide.category;
-      workoutDose.textContent = guide.dose;
-      workoutTitle.textContent = guide.title;
-      workoutIcon.replaceChildren(visual);
-      const cueItems = guide.cues.map((cue) => {
-        const item = document.createElement("li");
-        item.textContent = cue;
-        return item;
-      });
-      workoutCues.replaceChildren();
-      cueItems.forEach((item) => workoutCues.append(item));
-      videoSlot.replaceChildren(createVideoButton(guide));
-      videoNote.textContent = "Tap to play · " + guide.source;
-      workoutPrevious.disabled = currentExercise === 0;
-      workoutNext.textContent = currentExercise === exerciseGuides.length - 1 ? "Finish Workout" : "Done, Next Exercise";
-    }
-
-    function openWorkout(index) {
-      lastOpener = document.activeElement;
-      renderWorkout(index);
-      if (!workoutDialog.open) {
-        workoutDialog.showModal();
-      }
-    }
-
-    profileButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedProfile = button.dataset.profile;
-        profileButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-        updatePlanLabel();
-      });
-    });
-
-    dayButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedDay = button.dataset.day;
-        dayButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-        updatePlanLabel();
-      });
-    });
-
-    startButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const firstIncomplete = completionButtons.findIndex((item) => item.getAttribute("aria-pressed") !== "true");
-        openWorkout(firstIncomplete === -1 ? 0 : firstIncomplete);
-      });
-    });
-
-    exerciseCards.forEach((card, index) => {
-      card.querySelector("summary").addEventListener("click", (event) => {
-        event.preventDefault();
-        card.removeAttribute("open");
-        openWorkout(index);
-      });
-    });
-
-    completionButtons.forEach((button, index) => {
-      button.addEventListener("click", () => {
-        const nextState = button.getAttribute("aria-pressed") !== "true";
-        setExerciseComplete(index, nextState);
-      });
-    });
-
-    workoutClose.addEventListener("click", () => {
-      workoutDialog.close("leave");
-    });
-
-    workoutPrevious.addEventListener("click", () => {
-      renderWorkout(currentExercise - 1);
-    });
-
-    workoutNext.addEventListener("click", () => {
-      setExerciseComplete(currentExercise, true);
-      if (currentExercise === exerciseGuides.length - 1) {
-        workoutDialog.close("complete");
-        mobileProgress.textContent = "Workout complete ✓";
-        return;
-      }
-      renderWorkout(currentExercise + 1);
-    });
-
-    workoutDialog.addEventListener("close", () => {
-      videoSlot.replaceChildren();
-      if (lastOpener instanceof HTMLElement) {
-        lastOpener.focus({ preventScroll: true });
-      }
-    });
-
-    updatePlanLabel();
-    updateProgress();
-  </script>
+  <div class="celebration" role="status" aria-live="polite">Session complete. Strong work.</div>
 
   <script>
-    const exerciseIcons = {
-      legPress: '<circle cx="22" cy="14" r="5" /><path d="m25 19 10 11 8 4m-17-13-8 18m17-9-7 18m15-14 9 13M12 52h43M46 15l7 22M43 15h7" />',
-      chestPress: '<circle cx="23" cy="16" r="5" /><path d="M25 21v22m0-13 13-8m-13 8 13 8M16 49h30M12 43h28m2-27v29m-3-29h7" />',
-      latPulldown: '<circle cx="32" cy="14" r="5" /><path d="M32 20v20m0-13-10-9m10 9 10-9M16 8h32m-28 0 4 4m20-4-4 4M32 40l-9 13m9-13 9 13" />',
-      rdl: '<circle cx="34" cy="10" r="5" /><path d="m33 16-10 17 15 7m-5-24 9 17m-19 0-5 18m20-11 7 12M15 34h6m18 0h6M14 31v7m32-7v7" />',
-      shoulderPress: '<circle cx="32" cy="15" r="5" /><path d="M32 21v19m0-12-10-8m10 8 10-8M17 8v13m-5-13h10m25 0v13m-5-13h10M32 40l-9 13m9-13 9 13" />',
-      farmerCarry: '<circle cx="32" cy="10" r="5" /><path d="M32 16v23m0-15-11 13m11-13 11 13m-11 2-10 14m10-14 11 14M14 34v16m-5-16h10m31 0v16m-5-16h10" />',
-      hackSquat: '<circle cx="24" cy="14" r="5" /><path d="m27 19 10 11 8 4M28 21 19 39m18-9-7 19m15-15 8 13M12 52h44M48 13l7 30M44 13h8" />',
-      hipThrust: '<circle cx="18" cy="21" r="5" /><path d="m23 25 15 8 11-2m-11 2-8 13m19-15 6 15M11 50h46M12 28v22m0-21h12" />',
-      cableRow: '<circle cx="24" cy="14" r="5" /><path d="M24 20v20m0-13 15 4m-15-4-8 10m8 3-9 13m9-13 12 13M39 19v25m0-13h12m-4-4 4 4-4 4" />',
-      inclinePress: '<circle cx="24" cy="15" r="5" /><path d="m26 20 10 15 12-6M36 35l-7 14m19-20 7 15M13 52h44M14 29l15 22M12 28h8" />',
-      legCurl: '<circle cx="24" cy="15" r="5" /><path d="m25 21 12 10h14M37 31l-8 15m22-15v18M11 52h45M14 22v30m0-29h12" />',
-      pallof: '<circle cx="27" cy="13" r="5" /><path d="M27 19v21m0-13 12 3m-12-3-8 10m8 3-8 13m8-13 12 13M39 15v30m0-15h13m-4-4 4 4-4 4" />'
-    };
-
     const programs = {
       A: {
-        name: "Workout A",
         heading: "Full Body A",
-        guides: [
-          {
-            title: "Leg Press",
-            category: "Quads · Glutes",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "2 reps left",
-            icon: "legPress",
-            tone: "#cddac8",
-            videoId: "UWLwsdErycg",
-            videoTitle: "Leg Press Demonstration",
-            source: "Nuffield Health",
-            duration: "2:26",
-            cues: [
-              "Set the seat so your hips and lower back stay supported.",
-              "Keep your knees tracking in the same direction as your toes.",
-              "Lower with control, then drive through your whole foot."
-            ]
-          },
-          {
-            title: "Machine Chest Press",
-            category: "Chest · Triceps",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "2 reps left",
-            icon: "chestPress",
-            tone: "#d8d8ef",
-            videoId: "iQYryL41HII",
-            videoTitle: "Machine Chest Press Demonstration",
-            source: "Nuffield Health",
-            duration: "1:51",
-            cues: [
-              "Set the handles near mid-chest and keep your back on the pad.",
-              "Keep your wrists straight and your shoulders relaxed.",
-              "Press smoothly, then control the return."
-            ]
-          },
-          {
-            title: "Lat Pulldown",
-            category: "Back · Biceps",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "2 reps left",
-            icon: "latPulldown",
-            tone: "#b9d8d6",
-            videoId: "JGeRYIZdojU",
-            videoTitle: "Lat Pulldown Demonstration",
-            source: "PureGym",
-            duration: "0:13",
-            cues: [
-              "Lock your thighs under the pads and sit tall.",
-              "Pull the bar toward your upper chest without swinging.",
-              "Control the return until your arms are long."
-            ]
-          },
-          {
-            title: "Romanian Deadlift",
-            cardTitle: "Dumbbell Romanian Deadlift",
-            category: "Glutes · Hamstrings",
-            dose: "2 Sets · 8–10 Reps",
-            cardDose: "2 × 8–10",
-            effort: "Clean reps",
-            icon: "rdl",
-            tone: "#dfff78",
-            videoId: "F5ZGAP-ZMaI",
-            videoTitle: "Dumbbell Romanian Deadlift Demonstration",
-            source: "E3 Rehab",
-            duration: "0:11",
-            cues: [
-              "Keep the dumbbells close to your thighs.",
-              "Soften your knees and send your hips backward.",
-              "Stand tall without leaning back at the top."
-            ]
-          },
-          {
-            title: "Machine Shoulder Press",
-            category: "Shoulders · Triceps",
-            dose: "2 Sets · 10–12 Reps",
-            cardDose: "2 × 10–12",
-            effort: "2 reps left",
-            icon: "shoulderPress",
-            tone: "#f5b39c",
-            videoId: "GcY6TZxfS0k",
-            videoTitle: "Machine Shoulder Press Demonstration",
-            source: "PureGym",
-            duration: "0:10",
-            cues: [
-              "Set the seat so the handles begin near shoulder height.",
-              "Keep your ribs down, back supported, and wrists stacked.",
-              "Press overhead without shrugging, then return slowly."
-            ]
-          },
-          {
-            title: "Farmer Carry",
-            category: "Grip · Core · Conditioning",
-            dose: "3 Sets · 20 m",
-            cardDose: "3 × 20 m",
-            effort: "Heavy and tidy",
-            icon: "farmerCarry",
-            tone: "#f4d8a8",
-            videoId: "-QSmQj9_CQo",
-            videoTitle: "Farmer Carry Demonstration",
-            source: "Continuous Motion Physical Therapy",
-            duration: "0:14",
-            cues: [
-              "Choose challenging dumbbells you can carry with tall posture.",
-              "Keep your shoulders quiet and take steady steps.",
-              "Turn under control and keep breathing."
-            ]
-          }
+        exercises: [
+          { title: "Leg Press", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", videoId: "UWLwsdErycg", source: "Nuffield Health · 2:26", cues: ["Set the seat so your hips and lower back stay supported.", "Keep your knees tracking in the same direction as your toes.", "Lower with control, then drive through your whole foot."] },
+          { title: "Machine Chest Press", category: "Chest · Triceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "iQYryL41HII", source: "Nuffield Health · 1:51", cues: ["Set the handles near mid-chest and keep your back on the pad.", "Keep your wrists straight and your shoulders relaxed.", "Press smoothly, then control the return."] },
+          { title: "Lat Pulldown", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "JGeRYIZdojU", source: "PureGym · 0:13", cues: ["Lock your thighs under the pads and sit tall.", "Pull the bar toward your upper chest without swinging.", "Control the return until your arms are long."] },
+          { title: "Dumbbell Romanian Deadlift", guideTitle: "Romanian Deadlift", category: "Glutes · Hamstrings", dose: "2 × 8–10", effort: "Clean reps", videoId: "F5ZGAP-ZMaI", source: "E3 Rehab · 0:11", cues: ["Keep the dumbbells close to your thighs.", "Soften your knees and send your hips backward.", "Stand tall without leaning back at the top."] },
+          { title: "Machine Shoulder Press", category: "Shoulders · Triceps", dose: "2 × 10–12", effort: "2 reps left", videoId: "GcY6TZxfS0k", source: "PureGym · 0:10", cues: ["Set the seat so the handles begin near shoulder height.", "Keep your ribs down, back supported and wrists stacked.", "Press overhead without shrugging, then return slowly."] },
+          { title: "Farmer Carry", category: "Grip · Core · Conditioning", dose: "3 × 20 m", effort: "Heavy and tidy", videoId: "-QSmQj9_CQo", source: "Continuous Motion PT · 0:14", cues: ["Choose challenging dumbbells you can carry with tall posture.", "Keep your shoulders quiet and take steady steps.", "Turn under control and keep breathing."] }
         ]
       },
       B: {
-        name: "Workout B",
         heading: "Full Body B",
-        guides: [
-          {
-            title: "Hack Squat",
-            category: "Quads · Glutes",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "2 reps left",
-            icon: "hackSquat",
-            tone: "#dfff78",
-            videoId: "scs5XcsZuc8",
-            videoTitle: "Hack Squat Demonstration",
-            source: "PureGym",
-            duration: "0:25",
-            cues: [
-              "Keep your back and shoulders firmly against the pads.",
-              "Let your knees travel in the same direction as your toes.",
-              "Drive the platform away without snapping your knees straight."
-            ]
-          },
-          {
-            title: "Hip Thrust Machine",
-            category: "Glutes · Hamstrings",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "Pause at top",
-            icon: "hipThrust",
-            tone: "#f5b39c",
-            videoId: "01rcKtWWvwE",
-            videoTitle: "Hip Thrust Machine Demonstration",
-            source: "Hype Training & Coaching",
-            duration: "0:38",
-            cues: [
-              "Place the pad securely across your hips and plant both feet.",
-              "Keep your chin tucked and your ribs down.",
-              "Drive your hips up, pause, then lower with control."
-            ]
-          },
-          {
-            title: "Seated Cable Row",
-            category: "Back · Biceps",
-            dose: "3 Sets · 8–10 Reps",
-            cardDose: "3 × 8–10",
-            effort: "2 reps left",
-            icon: "cableRow",
-            tone: "#b9d8d6",
-            videoId: "VmXBWEoIY5c",
-            videoTitle: "Seated Cable Row Demonstration",
-            source: "University of Alberta",
-            duration: "0:35",
-            cues: [
-              "Set your feet securely and sit tall.",
-              "Pull the handle toward your lower ribs.",
-              "Keep your torso quiet without rocking."
-            ]
-          },
-          {
-            title: "Incline Dumbbell Press",
-            category: "Chest · Shoulders",
-            dose: "2 Sets · 8–10 Reps",
-            cardDose: "2 × 8–10",
-            effort: "Clean reps",
-            icon: "inclinePress",
-            tone: "#d8d8ef",
-            videoId: "jMQA3XtJSgo",
-            videoTitle: "Incline Dumbbell Press Demonstration",
-            source: "OPEX Fitness",
-            duration: "0:13",
-            cues: [
-              "Set a low incline and plant both feet firmly.",
-              "Start the dumbbells just outside your upper chest.",
-              "Press them up together, then lower with control."
-            ]
-          },
-          {
-            title: "Seated Leg Curl",
-            category: "Hamstrings · Knees",
-            dose: "2 Sets · 10–12 Reps",
-            cardDose: "2 × 10–12",
-            effort: "Slow return",
-            icon: "legCurl",
-            tone: "#cddac8",
-            videoId: "hhzTWndsgTc",
-            videoTitle: "Seated Leg Curl Demonstration",
-            source: "Life Fitness",
-            duration: "0:24",
-            cues: [
-              "Align your knees with the machine pivot and secure the pads.",
-              "Keep your hips and back pressed into the seat.",
-              "Curl your heels down, squeeze, then return slowly."
-            ]
-          },
-          {
-            title: "Pallof Press",
-            category: "Core · Anti-Rotation",
-            dose: "2 Sets · 10 Each Side",
-            cardDose: "2 × 10",
-            effort: "Each side",
-            icon: "pallof",
-            tone: "#f4d8a8",
-            videoId: "lcVTzIaqkPE",
-            videoTitle: "Pallof Press Demonstration",
-            source: "Pursuit Physical Therapy",
-            duration: "0:31",
-            cues: [
-              "Stand side-on to the cable with a stable stance.",
-              "Press straight forward without letting your torso rotate.",
-              "Pause, breathe, then return under control."
-            ]
-          }
+        exercises: [
+          { title: "Hack Squat", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", videoId: "scs5XcsZuc8", source: "PureGym · 0:25", cues: ["Keep your back and shoulders firmly against the pads.", "Let your knees travel in the same direction as your toes.", "Drive the platform away without snapping your knees straight."] },
+          { title: "Hip Thrust Machine", category: "Glutes · Hamstrings", dose: "3 × 8–10", effort: "Pause at top", videoId: "01rcKtWWvwE", source: "Hype Training & Coaching · 0:38", cues: ["Place the pad securely across your hips and plant both feet.", "Keep your chin tucked and your ribs down.", "Drive your hips up, pause, then lower with control."] },
+          { title: "Seated Cable Row", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "VmXBWEoIY5c", source: "University of Alberta · 0:35", cues: ["Set your feet securely and sit tall.", "Pull the handle toward your lower ribs.", "Keep your torso quiet without rocking."] },
+          { title: "Incline Dumbbell Press", category: "Chest · Shoulders", dose: "2 × 8–10", effort: "Clean reps", videoId: "jMQA3XtJSgo", source: "OPEX Fitness · 0:13", cues: ["Set a low incline and plant both feet firmly.", "Start the dumbbells just outside your upper chest.", "Press them up together, then lower with control."] },
+          { title: "Seated Leg Curl", category: "Hamstrings · Knees", dose: "2 × 10–12", effort: "Slow return", videoId: "hhzTWndsgTc", source: "Life Fitness · 0:24", cues: ["Align your knees with the machine pivot and secure the pads.", "Keep your hips and back pressed into the seat.", "Curl your heels down, squeeze, then return slowly."] },
+          { title: "Pallof Press", category: "Core · Anti-Rotation", dose: "2 × 10 each side", effort: "Each side", videoId: "lcVTzIaqkPE", source: "Pursuit Physical Therapy · 0:31", cues: ["Stand side-on to the cable with a stable stance.", "Press straight forward without letting your torso rotate.", "Pause, breathe, then return under control."] }
         ]
       }
     };
 
-    const profileButtonsV2 = Array.from(document.querySelectorAll("[data-profile]"));
-    const dayButtonsV2 = Array.from(document.querySelectorAll("[data-day]"));
-    const startButtonsV2 = Array.from(document.querySelectorAll("[data-start]"));
-    const startLabelsV2 = Array.from(document.querySelectorAll("[data-start-label]"));
-    const exerciseListV2 = document.getElementById("exercise-list");
-    const planOwnerV2 = document.getElementById("plan-owner");
-    const sessionTitleV2 = document.getElementById("session-title");
-    const progressRingV2 = document.getElementById("progress-ring");
-    const progressCountV2 = document.getElementById("progress-count");
-    const mobileProgressV2 = document.getElementById("mobile-progress");
-    const workoutDialogV2 = document.getElementById("workout-dialog");
-    const workoutCloseV2 = document.getElementById("workout-close");
-    const workoutStepV2 = document.getElementById("workout-step");
-    const workoutProfileV2 = document.getElementById("workout-profile");
-    const workoutIconV2 = document.getElementById("workout-icon");
-    const workoutCategoryV2 = document.getElementById("workout-category");
-    const workoutDoseV2 = document.getElementById("workout-dose");
-    const workoutTitleV2 = document.getElementById("workout-title");
-    const workoutCuesV2 = document.getElementById("workout-cues");
-    const workoutPreviousV2 = document.getElementById("workout-previous");
-    const workoutNextV2 = document.getElementById("workout-next");
-    const videoSlotV2 = document.getElementById("video-slot");
-    const videoNoteV2 = document.getElementById("video-note");
-    const progressStateV2 = new Map();
-    let selectedProfileV2 = "Mom";
-    let selectedDayV2 = "Monday";
-    let selectedWorkoutV2 = "A";
-    let currentExerciseV2 = 0;
-    let exerciseCardsV2 = [];
-    let lastOpenerV2 = null;
+    let activeProgram = "A";
+    let activeIndex = 0;
+    let activeProfile = "Mom";
+    const completed = { Mom: { A: new Set(), B: new Set() }, Aunt: { A: new Set(), B: new Set() } };
 
-    function activeGuidesV2() {
-      return programs[selectedWorkoutV2].guides;
+    const grid = document.getElementById("exercise-grid");
+    const workoutDialog = document.getElementById("workout-dialog");
+    const rulesDialog = document.getElementById("rules-dialog");
+    const videoPanel = document.getElementById("video-panel");
+    const cueList = document.getElementById("cue-list");
+    const celebration = document.querySelector(".celebration");
+
+    function thumbnail(videoId) {
+      return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
     }
 
-    function progressKeyV2() {
-      return selectedProfileV2 + "|" + selectedDayV2;
+    function renderProgram() {
+      const program = programs[activeProgram];
+      document.querySelector("[data-session-heading]").textContent = program.heading;
+      document.getElementById("session-title").textContent = `Workout ${activeProgram} · 6 exercises`;
+      document.querySelectorAll("[data-tab]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.tab === activeProgram)));
+      document.querySelectorAll("[data-day]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.day === activeProgram && button === document.activeElement || button.getAttribute("aria-pressed") === "true" && button.dataset.day === activeProgram)));
+      grid.innerHTML = program.exercises.map((exercise, index) => `
+        <button class="exercise-card" type="button" data-exercise="${index}" aria-label="Open ${exercise.title} guide">
+          <span class="exercise-media">
+            <img src="${thumbnail(exercise.videoId)}" alt="" width="480" height="270" loading="${index < 3 ? "eager" : "lazy"}">
+            <span class="card-number">${index + 1}</span><span class="card-play" aria-hidden="true">▶</span>
+          </span>
+          <span class="exercise-copy"><h3>${exercise.title}</h3><span class="exercise-meta"><strong>${exercise.dose}</strong><span>${exercise.category}</span></span></span>
+        </button>`).join("");
+      grid.querySelectorAll("[data-exercise]").forEach(button => button.addEventListener("click", () => openWorkout(Number(button.dataset.exercise))));
     }
 
-    function completionSetV2() {
-      const key = progressKeyV2();
-      if (!progressStateV2.has(key)) {
-        progressStateV2.set(key, new Set());
-      }
-      return progressStateV2.get(key);
-    }
-
-    function createVideoButtonV2(guide) {
-      const button = document.createElement("button");
-      const thumbnail = document.createElement("img");
-      const play = document.createElement("span");
-      const label = document.createElement("span");
-      const length = document.createElement("span");
-
-      button.type = "button";
-      button.className = "workout-video";
-      button.setAttribute("aria-label", "Play " + guide.videoTitle + ", " + guide.duration);
-      thumbnail.src = "https://i.ytimg.com/vi/" + guide.videoId + "/mqdefault.jpg";
-      thumbnail.alt = "";
-      thumbnail.width = 320;
-      thumbnail.height = 180;
-      play.className = "video-play";
-      play.setAttribute("aria-hidden", "true");
-      play.textContent = "▶";
-      label.className = "video-label";
-      length.className = "video-length";
-      length.textContent = guide.duration;
-      label.append(length);
-      button.append(thumbnail, play, label);
-
-      button.addEventListener("click", () => {
-        const frame = document.createElement("div");
-        const iframe = document.createElement("iframe");
-        frame.className = "video-frame";
-        iframe.src = "https://www.youtube-nocookie.com/embed/" + guide.videoId + "?autoplay=1&cc_load_policy=1&playsinline=1&rel=0";
-        iframe.title = guide.videoTitle;
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.referrerPolicy = "strict-origin-when-cross-origin";
-        iframe.allowFullscreen = true;
-        frame.append(iframe);
-        videoSlotV2.replaceChildren(frame);
-        videoNoteV2.textContent = "YouTube player · captions available";
+    function renderGuide() {
+      const exercise = programs[activeProgram].exercises[activeIndex];
+      document.querySelector("[data-workout-name]").textContent = `Workout ${activeProgram}`;
+      document.querySelector("[data-step]").textContent = String(activeIndex + 1);
+      document.querySelector("[data-category]").textContent = exercise.category;
+      document.querySelector("[data-guide-title]").textContent = exercise.guideTitle || exercise.title;
+      document.querySelector("[data-dose]").textContent = exercise.dose;
+      document.querySelector("[data-effort]").textContent = exercise.effort;
+      cueList.innerHTML = exercise.cues.map(cue => `<li>${cue}</li>`).join("");
+      videoPanel.innerHTML = `
+        <button class="video-button" type="button" aria-label="Play ${exercise.title} demonstration">
+          <img src="${thumbnail(exercise.videoId)}" alt="" width="640" height="360">
+          <span class="big-play" aria-hidden="true">▶</span>
+        </button>
+        <p class="video-source">Tap to play · ${exercise.source}</p>`;
+      videoPanel.querySelector("button").addEventListener("click", () => {
+        videoPanel.innerHTML = `<iframe class="video-frame" src="https://www.youtube-nocookie.com/embed/${exercise.videoId}?autoplay=1&cc_load_policy=1&playsinline=1&rel=0" title="${exercise.title} demonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><p class="video-source">${exercise.source}</p>`;
       });
-
-      return button;
+      document.querySelector("[data-previous]").disabled = activeIndex === 0;
+      document.querySelector("[data-next]").textContent = activeIndex === 5 ? "Finish workout" : "Done · Next exercise";
     }
 
-    function createExerciseCardV2(guide, index) {
-      const card = document.createElement("details");
-      const summary = document.createElement("summary");
-      const visual = document.createElement("span");
-      const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      const copy = document.createElement("span");
-      const category = document.createElement("span");
-      const title = document.createElement("strong");
-      const dose = document.createElement("span");
-      const effort = document.createElement("span");
-      const view = document.createElement("span");
-
-      card.className = "exercise";
-      card.dataset.exercise = "";
-      summary.setAttribute("aria-haspopup", "dialog");
-      summary.setAttribute("aria-controls", "workout-dialog");
-      visual.className = "exercise-visual";
-      visual.style.setProperty("--tone", guide.tone);
-      icon.setAttribute("viewBox", "0 0 64 64");
-      icon.setAttribute("aria-hidden", "true");
-      icon.innerHTML = exerciseIcons[guide.icon];
-      copy.className = "exercise-copy";
-      category.textContent = guide.category;
-      title.textContent = guide.cardTitle || guide.title;
-      dose.className = "exercise-dose";
-      dose.append(document.createTextNode(guide.cardDose), effort);
-      effort.textContent = guide.effort;
-      view.className = "chevron";
-      view.setAttribute("aria-hidden", "true");
-      visual.append(icon);
-      copy.append(category, title);
-      summary.append(visual, copy, dose, view);
-      card.append(summary);
-
-      summary.addEventListener("click", (event) => {
-        event.preventDefault();
-        card.removeAttribute("open");
-        openWorkoutV2(index);
-      });
-
-      return card;
+    function openWorkout(index = 0) {
+      activeIndex = index;
+      renderGuide();
+      workoutDialog.showModal();
     }
 
-    function updatePlanLabelV2() {
-      const workoutName = programs[selectedWorkoutV2].name;
-      planOwnerV2.textContent = selectedProfileV2 + "’s plan · " + selectedDayV2 + " · " + workoutName;
-      sessionTitleV2.textContent = programs[selectedWorkoutV2].heading;
-      workoutProfileV2.textContent = selectedProfileV2 + "’s Plan · " + workoutName;
-      startLabelsV2.forEach((label) => {
-        label.textContent = "Start " + workoutName;
-      });
+    function updateProfile(name) {
+      activeProfile = name;
+      document.querySelectorAll("[data-profile]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.profile === name)));
+      document.querySelectorAll("[data-owner]").forEach(node => node.textContent = name);
     }
 
-    function updateProgressV2() {
-      const completed = completionSetV2();
-      const total = activeGuidesV2().length;
-      const percent = Math.round((completed.size / total) * 100);
-      progressRingV2.style.setProperty("--progress", String(percent));
-      progressCountV2.textContent = completed.size + "/" + total;
-      mobileProgressV2.textContent = completed.size === total
-        ? programs[selectedWorkoutV2].name + " complete ✓"
-        : completed.size + " of " + total + " complete";
-      exerciseCardsV2.forEach((card, index) => {
-        card.classList.toggle("is-complete", completed.has(index));
-      });
-    }
-
-    function renderExerciseListV2() {
-      exerciseListV2.replaceChildren();
-      exerciseCardsV2 = activeGuidesV2().map((guide, index) => createExerciseCardV2(guide, index));
-      exerciseCardsV2.forEach((card) => exerciseListV2.append(card));
-      updateProgressV2();
-    }
-
-    function renderProgramV2() {
-      updatePlanLabelV2();
-      renderExerciseListV2();
-    }
-
-    function setExerciseCompleteV2(index, isComplete) {
-      const completed = completionSetV2();
-      if (isComplete) {
-        completed.add(index);
-      } else {
-        completed.delete(index);
-      }
-      updateProgressV2();
-    }
-
-    function renderWorkoutV2(index) {
-      const guides = activeGuidesV2();
-      currentExerciseV2 = Math.max(0, Math.min(index, guides.length - 1));
-      const guide = guides[currentExerciseV2];
-      const visual = exerciseCardsV2[currentExerciseV2].querySelector(".exercise-visual").cloneNode(true);
-      workoutStepV2.textContent = programs[selectedWorkoutV2].name + " · " + (currentExerciseV2 + 1) + " of " + guides.length;
-      workoutCategoryV2.textContent = guide.category;
-      workoutDoseV2.textContent = guide.dose;
-      workoutTitleV2.textContent = guide.title;
-      workoutIconV2.replaceChildren(visual);
-      workoutCuesV2.replaceChildren();
-      guide.cues.forEach((cue) => {
-        const item = document.createElement("li");
-        item.textContent = cue;
-        workoutCuesV2.append(item);
-      });
-      videoSlotV2.replaceChildren(createVideoButtonV2(guide));
-      videoNoteV2.textContent = "Tap to play · " + guide.source;
-      workoutPreviousV2.disabled = currentExerciseV2 === 0;
-      workoutNextV2.textContent = currentExerciseV2 === guides.length - 1 ? "Finish Workout" : "Done, Next Exercise";
-    }
-
-    function openWorkoutV2(index) {
-      lastOpenerV2 = document.activeElement;
-      renderWorkoutV2(index);
-      if (!workoutDialogV2.open) {
-        workoutDialogV2.showModal();
-      }
-    }
-
-    profileButtonsV2.forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedProfileV2 = button.dataset.profile;
-        profileButtonsV2.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-        updatePlanLabelV2();
-        updateProgressV2();
-      });
+    document.querySelectorAll("[data-profile]").forEach(button => button.addEventListener("click", () => updateProfile(button.dataset.profile)));
+    document.querySelectorAll("[data-tab]").forEach(button => button.addEventListener("click", () => { activeProgram = button.dataset.tab; renderProgram(); }));
+    document.querySelectorAll("[data-day]").forEach(button => button.addEventListener("click", () => { activeProgram = button.dataset.day; document.querySelectorAll("[data-day]").forEach(item => item.setAttribute("aria-pressed", String(item === button))); renderProgram(); document.getElementById("session-title").scrollIntoView({ behavior: "smooth", block: "start" }); }));
+    document.querySelectorAll("[data-start]").forEach(button => button.addEventListener("click", () => openWorkout(0)));
+    document.querySelector("[data-close]").addEventListener("click", () => workoutDialog.close());
+    document.querySelector("[data-previous]").addEventListener("click", () => { if (activeIndex > 0) { activeIndex -= 1; renderGuide(); } });
+    document.querySelector("[data-next]").addEventListener("click", () => {
+      completed[activeProfile][activeProgram].add(activeIndex);
+      if (activeIndex < 5) { activeIndex += 1; renderGuide(); return; }
+      workoutDialog.close();
+      celebration.classList.add("show");
+      setTimeout(() => celebration.classList.remove("show"), 2400);
     });
+    document.querySelectorAll("[data-rules]").forEach(button => button.addEventListener("click", () => rulesDialog.showModal()));
+    document.querySelector("[data-rules-close]").addEventListener("click", () => rulesDialog.close());
+    [workoutDialog, rulesDialog].forEach(dialog => dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); }));
 
-    dayButtonsV2.forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedDayV2 = button.dataset.day;
-        selectedWorkoutV2 = button.dataset.workout;
-        dayButtonsV2.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-        renderProgramV2();
-      });
-    });
-
-    startButtonsV2.forEach((button) => {
-      button.addEventListener("click", () => {
-        const completed = completionSetV2();
-        const firstIncomplete = activeGuidesV2().findIndex((guide, index) => !completed.has(index));
-        openWorkoutV2(firstIncomplete === -1 ? 0 : firstIncomplete);
-      });
-    });
-
-    workoutCloseV2.addEventListener("click", () => {
-      workoutDialogV2.close("leave");
-    });
-
-    workoutPreviousV2.addEventListener("click", () => {
-      renderWorkoutV2(currentExerciseV2 - 1);
-    });
-
-    workoutNextV2.addEventListener("click", () => {
-      const guides = activeGuidesV2();
-      setExerciseCompleteV2(currentExerciseV2, true);
-      if (currentExerciseV2 === guides.length - 1) {
-        workoutDialogV2.close("complete");
-        return;
-      }
-      renderWorkoutV2(currentExerciseV2 + 1);
-    });
-
-    workoutDialogV2.addEventListener("close", () => {
-      videoSlotV2.replaceChildren();
-      if (lastOpenerV2 instanceof HTMLElement) {
-        lastOpenerV2.focus({ preventScroll: true });
-      }
-    });
-
-    renderProgramV2();
+    renderProgram();
   </script>
 </body>
 </html>
