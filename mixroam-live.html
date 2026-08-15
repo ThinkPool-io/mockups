@@ -83,51 +83,27 @@
     display: inline-flex;
     align-items: center;
     width: fit-content;
-    gap: 10px;
+    gap: 9px;
     font-size: 20px;
     line-height: 1;
-    font-weight: 700;
-    letter-spacing: -0.045em;
+    font-weight: 820;
+    letter-spacing: -0.07em;
   }
 
   .brand-name { transform: translateY(-1px); }
+  .brand-name span { color: var(--cyan); }
 
   .brand-mark {
-    width: 31px;
-    height: 31px;
+    width: 38px;
+    height: 38px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(125, 215, 231, 0.42);
-    border-radius: 9px;
-    color: var(--cyan);
-    background:
-      radial-gradient(circle at 18% 82%, rgba(200, 255, 77, 0.12), transparent 36%),
-      linear-gradient(145deg, rgba(125, 215, 231, 0.12), rgba(10, 27, 25, 0.72));
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025), 0 0 22px rgba(125, 215, 231, 0.08);
   }
 
   .brand-mark svg {
-    width: 23px;
-    height: 23px;
+    width: 100%;
+    height: 100%;
     overflow: visible;
-  }
-
-  .brand-route {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.35;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .brand-origin { fill: var(--signal); }
-  .brand-destination { fill: var(--cyan); }
-
-  .brand-compass {
-    fill: none;
-    stroke: rgba(238, 247, 243, 0.7);
-    stroke-width: 1;
-    stroke-linecap: round;
   }
 
   .live-ticker {
@@ -1704,6 +1680,7 @@
     .live-ticker { display: none; }
     .text-action { display: none; }
     .brand { font-size: 19px; }
+    .brand-mark { width: 34px; height: 34px; }
 
     .chat-action {
       width: 42px;
@@ -1900,14 +1877,16 @@
   <header class="topbar">
     <div class="brand" aria-label="Mixroam home">
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" fill="none">
-          <path class="brand-route" d="M5.5 21.5c3 0 3.3-11 7.2-11s4.1 11 7.5 11c3 0 3.4-7.2 6.3-7.2"/>
-          <circle class="brand-origin" cx="5.5" cy="21.5" r="2.25"/>
-          <circle class="brand-destination" cx="26.5" cy="14.3" r="1.8"/>
-          <path class="brand-compass" d="M23.8 7.2l1-2.2 1 2.2M24.8 5v4.8"/>
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M11 40l12-17 10 13 9-19 11 23" stroke="#eef7f3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="11" cy="40" r="5" fill="#c8ff4d"/>
+          <circle cx="23" cy="23" r="4" fill="#7dd7e7"/>
+          <circle cx="33" cy="36" r="4" fill="#eef7f3"/>
+          <circle cx="42" cy="17" r="4" fill="#7dd7e7"/>
+          <circle cx="53" cy="40" r="5" fill="#c8ff4d"/>
         </svg>
       </span>
-      <span class="brand-name">mixroam</span>
+      <span class="brand-name">mix<span>roam</span></span>
     </div>
     <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">8</b> verified · Hard Techno pilot</span></div>
     <div class="top-actions">
