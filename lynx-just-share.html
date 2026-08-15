@@ -8,10 +8,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Lynx" />
     <meta name="description" content="Turn Spotify track and album links into Apple Music links, and Apple Music links into Spotify links." />
-    <meta property="og:title" content="Lynx, music links without the lookup" />
-    <meta property="og:description" content="Paste a Spotify or Apple Music track or album and get the link for the other service." />
+    <meta property="og:title" content="Lynx, share the song, not the service" />
+    <meta property="og:description" content="Paste a Spotify or Apple Music track or album. Lynx finds it on the other service." />
     <meta property="og:type" content="website" />
-    <title>Lynx, just share the damn song</title>
+    <title>Lynx, share the song, not the service</title>
     <link rel="icon" type="image/svg+xml" href="https://lynx-music-links.vercel.app/icon.svg?v=3" />
     <link rel="apple-touch-icon" sizes="180x180" href="https://lynx-music-links.vercel.app/icon-equalizer-180.png" />
     <style>
@@ -33,8 +33,8 @@
         --radius: 16px;
         --ease-settle: cubic-bezier(.16, 1, .3, 1);
         --motion-snap: 160ms;
-        --motion-fast: 320ms;
-        --motion-enter: 480ms;
+        --motion-fast: 200ms;
+        --motion-enter: 260ms;
         font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background: var(--bg);
         color: var(--ink);
@@ -64,14 +64,14 @@
       .skip-link:focus { transform: translateY(0); }
       .glow { position: fixed; inset: 0 0 auto; height: 560px; pointer-events: none; background: radial-gradient(circle at 50% 0%, rgba(40, 118, 247, .18), transparent 65%); }
       
-      .topbar { position: relative; display: flex; width: min(1120px, 100%); flex: 0 0 auto; align-items: center; justify-content: center; gap: 18px; margin: 0 auto; padding: 16px 28px 14px; flex-direction: column; }
+      .topbar { position: relative; display: flex; width: min(1120px, 100%); flex: 0 0 auto; align-items: center; justify-content: center; gap: 18px; margin: 0 auto; padding: 16px 28px 4px; flex-direction: column; }
       .brand { display: inline-flex; align-items: center; gap: 10px; border-radius: 19px; flex-direction: column; font-size: 32px; font-weight: 750; line-height: 1; text-decoration: none; }
       .brand-mark { display: grid; width: 80px; height: 80px; overflow: hidden; place-items: center; border: 1px solid rgba(108, 162, 255, .55); border-radius: 20px; background: rgba(40, 118, 247, .12); }
       .brand-mark img { display: block; width: 100%; height: 100%; }
       .service-rail { display: flex; align-items: center; gap: 9px; color: var(--faint); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
       .service-rail svg { width: 14px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
       
-      main { position: relative; display: flex; width: min(760px, 100%); min-height: 0; flex: 1 1 auto; margin: 0 auto; overflow-y: auto; padding: clamp(12px, 2vh, 18px) 28px clamp(20px, 4vh, 28px); flex-direction: column; align-items: center; text-align: center; scrollbar-width: none; }
+      main { position: relative; display: flex; width: min(760px, 100%); min-height: 0; flex: 1 1 auto; margin: 0 auto; overflow-y: auto; padding: 4px 28px clamp(20px, 4vh, 28px); flex-direction: column; align-items: center; text-align: center; scrollbar-width: none; }
       main::-webkit-scrollbar { display: none; }
       .service-icons { display: flex; align-items: center; gap: 14px; color: var(--muted); }
       .service-icon { display: grid; width: 49px; height: 49px; place-items: center; border: 1px solid var(--line); border-radius: 15px; background: rgba(17, 23, 34, .85); }
@@ -79,11 +79,11 @@
       .service-icon svg.apple { fill: currentColor; stroke: none; }
       .swap-icon { width: 19px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
       
-      h1 { max-width: 680px; margin: 12px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(3rem, 7.8vw, 5.9rem); font-weight: 400; line-height: .94; letter-spacing: -.045em; text-wrap: balance; }
+      h1 { max-width: 680px; margin: 8px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(3rem, 7.8vw, 5.9rem); font-weight: 400; line-height: .94; letter-spacing: -.045em; text-wrap: balance; }
       .intro { max-width: 590px; margin: 20px 0 0; color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 550; line-height: 1.65; }
       .intro-tail { margin-top: 12px; }
       
-      .converter { width: 100%; margin-top: 32px; border: 1px solid var(--line); border-radius: 21px; background: rgba(21, 27, 38, .9); padding: 16px; box-shadow: 0 30px 90px -52px var(--blue); backdrop-filter: blur(12px); }
+      .converter { width: 100%; margin-top: 24px; border: 1px solid var(--line); border-radius: 21px; background: rgba(21, 27, 38, .9); padding: 16px; box-shadow: 0 30px 90px -52px var(--blue); backdrop-filter: blur(12px); }
       #convert-form { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: 12px; }
       .input-shell { display: flex; min-height: 64px; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 14px; background: rgba(9, 13, 20, .84); padding: 0 13px; }
       .input-shell:focus-within { border-color: var(--blue-hi); box-shadow: 0 0 0 3px rgba(40, 118, 247, .18); }
@@ -101,9 +101,7 @@
       .external-icon { width: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
       .spinner { width: 16px; height: 16px; border: 2px solid rgba(7, 16, 29, .28); border-top-color: #07101d; border-radius: 50%; animation: spin .7s linear infinite; }
       @keyframes spin { to { transform: rotate(360deg); } }
-      .form-status { min-height: 24px; padding: 0 8px; text-align: left; }
-      .form-status p { margin: 0; color: var(--faint); font-size: 12px; line-height: 1.65; }
-      .form-status #error-text { color: var(--danger); font-size: 13px; }
+      #error-text { margin: 0; padding: 0 8px; color: var(--danger); font-size: 13px; line-height: 1.65; text-align: left; }
       
       .result { padding: 12px; text-align: left; transform-origin: 50% 0; }
       .track-row { display: flex; align-items: center; gap: 16px; }
@@ -161,25 +159,25 @@
       
       @media (prefers-reduced-motion: no-preference) {
         .topbar { animation: lynx-enter-down var(--motion-fast) var(--ease-settle) both; }
-        .brand-mark { animation: lynx-mark-in var(--motion-enter) var(--ease-settle) 40ms both; }
-        .service-icons { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 60ms both; }
-        h1 { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 110ms both; }
-        .intro { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 160ms both; }
-        .converter { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 210ms both; }
-        .footer-note { animation: lynx-enter-up var(--motion-fast) var(--ease-settle) 280ms both; }
+        .brand-mark { animation: lynx-mark-in var(--motion-enter) var(--ease-settle) 20ms both; }
+        .service-icons { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 30ms both; }
+        h1 { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 45ms both; }
+        .intro { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 60ms both; }
+        .converter { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 75ms both; }
+        .footer-note { animation: lynx-enter-up var(--motion-fast) var(--ease-settle) 90ms both; }
         .result:not([hidden]) { animation: lynx-result-in var(--motion-fast) var(--ease-settle) both; }
         .copy-link-button.copied { animation: lynx-confirm var(--motion-fast) var(--ease-settle); }
       }
       
       @media (max-width: 600px) {
-        .topbar { padding: 12px 19px 10px; }
+        .topbar { padding: 12px 19px 4px; }
         .service-rail { gap: 7px; font-size: 9px; }
-        main { padding: 8px 19px 16px; }
-        h1 { margin-top: 12px; font-size: clamp(2.75rem, 13vw, 3.5rem); line-height: .98; }
+        main { padding: 2px 19px 16px; }
+        h1 { margin-top: 8px; font-size: clamp(2.75rem, 13vw, 3.5rem); line-height: .98; }
         .desktop-break { display: none; }
         .intro { margin-top: 14px; font-size: 16px; line-height: 1.5; }
         .intro-tail { margin-top: 10px; }
-        .converter { margin-top: 20px; padding: 12px; }
+        .converter { margin-top: 18px; padding: 12px; }
         .input-shell { padding-inline: 11px; }
         .result { padding: 7px; }
         .artwork-shell { width: 77px; height: 77px; }
@@ -216,7 +214,7 @@
     <header class="topbar">
       <a class="brand" href="/" aria-label="Lynx home">
         <span class="brand-mark" aria-hidden="true">
-          <img src="https://lynx-music-links.vercel.app/icon.svg?v=3" alt="" />
+          <img src="https://lynx-music-links.vercel.app/icon.svg?v=3" alt="" width="80" height="80" />
         </span>
         <span class="brand-name">Lynx</span>
       </a>
@@ -248,9 +246,7 @@
             <span class="button-label">Find the other link</span>
             <svg class="external-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6 14 14 6M8 6h6v6" /></svg>
           </button>
-          <div class="form-status" aria-live="polite">
-            <p id="error-text" role="alert" hidden></p>
-          </div>
+          <p id="error-text" role="alert" aria-live="polite" hidden></p>
         </form>
 
         <div id="result" class="result" hidden aria-live="polite">
