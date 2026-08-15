@@ -1,0 +1,1225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WHERE/NOW · Live DJ discovery</title>
+<meta name="theme-color" content="#07100f" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #07100f;
+    --deep: #0a1716;
+    --panel: rgba(10, 25, 23, 0.92);
+    --panel-solid: #0c1b19;
+    --line: rgba(216, 239, 230, 0.14);
+    --line-strong: rgba(216, 239, 230, 0.28);
+    --paper: #eaf0e8;
+    --muted: #94a8a0;
+    --dim: #5f746d;
+    --signal: #c8ff4d;
+    --signal-soft: rgba(200, 255, 77, 0.16);
+    --water: #7dd7e7;
+    --water-soft: rgba(125, 215, 231, 0.12);
+    --danger: #ff5c75;
+    --display: "Archivo", Arial, sans-serif;
+    --mono: "IBM Plex Mono", monospace;
+    --radius: 22px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    background: var(--night);
+    color: var(--paper);
+    font-family: var(--display);
+    overflow-x: hidden;
+  }
+
+  button, select { font: inherit; }
+  button { color: inherit; }
+
+  .shell {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 44%, rgba(55, 128, 121, 0.15), transparent 32%),
+      linear-gradient(135deg, #06100f 0%, #081412 48%, #06100f 100%);
+  }
+
+  .topbar {
+    height: 78px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 20px;
+    padding: 0 34px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 20;
+    background: rgba(7, 16, 15, 0.72);
+    backdrop-filter: blur(18px);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    gap: 12px;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+  }
+
+  .brand-mark::before,
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    background: var(--signal);
+  }
+
+  .brand-mark::before {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    left: 4px;
+    top: 10px;
+    box-shadow: 12px -5px 0 -2px rgba(200, 255, 77, 0.65), 14px 8px 0 -1px rgba(125, 215, 231, 0.7);
+  }
+
+  .brand-mark::after {
+    width: 1px;
+    height: 34px;
+    left: 13px;
+    top: -4px;
+    transform: rotate(34deg);
+    opacity: 0.65;
+  }
+
+  .live-ticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 5px var(--signal-soft), 0 0 20px rgba(200, 255, 77, 0.45);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.45; transform: scale(0.84); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .text-action,
+  .icon-action {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease;
+  }
+
+  .text-action {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .icon-action {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+  .text-action:hover,
+  .icon-action:hover { border-color: var(--signal); background: var(--signal-soft); }
+
+  .main {
+    min-height: calc(100vh - 78px);
+    display: grid;
+    grid-template-columns: minmax(390px, 38%) 1fr;
+    position: relative;
+  }
+
+  .player-column {
+    position: relative;
+    z-index: 12;
+    padding: 30px 0 30px 34px;
+  }
+
+  .player-card {
+    height: 100%;
+    min-height: 720px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--panel-solid);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.35);
+  }
+
+  .video {
+    min-height: 350px;
+    flex: 1 1 auto;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%),
+      linear-gradient(140deg, #183b38 0%, #0c201e 47%, #06100f 100%);
+    isolation: isolate;
+  }
+
+  .video::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.34;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+    background-size: 34px 34px;
+    transform: perspective(480px) rotateX(58deg) scale(1.6) translateY(16%);
+    transform-origin: bottom center;
+  }
+
+  .video-glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+    background: rgba(200, 255, 77, 0.07);
+    border: 1px solid rgba(200, 255, 77, 0.14);
+    box-shadow: 0 0 70px rgba(200, 255, 77, 0.1);
+  }
+
+  .video-glow::before,
+  .video-glow::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(200, 255, 77, 0.11);
+    border-radius: 50%;
+    inset: 26px;
+  }
+
+  .video-glow::after { inset: 64px; }
+
+  .deck {
+    position: absolute;
+    width: 280px;
+    height: 74px;
+    left: 50%;
+    bottom: 17%;
+    transform: translateX(-50%) skewX(-7deg);
+    border: 1px solid rgba(234, 240, 232, 0.25);
+    background: linear-gradient(180deg, rgba(21, 42, 39, 0.96), rgba(7, 16, 15, 0.98));
+    box-shadow: 0 24px 44px rgba(0,0,0,0.55);
+  }
+
+  .deck::before,
+  .deck::after {
+    content: "";
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 7px double rgba(125, 215, 231, 0.4);
+    top: 8px;
+  }
+
+  .deck::before { left: 17px; }
+  .deck::after { right: 17px; }
+
+  .mixer {
+    position: absolute;
+    left: 50%;
+    top: 15px;
+    width: 72px;
+    height: 43px;
+    transform: translateX(-50%);
+    border-left: 1px solid var(--line-strong);
+    border-right: 1px solid var(--line-strong);
+    background: repeating-linear-gradient(90deg, transparent 0 9px, rgba(200,255,77,0.5) 10px 11px);
+  }
+
+  .dj {
+    position: absolute;
+    left: 50%;
+    bottom: calc(17% + 58px);
+    width: 120px;
+    height: 180px;
+    transform: translateX(-50%);
+  }
+
+  .dj::before {
+    content: "";
+    position: absolute;
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    left: 31px;
+    top: 0;
+    background: #07100f;
+    border: 8px solid rgba(125, 215, 231, 0.16);
+    box-shadow: 0 0 32px rgba(125, 215, 231, 0.18);
+  }
+
+  .dj::after {
+    content: "";
+    position: absolute;
+    width: 118px;
+    height: 132px;
+    border-radius: 55px 55px 14px 14px;
+    left: 1px;
+    bottom: 0;
+    background: linear-gradient(100deg, #07100f, #102a27 60%, #07100f);
+    clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  }
+
+  .video-top {
+    position: absolute;
+    inset: 18px 18px auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .platform-badge,
+  .quality-badge {
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(234, 240, 232, 0.2);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(7, 16, 15, 0.5);
+    backdrop-filter: blur(10px);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .platform-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--danger);
+    box-shadow: 0 0 12px rgba(255, 92, 117, 0.7);
+  }
+
+  .wave {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 17px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    opacity: 0.8;
+  }
+
+  .bar {
+    flex: 1;
+    max-width: 5px;
+    min-width: 2px;
+    height: var(--h);
+    border-radius: 3px;
+    background: linear-gradient(to top, var(--water), var(--signal));
+    animation: meter var(--speed) ease-in-out infinite alternate;
+    transform-origin: bottom;
+  }
+
+  @keyframes meter { to { transform: scaleY(0.28); opacity: 0.45; } }
+
+  .player-info {
+    padding: 24px 25px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-top: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .city-signal { color: var(--signal); }
+
+  .title-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 16px;
+  }
+
+  .set-title {
+    font-size: clamp(30px, 3.25vw, 48px);
+    line-height: 0.95;
+    letter-spacing: -0.055em;
+    font-weight: 700;
+  }
+
+  .dj-name {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .follow-button {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .follow-button.active {
+    color: var(--night);
+    background: var(--paper);
+  }
+
+  .metadata {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .meta-pill {
+    min-height: 30px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .shuffle-button {
+    width: 100%;
+    min-height: 62px;
+    border: 0;
+    border-radius: 13px;
+    background: var(--signal);
+    color: #10190d;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    cursor: pointer;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+    transition: transform 160ms ease, filter 160ms ease;
+  }
+
+  .shuffle-button:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .shuffle-button:active { transform: translateY(1px); }
+
+  .shuffle-button span:last-child {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .map-column {
+    position: relative;
+    min-width: 0;
+    min-height: 720px;
+  }
+
+  .map-tools {
+    position: absolute;
+    z-index: 10;
+    left: 32px;
+    right: 34px;
+    top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px;
+    max-width: calc(100% - 182px);
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 16, 15, 0.72);
+    backdrop-filter: blur(18px);
+    scrollbar-width: none;
+  }
+
+  .filter-group::-webkit-scrollbar { display: none; }
+
+  .genre {
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .genre.active {
+    background: var(--paper);
+    color: var(--night);
+  }
+
+  .region-select {
+    height: 49px;
+    min-width: 166px;
+    appearance: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0 42px 0 18px;
+    color: var(--paper);
+    background-color: rgba(7, 16, 15, 0.72);
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position: calc(100% - 19px) 21px, calc(100% - 14px) 21px;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    backdrop-filter: blur(18px);
+  }
+
+  .world {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .world::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.34;
+    background-image:
+      linear-gradient(rgba(125, 215, 231, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(125, 215, 231, 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .world::after {
+    content: "";
+    position: absolute;
+    width: 52vw;
+    height: 52vw;
+    max-width: 780px;
+    max-height: 780px;
+    min-width: 620px;
+    min-height: 620px;
+    left: 57%;
+    top: 53%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(125, 215, 231, 0.09);
+    border-radius: 50%;
+    box-shadow: 0 0 0 90px rgba(125, 215, 231, 0.015), 0 0 0 180px rgba(125, 215, 231, 0.01);
+  }
+
+  .map-svg {
+    position: absolute;
+    width: 112%;
+    height: 94%;
+    left: -3%;
+    top: 5%;
+    opacity: 0.68;
+    filter: drop-shadow(0 0 25px rgba(125, 215, 231, 0.06));
+  }
+
+  .map-svg path {
+    fill: rgba(18, 54, 50, 0.58);
+    stroke: rgba(125, 215, 231, 0.23);
+    stroke-width: 1.3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .map-svg .inner {
+    fill: none;
+    stroke: rgba(125, 215, 231, 0.09);
+    stroke-width: 0.8;
+  }
+
+  .map-label {
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(148, 168, 160, 0.44);
+    z-index: 2;
+  }
+
+  .label-atlantic { left: 35%; top: 48%; transform: rotate(-83deg); }
+  .label-pacific { right: 6%; top: 42%; transform: rotate(84deg); }
+  .label-equator { right: 24%; top: 61%; }
+
+  .pin {
+    position: absolute;
+    z-index: 8;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .pin::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    left: 12px;
+    top: 12px;
+    background: var(--water);
+    box-shadow: 0 0 0 6px rgba(125, 215, 231, 0.1), 0 0 18px rgba(125, 215, 231, 0.5);
+  }
+
+  .pin::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border: 1px solid rgba(125, 215, 231, 0.22);
+    border-radius: 50%;
+    animation: sonar 2.8s ease-out infinite;
+  }
+
+  .pin.active::before {
+    width: 13px;
+    height: 13px;
+    left: 10.5px;
+    top: 10.5px;
+    background: var(--signal);
+    box-shadow: 0 0 0 7px var(--signal-soft), 0 0 24px rgba(200, 255, 77, 0.65);
+  }
+
+  .pin.active::after { border-color: rgba(200, 255, 77, 0.55); }
+
+  @keyframes sonar {
+    0% { opacity: 0.9; transform: scale(0.5); }
+    80%, 100% { opacity: 0; transform: scale(1.45); }
+  }
+
+  .pin-card {
+    position: absolute;
+    z-index: 7;
+    min-width: 170px;
+    padding: 11px 12px;
+    border: 1px solid rgba(200, 255, 77, 0.28);
+    border-radius: 9px;
+    background: rgba(7, 16, 15, 0.88);
+    backdrop-filter: blur(14px);
+    transform: translate(18px, -50%);
+    pointer-events: none;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  }
+
+  .pin-card strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .pin-card span {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .map-bottom {
+    position: absolute;
+    z-index: 9;
+    left: 32px;
+    right: 34px;
+    bottom: 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .map-note {
+    max-width: 280px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .map-note strong { color: var(--paper); font-weight: 600; }
+
+  .map-coords {
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    text-align: right;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .toast {
+    position: fixed;
+    z-index: 50;
+    right: 28px;
+    bottom: 28px;
+    padding: 14px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--paper);
+    color: var(--night);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    transform: translateY(24px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .topbar {
+      height: 66px;
+      grid-template-columns: 1fr auto;
+      padding: 0 16px;
+    }
+
+    .live-ticker { display: none; }
+    .text-action { display: none; }
+    .brand { font-size: 18px; }
+
+    .main {
+      min-height: calc(100vh - 66px);
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .map-column {
+      position: absolute;
+      inset: 0 0 auto 0;
+      min-height: 400px;
+      height: 46vh;
+    }
+
+    .world::after {
+      min-width: 430px;
+      min-height: 430px;
+      left: 52%;
+      top: 48%;
+    }
+
+    .map-svg {
+      width: 145%;
+      height: 100%;
+      left: -22%;
+      top: 1%;
+    }
+
+    .map-tools {
+      top: 14px;
+      left: 14px;
+      right: 14px;
+    }
+
+    .filter-group {
+      max-width: calc(100% - 50px);
+      border-radius: 12px;
+      padding: 5px;
+    }
+
+    .genre { height: 32px; padding: 0 12px; }
+
+    .region-select {
+      width: 42px;
+      min-width: 42px;
+      padding: 0;
+      color: transparent;
+      border-radius: 12px;
+      background-position: 16px 20px, 21px 20px;
+    }
+
+    .map-bottom,
+    .map-label,
+    .pin-card { display: none; }
+
+    .player-column {
+      width: 100%;
+      padding: 0 10px 10px;
+      margin-top: 34vh;
+    }
+
+    .player-card {
+      min-height: auto;
+      height: auto;
+      border-radius: 20px;
+      background: rgba(10, 25, 23, 0.97);
+      box-shadow: 0 -18px 50px rgba(0,0,0,0.45);
+    }
+
+    .video {
+      min-height: 238px;
+      flex: 0 0 238px;
+    }
+
+    .video-glow { width: 190px; height: 190px; }
+    .deck { width: 230px; bottom: 13%; }
+    .dj { transform: translateX(-50%) scale(0.75); transform-origin: bottom center; bottom: calc(13% + 56px); }
+    .wave { height: 26px; bottom: 12px; }
+
+    .player-info {
+      padding: 18px 18px 16px;
+      gap: 16px;
+    }
+
+    .title-row { align-items: center; }
+    .set-title { font-size: 33px; }
+    .dj-name { margin-top: 7px; }
+    .follow-button { width: 44px; padding: 0; font-size: 0; }
+    .follow-button::before { content: "+"; font-size: 19px; font-family: var(--mono); }
+    .follow-button.active::before { content: "✓"; font-size: 14px; }
+
+    .metadata { flex-wrap: nowrap; overflow: hidden; }
+    .meta-pill { flex: 0 0 auto; }
+    .shuffle-button { min-height: 58px; }
+    .toast { right: 16px; left: 16px; bottom: 16px; text-align: center; }
+  }
+
+  @media (max-width: 390px) and (max-height: 760px) {
+    .map-column { height: 41vh; }
+    .player-column { margin-top: 30vh; }
+    .video { min-height: 205px; flex-basis: 205px; }
+    .player-info { gap: 12px; padding-top: 14px; }
+    .metadata { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand" aria-label="Where Now home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>WHERE/NOW</span>
+    </div>
+    <div class="live-ticker"><span class="live-dot"></span><span><b id="liveCount">248</b> live signals</span></div>
+    <div class="top-actions">
+      <button class="text-action" id="claimButton">Claim your pin</button>
+      <button class="icon-action" aria-label="Open menu">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2 4.5H14M2 8H10M2 11.5H14" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="player-column" aria-label="Current live set">
+      <article class="player-card">
+        <div class="video" id="videoStage">
+          <div class="video-glow"></div>
+          <div class="dj"></div>
+          <div class="deck"><div class="mixer"></div></div>
+          <div class="video-top">
+            <span class="platform-badge" id="platform">Live on Twitch</span>
+            <span class="quality-badge">1080p</span>
+          </div>
+          <div class="wave" id="wave" aria-hidden="true"></div>
+        </div>
+
+        <div class="player-info">
+          <div class="eyebrow">
+            <span class="city-signal" id="location">Johannesburg, South Africa</span>
+            <span id="localTime">00:47 local</span>
+          </div>
+
+          <div class="title-row">
+            <div>
+              <h1 class="set-title" id="setTitle">Soft Pressure</h1>
+              <p class="dj-name">with <span id="djName">Lerato.exe</span></p>
+            </div>
+            <button class="follow-button" id="followButton">Follow DJ</button>
+          </div>
+
+          <div class="metadata">
+            <span class="meta-pill" id="genreMeta">Amapiano</span>
+            <span class="meta-pill" id="viewerMeta">62 listening</span>
+            <span class="meta-pill">Live location</span>
+          </div>
+
+          <button class="shuffle-button" id="shuffleButton">
+            <span>Take me somewhere else</span>
+            <span>↗</span>
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section class="map-column" aria-label="World map of live DJ sets">
+      <div class="map-tools">
+        <div class="filter-group" role="group" aria-label="Select a genre">
+          <button class="genre active" data-genre="All">All signals</button>
+          <button class="genre" data-genre="House">House</button>
+          <button class="genre" data-genre="Techno">Techno</button>
+          <button class="genre" data-genre="Bass">Bass</button>
+          <button class="genre" data-genre="Amapiano">Amapiano</button>
+          <button class="genre" data-genre="Ambient">Ambient</button>
+        </div>
+        <select class="region-select" id="regionSelect" aria-label="Select a region">
+          <option value="All">Anywhere</option>
+          <option value="Africa">Africa</option>
+          <option value="Asia">Asia</option>
+          <option value="Europe">Europe</option>
+          <option value="Middle East">Middle East</option>
+          <option value="South America">South America</option>
+        </select>
+      </div>
+
+      <div class="world">
+        <svg class="map-svg" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <path d="M65 172L93 125l66-46 85-18 75 18 58 54 45 10 28 45-24 34-60 2-34 48-44 4-27 58-34 25-35-24-27-65-45-34-19-64z"/>
+          <path d="M308 363l48 15 47 54 17 61-14 72-31 50-35-15-6-72-30-63-18-55z"/>
+          <path d="M440 158l50-54 74-24 75 11 45 38 60-4 61 30 76 7 57 45-10 50-58 24-55-13-24 27-45-7-29 52-43 3-37-47-41 1-35-37-62 11-50-37-37-4-19-45z"/>
+          <path d="M511 297l55-26 71 31 42 70-18 74-47 68-45-22-29-59-33-52-18-51z"/>
+          <path d="M787 406l49-29 57 21 43 52-34 43-65-5-49-37z"/>
+          <path d="M494 91l14-38 41-20 45 28-12 36-44 17z"/>
+          <path class="inner" d="M131 143l105 62 92-54M185 275l88-47M343 396l57 36M492 187l92 72 83-120M567 274l72 25 64-67M602 348l-22 85 63 40M754 183l29 85 63-48M835 418l21 58"/>
+        </svg>
+
+        <span class="map-label label-atlantic">Atlantic</span>
+        <span class="map-label label-pacific">Pacific</span>
+        <span class="map-label label-equator">00° Equator</span>
+
+        <div id="pins"></div>
+      </div>
+
+      <div class="map-bottom">
+        <p class="map-note"><strong>Every light is live.</strong> Jump into a set or narrow the world to the sound you want.</p>
+        <p class="map-coords" id="coordinates">26.2041° S<br>28.0473° E</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+  const sets = [
+    {
+      id: "johannesburg",
+      title: "Soft Pressure",
+      dj: "Lerato.exe",
+      city: "Johannesburg",
+      country: "South Africa",
+      region: "Africa",
+      genre: "Amapiano",
+      viewers: 62,
+      time: "00:47",
+      coords: ["26.2041° S", "28.0473° E"],
+      pos: [56, 66],
+      platform: "Live on Twitch",
+      colors: ["#214f49", "#0b2420", "#07100f"]
+    },
+    {
+      id: "london",
+      title: "Sub Level",
+      dj: "Mara Vale",
+      city: "London",
+      country: "United Kingdom",
+      region: "Europe",
+      genre: "Bass",
+      viewers: 114,
+      time: "23:47",
+      coords: ["51.5072° N", "0.1276° W"],
+      pos: [47, 36],
+      platform: "Live on Twitch",
+      colors: ["#163d45", "#0d2428", "#07100f"]
+    },
+    {
+      id: "berlin",
+      title: "Concrete Bloom",
+      dj: "Nullform",
+      city: "Berlin",
+      country: "Germany",
+      region: "Europe",
+      genre: "Techno",
+      viewers: 38,
+      time: "00:47",
+      coords: ["52.5200° N", "13.4050° E"],
+      pos: [51, 36],
+      platform: "Live on YouTube",
+      colors: ["#294641", "#132824", "#07100f"]
+    },
+    {
+      id: "tokyo",
+      title: "Blue Hours",
+      dj: "Mizu Signal",
+      city: "Tokyo",
+      country: "Japan",
+      region: "Asia",
+      genre: "Ambient",
+      viewers: 91,
+      time: "07:47",
+      coords: ["35.6762° N", "139.6503° E"],
+      pos: [83, 43],
+      platform: "Live on YouTube",
+      colors: ["#174451", "#0c2730", "#07100f"]
+    },
+    {
+      id: "saopaulo",
+      title: "Heat Index",
+      dj: "Nina Brava",
+      city: "São Paulo",
+      country: "Brazil",
+      region: "South America",
+      genre: "House",
+      viewers: 47,
+      time: "19:47",
+      coords: ["23.5505° S", "46.6333° W"],
+      pos: [37, 69],
+      platform: "Live on Twitch",
+      colors: ["#315044", "#15271f", "#07100f"]
+    },
+    {
+      id: "beirut",
+      title: "Afterimage",
+      dj: "Rana 909",
+      city: "Beirut",
+      country: "Lebanon",
+      region: "Middle East",
+      genre: "Techno",
+      viewers: 29,
+      time: "01:47",
+      coords: ["33.8938° N", "35.5018° E"],
+      pos: [57, 44],
+      platform: "Live on Twitch",
+      colors: ["#214b45", "#102723", "#07100f"]
+    },
+    {
+      id: "lagos",
+      title: "Palm Wine Data",
+      dj: "Teju B2B Mina",
+      city: "Lagos",
+      country: "Nigeria",
+      region: "Africa",
+      genre: "House",
+      viewers: 76,
+      time: "23:47",
+      coords: ["6.5244° N", "3.3792° E"],
+      pos: [49, 57],
+      platform: "Live on Twitch",
+      colors: ["#264d42", "#11271f", "#07100f"]
+    }
+  ];
+
+  let current = 0;
+  let selectedGenre = "All";
+  let selectedRegion = "All";
+
+  const pins = document.getElementById("pins");
+  const wave = document.getElementById("wave");
+  const title = document.getElementById("setTitle");
+  const dj = document.getElementById("djName");
+  const locationLabel = document.getElementById("location");
+  const localTime = document.getElementById("localTime");
+  const genreMeta = document.getElementById("genreMeta");
+  const viewerMeta = document.getElementById("viewerMeta");
+  const coordinates = document.getElementById("coordinates");
+  const platform = document.getElementById("platform");
+  const stage = document.getElementById("videoStage");
+  const followButton = document.getElementById("followButton");
+  const toast = document.getElementById("toast");
+
+  function renderWave() {
+    const pattern = [16, 27, 12, 31, 22, 18, 30, 13, 25, 34, 19, 27, 15, 32, 21, 28, 13, 25, 33, 17, 29, 12, 24, 31, 18, 26, 14, 30, 20, 34, 16, 27, 12, 31, 22, 18, 29, 15, 24, 32, 19, 28, 13, 26, 34, 17, 30, 14, 25, 31, 18, 27, 12, 29, 21, 33, 15, 26, 19, 30];
+    wave.innerHTML = pattern.map((height, index) => `<span class="bar" style="--h:${height}px;--speed:${0.55 + (index % 7) * 0.09}s"></span>`).join("");
+  }
+
+  function eligibleSets() {
+    const filtered = sets.filter(set =>
+      (selectedGenre === "All" || set.genre === selectedGenre) &&
+      (selectedRegion === "All" || set.region === selectedRegion)
+    );
+    return filtered.length ? filtered : sets;
+  }
+
+  function renderPins() {
+    pins.innerHTML = "";
+    sets.forEach((set, index) => {
+      const visible = (selectedGenre === "All" || set.genre === selectedGenre) &&
+        (selectedRegion === "All" || set.region === selectedRegion);
+      if (!visible) return;
+
+      const button = document.createElement("button");
+      button.className = `pin${index === current ? " active" : ""}`;
+      button.style.left = `${set.pos[0]}%`;
+      button.style.top = `${set.pos[1]}%`;
+      button.setAttribute("aria-label", `Play ${set.dj} live from ${set.city}`);
+      button.addEventListener("click", () => selectSet(index));
+      pins.appendChild(button);
+
+      if (index === current) {
+        const card = document.createElement("div");
+        card.className = "pin-card";
+        card.style.left = `${set.pos[0]}%`;
+        card.style.top = `${set.pos[1]}%`;
+        card.innerHTML = `<strong>${set.city}</strong><span>${set.genre} · live now</span>`;
+        pins.appendChild(card);
+      }
+    });
+  }
+
+  function selectSet(index) {
+    current = index;
+    const set = sets[current];
+    title.textContent = set.title;
+    dj.textContent = set.dj;
+    locationLabel.textContent = `${set.city}, ${set.country}`;
+    localTime.textContent = `${set.time} local`;
+    genreMeta.textContent = set.genre;
+    viewerMeta.textContent = `${set.viewers} listening`;
+    coordinates.innerHTML = `${set.coords[0]}<br>${set.coords[1]}`;
+    platform.textContent = set.platform;
+    stage.style.background = `radial-gradient(circle at 72% 18%, rgba(125, 215, 231, 0.34), transparent 23%), linear-gradient(140deg, ${set.colors[0]} 0%, ${set.colors[1]} 47%, ${set.colors[2]} 100%)`;
+    followButton.classList.remove("active");
+    followButton.textContent = "Follow DJ";
+    renderPins();
+  }
+
+  function shuffle() {
+    const pool = eligibleSets();
+    const alternatives = pool.filter(set => sets.indexOf(set) !== current);
+    const candidates = alternatives.length ? alternatives : pool;
+    const next = candidates[Math.floor(Math.random() * candidates.length)];
+    selectSet(sets.indexOf(next));
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => toast.classList.remove("show"), 2200);
+  }
+
+  document.querySelectorAll(".genre").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".genre").forEach(item => item.classList.remove("active"));
+      button.classList.add("active");
+      selectedGenre = button.dataset.genre;
+      const first = eligibleSets()[0];
+      selectSet(sets.indexOf(first));
+    });
+  });
+
+  document.getElementById("regionSelect").addEventListener("change", event => {
+    selectedRegion = event.target.value;
+    const first = eligibleSets()[0];
+    selectSet(sets.indexOf(first));
+  });
+
+  document.getElementById("shuffleButton").addEventListener("click", shuffle);
+
+  followButton.addEventListener("click", () => {
+    followButton.classList.toggle("active");
+    followButton.textContent = followButton.classList.contains("active") ? "Following" : "Follow DJ";
+    showToast(followButton.classList.contains("active") ? `Following ${sets[current].dj}` : `Unfollowed ${sets[current].dj}`);
+  });
+
+  document.getElementById("claimButton").addEventListener("click", () => showToast("DJ claims open soon. Your city, your signal."));
+
+  renderWave();
+  selectSet(0);
+</script>
+</body>
+</html>
