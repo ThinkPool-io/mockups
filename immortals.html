@@ -262,6 +262,23 @@
     .primary-button svg { width: 20px; height: 20px; }
     .duration { color: var(--muted); font-size: 15px; font-weight: 700; }
 
+    .weight-book-button {
+      min-height: 50px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 7px 14px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      background: var(--card);
+      cursor: pointer;
+      line-height: 1.1;
+    }
+
+    .weight-book-button strong { font-size: 15px; }
+    .weight-book-button span { margin-top: 3px; color: var(--muted); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
     .week-card {
       border-radius: var(--radius-lg);
       padding: 26px;
@@ -394,6 +411,21 @@
     .exercise-meta { margin-top: 9px; display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; font-weight: 700; }
     .exercise-meta strong { color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
+    .exercise-weight {
+      margin-top: 13px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .exercise-weight strong { color: var(--coral-dark); font-size: 14px; font-variant-numeric: tabular-nums; }
+
     .rules-card {
       margin-top: 34px;
       padding: 26px;
@@ -520,6 +552,63 @@
     .dose-pill { min-height: 40px; padding: 0 14px; display: inline-flex; align-items: center; border-radius: 999px; background: var(--sage-soft); font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
     .dose-pill.secondary { background: #eeeae2; color: var(--muted); }
 
+    .load-card {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #f3f0e9;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px 16px;
+      align-items: center;
+    }
+
+    .load-copy strong { display: block; font-size: 16px; }
+    .load-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.3; }
+
+    .weight-stepper { display: grid; grid-template-columns: 44px 84px 44px auto; gap: 6px; align-items: center; }
+
+    .stepper-button {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      font-size: 24px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .weight-input {
+      width: 84px;
+      height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--ink);
+      text-align: center;
+      font-size: 18px;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .weight-unit { min-width: 42px; color: var(--muted); font-size: 13px; font-weight: 800; }
+
+    .top-range-check {
+      grid-column: 1 / -1;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .top-range-check input { width: 22px; height: 22px; margin: 0; accent-color: var(--coral); }
+
     .cue-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; counter-reset: cue; }
     .cue-list li { min-height: 58px; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; font-size: 17px; line-height: 1.35; font-weight: 650; }
     .cue-list li::before { counter-increment: cue; content: counter(cue); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #eeeae2; font-size: 14px; font-weight: 850; }
@@ -555,6 +644,62 @@
     .rule-detail strong { display: block; font-size: 18px; }
     .rule-detail p { margin: 7px 0 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
     .safety-note { margin: 18px 0 0; padding: 16px 18px; border-left: 4px solid var(--coral); background: #fae6df; font-size: 15px; line-height: 1.45; }
+
+    .weight-dialog { width: min(760px, calc(100vw - 32px)); height: min(780px, calc(100vh - 32px)); }
+
+    .weight-dialog-shell { height: 100%; display: grid; grid-template-rows: auto auto 1fr auto; }
+
+    .weight-dialog-head {
+      padding: 24px 26px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 20px;
+    }
+
+    .weight-dialog h2 { margin: 7px 0 0; font-size: 36px; letter-spacing: -.05em; }
+    .weight-summary { margin: 7px 0 0; color: var(--muted); font-size: 15px; font-weight: 650; }
+
+    .weight-tabs { margin: 0 26px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 4px; border-radius: 15px; background: #e8e4dc; }
+
+    .weight-tab {
+      min-height: 48px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .weight-tab[aria-pressed="true"] { background: var(--card); box-shadow: 0 4px 12px rgba(38, 31, 23, .08); }
+
+    .weight-list { min-height: 0; overflow-y: auto; padding: 0 26px 18px; display: grid; gap: 9px; }
+
+    .weight-row {
+      min-height: 74px;
+      padding: 11px 12px 11px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      background: var(--card);
+    }
+
+    .weight-row-title { min-width: 0; }
+    .weight-row-title strong { display: block; font-size: 16px; line-height: 1.2; }
+    .weight-row-title span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.25; }
+    .weight-row .weight-stepper { grid-template-columns: 44px 76px 44px auto; }
+    .weight-row .weight-input { width: 76px; }
+
+    .weight-save {
+      padding: 14px 26px 20px;
+      border-top: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .weight-save .primary-button { width: 100%; }
 
     .celebration {
       position: fixed;
@@ -608,6 +753,7 @@
       .start-row { display: block; margin-top: 24px; }
       .start-row .primary-button { width: 100%; min-height: 60px; }
       .duration { display: block; margin-top: 10px; text-align: center; }
+      .weight-book-button { width: 100%; margin-top: 12px; min-height: 54px; align-items: center; }
       .week-card { margin-top: 14px; padding: 20px; border-radius: 24px; }
       .week-heading h2 { font-size: 23px; }
       .week-count { width: 46px; min-width: 46px; height: 46px; }
@@ -627,6 +773,7 @@
       .exercise-copy h3 { font-size: 18px; }
       .exercise-meta { display: block; margin-top: 8px; }
       .exercise-meta span { display: block; margin-top: 3px; }
+      .exercise-weight { margin-top: 9px; padding-top: 8px; }
       .rules-card { margin-top: 28px; padding: 18px; grid-template-columns: 1fr; border-radius: 24px; }
       .rules-intro { padding: 4px 4px 8px; }
       .rule { min-height: 0; }
@@ -643,6 +790,12 @@
       .guide-copy h2 { margin: 8px 0; font-size: 34px; }
       .dose-row { margin-bottom: 12px; }
       .dose-pill { min-height: 36px; font-size: 14px; }
+      .load-card { margin-bottom: 8px; padding: 10px 12px; grid-template-columns: 1fr; gap: 8px; }
+      .load-copy { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+      .load-copy span { margin-top: 0; text-align: right; max-width: 160px; }
+      .load-card .weight-stepper { grid-template-columns: 44px 78px 44px auto; }
+      .load-card .weight-input { width: 78px; }
+      .top-range-check { min-height: 44px; padding-top: 7px; font-size: 13px; }
       .cue-list { gap: 4px; }
       .cue-list li { min-height: 48px; font-size: 16px; grid-template-columns: 30px 1fr; gap: 10px; }
       .cue-list li::before { width: 30px; height: 30px; }
@@ -651,6 +804,15 @@
       .rules-dialog { width: 100vw; height: 100svh; max-height: none; }
       .rules-dialog-inner { padding: 22px 18px 30px; overflow-y: auto; height: 100%; }
       .rules-dialog h2 { font-size: 32px; }
+      .weight-dialog { width: 100vw; height: 100svh; max-height: none; }
+      .weight-dialog-head { padding: 18px 16px 12px; }
+      .weight-dialog h2 { font-size: 31px; }
+      .weight-tabs { margin: 0 16px 12px; }
+      .weight-list { padding: 0 16px 14px; }
+      .weight-row { min-height: 104px; grid-template-columns: 1fr; gap: 8px; }
+      .weight-row .weight-stepper { grid-template-columns: 46px 1fr 46px auto; }
+      .weight-row .weight-input { width: 100%; }
+      .weight-save { padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -702,6 +864,10 @@
                 Start workout
               </button>
               <span class="duration">About 50 minutes</span>
+              <button class="weight-book-button" type="button" data-weights>
+                <strong>Weight book</strong>
+                <span data-weight-count>0 of 12 saved</span>
+              </button>
             </div>
           </article>
 
@@ -752,6 +918,16 @@
           <p class="guide-category" data-category>Quads · Glutes</p>
           <h2 id="guide-title" data-guide-title>Leg Press</h2>
           <div class="dose-row"><span class="dose-pill" data-dose>3 × 8–10</span><span class="dose-pill secondary" data-effort>2 reps left</span></div>
+          <div class="load-card">
+            <div class="load-copy"><strong>Today’s weight</strong><span data-load-note>Enter your starting weight</span></div>
+            <div class="weight-stepper">
+              <button class="stepper-button" type="button" data-load-minus aria-label="Decrease weight">−</button>
+              <input class="weight-input" data-load-input type="number" min="0" inputmode="decimal" aria-label="Weight for this exercise">
+              <button class="stepper-button" type="button" data-load-plus aria-label="Increase weight">+</button>
+              <span class="weight-unit" data-load-unit>kg</span>
+            </div>
+            <label class="top-range-check"><input type="checkbox" data-top-range><span>I reached the top reps on every set</span></label>
+          </div>
           <ol class="cue-list" id="cue-list"></ol>
         </div>
       </div>
@@ -759,6 +935,21 @@
         <button class="secondary-button" type="button" data-previous>Previous</button>
         <button class="primary-button" type="button" data-next>Done · Next exercise</button>
       </footer>
+    </div>
+  </dialog>
+
+  <dialog class="weight-dialog" id="weight-dialog" role="dialog" aria-modal="true" aria-labelledby="weight-dialog-title">
+    <div class="weight-dialog-shell">
+      <header class="weight-dialog-head">
+        <div><p class="section-kicker">Progressive overload</p><h2 id="weight-dialog-title"><span data-weight-owner>Mom</span>’s weight book</h2><p class="weight-summary" data-weight-summary>0 of 12 starting weights saved</p></div>
+        <button class="icon-button" type="button" data-weights-close aria-label="Close weight book">×</button>
+      </header>
+      <div class="weight-tabs" aria-label="Choose workout for weight setup">
+        <button class="weight-tab" type="button" data-weight-tab="A" aria-pressed="true">Workout A</button>
+        <button class="weight-tab" type="button" data-weight-tab="B" aria-pressed="false">Workout B</button>
+      </div>
+      <div class="weight-list" id="weight-list"></div>
+      <footer class="weight-save"><button class="primary-button" type="button" data-weights-save>Save weights</button></footer>
     </div>
   </dialog>
 
@@ -782,23 +973,23 @@
       A: {
         heading: "Full Body A",
         exercises: [
-          { title: "Leg Press", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", videoId: "UWLwsdErycg", source: "Nuffield Health · 2:26", cues: ["Set the seat so your hips and lower back stay supported.", "Keep your knees tracking in the same direction as your toes.", "Lower with control, then drive through your whole foot."] },
-          { title: "Machine Chest Press", category: "Chest · Triceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "iQYryL41HII", source: "Nuffield Health · 1:51", cues: ["Set the handles near mid-chest and keep your back on the pad.", "Keep your wrists straight and your shoulders relaxed.", "Press smoothly, then control the return."] },
-          { title: "Lat Pulldown", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "JGeRYIZdojU", source: "PureGym · 0:13", cues: ["Lock your thighs under the pads and sit tall.", "Pull the bar toward your upper chest without swinging.", "Control the return until your arms are long."] },
-          { title: "Dumbbell Romanian Deadlift", guideTitle: "Romanian Deadlift", category: "Glutes · Hamstrings", dose: "2 × 8–10", effort: "Clean reps", videoId: "F5ZGAP-ZMaI", source: "E3 Rehab · 0:11", cues: ["Keep the dumbbells close to your thighs.", "Soften your knees and send your hips backward.", "Stand tall without leaning back at the top."] },
-          { title: "Machine Shoulder Press", category: "Shoulders · Triceps", dose: "2 × 10–12", effort: "2 reps left", videoId: "GcY6TZxfS0k", source: "PureGym · 0:10", cues: ["Set the seat so the handles begin near shoulder height.", "Keep your ribs down, back supported and wrists stacked.", "Press overhead without shrugging, then return slowly."] },
-          { title: "Farmer Carry", category: "Grip · Core · Conditioning", dose: "3 × 20 m", effort: "Heavy and tidy", videoId: "-QSmQj9_CQo", source: "Continuous Motion PT · 0:14", cues: ["Choose challenging dumbbells you can carry with tall posture.", "Keep your shoulders quiet and take steady steps.", "Turn under control and keep breathing."] }
+          { title: "Leg Press", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", increment: 5, unit: "kg", videoId: "UWLwsdErycg", source: "Nuffield Health · 2:26", cues: ["Set the seat so your hips and lower back stay supported.", "Keep your knees tracking in the same direction as your toes.", "Lower with control, then drive through your whole foot."] },
+          { title: "Machine Chest Press", category: "Chest · Triceps", dose: "3 × 8–10", effort: "2 reps left", increment: 5, unit: "kg", videoId: "iQYryL41HII", source: "Nuffield Health · 1:51", cues: ["Set the handles near mid-chest and keep your back on the pad.", "Keep your wrists straight and your shoulders relaxed.", "Press smoothly, then control the return."] },
+          { title: "Lat Pulldown", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", increment: 5, unit: "kg", videoId: "JGeRYIZdojU", source: "PureGym · 0:13", cues: ["Lock your thighs under the pads and sit tall.", "Pull the bar toward your upper chest without swinging.", "Control the return until your arms are long."] },
+          { title: "Dumbbell Romanian Deadlift", guideTitle: "Romanian Deadlift", category: "Glutes · Hamstrings", dose: "2 × 8–10", effort: "Clean reps", increment: 2, unit: "kg each", videoId: "F5ZGAP-ZMaI", source: "E3 Rehab · 0:11", cues: ["Keep the dumbbells close to your thighs.", "Soften your knees and send your hips backward.", "Stand tall without leaning back at the top."] },
+          { title: "Machine Shoulder Press", category: "Shoulders · Triceps", dose: "2 × 10–12", effort: "2 reps left", increment: 5, unit: "kg", videoId: "GcY6TZxfS0k", source: "PureGym · 0:10", cues: ["Set the seat so the handles begin near shoulder height.", "Keep your ribs down, back supported and wrists stacked.", "Press overhead without shrugging, then return slowly."] },
+          { title: "Farmer Carry", category: "Grip · Core · Conditioning", dose: "3 × 20 m", effort: "Heavy and tidy", increment: 2, unit: "kg each", videoId: "-QSmQj9_CQo", source: "Continuous Motion PT · 0:14", cues: ["Choose challenging dumbbells you can carry with tall posture.", "Keep your shoulders quiet and take steady steps.", "Turn under control and keep breathing."] }
         ]
       },
       B: {
         heading: "Full Body B",
         exercises: [
-          { title: "Hack Squat", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", videoId: "scs5XcsZuc8", source: "PureGym · 0:25", cues: ["Keep your back and shoulders firmly against the pads.", "Let your knees travel in the same direction as your toes.", "Drive the platform away without snapping your knees straight."] },
-          { title: "Hip Thrust Machine", category: "Glutes · Hamstrings", dose: "3 × 8–10", effort: "Pause at top", videoId: "01rcKtWWvwE", source: "Hype Training & Coaching · 0:38", cues: ["Place the pad securely across your hips and plant both feet.", "Keep your chin tucked and your ribs down.", "Drive your hips up, pause, then lower with control."] },
-          { title: "Seated Cable Row", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", videoId: "VmXBWEoIY5c", source: "University of Alberta · 0:35", cues: ["Set your feet securely and sit tall.", "Pull the handle toward your lower ribs.", "Keep your torso quiet without rocking."] },
-          { title: "Incline Dumbbell Press", category: "Chest · Shoulders", dose: "2 × 8–10", effort: "Clean reps", videoId: "jMQA3XtJSgo", source: "OPEX Fitness · 0:13", cues: ["Set a low incline and plant both feet firmly.", "Start the dumbbells just outside your upper chest.", "Press them up together, then lower with control."] },
-          { title: "Seated Leg Curl", category: "Hamstrings · Knees", dose: "2 × 10–12", effort: "Slow return", videoId: "hhzTWndsgTc", source: "Life Fitness · 0:24", cues: ["Align your knees with the machine pivot and secure the pads.", "Keep your hips and back pressed into the seat.", "Curl your heels down, squeeze, then return slowly."] },
-          { title: "Pallof Press", category: "Core · Anti-Rotation", dose: "2 × 10 each side", effort: "Each side", videoId: "lcVTzIaqkPE", source: "Pursuit Physical Therapy · 0:31", cues: ["Stand side-on to the cable with a stable stance.", "Press straight forward without letting your torso rotate.", "Pause, breathe, then return under control."] }
+          { title: "Hack Squat", category: "Quads · Glutes", dose: "3 × 8–10", effort: "2 reps left", increment: 5, unit: "kg", videoId: "scs5XcsZuc8", source: "PureGym · 0:25", cues: ["Keep your back and shoulders firmly against the pads.", "Let your knees travel in the same direction as your toes.", "Drive the platform away without snapping your knees straight."] },
+          { title: "Hip Thrust Machine", category: "Glutes · Hamstrings", dose: "3 × 8–10", effort: "Pause at top", increment: 5, unit: "kg", videoId: "01rcKtWWvwE", source: "Hype Training & Coaching · 0:38", cues: ["Place the pad securely across your hips and plant both feet.", "Keep your chin tucked and your ribs down.", "Drive your hips up, pause, then lower with control."] },
+          { title: "Seated Cable Row", category: "Back · Biceps", dose: "3 × 8–10", effort: "2 reps left", increment: 5, unit: "kg", videoId: "VmXBWEoIY5c", source: "University of Alberta · 0:35", cues: ["Set your feet securely and sit tall.", "Pull the handle toward your lower ribs.", "Keep your torso quiet without rocking."] },
+          { title: "Incline Dumbbell Press", category: "Chest · Shoulders", dose: "2 × 8–10", effort: "Clean reps", increment: 2, unit: "kg each", videoId: "jMQA3XtJSgo", source: "OPEX Fitness · 0:13", cues: ["Set a low incline and plant both feet firmly.", "Start the dumbbells just outside your upper chest.", "Press them up together, then lower with control."] },
+          { title: "Seated Leg Curl", category: "Hamstrings · Knees", dose: "2 × 10–12", effort: "Slow return", increment: 5, unit: "kg", videoId: "hhzTWndsgTc", source: "Life Fitness · 0:24", cues: ["Align your knees with the machine pivot and secure the pads.", "Keep your hips and back pressed into the seat.", "Curl your heels down, squeeze, then return slowly."] },
+          { title: "Pallof Press", category: "Core · Anti-Rotation", dose: "2 × 10 each side", effort: "Each side", increment: 2.5, unit: "kg", videoId: "lcVTzIaqkPE", source: "Pursuit Physical Therapy · 0:31", cues: ["Stand side-on to the cable with a stable stance.", "Press straight forward without letting your torso rotate.", "Pause, breathe, then return under control."] }
         ]
       }
     };
@@ -806,17 +997,68 @@
     let activeProgram = "A";
     let activeIndex = 0;
     let activeProfile = "Mom";
+    let weightProgram = "A";
     const completed = { Mom: { A: new Set(), B: new Set() }, Aunt: { A: new Set(), B: new Set() } };
+    const WEIGHT_STORE_KEY = "immortals-weight-book-v1";
+
+    function emptyWeightBook() {
+      return { Mom: { A: {}, B: {} }, Aunt: { A: {}, B: {} } };
+    }
+
+    function loadWeightBook() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(WEIGHT_STORE_KEY));
+        if (saved && saved.Mom && saved.Aunt) return saved;
+      } catch (error) {
+        console.warn("Weight book could not be loaded", error);
+      }
+      return emptyWeightBook();
+    }
+
+    const weightBook = loadWeightBook();
 
     const grid = document.getElementById("exercise-grid");
     const workoutDialog = document.getElementById("workout-dialog");
+    const weightDialog = document.getElementById("weight-dialog");
     const rulesDialog = document.getElementById("rules-dialog");
+    const weightList = document.getElementById("weight-list");
     const videoPanel = document.getElementById("video-panel");
     const cueList = document.getElementById("cue-list");
     const celebration = document.querySelector(".celebration");
 
     function thumbnail(videoId) {
       return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    }
+
+    function getWeightEntry(program, index, profile = activeProfile) {
+      weightBook[profile] ||= { A: {}, B: {} };
+      weightBook[profile][program] ||= {};
+      weightBook[profile][program][index] ||= { target: null, last: null, history: [] };
+      return weightBook[profile][program][index];
+    }
+
+    function saveWeightBook() {
+      try {
+        localStorage.setItem(WEIGHT_STORE_KEY, JSON.stringify(weightBook));
+      } catch (error) {
+        console.warn("Weight book could not be saved", error);
+      }
+    }
+
+    function formatWeight(value) {
+      if (!Number.isFinite(Number(value))) return "";
+      return Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
+    }
+
+    function savedWeightCount(profile = activeProfile) {
+      return ["A", "B"].reduce((total, program) => total + programs[program].exercises.reduce((count, exercise, index) => count + (getWeightEntry(program, index, profile).target ? 1 : 0), 0), 0);
+    }
+
+    function updateWeightSummary() {
+      const count = savedWeightCount();
+      document.querySelectorAll("[data-weight-count]").forEach(node => node.textContent = `${count} of 12 saved`);
+      document.querySelector("[data-weight-owner]").textContent = activeProfile;
+      document.querySelector("[data-weight-summary]").textContent = `${count} of 12 starting weights saved`;
     }
 
     function renderProgram() {
@@ -831,9 +1073,10 @@
             <img src="${thumbnail(exercise.videoId)}" alt="" width="480" height="270" loading="${index < 3 ? "eager" : "lazy"}">
             <span class="card-number">${index + 1}</span><span class="card-play" aria-hidden="true">▶</span>
           </span>
-          <span class="exercise-copy"><h3>${exercise.title}</h3><span class="exercise-meta"><strong>${exercise.dose}</strong><span>${exercise.category}</span></span></span>
+          <span class="exercise-copy"><h3>${exercise.title}</h3><span class="exercise-meta"><strong>${exercise.dose}</strong><span>${exercise.category}</span></span><span class="exercise-weight"><span>${getWeightEntry(activeProgram, index).last !== null ? "Next target" : "Starting weight"}</span><strong>${getWeightEntry(activeProgram, index).target ? `${formatWeight(getWeightEntry(activeProgram, index).target)} ${exercise.unit}` : "Set weight"}</strong></span></span>
         </button>`).join("");
       grid.querySelectorAll("[data-exercise]").forEach(button => button.addEventListener("click", () => openWorkout(Number(button.dataset.exercise))));
+      updateWeightSummary();
     }
 
     function renderGuide() {
@@ -844,6 +1087,13 @@
       document.querySelector("[data-guide-title]").textContent = exercise.guideTitle || exercise.title;
       document.querySelector("[data-dose]").textContent = exercise.dose;
       document.querySelector("[data-effort]").textContent = exercise.effort;
+      const weightEntry = getWeightEntry(activeProgram, activeIndex);
+      const loadInput = document.querySelector("[data-load-input]");
+      loadInput.step = String(exercise.increment);
+      loadInput.value = weightEntry.target ?? "";
+      document.querySelector("[data-load-unit]").textContent = exercise.unit;
+      document.querySelector("[data-load-note]").textContent = weightEntry.last !== null ? `Last logged: ${formatWeight(weightEntry.last)} ${exercise.unit}` : "Enter your starting weight";
+      document.querySelector("[data-top-range]").checked = false;
       cueList.innerHTML = exercise.cues.map(cue => `<li>${cue}</li>`).join("");
       videoPanel.innerHTML = `
         <button class="video-button" type="button" aria-label="Play ${exercise.title} demonstration">
@@ -858,6 +1108,72 @@
       document.querySelector("[data-next]").textContent = activeIndex === 5 ? "Finish workout" : "Done · Next exercise";
     }
 
+    function adjustGuideWeight(direction) {
+      const exercise = programs[activeProgram].exercises[activeIndex];
+      const input = document.querySelector("[data-load-input]");
+      const current = Number(input.value) || 0;
+      input.value = String(Math.max(0, Math.round((current + direction * exercise.increment) * 100) / 100));
+      input.focus();
+    }
+
+    function logCurrentExercise() {
+      const exercise = programs[activeProgram].exercises[activeIndex];
+      const input = document.querySelector("[data-load-input]");
+      const weight = Number(input.value);
+      if (!(weight > 0)) return;
+      const entry = getWeightEntry(activeProgram, activeIndex);
+      const reachedTop = document.querySelector("[data-top-range]").checked;
+      entry.last = weight;
+      entry.target = reachedTop ? Math.round((weight + exercise.increment) * 100) / 100 : weight;
+      entry.history ||= [];
+      entry.history.push({ date: new Date().toISOString(), weight, reachedTop });
+      entry.history = entry.history.slice(-40);
+      saveWeightBook();
+      renderProgram();
+    }
+
+    function renderWeightBook() {
+      updateWeightSummary();
+      document.querySelectorAll("[data-weight-tab]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.weightTab === weightProgram)));
+      weightList.innerHTML = programs[weightProgram].exercises.map((exercise, index) => {
+        const entry = getWeightEntry(weightProgram, index);
+        const note = entry.last !== null ? `Last logged: ${formatWeight(entry.last)} ${exercise.unit}` : `Increase by ${formatWeight(exercise.increment)} ${exercise.unit}`;
+        return `<div class="weight-row">
+          <div class="weight-row-title"><strong>${exercise.title}</strong><span>${note}</span></div>
+          <div class="weight-stepper">
+            <button class="stepper-button" type="button" data-book-step="-1" data-book-index="${index}" aria-label="Decrease ${exercise.title} weight">−</button>
+            <input class="weight-input" type="number" min="0" step="${exercise.increment}" inputmode="decimal" data-book-input="${index}" value="${entry.target ?? ""}" aria-label="Weight for ${exercise.title}">
+            <button class="stepper-button" type="button" data-book-step="1" data-book-index="${index}" aria-label="Increase ${exercise.title} weight">+</button>
+            <span class="weight-unit">${exercise.unit}</span>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function openWeightBook() {
+      weightProgram = activeProgram;
+      renderWeightBook();
+      weightDialog.showModal();
+    }
+
+    function saveWeightBookTargets() {
+      weightList.querySelectorAll("[data-book-input]").forEach(input => {
+        const entry = getWeightEntry(weightProgram, Number(input.dataset.bookInput));
+        const value = Number(input.value);
+        entry.target = value > 0 ? value : null;
+      });
+      saveWeightBook();
+      renderProgram();
+      updateWeightSummary();
+      weightDialog.close();
+      celebration.textContent = "Weights saved.";
+      celebration.classList.add("show");
+      setTimeout(() => {
+        celebration.classList.remove("show");
+        celebration.textContent = "Session complete. Strong work.";
+      }, 1800);
+    }
+
     function openWorkout(index = 0) {
       activeIndex = index;
       renderGuide();
@@ -868,6 +1184,8 @@
       activeProfile = name;
       document.querySelectorAll("[data-profile]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.profile === name)));
       document.querySelectorAll("[data-owner]").forEach(node => node.textContent = name);
+      renderProgram();
+      if (weightDialog.open) renderWeightBook();
     }
 
     document.querySelectorAll("[data-profile]").forEach(button => button.addEventListener("click", () => updateProfile(button.dataset.profile)));
@@ -875,17 +1193,34 @@
     document.querySelectorAll("[data-day]").forEach(button => button.addEventListener("click", () => { activeProgram = button.dataset.day; document.querySelectorAll("[data-day]").forEach(item => item.setAttribute("aria-pressed", String(item === button))); renderProgram(); document.getElementById("session-title").scrollIntoView({ behavior: "smooth", block: "start" }); }));
     document.querySelectorAll("[data-start]").forEach(button => button.addEventListener("click", () => openWorkout(0)));
     document.querySelector("[data-close]").addEventListener("click", () => workoutDialog.close());
+    document.querySelector("[data-load-minus]").addEventListener("click", () => adjustGuideWeight(-1));
+    document.querySelector("[data-load-plus]").addEventListener("click", () => adjustGuideWeight(1));
     document.querySelector("[data-previous]").addEventListener("click", () => { if (activeIndex > 0) { activeIndex -= 1; renderGuide(); } });
     document.querySelector("[data-next]").addEventListener("click", () => {
+      logCurrentExercise();
       completed[activeProfile][activeProgram].add(activeIndex);
       if (activeIndex < 5) { activeIndex += 1; renderGuide(); return; }
       workoutDialog.close();
       celebration.classList.add("show");
       setTimeout(() => celebration.classList.remove("show"), 2400);
     });
+    document.querySelectorAll("[data-weights]").forEach(button => button.addEventListener("click", openWeightBook));
+    document.querySelector("[data-weights-close]").addEventListener("click", () => weightDialog.close());
+    document.querySelector("[data-weights-save]").addEventListener("click", saveWeightBookTargets);
+    document.querySelectorAll("[data-weight-tab]").forEach(button => button.addEventListener("click", () => { weightProgram = button.dataset.weightTab; renderWeightBook(); }));
+    weightList.addEventListener("click", event => {
+      const button = event.target.closest("[data-book-step]");
+      if (!button) return;
+      const index = Number(button.dataset.bookIndex);
+      const input = weightList.querySelector(`[data-book-input="${index}"]`);
+      const increment = programs[weightProgram].exercises[index].increment;
+      const current = Number(input.value) || 0;
+      input.value = String(Math.max(0, Math.round((current + Number(button.dataset.bookStep) * increment) * 100) / 100));
+      input.focus();
+    });
     document.querySelectorAll("[data-rules]").forEach(button => button.addEventListener("click", () => rulesDialog.showModal()));
     document.querySelector("[data-rules-close]").addEventListener("click", () => rulesDialog.close());
-    [workoutDialog, rulesDialog].forEach(dialog => dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); }));
+    [workoutDialog, weightDialog, rulesDialog].forEach(dialog => dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); }));
 
     renderProgram();
   </script>
