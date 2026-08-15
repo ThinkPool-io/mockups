@@ -30,6 +30,7 @@
   .brand{display:flex;align-items:center}
   .status{display:flex;align-items:center;gap:9px;color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}
   .status:before{content:"";width:8px;height:8px;background:var(--green)}
+  .top-actions{display:flex;align-items:center;gap:16px}.stack-open{min-height:42px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0 14px;font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.stack-open span{color:var(--green)}
 
   .hero{display:grid;grid-template-columns:minmax(0,1fr) 360px;border-bottom:1px solid var(--line);background:var(--raised)}
   .hero-main{padding:42px 32px 52px;border-right:1px solid var(--line)}
@@ -50,6 +51,10 @@
   .scene[data-filter="rave"].active{background:var(--rave);border-color:var(--rave)}
   .scene[data-filter="metal"].active{background:var(--metal);border-color:var(--metal)}
 
+  .edge{border-bottom:1px solid var(--line);background:var(--bg);padding:18px 32px}
+  .edge-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+  .edge-card{background:var(--surface);padding:18px 20px;min-height:92px}.edge-card:first-child{background:var(--rave);color:#07101d}.edge-card b{display:block;font:800 14px/1.2 var(--mono);text-transform:uppercase;letter-spacing:-.02em}.edge-card p{margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}.edge-card:first-child p{color:#10203b}.edge-card small{display:block;margin-bottom:9px;color:var(--faint);font:600 8px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}.edge-card:first-child small{color:#173765}
+
   .controls{padding:18px 32px;border-bottom:1px solid var(--line);background:rgba(9,12,15,.97);position:sticky;top:0;z-index:5}
   .controls-grid{display:grid;grid-template-columns:minmax(260px,1fr) auto auto;gap:10px}
   .search{min-height:46px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:12px;padding:0 16px}
@@ -59,6 +64,7 @@
   .board{padding:36px 32px 72px}
   .board-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px}
   .count{font:800 25px/1 var(--mono);text-transform:uppercase;letter-spacing:-.04em}.tz{color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .night-modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:-10px 0 30px}.mode{min-height:82px;border:1px solid var(--line);background:var(--raised);color:var(--ink);padding:14px;text-align:left}.mode:hover,.mode.active{border-color:var(--rave);background:#111d31}.mode strong{display:block;font:700 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase}.mode small{display:block;color:var(--faint);font-size:11px;line-height:1.45;margin-top:8px}.mode:nth-child(3):hover,.mode:nth-child(3).active{border-color:var(--metal);background:#261f0d}
   .month{display:flex;align-items:center;gap:16px;margin:28px 0 12px;color:var(--faint);font:700 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}.month:after{content:"";height:1px;background:var(--line);flex:1}
   .event-list{display:grid;gap:12px}
   .event{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rave)}
@@ -76,27 +82,32 @@
   .fact small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.fact div{font-size:13px;color:var(--soft);line-height:1.4}.fact.price div{color:var(--rave);font-family:var(--mono)}.metal .fact.price div{color:var(--metal)}
   details{margin-top:10px}summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--soft);font:600 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}summary::-webkit-details-marker{display:none}
   .intel{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13px;line-height:1.55}.intel small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
-  .action{border-left:1px solid var(--line);padding:18px;display:flex;align-items:flex-end}.ticket{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;background:var(--rave);color:#07101d;padding:0 16px;text-decoration:none;font:700 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}.metal .ticket{background:var(--metal);color:#161207}.ticket:hover{filter:brightness(1.08)}
+  .action{border-left:1px solid var(--line);padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}.ticket{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;background:var(--rave);color:#07101d;padding:0 16px;text-decoration:none;font:700 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}.metal .ticket{background:var(--metal);color:#161207}.ticket:hover{filter:brightness(1.08)}
+  .save{width:100%;min-height:46px;border:1px solid var(--line-strong);background:transparent;color:var(--soft);font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.save:hover,.save.saved{border-color:var(--green);color:var(--green);background:#102019}
   .passport{margin-top:14px;padding:10px 12px;border:1px solid #325587;background:#142038;color:var(--rave-hi);font:600 9px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}
   .empty{display:none;border:1px solid var(--line);background:var(--surface);padding:60px 20px;text-align:center}.empty b{font-size:28px;text-transform:uppercase}.empty p{color:var(--muted)}
+  .radar{border-top:1px solid var(--line);background:var(--raised);padding:48px 32px 64px}.radar-head{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:end;margin-bottom:28px}.radar h2{font-size:46px;margin:0}.radar-copy{color:var(--muted);line-height:1.65;margin:0;max-width:650px}.source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.source-group{background:var(--surface);padding:22px;min-height:215px}.source-group .num{color:var(--faint);font:600 9px/1 var(--mono);letter-spacing:.15em}.source-group h3{font-size:17px;text-transform:uppercase;margin:18px 0 8px}.source-group p{font-size:12px;line-height:1.5;color:var(--faint);margin:0 0 18px}.source-links{display:flex;flex-wrap:wrap;gap:6px}.source-links a{border:1px solid var(--line);background:var(--bg);padding:6px 8px;text-decoration:none;color:var(--muted);font:500 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.source-links a:hover{border-color:var(--rave);color:var(--ink)}
+  .stack-dock{position:fixed;right:24px;bottom:22px;z-index:20;min-width:260px;min-height:56px;border:1px solid #3b6954;background:#102019;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 18px;box-shadow:0 16px 40px rgba(0,0,0,.45);font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.stack-dock[hidden]{display:none}.stack-dock b{color:var(--green)}
+  .stack-panel{position:fixed;inset:0;z-index:30;background:rgba(3,5,7,.82);display:none;align-items:flex-end;justify-content:flex-end}.stack-panel.open{display:flex}.stack-sheet{width:min(520px,100%);height:100%;background:var(--raised);border-left:1px solid var(--line);padding:28px;display:flex;flex-direction:column}.stack-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px}.stack-head h2{font-size:28px;margin:0}.close{width:44px;height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px}.stack-list{display:grid;gap:8px;padding:20px 0;overflow:auto}.stack-item{border:1px solid var(--line);background:var(--surface);padding:15px}.stack-item b{display:block;text-transform:uppercase;font-size:14px}.stack-item small{display:block;color:var(--faint);margin-top:8px;font:500 9px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}.stack-empty{color:var(--faint);font-size:14px;line-height:1.6}.stack-actions{margin-top:auto;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.stack-actions button{min-height:50px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.stack-actions .copy{background:var(--green);border-color:var(--green);color:#0b1711}
   footer{border-top:1px solid var(--line);padding:28px 32px;display:flex;justify-content:space-between;color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
 
   @media(max-width:900px){
-    .topbar{height:66px;padding:0 15px}.descriptor,.status span{display:none}
+    .topbar{height:66px;padding:0 15px}.descriptor,.status{display:none}.top-actions{gap:0}.stack-open{min-height:44px;padding:0 11px}
     .hero{display:block}.hero-main{padding:32px 15px;border:0}.eyebrow{font-size:9px;margin-bottom:17px}h1{font-size:48px;line-height:.86}.dek{font-size:15px;line-height:1.75;margin-top:24px}
     .stats{grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.stat{padding:20px 15px;border-right:1px solid var(--line);border-bottom:0}.stat:last-child{border:0}.stat b{font-size:30px}.stat small{font-size:8px}
+    .edge{padding:12px 15px}.edge-grid{grid-template-columns:1fr}.edge-card{min-height:0;padding:15px}.edge-card:not(:first-child){display:none}
     .scene-bar{padding:20px 15px}.scene{min-height:56px;padding:0 22px;font-size:14px}
     .controls{position:static;padding:14px 15px}.controls-grid{display:block}.controls-grid .button-row{margin-top:12px}.subgenres{margin-top:12px}
-    .board{padding:30px 15px 54px}.board-head{margin-bottom:24px}.count{font-size:21px}.tz{display:none}
+    .board{padding:30px 15px 54px}.board-head{margin-bottom:24px}.count{font-size:21px}.tz{display:none}.night-modes{display:flex;overflow:auto;grid-template-columns:none;margin:-8px 0 24px;scrollbar-width:none}.mode{min-width:170px;min-height:76px}
     .event-grid{display:block}.when{border-right:0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.time{font-size:36px}.event-main{padding:18px 16px}h2{font-size:28px;line-height:.98}.facts{grid-template-columns:1fr;gap:14px}.action{border-left:0;border-top:1px solid var(--line);padding:15px}.ticket{min-height:48px}.intel{grid-template-columns:1fr}
-    .ticket-head{padding:0 16px}.month{margin-top:25px}footer{padding:24px 15px;display:grid;gap:8px}
+    .ticket-head{padding:0 16px}.month{margin-top:25px}.radar{padding:38px 15px 48px}.radar-head{display:block}.radar h2{font-size:34px}.radar-copy{margin-top:16px}.source-grid{grid-template-columns:1fr}.source-group{min-height:0}.stack-dock{left:15px;right:15px;bottom:12px;min-width:0}.stack-sheet{padding:22px 15px}.stack-actions{grid-template-columns:1fr}footer{padding:24px 15px 90px;display:grid;gap:8px}
   }
 </style>
 </head>
 <body>
   <header class="topbar shell">
     <div class="brand"><div class="logo">NIGHT<i>//</i>SHIFT</div><div class="descriptor">Prague underground index</div></div>
-    <div class="status"><span>Checked 15 Aug 2026</span></div>
+    <div class="top-actions"><div class="status"><span>Checked 15 Aug 2026</span></div><button class="stack-open" data-open-stack>Your stack <span data-stack-count>0</span></button></div>
   </header>
 
   <main>
@@ -110,6 +121,14 @@
         <div class="stat"><b>17</b><small>Rave listings</small></div>
         <div class="stat"><b>7</b><small>Metal listings</small></div>
         <div class="stat"><b>17</b><small>Venues indexed</small></div>
+      </div>
+    </section>
+
+    <section class="edge shell">
+      <div class="edge-grid">
+        <div class="edge-card"><small>The edge</small><b>Decide the night, not the tabs.</b><p>Save contenders, compare the damage and send one shared plan to the crew.</p></div>
+        <div class="edge-card"><small>Truth layer</small><b>Receipts stay attached.</b><p>Venue, promoter and ticket pages resolve conflicts instead of hiding them.</p></div>
+        <div class="edge-card"><small>Door ready</small><b>Know before you move.</b><p>Price, end time, transport and unknowns are visible before the ticket click.</p></div>
       </div>
     </section>
 
@@ -136,6 +155,12 @@
 
     <section class="board shell" id="board">
       <div class="board-head"><div><div class="micro">The board</div><div class="count"><span id="count">8</span> matching events</div></div><div class="tz">Prague time / chronological</div></div>
+      <div class="night-modes" aria-label="Quick night modes">
+        <button class="mode" data-mode="tonight"><strong>Right now</strong><small>Only tonight. No future-you admin.</small></button>
+        <button class="mode" data-mode="prague"><strong>No logistics</strong><small>Stay inside Prague and keep it simple.</small></button>
+        <button class="mode" data-mode="metal"><strong>Maximum pressure</strong><small>Hardcore, metal and riff damage.</small></button>
+        <button class="mode" data-mode="passport"><strong>Passport night</strong><small>Dresden when the direct train earns it.</small></button>
+      </div>
       <div class="month">August 2026</div>
       <div class="event-list">
         <article class="event rave" data-scene="rave" data-city="prague" data-search="fuchs2 helena hauff techno house breakbeat hard dance bike jesus stvanice">
@@ -183,22 +208,55 @@
       </div>
       <div class="empty" id="empty"><b>Dead air.</b><p>Nothing matches that combination.</p></div>
     </section>
+
+    <section class="radar shell">
+      <div class="radar-head"><div><div class="micro">Source radar</div><h2>Four layers.<br>Fewer blind spots.</h2></div><p class="radar-copy">Most event sites stop at the aggregator. NIGHT//SHIFT checks the club, promoter and ticket layer too, then keeps the strongest source visible on the card.</p></div>
+      <div class="source-grid">
+        <article class="source-group"><div class="num">01 / Broad scan</div><h3>Find the field</h3><p>Wide city coverage and first-pass discovery.</p><div class="source-links"><a href="https://ra.co/events/cz/prague" target="_blank" rel="noreferrer">RA</a><a href="https://goout.net/en/prague/events/leznyvlkk/" target="_blank" rel="noreferrer">GoOut</a><a href="https://www.ticketportal.cz/" target="_blank" rel="noreferrer">Ticketportal</a><a href="https://www.ticketmaster.cz/" target="_blank" rel="noreferrer">Ticketmaster</a></div></article>
+        <article class="source-group"><div class="num">02 / Scene scan</div><h3>Catch the weird stuff</h3><p>Genre trackers find nights generic calendars flatten or miss.</p><div class="source-links"><a href="https://www.dramce.cz/drum-and-bass/praha" target="_blank" rel="noreferrer">Dramce</a><a href="https://circlepit.app/events/prague" target="_blank" rel="noreferrer">CirclePit</a><a href="https://obscure.cz/en/tickets" target="_blank" rel="noreferrer">Obscure</a><a href="https://rfpconcerts.cz/" target="_blank" rel="noreferrer">RFP</a></div></article>
+        <article class="source-group"><div class="num">03 / Direct scan</div><h3>Ask the room</h3><p>Venue calendars carry door times, running orders and last-minute changes.</p><div class="source-links"><a href="https://anka.li/" target="_blank" rel="noreferrer">Ankali</a><a href="https://www.fuchs2.cz/shows" target="_blank" rel="noreferrer">Fuchs2</a><a href="https://www.crossclub.cz/cs/program/" target="_blank" rel="noreferrer">Cross</a><a href="https://www.modravopice.cz/" target="_blank" rel="noreferrer">Vopice</a><a href="https://klub007strahov.cz/program/" target="_blank" rel="noreferrer">007</a></div></article>
+        <article class="source-group"><div class="num">04 / Border scan</div><h3>Earn the train</h3><p>Dresden only surfaces when the event is worth the direct connection.</p><div class="source-links"><a href="https://www.club-paula.de/" target="_blank" rel="noreferrer">Paula</a><a href="https://www.sektor-evolution.de/dates/" target="_blank" rel="noreferrer">Sektor</a><a href="https://objektkleina.com/" target="_blank" rel="noreferrer">objekt klein a</a><a href="https://www.chemiefabrik.info/" target="_blank" rel="noreferrer">Chemo</a></div></article>
+      </div>
+    </section>
   </main>
 
   <footer class="shell"><span>NIGHT//SHIFT · Prague underground index</span><span>No affiliate links. No filler.</span></footer>
 
+  <button class="stack-dock" data-open-stack hidden><span>Your night stack</span><b><span data-stack-count>0</span> saved · open</b></button>
+  <div class="stack-panel" id="stackPanel" role="dialog" aria-modal="true" aria-labelledby="stackTitle">
+    <section class="stack-sheet">
+      <div class="stack-head"><div><div class="micro">Crew plan</div><h2 id="stackTitle">Your night stack</h2></div><button class="close" id="closeStack" aria-label="Close stack">×</button></div>
+      <div class="stack-list" id="stackList"><p class="stack-empty">Save a few contenders. This becomes the clean shortlist you send to Max, Conrad or whoever is still pretending they have no plans.</p></div>
+      <div class="stack-actions"><button id="clearStack">Clear stack</button><button class="copy" id="copyStack">Copy crew plan</button></div>
+    </section>
+  </div>
+
 <script>
-  const state={scene:'all',city:'all',query:''};
+  const state={scene:'all',city:'all',query:'',when:'all'};
   const cards=[...document.querySelectorAll('.event')];
   const count=document.getElementById('count');
   const empty=document.getElementById('empty');
+  const search=document.getElementById('search');
+  const dateButtons=[...document.querySelectorAll('.controls-grid .button-row:nth-child(2) .chip')];
+  const dateKeys=['all','tonight','week'];
+  const cardDates=['tonight','week','week','week','later','later','later','later'];
+  cards.forEach((card,index)=>{card.id=`event-${index+1}`;card.dataset.when=cardDates[index]});
+
+  function clearModes(){document.querySelectorAll('.mode').forEach(item=>item.classList.remove('active'))}
+  function syncControls(){
+    document.querySelectorAll('.scene').forEach(item=>item.classList.toggle('active',item.dataset.filter===state.scene));
+    document.querySelectorAll('[data-city]').forEach(item=>item.classList.toggle('active',item.dataset.city===state.city));
+    dateButtons.forEach((item,index)=>item.classList.toggle('active',dateKeys[index]===state.when));
+    search.value=state.query;
+  }
   function apply(){
     let visible=0;
     cards.forEach(card=>{
       const scene=state.scene==='all'||card.dataset.scene===state.scene;
       const city=state.city==='all'||card.dataset.city===state.city;
       const query=!state.query||card.dataset.search.includes(state.query);
-      const show=scene&&city&&query;
+      const when=state.when==='all'||card.dataset.when===state.when||(state.when==='week'&&card.dataset.when==='tonight');
+      const show=scene&&city&&query&&when;
       card.style.display=show?'block':'none';
       if(show)visible++;
     });
@@ -208,22 +266,53 @@
       const list=month.nextElementSibling;
       month.style.display=[...list.children].some(card=>card.style.display!=='none')?'flex':'none';
     });
+    syncControls();
   }
-  document.querySelectorAll('.scene').forEach(button=>button.addEventListener('click',()=>{
-    document.querySelectorAll('.scene').forEach(item=>item.classList.remove('active'));
-    button.classList.add('active');state.scene=button.dataset.filter;apply();
-  }));
-  document.querySelectorAll('[data-city]').forEach(button=>button.addEventListener('click',()=>{
-    document.querySelectorAll('[data-city]').forEach(item=>item.classList.remove('active'));
-    button.classList.add('active');state.city=button.dataset.city;apply();
-  }));
-  document.getElementById('search').addEventListener('input',event=>{state.query=event.target.value.trim().toLowerCase();apply()});
+  document.querySelectorAll('.scene').forEach(button=>button.addEventListener('click',()=>{clearModes();state.scene=button.dataset.filter;apply()}));
+  document.querySelectorAll('[data-city]').forEach(button=>button.addEventListener('click',()=>{clearModes();state.city=button.dataset.city;apply()}));
+  dateButtons.forEach((button,index)=>button.addEventListener('click',()=>{clearModes();state.when=dateKeys[index];apply()}));
+  search.addEventListener('input',event=>{clearModes();state.query=event.target.value.trim().toLowerCase();apply()});
   document.querySelectorAll('.subgenres .chip').forEach(button=>button.addEventListener('click',()=>{
-    const active=button.classList.toggle('active');
-    document.getElementById('search').value=active?button.textContent:'';
+    clearModes();const active=button.classList.toggle('active');
     state.query=active?button.textContent.toLowerCase():'';
     document.querySelectorAll('.subgenres .chip').forEach(item=>{if(item!==button)item.classList.remove('active')});apply();
   }));
+  document.querySelectorAll('.mode').forEach(button=>button.addEventListener('click',()=>{
+    const mode=button.dataset.mode;clearModes();button.classList.add('active');
+    state.scene=mode==='metal'?'metal':'all';state.city=mode==='passport'?'dresden':mode==='prague'?'prague':'all';state.when=mode==='tonight'?'tonight':'all';state.query='';
+    document.querySelectorAll('.subgenres .chip').forEach(item=>item.classList.remove('active'));apply();
+  }));
+
+  let saved=new Set();
+  try{saved=new Set(JSON.parse(localStorage.getItem('night-shift-stack')||'[]'))}catch{}
+  cards.forEach(card=>{
+    const button=document.createElement('button');button.className='save';button.type='button';button.dataset.save=card.id;button.textContent='+ Save to stack';
+    card.querySelector('.action').append(button);
+    button.addEventListener('click',()=>{saved.has(card.id)?saved.delete(card.id):saved.add(card.id);syncStack()});
+  });
+  const panel=document.getElementById('stackPanel');
+  const stackList=document.getElementById('stackList');
+  function syncStack(){
+    try{localStorage.setItem('night-shift-stack',JSON.stringify([...saved]))}catch{}
+    document.querySelectorAll('[data-stack-count]').forEach(item=>item.textContent=saved.size);
+    document.querySelector('.stack-dock').hidden=saved.size===0;
+    document.querySelectorAll('[data-save]').forEach(button=>{const on=saved.has(button.dataset.save);button.classList.toggle('saved',on);button.textContent=on?'✓ Saved to stack':'+ Save to stack'});
+    const selected=cards.filter(card=>saved.has(card.id));
+    stackList.innerHTML=selected.length?selected.map(card=>`<article class="stack-item"><b>${card.querySelector('h2').textContent}</b><small>${card.querySelector('.date').textContent} · ${card.querySelector('.time').textContent} · ${card.querySelector('.fact div').textContent}</small></article>`).join(''):'<p class="stack-empty">Save a few contenders. This becomes the clean shortlist you send to Max, Conrad or whoever is still pretending they have no plans.</p>';
+  }
+  document.querySelectorAll('[data-open-stack]').forEach(button=>button.addEventListener('click',()=>{panel.classList.add('open');document.body.style.overflow='hidden'}));
+  function closeStack(){panel.classList.remove('open');document.body.style.overflow=''}
+  document.getElementById('closeStack').addEventListener('click',closeStack);
+  panel.addEventListener('click',event=>{if(event.target===panel)closeStack()});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeStack()});
+  document.getElementById('clearStack').addEventListener('click',()=>{saved.clear();syncStack()});
+  document.getElementById('copyStack').addEventListener('click',async event=>{
+    const selected=cards.filter(card=>saved.has(card.id));
+    const text=selected.length?'NIGHT//SHIFT\n\n'+selected.map(card=>`${card.querySelector('.date').textContent} ${card.querySelector('.time').textContent} · ${card.querySelector('h2').textContent} · ${card.querySelector('.fact div').textContent}`).join('\n'):'NIGHT//SHIFT · no events saved yet';
+    try{await navigator.clipboard.writeText(text);event.currentTarget.textContent='Copied ✓'}catch{event.currentTarget.textContent='Plan ready'}
+    setTimeout(()=>{event.currentTarget.textContent='Copy crew plan'},1400);
+  });
+  syncStack();apply();
 </script>
 </body>
 </html>
