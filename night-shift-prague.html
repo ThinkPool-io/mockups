@@ -55,6 +55,18 @@
   .edge-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
   .edge-card{background:var(--surface);padding:18px 20px;min-height:92px}.edge-card:first-child{background:var(--rave);color:#07101d}.edge-card b{display:block;font:800 14px/1.2 var(--mono);text-transform:uppercase;letter-spacing:-.02em}.edge-card p{margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--muted)}.edge-card:first-child p{color:#10203b}.edge-card small{display:block;margin-bottom:9px;color:var(--faint);font:600 8px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase}.edge-card:first-child small{color:#173765}
 
+  .engine{border-bottom:1px solid var(--line);background:var(--raised);padding:30px 32px}
+  .engine-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:18px}.engine h2{font-size:34px;margin:8px 0 0}.engine-copy{max-width:520px;color:var(--muted);font-size:13px;line-height:1.6;margin:0}
+  .sync-button{min-height:46px;border:1px solid var(--green);background:#102019;color:var(--green);padding:0 17px;font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.sync-button.syncing{opacity:.55;pointer-events:none}
+  .engine-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .engine-stat{background:var(--surface);padding:18px;min-height:104px}.engine-stat strong{display:block;color:var(--ink);font:800 25px/1 var(--mono);font-variant-numeric:tabular-nums}.engine-stat:first-child strong{color:var(--green)}.engine-stat:nth-child(3) strong{color:var(--rave)}.engine-stat:nth-child(4) strong{color:var(--metal)}.engine-stat span{display:block;margin-top:9px;color:var(--faint);font:500 8px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .connector-row{display:flex;align-items:center;gap:7px;margin-top:12px;overflow:auto;scrollbar-width:none}.connector-row::-webkit-scrollbar{display:none}.connector{white-space:nowrap;border:1px solid var(--line);background:var(--bg);padding:7px 9px;color:var(--muted);font:600 8px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase}.connector:before{content:"";display:inline-block;width:6px;height:6px;background:var(--green);margin-right:7px}.prototype-note{margin:12px 0 0;color:var(--faint);font:500 8px/1.5 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+
+  .taste-lab{display:grid;grid-template-columns:minmax(0,.82fr) minmax(500px,1.18fr);gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+  .taste-copy{background:#11161c;padding:34px 32px}.taste-copy h2{font-size:42px;margin:14px 0 16px}.taste-copy p{color:var(--muted);font-size:14px;line-height:1.65;max-width:560px;margin:0}
+  .taste-console{background:#0d1116;padding:26px 28px}.anchor-row{display:flex;gap:8px;margin:13px 0 20px}.anchor{min-height:48px;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:0 14px;font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}.anchor.active:first-child{border-color:var(--rave);background:#111d31;color:var(--rave-hi)}.anchor.active:nth-child(2){border-color:var(--metal);background:#261f0d;color:var(--metal-hi)}
+  .taste-vectors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.vector{border-top:1px solid var(--line);padding-top:10px}.vector span{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.vector b{display:block;margin-top:6px;font:700 18px/1 var(--mono);font-variant-numeric:tabular-nums}.taste-result{margin:18px 0 0;padding:14px;border:1px solid #315281;background:#121d30;color:var(--soft);font-size:12px;line-height:1.5}.taste-result b{color:var(--rave-hi);font-family:var(--mono);text-transform:uppercase}.apply-taste{width:100%;min-height:48px;margin-top:10px;border:0;background:var(--ink);color:var(--bg);font:800 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+
   .controls{padding:18px 32px;border-bottom:1px solid var(--line);background:rgba(9,12,15,.97);position:sticky;top:0;z-index:5}
   .controls-grid{display:grid;grid-template-columns:minmax(260px,1fr) auto auto;gap:10px}
   .search{min-height:46px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:12px;padding:0 16px}
@@ -94,6 +106,7 @@
   .tags{display:flex;gap:8px;flex-wrap:wrap}.tag{border:1px solid var(--line);background:var(--bg);padding:6px 10px;color:var(--muted);font:500 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
   h2{font-size:38px;line-height:.96;letter-spacing:-.045em;text-transform:uppercase;margin:16px 0 14px;max-width:900px}
   .note{color:var(--muted);line-height:1.6;margin:0;max-width:760px}
+  .trust-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.trust-strip span{border:1px solid var(--line);background:var(--bg);padding:6px 8px;color:var(--faint);font:600 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.trust-strip .confirmed{border-color:#315f4b;color:var(--green);background:#102019}.trust-strip .warning{border-color:#635426;color:var(--metal);background:#201b0e}
   .facts{display:grid;grid-template-columns:1fr .75fr 1.25fr;gap:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:15px 0;margin-top:18px}
   .fact small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}.fact div{font-size:13px;color:var(--soft);line-height:1.4}.fact.price div{color:var(--rave);font-family:var(--mono)}.metal .fact.price div{color:var(--metal)}
   details{margin-top:10px}summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--soft);font:600 9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase}summary::-webkit-details-marker{display:none}
@@ -101,10 +114,13 @@
   .action{grid-column:4;grid-row:1;border-left:1px solid var(--line);padding:18px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}.ticket{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;background:var(--rave);color:#07101d;padding:0 16px;text-decoration:none;font:700 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}.metal .ticket{background:var(--metal);color:#161207}.ticket:hover{filter:brightness(1.08)}
   .save{width:100%;min-height:46px;border:1px solid var(--line-strong);background:transparent;color:var(--soft);font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.save:hover,.save.saved{border-color:var(--green);color:var(--green);background:#102019}
   .passport{margin-top:14px;padding:10px 12px;border:1px solid #325587;background:#142038;color:var(--rave-hi);font:600 9px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  .journey{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:12px}.journey div{background:var(--bg);padding:11px}.journey small{display:block;color:var(--faint);font:500 8px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}.journey b{display:block;color:var(--soft);font-size:11px;line-height:1.4}.journey .safe b{color:var(--green)}.journey .risk b{color:var(--metal)}
+  .crew-vote{border:1px solid var(--line);background:var(--bg);padding:11px}.crew-vote-head{display:flex;justify-content:space-between;align-items:center;color:var(--faint);font:600 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}.voters{display:flex;gap:5px;margin:9px 0}.voter{width:30px;height:30px;border:1px solid var(--line);display:grid;place-items:center;color:var(--faint);font:700 9px/1 var(--mono)}.voter.yes{border-color:var(--green);background:#183024;color:var(--green)}.vote{width:100%;min-height:44px;border:1px solid var(--line-strong);background:transparent;color:var(--soft);font:700 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}.vote.yes{border-color:var(--green);color:var(--green);background:#102019}.event.taste-hit{border-color:var(--rave-hi);box-shadow:0 0 0 1px rgba(75,141,247,.25)}
   .empty{display:none;border:1px solid var(--line);background:var(--surface);padding:60px 20px;text-align:center}.empty b{font-size:28px;text-transform:uppercase}.empty p{color:var(--muted)}
   .radar{border-top:1px solid var(--line);background:var(--raised);padding:48px 32px 64px}.radar-head{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px;align-items:end;margin-bottom:28px}.radar h2{font-size:46px;margin:0}.radar-copy{color:var(--muted);line-height:1.65;margin:0;max-width:650px}.source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}.source-group{background:var(--surface);padding:22px;min-height:215px}.source-group .num{color:var(--faint);font:600 9px/1 var(--mono);letter-spacing:.15em}.source-group h3{font-size:17px;text-transform:uppercase;margin:18px 0 8px}.source-group p{font-size:12px;line-height:1.5;color:var(--faint);margin:0 0 18px}.source-links{display:flex;flex-wrap:wrap;gap:6px}.source-links a{border:1px solid var(--line);background:var(--bg);padding:6px 8px;text-decoration:none;color:var(--muted);font:500 8px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.source-links a:hover{border-color:var(--rave);color:var(--ink)}
   .stack-dock{position:fixed;right:24px;bottom:22px;z-index:20;min-width:260px;min-height:56px;border:1px solid #3b6954;background:#102019;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 18px;box-shadow:0 16px 40px rgba(0,0,0,.45);font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.stack-dock[hidden]{display:none}.stack-dock b{color:var(--green)}
   .stack-panel{position:fixed;inset:0;z-index:30;background:rgba(3,5,7,.82);display:none;align-items:flex-end;justify-content:flex-end}.stack-panel.open{display:flex}.stack-sheet{width:min(520px,100%);height:100%;background:var(--raised);border-left:1px solid var(--line);padding:28px;display:flex;flex-direction:column}.stack-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px}.stack-head h2{font-size:28px;margin:0}.close{width:44px;height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px}.stack-list{display:grid;gap:8px;padding:20px 0;overflow:auto}.stack-item{border:1px solid var(--line);background:var(--surface);padding:15px}.stack-item b{display:block;text-transform:uppercase;font-size:14px}.stack-item small{display:block;color:var(--faint);margin-top:8px;font:500 9px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}.stack-empty{color:var(--faint);font-size:14px;line-height:1.6}.stack-actions{margin-top:auto;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.stack-actions button{min-height:50px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}.stack-actions .copy{background:var(--green);border-color:var(--green);color:#0b1711}
+  .route-plan{display:none;border-top:1px solid var(--line);padding:16px 0}.route-plan.open{display:block}.route-plan h3{margin:0 0 12px;font-size:14px;text-transform:uppercase}.route-step{display:grid;grid-template-columns:54px 1fr;gap:12px;border-top:1px solid var(--line);padding:12px 0}.route-step time{color:var(--green);font:700 11px/1 var(--mono);font-variant-numeric:tabular-nums}.route-step b{display:block;font-size:12px;text-transform:uppercase}.route-step span{display:block;color:var(--faint);font-size:11px;line-height:1.45;margin-top:5px}.route-alert{border:1px solid #635426;background:#201b0e;color:var(--metal);padding:11px;font:600 9px/1.45 var(--mono);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}.stack-actions{grid-template-columns:1fr 1fr 1fr}.stack-actions .build{border-color:var(--rave);color:var(--rave-hi);background:#111d31}
   footer{border-top:1px solid var(--line);padding:28px 32px;display:flex;justify-content:space-between;color:var(--faint);font:500 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
 
   @media(max-width:900px){
@@ -112,10 +128,11 @@
     .hero{display:block}.hero-main{padding:32px 15px;border:0}.eyebrow{font-size:9px;margin-bottom:17px}h1{font-size:48px;line-height:.86}.dek{font-size:15px;line-height:1.75;margin-top:24px}
     .stats{grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}.stat{padding:20px 15px;border-right:1px solid var(--line);border-bottom:0}.stat:last-child{border:0}.stat b{font-size:30px}.stat small{font-size:8px}
     .edge{padding:12px 15px}.edge-grid{grid-template-columns:1fr}.edge-card{min-height:0;padding:15px}.edge-card:not(:first-child){display:none}
+    .engine{padding:26px 15px}.engine-head{display:block}.engine h2{font-size:29px}.engine-copy{margin-top:14px}.sync-button{width:100%;margin-top:16px}.engine-grid{grid-template-columns:1fr 1fr}.engine-stat{min-height:94px;padding:15px}.connector-row{margin-top:10px}.taste-lab{display:block}.taste-copy,.taste-console{padding:27px 15px}.taste-copy h2{font-size:34px}.taste-vectors{grid-template-columns:1fr 1fr}.anchor{flex:1;padding:0 8px}
     .scene-bar{padding:20px 15px}.scene{min-height:56px;padding:0 22px;font-size:14px}
     .controls{position:static;padding:14px 15px}.controls-grid{display:block}.controls-grid .button-row{margin-top:12px}.subgenres{margin-top:12px}
     .board{padding:30px 15px 54px}.board-head{margin-bottom:24px}.count{font-size:21px}.tz{display:none}.night-modes{display:flex;overflow:auto;grid-template-columns:none;margin:-8px 0 24px;scrollbar-width:none}.mode{min-width:170px;min-height:76px}
-    .event-grid{display:block}.event-grid:before{min-height:0;aspect-ratio:16/10;border-right:0;border-bottom:1px solid var(--line);background-position:center 28%}.when{border-right:0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.time{font-size:36px}.event-main{padding:18px 16px}h2{font-size:28px;line-height:.98}.facts{grid-template-columns:1fr;gap:14px}.action{border-left:0;border-top:1px solid var(--line);padding:15px}.ticket{min-height:48px}.intel{grid-template-columns:1fr}
+    .event-grid{display:block}.event-grid:before{min-height:0;aspect-ratio:16/10;border-right:0;border-bottom:1px solid var(--line);background-position:center 28%}.when{border-right:0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.time{font-size:36px}.event-main{padding:18px 16px}h2{font-size:28px;line-height:.98}.facts{grid-template-columns:1fr;gap:14px}.journey{grid-template-columns:1fr}.action{border-left:0;border-top:1px solid var(--line);padding:15px}.ticket{min-height:48px}.intel{grid-template-columns:1fr}
     .ticket-head{padding:0 16px}.month{margin-top:25px}.radar{padding:38px 15px 48px}.radar-head{display:block}.radar h2{font-size:34px}.radar-copy{margin-top:16px}.source-grid{grid-template-columns:1fr}.source-group{min-height:0}.stack-dock{left:15px;right:15px;bottom:12px;min-width:0}.stack-sheet{padding:22px 15px}.stack-actions{grid-template-columns:1fr}footer{padding:24px 15px 90px;display:grid;gap:8px}
   }
 </style>
@@ -145,6 +162,32 @@
         <div class="edge-card"><small>The edge</small><b>Decide the night, not the tabs.</b><p>Save contenders, compare the damage and send one shared plan to the crew.</p></div>
         <div class="edge-card"><small>Truth layer</small><b>Receipts stay attached.</b><p>Venue, promoter and ticket pages resolve conflicts instead of hiding them.</p></div>
         <div class="edge-card"><small>Door ready</small><b>Know before you move.</b><p>Price, end time, transport and unknowns are visible before the ticket click.</p></div>
+      </div>
+    </section>
+
+    <section class="engine shell" aria-labelledby="engine-title">
+      <div class="engine-head">
+        <div><div class="micro">Ingestion engine</div><h2 id="engine-title">Twenty-one connectors. One clean board.</h2></div>
+        <div><p class="engine-copy">Broad calendars find the field. Genre trackers, promoters and venue pages settle the useful details. Matching listings collapse into one event with every receipt attached.</p><button class="sync-button" id="runSync" type="button">Replay source check ↻</button></div>
+      </div>
+      <div class="engine-grid">
+        <div class="engine-stat"><strong id="syncAge">01:32</strong><span>Captured source age</span></div>
+        <div class="engine-stat"><strong>21</strong><span>Source connectors mapped</span></div>
+        <div class="engine-stat"><strong>3</strong><span>Duplicate listings collapsed</span></div>
+        <div class="engine-stat"><strong>2</strong><span>Fields awaiting confirmation</span></div>
+      </div>
+      <div class="connector-row" aria-label="Mapped source connectors"><span class="connector">GoOut</span><span class="connector">Resident Advisor</span><span class="connector">Dramce</span><span class="connector">Obscure</span><span class="connector">Fuchs2</span><span class="connector">Cross</span><span class="connector">Roxy</span><span class="connector">Rock Café</span><span class="connector">Ticketportal</span><span class="connector">CirclePit</span><span class="connector">Plus 11</span></div>
+      <p class="prototype-note">Captured prototype telemetry. Production crawlers and continuous source checks are not connected in this static preview.</p>
+    </section>
+
+    <section class="taste-lab shell" aria-labelledby="taste-title">
+      <div class="taste-copy"><div class="micro">Cross-scene taste engine</div><h2 id="taste-title">Andy C × Spiritbox is a valid sentence.</h2><p>Genre labels split them apart. NIGHT//SHIFT maps the traits that actually matter on a night out: pressure, pace, atmosphere and how the room moves.</p></div>
+      <div class="taste-console">
+        <div class="micro">Your anchor artists</div>
+        <div class="anchor-row"><button class="anchor active" type="button" data-anchor="andy">Andy C ✓</button><button class="anchor active" type="button" data-anchor="spiritbox">Spiritbox ✓</button></div>
+        <div class="taste-vectors"><div class="vector"><span>Pressure</span><b data-vector="pressure">94</b></div><div class="vector"><span>Velocity</span><b data-vector="velocity">89</b></div><div class="vector"><span>Atmosphere</span><b data-vector="atmosphere">78</b></div><div class="vector"><span>Movement</span><b data-vector="movement">93</b></div></div>
+        <div class="taste-result"><b>Bridge matches</b><br>SPEED for impact, Allegaeon for technical intensity, Komiks for pace, plus both anchor events.</div>
+        <button class="apply-taste" id="applyTaste" type="button">Show 5 bridge matches</button>
       </div>
     </section>
 
@@ -243,12 +286,13 @@
     <section class="stack-sheet">
       <div class="stack-head"><div><div class="micro">Crew plan</div><h2 id="stackTitle">Your night stack</h2></div><button class="close" id="closeStack" aria-label="Close stack">×</button></div>
       <div class="stack-list" id="stackList"><p class="stack-empty">Save a few contenders. This becomes the clean shortlist you send to Max, Conrad or whoever is still pretending they have no plans.</p></div>
-      <div class="stack-actions"><button id="clearStack">Clear stack</button><button class="copy" id="copyStack">Copy crew plan</button></div>
+      <div class="route-plan" id="routePlan" aria-live="polite"></div>
+      <div class="stack-actions"><button id="clearStack">Clear stack</button><button class="build" id="buildRoute">Build route</button><button class="copy" id="copyStack">Copy plan</button></div>
     </section>
   </div>
 
 <script>
-  const state={scene:'all',city:'all',query:'',when:'all'};
+  const state={scene:'all',city:'all',query:'',when:'all',taste:false};
   const cards=[...document.querySelectorAll('.event')];
   const count=document.getElementById('count');
   const empty=document.getElementById('empty');
@@ -258,7 +302,35 @@
   const cardDates=['tonight','week','week','week','later','later','later','later'];
   cards.forEach((card,index)=>{card.id=`event-${index+1}`;card.dataset.when=cardDates[index]});
 
-  function clearModes(){document.querySelectorAll('.mode').forEach(item=>item.classList.remove('active'))}
+  const eventIntel=[
+    {age:'8m',sources:3,dupes:1,home:'Night trams serve Štvanice after the set',access:'Access details not published',meet:'15:20'},
+    {age:'12m',sources:2,dupes:0,home:'Anděl night transit within walking range',access:'Wheelchair accessible',meet:'18:20'},
+    {age:'6m',sources:3,dupes:1,home:'No same-night rail return. Use first morning train',access:'Venue access not published',meet:'18:15'},
+    {age:'19m',sources:2,dupes:0,home:'Central night tram and metro interchange nearby',access:'Basement access not published',meet:'17:45'},
+    {age:'5m',sources:4,dupes:1,home:'Night tram from Štvanice. Transfer details pending',access:'Access details not published',meet:'12:20'},
+    {age:'28m',sources:2,dupes:0,home:'Late suburban connection requires a live check',access:'Access details not published',meet:'17:30'},
+    {age:'11m',sources:2,dupes:0,home:'Night tram service from Karlín',access:'Step-free route not confirmed',meet:'18:10'},
+    {age:'4m',sources:3,dupes:0,home:'Old Town night trams run after doors close',access:'Club access not published',meet:'21:10'}
+  ];
+  const conradVotes=new Set(['event-1','event-5','event-8']);
+  let maxVotes=new Set();
+  try{maxVotes=new Set(JSON.parse(localStorage.getItem('night-shift-votes')||'[]'))}catch{}
+  cards.forEach((card,index)=>{
+    const intel=eventIntel[index];
+    const note=card.querySelector('.note');
+    note.insertAdjacentHTML('afterend',`<div class="trust-strip"><span class="confirmed">✓ ${intel.sources} sources agree</span><span>Checked ${intel.age} ago</span>${intel.dupes?`<span>${intel.dupes} duplicate folded</span>`:'<span>Direct listing</span>'}</div>`);
+    const facts=card.querySelector('.facts');
+    const accessClass=intel.access.toLowerCase().includes('wheelchair')?'safe':'risk';
+    facts.insertAdjacentHTML('afterend',`<div class="journey"><div class="safe"><small>Getting home</small><b>${intel.home}</b></div><div class="${accessClass}"><small>Accessibility</small><b>${intel.access}</b></div></div>`);
+    const voted=maxVotes.has(card.id);
+    card.querySelector('.action').insertAdjacentHTML('afterbegin',`<div class="crew-vote"><div class="crew-vote-head"><span>Crew vote</span><span data-vote-count>${Number(voted)+Number(conradVotes.has(card.id))}/2</span></div><div class="voters"><span class="voter ${voted?'yes':''}" data-max-voter title="Max">M</span><span class="voter ${conradVotes.has(card.id)?'yes':''}" title="Conrad">C</span></div><button class="vote ${voted?'yes':''}" type="button" data-vote="${card.id}">${voted?'Max is in':'Max: vote yes'}</button></div>`);
+  });
+
+  function clearModes(){
+    document.querySelectorAll('.mode').forEach(item=>item.classList.remove('active'));
+    state.taste=false;cards.forEach(card=>card.classList.remove('taste-hit'));
+    const tasteButton=document.getElementById('applyTaste');if(tasteButton)tasteButton.textContent='Show 5 bridge matches';
+  }
   function syncControls(){
     document.querySelectorAll('.scene').forEach(item=>item.classList.toggle('active',item.dataset.filter===state.scene));
     document.querySelectorAll('[data-city]').forEach(item=>item.classList.toggle('active',item.dataset.city===state.city));
@@ -272,7 +344,8 @@
       const city=state.city==='all'||card.dataset.city===state.city;
       const query=!state.query||card.dataset.search.includes(state.query);
       const when=state.when==='all'||card.dataset.when===state.when||(state.when==='week'&&card.dataset.when==='tonight');
-      const show=scene&&city&&query&&when;
+      const taste=!state.taste||['event-2','event-5','event-6','event-7','event-8'].includes(card.id);
+      const show=scene&&city&&query&&when&&taste;
       card.style.display=show?'block':'none';
       if(show)visible++;
     });
@@ -280,7 +353,7 @@
     empty.style.display=visible?'none':'block';
     document.querySelectorAll('.month').forEach(month=>{
       const list=month.nextElementSibling;
-      month.style.display=[...list.children].some(card=>card.style.display!=='none')?'flex':'none';
+      month.style.display=Array.from(list.children).some(card=>card.style.display!=='none')?'flex':'none';
     });
     syncControls();
   }
@@ -299,6 +372,41 @@
     document.querySelectorAll('.subgenres .chip').forEach(item=>item.classList.remove('active'));apply();
   }));
 
+  const anchorValues={
+    both:{pressure:94,velocity:89,atmosphere:78,movement:93,text:'SPEED for impact, Allegaeon for technical intensity, Komiks for pace, plus both anchor events.'},
+    andy:{pressure:87,velocity:96,atmosphere:64,movement:98,text:'Komiks for pace, Fuchs2 for movement and Andy C for the direct hit.'},
+    spiritbox:{pressure:96,velocity:74,atmosphere:92,movement:71,text:'SPEED for impact, Allegaeon for precision and Spiritbox for the direct hit.'},
+    none:{pressure:0,velocity:0,atmosphere:0,movement:0,text:'Choose at least one anchor artist to map your pressure profile.'}
+  };
+  function syncTaste(){
+    const active=[...document.querySelectorAll('.anchor.active')].map(item=>item.dataset.anchor);
+    const key=active.length===2?'both':active[0]||'none';const values=anchorValues[key];
+    Object.entries(values).forEach(([name,value])=>{const el=document.querySelector(`[data-vector="${name}"]`);if(el)el.textContent=value});
+    document.querySelector('.taste-result').innerHTML=`<b>Bridge matches</b><br>${values.text}`;
+    document.getElementById('applyTaste').disabled=key==='none';
+  }
+  document.querySelectorAll('.anchor').forEach(button=>button.addEventListener('click',()=>{button.classList.toggle('active');button.textContent=`${button.dataset.anchor==='andy'?'Andy C':'Spiritbox'}${button.classList.contains('active')?' ✓':''}`;syncTaste()}));
+  document.getElementById('applyTaste').addEventListener('click',event=>{
+    clearModes();state.scene='all';state.city='all';state.when='all';state.query='';state.taste=true;
+    cards.filter(card=>['event-2','event-5','event-6','event-7','event-8'].includes(card.id)).forEach(card=>card.classList.add('taste-hit'));
+    event.currentTarget.textContent='Showing 5 bridge matches';apply();document.getElementById('board').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  document.getElementById('runSync').addEventListener('click',event=>{
+    const button=event.currentTarget;button.classList.add('syncing');button.textContent='Checking 21 sources…';
+    setTimeout(()=>{document.getElementById('syncAge').textContent='00:04';button.classList.remove('syncing');button.textContent='Source check replayed ✓'},900);
+    setTimeout(()=>{button.textContent='Replay source check ↻'},2400);
+  });
+
+  function syncVotes(){
+    try{localStorage.setItem('night-shift-votes',JSON.stringify(Array.from(maxVotes)))}catch{}
+    document.querySelectorAll('[data-vote]').forEach(button=>{
+      const card=document.getElementById(button.dataset.vote);const yes=maxVotes.has(card.id);button.classList.toggle('yes',yes);button.textContent=yes?'Max is in':'Max: vote yes';card.querySelector('[data-max-voter]').classList.toggle('yes',yes);card.querySelector('[data-vote-count]').textContent=`${Number(yes)+Number(conradVotes.has(card.id))}/2`;
+    });
+    if(typeof saved!=='undefined')syncStack();
+  }
+  document.querySelectorAll('[data-vote]').forEach(button=>button.addEventListener('click',()=>{maxVotes.has(button.dataset.vote)?maxVotes.delete(button.dataset.vote):maxVotes.add(button.dataset.vote);syncVotes()}));
+
   let saved=new Set();
   try{saved=new Set(JSON.parse(localStorage.getItem('night-shift-stack')||'[]'))}catch{}
   cards.forEach(card=>{
@@ -309,12 +417,13 @@
   const panel=document.getElementById('stackPanel');
   const stackList=document.getElementById('stackList');
   function syncStack(){
-    try{localStorage.setItem('night-shift-stack',JSON.stringify([...saved]))}catch{}
+    try{localStorage.setItem('night-shift-stack',JSON.stringify(Array.from(saved)))}catch{}
+    document.getElementById('routePlan').classList.remove('open');
     document.querySelectorAll('[data-stack-count]').forEach(item=>item.textContent=saved.size);
     document.querySelector('.stack-dock').hidden=saved.size===0;
     document.querySelectorAll('[data-save]').forEach(button=>{const on=saved.has(button.dataset.save);button.classList.toggle('saved',on);button.textContent=on?'✓ Saved to stack':'+ Save to stack'});
     const selected=cards.filter(card=>saved.has(card.id));
-    stackList.innerHTML=selected.length?selected.map(card=>`<article class="stack-item"><b>${card.querySelector('h2').textContent}</b><small>${card.querySelector('.date').textContent} · ${card.querySelector('.time').textContent} · ${card.querySelector('.fact div').textContent}</small></article>`).join(''):'<p class="stack-empty">Save a few contenders. This becomes the clean shortlist you send to Max, Conrad or whoever is still pretending they have no plans.</p>';
+    stackList.innerHTML=selected.length?selected.map(card=>{const votes=Number(maxVotes.has(card.id))+Number(conradVotes.has(card.id));return `<article class="stack-item"><b>${card.querySelector('h2').textContent}</b><small>${card.querySelector('.date').textContent} · ${card.querySelector('.time').textContent} · ${card.querySelector('.fact div').textContent} · ${votes}/2 crew votes</small></article>`}).join(''):'<p class="stack-empty">Save a few contenders. This becomes the clean shortlist you send to Max, Conrad or whoever is still pretending they have no plans.</p>';
   }
   document.querySelectorAll('[data-open-stack]').forEach(button=>button.addEventListener('click',()=>{panel.classList.add('open');document.body.style.overflow='hidden'}));
   function closeStack(){panel.classList.remove('open');document.body.style.overflow=''}
@@ -322,13 +431,21 @@
   panel.addEventListener('click',event=>{if(event.target===panel)closeStack()});
   document.addEventListener('keydown',event=>{if(event.key==='Escape')closeStack()});
   document.getElementById('clearStack').addEventListener('click',()=>{saved.clear();syncStack()});
+  document.getElementById('buildRoute').addEventListener('click',()=>{
+    const selected=cards.filter(card=>saved.has(card.id));const route=document.getElementById('routePlan');route.classList.add('open');
+    if(!selected.length){route.innerHTML='<div class="route-alert">Save at least one event before building the crew route.</div>';return}
+    const groups=new Map();selected.forEach(card=>{const date=card.querySelector('.date').textContent;if(!groups.has(date))groups.set(date,[]);groups.get(date).push(card)});
+    let collisions=0;const chosen=[...groups.values()].map(group=>{if(group.length>1)collisions+=group.length-1;return group.sort((a,b)=>(Number(maxVotes.has(b.id))+Number(conradVotes.has(b.id)))-(Number(maxVotes.has(a.id))+Number(conradVotes.has(a.id))))[0]});
+    const alert=collisions?`<div class="route-alert">${collisions} schedule collision ${collisions===1?'was':'were'} resolved by crew votes. The highest-consensus event stays in the route.</div>`:'';
+    route.innerHTML=`<h3>Automatic crew itinerary</h3>${alert}${chosen.map(card=>{const index=cards.indexOf(card);const intel=eventIntel[index];const venue=card.querySelector('.fact div').textContent;return `<div class="route-step"><time>${intel.meet}</time><div><b>Meet near ${venue}</b><span>${card.querySelector('.date').textContent}: ${card.querySelector('h2').textContent}. Doors ${card.querySelector('.time').textContent}. ${intel.home}.</span></div></div>`}).join('')}`;
+  });
   document.getElementById('copyStack').addEventListener('click',async event=>{
     const selected=cards.filter(card=>saved.has(card.id));
-    const text=selected.length?'NIGHT//SHIFT\n\n'+selected.map(card=>`${card.querySelector('.date').textContent} ${card.querySelector('.time').textContent} · ${card.querySelector('h2').textContent} · ${card.querySelector('.fact div').textContent}`).join('\n'):'NIGHT//SHIFT · no events saved yet';
+    const text=selected.length?'NIGHT//SHIFT CREW PLAN\n\n'+selected.map(card=>{const intel=eventIntel[cards.indexOf(card)];return `${card.querySelector('.date').textContent} ${card.querySelector('.time').textContent} · ${card.querySelector('h2').textContent} · ${card.querySelector('.fact div').textContent}\nMeet ${intel.meet} · ${intel.home}`}).join('\n\n'):'NIGHT//SHIFT · no events saved yet';
     try{await navigator.clipboard.writeText(text);event.currentTarget.textContent='Copied ✓'}catch{event.currentTarget.textContent='Plan ready'}
     setTimeout(()=>{event.currentTarget.textContent='Copy crew plan'},1400);
   });
-  syncStack();apply();
+  syncVotes();syncTaste();syncStack();apply();
 </script>
 </body>
 </html>
