@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070a10" />
+    <title>Lynx hero lines in context</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --board-bg: #070a10;
+        --bg: #090d14;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --line-strong: #445065;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --thinkpool-cobalt: #1a6ef4;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--board-bg);
+        color: var(--ink);
+      }
+
+      * { box-sizing: border-box; }
+      html { background: var(--board-bg); scroll-behavior: smooth; }
+      body { margin: 0; background: var(--board-bg); -webkit-font-smoothing: antialiased; }
+      button, input { font: inherit; }
+
+      .board-header {
+        display: grid;
+        width: min(1120px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 50px 0 34px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 28px;
+      }
+      .board-kicker {
+        margin: 0 0 8px;
+        color: var(--blue-hi);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+      .board-header h1 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 5vw, 4.6rem);
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+      }
+      .board-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+      .board-nav a {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--raised);
+        padding: 9px 12px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 750;
+        text-decoration: none;
+      }
+
+      .option {
+        width: min(1240px, calc(100% - 48px));
+        margin: 0 auto 38px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--bg);
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+      }
+      .option-meta {
+        display: flex;
+        min-height: 58px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        border-bottom: 1px solid var(--line);
+        background: var(--raised);
+        padding: 12px 18px;
+      }
+      .option-id { color: var(--blue-hi); font-size: 11px; font-weight: 800; letter-spacing: 0.11em; }
+      .option-copy { color: var(--muted); font-size: 13px; }
+
+      .landing {
+        position: relative;
+        display: grid;
+        min-height: 900px;
+        overflow: hidden;
+        grid-template-rows: minmax(0, 1fr) auto;
+        background: var(--bg);
+      }
+      .landing::before {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 560px;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 0%, rgba(40, 118, 247, 0.18), transparent 65%);
+        content: "";
+      }
+      .page-cluster { position: relative; width: 100%; align-self: center; }
+      .topbar {
+        display: flex;
+        width: min(1120px, 100%);
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        padding: 0 28px 4px;
+        flex-direction: column;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 19px;
+        flex-direction: column;
+        color: inherit;
+        font-size: 32px;
+        font-weight: 750;
+        line-height: 1;
+        text-decoration: none;
+      }
+      .brand-mark {
+        display: grid;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        place-items: center;
+        border: 1px solid rgba(108, 162, 255, 0.55);
+        border-radius: 20px;
+        background: rgba(40, 118, 247, 0.12);
+      }
+      .brand-mark svg { display: block; width: 100%; height: 100%; }
+      .landing-main {
+        position: relative;
+        display: flex;
+        width: min(760px, 100%);
+        margin: 0 auto;
+        padding: 4px 28px 0;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .hero {
+        max-width: 720px;
+        margin: 8px 0 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 7.8vw, 5.9rem);
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+      }
+      .intro {
+        max-width: 590px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        font-weight: 550;
+        line-height: 1.65;
+      }
+      .intro-tail { margin-top: 12px; }
+      .converter {
+        width: 100%;
+        margin-top: 24px;
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.9);
+        padding: 16px;
+        backdrop-filter: blur(12px);
+      }
+      .convert-form { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+      .input-shell {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(9, 13, 20, 0.84);
+        padding: 0 13px;
+      }
+      .link-icon {
+        width: 21px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: var(--faint);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+      }
+      .input-placeholder { min-width: 0; flex: 1; color: var(--faint); font-size: 16px; text-align: left; }
+      .paste-button {
+        min-width: 56px;
+        min-height: 44px;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .primary-button {
+        display: inline-flex;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 15px;
+        font-weight: 780;
+      }
+      .footer-note {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        margin: 0;
+        padding-bottom: 28px;
+        color: var(--faint);
+        flex-direction: column;
+        font-size: 12px;
+      }
+      .footer-credits { display: block; }
+      .credit { display: block; color: var(--muted); font-weight: 700; }
+      .made-with { display: block; margin-top: 5px; }
+      .thinkpool-wordmark { font-weight: 750; letter-spacing: -0.02em; }
+      .thinkpool-think { color: var(--ink); }
+      .thinkpool-pool { color: var(--thinkpool-cobalt); }
+
+      .board-footer {
+        width: min(1120px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 8px 0 54px;
+        color: var(--faint);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .board-header {
+          width: min(100% - 24px, 420px);
+          padding: 30px 0 22px;
+          grid-template-columns: 1fr;
+          align-items: start;
+          gap: 18px;
+        }
+        .board-header h1 { font-size: 2.7rem; }
+        .board-nav { justify-content: flex-start; }
+        .option { width: calc(100% - 16px); margin-bottom: 22px; border-radius: 22px; }
+        .option-meta { min-height: 54px; padding: 10px 13px; }
+        .option-copy { font-size: 11px; }
+        .landing { min-height: 844px; }
+        .topbar { padding: 12px 19px 4px; }
+        .landing-main { padding: 2px 19px 16px; }
+        .hero {
+          max-width: none;
+          margin-top: 8px;
+          font-size: clamp(2.65rem, 13vw, 3.5rem);
+          line-height: 0.98;
+        }
+        .intro { margin-top: 14px; font-size: 16px; line-height: 1.5; }
+        .intro-tail { margin-top: 10px; }
+        .converter { margin-top: 18px; padding: 12px; }
+        .input-shell { padding-inline: 11px; }
+        .footer-note { padding-bottom: 16px; }
+        .board-footer { width: calc(100% - 24px); padding-bottom: 36px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="board-header">
+      <div>
+        <p class="board-kicker">Lynx hero comparison</p>
+        <h1>Three lines in the full landing</h1>
+      </div>
+      <nav class="board-nav" aria-label="Jump to an option">
+        <a href="#option-1">01</a>
+        <a href="#option-2">02</a>
+        <a href="#option-3">03</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="option" id="option-1">
+        <div class="option-meta">
+          <span class="option-id">01</span>
+          <span class="option-copy">Music / without borders</span>
+        </div>
+        <section class="landing" aria-label="Music without borders landing">
+          <div class="page-cluster">
+            <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="bg-1" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset="0.6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#bg-1)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity="0.5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Lynx</span></div></header>
+            <div class="landing-main">
+              <h2 class="hero">Music<br />without borders</h2>
+              <p class="intro">Paste a Spotify or Apple Music link</p>
+              <p class="intro intro-tail">Lynx finds the match on the other platform</p>
+              <div class="converter"><div class="convert-form"><div class="input-shell"><svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span class="input-placeholder">Add a music link…</span><button class="paste-button" type="button">Paste</button></div><button class="primary-button" type="button">Convert the link</button></div></div>
+            </div>
+          </div>
+          <p class="footer-note"><span class="footer-credits"><span class="credit">By Maksim Zeidler</span><span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span></span></p>
+        </section>
+      </article>
+
+      <article class="option" id="option-2">
+        <div class="option-meta">
+          <span class="option-id">02</span>
+          <span class="option-copy">Music links / with social skills</span>
+        </div>
+        <section class="landing" aria-label="Music links with social skills landing">
+          <div class="page-cluster">
+            <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="bg-2" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset="0.6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#bg-2)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity="0.5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Lynx</span></div></header>
+            <div class="landing-main">
+              <h2 class="hero">Music links<br />with social skills</h2>
+              <p class="intro">Paste a Spotify or Apple Music link</p>
+              <p class="intro intro-tail">Lynx finds the match on the other platform</p>
+              <div class="converter"><div class="convert-form"><div class="input-shell"><svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span class="input-placeholder">Add a music link…</span><button class="paste-button" type="button">Paste</button></div><button class="primary-button" type="button">Convert the link</button></div></div>
+            </div>
+          </div>
+          <p class="footer-note"><span class="footer-credits"><span class="credit">By Maksim Zeidler</span><span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span></span></p>
+        </section>
+      </article>
+
+      <article class="option" id="option-3">
+        <div class="option-meta">
+          <span class="option-id">03</span>
+          <span class="option-copy">Song sharing / made seamless</span>
+        </div>
+        <section class="landing" aria-label="Song sharing made seamless landing">
+          <div class="page-cluster">
+            <header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="bg-3" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset="0.6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#bg-3)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity="0.5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Lynx</span></div></header>
+            <div class="landing-main">
+              <h2 class="hero">Song sharing<br />made seamless</h2>
+              <p class="intro">Paste a Spotify or Apple Music link</p>
+              <p class="intro intro-tail">Lynx finds the match on the other platform</p>
+              <div class="converter"><div class="convert-form"><div class="input-shell"><svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span class="input-placeholder">Add a music link…</span><button class="paste-button" type="button">Paste</button></div><button class="primary-button" type="button">Convert the link</button></div></div>
+            </div>
+          </div>
+          <p class="footer-note"><span class="footer-credits"><span class="credit">By Maksim Zeidler</span><span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span></span></p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="board-footer">Exact live layout with only the hero wording changed</footer>
+  </body>
+</html>
