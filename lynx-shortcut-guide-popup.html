@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lynx iPhone Shortcut guide popup</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --line-strong: #445065;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --thinkpool-cobalt: #1a6ef4;
+        font-family:
+          ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: var(--bg);
+      }
+
+      body {
+        display: grid;
+        height: 100dvh;
+        overflow: hidden;
+        grid-template-rows: minmax(0, 1fr) auto;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .glow {
+        position: fixed;
+        inset: 0 0 auto;
+        height: 560px;
+        pointer-events: none;
+        background: radial-gradient(
+          circle at 50% 0%,
+          rgba(40, 118, 247, 0.18),
+          transparent 65%
+        );
+      }
+
+      .page-cluster {
+        position: relative;
+        width: 100%;
+        min-height: 0;
+        align-self: safe center;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: center;
+        padding: 0 28px 4px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--ink);
+        flex-direction: column;
+        font-size: 32px;
+        font-weight: 750;
+        line-height: 1;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        place-items: center;
+        border: 1px solid rgba(108, 162, 255, 0.55);
+        border-radius: 20px;
+        background: rgba(40, 118, 247, 0.12);
+      }
+
+      .brand-mark svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      main {
+        display: flex;
+        width: min(760px, 100%);
+        margin: 0 auto;
+        padding: 4px 28px 0;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      h1 {
+        max-width: 680px;
+        margin: 8px 0 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 7.8vw, 5.9rem);
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+      }
+
+      .intro {
+        max-width: 590px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        font-weight: 550;
+        line-height: 1.65;
+      }
+
+      .intro-tail {
+        margin-top: 12px;
+      }
+
+      .converter {
+        width: 100%;
+        margin-top: 24px;
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.9);
+        padding: 16px;
+        backdrop-filter: blur(12px);
+      }
+
+      form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .input-shell {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(9, 13, 20, 0.84);
+        padding: 0 13px;
+      }
+
+      .paperclip {
+        width: 21px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: var(--faint);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+      }
+
+      input {
+        min-width: 0;
+        flex: 1;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      input::placeholder {
+        color: var(--faint);
+      }
+
+      .paste {
+        min-width: 56px;
+        min-height: 44px;
+        border: 0;
+        background: transparent;
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .convert {
+        min-height: 56px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 15px;
+        font-weight: 780;
+      }
+
+      .shortcut-install {
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
+        border: 1px solid rgba(108, 162, 255, 0.4);
+        border-radius: 999px;
+        background: rgba(40, 118, 247, 0.1);
+        padding: 8px 13px;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 750;
+      }
+
+      .footer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding-bottom: 28px;
+        color: var(--faint);
+        flex-direction: column;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .credit {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .made-with {
+        margin-top: 5px;
+      }
+
+      .thinkpool {
+        color: var(--ink);
+        font-weight: 750;
+        letter-spacing: -0.02em;
+      }
+
+      .pool {
+        color: var(--thinkpool-cobalt);
+      }
+
+      .modal-layer {
+        position: fixed;
+        z-index: 20;
+        display: grid;
+        inset: 0;
+        place-items: center;
+        background: rgba(3, 6, 12, 0.74);
+        padding: 22px;
+        backdrop-filter: blur(7px);
+      }
+
+      .modal-layer[hidden] {
+        display: none;
+      }
+
+      .shortcut-guide {
+        position: relative;
+        width: min(460px, 100%);
+        border: 1px solid var(--line-strong);
+        border-radius: 26px;
+        background: var(--raised);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.44);
+        padding: 26px;
+        text-align: left;
+      }
+
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(130, 144, 164, 0.12);
+        color: var(--muted);
+      }
+
+      .close svg {
+        width: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: var(--blue-hi);
+        font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        font-weight: 750;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .shortcut-guide h2 {
+        max-width: 330px;
+        margin: 11px 48px 0 0;
+        font-size: 27px;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+      }
+
+      .guide-intro {
+        max-width: 370px;
+        margin: 11px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .steps {
+        display: grid;
+        gap: 10px;
+        margin: 21px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .step {
+        display: grid;
+        min-height: 62px;
+        align-items: center;
+        grid-template-columns: 34px minmax(0, 1fr) 32px;
+        gap: 12px;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: rgba(9, 13, 20, 0.52);
+        padding: 10px 12px;
+      }
+
+      .step-number {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(40, 118, 247, 0.14);
+        color: var(--blue-hi);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .step-copy strong,
+      .step-copy span {
+        display: block;
+      }
+
+      .step-copy strong {
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.25;
+      }
+
+      .step-copy span {
+        margin-top: 3px;
+        color: var(--faint);
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .step-icon {
+        width: 25px;
+        height: 25px;
+        justify-self: center;
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 1.55;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .guide-actions {
+        display: grid;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .install-button {
+        min-height: 52px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 15px;
+        font-weight: 800;
+      }
+
+      .not-now {
+        min-height: 44px;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 19px 4px;
+        }
+
+        main {
+          padding: 2px 19px 0;
+        }
+
+        h1 {
+          font-size: clamp(2.75rem, 13vw, 3.5rem);
+          line-height: 0.98;
+        }
+
+        .intro {
+          margin-top: 14px;
+          font-size: 16px;
+          line-height: 1.5;
+        }
+
+        .intro-tail {
+          margin-top: 10px;
+        }
+
+        .converter {
+          margin-top: 18px;
+          padding: 12px;
+        }
+
+        .footer {
+          padding-bottom: 16px;
+        }
+
+        .modal-layer {
+          align-items: end;
+          padding: 0;
+        }
+
+        .shortcut-guide {
+          width: 100%;
+          max-height: calc(100dvh - 40px);
+          overflow-y: auto;
+          border-right: 0;
+          border-bottom: 0;
+          border-left: 0;
+          border-radius: 26px 26px 0 0;
+          padding: 23px 19px max(16px, env(safe-area-inset-bottom));
+        }
+
+        .shortcut-guide::before {
+          position: absolute;
+          top: 8px;
+          left: 50%;
+          width: 38px;
+          height: 4px;
+          border-radius: 99px;
+          background: var(--line-strong);
+          content: "";
+          transform: translateX(-50%);
+        }
+
+        .shortcut-guide h2 {
+          font-size: 25px;
+        }
+
+        .guide-intro {
+          padding-right: 20px;
+        }
+
+        .steps {
+          margin-top: 17px;
+        }
+
+        .step {
+          min-height: 59px;
+        }
+
+        .guide-actions {
+          margin-top: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow" aria-hidden="true"></div>
+
+    <div class="page-cluster">
+      <header class="topbar">
+        <a class="brand" href="https://lynx.stream" aria-label="Lynx home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="cat-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#1a3c70" />
+                  <stop offset=".6" stop-color="#091426" />
+                  <stop offset="1" stop-color="#050812" />
+                </linearGradient>
+              </defs>
+              <rect width="200" height="200" rx="44" fill="url(#cat-bg)" />
+              <path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round" />
+              <path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5" />
+              <g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round">
+                <path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94" />
+              </g>
+              <path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff" />
+              <path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>Lynx</span>
+        </a>
+      </header>
+
+      <main>
+        <h1>Share the song,<br />not the service</h1>
+        <p class="intro">Paste a Spotify or Apple Music link</p>
+        <p class="intro intro-tail">Lynx finds the match on the other platform</p>
+
+        <section class="converter" aria-label="Convert a track or album link">
+          <form>
+            <div class="input-shell">
+              <svg class="paperclip" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" />
+              </svg>
+              <input aria-label="Music link" placeholder="Add a music link…" />
+              <button class="paste" type="button">Paste</button>
+            </div>
+            <button class="convert" type="button">Convert the link</button>
+          </form>
+        </section>
+
+        <button class="shortcut-install" id="open-guide" type="button">Add iPhone Shortcut</button>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <span class="credit">By Maksim Zeidler</span>
+      <span class="made-with">Made with <span class="thinkpool">think<span class="pool">pool</span></span></span>
+    </footer>
+
+    <div class="modal-layer" id="guide-layer">
+      <section class="shortcut-guide" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+        <button class="close" id="close-guide" type="button" aria-label="Close guide">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+        <p class="eyebrow">iPhone Shortcut</p>
+        <h2 id="guide-title">Share with Lynx in three taps</h2>
+        <p class="guide-intro">Install it once. After that, Lynx lives in the Share menu inside Spotify and Apple Music.</p>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-number">1</span>
+            <span class="step-copy"><strong>Install the Shortcut</strong><span>Apple opens Shortcuts and asks you to add it.</span></span>
+            <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 19h14" /></svg>
+          </li>
+          <li class="step">
+            <span class="step-number">2</span>
+            <span class="step-copy"><strong>Tap Share on any song</strong><span>Use Spotify or Apple Music, then open its Share menu.</span></span>
+            <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M5 11v8h14v-8" /></svg>
+          </li>
+          <li class="step">
+            <span class="step-number">3</span>
+            <span class="step-copy"><strong>Choose Share with Lynx</strong><span>Lynx converts it, then opens Share again with the new link.</span></span>
+            <svg class="step-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7zM4 12H2m20 0h-2M12 4V2m0 20v-2" /></svg>
+          </li>
+        </ol>
+
+        <div class="guide-actions">
+          <button class="install-button" type="button">Install Shortcut</button>
+          <button class="not-now" id="not-now" type="button">Not now</button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const layer = document.querySelector("#guide-layer");
+      const closeGuide = () => {
+        layer.hidden = true;
+      };
+      document.querySelector("#open-guide").addEventListener("click", () => {
+        layer.hidden = false;
+      });
+      document.querySelector("#close-guide").addEventListener("click", closeGuide);
+      document.querySelector("#not-now").addEventListener("click", closeGuide);
+    </script>
+  </body>
+</html>
