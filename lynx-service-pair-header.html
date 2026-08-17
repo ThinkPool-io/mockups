@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lynx service-pair header</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --thinkpool-cobalt: #1a6ef4;
+        font-family:
+          ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: var(--bg);
+      }
+
+      body {
+        display: grid;
+        height: 100dvh;
+        overflow: hidden;
+        grid-template-rows: minmax(0, 1fr) auto;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .glow {
+        position: fixed;
+        inset: 0 0 auto;
+        height: 560px;
+        pointer-events: none;
+        background: radial-gradient(
+          circle at 50% 0%,
+          rgba(40, 118, 247, 0.18),
+          transparent 65%
+        );
+      }
+
+      .page-cluster {
+        position: relative;
+        width: 100%;
+        min-height: 0;
+        align-self: safe center;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: center;
+        padding: 0 28px 5px;
+      }
+
+      .brand {
+        border-radius: 12px;
+        color: var(--ink);
+        font-size: 34px;
+        font-weight: 780;
+        line-height: 1;
+        text-decoration: none;
+        letter-spacing: -0.035em;
+      }
+
+      main {
+        display: flex;
+        width: min(760px, 100%);
+        margin: 0 auto;
+        padding: 8px 28px 0;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .service-pair {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-top: 12px;
+        color: var(--muted);
+      }
+
+      .service-icon {
+        display: grid;
+        width: 52px;
+        height: 52px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: rgba(17, 23, 34, 0.85);
+      }
+
+      .service-icon svg {
+        width: 30px;
+        height: 30px;
+        overflow: visible;
+      }
+
+      .spotify {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.55;
+        stroke-linecap: round;
+      }
+
+      .apple {
+        fill: currentColor;
+      }
+
+      .swap {
+        width: 26px;
+        height: 26px;
+        fill: none;
+        stroke: var(--blue-hi);
+        stroke-width: 1.65;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      h1 {
+        max-width: 680px;
+        margin: 22px 0 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 7.8vw, 5.9rem);
+        font-weight: 400;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+      }
+
+      .intro {
+        max-width: 590px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        font-weight: 550;
+        line-height: 1.65;
+      }
+
+      .intro-tail {
+        margin-top: 12px;
+      }
+
+      .converter {
+        width: 100%;
+        margin-top: 24px;
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.9);
+        padding: 16px;
+        backdrop-filter: blur(12px);
+      }
+
+      form {
+        display: grid;
+        min-width: 0;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .input-shell {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(9, 13, 20, 0.84);
+        padding: 0 13px;
+      }
+
+      .paperclip {
+        width: 21px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: var(--faint);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+      }
+
+      input {
+        min-width: 0;
+        flex: 1;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      input::placeholder {
+        color: var(--faint);
+      }
+
+      .paste {
+        min-width: 56px;
+        min-height: 44px;
+        border: 0;
+        background: transparent;
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .convert {
+        min-height: 56px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 15px;
+        font-weight: 780;
+      }
+
+      .shortcut-install {
+        display: none;
+        min-height: 36px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
+        border: 1px solid rgba(108, 162, 255, 0.4);
+        border-radius: 999px;
+        background: rgba(40, 118, 247, 0.1);
+        padding: 8px 13px;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 750;
+        text-decoration: none;
+      }
+
+      .footer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding-bottom: 28px;
+        color: var(--faint);
+        flex-direction: column;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .credit {
+        display: block;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .made-with {
+        display: block;
+        margin-top: 5px;
+      }
+
+      .thinkpool {
+        color: var(--ink);
+        font-weight: 750;
+        letter-spacing: -0.02em;
+      }
+
+      .pool {
+        color: var(--thinkpool-cobalt);
+      }
+
+      @media (max-width: 600px) {
+        .topbar {
+          padding: 0 19px 3px;
+        }
+
+        .brand {
+          font-size: 31px;
+        }
+
+        main {
+          padding: 5px 19px 0;
+        }
+
+        .service-pair {
+          gap: 12px;
+          margin-top: 10px;
+        }
+
+        .service-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 14px;
+        }
+
+        .service-icon svg {
+          width: 28px;
+          height: 28px;
+        }
+
+        .swap {
+          width: 24px;
+          height: 24px;
+        }
+
+        h1 {
+          margin-top: 18px;
+          font-size: clamp(2.7rem, 12.6vw, 3.3rem);
+          line-height: 0.98;
+        }
+
+        .intro {
+          margin-top: 14px;
+          font-size: 16px;
+          line-height: 1.5;
+        }
+
+        .intro-tail {
+          margin-top: 10px;
+        }
+
+        .converter {
+          margin-top: 18px;
+          padding: 12px;
+        }
+
+        .input-shell {
+          padding-inline: 11px;
+        }
+
+        .footer {
+          padding-bottom: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow" aria-hidden="true"></div>
+
+    <div class="page-cluster">
+      <header class="topbar">
+        <a class="brand" href="https://lynx.stream" aria-label="Lynx home">Lynx</a>
+      </header>
+
+      <main>
+        <div class="service-pair" aria-label="Spotify and Apple Music, both directions">
+          <span class="service-icon" aria-label="Spotify">
+            <svg class="spotify" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M7.3 9.2c3.6-1 7.4-.7 9.9.8" />
+              <path d="M8 12.2c3-.8 6.1-.5 8.3.7" />
+              <path d="M8.7 15.1c2.4-.6 4.8-.4 6.7.6" />
+            </svg>
+          </span>
+
+          <svg class="swap" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h15m-4-4 4 4-4 4" />
+            <path d="M20 17H5m4-4-4 4 4 4" />
+          </svg>
+
+          <span class="service-icon" aria-label="Apple Music">
+            <svg class="apple" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.6 5.1c.8-1 1.3-2.3 1.2-3.6-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.7Zm3.4 7.8c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.8-.2-3.4 1-4.3 1-.9 0-2.2-1-3.7-.9a5.5 5.5 0 0 0-4.6 2.8c-2 3.4-.5 8.5 1.4 11.2.9 1.3 2 2.8 3.5 2.7 1.4-.1 1.9-.9 3.6-.9s2.2.9 3.7.9c1.5 0 2.5-1.3 3.4-2.7a12 12 0 0 0 1.6-3.2 4.9 4.9 0 0 1-2.9-4.4Z" transform="scale(.8) translate(2.5 1)" />
+            </svg>
+          </span>
+        </div>
+
+        <h1>Share the song,<br />not the service</h1>
+        <p class="intro">Paste a Spotify or Apple Music link</p>
+        <p class="intro intro-tail">Lynx finds the match on the other platform</p>
+
+        <section class="converter" aria-label="Convert a track or album link">
+          <form>
+            <div class="input-shell">
+              <svg class="paperclip" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" />
+              </svg>
+              <input aria-label="Music link" placeholder="Add a music link…" />
+              <button class="paste" type="button">Paste</button>
+            </div>
+            <button class="convert" type="button">Convert the link</button>
+          </form>
+        </section>
+
+        <a class="shortcut-install" href="https://lynx.stream/shortcut/ShareWithLynx.shortcut">Add iPhone Shortcut</a>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <span class="credit">By Maksim Zeidler</span>
+      <span class="made-with">Made with <span class="thinkpool">think<span class="pool">pool</span></span></span>
+    </footer>
+  </body>
+</html>
