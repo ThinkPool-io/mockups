@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#090909" />
-<title>Tokless · @vnthhollow</title>
+<title>SlopStream · @vnthhollow</title>
 <style>
   :root {
     color-scheme: dark;
@@ -256,9 +256,9 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="Tokless home">
+    <a class="brand" href="#" aria-label="SlopStream home">
       <span class="mark" aria-hidden="true"></span>
-      <span>tokless</span>
+      <span>SlopStream</span>
     </a>
 
     <div class="source" aria-label="Video creator">
@@ -276,7 +276,7 @@
     <div class="player-shell">
       <div class="player-state" id="player-state" hidden>
         <div class="spinner" id="player-spinner"></div>
-        <div id="player-message">Opening video…</div>
+        <div id="player-message">Fetching fresh slop…</div>
         <a id="player-fallback" href="#" target="_blank" rel="noopener noreferrer" hidden>Open the original</a>
       </div>
       <video
@@ -291,7 +291,7 @@
     </div>
   </main>
 
-  <div class="prototype-tag">Browser viewer prototype</div>
+  <div class="prototype-tag">Brain rot, uninterrupted</div>
   <div class="toast" id="toast" role="status" aria-live="polite">Link copied</div>
 
 <script>
@@ -364,7 +364,7 @@
   }
 
   async function openDynamicVideo(sourceUrl) {
-    showPlayerState('Opening video…');
+    showPlayerState('Fetching fresh slop…');
     original.href = sourceUrl;
     playerFallback.href = sourceUrl;
 
@@ -379,7 +379,7 @@
       const username = data.author && data.author.unique_id ? data.author.unique_id : 'creator';
       creator.textContent = '@' + username;
       shareTitle = 'Watch @' + username;
-      document.title = 'Tokless · @' + username;
+      document.title = 'SlopStream · @' + username;
       video.setAttribute('aria-label', 'TikTok video by ' + username);
 
       const ready = () => hidePlayerState();
