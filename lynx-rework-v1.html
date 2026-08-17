@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lynx, share the song, not the service</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #090d14;
+  --raised: #111722;
+  --surface: #151b26;
+  --line: #2c3442;
+  --line-strong: #445065;
+  --ink: #f2f5fa;
+  --muted: #b5bfce;
+  --faint: #8290a4;
+  --blue: #2876f7;
+  --blue-hi: #6ca2ff;
+  --thinkpool-cobalt: #1a6ef4;
+  --danger: #ef9387;
+  --positive: #72c69b;
+  --radius: 16px;
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-snap: 160ms;
+  --motion-fast: 200ms;
+  --motion-enter: 260ms;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+* { box-sizing: border-box; }
+html { height: 100%; background: var(--bg); }
+body {
+  display: flex;
+  height: 100dvh;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  flex-direction: column;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { cursor: pointer; }
+a { color: inherit; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; z-index: 10; top: 12px; left: 12px;
+  transform: translateY(-150%); border-radius: 10px; background: var(--blue);
+  padding: 12px 16px; font-weight: 700; text-decoration: none;
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* ── ambient field ─────────────────────────────── */
+.field {
+  position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+}
+.field::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(40,118,247,.14), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 85% 100%, rgba(40,118,247,.06), transparent 70%);
+}
+.field::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(108,162,255,.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
+}
+
+/* ── topbar ────────────────────────────────────── */
+.topbar {
+  position: relative; display: flex; width: min(1120px, 100%);
+  flex: 0 0 auto; align-items: center; justify-content: space-between;
+  margin: 0 auto; padding: 20px 28px;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 10px;
+  border-radius: 12px; font-size: 17px; font-weight: 750; text-decoration: none;
+}
+.brand-mark {
+  display: grid; width: 32px; height: 32px; overflow: hidden; place-items: center;
+  border: 1px solid rgba(108,162,255,.55); border-radius: 9px;
+  background: rgba(40,118,247,.12);
+}
+.brand-mark img { display: block; width: 100%; height: 100%; }
+.service-rail {
+  display: flex; align-items: center; gap: 9px; color: var(--faint);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+}
+.service-rail svg {
+  width: 14px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── main stage ────────────────────────────────── */
+main {
+  position: relative; display: flex; width: min(760px, 100%);
+  min-height: 0; flex: 1 1 auto; margin: 0 auto; overflow-y: auto;
+  padding: clamp(8px, 3vh, 28px) 28px clamp(16px, 4vh, 32px);
+  flex-direction: column; align-items: center; text-align: center;
+  scrollbar-width: none;
+}
+main::-webkit-scrollbar { display: none; }
+
+/* ── hero ──────────────────────────────────────── */
+.hero { display: flex; flex-direction: column; align-items: center; }
+.service-icons { display: flex; align-items: center; gap: 14px; color: var(--muted); }
+.service-icon {
+  display: grid; width: 49px; height: 49px; place-items: center;
+  border: 1px solid var(--line); border-radius: 15px;
+  background: rgba(17,23,34,.85);
+}
+.service-icon svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.service-icon svg.apple { fill: currentColor; stroke: none; }
+.swap-icon {
+  width: 19px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+h1 {
+  max-width: 680px; margin: 22px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.6rem, 6.4vw, 4.6rem);
+  font-weight: 400; line-height: .96; letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.intro {
+  max-width: 590px; margin: 16px 0 0; color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 550; line-height: 1.65;
+}
+.intro-tail { margin-top: 10px; }
+
+/* ── converter ─────────────────────────────────── */
+.converter {
+  width: 100%; margin-top: 26px; border: 1px solid var(--line);
+  border-radius: 21px; background: rgba(21,27,38,.9); padding: 16px;
+  box-shadow: 0 30px 90px -52px var(--blue); backdrop-filter: blur(12px);
+}
+#convert-form { display: grid; min-width: 0; grid-template-columns: minmax(0,1fr); gap: 12px; }
+.input-shell {
+  display: flex; min-height: 64px; align-items: center; gap: 10px;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: rgba(9,13,20,.84); padding: 0 13px;
+}
+.input-shell:focus-within {
+  border-color: var(--blue-hi);
+  box-shadow: 0 0 0 3px rgba(40,118,247,.18);
+}
+.link-icon {
+  width: 21px; flex: 0 0 auto; fill: none; stroke: var(--faint);
+  stroke-width: 1.6; stroke-linecap: round;
+}
+input {
+  min-width: 0; flex: 1; border: 0; outline: 0; background: transparent;
+  color: var(--ink); font-size: 16px;
+}
+input::placeholder { color: var(--faint); }
+.paste-button {
+  min-width: 56px; min-height: 44px; border: 0; border-radius: 10px;
+  background: transparent; color: var(--blue-hi); font-size: 13px; font-weight: 750;
+  transition: background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle);
+}
+.paste-button:hover { background: rgba(40,118,247,.12); }
+.paste-button:active { transform: scale(.96); }
+
+.primary-button {
+  display: inline-flex; min-height: 56px; align-items: center; justify-content: center;
+  gap: 8px; border: 0; border-radius: 14px; background: var(--blue);
+  color: #07101d; font-size: 15px; font-weight: 780; text-decoration: none;
+  transition: background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle);
+}
+.primary-button:hover { background: var(--blue-hi); }
+.primary-button:active { transform: translateY(1px) scale(.985); }
+.primary-button:disabled { cursor: wait; opacity: .72; }
+.external-icon {
+  width: 17px; fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.spinner {
+  width: 16px; height: 16px; border: 2px solid rgba(7,16,29,.28);
+  border-top-color: #07101d; border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#error-text {
+  margin: 0; padding: 0 8px; color: var(--danger); font-size: 13px;
+  line-height: 1.65; text-align: left;
+}
+
+/* ── result ────────────────────────────────────── */
+.result { padding: 12px; text-align: left; transform-origin: 50% 0; }
+.track-row { display: flex; align-items: center; gap: 16px; }
+.artwork-shell {
+  position: relative; width: 96px; height: 96px; flex: 0 0 auto;
+  overflow: hidden; border-radius: 13px; background: var(--raised);
+}
+.artwork-shell img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: cover; }
+.artwork-shell img:not([src]) { display: none; }
+.artwork-fallback {
+  position: absolute; inset: 29px; fill: none; stroke: var(--faint);
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.track-copy { min-width: 0; }
+.route-label {
+  color: var(--blue-hi); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 10px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase;
+}
+h2 {
+  overflow: hidden; margin: 8px 0 0; color: var(--ink); font-size: 22px;
+  line-height: 1.15; letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap;
+}
+.track-copy p {
+  overflow: hidden; margin: 5px 0 0; color: var(--muted); font-size: 14px;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.result-actions { display: grid; gap: 8px; margin-top: 18px; }
+.copy-link-button svg {
+  width: 20px; fill: none; stroke: currentColor; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.copy-link-button.copied { background: var(--positive); }
+.secondary-link {
+  display: inline-flex; min-height: 44px; align-items: center; justify-content: center;
+  border-radius: 11px; color: var(--muted); font-size: 13px; font-weight: 750;
+  text-decoration: underline; text-decoration-color: var(--line-strong);
+  text-underline-offset: 4px;
+  transition: color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle);
+}
+.secondary-link:hover { color: var(--ink); }
+.secondary-link:active { transform: scale(.985); }
+.search-note { margin: 12px 0 0; color: var(--faint); font-size: 12px; line-height: 1.55; }
+.result-meta-actions {
+  display: grid; margin-top: 14px; gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.meta-action {
+  display: inline-flex; min-height: 44px; align-items: center; justify-content: center;
+  gap: 7px; border: 0; border-radius: 9px; background: transparent; color: var(--muted);
+  font-size: 13px; font-weight: 700; text-decoration: underline;
+  text-decoration-color: var(--line-strong); text-underline-offset: 4px;
+  transition: color var(--motion-snap) var(--ease-settle), background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle);
+}
+.meta-action:hover { background: rgba(40,118,247,.08); color: var(--ink); }
+.meta-action:active { transform: scale(.97); }
+.share-lynx-button svg {
+  width: 17px; fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── footer ────────────────────────────────────── */
+.footer-note {
+  display: flex; width: 100%; min-height: 0; flex: 1 1 auto;
+  align-items: center; margin: 0; color: var(--faint);
+  flex-direction: column; font-size: 12px;
+}
+.footer-credits { display: block; margin-top: auto; }
+.credit { display: block; color: var(--muted); font-weight: 700; }
+.made-with { display: block; margin-top: 5px; }
+.thinkpool-wordmark { font-weight: 750; letter-spacing: -.02em; }
+.thinkpool-think { color: var(--ink); }
+.thinkpool-pool { color: var(--thinkpool-cobalt); }
+.shortcut-install {
+  display: inline-flex; min-height: 36px; align-items: center; justify-content: center;
+  gap: 7px; margin-top: 10px; border: 1px solid rgba(108,162,255,.4);
+  border-radius: 999px; background: rgba(40,118,247,.1); padding: 8px 13px;
+  color: var(--ink); font-size: 11px; font-weight: 750; text-decoration: none;
+  transition: border-color var(--motion-snap) var(--ease-settle), background-color var(--motion-snap) var(--ease-settle), transform var(--motion-snap) var(--ease-settle);
+}
+.shortcut-install:hover { border-color: rgba(108,162,255,.75); background: rgba(40,118,247,.18); }
+.shortcut-install:active { transform: scale(.98); }
+.shortcut-install svg {
+  width: 16px; height: 16px; fill: none; stroke: var(--blue-hi);
+  stroke-linecap: round; stroke-width: 1.8;
+}
+
+:focus-visible { outline: 2px solid var(--blue-hi); outline-offset: 3px; }
+[hidden] { display: none !important; }
+
+/* ── motion ────────────────────────────────────── */
+@keyframes lynx-enter-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lynx-enter-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes lynx-mark-in { from { opacity: 0; transform: scale(.76) rotate(-5deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes lynx-result-in { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes lynx-confirm { 50% { transform: scale(1.02); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .topbar { animation: lynx-enter-down var(--motion-fast) var(--ease-settle) both; }
+  .brand-mark { animation: lynx-mark-in var(--motion-enter) var(--ease-settle) 20ms both; }
+  .service-icons { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 30ms both; }
+  h1 { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 45ms both; }
+  .intro { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 60ms both; }
+  .converter { animation: lynx-enter-up var(--motion-enter) var(--ease-settle) 75ms both; }
+  .footer-note { animation: lynx-enter-up var(--motion-fast) var(--ease-settle) 90ms both; }
+  .result:not([hidden]) { animation: lynx-result-in var(--motion-fast) var(--ease-settle) both; }
+  .copy-link-button.copied { animation: lynx-confirm var(--motion-fast) var(--ease-settle); }
+}
+
+/* ── responsive ────────────────────────────────── */
+@media (max-width: 600px) {
+  .topbar { padding: 12px 19px; }
+  .service-rail { gap: 7px; font-size: 9px; }
+  main { padding: 4px 19px 14px; }
+  h1 { margin-top: 14px; font-size: clamp(2.4rem, 11vw, 3.2rem); line-height: .98; }
+  .intro { margin-top: 12px; font-size: 16px; line-height: 1.5; }
+  .intro-tail { margin-top: 8px; }
+  .converter { margin-top: 18px; padding: 12px; }
+  .input-shell { padding-inline: 11px; }
+  .result { padding: 7px; }
+  .artwork-shell { width: 77px; height: 77px; }
+  .artwork-fallback { inset: 22px; }
+  h2 { font-size: 19px; }
+  .footer-note { margin-top: 0; }
+}
+
+@media (min-width: 601px) and (max-height: 700px) {
+  .topbar { padding: 12px 28px; }
+  main { padding: 8px 28px 8px; }
+  .service-icons { gap: 12px; }
+  .service-icon { width: 44px; height: 44px; border-radius: 13px; }
+  .service-icon svg { width: 26px; height: 26px; }
+  h1 { max-width: none; margin-top: 10px; font-size: 48px; line-height: .96; }
+  .intro { max-width: 760px; margin-top: 8px; font-size: 16px; line-height: 1.4; }
+  .intro-tail { margin-top: 6px; }
+  .converter { margin-top: 14px; padding: 12px; }
+  #convert-form { gap: 10px; }
+  .input-shell { min-height: 56px; }
+  .primary-button { min-height: 52px; }
+  .footer-note { margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#converter">Skip to converter</a>
+<div class="field" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Lynx home">
+    <span class="brand-mark" aria-hidden="true">
+      <img src="https://lynx.stream/icon.svg?v=3" alt="" width="80" height="80" />
+    </span>
+    <span class="brand-name">Lynx</span>
+  </a>
+  <div class="service-rail" aria-label="Spotify and Apple Music">
+    <span>Spotify</span>
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
+    <span>Apple Music</span>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="service-icons" aria-hidden="true">
+      <span class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" /><path d="M7.5 9.4c3.5-1 7.1-.7 9.6.7M8.2 12.3c3-.8 5.9-.5 8.1.7M8.8 15.1c2.4-.6 4.7-.4 6.5.6" /></svg>
+      </span>
+      <svg class="swap-icon" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
+      <span class="service-icon">
+        <svg class="apple" viewBox="0 0 24 24"><path d="M15.6 5.1c.8-1 1.3-2.3 1.2-3.6-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.7Zm3.4 7.8c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.8-.2-3.4 1-4.3 1-.9 0-2.2-1-3.7-.9a5.5 5.5 0 0 0-4.6 2.8c-2 3.4-.5 8.5 1.4 11.2.9 1.3 2 2.8 3.5 2.7 1.4-.1 1.9-.9 3.6-.9s2.2.9 3.7.9c1.5 0 2.5-1.3 3.4-2.7a12 12 0 0 0 1.6-3.2 4.9 4.9 0 0 1-2.9-4.4Z" transform="scale(.8) translate(2.5 1)" /></svg>
+      </span>
+    </div>
+
+    <h1>Share the song,<br />not the service</h1>
+    <p class="intro intro-lead">Paste a Spotify or Apple Music track or album</p>
+    <p class="intro intro-tail">Lynx finds it on the other service</p>
+  </div>
+
+  <section id="converter" class="converter" aria-label="Convert a track or album link">
+    <form id="convert-form" novalidate>
+      <label class="sr-only" for="track-link">Spotify or Apple Music track or album link</label>
+      <div class="input-shell">
+        <svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M10.5 13.5 13.5 10.5M8.2 15.8l-1.3 1.3a3.8 3.8 0 0 1-5.4-5.4l3.4-3.4a3.8 3.8 0 0 1 5.4 0M15.8 8.2l1.3-1.3a3.8 3.8 0 0 1 5.4 5.4l-3.4 3.4a3.8 3.8 0 0 1-5.4 0" /></svg>
+        <input id="track-link" name="track-link" type="url" inputmode="url" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Paste a track or album link…" />
+        <button id="paste-button" class="paste-button" type="button">Paste</button>
+      </div>
+      <button id="submit-button" class="primary-button" type="submit">
+        <span class="button-label">Find the other link</span>
+        <svg class="external-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6 14 14 6M8 6h6v6" /></svg>
+      </button>
+      <p id="error-text" role="alert" aria-live="polite" hidden></p>
+    </form>
+
+    <div id="result" class="result" hidden aria-live="polite">
+      <div class="track-row">
+        <div class="artwork-shell">
+          <img id="artwork" alt="" width="600" height="600" />
+          <svg class="artwork-fallback" aria-hidden="true" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12M9 10l10-2M6.5 20c1.4 0 2.5-.9 2.5-2s-1.1-2-2.5-2S4 16.9 4 18s1.1 2 2.5 2Zm10 0c1.4 0 2.5-.9 2.5-2s-1.1-2-2.5-2-2.5.9-2.5 2 1.1 2 2.5 2Z" /></svg>
+        </div>
+        <div class="track-copy">
+          <div id="route-label" class="route-label"></div>
+          <h2 id="track-title"></h2>
+          <p id="track-artist"></p>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button id="copy-button" class="primary-button copy-link-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="8" y="8" width="10" height="11" rx="2" /><path d="M15 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2" /></svg>
+          <span class="copy-label">Copy link</span>
+        </button>
+        <a id="search-link" class="secondary-link" target="_blank" rel="noreferrer"></a>
+      </div>
+      <p id="search-note" class="search-note" hidden>No confident direct match was found. The copied link opens the closest search.</p>
+      <div class="result-meta-actions">
+        <button id="share-lynx-button" class="meta-action share-lynx-button" type="button" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4" /></svg>
+          <span class="share-lynx-label">Share Lynx</span>
+        </button>
+        <button id="reset-button" class="meta-action reset-button" type="button">Convert another</button>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer-note">
+    <a class="shortcut-install" href="/shortcut/ShareWithLynx.shortcut" aria-label="Install the Share with Lynx iPhone Shortcut">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 14v-4M9 17V7M13 20V4M17 16V8M21 14v-4" /></svg>
+      Add iPhone Shortcut
+    </a>
+    <span class="footer-credits">
+      <span class="credit">By Maksim Zeidler</span>
+      <span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span>
+    </span>
+  </p>
+</main>
+</body>
+</html>
