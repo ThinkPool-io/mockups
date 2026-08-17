@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lynx input icon options</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --surface: #151b26;
+        --line: #2c3442;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at 50% 0%, rgba(40, 118, 247, 0.16), transparent 42%),
+          var(--bg);
+        padding: 56px 28px;
+      }
+      main {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+      }
+      header {
+        margin-bottom: 34px;
+        text-align: center;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 48px);
+        letter-spacing: -0.04em;
+      }
+      header p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 16px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.92);
+        padding: 18px;
+      }
+      article.recommended {
+        border-color: var(--blue-hi);
+        box-shadow: 0 0 0 3px rgba(40, 118, 247, 0.12);
+      }
+      .option-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .preview {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: #090d14;
+        color: var(--blue-hi);
+      }
+      .preview svg {
+        width: 28px;
+        height: 28px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .option-head p {
+        margin: 3px 0 0;
+        color: var(--faint);
+        font-size: 13px;
+      }
+      .badge {
+        border-radius: 999px;
+        background: rgba(40, 118, 247, 0.16);
+        color: var(--blue-hi);
+        padding: 6px 9px;
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .input-shell {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(9, 13, 20, 0.84);
+        padding: 0 13px;
+      }
+      .field-icon {
+        width: 21px;
+        height: 21px;
+        flex: 0 0 auto;
+      }
+      svg {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .field-icon {
+        color: var(--faint);
+      }
+      .placeholder {
+        min-width: 0;
+        flex: 1;
+        overflow: hidden;
+        color: var(--faint);
+        font-size: 16px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .paste {
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .wide {
+        grid-column: 1 / -1;
+      }
+      @media (max-width: 700px) {
+        body {
+          padding: 34px 16px;
+        }
+        header {
+          margin-bottom: 24px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .wide {
+          grid-column: auto;
+        }
+        article {
+          padding: 14px;
+        }
+        .input-shell {
+          min-height: 58px;
+          padding: 0 12px;
+        }
+        .placeholder {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Input icon options</h1>
+        <p>Shown inside the real Lynx field at production size</p>
+      </header>
+      <section class="grid">
+        <article class="recommended">
+          <div class="option-head">
+            <div class="identity">
+              <span class="preview">
+                <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>
+              </span>
+              <div><h2>01 · Clean link</h2><p>Recognizable, lighter, less tangled</p></div>
+            </div>
+            <span class="badge">Best fit</span>
+          </div>
+          <div class="input-shell">
+            <svg class="field-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></svg>
+            <span class="placeholder">Spotify or Apple Music track or album…</span><span class="paste">Paste</span>
+          </div>
+        </article>
+
+        <article>
+          <div class="option-head">
+            <div class="identity">
+              <span class="preview">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+              </span>
+              <div><h2>02 · Circle plus</h2><p>Clear “add” action, less URL-specific</p></div>
+            </div>
+          </div>
+          <div class="input-shell">
+            <svg class="field-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+            <span class="placeholder">Spotify or Apple Music track or album…</span><span class="paste">Paste</span>
+          </div>
+        </article>
+
+        <article>
+          <div class="option-head">
+            <div class="identity">
+              <span class="preview">
+                <svg viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg>
+              </span>
+              <div><h2>03 · Paperclip</h2><p>Familiar attachment metaphor</p></div>
+            </div>
+          </div>
+          <div class="input-shell">
+            <svg class="field-icon" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg>
+            <span class="placeholder">Spotify or Apple Music track or album…</span><span class="paste">Paste</span>
+          </div>
+        </article>
+
+        <article>
+          <div class="option-head">
+            <div class="identity">
+              <span class="preview">
+                <svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/><path d="M9 9l10-2"/></svg>
+              </span>
+              <div><h2>04 · Music note</h2><p>Category-first, does not imply a link</p></div>
+            </div>
+          </div>
+          <div class="input-shell">
+            <svg class="field-icon" viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/><path d="M9 9l10-2"/></svg>
+            <span class="placeholder">Spotify or Apple Music track or album…</span><span class="paste">Paste</span>
+          </div>
+        </article>
+
+        <article class="wide">
+          <div class="option-head">
+            <div class="identity">
+              <span class="preview">
+                <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>
+              </span>
+              <div><h2>05 · Insert arrow</h2><p>Signals putting something into the field</p></div>
+            </div>
+          </div>
+          <div class="input-shell">
+            <svg class="field-icon" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>
+            <span class="placeholder">Spotify or Apple Music track or album…</span><span class="paste">Paste</span>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
