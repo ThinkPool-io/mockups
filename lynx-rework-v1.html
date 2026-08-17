@@ -89,13 +89,18 @@ a { color: inherit; }
   background: rgba(40,118,247,.12);
 }
 .brand-mark img { display: block; width: 100%; height: 100%; }
-.service-rail {
-  display: flex; align-items: center; gap: 9px; color: var(--faint);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
-  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+.service-icons {
+  display: flex; align-items: center; gap: 10px; color: var(--muted);
 }
-.service-rail svg {
-  width: 14px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6;
+.service-icon {
+  display: grid; width: 36px; height: 36px; place-items: center;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: rgba(17,23,34,.85);
+}
+.service-icon svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.service-icon svg.apple { fill: currentColor; stroke: none; }
+.swap-icon {
+  width: 16px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6;
   stroke-linecap: round; stroke-linejoin: round;
 }
 
@@ -110,22 +115,13 @@ main {
 main::-webkit-scrollbar { display: none; }
 
 /* ── hero ──────────────────────────────────────── */
-.hero { display: flex; flex-direction: column; align-items: center; }
-.service-icons { display: flex; align-items: center; gap: 14px; color: var(--muted); }
-.service-icon {
-  display: grid; width: 49px; height: 49px; place-items: center;
-  border: 1px solid var(--line); border-radius: 15px;
-  background: rgba(17,23,34,.85);
-}
-.service-icon svg { width: 29px; height: 29px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
-.service-icon svg.apple { fill: currentColor; stroke: none; }
-.swap-icon {
-  width: 19px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6;
-  stroke-linecap: round; stroke-linejoin: round;
+.hero {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1 1 auto; justify-content: center; width: 100%;
 }
 
 h1 {
-  max-width: 680px; margin: 22px 0 0;
+  max-width: 680px; margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(2.6rem, 6.4vw, 4.6rem);
   font-weight: 400; line-height: .96; letter-spacing: -.045em;
@@ -255,11 +251,11 @@ h2 {
 
 /* ── footer ────────────────────────────────────── */
 .footer-note {
-  display: flex; width: 100%; min-height: 0; flex: 1 1 auto;
+  display: flex; width: 100%; min-height: 0; flex: 0 0 auto;
   align-items: center; margin: 0; color: var(--faint);
   flex-direction: column; font-size: 12px;
 }
-.footer-credits { display: block; margin-top: auto; }
+.footer-credits { display: block; margin-top: 10px; }
 .credit { display: block; color: var(--muted); font-weight: 700; }
 .made-with { display: block; margin-top: 5px; }
 .thinkpool-wordmark { font-weight: 750; letter-spacing: -.02em; }
@@ -304,9 +300,8 @@ h2 {
 /* ── responsive ────────────────────────────────── */
 @media (max-width: 600px) {
   .topbar { padding: 12px 19px; }
-  .service-rail { gap: 7px; font-size: 9px; }
   main { padding: 4px 19px 14px; }
-  h1 { margin-top: 14px; font-size: clamp(2.4rem, 11vw, 3.2rem); line-height: .98; }
+  h1 { margin-top: 0; font-size: clamp(2.4rem, 11vw, 3.2rem); line-height: .98; }
   .intro { margin-top: 12px; font-size: 16px; line-height: 1.5; }
   .intro-tail { margin-top: 8px; }
   .converter { margin-top: 18px; padding: 12px; }
@@ -321,10 +316,7 @@ h2 {
 @media (min-width: 601px) and (max-height: 700px) {
   .topbar { padding: 12px 28px; }
   main { padding: 8px 28px 8px; }
-  .service-icons { gap: 12px; }
-  .service-icon { width: 44px; height: 44px; border-radius: 13px; }
-  .service-icon svg { width: 26px; height: 26px; }
-  h1 { max-width: none; margin-top: 10px; font-size: 48px; line-height: .96; }
+  h1 { max-width: none; margin-top: 0; font-size: 48px; line-height: .96; }
   .intro { max-width: 760px; margin-top: 8px; font-size: 16px; line-height: 1.4; }
   .intro-tail { margin-top: 6px; }
   .converter { margin-top: 14px; padding: 12px; }
@@ -355,25 +347,19 @@ h2 {
     </span>
     <span class="brand-name">Lynx</span>
   </a>
-  <div class="service-rail" aria-label="Spotify and Apple Music">
-    <span>Spotify</span>
-    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
-    <span>Apple Music</span>
+  <div class="service-icons" aria-label="Spotify and Apple Music">
+    <span class="service-icon">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" /><path d="M7.5 9.4c3.5-1 7.1-.7 9.6.7M8.2 12.3c3-.8 5.9-.5 8.1.7M8.8 15.1c2.4-.6 4.7-.4 6.5.6" /></svg>
+    </span>
+    <svg class="swap-icon" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
+    <span class="service-icon">
+      <svg class="apple" viewBox="0 0 24 24"><path d="M15.6 5.1c.8-1 1.3-2.3 1.2-3.6-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.7Zm3.4 7.8c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.8-.2-3.4 1-4.3 1-.9 0-2.2-1-3.7-.9a5.5 5.5 0 0 0-4.6 2.8c-2 3.4-.5 8.5 1.4 11.2.9 1.3 2 2.8 3.5 2.7 1.4-.1 1.9-.9 3.6-.9s2.2.9 3.7.9c1.5 0 2.5-1.3 3.4-2.7a12 12 0 0 0 1.6-3.2 4.9 4.9 0 0 1-2.9-4.4Z" transform="scale(.8) translate(2.5 1)" /></svg>
+    </span>
   </div>
 </header>
 
 <main>
   <div class="hero">
-    <div class="service-icons" aria-hidden="true">
-      <span class="service-icon">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" /><path d="M7.5 9.4c3.5-1 7.1-.7 9.6.7M8.2 12.3c3-.8 5.9-.5 8.1.7M8.8 15.1c2.4-.6 4.7-.4 6.5.6" /></svg>
-      </span>
-      <svg class="swap-icon" viewBox="0 0 24 24"><path d="M5 8h13m-3-3 3 3-3 3M19 16H6m3-3-3 3 3 3" /></svg>
-      <span class="service-icon">
-        <svg class="apple" viewBox="0 0 24 24"><path d="M15.6 5.1c.8-1 1.3-2.3 1.2-3.6-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.7Zm3.4 7.8c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.8-.2-3.4 1-4.3 1-.9 0-2.2-1-3.7-.9a5.5 5.5 0 0 0-4.6 2.8c-2 3.4-.5 8.5 1.4 11.2.9 1.3 2 2.8 3.5 2.7 1.4-.1 1.9-.9 3.6-.9s2.2.9 3.7.9c1.5 0 2.5-1.3 3.4-2.7a12 12 0 0 0 1.6-3.2 4.9 4.9 0 0 1-2.9-4.4Z" transform="scale(.8) translate(2.5 1)" /></svg>
-      </span>
-    </div>
-
     <h1>Share the song,<br />not the service</h1>
     <p class="intro intro-lead">Paste a Spotify or Apple Music track or album</p>
     <p class="intro intro-tail">Lynx finds it on the other service</p>
