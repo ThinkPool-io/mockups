@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ff6438" />
+  <meta name="description" content="Paste TikTok or Instagram. Get one clean link. Get dumb together." />
+  <title>SlopStream · Microwave the feed</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --orange: #ff6438;
+      --red: #e83519;
+      --yellow: #ffdc25;
+      --cream: #f4ead1;
+      --panel: #d9cfb5;
+      --black: #1d1916;
+      --green: #91ff72;
+      --white: #fffdf7;
+      --shadow: 14px 14px 0 var(--black);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      overflow-x: hidden;
+      color: var(--black);
+      background:
+        radial-gradient(circle at 10% 12%, rgba(255,255,255,.3) 0 2px, transparent 2.6px) 0 0 / 17px 17px,
+        var(--orange);
+      font-family: Arial Black, Arial, Helvetica, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    [hidden] { display: none !important; }
+
+    .ticker {
+      position: relative;
+      z-index: 5;
+      overflow: hidden;
+      border-block: 3px solid var(--black);
+      background: var(--yellow);
+      font: 900 12px/34px ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .ticker span {
+      display: inline-block;
+      min-width: 200%;
+      animation: crawl 19s linear infinite;
+    }
+
+    .sitebar {
+      min-height: 70px;
+      padding: 14px clamp(18px, 4vw, 54px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 4px solid var(--black);
+      background: var(--cream);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: inherit;
+      text-decoration: none;
+      font-size: clamp(22px, 3vw, 34px);
+      letter-spacing: -.07em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 34px;
+      aspect-ratio: 1;
+      border: 4px solid var(--black);
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: inset 0 0 0 6px var(--yellow);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--black);
+      transform: translate(-50%, -50%);
+    }
+
+    .platforms {
+      display: flex;
+      gap: 7px;
+      font: 900 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .platforms span {
+      padding: 8px 10px;
+      border: 2px solid var(--black);
+      background: var(--white);
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    main {
+      position: relative;
+      min-height: calc(100svh - 108px);
+      padding: clamp(24px, 5vw, 70px);
+      display: grid;
+      place-items: center;
+    }
+
+    .orbit {
+      position: absolute;
+      z-index: 0;
+      border: 4px solid var(--black);
+      background: var(--yellow);
+      box-shadow: 7px 7px 0 var(--black);
+      font: 900 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+    }
+
+    .orbit.one { left: 2.6vw; top: 6%; padding: 13px 17px; transform: rotate(-10deg); }
+    .orbit.two { right: 2.8vw; bottom: 8%; padding: 18px; border-radius: 50%; transform: rotate(12deg); }
+
+    .machine {
+      position: relative;
+      z-index: 2;
+      width: min(1240px, 100%);
+      padding: clamp(18px, 3vw, 42px);
+      border: 5px solid var(--black);
+      border-radius: clamp(26px, 4vw, 50px);
+      background: var(--cream);
+      box-shadow: inset 0 -13px 0 #cfc3a7, var(--shadow);
+    }
+
+    .machine-top {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      text-transform: uppercase;
+    }
+
+    .machine-model {
+      font-size: clamp(12px, 2vw, 17px);
+      letter-spacing: .09em;
+    }
+
+    .warning {
+      padding: 9px 12px;
+      border: 3px solid var(--black);
+      background: var(--yellow);
+      box-shadow: 4px 4px 0 var(--black);
+      font: 900 10px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      transform: rotate(2deg);
+    }
+
+    .machine-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .65fr);
+      gap: clamp(18px, 2.6vw, 30px);
+    }
+
+    .door {
+      position: relative;
+      min-height: 550px;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 66px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 5px solid var(--black);
+      border-radius: 30px;
+      color: var(--cream);
+      background:
+        linear-gradient(135deg, transparent 0 47%, rgba(255,100,56,.18) 48% 52%, transparent 53%),
+        repeating-radial-gradient(circle at 50% 46%, transparent 0 8px, rgba(255,100,56,.7) 9px 11px),
+        #221e1b;
+    }
+
+    .door::before {
+      content: "";
+      position: absolute;
+      width: min(470px, 70vw);
+      aspect-ratio: 1;
+      left: 50%;
+      top: 44%;
+      border: 4px solid var(--yellow);
+      border-radius: 50%;
+      box-shadow: 0 0 0 22px rgba(255,220,37,.08), 0 0 80px rgba(255,100,56,.48);
+      transform: translate(-50%, -50%);
+      animation: hum 3.4s ease-in-out infinite;
+    }
+
+    .burst {
+      position: absolute;
+      top: 7%;
+      right: 5%;
+      width: 116px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 4px solid var(--black);
+      background: var(--green);
+      color: var(--black);
+      clip-path: polygon(50% 0,61% 22%,82% 8%,80% 32%,100% 35%,80% 51%,96% 69%,73% 70%,70% 96%,52% 79%,34% 100%,31% 75%,6% 82%,20% 59%,0 49%,24% 40%,8% 19%,34% 25%);
+      font: 900 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-align: center;
+      transform: rotate(9deg);
+      animation: wiggle 2.2s steps(2, end) infinite;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 2;
+      max-width: 840px;
+    }
+
+    .eyebrow {
+      margin: 0 0 15px;
+      color: var(--yellow);
+      font: 900 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0;
+      font-size: clamp(58px, 7.7vw, 116px);
+      line-height: .79;
+      letter-spacing: -.085em;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    h1 em {
+      display: block;
+      color: var(--yellow);
+      font-style: normal;
+      text-shadow: 5px 5px 0 var(--red);
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 27px 0 0;
+      font: 800 clamp(16px, 1.7vw, 21px)/1.35 Arial, Helvetica, sans-serif;
+    }
+
+    .controls {
+      min-width: 0;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      border: 5px solid var(--black);
+      border-radius: 30px;
+      background: var(--panel);
+    }
+
+    .screen {
+      min-height: 86px;
+      padding: 14px;
+      display: grid;
+      place-items: center;
+      border: 5px inset #87816d;
+      background: #151c16;
+      color: var(--green);
+      font: 900 clamp(26px, 4vw, 45px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .05em;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(145,255,114,.8);
+    }
+
+    .screen[data-state="ready"] { font-size: clamp(17px, 2.5vw, 27px); }
+    .screen[data-state="error"] { color: #ff8c73; font-size: 16px; text-shadow: none; }
+
+    .dial-wrap {
+      min-height: 170px;
+      display: grid;
+      place-items: center;
+    }
+
+    .dial {
+      position: relative;
+      width: 136px;
+      aspect-ratio: 1;
+      border: 5px solid var(--black);
+      border-radius: 50%;
+      background: conic-gradient(var(--black) 0 11%, #f2e9d5 11% 100%);
+      box-shadow: inset 0 0 0 13px #c7bca1, 6px 7px 0 var(--black);
+      transform: rotate(-24deg);
+      transition: transform .5s cubic-bezier(.2,.9,.2,1);
+    }
+
+    .dial::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 8px;
+      width: 7px;
+      height: 30px;
+      border-radius: 5px;
+      background: var(--red);
+      transform: translateX(-50%);
+    }
+
+    .machine.is-cooking .dial { transform: rotate(238deg); }
+
+    form { margin-top: auto; display: grid; gap: 10px; }
+    label {
+      font: 900 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .input-shell { position: relative; }
+    input {
+      width: 100%;
+      min-height: 56px;
+      padding: 13px 50px 13px 14px;
+      border: 3px solid var(--black);
+      border-radius: 7px;
+      outline: none;
+      color: var(--black);
+      background: var(--white);
+      font: 700 14px/1.25 Arial, Helvetica, sans-serif;
+    }
+
+    input:focus-visible { box-shadow: 0 0 0 4px var(--yellow); }
+    input::placeholder { color: #777064; }
+
+    .paste {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      min-width: 38px;
+      min-height: 38px;
+      border: 2px solid var(--black);
+      border-radius: 5px;
+      background: var(--yellow);
+      cursor: pointer;
+      font: 900 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      transform: translateY(-50%);
+      text-transform: uppercase;
+    }
+
+    .cook {
+      min-height: 60px;
+      padding: 12px 18px;
+      border: 4px solid var(--black);
+      border-radius: 8px;
+      color: #fff;
+      background: var(--red);
+      box-shadow: 0 7px 0 #8b1d0d;
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .cook:hover { background: #fa3e1d; }
+    .cook:active { box-shadow: 0 1px 0 #8b1d0d; transform: translateY(6px); }
+    .cook:focus-visible, .paste:focus-visible, .result-actions button:focus-visible, .result-actions a:focus-visible {
+      outline: 4px solid var(--yellow);
+      outline-offset: 2px;
+    }
+
+    .fine {
+      margin: 12px 0 0;
+      font: 800 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-align: center;
+    }
+
+    .shortcut-install {
+      min-height: 46px;
+      margin-top: 10px;
+      padding: 10px 12px;
+      display: grid;
+      place-items: center;
+      border: 3px dashed var(--black);
+      border-radius: 7px;
+      color: var(--black);
+      background: var(--yellow);
+      font: 900 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .result {
+      margin-top: 14px;
+      padding: 14px;
+      border: 3px solid var(--black);
+      border-radius: 8px;
+      background: var(--green);
+    }
+
+    .result strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .clean-url {
+      display: block;
+      overflow: hidden;
+      color: var(--black);
+      font: 700 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .result-actions {
+      margin-top: 11px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .result-actions a, .result-actions button {
+      min-height: 46px;
+      padding: 10px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--black);
+      border-radius: 6px;
+      color: var(--cream);
+      background: var(--black);
+      cursor: pointer;
+      font: 900 11px/1 Arial, Helvetica, sans-serif;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .relay {
+      width: min(1100px, calc(100% - 36px));
+      margin: 0 auto 56px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      border: 4px solid var(--black);
+      background: var(--cream);
+      box-shadow: 9px 9px 0 var(--black);
+    }
+
+    .relay article {
+      min-height: 132px;
+      padding: 18px;
+      border: 3px solid var(--black);
+      background: var(--white);
+    }
+
+    .relay b { font-size: 30px; letter-spacing: -.06em; }
+    .relay h2 { margin: 9px 0 5px; font-size: 15px; text-transform: uppercase; }
+    .relay p { margin: 0; font: 700 13px/1.35 Arial, Helvetica, sans-serif; }
+
+    footer {
+      padding: 18px;
+      border-top: 4px solid var(--black);
+      background: var(--black);
+      color: var(--cream);
+      font: 800 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @keyframes crawl { to { transform: translateX(-50%); } }
+    @keyframes hum {
+      0%, 100% { transform: translate(-50%, -50%) scale(.96); opacity: .72; }
+      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+    }
+    @keyframes wiggle { 0%,100% { transform: rotate(9deg); } 50% { transform: rotate(-4deg); } }
+
+    @media (max-width: 850px) {
+      .sitebar { min-height: 62px; padding: 11px 16px; }
+      .platforms span { padding: 7px 8px; }
+      main { min-height: auto; padding: 24px 16px 42px; }
+      .orbit { display: none; }
+      .machine { padding: 15px; border-radius: 27px; box-shadow: inset 0 -10px 0 #cfc3a7, 8px 8px 0 var(--black); }
+      .machine-top { margin: 3px 5px 16px; }
+      .machine-grid { grid-template-columns: 1fr; }
+      .door { min-height: 385px; padding: 28px 24px; border-radius: 21px; }
+      .burst { width: 88px; }
+      h1 { font-size: clamp(52px, 15.5vw, 76px); }
+      .hero-copy { margin-top: 21px; font-size: 16px; }
+      .controls { padding: 17px; border-radius: 21px; }
+      .dial-wrap { min-height: 128px; }
+      .dial { width: 102px; }
+      .relay { grid-template-columns: 1fr; margin-bottom: 38px; }
+      .relay article { min-height: 0; }
+    }
+
+    @media (max-width: 440px) {
+      .ticker { font-size: 10px; line-height: 30px; }
+      .brand { font-size: 21px; }
+      .brand-mark { width: 28px; border-width: 3px; }
+      .platforms { gap: 4px; }
+      .platforms span { padding: 6px; font-size: 8px; box-shadow: 2px 2px 0 var(--black); }
+      .warning { max-width: 140px; padding: 7px; font-size: 8px; }
+      .door { min-height: 360px; }
+      .burst { top: 4%; right: 2%; width: 75px; font-size: 9px; }
+      h1 { font-size: clamp(44px, 12vw, 58px); }
+      .screen { min-height: 72px; }
+      .result-actions { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ticker" aria-hidden="true">
+    <span>Brain rot relay active · TikTok in · Instagram in · Clean link out · Get dumb together · No install · No account · &nbsp; Brain rot relay active · TikTok in · Instagram in · Clean link out · Get dumb together · No install · No account · &nbsp;</span>
+  </div>
+
+  <header class="sitebar">
+    <a class="brand" href="#" aria-label="SlopStream home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>SlopStream</span>
+    </a>
+    <div class="platforms" aria-label="Supported platforms">
+      <span>TikTok</span>
+      <span>Instagram</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="orbit one">Friendship appliance</div>
+    <div class="orbit two">Zero<br />thoughts</div>
+
+    <article class="machine" id="machine">
+      <div class="machine-top">
+        <div class="machine-model">SlopStream 9000</div>
+        <div class="warning">For two cooked brains at once</div>
+      </div>
+
+      <div class="machine-grid">
+        <section class="door">
+          <div class="burst" aria-hidden="true">App<br />prompt<br />destroyed</div>
+          <div class="hero">
+            <p class="eyebrow">Cross-platform intellectual decline</p>
+            <h1>Microwave your <em>attention span.</em></h1>
+            <p class="hero-copy">Conrad pastes the slop. You open one clean link. Nobody installs anything. Now you can get dumb together, seamlessly.</p>
+          </div>
+        </section>
+
+        <aside class="controls">
+          <div class="screen" id="screen" role="status" aria-live="polite">00:08</div>
+          <div class="dial-wrap" aria-hidden="true"><div class="dial"></div></div>
+
+          <form id="relay-form" novalidate>
+            <label for="source-url">Insert public brain rot</label>
+            <div class="input-shell">
+              <input id="source-url" name="url" type="url" inputmode="url" autocomplete="url" placeholder="TikTok or Instagram link" aria-describedby="support-note" required />
+              <button class="paste" id="paste-button" type="button">Paste</button>
+            </div>
+            <button class="cook" type="submit">Start slop</button>
+          </form>
+
+          <p class="fine" id="support-note">Public posts, reels, videos and carousels. Private or deleted slop stays private or deleted.</p>
+
+          <a class="shortcut-install" href="https://thinkpool-io.github.io/mockups/slopstream/ShareWithSlopStream.shortcut" hidden>Install “Share with SlopStream” on iPhone</a>
+
+          <section class="result" id="result" hidden>
+            <strong>Slop cooked. Serve immediately.</strong>
+            <span class="clean-url" id="clean-url"></span>
+            <div class="result-actions">
+              <a id="open-link" href="#" target="_blank" rel="noopener noreferrer">Open clean link</a>
+              <button id="share-link" type="button">Share with victim</button>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <section class="relay" aria-label="How SlopStream works">
+    <article><b>01</b><h2>Paste the poison</h2><p>TikTok or Instagram. Platform loyalty is for people with intact dopamine receptors.</p></article>
+    <article><b>02</b><h2>Nuke the friction</h2><p>SlopStream makes one browser link. No app store detour. No account ceremony.</p></article>
+    <article><b>03</b><h2>Get dumb together</h2><p>Send it to your friend and resume the synchronized collapse of your attention spans.</p></article>
+  </section>
+
+  <footer>SlopStream · The brain rot relay should never depend on the platform</footer>
+
+  <script>
+    const viewerBase = 'https://thinkpool-io.github.io/mockups/tokless-prototype.html';
+    const form = document.querySelector('#relay-form');
+    const input = document.querySelector('#source-url');
+    const machine = document.querySelector('#machine');
+    const screen = document.querySelector('#screen');
+    const result = document.querySelector('#result');
+    const cleanUrl = document.querySelector('#clean-url');
+    const openLink = document.querySelector('#open-link');
+    const shareLink = document.querySelector('#share-link');
+    let cookedLink = '';
+
+    const shortcutInstall = document.querySelector('.shortcut-install');
+    if (/iPhone/.test(navigator.userAgent)) shortcutInstall.hidden = false;
+
+    function normalizeSource(value) {
+      try {
+        const candidate = /^https?:\/\//i.test(value) ? value : 'https://' + value;
+        const url = new URL(candidate);
+        const host = url.hostname.toLowerCase();
+        if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
+          return { platform: 'TIKTOK', url: url.origin + url.pathname };
+        }
+        if (host === 'instagram.com' || host.endsWith('.instagram.com') || host === 'instagr.am' || host.endsWith('.instagr.am')) {
+          const match = url.pathname.match(/^\/(?:[^/]+\/)?(?:p|reel|reels|tv)\/[\w-]+/i);
+          if (!match) return null;
+          return { platform: 'INSTAGRAM', url: url.origin + match[0].replace(/^\/reels\//i, '/reel/') + '/' };
+        }
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setScreen(message, state = '') {
+      screen.textContent = message;
+      screen.dataset.state = state;
+    }
+
+    function cook(source) {
+      machine.classList.add('is-cooking');
+      result.hidden = true;
+      setScreen('NUKING');
+      window.setTimeout(() => {
+        cookedLink = viewerBase + '?url=' + encodeURIComponent(source.url);
+        cleanUrl.textContent = cookedLink;
+        openLink.href = cookedLink;
+        result.hidden = false;
+        setScreen(source.platform + ' READY', 'ready');
+        machine.classList.remove('is-cooking');
+        result.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 620);
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const source = normalizeSource(input.value.trim());
+      if (!source) {
+        result.hidden = true;
+        setScreen('BAD LINK', 'error');
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      cook(source);
+    });
+
+    document.querySelector('#paste-button').addEventListener('click', async () => {
+      try {
+        input.value = await navigator.clipboard.readText();
+        input.focus();
+      } catch {
+        input.focus();
+        setScreen('HOLD TO PASTE', 'error');
+      }
+    });
+
+    shareLink.addEventListener('click', async () => {
+      if (!cookedLink) return;
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: 'Fresh SlopStream delivery', text: 'Get dumb with me.', url: cookedLink });
+          return;
+        }
+        await navigator.clipboard.writeText(cookedLink);
+        shareLink.textContent = 'Copied';
+        window.setTimeout(() => { shareLink.textContent = 'Share with victim'; }, 1400);
+      } catch (error) {
+        if (error && error.name === 'AbortError') return;
+        shareLink.textContent = 'Copy from address';
+      }
+    });
+  </script>
+</body>
+</html>
