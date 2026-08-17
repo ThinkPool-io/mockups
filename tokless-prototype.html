@@ -353,11 +353,17 @@
   async function fetchVideoData(sourceUrl, attempt = 0) {
     const endpoint = 'https://www.tikwm.com/api/?hd=0&url=' + encodeURIComponent(sourceUrl);
     const response = await fetch(endpoint, { headers: { Accept: 'application/json' } });
-    if (!response.ok) throw new Error('Resolver request failed.');
+    if (!response.ok) {
+      if (attempt < 2 && (response.status === 429 || response.status >= 500)) {
+        await delay(1350);
+        return fetchVideoData(sourceUrl, attempt + 1);
+      }
+      throw new Error('Resolver request failed.');
+    }
     const payload = await response.json();
     if (payload.code === 0 && payload.data) return payload.data;
-    if (attempt < 1 && /limit|frequent|second/i.test(payload.msg || '')) {
-      await delay(1250);
+    if (attempt < 2 && /limit|frequent|second/i.test(payload.msg || '')) {
+      await delay(1350);
       return fetchVideoData(sourceUrl, attempt + 1);
     }
     throw new Error(payload.msg || 'Video could not be resolved.');
