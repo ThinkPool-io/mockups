@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050505" />
+    <title>Lynx, album relay direction</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050505;
+        --raised: rgba(17, 20, 26, 0.92);
+        --line: rgba(176, 190, 214, 0.25);
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; }
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .album-grid {
+        position: fixed;
+        inset: -5vh -4vw;
+        display: grid;
+        grid-template-columns: repeat(7, minmax(120px, 1fr));
+        grid-auto-rows: minmax(150px, 27vh);
+        gap: 18px;
+        padding: 18px;
+        opacity: 0.92;
+        transform: rotate(-3deg) scale(1.06);
+      }
+      .album {
+        overflow: hidden;
+        border-radius: 19px;
+        background: var(--art);
+        box-shadow:
+          inset 0 0 0 1px rgba(255,255,255,.08),
+          0 18px 46px rgba(0,0,0,.35);
+      }
+      .album:nth-child(2n) { transform: translateY(42px); }
+      .album:nth-child(3n) { transform: translateY(-24px); }
+      .album::after {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background:
+          linear-gradient(135deg, transparent 52%, rgba(255,255,255,.09)),
+          radial-gradient(circle at 28% 24%, rgba(255,255,255,.2), transparent 25%);
+        content: "";
+      }
+      .veil {
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(circle at 50% 48%, rgba(0,0,0,.34), #050505 74%),
+          linear-gradient(rgba(2,4,8,.08), rgba(2,4,8,.26));
+        backdrop-filter: blur(1.5px);
+      }
+      main {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        width: min(700px, calc(100% - 36px));
+        height: 100dvh;
+        margin: 0 auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .content-shell {
+        display: flex;
+        width: 100%;
+        max-height: calc(100dvh - 30px);
+        align-items: center;
+        flex-direction: column;
+        border: 0;
+        border-radius: 32px;
+        background: transparent;
+        padding: 22px 28px 18px;
+        text-shadow: 0 2px 20px rgba(0,0,0,.88);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .brand-mark {
+        display: grid;
+        width: 66px;
+        height: 66px;
+        overflow: hidden;
+        place-items: center;
+        border: 1px solid rgba(108, 162, 255, 0.58);
+        border-radius: 18px;
+        background: rgba(40, 118, 247, 0.13);
+      }
+      .brand-mark img { width: 100%; height: 100%; }
+      .brand-name { font-size: 28px; font-weight: 790; letter-spacing: -.04em; }
+      .service-icons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        color: #c0c9d6;
+      }
+      .service-icon {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: rgba(14, 18, 25, .82);
+      }
+      .service-icon svg { width: 25px; height: 25px; }
+      .spotify circle, .spotify path {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+      }
+      .apple { fill: currentColor; }
+      .swap { color: var(--blue-hi); font-size: 18px; }
+      h1 {
+        max-width: 650px;
+        margin: 14px 0 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3.25rem, 6vw, 5.2rem);
+        font-weight: 400;
+        letter-spacing: -.055em;
+        line-height: .9;
+        text-wrap: balance;
+      }
+      .intro {
+        margin: 13px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 570;
+        line-height: 1.4;
+      }
+      .intro-tail { margin-top: 6px; }
+      .converter {
+        width: 100%;
+        margin-top: 16px;
+        border: 1px solid rgba(176,190,214,.22);
+        border-radius: 20px;
+        background: rgba(17, 20, 26, 0.9);
+        padding: 13px;
+        box-shadow: 0 28px 80px -40px rgba(47, 124, 248, .92);
+      }
+      form { display: grid; gap: 10px; }
+      .input-shell {
+        display: flex;
+        min-height: 58px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(176,190,214,.22);
+        border-radius: 13px;
+        background: rgba(0,0,0,.62);
+        padding: 0 13px;
+      }
+      .link-icon { width: 20px; flex: 0 0 auto; fill: none; stroke: var(--faint); stroke-width: 1.6; stroke-linecap: round; }
+      input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 15px; }
+      input::placeholder { color: var(--faint); }
+      .paste-button { min-width: 50px; min-height: 42px; border: 0; border-radius: 9px; background: transparent; color: var(--blue-hi); font-size: 12px; font-weight: 800; }
+      .primary-button {
+        display: inline-flex;
+        min-height: 52px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 0;
+        border-radius: 13px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 14px;
+        font-weight: 820;
+      }
+      .external-icon { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .footer-note {
+        display: flex;
+        margin: 10px 0 0;
+        align-items: center;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .shortcut-install {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(108,162,255,.55);
+        border-radius: 999px;
+        background: rgba(40,118,247,.13);
+        padding: 0 15px;
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 760;
+        text-decoration: none;
+      }
+      .shortcut-install svg { width: 17px; fill: none; stroke: var(--blue-hi); stroke-width: 1.6; }
+      .footer-credits { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 11px; }
+      .credit { font-weight: 700; }
+      .made-with { color: var(--faint); }
+      .thinkpool-wordmark { font-weight: 850; }
+      .thinkpool-think { color: var(--ink); }
+      .thinkpool-pool { color: var(--blue); }
+
+      @media (max-width: 600px) {
+        .album-grid {
+          inset: -2vh -25vw;
+          grid-template-columns: repeat(4, minmax(94px, 1fr));
+          grid-auto-rows: minmax(118px, 19vh);
+          gap: 12px;
+          opacity: .88;
+        }
+        main { width: calc(100% - 20px); }
+        .content-shell {
+          max-height: calc(100dvh - 16px);
+          border-radius: 26px;
+          padding: 14px 12px 12px;
+        }
+        .brand { gap: 5px; }
+        .brand-mark { width: 54px; height: 54px; border-radius: 15px; }
+        .brand-name { font-size: 23px; }
+        .service-icons { gap: 9px; margin-top: 8px; }
+        .service-icon { width: 38px; height: 38px; border-radius: 12px; }
+        .service-icon svg { width: 23px; height: 23px; }
+        h1 { margin-top: 10px; font-size: clamp(2.7rem, 12.5vw, 3.45rem); line-height: .88; }
+        .intro { margin-top: 10px; font-size: 13px; line-height: 1.3; }
+        .intro-tail { margin-top: 5px; }
+        .converter { margin-top: 12px; border-radius: 18px; padding: 11px; }
+        form { gap: 9px; }
+        .input-shell { min-height: 54px; padding: 0 11px; }
+        input { font-size: 14px; }
+        .primary-button { min-height: 50px; }
+        .footer-note { margin-top: 8px; gap: 7px; }
+        .shortcut-install { min-height: 38px; }
+        .footer-credits { gap: 9px; font-size: 10px; }
+      }
+
+      @media (max-height: 720px) {
+        .content-shell { padding-top: 10px; padding-bottom: 9px; }
+        .brand-mark { width: 48px; height: 48px; }
+        .brand-name { font-size: 21px; }
+        .service-icons { margin-top: 6px; }
+        .service-icon { width: 34px; height: 34px; }
+        h1 { margin-top: 7px; font-size: 2.8rem; }
+        .intro { margin-top: 7px; font-size: 12px; }
+        .intro-tail { margin-top: 3px; }
+        .converter { margin-top: 9px; }
+        .input-shell { min-height: 48px; }
+        .primary-button { min-height: 46px; }
+        .footer-note { margin-top: 6px; }
+        .shortcut-install { min-height: 34px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="album-grid" aria-hidden="true">
+      <i class="album" style="--art:linear-gradient(145deg,#bf1e46,#151515 60%)"></i>
+      <i class="album" style="--art:linear-gradient(45deg,#f0c741,#8131aa)"></i>
+      <i class="album" style="--art:linear-gradient(135deg,#0d674d,#d4b76d)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#4777d0,#17182d)"></i>
+      <i class="album" style="--art:linear-gradient(35deg,#f06d37,#f2d66f)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#eee,#5d5c64)"></i>
+      <i class="album" style="--art:linear-gradient(45deg,#47223a,#f5a054)"></i>
+      <i class="album" style="--art:linear-gradient(135deg,#141414,#4d7aeb)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#db3a30,#281313)"></i>
+      <i class="album" style="--art:linear-gradient(35deg,#4bbaac,#192941)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#8a52d1,#f1a751)"></i>
+      <i class="album" style="--art:linear-gradient(45deg,#e0d5bd,#67333a)"></i>
+      <i class="album" style="--art:linear-gradient(135deg,#1a2538,#d75587)"></i>
+      <i class="album" style="--art:linear-gradient(35deg,#df9d4a,#11464f)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#151515,#9a302b)"></i>
+      <i class="album" style="--art:linear-gradient(45deg,#a3b3e8,#33214f)"></i>
+      <i class="album" style="--art:linear-gradient(135deg,#673f2c,#d1c6a4)"></i>
+      <i class="album" style="--art:linear-gradient(35deg,#e83c7c,#323e92)"></i>
+      <i class="album" style="--art:linear-gradient(145deg,#315e7d,#dd9b51)"></i>
+      <i class="album" style="--art:linear-gradient(45deg,#b22522,#0d191e)"></i>
+      <i class="album" style="--art:linear-gradient(135deg,#4c6f36,#e6be72)"></i>
+    </div>
+    <div class="veil" aria-hidden="true"></div>
+
+    <main>
+      <div class="content-shell">
+        <header class="brand">
+          <span class="brand-mark"><img src="https://lynx.stream/icon.svg?v=3" alt="" width="66" height="66" /></span>
+          <span class="brand-name">Lynx</span>
+        </header>
+
+        <div class="service-icons" aria-label="Spotify and Apple Music">
+          <span class="service-icon">
+            <svg class="spotify" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.4c3.5-1 7.1-.7 9.6.7M8.2 12.3c3-.8 5.9-.5 8.1.7M8.8 15.1c2.4-.6 4.7-.4 6.5.6"/></svg>
+          </span>
+          <span class="swap">↔</span>
+          <span class="service-icon">
+            <svg class="apple" viewBox="0 0 24 24"><path d="M15.6 5.1c.8-1 1.3-2.3 1.2-3.6-1.2.1-2.6.8-3.4 1.8-.7.8-1.4 2.2-1.2 3.5 1.3.1 2.6-.7 3.4-1.7Zm3.4 7.8c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.8-.2-3.4 1-4.3 1-.9 0-2.2-1-3.7-.9a5.5 5.5 0 0 0-4.6 2.8c-2 3.4-.5 8.5 1.4 11.2.9 1.3 2 2.8 3.5 2.7 1.4-.1 1.9-.9 3.6-.9s2.2.9 3.7.9c1.5 0 2.5-1.3 3.4-2.7a12 12 0 0 0 1.6-3.2 4.9 4.9 0 0 1-2.9-4.4Z" transform="scale(.8) translate(2.5 1)"/></svg>
+          </span>
+        </div>
+
+        <h1>Share the song,<br />not the service</h1>
+        <p class="intro">Paste a Spotify or Apple Music track or album</p>
+        <p class="intro intro-tail">Lynx finds it on the other service</p>
+
+        <section class="converter" aria-label="Convert a track or album link">
+          <form>
+            <div class="input-shell">
+              <svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M10.5 13.5 13.5 10.5M8.2 15.8l-1.3 1.3a3.8 3.8 0 0 1-5.4-5.4l3.4-3.4a3.8 3.8 0 0 1 5.4 0M15.8 8.2l1.3-1.3a3.8 3.8 0 0 1 5.4 5.4l-3.4 3.4a3.8 3.8 0 0 1-5.4 0"/></svg>
+              <input type="url" aria-label="Spotify or Apple Music track or album link" placeholder="Paste a track or album link…" />
+              <button class="paste-button" type="button">Paste</button>
+            </div>
+            <button class="primary-button" type="button">
+              <span>Find the other link</span>
+              <svg class="external-icon" aria-hidden="true" viewBox="0 0 20 20"><path d="M6 14 14 6M8 6h6v6"/></svg>
+            </button>
+          </form>
+        </section>
+
+        <p class="footer-note">
+          <a class="shortcut-install" href="#">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 14v-4M9 17V7M13 20V4M17 16V8M21 14v-4"/></svg>
+            Add iPhone Shortcut
+          </a>
+          <span class="footer-credits">
+            <span class="credit">By Maksim Zeidler</span>
+            <span class="made-with">Made with <span class="thinkpool-wordmark"><span class="thinkpool-think">think</span><span class="thinkpool-pool">pool</span></span></span>
+          </span>
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
