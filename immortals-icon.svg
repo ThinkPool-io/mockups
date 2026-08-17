@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Бессмертные</title>
+  <rect width="512" height="512" rx="112" fill="#f4f1ea"/>
+  <circle cx="256" cy="256" r="176" fill="#1d1b18"/>
+  <path d="M174 146h94c58 0 94 27 94 72 0 27-14 49-41 61 34 11 52 35 52 70 0 54-41 83-109 83h-90V146Zm78 111h19c28 0 43-11 43-32 0-20-14-29-42-29h-20v61Zm0 123h25c31 0 47-12 47-36 0-23-16-34-49-34h-23v70Z" fill="#fffdf8"/>
+</svg>

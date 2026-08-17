@@ -4,6 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f4f1ea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Бессмертные">
+  <link rel="manifest" href="./immortals.webmanifest">
+  <link rel="icon" href="./immortals-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./immortals-icon-192.png">
   <title>Бессмертные · Сила на всю жизнь</title>
   <style>
     :root {
@@ -27,6 +33,8 @@
     }
 
     * { box-sizing: border-box; }
+
+    [hidden] { display: none !important; }
 
     html { scroll-behavior: smooth; }
 
@@ -99,6 +107,24 @@
     }
 
     .profile-stack { display: grid; gap: 10px; margin-top: 12px; }
+
+    .profile-manage-button {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 0 14px;
+      background: transparent;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .sidebar .profile-manage-button { width: 100%; margin-top: 10px; }
 
     .profile-button {
       min-height: 56px;
@@ -453,7 +479,7 @@
     .rule strong { display: block; font-size: 18px; letter-spacing: -.02em; }
     .rule span { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.4; }
 
-    .mobile-profile { display: none; }
+    .mobile-profile, .mobile-profile-list { display: none; }
 
     dialog {
       width: min(1120px, calc(100vw - 32px));
@@ -484,7 +510,9 @@
 
     .icon-button {
       width: 48px;
+      min-width: 48px;
       height: 48px;
+      flex: 0 0 auto;
       border: 1px solid var(--line);
       border-radius: 50%;
       background: var(--card);
@@ -701,6 +729,67 @@
 
     .weight-save .primary-button { width: 100%; }
 
+    .profile-dialog { width: min(720px, calc(100vw - 32px)); height: min(780px, calc(100vh - 32px)); }
+    .profile-dialog-shell { height: 100%; display: grid; grid-template-rows: auto 1fr; }
+    .profile-dialog-head { padding: 26px 28px 18px; display: flex; align-items: start; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); }
+    .profile-dialog h2 { margin: 7px 0 0; font-size: 38px; line-height: 1; letter-spacing: -.05em; }
+    .profile-dialog-subtitle { max-width: 500px; margin: 10px 0 0; color: var(--muted); font-size: 16px; line-height: 1.4; }
+    .profile-dialog-body { min-height: 0; overflow-y: auto; padding: 22px 28px 28px; }
+    .profile-manager-list { display: grid; gap: 10px; }
+
+    .profile-manager-row {
+      min-height: 76px;
+      padding: 10px 10px 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+    }
+
+    .profile-manager-row .avatar { width: 44px; height: 44px; }
+    .profile-manager-copy { min-width: 0; }
+    .profile-manager-copy strong { display: block; font-size: 17px; overflow-wrap: anywhere; }
+    .profile-manager-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; }
+    .profile-row-actions { display: flex; gap: 6px; }
+
+    .small-action {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 0 13px;
+      background: var(--card);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .small-action.danger { color: #a83325; }
+    .profile-add-button { width: 100%; margin-top: 12px; min-height: 54px; border-style: dashed; }
+    .profile-editor { display: grid; gap: 18px; }
+    .profile-field { display: grid; gap: 8px; }
+    .profile-field label, .profile-color-label { font-size: 15px; font-weight: 800; }
+    .profile-name-input { width: 100%; height: 58px; border: 1px solid var(--line); border-radius: 16px; padding: 0 16px; background: var(--card); color: var(--ink); font-size: 20px; font-weight: 750; }
+    .profile-name-input::placeholder { color: #aaa49a; }
+    .profile-color-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .profile-color-button { width: 52px; height: 52px; border: 3px solid transparent; border-radius: 50%; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(29, 27, 24, .08); }
+    .profile-color-button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 3px var(--card); }
+    .profile-form-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-top: 4px; }
+    .profile-form-actions .primary-button, .profile-form-actions .secondary-button { width: 100%; min-height: 58px; }
+
+    .profile-tools { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .profile-tools h3 { margin: 0; font-size: 20px; letter-spacing: -.03em; }
+    .profile-tools p { margin: 6px 0 14px; color: var(--muted); font-size: 14px; line-height: 1.4; }
+    .profile-tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .profile-tool-grid .secondary-button { min-height: 52px; font-size: 15px; }
+    .profile-install { margin-top: 14px; padding: 16px; border-radius: 18px; background: var(--sage-soft); display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+    .profile-install strong { display: block; font-size: 16px; }
+    .profile-install span { display: block; margin-top: 4px; color: #4e5b48; font-size: 13px; line-height: 1.35; }
+    .profile-install .small-action { background: var(--card); }
+    .visually-hidden-file { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
     .celebration {
       position: fixed;
       z-index: 20;
@@ -742,9 +831,11 @@
       .greeting { display: none; }
       .help-button { min-height: 46px; padding: 0 14px; }
       .mobile-profile { display: flex; gap: 8px; overflow-x: auto; margin: 4px 0 14px; padding-bottom: 2px; }
+      .mobile-profile-list { display: flex; gap: 8px; }
       .mobile-profile .profile-button { min-width: 130px; min-height: 52px; grid-template-columns: 34px 1fr; padding: 6px 9px; border-color: var(--line); }
       .mobile-profile .avatar { width: 34px; height: 34px; }
       .mobile-profile .profile-note, .mobile-profile .profile-check { display: none; }
+      .mobile-profile .profile-manage-button { min-width: 52px; width: 52px; padding: 0; font-size: 22px; border-radius: 16px; }
       .above-fold { display: block; }
       .next-card { min-height: 308px; padding: 24px; border-radius: 24px; }
       .next-card::after { width: 180px; height: 180px; right: -80px; top: -70px; }
@@ -781,7 +872,7 @@
       dialog { width: 100vw; height: 100svh; border-radius: 0; }
       .workout-shell { grid-template-rows: 64px 1fr 80px; }
       .workout-header { padding: 0 14px; grid-template-columns: 44px 1fr 44px; }
-      .icon-button { width: 44px; height: 44px; }
+      .icon-button { width: 44px; min-width: 44px; height: 44px; }
       .workout-body { display: block; padding: 16px 16px 22px; }
       .video-button, .video-frame { border-radius: 18px; }
       .big-play { width: 64px; height: 64px; }
@@ -813,6 +904,17 @@
       .weight-row .weight-stepper { grid-template-columns: 46px 1fr 46px auto; }
       .weight-row .weight-input { width: 100%; }
       .weight-save { padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); }
+      .profile-dialog { width: 100vw; height: 100svh; max-height: none; }
+      .profile-dialog-head { padding: 20px 16px 16px; }
+      .profile-dialog h2 { font-size: 34px; }
+      .profile-dialog-subtitle { font-size: 15px; }
+      .profile-dialog-body { padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); }
+      .profile-manager-row { grid-template-columns: 42px minmax(0, 1fr); padding: 12px; }
+      .profile-row-actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+      .small-action { min-height: 48px; }
+      .profile-tool-grid { grid-template-columns: 1fr; }
+      .profile-install { grid-template-columns: 1fr; }
+      .profile-install .small-action { width: 100%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -826,14 +928,8 @@
       <div class="brand"><span class="brand-mark">Б</span><span>БЕССМЕРТНЫЕ</span></div>
       <div>
         <p class="nav-label">Тренируется</p>
-        <div class="profile-stack">
-          <button class="profile-button" type="button" data-profile="Светлана" aria-pressed="true">
-            <span class="avatar">С</span><span><span class="profile-name">Светлана</span><span class="profile-note">Отличный старт</span></span><span class="profile-check">✓</span>
-          </button>
-          <button class="profile-button" type="button" data-profile="Людмила" aria-pressed="false">
-            <span class="avatar">Л</span><span><span class="profile-name">Людмила</span><span class="profile-note">Отличный старт</span></span><span class="profile-check">✓</span>
-          </button>
-        </div>
+        <div class="profile-stack" data-profile-list></div>
+        <button class="profile-manage-button" type="button" data-manage-profiles><span aria-hidden="true">＋</span> Профили</button>
       </div>
       <div class="side-rule"><strong>Оставляй 2 повтора.</strong><span>Заканчивай подход, пока можешь сделать ещё два чистых повтора.</span></div>
     </aside>
@@ -847,8 +943,8 @@
         </header>
 
         <div class="mobile-profile" aria-label="Выбор профиля">
-          <button class="profile-button" type="button" data-profile="Светлана" aria-pressed="true"><span class="avatar">С</span><span class="profile-name">Светлана</span></button>
-          <button class="profile-button" type="button" data-profile="Людмила" aria-pressed="false"><span class="avatar">Л</span><span class="profile-name">Людмила</span></button>
+          <div class="mobile-profile-list" data-profile-list></div>
+          <button class="profile-manage-button" type="button" data-manage-profiles aria-label="Управлять профилями">＋</button>
         </div>
 
         <section class="above-fold" aria-label="Следующая тренировка">
@@ -926,7 +1022,7 @@
               <button class="stepper-button" type="button" data-load-plus aria-label="Увеличить вес">+</button>
               <span class="weight-unit" data-load-unit>кг</span>
             </div>
-            <label class="top-range-check"><input type="checkbox" data-top-range><span>Во всех подходах дошла до верхней границы повторов</span></label>
+            <label class="top-range-check"><input type="checkbox" data-top-range><span>Верхняя граница повторов выполнена во всех подходах</span></label>
           </div>
           <ol class="cue-list" id="cue-list"></ol>
         </div>
@@ -966,6 +1062,61 @@
     </div>
   </dialog>
 
+  <dialog class="profile-dialog" id="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-dialog-title">
+    <div class="profile-dialog-shell">
+      <header class="profile-dialog-head">
+        <div>
+          <p class="section-kicker" data-profile-kicker>Только на этом устройстве</p>
+          <h2 id="profile-dialog-title" data-profile-title>Профили</h2>
+          <p class="profile-dialog-subtitle" data-profile-subtitle>У каждого человека свои рабочие веса и история тренировок.</p>
+        </div>
+        <button class="icon-button" type="button" data-profile-close aria-label="Закрыть профили">×</button>
+      </header>
+      <div class="profile-dialog-body">
+        <section data-profile-manager>
+          <div class="profile-manager-list" id="profile-manager-list"></div>
+          <button class="secondary-button profile-add-button" type="button" data-profile-add>＋ Добавить человека</button>
+        </section>
+
+        <form class="profile-editor" data-profile-form hidden>
+          <div class="profile-field">
+            <label for="profile-name-input">Имя</label>
+            <input class="profile-name-input" id="profile-name-input" data-profile-name type="text" maxlength="24" autocomplete="name" placeholder="Например, Валентина" required>
+          </div>
+          <div>
+            <p class="profile-color-label">Цвет профиля</p>
+            <div class="profile-color-row" role="group" aria-label="Цвет профиля" data-profile-colors>
+              <button class="profile-color-button" type="button" data-profile-color="#efc2ab" style="background:#efc2ab" aria-label="Персиковый" aria-pressed="true"></button>
+              <button class="profile-color-button" type="button" data-profile-color="#b8d2df" style="background:#b8d2df" aria-label="Голубой" aria-pressed="false"></button>
+              <button class="profile-color-button" type="button" data-profile-color="#b8c9ad" style="background:#b8c9ad" aria-label="Зелёный" aria-pressed="false"></button>
+              <button class="profile-color-button" type="button" data-profile-color="#f0cb73" style="background:#f0cb73" aria-label="Жёлтый" aria-pressed="false"></button>
+              <button class="profile-color-button" type="button" data-profile-color="#cbc8df" style="background:#cbc8df" aria-label="Сиреневый" aria-pressed="false"></button>
+            </div>
+          </div>
+          <div class="profile-form-actions">
+            <button class="secondary-button" type="button" data-profile-cancel>Назад</button>
+            <button class="primary-button" type="submit" data-profile-submit>Создать профиль</button>
+          </div>
+          <button class="small-action danger" type="button" data-profile-delete-current hidden>Удалить профиль и его данные</button>
+        </form>
+
+        <section class="profile-tools" data-profile-tools>
+          <h3>Резервная копия</h3>
+          <p>Скачай один файл, чтобы перенести все профили на другой телефон или восстановить данные.</p>
+          <div class="profile-tool-grid">
+            <button class="secondary-button" type="button" data-profile-export>Скачать копию</button>
+            <button class="secondary-button" type="button" data-profile-import>Восстановить из файла</button>
+          </div>
+          <input class="visually-hidden-file" type="file" accept="application/json,.json" data-profile-file aria-label="Выбрать резервную копию">
+          <div class="profile-install">
+            <div><strong>Добавить на главный экран</strong><span data-install-note>Открой меню браузера и выбери «На экран Домой».</span></div>
+            <button class="small-action" type="button" data-install-app hidden>Установить</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
   <div class="celebration" role="status" aria-live="polite">Тренировка завершена. Отличная работа.</div>
 
   <script>
@@ -996,47 +1147,155 @@
 
     let activeProgram = "A";
     let activeIndex = 0;
-    let activeProfile = "Светлана";
     let weightProgram = "A";
-    const completed = { "Светлана": { A: new Set(), B: new Set() }, "Людмила": { A: new Set(), B: new Set() } };
-    const WEIGHT_STORE_KEY = "immortals-weight-book-v1";
+    const PROFILE_COLORS = ["#efc2ab", "#b8d2df", "#b8c9ad", "#f0cb73", "#cbc8df"];
+    const PROFILE_STORE_KEY = "immortals-profiles-v2";
+    const ACTIVE_PROFILE_KEY = "immortals-active-profile-v2";
+    const WEIGHT_STORE_KEY = "immortals-weight-book-v2";
+    const LEGACY_WEIGHT_STORE_KEY = "immortals-weight-book-v1";
+    const completed = {};
 
-    function emptyWeightBook() {
-      return { "Светлана": { A: {}, B: {} }, "Людмила": { A: {}, B: {} } };
-    }
-
-    function loadWeightBook() {
+    function readStoredJson(key, fallback) {
       try {
-        const saved = JSON.parse(localStorage.getItem(WEIGHT_STORE_KEY));
-        if (saved) {
-          let migrated = false;
-          if (saved.Mom && !saved["Светлана"]) { saved["Светлана"] = saved.Mom; migrated = true; }
-          if (saved.Aunt && !saved["Людмила"]) { saved["Людмила"] = saved.Aunt; migrated = true; }
-          if (migrated) localStorage.setItem(WEIGHT_STORE_KEY, JSON.stringify(saved));
-          if (saved["Светлана"] && saved["Людмила"]) return saved;
-        }
+        const value = JSON.parse(localStorage.getItem(key));
+        return value ?? fallback;
       } catch (error) {
-        console.warn("Не удалось загрузить рабочие веса", error);
+        console.warn(`Не удалось прочитать ${key}`, error);
+        return fallback;
       }
-      return emptyWeightBook();
     }
 
-    const weightBook = loadWeightBook();
+    function newProfileId() {
+      if (crypto.randomUUID) return `profile-${crypto.randomUUID()}`;
+      return `profile-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`;
+    }
+
+    function safeProfileColor(color, index = 0) {
+      return PROFILE_COLORS.includes(color) ? color : PROFILE_COLORS[index % PROFILE_COLORS.length];
+    }
+
+    function normalizeProfiles(value) {
+      if (!Array.isArray(value)) return [];
+      const used = new Set();
+      return value.slice(0, 8).map((profile, index) => {
+        const storedId = typeof profile?.id === "string" && /^[a-zA-Z0-9_-]{1,80}$/.test(profile.id) ? profile.id : newProfileId();
+        const id = used.has(storedId) ? newProfileId() : storedId;
+        used.add(id);
+        return {
+          id,
+          name: String(profile?.name || `Профиль ${index + 1}`).trim().slice(0, 24) || `Профиль ${index + 1}`,
+          color: safeProfileColor(profile?.color, index),
+          createdAt: profile?.createdAt || new Date().toISOString()
+        };
+      });
+    }
+
+    function migrateLegacyData() {
+      const legacy = readStoredJson(LEGACY_WEIGHT_STORE_KEY, null);
+      if (!legacy || typeof legacy !== "object") return { profiles: [], weights: {} };
+      const candidates = [];
+      if (legacy["Светлана"]) candidates.push(["Светлана", legacy["Светлана"]]);
+      else if (legacy.Mom) candidates.push(["Светлана", legacy.Mom]);
+      if (legacy["Людмила"]) candidates.push(["Людмила", legacy["Людмила"]]);
+      else if (legacy.Aunt) candidates.push(["Людмила", legacy.Aunt]);
+      Object.entries(legacy).forEach(([name, weights]) => {
+        if (["Светлана", "Людмила", "Mom", "Aunt"].includes(name)) return;
+        if (weights && typeof weights === "object") candidates.push([name, weights]);
+      });
+      const migratedProfiles = [];
+      const migratedWeights = {};
+      candidates.slice(0, 8).forEach(([name, weights], index) => {
+        const profile = { id: newProfileId(), name: String(name).slice(0, 24), color: PROFILE_COLORS[index % PROFILE_COLORS.length], createdAt: new Date().toISOString() };
+        migratedProfiles.push(profile);
+        migratedWeights[profile.id] = weights;
+      });
+      return { profiles: migratedProfiles, weights: migratedWeights };
+    }
+
+    let profiles = normalizeProfiles(readStoredJson(PROFILE_STORE_KEY, []));
+    let weightBook = readStoredJson(WEIGHT_STORE_KEY, {});
+
+    if (!profiles.length) {
+      const migrated = migrateLegacyData();
+      profiles = migrated.profiles;
+      weightBook = migrated.weights;
+      if (profiles.length) {
+        localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(profiles));
+        localStorage.setItem(WEIGHT_STORE_KEY, JSON.stringify(weightBook));
+      }
+    }
+
+    let activeProfile = localStorage.getItem(ACTIVE_PROFILE_KEY);
+    if (!profiles.some(profile => profile.id === activeProfile)) activeProfile = profiles[0]?.id || null;
+    profiles.forEach(profile => { completed[profile.id] = { A: new Set(), B: new Set() }; });
 
     const grid = document.getElementById("exercise-grid");
     const workoutDialog = document.getElementById("workout-dialog");
     const weightDialog = document.getElementById("weight-dialog");
     const rulesDialog = document.getElementById("rules-dialog");
+    const profileDialog = document.getElementById("profile-dialog");
+    const profileManagerList = document.getElementById("profile-manager-list");
+    const profileForm = document.querySelector("[data-profile-form]");
+    const profileNameInput = document.querySelector("[data-profile-name]");
+    const profileManager = document.querySelector("[data-profile-manager]");
+    const profileTools = document.querySelector("[data-profile-tools]");
+    const profileFileInput = document.querySelector("[data-profile-file]");
     const weightList = document.getElementById("weight-list");
     const videoPanel = document.getElementById("video-panel");
     const cueList = document.getElementById("cue-list");
     const celebration = document.querySelector(".celebration");
+    const previewWeights = { A: {}, B: {} };
+    let editingProfileId = null;
+    let selectedProfileColor = PROFILE_COLORS[0];
+    let firstRunMode = false;
+    let installPrompt = null;
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
+    }
+
+    function currentProfile() {
+      return profiles.find(profile => profile.id === activeProfile) || null;
+    }
+
+    function activeProfileName() {
+      return currentProfile()?.name || "Новый профиль";
+    }
+
+    function ensureProfileState(profileId) {
+      if (!profileId) return;
+      weightBook[profileId] ||= { A: {}, B: {} };
+      completed[profileId] ||= { A: new Set(), B: new Set() };
+    }
+
+    function saveProfiles() {
+      try {
+        localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(profiles));
+        if (activeProfile) localStorage.setItem(ACTIVE_PROFILE_KEY, activeProfile);
+        else localStorage.removeItem(ACTIVE_PROFILE_KEY);
+      } catch (error) {
+        console.warn("Не удалось сохранить профили", error);
+      }
+    }
+
+    function showMessage(message) {
+      celebration.textContent = message;
+      celebration.classList.add("show");
+      setTimeout(() => {
+        celebration.classList.remove("show");
+        celebration.textContent = "Тренировка завершена. Отличная работа.";
+      }, 2200);
+    }
 
     function thumbnail(videoId) {
       return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
     }
 
     function getWeightEntry(program, index, profile = activeProfile) {
+      if (!profile || !profiles.some(item => item.id === profile)) {
+        previewWeights[program][index] ||= { target: null, last: null, history: [] };
+        return previewWeights[program][index];
+      }
       weightBook[profile] ||= { A: {}, B: {} };
       weightBook[profile][program] ||= {};
       weightBook[profile][program][index] ||= { target: null, last: null, history: [] };
@@ -1057,14 +1316,29 @@
     }
 
     function savedWeightCount(profile = activeProfile) {
+      if (!profile || !profiles.some(item => item.id === profile)) return 0;
       return ["A", "B"].reduce((total, program) => total + programs[program].exercises.reduce((count, exercise, index) => count + (getWeightEntry(program, index, profile).target ? 1 : 0), 0), 0);
     }
 
     function updateWeightSummary() {
       const count = savedWeightCount();
       document.querySelectorAll("[data-weight-count]").forEach(node => node.textContent = `Сохранено ${count} из 12`);
-      document.querySelector("[data-weight-owner]").textContent = activeProfile;
+      document.querySelector("[data-weight-owner]").textContent = activeProfileName();
       document.querySelector("[data-weight-summary]").textContent = `Сохранено начальных весов: ${count} из 12`;
+    }
+
+    function renderProfiles() {
+      const markup = profiles.map(profile => `
+        <button class="profile-button" type="button" data-profile="${escapeHtml(profile.id)}" aria-pressed="${profile.id === activeProfile}">
+          <span class="avatar" style="background:${profile.color}">${escapeHtml(profile.name.charAt(0).toUpperCase() || "?")}</span>
+          <span><span class="profile-name">${escapeHtml(profile.name)}</span><span class="profile-note">${savedWeightCount(profile.id)} из 12 весов</span></span>
+          <span class="profile-check">✓</span>
+        </button>`).join("");
+      document.querySelectorAll("[data-profile-list]").forEach(list => {
+        list.innerHTML = markup;
+        list.querySelectorAll("[data-profile]").forEach(button => button.addEventListener("click", () => updateProfile(button.dataset.profile)));
+      });
+      document.querySelectorAll("[data-owner]").forEach(node => node.textContent = activeProfileName());
     }
 
     function renderProgram() {
@@ -1157,6 +1431,7 @@
     }
 
     function openWeightBook() {
+      if (!activeProfile) { openProfileManager(true); return; }
       weightProgram = activeProgram;
       renderWeightBook();
       weightDialog.showModal();
@@ -1180,21 +1455,158 @@
       }, 1800);
     }
 
+    function setProfileDialogCopy(kicker, title, subtitle) {
+      document.querySelector("[data-profile-kicker]").textContent = kicker;
+      document.querySelector("[data-profile-title]").textContent = title;
+      document.querySelector("[data-profile-subtitle]").textContent = subtitle;
+    }
+
+    function renderProfileManager() {
+      profileManagerList.innerHTML = profiles.map(profile => {
+        const active = profile.id === activeProfile;
+        return `<div class="profile-manager-row">
+          <span class="avatar" style="background:${profile.color}">${escapeHtml(profile.name.charAt(0).toUpperCase() || "?")}</span>
+          <span class="profile-manager-copy"><strong>${escapeHtml(profile.name)}</strong><span>${active ? "Активный профиль · " : ""}${savedWeightCount(profile.id)} из 12 весов</span></span>
+          <span class="profile-row-actions">
+            <button class="small-action" type="button" data-profile-select="${escapeHtml(profile.id)}" ${active ? "disabled" : ""}>${active ? "Выбран" : "Выбрать"}</button>
+            <button class="small-action" type="button" data-profile-edit="${escapeHtml(profile.id)}">Изменить</button>
+          </span>
+        </div>`;
+      }).join("");
+    }
+
+    function showProfileManagerView() {
+      firstRunMode = false;
+      editingProfileId = null;
+      profileManager.hidden = false;
+      profileTools.hidden = false;
+      profileForm.hidden = true;
+      document.querySelector("[data-profile-close]").hidden = false;
+      setProfileDialogCopy("Только на этом устройстве", "Профили", "У каждого человека свои рабочие веса и история тренировок.");
+      renderProfileManager();
+    }
+
+    function selectProfileColor(color) {
+      selectedProfileColor = safeProfileColor(color);
+      document.querySelectorAll("[data-profile-color]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.profileColor === selectedProfileColor)));
+    }
+
+    function showProfileForm(profileId = null, firstRun = false) {
+      const profile = profiles.find(item => item.id === profileId) || null;
+      firstRunMode = firstRun || !profiles.length;
+      editingProfileId = profile?.id || null;
+      profileManager.hidden = true;
+      profileTools.hidden = true;
+      profileForm.hidden = false;
+      profileNameInput.value = profile?.name || "";
+      selectProfileColor(profile?.color || PROFILE_COLORS[profiles.length % PROFILE_COLORS.length]);
+      document.querySelector("[data-profile-submit]").textContent = profile ? "Сохранить изменения" : "Создать профиль";
+      document.querySelector("[data-profile-delete-current]").hidden = !profile;
+      const cancelButton = document.querySelector("[data-profile-cancel]");
+      cancelButton.hidden = firstRunMode && !profiles.length;
+      cancelButton.parentElement.style.gridTemplateColumns = cancelButton.hidden ? "1fr" : "1fr 1.4fr";
+      document.querySelector("[data-profile-close]").hidden = firstRunMode && !profiles.length;
+      setProfileDialogCopy(
+        firstRunMode ? "Добро пожаловать" : profile ? "Настройки профиля" : "Новый человек",
+        profile ? "Изменить профиль" : firstRunMode ? "Создай свой профиль" : "Добавить профиль",
+        firstRunMode ? "Имя и прогресс останутся только на этом устройстве. Аккаунт не нужен." : "Имя поможет не перепутать рабочие веса."
+      );
+      requestAnimationFrame(() => profileNameInput.focus());
+    }
+
+    function openProfileManager(firstRun = false) {
+      if (!profileDialog.open) profileDialog.showModal();
+      if (firstRun || !profiles.length) showProfileForm(null, true);
+      else showProfileManagerView();
+    }
+
+    function persistProfileData() {
+      saveProfiles();
+      saveWeightBook();
+    }
+
+    function deleteEditingProfile() {
+      const profile = profiles.find(item => item.id === editingProfileId);
+      if (!profile) return;
+      if (!window.confirm(`Удалить профиль «${profile.name}» и все его сохранённые веса?`)) return;
+      profiles = profiles.filter(item => item.id !== profile.id);
+      delete weightBook[profile.id];
+      delete completed[profile.id];
+      if (activeProfile === profile.id) activeProfile = profiles[0]?.id || null;
+      persistProfileData();
+      renderProfiles();
+      renderProgram();
+      if (profiles.length) showProfileManagerView();
+      else showProfileForm(null, true);
+      showMessage("Профиль удалён.");
+    }
+
+    function exportProfileBackup() {
+      if (!profiles.length) return;
+      const backup = {
+        app: "immortals",
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        activeProfile,
+        profiles,
+        weights: weightBook
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `bessmertnye-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(link.href), 0);
+      showMessage("Резервная копия скачана.");
+    }
+
+    async function importProfileBackup(file) {
+      try {
+        const backup = JSON.parse(await file.text());
+        if (backup?.app !== "immortals" || backup?.version !== 2 || !Array.isArray(backup.profiles) || !backup.profiles.length || typeof backup.weights !== "object") throw new Error("Неверный формат");
+        const rawProfiles = backup.profiles.slice(0, 8);
+        const importedProfiles = normalizeProfiles(rawProfiles);
+        const importedWeights = {};
+        rawProfiles.forEach((rawProfile, index) => {
+          importedWeights[importedProfiles[index].id] = backup.weights?.[rawProfile.id] || { A: {}, B: {} };
+        });
+        const activeIndex = rawProfiles.findIndex(profile => profile.id === backup.activeProfile);
+        profiles = importedProfiles;
+        weightBook = importedWeights;
+        activeProfile = importedProfiles[Math.max(0, activeIndex)]?.id || importedProfiles[0].id;
+        Object.keys(completed).forEach(key => delete completed[key]);
+        profiles.forEach(profile => { completed[profile.id] = { A: new Set(), B: new Set() }; });
+        persistProfileData();
+        updateProfile(activeProfile);
+        showProfileManagerView();
+        showMessage("Профили восстановлены.");
+      } catch (error) {
+        console.warn("Не удалось восстановить резервную копию", error);
+        showMessage("Этот файл не похож на резервную копию «Бессмертных».");
+      } finally {
+        profileFileInput.value = "";
+      }
+    }
+
     function openWorkout(index = 0) {
+      if (!activeProfile) { openProfileManager(true); return; }
       activeIndex = index;
       renderGuide();
       workoutDialog.showModal();
     }
 
-    function updateProfile(name) {
-      activeProfile = name;
-      document.querySelectorAll("[data-profile]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.profile === name)));
-      document.querySelectorAll("[data-owner]").forEach(node => node.textContent = name);
+    function updateProfile(profileId) {
+      if (!profiles.some(profile => profile.id === profileId)) return;
+      activeProfile = profileId;
+      ensureProfileState(profileId);
+      saveProfiles();
+      renderProfiles();
       renderProgram();
       if (weightDialog.open) renderWeightBook();
     }
 
-    document.querySelectorAll("[data-profile]").forEach(button => button.addEventListener("click", () => updateProfile(button.dataset.profile)));
     document.querySelectorAll("[data-tab]").forEach(button => button.addEventListener("click", () => { activeProgram = button.dataset.tab; renderProgram(); }));
     document.querySelectorAll("[data-day]").forEach(button => button.addEventListener("click", () => { activeProgram = button.dataset.day; document.querySelectorAll("[data-day]").forEach(item => item.setAttribute("aria-pressed", String(item === button))); renderProgram(); document.getElementById("session-title").scrollIntoView({ behavior: "smooth", block: "start" }); }));
     document.querySelectorAll("[data-start]").forEach(button => button.addEventListener("click", () => openWorkout(0)));
@@ -1228,7 +1640,80 @@
     document.querySelector("[data-rules-close]").addEventListener("click", () => rulesDialog.close());
     [workoutDialog, weightDialog, rulesDialog].forEach(dialog => dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); }));
 
+    document.querySelectorAll("[data-manage-profiles]").forEach(button => button.addEventListener("click", () => openProfileManager()));
+    document.querySelector("[data-profile-close]").addEventListener("click", () => { if (profiles.length) profileDialog.close(); });
+    document.querySelector("[data-profile-add]").addEventListener("click", () => {
+      if (profiles.length >= 8) { showMessage("Можно сохранить не больше восьми профилей."); return; }
+      showProfileForm();
+    });
+    document.querySelector("[data-profile-cancel]").addEventListener("click", showProfileManagerView);
+    document.querySelector("[data-profile-delete-current]").addEventListener("click", deleteEditingProfile);
+    document.querySelectorAll("[data-profile-color]").forEach(button => button.addEventListener("click", () => selectProfileColor(button.dataset.profileColor)));
+    profileManagerList.addEventListener("click", event => {
+      const selectButton = event.target.closest("[data-profile-select]");
+      const editButton = event.target.closest("[data-profile-edit]");
+      if (selectButton && !selectButton.disabled) { updateProfile(selectButton.dataset.profileSelect); showProfileManagerView(); }
+      if (editButton) showProfileForm(editButton.dataset.profileEdit);
+    });
+    profileForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const name = profileNameInput.value.trim().replace(/\s+/g, " ").slice(0, 24);
+      if (!name) { profileNameInput.focus(); return; }
+      if (editingProfileId) {
+        const profile = profiles.find(item => item.id === editingProfileId);
+        if (!profile) return;
+        profile.name = name;
+        profile.color = selectedProfileColor;
+        persistProfileData();
+        renderProfiles();
+        renderProgram();
+        showProfileManagerView();
+        showMessage("Профиль обновлён.");
+        return;
+      }
+      if (profiles.length >= 8) { showMessage("Можно сохранить не больше восьми профилей."); return; }
+      const profile = { id: newProfileId(), name, color: selectedProfileColor, createdAt: new Date().toISOString() };
+      profiles.push(profile);
+      activeProfile = profile.id;
+      ensureProfileState(profile.id);
+      persistProfileData();
+      renderProfiles();
+      renderProgram();
+      profileDialog.close();
+      showMessage("Профиль создан.");
+    });
+    document.querySelector("[data-profile-export]").addEventListener("click", exportProfileBackup);
+    document.querySelector("[data-profile-import]").addEventListener("click", () => profileFileInput.click());
+    profileFileInput.addEventListener("change", () => { if (profileFileInput.files?.[0]) importProfileBackup(profileFileInput.files[0]); });
+    profileDialog.addEventListener("cancel", event => { if (!profiles.length) event.preventDefault(); });
+    profileDialog.addEventListener("click", event => { if (event.target === profileDialog && profiles.length) profileDialog.close(); });
+
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      installPrompt = event;
+      document.querySelector("[data-install-app]").hidden = false;
+      document.querySelector("[data-install-note]").textContent = "Установи приложение, чтобы открывать его одним нажатием.";
+    });
+    document.querySelector("[data-install-app]").addEventListener("click", async () => {
+      if (!installPrompt) return;
+      await installPrompt.prompt();
+      await installPrompt.userChoice;
+      installPrompt = null;
+      document.querySelector("[data-install-app]").hidden = true;
+    });
+    window.addEventListener("appinstalled", () => {
+      document.querySelector("[data-install-app]").hidden = true;
+      document.querySelector("[data-install-note]").textContent = "Приложение добавлено на главный экран.";
+    });
+
+    renderProfiles();
     renderProgram();
+    if (!profiles.length) openProfileManager(true);
+    else updateProfile(activeProfile);
+
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      navigator.serviceWorker.register("./immortals-sw.js").catch(error => console.warn("Не удалось включить офлайн-режим", error));
+    }
   </script>
 </body>
 </html>
