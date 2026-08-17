@@ -412,7 +412,7 @@
           <button class="make-button" id="make-button" type="submit">Make clean link</button>
         </div>
         <div class="under-form" id="form-note">
-          <span>Prototype</span>
+          <span>Any public TikTok</span>
           <span aria-hidden="true">·</span>
           <button class="sample-button" id="sample-button" type="button">Use the test link</button>
         </div>
@@ -450,7 +450,8 @@
 
 <script>
   const testLink = 'https://vm.tiktok.com/ZN88o1DdG/';
-  const viewerLink = 'https://thinkpool-io.github.io/mockups/tokless-prototype.html';
+  const viewerBase = 'https://thinkpool-io.github.io/mockups/tokless-prototype.html';
+  let viewerLink = viewerBase;
   const maker = document.querySelector('#maker');
   const result = document.querySelector('#result');
   const form = document.querySelector('#link-form');
@@ -466,6 +467,23 @@
     maker.classList.add('hidden');
     result.classList.add('show');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function normalizeTikTokUrl(value) {
+    try {
+      const candidate = /^https?:\/\//i.test(value) ? value : 'https://' + value;
+      const url = new URL(candidate);
+      const host = url.hostname.toLowerCase();
+      if (host !== 'tiktok.com' && !host.endsWith('.tiktok.com')) return null;
+      return url.origin + url.pathname;
+    } catch {
+      return null;
+    }
+  }
+
+  function genericPreview() {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280"><rect width="720" height="1280" fill="#090909"/><circle cx="360" cy="640" r="116" fill="#d8ff45"/><path d="M310 660l-42 42a70 70 0 0099 99l70-70a70 70 0 000-99" fill="none" stroke="#101300" stroke-width="28" stroke-linecap="round"/><path d="M410 620l42-42a70 70 0 00-99-99l-70 70a70 70 0 000 99" fill="none" stroke="#101300" stroke-width="28" stroke-linecap="round"/></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
   async function copyViewerLink(button) {
@@ -496,17 +514,18 @@
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const value = input.value.trim();
-    if (!value || !/(vm\.)?tiktok\.com\//i.test(value)) {
+    const sourceUrl = normalizeTikTokUrl(input.value.trim());
+    if (!sourceUrl) {
       setError('Paste a TikTok link first.');
       input.focus();
       return;
     }
-    if (!/ZN88o1DdG|7649128757508295969/i.test(value)) {
-      setError('Use the supplied test link for this prototype.');
-      return;
-    }
 
+    viewerLink = viewerBase + '?url=' + encodeURIComponent(sourceUrl);
+    document.querySelector('#clean-url').value = viewerLink;
+    document.querySelector('.thumb').src = genericPreview();
+    document.querySelector('.video-meta strong').textContent = 'TikTok video';
+    document.querySelector('.video-meta span').textContent = 'Ready for browser playback';
     makeButton.disabled = true;
     makeButton.textContent = 'Making link…';
     window.setTimeout(showResult, 520);
@@ -532,7 +551,8 @@
     makeButton.disabled = false;
     makeButton.textContent = 'Make clean link';
     input.value = '';
-    formNote.innerHTML = '<span>Prototype</span><span aria-hidden="true">·</span><button class="sample-button" id="sample-button-reset" type="button">Use the test link</button>';
+    viewerLink = viewerBase;
+    formNote.innerHTML = '<span>Any public TikTok</span><span aria-hidden="true">·</span><button class="sample-button" id="sample-button-reset" type="button">Use the test link</button>';
     document.querySelector('#sample-button-reset').addEventListener('click', () => {
       input.value = testLink;
       input.focus();
