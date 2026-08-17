@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lynx button options</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --surface: #151b26;
+        --line: #2c3442;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 56px 28px;
+        background:
+          radial-gradient(circle at 50% 0%, rgba(40, 118, 247, 0.16), transparent 42%),
+          var(--bg);
+      }
+      main { width: min(820px, 100%); margin: 0 auto; }
+      header { margin-bottom: 32px; text-align: center; }
+      h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); letter-spacing: -0.04em; }
+      header p { margin: 12px 0 0; color: var(--muted); font-size: 16px; }
+      .stack { display: grid; gap: 14px; }
+      article {
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.92);
+        padding: 16px;
+      }
+      article.recommended {
+        border-color: var(--blue-hi);
+        box-shadow: 0 0 0 3px rgba(40, 118, 247, 0.12);
+      }
+      .meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+      .copy { min-width: 0; }
+      h2 { margin: 0; font-size: 16px; }
+      .copy p { margin: 3px 0 0; color: var(--faint); font-size: 13px; }
+      .badge {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        background: rgba(40, 118, 247, 0.16);
+        color: var(--blue-hi);
+        padding: 6px 9px;
+        font-size: 11px;
+        font-weight: 750;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      button {
+        display: inline-flex;
+        width: 100%;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font: inherit;
+        font-size: 15px;
+        font-weight: 780;
+      }
+      button svg {
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .endcap {
+        display: grid;
+        width: 27px;
+        height: 27px;
+        margin-left: 2px;
+        place-items: center;
+        border-radius: 999px;
+        background: rgba(7, 16, 29, 0.13);
+      }
+      .endcap svg { width: 14px; height: 14px; }
+      @media (max-width: 600px) {
+        body { padding: 34px 16px; }
+        header { margin-bottom: 24px; }
+        article { padding: 14px; }
+        .copy p { max-width: 29ch; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Convert button options</h1>
+        <p>Current northeast arrow removed from every option</p>
+      </header>
+      <section class="stack">
+        <article class="recommended">
+          <div class="meta">
+            <div class="copy"><h2>01 · Text only</h2><p>The label already explains the action</p></div>
+            <span class="badge">Cleanest</span>
+          </div>
+          <button type="button">Convert the link</button>
+        </article>
+
+        <article>
+          <div class="meta">
+            <div class="copy"><h2>02 · Chevron</h2><p>Quiet forward motion without implying a new tab</p></div>
+          </div>
+          <button type="button">Convert the link <svg viewBox="0 0 20 20"><path d="m8 5 5 5-5 5"/></svg></button>
+        </article>
+
+        <article>
+          <div class="meta">
+            <div class="copy"><h2>03 · Straight arrow</h2><p>Clear progression, slightly more assertive</p></div>
+          </div>
+          <button type="button">Convert the link <svg viewBox="0 0 20 20"><path d="M4 10h12M11 5l5 5-5 5"/></svg></button>
+        </article>
+
+        <article>
+          <div class="meta">
+            <div class="copy"><h2>04 · Swap</h2><p>Expresses conversion between two platforms</p></div>
+          </div>
+          <button type="button">Convert the link <svg viewBox="0 0 20 20"><path d="M4 7h11M12 4l3 3-3 3M16 13H5M8 10l-3 3 3 3"/></svg></button>
+        </article>
+
+        <article>
+          <div class="meta">
+            <div class="copy"><h2>05 · Contained arrow</h2><p>Keeps direction while separating it from the label</p></div>
+          </div>
+          <button type="button">Convert the link <span class="endcap"><svg viewBox="0 0 20 20"><path d="M4 10h12M11 5l5 5-5 5"/></svg></span></button>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
