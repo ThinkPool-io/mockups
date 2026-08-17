@@ -411,7 +411,7 @@
     try {
       const url = new URL(value);
       const host = url.hostname.toLowerCase();
-      const allowed = ['cdninstagram.com', 'fbcdn.net'];
+      const allowed = ['cdninstagram.com', 'fbcdn.net', 'instagram7.com'];
       return url.protocol === 'https:' && allowed.some((domain) => host === domain || host.endsWith('.' + domain));
     } catch {
       return false;
@@ -536,6 +536,10 @@
     showPlayerState('Heating Instagram slop…');
     original.href = source.url;
     playerFallback.href = source.url;
+    creator.textContent = '@instagram';
+    sourcePlatform.textContent = 'via Instagram';
+    shareTitle = 'Watch this Instagram post';
+    document.title = 'SlopStream · Instagram';
     instagramImage.hidden = true;
     instagramNav.hidden = true;
     video.pause();
