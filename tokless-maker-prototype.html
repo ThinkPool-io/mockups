@@ -224,6 +224,57 @@
     cursor: pointer;
   }
 
+  .shortcut-install {
+    width: min(430px, 100%);
+    min-height: 58px;
+    margin: 22px auto 0;
+    padding: 9px 11px;
+    border: 1px solid rgba(216,255,69,.34);
+    border-radius: 16px;
+    background: rgba(216,255,69,.075);
+    color: var(--ink);
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 11px;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .shortcut-install[hidden] { display: none; }
+
+  .shortcut-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--signal);
+    color: var(--signal-ink);
+    display: grid;
+    place-items: center;
+  }
+
+  .shortcut-copy strong,
+  .shortcut-copy span { display: block; }
+
+  .shortcut-copy strong {
+    margin-bottom: 3px;
+    font-size: 13px;
+    font-weight: 760;
+  }
+
+  .shortcut-copy span {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .shortcut-arrow {
+    padding: 0 5px;
+    color: var(--signal);
+    font-size: 20px;
+  }
+
+  .shortcut-install:hover { border-color: rgba(216,255,69,.66); }
+
   .error { color: var(--danger); }
 
   .trust-row {
@@ -418,6 +469,26 @@
         </div>
       </form>
 
+      <a
+        class="shortcut-install"
+        href="https://github.com/ThinkPool-io/mockups/releases/download/slopstream-shortcut-v1/ShareWithSlopStream.shortcut"
+        download="ShareWithSlopStream.shortcut"
+        aria-label="Download the SlopStream iPhone Shortcut"
+        hidden
+      >
+        <span class="shortcut-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 15V3m0 0L8 7m4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5 11v8h14v-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="shortcut-copy">
+          <strong>Download SlopStream Shortcut</strong>
+          <span>Download → open file → add</span>
+        </span>
+        <span class="shortcut-arrow" aria-hidden="true">›</span>
+      </a>
+
       <div class="trust-row" aria-label="Product qualities">
         <span>No account</span>
         <span>No app prompt</span>
@@ -458,6 +529,16 @@
   const input = document.querySelector('#tiktok-link');
   const formNote = document.querySelector('#form-note');
   const makeButton = document.querySelector('#make-button');
+  const shortcutInstall = document.querySelector('.shortcut-install');
+  const shortcutSupported = /iPhone/.test(navigator.userAgent);
+
+  function syncShortcutVisibility() {
+    if (!shortcutSupported) return;
+    shortcutInstall.hidden = Boolean(input.value.trim());
+  }
+
+  if (shortcutSupported) syncShortcutVisibility();
+  else shortcutInstall.remove();
 
   function setError(message) {
     formNote.innerHTML = '<span class="error">' + message + '</span>';
@@ -500,12 +581,14 @@
   document.querySelector('#sample-button').addEventListener('click', () => {
     input.value = testLink;
     input.focus();
+    syncShortcutVisibility();
   });
 
   document.querySelector('#paste-button').addEventListener('click', async () => {
     try {
       input.value = await navigator.clipboard.readText();
       input.focus();
+      syncShortcutVisibility();
     } catch {
       input.focus();
       setError('Press and hold the field to paste.');
@@ -552,13 +635,17 @@
     makeButton.textContent = 'Make clean link';
     input.value = '';
     viewerLink = viewerBase;
+    syncShortcutVisibility();
     formNote.innerHTML = '<span>Any public TikTok</span><span aria-hidden="true">·</span><button class="sample-button" id="sample-button-reset" type="button">Use the test link</button>';
     document.querySelector('#sample-button-reset').addEventListener('click', () => {
       input.value = testLink;
       input.focus();
+      syncShortcutVisibility();
     });
     input.focus();
   });
+
+  input.addEventListener('input', syncShortcutVisibility);
 </script>
 </body>
 </html>
