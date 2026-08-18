@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Peptalk Navigator</title>
+<script>
+  try {
+    const savedTheme = localStorage.getItem('peptalk-theme');
+    const preferredTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const initialTheme = savedTheme || preferredTheme;
+    document.documentElement.dataset.theme = initialTheme;
+    document.documentElement.style.colorScheme = initialTheme;
+  } catch {
+    document.documentElement.dataset.theme = 'light';
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
@@ -27,6 +38,12 @@
     --caution: hsl(38 72% 35%);
     --caution-wash: hsl(41 65% 91%);
     --danger: hsl(5 50% 45%);
+    --topbar: hsl(45 24% 96% / .94);
+    --mobile-bar: hsl(48 33% 99% / .98);
+    --overlay: hsl(158 12% 13% / .3);
+    --drawer-shadow: 14px 0 40px hsl(158 12% 13% / .15);
+    --caution-line: hsl(38 44% 75%);
+    --caution-signal: hsl(38 55% 84%);
     --font-sans: "Hanken Grotesk", system-ui, sans-serif;
     --font-display: "Newsreader", Georgia, serif;
     --font-mono: "IBM Plex Mono", monospace;
@@ -34,9 +51,37 @@
     --ease: cubic-bezier(.16, 1, .3, 1);
   }
 
+  html[data-theme="dark"] {
+    --canvas: hsl(158 12% 8%);
+    --surface: hsl(158 10% 11%);
+    --surface-quiet: hsl(158 8% 15%);
+    --surface-warm: hsl(158 12% 16%);
+    --ink: hsl(45 18% 92%);
+    --ink-soft: hsl(45 10% 74%);
+    --muted: hsl(45 6% 61%);
+    --faint: hsl(45 6% 48%);
+    --line: hsl(158 7% 22%);
+    --line-strong: hsl(158 7% 31%);
+    --accent: hsl(153 35% 57%);
+    --accent-dark: hsl(153 40% 72%);
+    --accent-wash: hsl(154 16% 17%);
+    --positive: hsl(151 31% 59%);
+    --positive-wash: hsl(151 15% 16%);
+    --caution: hsl(40 58% 64%);
+    --caution-wash: hsl(39 22% 15%);
+    --danger: hsl(5 55% 66%);
+    --topbar: hsl(158 12% 8% / .94);
+    --mobile-bar: hsl(158 10% 11% / .98);
+    --overlay: hsl(158 20% 3% / .66);
+    --drawer-shadow: 14px 0 40px hsl(158 20% 3% / .42);
+    --caution-line: hsl(39 26% 35%);
+    --caution-signal: hsl(39 24% 23%);
+    --shadow: 0 1px 2px hsl(158 20% 3% / .2), 0 10px 36px hsl(158 20% 3% / .16);
+  }
+
   * { box-sizing: border-box; }
   html { background: var(--canvas); scroll-behavior: smooth; }
-  body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background 180ms var(--ease), color 180ms var(--ease); }
   button, input { font: inherit; }
   button, a { -webkit-tap-highlight-color: transparent; }
   button { color: inherit; }
@@ -67,12 +112,20 @@
   .category-mini { min-height: 38px; }
   .category-mini span { font-size: 13px; font-weight: 500; }
 
-  .sidebar-foot { margin-top: auto; padding: 16px 14px; border-top: 1px solid var(--line); }
+  .sidebar-foot { margin-top: auto; display: grid; gap: 10px; padding: 16px 14px; border-top: 1px solid var(--line); }
   .review-note { padding: 12px; border-radius: 9px; background: var(--surface-quiet); color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
   .review-note strong { display: block; margin-bottom: 3px; color: var(--ink); font-size: 12px; }
+  .theme-toggle { width: 100%; min-height: 42px; display: flex; align-items: center; gap: 10px; padding: 0 11px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink-soft); cursor: pointer; font-size: 12px; font-weight: 700; text-align: left; transition: background 160ms var(--ease), border-color 160ms var(--ease), color 160ms var(--ease); }
+  .theme-toggle:hover { border-color: var(--line-strong); background: var(--surface-quiet); color: var(--ink); }
+  .theme-toggle svg { width: 16px; height: 16px; stroke-width: 1.7; }
+  .theme-toggle .theme-label { flex: 1; }
+  .theme-toggle .theme-state { color: var(--faint); font: 500 9px/1 var(--font-mono); text-transform: uppercase; }
+  .theme-icon-sun { display: none; }
+  html[data-theme="dark"] .theme-icon-moon { display: none; }
+  html[data-theme="dark"] .theme-icon-sun { display: block; }
 
   .shell { grid-column: 2; min-width: 0; }
-  .topbar { position: sticky; top: 0; z-index: 15; height: 76px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid var(--line); background: hsl(45 24% 96% / .94); backdrop-filter: blur(10px); }
+  .topbar { position: sticky; top: 0; z-index: 15; height: 76px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid var(--line); background: var(--topbar); backdrop-filter: blur(10px); }
   .mobile-menu { display: none; }
   .global-search { width: min(500px, 50vw); position: relative; }
   .global-search svg { position: absolute; left: 14px; top: 50%; width: 17px; height: 17px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
@@ -162,8 +215,8 @@
   .summary-card { margin-bottom: 24px; padding: 24px 26px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
   .summary-card h2 { margin-bottom: 12px; }
   .summary-card p { max-width: 65ch; margin-bottom: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.7; }
-  .evidence-callout { display: grid; grid-template-columns: auto 1fr; gap: 15px; margin-bottom: 24px; padding: 18px 20px; border: 1px solid hsl(38 44% 75%); border-radius: 11px; background: var(--caution-wash); }
-  .evidence-callout .signal { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: hsl(38 55% 84%); color: var(--caution); font-weight: 800; }
+  .evidence-callout { display: grid; grid-template-columns: auto 1fr; gap: 15px; margin-bottom: 24px; padding: 18px 20px; border: 1px solid var(--caution-line); border-radius: 11px; background: var(--caution-wash); }
+  .evidence-callout .signal { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--caution-signal); color: var(--caution); font-weight: 800; }
   .evidence-callout strong { display: block; margin-bottom: 3px; font-size: 13px; }
   .evidence-callout p { margin: 0; color: var(--ink-soft); font-size: 13px; }
 
@@ -208,7 +261,7 @@
     .app { display: block; }
     .sidebar { display: none; }
     .shell { display: block; }
-    .topbar { height: 64px; padding: 0 16px; background: hsl(45 24% 96% / .98); }
+    .topbar { height: 64px; padding: 0 16px; background: var(--topbar); }
     .mobile-menu { width: 42px; height: 42px; display: grid; place-items: center; margin-right: 10px; border: 0; background: transparent; cursor: pointer; }
     .mobile-menu svg { width: 20px; height: 20px; }
     .global-search { flex: 1; width: auto; }
@@ -255,13 +308,13 @@
     summary { min-height: 56px; padding: 0 16px; }
     .detail-body { padding: 0 16px 18px; }
     .paper { grid-template-columns: 40px minmax(0, 1fr) 15px; gap: 10px; }
-    .mobile-nav { position: fixed; inset: auto 0 0; z-index: 30; height: 68px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); background: hsl(48 33% 99% / .98); padding-bottom: env(safe-area-inset-bottom); }
+    .mobile-nav { position: fixed; inset: auto 0 0; z-index: 30; height: 68px; display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line); background: var(--mobile-bar); padding-bottom: env(safe-area-inset-bottom); }
     .mobile-nav button { display: grid; place-items: center; align-content: center; gap: 4px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 600; }
     .mobile-nav svg { width: 18px; height: 18px; }
     .mobile-nav button.is-active { color: var(--accent-dark); }
-    .mobile-drawer { position: fixed; inset: 0; z-index: 50; background: hsl(158 12% 13% / .3); }
+    .mobile-drawer { position: fixed; inset: 0; z-index: 50; background: var(--overlay); }
     .mobile-drawer.is-open { display: block; }
-    .drawer-panel { width: min(318px, 84vw); height: 100%; overflow: auto; padding: 18px; background: var(--surface); box-shadow: 14px 0 40px hsl(158 12% 13% / .15); animation: drawer-in 220ms var(--ease) both; }
+    .drawer-panel { width: min(318px, 84vw); height: 100%; overflow: auto; padding: 18px; background: var(--surface); box-shadow: var(--drawer-shadow); animation: drawer-in 220ms var(--ease) both; }
     @keyframes drawer-in { from { transform: translateX(-18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     .drawer-head { height: 48px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
     .drawer-head button { width: 42px; height: 42px; border: 0; background: transparent; font-size: 24px; }
@@ -313,6 +366,11 @@
     </div>
     <div class="sidebar-foot">
       <div class="review-note"><strong>Evidence reviewed</strong>17 August 2026 · 381 papers indexed</div>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"/></svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <span class="theme-label">Dark mode</span><span class="theme-state">Light</span>
+      </button>
     </div>
   </aside>
 
@@ -360,6 +418,11 @@
   <button data-view="category" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Topics</button>
   <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m3 0h3M8 15h2m3 0h3"/></svg>Tools</button>
   <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 3h14v18l-7-4-7 4z"/></svg>Saved</button>
+  <button class="theme-toggle-mobile" type="button" aria-label="Switch to dark mode">
+    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"/></svg>
+    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span class="theme-label">Theme</span>
+  </button>
 </nav>
 
 <template id="home-template">
@@ -475,6 +538,29 @@
     article: document.querySelector('#article-template')
   };
 
+  function updateThemeUI() {
+    const currentTheme = document.documentElement.dataset.theme || 'light';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.querySelectorAll('.theme-toggle, .theme-toggle-mobile').forEach((button) => {
+      button.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+    });
+    document.querySelectorAll('.theme-toggle .theme-label').forEach((label) => {
+      label.textContent = currentTheme === 'dark' ? 'Light mode' : 'Dark mode';
+    });
+    document.querySelectorAll('.theme-toggle .theme-state').forEach((state) => {
+      state.textContent = currentTheme === 'dark' ? 'Dark' : 'Light';
+    });
+  }
+
+  function toggleTheme() {
+    const currentTheme = document.documentElement.dataset.theme || 'light';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = nextTheme;
+    document.documentElement.style.colorScheme = nextTheme;
+    try { localStorage.setItem('peptalk-theme', nextTheme); } catch {}
+    updateThemeUI();
+  }
+
   function setView(view) {
     const template = templates[view] || templates.home;
     content.replaceChildren(template.content.cloneNode(true));
@@ -485,6 +571,10 @@
   }
 
   document.addEventListener('click', (event) => {
+    if (event.target.closest('.theme-toggle, .theme-toggle-mobile')) {
+      toggleTheme();
+      return;
+    }
     const trigger = event.target.closest('[data-view]');
     if (trigger) setView(trigger.dataset.view);
   });
@@ -514,6 +604,7 @@
     }
   });
 
+  updateThemeUI();
   setView('home');
 </script>
 </body>
