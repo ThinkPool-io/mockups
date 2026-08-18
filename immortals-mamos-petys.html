@@ -160,7 +160,7 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(320px, .85fr);
+      grid-template-columns: 1fr;
       gap: 16px;
     }
     .hero-card, .pain-card, .exercise-card, .plan-card, .info-card, .source-card {
@@ -556,13 +556,13 @@
   <a class="skip-link" href="#main">Перейти к содержанию</a>
   <div class="app-shell">
     <aside class="side-nav" aria-label="Главное меню">
-      <div class="brand"><span class="brand-mark">I</span><span>IMMORTALS<small>Мамино плечо</small></span></div>
+      <div class="brand"><span class="brand-mark">I</span><span>IMMORTALS</span></div>
       <nav class="nav-list">
         <button class="nav-button" type="button" data-view="today" aria-pressed="true"><span class="nav-icon" aria-hidden="true">●</span>Сегодня</button>
         <button class="nav-button" type="button" data-view="plan" aria-pressed="false"><span class="nav-icon" aria-hidden="true">↗</span>План на 6 недель</button>
         <button class="nav-button" type="button" data-view="safety" aria-pressed="false"><span class="nav-icon" aria-hidden="true">＋</span>Безопасность</button>
       </nav>
-      <div class="side-note"><strong>Тяжело мышцам, не суставу.</strong>Рабочая интенсивность RPE 7–8. Оставляй два чистых повтора в запасе.</div>
+      <div class="side-note"><strong>RPE показывает тяжесть подхода.</strong>RPE 7–8: осталось бы ещё 2–3 чистых повтора. RPE 10: больше повторить не можешь.</div>
     </aside>
 
     <main class="main" id="main">
@@ -587,20 +587,6 @@
               </div>
             </article>
 
-            <aside class="pain-card" aria-labelledby="pain-title">
-              <p class="eyebrow">Перед нагрузкой</p>
-              <h2 id="pain-title">Насколько болит сейчас?</h2>
-              <p>Выбери число от 0 до 10.</p>
-              <div class="pain-scale" aria-label="Шкала боли от 0 до 10">
-                <button class="pain-button" type="button" data-pain="0" aria-pressed="false">0</button>
-                <button class="pain-button" type="button" data-pain="2" aria-pressed="false">2</button>
-                <button class="pain-button" type="button" data-pain="4" aria-pressed="false">4</button>
-                <button class="pain-button" type="button" data-pain="6" aria-pressed="false">6</button>
-                <button class="pain-button" type="button" data-pain="8" aria-pressed="false">8</button>
-                <button class="pain-button" type="button" data-pain="10" aria-pressed="false">10</button>
-              </div>
-              <div class="pain-readout" data-pain-readout aria-live="polite">Выбери уровень боли. Мышцы должны уставать сильно, но боль в суставе не должна нарастать.</div>
-            </aside>
           </div>
 
           <div class="section-head">
