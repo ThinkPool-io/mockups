@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Ten bar-eye variations for the SlopStream Ghost 03 mark" />
+  <title>SlopStream · Ghost bar eyes</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: rgb(9 13 20);
+      --surface: rgb(15 22 33);
+      --line: rgb(43 55 72);
+      --ink: rgb(243 247 255);
+      --muted: rgb(181 191 206);
+      --faint: rgb(130 144 164);
+      --blue: rgb(67 140 248);
+      --blue-hi: rgb(93 158 255);
+      --face: rgb(11 21 39);
+      --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Newsreader", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -18%, rgb(40 118 247 / 0.16), transparent 34rem),
+        var(--bg);
+    }
+
+    .page {
+      width: min(100% - 48px, 1320px);
+      margin: 0 auto;
+      padding: 48px 0 56px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      align-items: end;
+      gap: 36px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue-hi);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(42px, 5.2vw, 68px);
+      font-weight: 400;
+      line-height: 0.94;
+      letter-spacing: -0.052em;
+    }
+
+    .brief {
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgb(15 22 33 / 0.94);
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+    }
+
+    .crop {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgb(67 140 248 / 0.42);
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(5 8 18));
+    }
+
+    .crop svg { width: 29px; height: 29px; }
+
+    .stage {
+      min-height: 138px;
+      display: grid;
+      place-items: center;
+      margin: 4px 0 2px;
+    }
+
+    .tile {
+      width: 118px;
+      height: 118px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgb(67 140 248 / 0.5);
+      border-radius: 27px;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(9 20 38) 58%, rgb(5 8 18));
+      box-shadow: 0 18px 36px rgb(0 0 0 / 0.28);
+    }
+
+    .tile svg { width: 96px; height: 96px; }
+
+    svg { display: block; overflow: visible; }
+
+    .body {
+      fill: var(--face);
+      stroke: var(--blue);
+      stroke-width: 5.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .eyes {
+      fill: none;
+      stroke: var(--ink);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .solid-eye { fill: var(--ink); }
+    .outline-eye { fill: none; stroke: var(--ink); stroke-width: 3.2; }
+
+    h2 {
+      margin: 7px 0 0;
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+
+    .note {
+      margin: 20px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .page { width: calc(100% - 24px); padding: 24px 0 30px; }
+      header { grid-template-columns: 1fr; gap: 9px; padding-bottom: 14px; }
+      .eyebrow { margin-bottom: 5px; font-size: 9px; }
+      h1 { font-size: 40px; }
+      .brief { max-width: 350px; font-size: 11px; line-height: 1.42; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin-top: 9px; }
+      .card { padding: 7px; border-radius: 15px; }
+      .meta { font-size: 8px; }
+      .crop { width: 25px; height: 25px; }
+      .crop svg { width: 21px; height: 21px; }
+      .stage { min-height: 78px; margin: 2px 0 0; }
+      .tile { width: 70px; height: 70px; border-radius: 16px; }
+      .tile svg { width: 58px; height: 58px; }
+      h2 { margin-top: 3px; font-size: 10px; }
+      .note { margin-top: 12px; font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity · Ghost 03</p>
+        <h1>Ten bar-eye cuts</h1>
+      </div>
+      <p class="brief">The ghost stays fixed. Only bar count, weight, rhythm, and direction change. Each option includes a circular portfolio-size check.</p>
+    </header>
+
+    <section class="grid" aria-label="Ten bar-eye variations">
+      <article class="card">
+        <div class="meta"><span>01</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="8" d="M38 61v-9m10 9V44m10 17V49m24 12v-9m-10 9V44m-10 17V49"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Heavy pulse bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="8" d="M38 61v-9m10 9V44m10 17V49m24 12v-9m-10 9V44m-10 17V49"/></svg></div></div>
+        <h2>Heavy pulse</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>02</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="9" d="M43 61V49m13 12V42m21 19V49M64 61V42"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Twin bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="9" d="M43 61V49m13 12V42m21 19V49M64 61V42"/></svg></div></div>
+        <h2>Twin bars</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>03</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="4.5" d="M34 61v-8m7 8V46m7 15V42m7 19V50m31 11v-8m-7 8V46m-7 15V42m-7 19V50"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Dense meter bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="4.5" d="M34 61v-8m7 8V46m7 15V42m7 19V50m31 11v-8m-7 8V46m-7 15V42m-7 19V50"/></svg></div></div>
+        <h2>Dense meter</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>04</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><g class="solid-eye"><rect x="35" y="51" width="8" height="11" rx="2"/><rect x="47" y="43" width="8" height="19" rx="2"/><rect x="59" y="48" width="8" height="14" rx="2"/><rect x="71" y="43" width="8" height="19" rx="2"/><rect x="83" y="51" width="8" height="11" rx="2"/></g></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Solid block bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><g class="solid-eye"><rect x="35" y="51" width="8" height="11" rx="2"/><rect x="47" y="43" width="8" height="19" rx="2"/><rect x="59" y="48" width="8" height="14" rx="2"/><rect x="71" y="43" width="8" height="19" rx="2"/><rect x="83" y="51" width="8" height="11" rx="2"/></g></svg></div></div>
+        <h2>Solid blocks</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>05</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><g class="outline-eye"><rect x="35" y="51" width="8" height="11" rx="3"/><rect x="47" y="43" width="8" height="19" rx="3"/><rect x="59" y="48" width="8" height="14" rx="3"/><rect x="71" y="43" width="8" height="19" rx="3"/><rect x="83" y="51" width="8" height="11" rx="3"/></g></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Outlined meter bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><g class="outline-eye"><rect x="35" y="51" width="8" height="11" rx="3"/><rect x="47" y="43" width="8" height="19" rx="3"/><rect x="59" y="48" width="8" height="14" rx="3"/><rect x="71" y="43" width="8" height="19" rx="3"/><rect x="83" y="51" width="8" height="11" rx="3"/></g></svg></div></div>
+        <h2>Outline meter</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>06</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="7" d="M37 62v-8m10 8V49m10 13V43m26 19v-8m-10 8V49m-10 13V43"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Stair pulse bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="7" d="M37 62v-8m10 8V49m10 13V43m26 19v-8m-10 8V49m-10 13V43"/></svg></div></div>
+        <h2>Stair pulse</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>07</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="7" d="M38 61v-8m11 8V46m11 15V39m11 22V46m11 15v-8"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Centered waveform bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="7" d="M38 61v-8m11 8V46m11 15V39m11 22V46m11 15v-8"/></svg></div></div>
+        <h2>Center wave</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>08</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><rect class="solid-eye" x="41" y="42" width="11" height="21" rx="5.5"/><rect class="solid-eye" x="68" y="42" width="11" height="21" rx="5.5"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Capsule bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><rect class="solid-eye" x="41" y="42" width="11" height="21" rx="5.5"/><rect class="solid-eye" x="68" y="42" width="11" height="21" rx="5.5"/></svg></div></div>
+        <h2>Capsules</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>09</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="6" d="M36 47h20m-15 10h15m28-10H64m15 10H64"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Horizontal stack bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="6" d="M36 47h20m-15 10h15m28-10H64m15 10H64"/></svg></div></div>
+        <h2>Side stacks</h2>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>10</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="5.5" d="M35 62h23m-18 0V51m9 11V44m9 18V53m27 9H62m18 0V51m-9 11V44m-9 18V53"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Connected rail bar eyes"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" stroke-width="5.5" d="M35 62h23m-18 0V51m9 11V44m9 18V53m27 9H62m18 0V51m-9 11V44m-9 18V53"/></svg></div></div>
+        <h2>Connected rails</h2>
+      </article>
+    </section>
+
+    <p class="note">Same body, same tile, same outline. Choose by number.</p>
+  </main>
+</body>
+</html>
