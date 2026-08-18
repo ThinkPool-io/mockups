@@ -286,8 +286,59 @@
     .shortcut-install:active { transform: scale(0.98); }
 
     .ready[hidden],
+    .limit-warning[hidden],
     form[hidden],
     .status:empty { display: none; }
+
+    .limit-warning {
+      width: 100%;
+      padding: 17px 12px 15px;
+      text-align: center;
+    }
+
+    .limit-mark {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      border: 1px solid rgb(108 162 255 / 0.42);
+      border-radius: 15px;
+      background: linear-gradient(145deg, rgb(40 118 247 / 0.28), rgb(8 12 19 / 0.92));
+      color: var(--blue-hi);
+    }
+
+    .limit-mark svg {
+      width: 25px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .limit-title {
+      margin: 15px 0 0;
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 760;
+      letter-spacing: -0.02em;
+    }
+
+    .limit-copy,
+    .limit-reset {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .limit-reset {
+      margin-top: 3px;
+      color: var(--blue-hi);
+      font-size: 12px;
+      font-weight: 700;
+    }
 
     .ready {
       width: 100%;
@@ -955,6 +1006,18 @@
           </div>
         </div>
 
+        <div class="limit-warning" id="limit-warning" hidden aria-live="assertive">
+          <span class="limit-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          </span>
+          <h2 class="limit-title">Daily limit reached</h2>
+          <p class="limit-copy">SlopStream is at today’s public limit</p>
+          <p class="limit-reset">Try again after 00:00 UTC</p>
+        </div>
+
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </section>
 
@@ -1024,11 +1087,13 @@
 
   <script>
     const viewerBase = 'https://thinkpool-io.github.io/mockups/tokless-prototype.html';
+    const quotaEndpoint = 'https://slopstream-resolver.vercel.app/api/quota';
     const form = document.querySelector('#relay-form');
     const field = document.querySelector('#field');
     const input = document.querySelector('#source-url');
     const status = document.querySelector('#status');
     const ready = document.querySelector('#ready');
+    const limitWarning = document.querySelector('#limit-warning');
     const readyRoute = document.querySelector('#ready-route');
     const copyLink = document.querySelector('#copy-link');
     const copyLabel = document.querySelector('#copy-label');
@@ -1075,7 +1140,26 @@
       }
     }
 
-    form.addEventListener('submit', (event) => {
+    function showLimitWarning() {
+      form.hidden = true;
+      ready.hidden = true;
+      limitWarning.hidden = false;
+      status.textContent = '';
+      syncShortcutVisibility();
+    }
+
+    async function quotaAvailable() {
+      try {
+        const response = await fetch(quotaEndpoint, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+        if (response.status === 429) {
+          showLimitWarning();
+          return false;
+        }
+      } catch {}
+      return true;
+    }
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const source = normalizeSource(input.value.trim());
       if (!source) {
@@ -1084,6 +1168,8 @@
         input.focus();
         return;
       }
+
+      if (!await quotaAvailable()) return;
 
       field.removeAttribute('data-invalid');
       status.textContent = '';
@@ -1095,6 +1181,7 @@
       shareLink.hidden = true;
       form.hidden = true;
       ready.hidden = false;
+      limitWarning.hidden = true;
       syncShortcutVisibility();
     });
 
@@ -1159,6 +1246,7 @@
       generatedLink = '';
       input.value = '';
       ready.hidden = true;
+      limitWarning.hidden = true;
       form.hidden = false;
       shareLink.hidden = true;
       shareLink.textContent = 'Share link';
@@ -1166,6 +1254,8 @@
       syncShortcutVisibility();
       input.focus();
     });
+
+    void quotaAvailable();
   </script>
 </body>
 </html>
