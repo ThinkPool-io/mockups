@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Ten eye logo variations for SlopStream" />
+  <title>SlopStream · Eye variations</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: rgb(9 13 20);
+      --surface: rgb(15 22 33);
+      --surface-raised: rgb(20 29 42);
+      --line: rgb(43 55 72);
+      --ink: rgb(242 245 250);
+      --muted: rgb(181 191 206);
+      --faint: rgb(130 144 164);
+      --blue: rgb(40 118 247);
+      --blue-hi: rgb(108 162 255);
+      --cyan: rgb(121 223 255);
+      --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: min(100% - 48px, 1280px);
+      margin: 0 auto;
+      padding: 64px 0 74px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
+      align-items: end;
+      gap: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--blue-hi);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 5vw, 66px);
+      font-weight: 720;
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+    }
+
+    .brief {
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+    }
+
+    .small-test {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--bg);
+    }
+
+    .small-test svg { width: 24px; height: 24px; }
+
+    .stage {
+      min-height: 144px;
+      display: grid;
+      place-items: center;
+      margin: 8px 0 2px;
+    }
+
+    .tile {
+      width: 126px;
+      height: 126px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgb(108 162 255 / 0.38);
+      border-radius: 28px;
+      background: var(--surface-raised);
+      box-shadow: 0 20px 42px rgb(0 0 0 / 0.24);
+    }
+
+    .tile svg { width: 88px; height: 88px; }
+
+    svg { display: block; overflow: visible; }
+    .outline { fill: none; stroke: var(--blue-hi); stroke-linecap: round; stroke-linejoin: round; }
+    .blue { fill: var(--blue); }
+    .blue-hi { fill: var(--blue-hi); }
+    .cyan { fill: var(--cyan); }
+    .ink { fill: var(--ink); }
+    .cut { fill: var(--surface-raised); }
+
+    h2 {
+      margin: 12px 0 5px;
+      font-size: 15px;
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+
+    .idea {
+      min-height: 36px;
+      margin: 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+    }
+
+    .lockup svg { width: 24px; height: 24px; flex: 0 0 auto; }
+
+    .note {
+      margin: 24px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .page { width: calc(100% - 24px); padding: 28px 0 34px; }
+      header { grid-template-columns: 1fr; gap: 14px; padding-bottom: 20px; }
+      h1 { font-size: 43px; }
+      .brief { max-width: 340px; font-size: 12px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+      .card { padding: 11px; border-radius: 17px; }
+      .meta { font-size: 8px; }
+      .small-test { width: 30px; height: 30px; }
+      .small-test svg { width: 21px; height: 21px; }
+      .stage { min-height: 104px; margin-top: 4px; }
+      .tile { width: 90px; height: 90px; border-radius: 21px; }
+      .tile svg { width: 63px; height: 63px; }
+      h2 { margin-top: 8px; font-size: 13px; }
+      .idea { min-height: 39px; font-size: 9px; line-height: 1.38; }
+      .lockup { gap: 5px; margin-top: 10px; padding-top: 9px; font-size: 10px; }
+      .lockup svg { width: 17px; height: 17px; }
+      .note { margin-top: 16px; font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity · Eye study</p>
+        <h1>Ten eye variations</h1>
+      </div>
+      <p class="brief">One mark, ten controlled changes. Every option is tested as a full logo tile, a 34 px reduction, and a wordmark companion</p>
+    </header>
+
+    <section class="grid" aria-label="Ten SlopStream eye logo variations">
+      <article class="card">
+        <div class="meta"><span>01</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="3" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="9"/><circle class="ink" cx="36" cy="36" r="2.7"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Balanced eye logo"><path class="outline" stroke-width="3" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="9"/><circle class="ink" cx="36" cy="36" r="2.7"/></svg></div></div>
+        <h2>Balanced</h2><p class="idea">The original proportion, cleaned and centered</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="4" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="9"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>02</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5.5" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="10"/><circle class="ink" cx="36" cy="36" r="3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Heavy eye logo"><path class="outline" stroke-width="5.5" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="10"/><circle class="ink" cx="36" cy="36" r="3"/></svg></div></div>
+        <h2>Heavy</h2><p class="idea">Thicker contour with the best tiny-size survival</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="6" d="M9 36c7-12 16-18 27-18s20 6 27 18c-7 12-16 18-27 18S16 48 9 36Z"/><circle class="blue" cx="36" cy="36" r="10"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>03</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="blue" d="M7 36c8-14 18-21 29-21s21 7 29 21c-8 14-18 21-29 21S15 50 7 36Z"/><circle class="cut" cx="36" cy="36" r="11"/><circle class="ink" cx="36" cy="36" r="4"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Solid eye logo"><path class="blue" d="M7 36c8-14 18-21 29-21s21 7 29 21c-8 14-18 21-29 21S15 50 7 36Z"/><circle class="cut" cx="36" cy="36" r="11"/><circle class="ink" cx="36" cy="36" r="4"/></svg></div></div>
+        <h2>Solid</h2><p class="idea">A filled silhouette with maximum favicon weight</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="blue" d="M7 36c8-14 18-21 29-21s21 7 29 21c-8 14-18 21-29 21S15 50 7 36Z"/><circle class="cut" cx="36" cy="36" r="11"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>04</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="4.5" d="M5 36c9-10 19-15 31-15s22 5 31 15c-9 10-19 15-31 15S14 46 5 36Z"/><circle class="blue-hi" cx="36" cy="36" r="9"/><circle class="ink" cx="39" cy="33" r="2.5"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Wide eye logo"><path class="outline" stroke-width="4.5" d="M5 36c9-10 19-15 31-15s22 5 31 15c-9 10-19 15-31 15S14 46 5 36Z"/><circle class="blue-hi" cx="36" cy="36" r="9"/><circle class="ink" cx="39" cy="33" r="2.5"/></svg></div></div>
+        <h2>Wide</h2><p class="idea">Lower and faster, with a more cinematic proportion</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M5 36c9-10 19-15 31-15s22 5 31 15c-9 10-19 15-31 15S14 46 5 36Z"/><circle class="blue-hi" cx="36" cy="36" r="9"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>05</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M14 36c5-15 12-22 22-22s17 7 22 22c-5 15-12 22-22 22S19 51 14 36Z"/><circle class="blue" cx="36" cy="36" r="9"/><circle class="ink" cx="36" cy="36" r="3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Tall eye logo"><path class="outline" stroke-width="5" d="M14 36c5-15 12-22 22-22s17 7 22 22c-5 15-12 22-22 22S19 51 14 36Z"/><circle class="blue" cx="36" cy="36" r="9"/><circle class="ink" cx="36" cy="36" r="3"/></svg></div></div>
+        <h2>Tall</h2><p class="idea">Compact vertical geometry for a square tile</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5.5" d="M14 36c5-15 12-22 22-22s17 7 22 22c-5 15-12 22-22 22S19 51 14 36Z"/><circle class="blue" cx="36" cy="36" r="9"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>06</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="4" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="outline" stroke-width="5" cx="36" cy="36" r="11"/><circle class="cyan" cx="36" cy="36" r="4"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Iris ring eye logo"><path class="outline" stroke-width="4" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="outline" stroke-width="5" cx="36" cy="36" r="11"/><circle class="cyan" cx="36" cy="36" r="4"/></svg></div></div>
+        <h2>Iris ring</h2><p class="idea">More technical, with a clear cyan focal point</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="4.5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="outline" stroke-width="5" cx="36" cy="36" r="11"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>07</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="4.5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><path class="ink" d="M36 25a11 11 0 0 1 0 22Z"/><circle class="cyan" cx="36" cy="36" r="3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Split iris eye logo"><path class="outline" stroke-width="4.5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><path class="ink" d="M36 25a11 11 0 0 1 0 22Z"/><circle class="cyan" cx="36" cy="36" r="3"/></svg></div></div>
+        <h2>Split iris</h2><p class="idea">A two-platform cue contained inside one eye</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><path class="ink" d="M36 25a11 11 0 0 1 0 22Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>08</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M7 36c8-13 18-20 29-20s21 7 29 20c-8 13-18 20-29 20S15 49 7 36Z"/><path class="outline" stroke-width="3" d="M15 36c6-8 13-12 21-12s15 4 21 12c-6 8-13 12-21 12s-15-4-21-12Z"/><circle class="cyan" cx="36" cy="36" r="5"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Double contour eye logo"><path class="outline" stroke-width="5" d="M7 36c8-13 18-20 29-20s21 7 29 20c-8 13-18 20-29 20S15 49 7 36Z"/><path class="outline" stroke-width="3" d="M15 36c6-8 13-12 21-12s15 4 21 12c-6 8-13 12-21 12s-15-4-21-12Z"/><circle class="cyan" cx="36" cy="36" r="5"/></svg></div></div>
+        <h2>Double contour</h2><p class="idea">A richer icon with a nested viewing layer</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M7 36c8-13 18-20 29-20s21 7 29 20c-8 13-18 20-29 20S15 49 7 36Z"/><path class="outline" stroke-width="3" d="M15 36c6-8 13-12 21-12s15 4 21 12c-6 8-13 12-21 12s-15-4-21-12Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>09</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="blue" d="M7 35c8-13 18-19 29-19s21 6 29 19H7Zm58 4c-8 12-18 18-29 18S15 51 7 39h58Z"/><circle class="ink" cx="36" cy="37" r="7"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Cut eye logo"><path class="blue" d="M7 35c8-13 18-19 29-19s21 6 29 19H7Zm58 4c-8 12-18 18-29 18S15 51 7 39h58Z"/><circle class="ink" cx="36" cy="37" r="7"/></svg></div></div>
+        <h2>Cut</h2><p class="idea">A solid eye split by one clean horizontal gap</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="blue" d="M7 35c8-13 18-19 29-19s21 6 29 19H7Zm58 4c-8 12-18 18-29 18S15 51 7 39h58Z"/><circle class="ink" cx="36" cy="37" r="7"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>10</span><span class="small-test"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><circle class="ink" cx="36" cy="36" r="4"/><circle class="cyan" cx="42" cy="30" r="3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 72 72" role="img" aria-label="Spark eye logo"><path class="outline" stroke-width="5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><circle class="ink" cx="36" cy="36" r="4"/><circle class="cyan" cx="42" cy="30" r="3"/></svg></div></div>
+        <h2>Spark</h2><p class="idea">The heavy eye with one ownable cyan highlight</p>
+        <div class="lockup"><svg viewBox="0 0 72 72" aria-hidden="true"><path class="outline" stroke-width="5.5" d="M8 36c7-13 16-19 28-19s21 6 28 19c-7 13-16 19-28 19S15 49 8 36Z"/><circle class="blue" cx="36" cy="36" r="11"/><circle class="cyan" cx="42" cy="30" r="3"/></svg><span>SlopStream</span></div>
+      </article>
+    </section>
+
+    <p class="note">Same eye, varied only by weight, proportion, iris, fill, and highlight</p>
+  </main>
+</body>
+</html>
