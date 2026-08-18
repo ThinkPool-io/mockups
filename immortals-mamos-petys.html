@@ -292,8 +292,24 @@
       cursor: pointer;
     }
     .exercise-card:hover { border-color: #8fa79d; box-shadow: 0 10px 30px rgba(28, 57, 48, .07); }
-    .exercise-visual { min-height: 142px; display: grid; place-items: center; background: var(--surface-soft); }
+    .exercise-visual { min-height: 142px; position: relative; display: grid; place-items: center; background: var(--surface-soft); }
     .exercise-visual svg { width: 112px; height: 112px; }
+    .card-video-badge {
+      position: absolute;
+      left: 10px;
+      bottom: 9px;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .94);
+      color: var(--primary-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 4px 14px rgba(28, 57, 48, .1);
+    }
     .exercise-copy { align-self: center; padding: 18px 22px; }
     .exercise-order { color: var(--primary-dark); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
     .exercise-copy h3 { margin: 5px 0 6px; font-size: 22px; line-height: 1.15; letter-spacing: -.025em; }
@@ -391,7 +407,7 @@
     .source-list { margin: 0; padding-left: 21px; display: grid; gap: 9px; color: var(--muted); font-size: 14px; }
 
     dialog {
-      width: min(760px, calc(100vw - 32px));
+      width: min(1040px, calc(100vw - 32px));
       max-height: calc(100vh - 32px);
       padding: 0;
       border: 0;
@@ -405,8 +421,30 @@
     .dialog-head { padding: 22px 24px 0; display: flex; justify-content: flex-end; }
     .close-button { width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); font-size: 25px; cursor: pointer; }
     .dialog-body { padding: 4px 30px 32px; }
-    .dialog-visual { min-height: 220px; margin: 0 0 22px; border-radius: 22px; display: grid; place-items: center; background: var(--surface-soft); }
-    .dialog-visual svg { width: min(250px, 72vw); height: 210px; }
+    .dialog-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr); gap: 28px; align-items: start; }
+    .video-panel { min-width: 0; }
+    .video-button, .video-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 22px; overflow: hidden; background: var(--surface-soft); }
+    .video-button { padding: 0; position: relative; display: grid; place-items: center; cursor: pointer; }
+    .video-button svg { width: min(300px, 72%); height: auto; }
+    .video-button::after { content: ""; position: absolute; inset: 0; background: rgba(19, 53, 46, .12); }
+    .big-play {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+      box-shadow: 0 14px 34px rgba(19, 53, 46, .28);
+    }
+    .video-source { margin: 10px 3px 0; color: var(--muted); font-size: 13px; font-weight: 750; }
+    .dialog-guide { min-width: 0; }
     .dialog-body h2 { margin: 8px 0 10px; font-size: 38px; line-height: 1; letter-spacing: -.045em; }
     .dialog-dose { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .cue-list { margin: 0; padding: 0; list-style: none; counter-reset: cue; display: grid; gap: 12px; }
@@ -438,6 +476,7 @@
       .phase-grid { grid-template-columns: 1fr; }
       .plan-card > p { min-height: 0; }
       .safety-grid { grid-template-columns: 1fr; }
+      .dialog-layout { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 720px) {
@@ -480,7 +519,9 @@
       dialog { width: 100vw; max-height: 100svh; height: 100svh; border-radius: 0; }
       .dialog-head { padding: 14px 16px 0; }
       .dialog-body { padding: 2px 20px 28px; }
-      .dialog-visual { min-height: 190px; }
+      .dialog-layout { gap: 20px; }
+      .video-button, .video-frame { border-radius: 18px; }
+      .big-play { width: 64px; height: 64px; }
       .dialog-body h2 { font-size: 34px; }
       .mobile-tabs {
         position: fixed;
@@ -604,12 +645,16 @@
   <dialog data-exercise-dialog aria-labelledby="dialog-title">
     <div class="dialog-head"><button class="close-button" type="button" data-close aria-label="Закрыть">×</button></div>
     <div class="dialog-body">
-      <div class="dialog-visual" data-dialog-visual></div>
-      <p class="eyebrow" data-dialog-order>Упражнение 1</p>
-      <h2 id="dialog-title" data-dialog-title>Упражнение</h2>
-      <div class="dialog-dose" data-dialog-dose></div>
-      <ol class="cue-list" data-dialog-cues></ol>
-      <div class="neck-cue" data-dialog-note></div>
+      <div class="dialog-layout">
+        <div class="video-panel" data-video-panel></div>
+        <div class="dialog-guide">
+          <p class="eyebrow" data-dialog-order>Упражнение 1</p>
+          <h2 id="dialog-title" data-dialog-title>Упражнение</h2>
+          <div class="dialog-dose" data-dialog-dose></div>
+          <ol class="cue-list" data-dialog-cues></ol>
+          <div class="neck-cue" data-dialog-note></div>
+        </div>
+      </div>
     </div>
   </dialog>
   <div class="toast" data-toast role="status" aria-live="polite">Сохранено на этом устройстве</div>
@@ -628,6 +673,8 @@
         dose: ["4 × 8–12", "RPE 7–8", "Отдых 90 сек."],
         cues: ["Настрой сиденье так, чтобы в нижней точке таз не подкручивался и поясница не отрывалась.", "Поставь стопы примерно на ширине плеч.", "Опускай платформу за 3 секунды до комфортной глубины.", "Выжми платформу, не блокируя колени. Два чистых повтора оставь в запасе."],
         note: "Если поясница отрывается, сократи глубину. Когда все 4 подхода по 12 чистые, добавь один шаг веса.",
+        videoId: "UWLwsdErycg",
+        source: "Nuffield Health · 2:26",
         visual: visualBase(`<rect x="43" y="87" width="70" height="48" rx="11" fill="#b8d5ca"/><circle cx="67" cy="59" r="18" fill="#e9bb99"/><path d="M69 77 95 105l35 5" fill="none" stroke="#254e46" stroke-width="9" stroke-linecap="round"/><path d="M128 81v62" stroke="#8ca69c" stroke-width="8"/><path d="M42 136v18m72-18v18" stroke="#254e46" stroke-width="7"/>`, `<path d="M109 100h16" stroke="#23675b" stroke-width="4"/><path d="m117 93 8 7-8 7" fill="none" stroke="#23675b" stroke-width="4" stroke-linecap="round"/>`)
       },
       {
@@ -636,6 +683,8 @@
         dose: ["3 × 10–15", "RPE 8", "Отдых 60 сек."],
         cues: ["Совмести колени с осью тренажёра и плотно прижми спину.", "Зафиксируй валик над пятками и верхний упор над бёдрами.", "Согни ноги вниз до сильного сокращения задней поверхности бедра.", "Верни вес за 3 секунды, не отпускай стек с ударом."],
         note: "Когда во всех подходах получилось 15, добавь один шаг веса и вернись к 10 повторениям.",
+        videoId: "hhzTWndsgTc",
+        source: "Life Fitness · 0:24",
         visual: visualBase(`<rect x="47" y="80" width="64" height="58" rx="12" fill="#b8d5ca"/><circle cx="72" cy="53" r="18" fill="#e9bb99"/><path d="M74 71v42h45" fill="none" stroke="#254e46" stroke-width="9" stroke-linecap="round"/><path d="M119 113v26" stroke="#254e46" stroke-width="8"/><circle cx="119" cy="143" r="10" fill="#f1c96f"/>`, `<path d="M132 112v24" stroke="#23675b" stroke-width="4"/><path d="m125 129 7 8 7-8" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -644,6 +693,8 @@
         dose: ["4 × 8–12", "RPE 7–8", "Отдых 90 сек."],
         cues: ["Настрой сиденье так, чтобы рукояти были примерно на уровне нижней части груди.", "Прижми грудь к подушке, опусти плечи.", "Тяни локти назад и своди лопатки без рывка.", "Возвращай вес за 3 секунды. Не отрывай грудь от упора."],
         note: "Нейтральный или полунейтральный хват обычно комфортнее плечу. Верх диапазона во всех подходах означает плюс один шаг веса.",
+        videoId: "FU6YQawma2Q",
+        source: "Colossus Fitness · 2:05",
         visual: visualBase(`<rect x="57" y="87" width="58" height="58" rx="13" fill="#b8d5ca"/><circle cx="85" cy="52" r="19" fill="#e9bb99"/><path d="M85 71v49" stroke="#254e46" stroke-width="8"/><path d="M68 91 43 110m59-19 25 19" stroke="#254e46" stroke-width="8" stroke-linecap="round"/><path d="M60 151v-34h51v34" fill="none" stroke="#254e46" stroke-width="7"/>`, `<path d="M38 110h-17m111 0h17" stroke="#23675b" stroke-width="4"/><path d="m29 103-8 7 8 7m112-7 8 7" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -652,6 +703,8 @@
         dose: ["3 × 8–12", "RPE 7", "Отдых 90 сек."],
         cues: ["Настрой сиденье так, чтобы рукояти были ниже уровня плеч.", "Прижми спину и затылок, опусти плечи.", "Жми вперёд без жёсткой блокировки локтей.", "Возвращай рукояти медленно и остановись до болезненного растяжения плеча."],
         note: "Если болит верх плеча или АК-сустав, сократи амплитуду и выбери нейтральный хват. Не тренируй через резкую боль.",
+        videoId: "iQYryL41HII",
+        source: "Nuffield Health · 1:51",
         visual: visualBase(`<rect x="54" y="79" width="63" height="65" rx="13" fill="#b8d5ca"/><circle cx="84" cy="50" r="19" fill="#e9bb99"/><path d="M84 69v49" stroke="#254e46" stroke-width="8"/><path d="M68 90 39 105m61-15 29 15" stroke="#254e46" stroke-width="9" stroke-linecap="round"/><path d="M58 151v-35h54v35" fill="none" stroke="#254e46" stroke-width="7"/>`, `<path d="M34 105H18m116 0h16" stroke="#23675b" stroke-width="4"/><path d="m26 98-8 7 8 7m116-14 8 7-8 7" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -660,6 +713,8 @@
         dose: ["3 × 12–15", "RPE 7–8", "Отдых 60 сек."],
         cues: ["Сядь лицом к подушке и настрой рукояти так, чтобы плечи не тянуло вперёд.", "Держи грудь прижатой, локти слегка согнуты.", "Разведи руки назад до линии корпуса.", "Верни вес за 3 секунды без удара стека."],
         note: "Не заводи руки далеко за спину. Движение должно чувствоваться сзади плеча, а не сверху в АК-суставе.",
+        videoId: "v0rJuhEa59c",
+        source: "FIT.nl · 0:19",
         visual: visualBase(`<rect x="64" y="84" width="52" height="60" rx="12" fill="#b8d5ca"/><circle cx="90" cy="52" r="19" fill="#e9bb99"/><path d="M90 71v48" stroke="#254e46" stroke-width="8"/><path d="M77 91 38 76m65 15 39-15" stroke="#254e46" stroke-width="8" stroke-linecap="round"/><path d="M66 151v-34h49v34" fill="none" stroke="#254e46" stroke-width="7"/>`, `<path d="M48 91 31 78m101 13 17-13" stroke="#23675b" stroke-width="4"/><path d="m39 78-9-1 2 9m108-8 9-1-2 9" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -668,6 +723,8 @@
         dose: ["3 × 12–15", "RPE 7", "Отдых 60 сек."],
         cues: ["Поставь скамью боком к нижнему блоку и упрись спиной.", "Подложи полотенце под локоть и держи его прижатым к боку.", "Поворачивай предплечье наружу в комфортной амплитуде.", "Возвращай рукоять за 3 секунды. Корпус не поворачивается."],
         note: "Начни с самого лёгкого веса стека. Добавляй один шаг только после 3 подходов по 15 без ухудшения на следующий день.",
+        videoId: "oKJd_FPnzC4",
+        source: "Swift Movement Academy · 0:51",
         visual: visualBase(`<circle cx="83" cy="45" r="20" fill="#e9bb99"/><rect x="58" y="68" width="52" height="74" rx="15" fill="#b8d5ca"/><path d="M74 85v43" stroke="#254e46" stroke-width="8"/><path d="M100 85v28h31" fill="none" stroke="#254e46" stroke-width="9" stroke-linecap="round"/><path d="M73 142v12m25-12v12" stroke="#254e46" stroke-width="8"/>`, `<path d="M131 113h30" stroke="#9a5a14" stroke-width="5"/><path d="M158 28v85" stroke="#8ca69c" stroke-width="4"/><path d="m151 105 9 8-9 8" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -676,6 +733,8 @@
         dose: ["3 × 10–15", "RPE 8", "Отдых 60 сек."],
         cues: ["Настрой сиденье так, чтобы локти совпадали с осью тренажёра.", "Прижми плечи к подушке и держи запястья ровно.", "Согни руки без рывка и задержись на секунду.", "Опускай вес за 3 секунды до почти полного разгибания."],
         note: "Никакого раскачивания корпуса. После 15 повторов во всех подходах добавь один шаг веса.",
+        videoId: "AR-oARBkYxI",
+        source: "Colossus Fitness · 2:05",
         visual: visualBase(`<circle cx="87" cy="45" r="19" fill="#e9bb99"/><rect x="62" y="67" width="50" height="74" rx="14" fill="#b8d5ca"/><path d="M71 84v34l-15 19m47-53v34l15 19" fill="none" stroke="#254e46" stroke-width="8" stroke-linecap="round"/><rect x="43" y="128" width="28" height="15" rx="7" fill="#f1c96f"/><rect x="104" y="128" width="28" height="15" rx="7" fill="#f1c96f"/>`, `<path d="M50 116V96m76 20V96" stroke="#23675b" stroke-width="4"/><path d="m44 103 6-8 6 8m64 0 6-8 6 8" fill="none" stroke="#23675b" stroke-width="4"/>`)
       },
       {
@@ -684,6 +743,8 @@
         dose: ["3 × 10–15", "RPE 8", "Отдых 60 сек."],
         cues: ["Настрой сиденье так, чтобы спина полностью лежала на подушке.", "Зафиксируй плечи и совмести локти с осью тренажёра.", "Разогни руки без рывка, не поднимая плечи к ушам.", "Верни вес за 3 секунды, не позволяя стеку ударяться."],
         note: "Если верх плеча раздражается, сократи амплитуду. После 15 повторов во всех подходах добавь один шаг веса.",
+        videoId: "bSp5GIsxwJU",
+        source: "Life Fitness / Hammer Strength · 1:49",
         visual: visualBase(`<rect x="55" y="79" width="61" height="65" rx="13" fill="#b8d5ca"/><circle cx="84" cy="50" r="19" fill="#e9bb99"/><path d="M84 69v49" stroke="#254e46" stroke-width="8"/><path d="M70 83v33l-18 22m46-55v33l18 22" fill="none" stroke="#254e46" stroke-width="8" stroke-linecap="round"/><path d="M58 151v-35h54v35" fill="none" stroke="#254e46" stroke-width="7"/><rect x="42" y="132" width="20" height="10" rx="5" fill="#f1c96f"/><rect x="107" y="132" width="20" height="10" rx="5" fill="#f1c96f"/>`, `<path d="M49 121v-21m71 21v-21" stroke="#23675b" stroke-width="4"/><path d="m43 107 6-8 6 8m59 0 6-8 6 8" fill="none" stroke="#23675b" stroke-width="4"/>`)
       }
     ];
@@ -697,6 +758,7 @@
 
     const list = document.querySelector("[data-exercise-list]");
     const dialog = document.querySelector("[data-exercise-dialog]");
+    const videoPanel = document.querySelector("[data-video-panel]");
     const toast = document.querySelector("[data-toast]");
 
     function renderExercises() {
@@ -706,7 +768,7 @@
         const ready = Number(log.reps) >= topReps && topReps > 0;
         return `
         <article class="exercise-card" data-open-exercise="${index}" tabindex="0" role="button" aria-label="Открыть: ${exercise.title}">
-          <div class="exercise-visual">${exercise.visual}</div>
+          <div class="exercise-visual">${exercise.visual}<span class="card-video-badge" aria-hidden="true">▶ Видео</span></div>
           <div class="exercise-copy">
             <span class="exercise-order">Упражнение ${index + 1}</span>
             <h3>${exercise.title}</h3>
@@ -737,12 +799,20 @@
 
     function openExercise(index) {
       const exercise = exercises[index];
-      document.querySelector("[data-dialog-visual]").innerHTML = exercise.visual;
       document.querySelector("[data-dialog-order]").textContent = `Упражнение ${index + 1}`;
       document.querySelector("[data-dialog-title]").textContent = exercise.title;
       document.querySelector("[data-dialog-dose]").innerHTML = exercise.dose.map(item => `<span class="dose">${item}</span>`).join("");
       document.querySelector("[data-dialog-cues]").innerHTML = exercise.cues.map(cue => `<li>${cue}</li>`).join("");
       document.querySelector("[data-dialog-note]").textContent = exercise.note;
+      videoPanel.innerHTML = `
+        <button class="video-button" type="button" aria-label="Воспроизвести технику упражнения ${exercise.title}">
+          ${exercise.visual}
+          <span class="big-play" aria-hidden="true">▶</span>
+        </button>
+        <p class="video-source">Нажми, чтобы посмотреть · ${exercise.source}</p>`;
+      videoPanel.querySelector("button").addEventListener("click", () => {
+        videoPanel.innerHTML = `<iframe class="video-frame" src="https://www.youtube-nocookie.com/embed/${exercise.videoId}?autoplay=1&cc_load_policy=1&playsinline=1&rel=0" title="${exercise.title}: техника" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><p class="video-source">${exercise.source}</p>`;
+      });
       dialog.showModal();
     }
 
@@ -803,6 +873,7 @@
     dialog.addEventListener("click", event => {
       if (event.target === dialog) dialog.close();
     });
+    dialog.addEventListener("close", () => { videoPanel.innerHTML = ""; });
 
     document.querySelector("[data-date]").textContent = new Intl.DateTimeFormat("ru-RU", { weekday: "long", month: "long", day: "numeric" }).format(new Date());
     renderExercises();
