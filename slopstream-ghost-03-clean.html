@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="A stripped-back Ghost 03 logo variation for SlopStream" />
+  <title>SlopStream · Ghost 03 clean</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: rgb(9 13 20);
+      --surface: rgb(15 22 33);
+      --line: rgb(43 55 72);
+      --ink: rgb(243 247 255);
+      --muted: rgb(181 191 206);
+      --faint: rgb(130 144 164);
+      --blue: rgb(67 140 248);
+      --face: rgb(11 21 39);
+      --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Newsreader", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 0%, rgb(40 118 247 / 0.16), transparent 34rem),
+        var(--bg);
+    }
+
+    .page {
+      width: min(100% - 48px, 920px);
+      padding: 48px 0;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 350px);
+      align-items: end;
+      gap: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(44px, 7vw, 72px);
+      font-weight: 400;
+      line-height: 0.94;
+      letter-spacing: -0.052em;
+    }
+
+    .brief {
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .study {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(220px, 0.8fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .hero,
+    .sizes {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgb(15 22 33 / 0.94);
+    }
+
+    .hero {
+      min-height: 460px;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .tile {
+      width: 256px;
+      height: 256px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgb(67 140 248 / 0.5);
+      border-radius: 58px;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(9 20 38) 58%, rgb(5 8 18));
+      box-shadow: 0 24px 54px rgb(0 0 0 / 0.34);
+    }
+
+    .tile svg { width: 208px; height: 208px; }
+
+    svg { display: block; overflow: visible; }
+    .body {
+      fill: var(--face);
+      stroke: var(--blue);
+      stroke-width: 5.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .bars {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+
+    .sizes {
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+
+    .note {
+      margin: 7px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .samples {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .sample {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+    }
+
+    .sample-icon {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgb(67 140 248 / 0.42);
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(5 8 18));
+    }
+
+    .sample-icon svg { width: 84%; height: 84%; }
+    .sample-icon.large { width: 88px; height: 88px; border-radius: 20px; }
+    .sample-icon.medium { width: 64px; height: 64px; border-radius: 50%; }
+    .sample-icon.small { width: 40px; height: 40px; border-radius: 50%; }
+
+    .sample span {
+      color: var(--faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 760;
+      letter-spacing: 0.08em;
+    }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+    }
+
+    .lockup svg { width: 31px; height: 31px; }
+
+    @media (max-width: 680px) {
+      body { place-items: start center; }
+      .page { width: calc(100% - 24px); padding: 28px 0 34px; }
+      header { grid-template-columns: 1fr; gap: 14px; padding-bottom: 20px; }
+      h1 { font-size: 46px; }
+      .brief { font-size: 12px; }
+      .study { grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+      .hero { min-height: 330px; padding: 24px; border-radius: 20px; }
+      .tile { width: 214px; height: 214px; border-radius: 49px; }
+      .tile svg { width: 174px; height: 174px; }
+      .sizes { min-height: 270px; padding: 20px; border-radius: 20px; }
+      .samples { margin-top: 18px; }
+      .lockup { margin-top: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity · Ghost 03</p>
+        <h1>Ghost, cleaned up</h1>
+      </div>
+      <p class="brief">The original ghost silhouette and equalizer eyes, with the cat nose, mouth, and blue crown removed.</p>
+    </header>
+
+    <section class="study" aria-label="Ghost 03 clean logo study">
+      <div class="hero">
+        <div class="tile">
+          <svg viewBox="0 0 120 120" role="img" aria-label="SlopStream ghost with equalizer-bar eyes">
+            <path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z" />
+            <path class="bars" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9" />
+          </svg>
+        </div>
+      </div>
+
+      <aside class="sizes">
+        <div>
+          <h2>Ghost 03 · clean</h2>
+          <p class="note">Body and bars only. Tested at portfolio and avatar sizes.</p>
+        </div>
+
+        <div class="samples" aria-label="Small-size previews">
+          <div class="sample">
+            <div class="sample-icon large">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="bars" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/></svg>
+            </div>
+            <span>88 PX</span>
+          </div>
+          <div class="sample">
+            <div class="sample-icon medium">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="bars" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/></svg>
+            </div>
+            <span>64 PX</span>
+          </div>
+          <div class="sample">
+            <div class="sample-icon small">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="bars" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/></svg>
+            </div>
+            <span>40 PX</span>
+          </div>
+        </div>
+
+        <div class="lockup">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="bars" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/></svg>
+          <span>SlopStream</span>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
