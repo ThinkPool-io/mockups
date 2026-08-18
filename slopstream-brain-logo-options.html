@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <title>SlopStream · Brain logo directions</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-dim: hsl(212 26% 21%);
+      --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      --font-display: "Newsreader", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--color-bg);
+    }
+
+    body {
+      color: var(--color-ink);
+      background:
+        radial-gradient(circle at 50% -20%, color-mix(in oklab, var(--color-pool) 16%, transparent), transparent 42%),
+        var(--color-bg);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: min(100% - 64px, 1320px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 64px 0 56px;
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--color-pool-hi);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(42px, 5vw, 70px);
+      font-weight: 400;
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+    }
+
+    .brief {
+      max-width: 360px;
+      margin: 0 0 4px;
+      color: var(--color-muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .option {
+      min-width: 0;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--color-line);
+      border-radius: 22px;
+      background: color-mix(in oklab, var(--color-surface) 94%, transparent);
+    }
+
+    .option-number {
+      width: 100%;
+      color: var(--color-faint);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .mark-tile {
+      width: 136px;
+      height: 136px;
+      display: grid;
+      place-items: center;
+      margin: 24px 0 22px;
+      border: 1px solid var(--color-line);
+      border-radius: 31px;
+      background: var(--color-raised);
+      color: var(--color-ink);
+      box-shadow: 0 20px 52px color-mix(in oklab, black 30%, transparent);
+    }
+
+    .mark {
+      width: 94px;
+      height: 94px;
+      overflow: visible;
+    }
+
+    .pool { color: var(--color-pool); }
+    .pool-hi { color: var(--color-pool-hi); }
+    .muted { color: var(--color-muted); }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .concept {
+      min-height: 42px;
+      margin: 8px 0 20px;
+      color: var(--color-faint);
+      font-size: 13px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .lockup {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--color-line);
+      font-size: 16px;
+      font-weight: 620;
+      letter-spacing: 0.005em;
+    }
+
+    .mini {
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      color: var(--color-ink);
+    }
+
+    .usage {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .usage span {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--color-faint);
+      background: var(--color-float);
+      font-size: 10px;
+      font-weight: 650;
+    }
+
+    @media (max-width: 900px) {
+      main { width: min(100% - 38px, 720px); padding: 42px 0 34px; }
+      header { align-items: start; margin-bottom: 24px; }
+      .brief { max-width: 280px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .option { min-height: 300px; }
+      .option:last-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 520px) {
+      main { width: calc(100% - 24px); padding: 28px 0 24px; }
+      header { display: block; margin-bottom: 18px; }
+      h1 { max-width: 330px; font-size: 42px; }
+      .brief { max-width: 330px; margin-top: 12px; font-size: 13px; }
+      .grid { gap: 10px; }
+      .option { min-height: 238px; padding: 12px 10px; border-radius: 18px; }
+      .option-number { font-size: 9px; }
+      .mark-tile { width: 88px; height: 88px; margin: 10px 0 10px; border-radius: 21px; }
+      .mark { width: 62px; height: 62px; }
+      h2 { font-size: 14px; }
+      .concept { min-height: 33px; margin: 5px 0 10px; font-size: 10px; line-height: 1.35; }
+      .lockup { gap: 6px; padding-top: 9px; font-size: 11px; }
+      .mini { width: 20px; height: 20px; }
+      .usage { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream mark study</p>
+        <h1>A person with<br />a brain</h1>
+      </div>
+      <p class="brief">Five clean interpretations of the original brain-rot idea, tested as a full app icon and a tiny wordmark companion</p>
+    </header>
+
+    <section class="grid" aria-label="Five SlopStream logo options">
+      <article class="option">
+        <span class="option-number">01</span>
+        <div class="mark-tile">
+          <svg class="mark" viewBox="0 0 96 96" role="img" aria-label="Open Profile logo">
+            <path d="M59 79H34c0-8 3-12 9-16-9-4-15-13-15-24 0-16 12-28 28-28 13 0 24 8 27 20 2 8 0 15-5 21l5 10-10 3v14" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="pool" d="M42 30c-2-6 5-10 10-6 4-6 13-3 12 4 7 0 9 9 4 13 4 6-3 12-9 9-3 6-12 5-13-2-7 1-10-7-5-12-3-1-3-4 1-6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="pool" d="M51 26v7m11-4-6 6m13 3-8 1m-15 9 6-7m7 8-2-8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2>Open Profile</h2>
+        <p class="concept">Closest to the Shortcut icon, with a cleaner brain</p>
+        <div class="lockup">
+          <svg class="mini" viewBox="0 0 96 96" aria-hidden="true"><path d="M59 79H34c0-8 3-12 9-16-9-4-15-13-15-24 0-16 12-28 28-28 13 0 24 8 27 20 2 8 0 15-5 21l5 10-10 3v14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="54" cy="35" r="13" fill="none" stroke="var(--color-pool)" stroke-width="5"/></svg>
+          <span>SlopStream</span>
+        </div>
+        <div class="usage"><span>most literal</span><span>familiar</span></div>
+      </article>
+
+      <article class="option">
+        <span class="option-number">02</span>
+        <div class="mark-tile">
+          <svg class="mark" viewBox="0 0 96 96" role="img" aria-label="Mind Window logo">
+            <path d="M29 81v-8c0-8 5-14 13-16-8-4-13-12-13-22 0-15 11-25 25-25s25 10 25 25c0 10-5 18-13 22 8 2 13 8 13 16v8" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <rect class="pool" x="37" y="23" width="34" height="24" rx="12" fill="none" stroke="currentColor" stroke-width="4"/>
+            <path class="pool" d="M47 26v18m14-18v18M41 35h26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M41 63c8 5 18 5 26 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2>Mind Window</h2>
+        <p class="concept">Frontal, calm, and unusually recognizable at small sizes</p>
+        <div class="lockup">
+          <svg class="mini" viewBox="0 0 96 96" aria-hidden="true"><path d="M29 81v-8c0-8 5-14 13-16-8-4-13-12-13-22 0-15 11-25 25-25s25 10 25 25c0 10-5 18-13 22 8 2 13 8 13 16v8" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><rect x="37" y="23" width="34" height="24" rx="12" fill="var(--color-pool)"/></svg>
+          <span>SlopStream</span>
+        </div>
+        <div class="usage"><span>smallest-ready</span><span>friendly</span></div>
+      </article>
+
+      <article class="option">
+        <span class="option-number">03</span>
+        <div class="mark-tile">
+          <svg class="mark" viewBox="0 0 96 96" role="img" aria-label="Single Thought logo">
+            <path d="M68 82H34V68c-8-6-13-16-13-27 0-17 13-30 30-30s30 13 30 30c0 7-2 13-6 18l8 9-13 3-2 11Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="pool" d="M39 39c-4-8 5-15 12-10 5-8 17-4 16 5 8 1 9 12 2 15 2 8-9 12-14 6-6 6-16 0-13-8-5-1-6-6-3-8Z" fill="currentColor"/>
+            <path d="M47 36c5 2 7 6 5 12m10-13c-4 3-5 8-2 13" fill="none" stroke="var(--color-raised)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h2>Single Thought</h2>
+        <p class="concept">Boldest brain shape and strongest app-icon silhouette</p>
+        <div class="lockup">
+          <svg class="mini" viewBox="0 0 96 96" aria-hidden="true"><path d="M68 82H34V68c-8-6-13-16-13-27 0-17 13-30 30-30s30 13 30 30c0 7-2 13-6 18l8 9-13 3-2 11Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M39 39c-4-8 5-15 12-10 5-8 17-4 16 5 8 1 9 12 2 15 2 8-9 12-14 6-6 6-16 0-13-8-5-1-6-6-3-8Z" fill="var(--color-pool)"/></svg>
+          <span>SlopStream</span>
+        </div>
+        <div class="usage"><span>boldest</span><span>ownable</span></div>
+      </article>
+
+      <article class="option">
+        <span class="option-number">04</span>
+        <div class="mark-tile">
+          <svg class="mark" viewBox="0 0 96 96" role="img" aria-label="Brainwave logo">
+            <path d="M61 82H35V67c-9-5-15-15-15-27 0-17 13-29 30-29s30 12 30 29c0 7-2 13-6 18l8 9-13 3-2 12" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="pool" d="M34 39h8l4-10 7 22 6-16 4 8h12" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Brainwave</h2>
+        <p class="concept">A human profile crossed with a clean media signal</p>
+        <div class="lockup">
+          <svg class="mini" viewBox="0 0 96 96" aria-hidden="true"><path d="M61 82H35V67c-9-5-15-15-15-27 0-17 13-29 30-29s30 12 30 29c0 7-2 13-6 18l8 9-13 3-2 12" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 39h8l4-10 7 22 6-16 4 8h12" fill="none" stroke="var(--color-pool)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>SlopStream</span>
+        </div>
+        <div class="usage"><span>fast</span><span>media-coded</span></div>
+      </article>
+
+      <article class="option">
+        <span class="option-number">05</span>
+        <div class="mark-tile">
+          <svg class="mark" viewBox="0 0 96 96" role="img" aria-label="Open Head logo">
+            <path d="M30 38c0-16 10-27 25-27 14 0 25 10 25 24 0 8-3 14-8 19l10 10-13 3-3 14H34V65c-8-6-12-15-12-25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M31 24c10-9 21-9 31-3" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path class="pool" d="M38 31c-3-7 6-11 11-7 4-7 14-3 13 4 7 0 9 9 4 13 3 7-7 11-12 6-5 5-14 0-11-7-6 0-7-7-5-9Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Open Head</h2>
+        <p class="concept">A more playful lid-off brain without becoming a meme</p>
+        <div class="lockup">
+          <svg class="mini" viewBox="0 0 96 96" aria-hidden="true"><path d="M30 38c0-16 10-27 25-27 14 0 25 10 25 24 0 8-3 14-8 19l10 10-13 3-3 14H34V65c-8-6-12-15-12-25" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 31c-3-7 6-11 11-7 4-7 14-3 13 4 7 0 9 9 4 13 3 7-7 11-12 6-5 5-14 0-11-7-6 0-7-7-5-9Z" fill="var(--color-pool)"/></svg>
+          <span>SlopStream</span>
+        </div>
+        <div class="usage"><span>playful</span><span>brain-first</span></div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
