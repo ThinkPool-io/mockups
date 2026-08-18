@@ -254,6 +254,32 @@
       text-align: center;
     }
 
+    .shortcut-install {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      padding: 8px 13px;
+      border: 1px solid rgb(108 162 255 / 0.4);
+      border-radius: 999px;
+      background: rgb(40 118 247 / 0.1);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+    }
+
+    .shortcut-install[hidden] { display: none; }
+
+    .shortcut-install:hover {
+      border-color: rgb(108 162 255 / 0.75);
+      background: rgb(40 118 247 / 0.18);
+    }
+
+    .shortcut-install:active { transform: scale(0.98); }
+
     .ready[hidden],
     form[hidden],
     .status:empty { display: none; }
@@ -307,13 +333,162 @@
       min-height: 44px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      padding: 1px 6px;
+      border: 0;
+      background: transparent;
       color: var(--faint);
       font-size: 12px;
       font-weight: 650;
-      text-underline-offset: 3px;
+      text-decoration: underline;
+      text-decoration-color: var(--line);
+      text-underline-offset: 4px;
+      cursor: pointer;
     }
 
-    .footer-link:hover { color: var(--muted); }
+    .footer-link:hover { color: var(--ink); }
+
+    .about-dialog,
+    .shortcut-guide {
+      width: min(430px, calc(100% - 44px));
+      max-width: none;
+      margin: auto;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: 0 30px 90px rgb(0 0 0 / 0.48);
+      color: var(--ink);
+    }
+
+    .shortcut-guide {
+      width: min(460px, calc(100% - 44px));
+      max-height: calc(100dvh - 44px);
+      overflow-y: auto;
+    }
+
+    .about-dialog::backdrop,
+    .shortcut-guide::backdrop {
+      background: rgb(3 6 12 / 0.74);
+      backdrop-filter: blur(7px);
+    }
+
+    .about-dialog h2,
+    .shortcut-guide h2 {
+      margin: 11px 0 0;
+      color: var(--ink);
+      font-size: 27px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .privacy-copy {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .privacy-copy p,
+    .shortcut-guide-intro,
+    .about-byline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .about-byline { margin-top: 15px; }
+
+    .about-byline a {
+      color: var(--ink);
+      font-weight: 750;
+      text-decoration-color: var(--line);
+      text-underline-offset: 4px;
+    }
+
+    .about-done,
+    .shortcut-guide-install {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 22px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--blue);
+      color: rgb(7 16 29);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .shortcut-guide h2 { max-width: 330px; }
+
+    .shortcut-guide-intro { margin-top: 11px; }
+
+    .shortcut-steps {
+      display: grid;
+      gap: 10px;
+      margin: 21px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .shortcut-step {
+      min-height: 62px;
+      display: grid;
+      align-items: center;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgb(9 13 20 / 0.52);
+      text-align: left;
+    }
+
+    .shortcut-step-number {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgb(40 118 247 / 0.16);
+      color: var(--blue-hi);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .shortcut-step-copy strong,
+    .shortcut-step-copy span { display: block; }
+
+    .shortcut-step-copy strong {
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .shortcut-step-copy span {
+      margin-top: 3px;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .shortcut-guide-actions { margin-top: 15px; }
+
+    .shortcut-guide-install {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      text-decoration: none;
+    }
+
+    .shortcut-guide-dismiss {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 8px;
+      color: var(--faint);
+      font-size: 13px;
+    }
 
     @media (max-width: 640px) {
       main {
@@ -336,6 +511,33 @@
       }
 
       .converter { margin-top: 25px; }
+
+      .about-dialog,
+      .shortcut-guide {
+        inset: auto 0 0;
+        width: 100%;
+        margin: auto 0 0;
+        padding: 23px 19px max(16px, env(safe-area-inset-bottom));
+        border-right: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 26px 26px 0 0;
+      }
+
+      .about-dialog::before,
+      .shortcut-guide::before {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        width: 38px;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--line);
+        content: "";
+        transform: translateX(-50%);
+      }
+
+      .shortcut-guide h2 { font-size: 25px; }
     }
 
     @media (max-height: 720px) {
@@ -398,12 +600,54 @@
 
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </section>
+
+      <button
+        class="shortcut-install"
+        id="shortcut-install"
+        type="button"
+        aria-haspopup="dialog"
+        aria-controls="shortcut-guide"
+        aria-label="Install the Share with SlopStream Shortcut"
+        hidden
+      >Add SlopStream Shortcut</button>
     </main>
 
     <footer>
-      <a class="footer-link" href="https://thinkpool-io.github.io/mockups/slopstream/ShareWithSlopStream.shortcut">iPhone Shortcut</a>
+      <button class="footer-link" id="about-link" type="button" aria-haspopup="dialog" aria-controls="about-dialog">About</button>
     </footer>
   </div>
+
+  <dialog class="shortcut-guide" id="shortcut-guide" aria-labelledby="shortcut-guide-title">
+    <h2 id="shortcut-guide-title">Share videos directly from the app</h2>
+    <p class="shortcut-guide-intro">SlopStream lives in the Share menu inside TikTok and Instagram.</p>
+    <ol class="shortcut-steps">
+      <li class="shortcut-step">
+        <span class="shortcut-step-number">1</span>
+        <span class="shortcut-step-copy"><strong>Add SlopStream to your iPhone</strong><span>Complete Apple’s one-time setup</span></span>
+      </li>
+      <li class="shortcut-step">
+        <span class="shortcut-step-number">2</span>
+        <span class="shortcut-step-copy"><strong>Tap Share on any video</strong><span>No need to copy and paste</span></span>
+      </li>
+      <li class="shortcut-step">
+        <span class="shortcut-step-number">3</span>
+        <span class="shortcut-step-copy"><strong>Choose Share with SlopStream</strong><span>The clean link appears, ready to send</span></span>
+      </li>
+    </ol>
+    <div class="shortcut-guide-actions">
+      <a class="shortcut-guide-install" href="https://thinkpool-io.github.io/mockups/slopstream/ShareWithSlopStream.shortcut">Install Shortcut</a>
+      <button class="shortcut-guide-dismiss" id="shortcut-guide-dismiss" type="button">Not now</button>
+    </div>
+  </dialog>
+
+  <dialog class="about-dialog" id="about-dialog" aria-labelledby="about-title">
+    <h2 id="about-title" tabindex="-1">About</h2>
+    <div class="privacy-copy">
+      <p>Submitted links may be sent to TikTok, Instagram, and a resolver service to load public media. Hosting providers may temporarily log IP addresses, browser details, and request times.<br />SlopStream has no accounts, cookies, analytics, or ads.</p>
+    </div>
+    <p class="about-byline">Made by <a href="https://maksim-zeidler.vercel.app/" target="_blank" rel="noreferrer">Maksim Zeidler</a></p>
+    <button class="about-done" id="about-done" type="button">Done</button>
+  </dialog>
 
   <script>
     const viewerBase = 'https://thinkpool-io.github.io/mockups/tokless-prototype.html';
@@ -415,7 +659,23 @@
     const cleanUrl = document.querySelector('#clean-url');
     const openLink = document.querySelector('#open-link');
     const shareLink = document.querySelector('#share-link');
+    const shortcutInstall = document.querySelector('#shortcut-install');
+    const shortcutGuide = document.querySelector('#shortcut-guide');
+    const shortcutGuideDismiss = document.querySelector('#shortcut-guide-dismiss');
+    const aboutLink = document.querySelector('#about-link');
+    const aboutDialog = document.querySelector('#about-dialog');
+    const aboutDone = document.querySelector('#about-done');
     let generatedLink = '';
+
+    const shortcutSupported = /\b(?:iPhone|iPad)\b|\bMacintosh\b.*\bMobile\b/i.test(navigator.userAgent || '');
+
+    function syncShortcutVisibility() {
+      if (!shortcutSupported) return;
+      shortcutInstall.hidden = form.hidden || Boolean(input.value.trim());
+    }
+
+    if (shortcutSupported) syncShortcutVisibility();
+    else shortcutInstall.remove();
 
     function normalizeSource(value) {
       try {
@@ -453,16 +713,37 @@
       openLink.href = generatedLink;
       form.hidden = true;
       ready.hidden = false;
+      syncShortcutVisibility();
     });
+
+    input.addEventListener('input', syncShortcutVisibility);
 
     document.querySelector('#paste-button').addEventListener('click', async () => {
       try {
         input.value = await navigator.clipboard.readText();
+        syncShortcutVisibility();
         input.focus();
       } catch {
         input.focus();
         status.textContent = 'Press and hold the field to paste.';
       }
+    });
+
+    shortcutInstall?.addEventListener('click', () => shortcutGuide.showModal());
+    shortcutGuideDismiss.addEventListener('click', () => shortcutGuide.close());
+    shortcutGuide.addEventListener('click', (event) => {
+      const bounds = shortcutGuide.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) shortcutGuide.close();
+    });
+
+    aboutLink.addEventListener('click', () => {
+      aboutDialog.showModal();
+      aboutDialog.querySelector('#about-title').focus();
+    });
+    aboutDone.addEventListener('click', () => aboutDialog.close());
+    aboutDialog.addEventListener('click', (event) => {
+      const bounds = aboutDialog.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) aboutDialog.close();
     });
 
     shareLink.addEventListener('click', async () => {
