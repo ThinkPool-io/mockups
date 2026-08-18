@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Ten Stream S logo variations for SlopStream" />
+  <title>SlopStream · Stream S variations</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: hsl(212 13% 5%);
+      --raised: hsl(212 11% 8%);
+      --surface: hsl(212 10% 10%);
+      --float: hsl(212 9% 13%);
+      --line: hsl(212 7% 21%);
+      --line-strong: hsl(212 7% 28%);
+      --ink: hsl(212 14% 95%);
+      --muted: hsl(212 14% 78%);
+      --faint: hsl(212 12% 62%);
+      --pool: hsl(217 85% 62%);
+      --pool-hi: hsl(217 85% 70%);
+      --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { min-height: 100svh; }
+
+    .page {
+      width: min(100% - 48px, 1280px);
+      margin: 0 auto;
+      padding: 72px 0 80px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--pool-hi);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 4.4vw, 64px);
+      font-weight: 710;
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .brief {
+      max-width: 360px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .number {
+      color: var(--faint);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+    }
+
+    .size-test {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--bg);
+    }
+
+    .size-test svg { width: 20px; height: 20px; }
+
+    .mark-wrap {
+      min-height: 126px;
+      display: grid;
+      place-items: center;
+    }
+
+    .mark {
+      width: 104px;
+      height: 104px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--pool-hi) 38%, transparent);
+      border-radius: 25px;
+      background: var(--float);
+      box-shadow: 0 20px 42px hsl(212 20% 2% / 0.34);
+    }
+
+    .mark svg { width: 72px; height: 72px; }
+
+    svg {
+      display: block;
+      overflow: visible;
+      fill: none;
+      stroke: var(--pool-hi);
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .fill-pool { fill: var(--pool); stroke: none; }
+    .fill-float { fill: var(--float); stroke: none; }
+    .stroke-float { stroke: var(--float); }
+    .heavy { stroke-width: 5.6; }
+    .medium { stroke-width: 4.2; }
+    .thin { stroke-width: 1.9; }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      font-size: 18px;
+      font-weight: 730;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+
+    .lockup svg { width: 24px; height: 24px; flex: 0 0 auto; }
+
+    h2 {
+      margin: 20px 0 7px;
+      font-size: 15px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+    }
+
+    .rationale {
+      min-height: 42px;
+      margin: 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .footer-note {
+      margin: 26px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 32px, 520px);
+        padding: 42px 0 56px;
+      }
+
+      header { grid-template-columns: 1fr; gap: 18px; }
+      h1 { font-size: 42px; }
+      .grid { grid-template-columns: 1fr; gap: 12px; }
+      .card { padding: 20px; }
+      .mark-wrap { min-height: 118px; }
+      .rationale { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity</p>
+        <h1>Stream S variations</h1>
+      </div>
+      <p class="brief">Ten refinements of direction 05, each tested as an app mark, wordmark companion, and 32 px favicon</p>
+    </header>
+
+    <section class="grid" aria-label="Ten Stream S logo variations">
+      <article class="card">
+        <div class="card-top"><span class="number">05A</span><span class="size-test"><svg viewBox="0 0 48 48"><path d="M37 9H19c-6 0-10 3-10 8s4 8 10 8h10c6 0 10 3 10 8s-4 8-10 8H11"/><circle cx="37" cy="9" r="3" class="fill-pool"/><circle cx="11" cy="41" r="3" class="fill-pool"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M56 12H29c-9 0-15 4.5-15 12s6 12 15 12h15c9 0 15 4.5 15 12s-6 12-15 12H17"/><circle cx="56" cy="12" r="4.5" class="fill-pool"/><circle cx="17" cy="60" r="4.5" class="fill-pool"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M37 9H19c-6 0-10 3-10 8s4 8 10 8h10c6 0 10 3 10 8s-4 8-10 8H11"/><circle cx="37" cy="9" r="3" class="fill-pool"/><circle cx="11" cy="41" r="3" class="fill-pool"/></svg><span>SlopStream</span></div>
+        <h2>Terminal S</h2><p class="rationale">The selected direction with visible input and output points</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05B</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="medium" d="M37 10H20c-7 0-11 3-11 8s4 8 11 8h8c7 0 11 3 11 8s-4 8-11 8H11"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="medium" d="M56 15H30c-10.5 0-16.5 4.5-16.5 12s6 12 16.5 12h12c10.5 0 16.5 4.5 16.5 12S52.5 63 42 63H16.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="medium" d="M37 10H20c-7 0-11 3-11 8s4 8 11 8h8c7 0 11 3 11 8s-4 8-11 8H11"/></svg><span>SlopStream</span></div>
+        <h2>Pure stroke</h2><p class="rationale">Removes the endpoints for the simplest and calmest reduction</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05C</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="heavy" d="M37 11H19c-5 0-8 2-8 6s3 6 8 6h10c5 0 8 2 8 6s-3 6-8 6H11"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="heavy" d="M56 16.5H28.5c-7.5 0-12 3-12 9s4.5 9 12 9h15c7.5 0 12 3 12 9s-4.5 9-12 9H16.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="heavy" d="M37 11H19c-5 0-8 2-8 6s3 6 8 6h10c5 0 8 2 8 6s-3 6-8 6H11"/></svg><span>SlopStream</span></div>
+        <h2>Heavy channel</h2><p class="rationale">More authority and better survival in tiny browser and home-screen contexts</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05D</span><span class="size-test"><svg viewBox="0 0 48 48"><path d="M37 11H20c-6 0-10 3-10 7s4 7 10 7h8c6 0 10 3 10 7s-4 7-10 7H11"/><path class="thin" d="M37 16H21c-3 0-5 1-5 2s2 2 5 2h8c9 0 15 5 15 12s-6 12-15 12H11"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M56 16.5H30c-9 0-15 4.5-15 10.5s6 10.5 15 10.5h12c9 0 15 4.5 15 10.5s-6 10.5-15 10.5H16.5"/><path class="thin" d="M56 24H31.5c-4.5 0-7.5 1.5-7.5 3s3 3 7.5 3h12c13.5 0 22.5 7.5 22.5 18s-9 18-22.5 18h-27"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M37 11H20c-6 0-10 3-10 7s4 7 10 7h8c6 0 10 3 10 7s-4 7-10 7H11"/><path class="thin" d="M37 16H21c-3 0-5 1-5 2s2 2 5 2h8c9 0 15 5 15 12s-6 12-15 12H11"/></svg><span>SlopStream</span></div>
+        <h2>Dual rail</h2><p class="rationale">A second line turns the route into a distinct two-platform stream</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05E</span><span class="size-test"><svg viewBox="0 0 48 48"><rect x="7" y="7" width="34" height="34" rx="11" class="fill-pool"/><path class="stroke-float medium" d="M35 14H20c-5 0-8 2-8 6s3 6 8 6h8c5 0 8 2 8 6s-3 6-8 6H13"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><rect x="10.5" y="10.5" width="51" height="51" rx="16.5" class="fill-pool"/><path class="stroke-float heavy" d="M52.5 21H30c-7.5 0-12 3-12 9s4.5 9 12 9h12c7.5 0 12 3 12 9s-4.5 9-12 9H19.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><rect x="7" y="7" width="34" height="34" rx="11" class="fill-pool"/><path class="stroke-float medium" d="M35 14H20c-5 0-8 2-8 6s3 6 8 6h8c5 0 8 2 8 6s-3 6-8 6H13"/></svg><span>SlopStream</span></div>
+        <h2>Negative tile</h2><p class="rationale">Bold app-icon presence with the stream cut directly through the field</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05F</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="medium" d="M37 10H21c-7 0-11 3-11 8 0 4 3 6 9 7l10 1c6 1 9 3 9 7 0 5-4 8-11 8H11"/><path d="m15 21 5 4-6 3"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="medium" d="M56 15H31.5C21 15 15 19.5 15 27c0 6 4.5 9 13.5 10.5l15 1.5c9 1.5 13.5 4.5 13.5 10.5C57 57 51 61.5 40.5 61.5H16.5"/><path d="m22.5 31.5 7.5 6-9 4.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="medium" d="M37 10H21c-7 0-11 3-11 8 0 4 3 6 9 7l10 1c6 1 9 3 9 7 0 5-4 8-11 8H11"/><path d="m15 21 5 4-6 3"/></svg><span>SlopStream</span></div>
+        <h2>Forward splice</h2><p class="rationale">The central handoff becomes an explicit forward motion without a play icon</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05G</span><span class="size-test"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path class="medium" d="M33 14H21c-5 0-8 2-8 6s3 6 8 6h6c5 0 8 2 8 6s-3 6-8 6H15"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="25.5"/><path class="medium" d="M49.5 21H31.5c-7.5 0-12 3-12 9s4.5 9 12 9h9c7.5 0 12 3 12 9s-4.5 9-12 9H22.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path class="medium" d="M33 14H21c-5 0-8 2-8 6s3 6 8 6h6c5 0 8 2 8 6s-3 6-8 6H15"/></svg><span>SlopStream</span></div>
+        <h2>Orbit S</h2><p class="rationale">Adds a stable enclosure for avatar, favicon, and app-store use</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05H</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="medium" d="M35 10H20c-6 0-10 3-10 8s4 8 10 8h8c6 0 10 3 10 8s-4 8-10 8H13"/><path d="m33 37 5-3-5-3"/><path d="m15 15-5 3 5 3"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="medium" d="M52.5 15H30c-9 0-15 4.5-15 12s6 12 15 12h12c9 0 15 4.5 15 12s-6 12-15 12H19.5"/><path d="m49.5 55.5 7.5-4.5-7.5-4.5"/><path d="m22.5 22.5-7.5 4.5 7.5 4.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="medium" d="M35 10H20c-6 0-10 3-10 8s4 8 10 8h8c6 0 10 3 10 8s-4 8-10 8H13"/><path d="m33 37 5-3-5-3"/><path d="m15 15-5 3 5 3"/></svg><span>SlopStream</span></div>
+        <h2>Input output</h2><p class="rationale">Directional terminals make the convert-and-share flow unambiguous</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05I</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="medium" d="M36 11H21c-6 0-10 3-10 7s4 7 10 7h6c6 0 10 3 10 7s-4 7-10 7H12"/><circle cx="36" cy="11" r="2.5" class="fill-pool"/><path d="m12 34 5 5-5 5"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="medium" d="M54 16.5H31.5c-9 0-15 4.5-15 10.5s6 10.5 15 10.5h9c9 0 15 4.5 15 10.5s-6 10.5-15 10.5h-22"/><circle cx="54" cy="16.5" r="3.75" class="fill-pool"/><path d="m18 51 7.5 7.5L18 66"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="medium" d="M36 11H21c-6 0-10 3-10 7s4 7 10 7h6c6 0 10 3 10 7s-4 7-10 7H12"/><circle cx="36" cy="11" r="2.5" class="fill-pool"/><path d="m12 34 5 5-5 5"/></svg><span>SlopStream</span></div>
+        <h2>Relay exit</h2><p class="rationale">A source point becomes a clean outbound link at the opposite terminal</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05J</span><span class="size-test"><svg viewBox="0 0 48 48"><path class="medium" d="M37 12H21c-7 0-11 2-11 6s4 6 11 6h6c7 0 11 2 11 6s-4 6-11 6H11"/><path d="M37 12v6M11 30v6"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path class="medium" d="M55.5 18H31.5C21 18 15 21 15 27s6 9 16.5 9h9C51 36 57 39 57 45s-6 9-16.5 9H16.5"/><path d="M55.5 18v9M16.5 45v9"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path class="medium" d="M37 12H21c-7 0-11 2-11 6s4 6 11 6h6c7 0 11 2 11 6s-4 6-11 6H11"/><path d="M37 12v6M11 30v6"/></svg><span>SlopStream</span></div>
+        <h2>Port S</h2><p class="rationale">Squared terminals give the fluid path a sharper technical character</p>
+      </article>
+    </section>
+
+    <p class="footer-note">Every variation shown at 104 px, 24 px, and 20 px</p>
+  </main>
+</body>
+</html>
