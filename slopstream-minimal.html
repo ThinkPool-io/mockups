@@ -4,8 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#090d14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SlopStream" />
   <meta name="description" content="Convert TikTok and Instagram links into clean browser links." />
   <title>SlopStream · Video links with social skills</title>
+  <link rel="icon" type="image/svg+xml" href="slopstream/icon.svg?v=1" />
+  <link rel="apple-touch-icon" sizes="180x180" href="slopstream/icon-180.png?v=1" />
+  <link rel="manifest" href="slopstream/manifest.webmanifest?v=1" />
   <style>
     :root {
       color-scheme: dark;
@@ -516,7 +522,7 @@
       min-height: 62px;
       display: grid;
       align-items: center;
-      grid-template-columns: 34px minmax(0, 1fr);
+      grid-template-columns: 42px minmax(0, 1fr);
       gap: 12px;
       padding: 10px 12px;
       border: 1px solid var(--line);
@@ -525,17 +531,37 @@
       text-align: left;
     }
 
-    .shortcut-step-number {
-      width: 30px;
-      height: 30px;
+    .shortcut-step-art {
+      width: 42px;
+      height: 42px;
       display: grid;
+      overflow: hidden;
       place-items: center;
-      border-radius: 50%;
-      background: rgb(40 118 247 / 0.16);
+      border: 1px solid rgb(108 162 255 / 0.36);
+      border-radius: 11px;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(9 20 38) 58%, rgb(5 8 18));
       color: var(--blue-hi);
-      font-size: 12px;
-      font-weight: 800;
     }
+
+    .shortcut-step-art svg { width: 30px; height: 30px; }
+
+    .shortcut-step-art .step-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .shortcut-step-art .ghost-body {
+      fill: rgb(11 21 39);
+      stroke: var(--blue);
+      stroke-width: 5.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .shortcut-step-art .ghost-eye { fill: var(--ink); }
 
     .shortcut-step-copy strong,
     .shortcut-step-copy span { display: block; }
@@ -863,6 +889,21 @@
   <div class="page page-cluster">
     <header class="topbar">
       <a class="brand" href="https://thinkpool-io.github.io/mockups/slopstream-minimal.html" aria-label="SlopStream home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <defs>
+              <linearGradient id="slopstream-icon-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1a3c70" />
+                <stop offset="0.6" stop-color="#091426" />
+                <stop offset="1" stop-color="#050812" />
+              </linearGradient>
+            </defs>
+            <rect width="200" height="200" rx="44" fill="url(#slopstream-icon-bg)" />
+            <path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff" />
+            <rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff" />
+          </svg>
+        </span>
         <span class="brand-name">SlopStream</span>
       </a>
     </header>
@@ -939,15 +980,30 @@
     <p class="shortcut-guide-intro">SlopStream lives in the Share menu inside TikTok and Instagram.</p>
     <ol class="shortcut-steps">
       <li class="shortcut-step">
-        <span class="shortcut-step-number">1</span>
+        <span class="shortcut-step-art" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <path class="step-line" d="m9 11 4-4 4 4-4 4-4-4Zm6 10 4-4 4 4-4 4-4-4Zm-6 0 4-4m6-6 4-4M8 16h16" />
+          </svg>
+        </span>
         <span class="shortcut-step-copy"><strong>Open the signed Shortcut</strong><span>Safari opens Apple Shortcuts</span></span>
       </li>
       <li class="shortcut-step">
-        <span class="shortcut-step-number">2</span>
+        <span class="shortcut-step-art" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <rect class="step-line" x="7" y="7" width="18" height="18" rx="5" />
+            <path class="step-line" d="M16 11v10m-5-5h10" />
+          </svg>
+        </span>
         <span class="shortcut-step-copy"><strong>Add the Shortcut</strong><span>Review it, then choose Add Shortcut</span></span>
       </li>
       <li class="shortcut-step">
-        <span class="shortcut-step-number">3</span>
+        <span class="shortcut-step-art" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <path class="ghost-body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z" />
+            <rect class="ghost-eye" x="41" y="42" width="11" height="21" rx="5.5" />
+            <rect class="ghost-eye" x="68" y="42" width="11" height="21" rx="5.5" />
+          </svg>
+        </span>
         <span class="shortcut-step-copy"><strong>Share any supported video</strong><span>Choose Share with SlopStream</span></span>
       </li>
     </ol>
