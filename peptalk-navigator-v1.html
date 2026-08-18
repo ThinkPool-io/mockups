@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peptalk Navigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: hsl(45 24% 96%);
+    --surface: hsl(48 33% 99%);
+    --surface-quiet: hsl(44 22% 93%);
+    --surface-warm: hsl(151 18% 93%);
+    --ink: hsl(158 12% 13%);
+    --ink-soft: hsl(158 8% 31%);
+    --muted: hsl(158 6% 44%);
+    --faint: hsl(158 7% 58%);
+    --line: hsl(46 12% 83%);
+    --line-strong: hsl(42 11% 72%);
+    --accent: hsl(158 30% 34%);
+    --accent-dark: hsl(158 37% 24%);
+    --accent-wash: hsl(153 19% 91%);
+    --positive: hsl(151 24% 36%);
+    --positive-wash: hsl(145 21% 92%);
+    --caution: hsl(38 72% 35%);
+    --caution-wash: hsl(41 65% 91%);
+    --danger: hsl(5 50% 45%);
+    --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --font-display: "Newsreader", Georgia, serif;
+    --font-mono: "IBM Plex Mono", monospace;
+    --shadow: 0 1px 2px hsl(158 12% 13% / .04), 0 10px 36px hsl(158 12% 13% / .035);
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--canvas); scroll-behavior: smooth; }
+  body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  button, input { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  button { color: inherit; }
+  a { color: inherit; }
+  svg { display: block; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .app { min-height: 100vh; display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+  .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; width: 232px; display: flex; flex-direction: column; border-right: 1px solid var(--line); background: var(--surface); }
+  .brand { height: 76px; display: flex; align-items: center; gap: 11px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+  .brand-mark { width: 31px; height: 31px; display: grid; place-items: center; border: 1px solid var(--ink); border-radius: 9px; transform: rotate(45deg); }
+  .brand-mark span { width: 10px; height: 10px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); }
+  .brand-copy { display: flex; flex-direction: column; line-height: 1; }
+  .brand-copy strong { font: 600 19px/1 var(--font-display); letter-spacing: -.02em; }
+  .brand-copy span { margin-top: 5px; color: var(--muted); font: 500 8px/1 var(--font-mono); letter-spacing: .18em; text-transform: uppercase; }
+
+  .sidebar-scroll { flex: 1; overflow: auto; padding: 20px 14px; scrollbar-width: thin; }
+  .nav-label { margin: 0 10px 8px; color: var(--faint); font: 500 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .nav-stack { display: grid; gap: 3px; }
+  .nav-button { width: 100%; min-height: 42px; display: flex; align-items: center; gap: 11px; padding: 0 11px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-soft); cursor: pointer; text-align: left; transition: color 160ms var(--ease), background 160ms var(--ease); }
+  .nav-button svg { width: 16px; height: 16px; color: var(--muted); stroke-width: 1.7; }
+  .nav-button span { flex: 1; font-size: 14px; font-weight: 600; }
+  .nav-button b { color: var(--faint); font: 500 10px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+  .nav-button:hover { background: var(--surface-quiet); color: var(--ink); }
+  .nav-button.is-active { background: var(--accent-wash); color: var(--accent-dark); }
+  .nav-button.is-active svg { color: var(--accent); }
+  .nav-gap { height: 23px; }
+  .category-mini { min-height: 38px; }
+  .category-mini span { font-size: 13px; font-weight: 500; }
+
+  .sidebar-foot { margin-top: auto; padding: 16px 14px; border-top: 1px solid var(--line); }
+  .review-note { padding: 12px; border-radius: 9px; background: var(--surface-quiet); color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+  .review-note strong { display: block; margin-bottom: 3px; color: var(--ink); font-size: 12px; }
+
+  .shell { grid-column: 2; min-width: 0; }
+  .topbar { position: sticky; top: 0; z-index: 15; height: 76px; display: flex; align-items: center; padding: 0 40px; border-bottom: 1px solid var(--line); background: hsl(45 24% 96% / .94); backdrop-filter: blur(10px); }
+  .mobile-menu { display: none; }
+  .global-search { width: min(500px, 50vw); position: relative; }
+  .global-search svg { position: absolute; left: 14px; top: 50%; width: 17px; height: 17px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
+  .global-search input { width: 100%; height: 42px; padding: 0 42px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); box-shadow: 0 1px 1px hsl(158 12% 13% / .02); }
+  .global-search input::placeholder { color: var(--faint); }
+  .shortcut { position: absolute; right: 10px; top: 50%; padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; color: var(--faint); font: 500 9px/1 var(--font-mono); transform: translateY(-50%); }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .icon-button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; transition: background 160ms var(--ease), border-color 160ms var(--ease); }
+  .icon-button:hover { background: var(--surface-quiet); border-color: var(--line-strong); }
+  .icon-button svg { width: 18px; height: 18px; stroke-width: 1.7; }
+  .safety-button { height: 42px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; }
+  .safety-button span { width: 7px; height: 7px; border-radius: 50%; background: var(--positive); }
+
+  .content { width: min(1180px, calc(100% - 80px)); margin: 0 auto; padding: 48px 0 96px; }
+  .page { animation: page-in 220ms var(--ease) both; }
+  @keyframes page-in { from { opacity: 0; } to { opacity: 1; } }
+  .eyebrow { margin: 0 0 10px; color: var(--accent-dark); font: 500 10px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 { max-width: 760px; margin-bottom: 12px; font: 600 clamp(38px, 4vw, 58px)/.98 var(--font-display); letter-spacing: -.035em; }
+  h2 { margin-bottom: 0; font: 600 27px/1.1 var(--font-display); letter-spacing: -.02em; }
+  h3 { margin-bottom: 0; font-size: 15px; line-height: 1.3; }
+  .lede { max-width: 660px; margin-bottom: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+  .page-head { margin-bottom: 38px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  .page-head-actions { flex: none; display: flex; gap: 8px; }
+  .button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; transition: color 160ms var(--ease), background 160ms var(--ease), border-color 160ms var(--ease); }
+  .button:hover { background: var(--surface-quiet); }
+  .button.primary { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+  .button.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+  .resume-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; margin-bottom: 44px; padding: 23px 26px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); box-shadow: var(--shadow); cursor: pointer; text-align: left; }
+  .resume-card:hover { border-color: var(--line-strong); }
+  .resume-card .meta { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+  .resume-card .meta span:first-child { color: var(--positive); font-weight: 700; }
+  .resume-card strong { display: block; margin-bottom: 4px; font: 600 22px/1.15 var(--font-display); }
+  .resume-card p { max-width: 710px; margin-bottom: 0; color: var(--ink-soft); font-size: 14px; }
+  .resume-card .arrow { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--surface-quiet); }
+  .resume-card .arrow svg { width: 17px; height: 17px; }
+
+  .section { margin-top: 44px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+  .section-head p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+  .text-link { border: 0; background: none; color: var(--accent-dark); cursor: pointer; font-size: 13px; font-weight: 700; }
+  .category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .category-card { min-height: 150px; position: relative; padding: 22px; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); cursor: pointer; text-align: left; transition: background 160ms var(--ease); }
+  .category-card:hover { background: var(--surface-warm); }
+  .category-card .count { display: block; margin-bottom: 24px; color: var(--faint); font: 500 10px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+  .category-card strong { display: block; margin-bottom: 5px; font: 600 19px/1.15 var(--font-display); }
+  .category-card p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+  .category-card svg { position: absolute; right: 18px; top: 20px; width: 16px; height: 16px; color: var(--faint); }
+
+  .topic-table { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  .topic-row { width: 100%; min-height: 68px; display: grid; grid-template-columns: minmax(220px, 1.2fr) minmax(190px, 1fr) 130px 90px; align-items: center; gap: 18px; padding: 0 20px; border: 0; border-bottom: 1px solid var(--line); background: transparent; cursor: pointer; text-align: left; }
+  .topic-row:last-child { border-bottom: 0; }
+  .topic-row:hover { background: var(--surface-quiet); }
+  .topic-name strong { display: block; margin-bottom: 2px; font-size: 14px; }
+  .topic-name span, .topic-type { color: var(--muted); font-size: 12px; }
+  .status { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-soft); font-size: 12px; }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--positive); }
+  .status.low::before { background: var(--caution); }
+  .paper-count { color: var(--muted); font: 500 11px/1 var(--font-mono); text-align: right; font-variant-numeric: tabular-nums; }
+
+  .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; color: var(--muted); font-size: 12px; }
+  .breadcrumb button { padding: 0; border: 0; background: none; color: var(--accent-dark); cursor: pointer; }
+  .category-hero { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 40px; margin-bottom: 34px; }
+  .category-stats { display: grid; grid-template-columns: 1fr 1fr; align-self: end; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+  .category-stats div { padding: 17px; }
+  .category-stats div + div { border-left: 1px solid var(--line); }
+  .category-stats strong { display: block; font: 600 25px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+  .category-stats span { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+  .filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .filter-chip { min-height: 35px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink-soft); cursor: pointer; font-size: 12px; font-weight: 600; }
+  .filter-chip.is-active { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+
+  .article-layout { display: grid; grid-template-columns: minmax(0, 760px) 220px; gap: 64px; justify-content: space-between; }
+  .article-head { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .article-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+  .article-title-row h1 { margin-bottom: 8px; }
+  .article-subtitle { margin: 0; color: var(--muted); font-size: 14px; }
+  .bookmark { flex: none; }
+  .fact-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 28px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  .fact { min-height: 92px; padding: 17px; }
+  .fact + .fact { border-left: 1px solid var(--line); }
+  .fact span { display: block; margin-bottom: 9px; color: var(--faint); font: 500 9px/1 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+  .fact strong { display: block; font-size: 13px; line-height: 1.35; }
+  .fact strong.warning { color: var(--danger); }
+
+  .summary-card { margin-bottom: 24px; padding: 24px 26px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .summary-card h2 { margin-bottom: 12px; }
+  .summary-card p { max-width: 65ch; margin-bottom: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.7; }
+  .evidence-callout { display: grid; grid-template-columns: auto 1fr; gap: 15px; margin-bottom: 24px; padding: 18px 20px; border: 1px solid hsl(38 44% 75%); border-radius: 11px; background: var(--caution-wash); }
+  .evidence-callout .signal { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: hsl(38 55% 84%); color: var(--caution); font-weight: 800; }
+  .evidence-callout strong { display: block; margin-bottom: 3px; font-size: 13px; }
+  .evidence-callout p { margin: 0; color: var(--ink-soft); font-size: 13px; }
+
+  .accordion { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  details + details { border-top: 1px solid var(--line); }
+  summary { min-height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 20px; cursor: pointer; list-style: none; font-size: 14px; font-weight: 700; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; margin-left: auto; color: var(--muted); font-size: 18px; font-weight: 400; }
+  details[open] summary::after { content: "−"; }
+  .detail-body { padding: 0 20px 21px; color: var(--ink-soft); font-size: 14px; }
+  .detail-body p { max-width: 65ch; margin-bottom: 0; }
+  .detail-body ul { margin: 0; padding-left: 18px; }
+  .detail-body li + li { margin-top: 6px; }
+  .paper-list { display: grid; gap: 0; }
+  .paper { display: grid; grid-template-columns: 47px minmax(0, 1fr) auto; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .paper:first-child { border-top: 0; padding-top: 4px; }
+  .paper-year { color: var(--faint); font: 500 10px/1.5 var(--font-mono); }
+  .paper strong { display: block; margin-bottom: 4px; color: var(--ink); font-size: 13px; line-height: 1.35; }
+  .paper p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+  .paper svg { width: 15px; height: 15px; color: var(--faint); }
+
+  .toc { position: sticky; top: 105px; align-self: start; }
+  .toc-label { margin-bottom: 12px; color: var(--faint); font: 500 9px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .toc a { display: block; padding: 7px 0 7px 12px; border-left: 1px solid var(--line); color: var(--muted); font-size: 12px; text-decoration: none; }
+  .toc a:first-of-type { border-left-color: var(--accent); color: var(--ink); font-weight: 700; }
+  .toc-note { margin-top: 24px; padding: 14px; border-radius: 9px; background: var(--positive-wash); color: var(--ink-soft); font-size: 11.5px; }
+  .toc-note strong { display: block; margin-bottom: 3px; color: var(--positive); }
+
+  .mobile-nav { display: none; }
+  .mobile-drawer { display: none; }
+
+  @media (max-width: 1050px) {
+    .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .article-layout { grid-template-columns: minmax(0, 1fr); }
+    .toc { display: none; }
+    .topic-row { grid-template-columns: minmax(210px, 1fr) 150px 90px; }
+    .topic-type { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    body { font-size: 14px; }
+    .app { display: block; }
+    .sidebar { display: none; }
+    .shell { display: block; }
+    .topbar { height: 64px; padding: 0 16px; background: hsl(45 24% 96% / .98); }
+    .mobile-menu { width: 42px; height: 42px; display: grid; place-items: center; margin-right: 10px; border: 0; background: transparent; cursor: pointer; }
+    .mobile-menu svg { width: 20px; height: 20px; }
+    .global-search { flex: 1; width: auto; }
+    .global-search input { height: 40px; padding-left: 38px; font-size: 13px; }
+    .shortcut, .safety-button, .top-actions .icon-button:first-child { display: none; }
+    .top-actions { margin-left: 8px; }
+    .icon-button { width: 40px; height: 40px; }
+    .content { width: auto; margin: 0; padding: 30px 18px 108px; }
+    .page-head { display: block; margin-bottom: 28px; }
+    .page-head-actions { margin-top: 20px; }
+    h1 { font-size: 39px; }
+    .lede { font-size: 15px; }
+    .resume-card { grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 36px; padding: 19px; }
+    .resume-card strong { font-size: 20px; }
+    .resume-card p { display: none; }
+    .resume-card .meta { flex-wrap: wrap; font-size: 11px; }
+    .section { margin-top: 36px; }
+    .section-head { align-items: flex-end; }
+    .section-head p { display: none; }
+    .category-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .category-card { min-height: 136px; padding: 17px; }
+    .category-card .count { margin-bottom: 22px; }
+    .category-card strong { font-size: 17px; }
+    .category-card p { display: none; }
+    .category-card svg { top: 16px; right: 14px; }
+    .topic-table { border-radius: 10px; }
+    .topic-row { min-height: 64px; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 0 15px; }
+    .topic-type, .status { display: none; }
+    .paper-count { font-size: 10px; }
+    .category-hero { display: block; margin-bottom: 26px; }
+    .category-stats { margin-top: 22px; }
+    .filter-row { overflow-x: auto; padding-bottom: 3px; scrollbar-width: none; }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-chip { flex: none; }
+    .article-title-row { align-items: center; }
+    .article-head { padding-bottom: 22px; }
+    .fact-grid { grid-template-columns: 1fr; }
+    .fact { min-height: 0; display: grid; grid-template-columns: 105px 1fr; align-items: center; gap: 12px; padding: 14px 16px; }
+    .fact + .fact { border-left: 0; border-top: 1px solid var(--line); }
+    .fact span { margin: 0; }
+    .summary-card { padding: 20px; }
+    .summary-card h2 { font-size: 24px; }
+    .evidence-callout { padding: 16px; }
+    summary { min-height: 56px; padding: 0 16px; }
+    .detail-body { padding: 0 16px 18px; }
+    .paper { grid-template-columns: 40px minmax(0, 1fr) 15px; gap: 10px; }
+    .mobile-nav { position: fixed; inset: auto 0 0; z-index: 30; height: 68px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); background: hsl(48 33% 99% / .98); padding-bottom: env(safe-area-inset-bottom); }
+    .mobile-nav button { display: grid; place-items: center; align-content: center; gap: 4px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 600; }
+    .mobile-nav svg { width: 18px; height: 18px; }
+    .mobile-nav button.is-active { color: var(--accent-dark); }
+    .mobile-drawer { position: fixed; inset: 0; z-index: 50; background: hsl(158 12% 13% / .3); }
+    .mobile-drawer.is-open { display: block; }
+    .drawer-panel { width: min(318px, 84vw); height: 100%; overflow: auto; padding: 18px; background: var(--surface); box-shadow: 14px 0 40px hsl(158 12% 13% / .15); animation: drawer-in 220ms var(--ease) both; }
+    @keyframes drawer-in { from { transform: translateX(-18px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .drawer-head { height: 48px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .drawer-head button { width: 42px; height: 42px; border: 0; background: transparent; font-size: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Primary navigation">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><span></span></div>
+      <div class="brand-copy"><strong>peptalk</strong><span>knowledge base</span></div>
+    </div>
+    <div class="sidebar-scroll">
+      <p class="nav-label">Workspace</p>
+      <nav class="nav-stack">
+        <button class="nav-button is-active" data-view="home" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+          <span>Discover</span>
+        </button>
+        <button class="nav-button" data-view="category" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <span>All topics</span><b>148</b>
+        </button>
+        <button class="nav-button" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 19V6a2 2 0 0 1 2-2h12v14H7a2 2 0 0 0 0 4h12"/></svg>
+          <span>Saved reading</span><b>6</b>
+        </button>
+        <button class="nav-button" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 3h14v18l-7-4-7 4z"/></svg>
+          <span>Research library</span><b>381</b>
+        </button>
+      </nav>
+
+      <div class="nav-gap"></div>
+      <p class="nav-label">Browse</p>
+      <nav class="nav-stack">
+        <button class="nav-button category-mini" data-view="category" type="button"><span>Fat loss &amp; metabolic</span><b>18</b></button>
+        <button class="nav-button category-mini" type="button"><span>Nutrition &amp; supplements</span><b>48</b></button>
+        <button class="nav-button category-mini" data-view="category" type="button"><span>Recovery &amp; healing</span><b>9</b></button>
+        <button class="nav-button category-mini" type="button"><span>Brain &amp; sleep</span><b>10</b></button>
+        <button class="nav-button category-mini" type="button"><span>Hormones &amp; fertility</span><b>13</b></button>
+        <button class="nav-button category-mini" type="button"><span>View all categories</span><b>14</b></button>
+      </nav>
+    </div>
+    <div class="sidebar-foot">
+      <div class="review-note"><strong>Evidence reviewed</strong>17 August 2026 · 381 papers indexed</div>
+    </div>
+  </aside>
+
+  <main class="shell">
+    <header class="topbar">
+      <button class="mobile-menu" id="open-drawer" type="button" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <label class="global-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="search" type="search" placeholder="Search compounds, nutrients, goals…" aria-label="Search Peptalk">
+        <span class="shortcut">⌘ K</span>
+      </label>
+      <div class="top-actions">
+        <button class="icon-button" type="button" aria-label="Open calculators"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m3 0h3M8 15h2m3 0h3"/></svg></button>
+        <button class="safety-button" type="button"><span></span>Safety rules</button>
+        <button class="icon-button" type="button" aria-label="Open reading settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 7h16M7 12h10M9 17h6"/></svg></button>
+      </div>
+    </header>
+
+    <div class="content" id="content" aria-live="polite"></div>
+  </main>
+</div>
+
+<div class="mobile-drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="Navigation">
+    <div class="drawer-head">
+      <div class="brand-copy"><strong>peptalk</strong><span>knowledge base</span></div>
+      <button id="close-drawer" type="button" aria-label="Close navigation">×</button>
+    </div>
+    <p class="nav-label">Browse</p>
+    <nav class="nav-stack">
+      <button class="nav-button is-active" data-view="home" type="button"><span>Discover</span></button>
+      <button class="nav-button" data-view="category" type="button"><span>All topics</span><b>148</b></button>
+      <button class="nav-button" data-view="category" type="button"><span>Recovery &amp; healing</span><b>9</b></button>
+      <button class="nav-button" type="button"><span>Nutrition &amp; supplements</span><b>48</b></button>
+      <button class="nav-button" type="button"><span>Fat loss &amp; metabolic</span><b>18</b></button>
+      <button class="nav-button" type="button"><span>Brain &amp; sleep</span><b>10</b></button>
+      <button class="nav-button" type="button"><span>Hormones &amp; fertility</span><b>13</b></button>
+      <button class="nav-button" type="button"><span>All 14 categories</span></button>
+    </nav>
+  </div>
+</div>
+
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <button class="is-active" data-view="home" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>Discover</button>
+  <button data-view="category" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Topics</button>
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m3 0h3M8 15h2m3 0h3"/></svg>Tools</button>
+  <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 3h14v18l-7-4-7 4z"/></svg>Saved</button>
+</nav>
+
+<template id="home-template">
+  <section class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Peptalk knowledge base</p>
+        <h1>Find the signal.<br>Skip the hype.</h1>
+        <p class="lede">Plain-language evidence for peptides, hormones, nutrients, and supplements. Start with a topic, a goal, or a question.</p>
+      </div>
+      <div class="page-head-actions"><button class="button primary" type="button" data-view="category">Browse all 148 topics</button></div>
+    </div>
+
+    <button class="resume-card" type="button" data-view="article">
+      <div>
+        <div class="meta"><span>Continue reading</span><span>·</span><span>4 minute overview</span></div>
+        <strong>BPC-157</strong>
+        <p>Experimental gastric peptide fragment with no approved therapeutic indication and very limited human evidence.</p>
+      </div>
+      <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></span>
+    </button>
+
+    <section class="section">
+      <div class="section-head"><div><p class="eyebrow">Browse by category</p><h2>Choose a clear starting point</h2></div><p>14 focused collections</p></div>
+      <div class="category-grid">
+        <button class="category-card" type="button"><span class="count">18 topics</span><strong>Fat loss &amp; metabolic</strong><p>Approved medicines and investigational weight-management compounds.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="category-card" type="button"><span class="count">48 topics</span><strong>Nutrition &amp; supplements</strong><p>Macronutrients, vitamins, minerals, and common supplements.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="category-card" type="button" data-view="category"><span class="count">9 topics</span><strong>Recovery &amp; healing</strong><p>Tissue repair and cosmetic claims, separated from human evidence.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="category-card" type="button"><span class="count">10 topics</span><strong>Brain &amp; sleep</strong><p>Nootropics, sleep claims, and neurologic peptide research.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="category-card" type="button"><span class="count">13 topics</span><strong>Hormones &amp; fertility</strong><p>Specialist medicines and hormones requiring clinical monitoring.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+        <button class="category-card" type="button"><span class="count">12 topics</span><strong>Longevity &amp; mitochondrial</strong><p>Cellular energy and aging research with explicit limits.</p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 5 7 7-7 7"/></svg></button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><p class="eyebrow">Popular this week</p><h2>Frequently opened topics</h2></div><button class="text-link" type="button" data-view="category">See all topics</button></div>
+      <div class="topic-table">
+        <button class="topic-row" type="button" data-view="article"><span class="topic-name"><strong>BPC-157</strong><span>Experimental peptide fragment</span></span><span class="topic-type">Recovery &amp; healing</span><span class="status low">Very low evidence</span><span class="paper-count">3 papers</span></button>
+        <button class="topic-row" type="button"><span class="topic-name"><strong>Semaglutide</strong><span>GLP-1 receptor agonist</span></span><span class="topic-type">Fat loss &amp; metabolic</span><span class="status">High evidence</span><span class="paper-count">3 papers</span></button>
+        <button class="topic-row" type="button"><span class="topic-name"><strong>Creatine monohydrate</strong><span>Ergogenic supplement</span></span><span class="topic-type">Nutrition &amp; supplements</span><span class="status">Established</span><span class="paper-count">3 papers</span></button>
+      </div>
+    </section>
+  </section>
+</template>
+
+<template id="category-template">
+  <section class="page">
+    <div class="breadcrumb"><button type="button" data-view="home">Discover</button><span>/</span><span>Recovery &amp; healing</span></div>
+    <div class="category-hero">
+      <div><p class="eyebrow">Wiki category</p><h1>Recovery &amp; healing</h1><p class="lede">Tissue-repair, skin, and antimicrobial research where human evidence often trails marketing claims.</p></div>
+      <div class="category-stats"><div><strong>9</strong><span>topics</span></div><div><strong>21</strong><span>linked papers</span></div></div>
+    </div>
+    <div class="filter-row"><button class="filter-chip is-active" type="button">All topics</button><button class="filter-chip" type="button">Human evidence</button><button class="filter-chip" type="button">Research only</button><button class="filter-chip" type="button">Cosmetic</button></div>
+    <div class="topic-table">
+      <button class="topic-row" type="button" data-view="article"><span class="topic-name"><strong>BPC-157</strong><span>Experimental gastric peptide fragment</span></span><span class="topic-type">No approved indication</span><span class="status low">Very low evidence</span><span class="paper-count">3 papers</span></button>
+      <button class="topic-row" type="button"><span class="topic-name"><strong>TB-500</strong><span>Thymosin beta-4 fragment</span></span><span class="topic-type">No approved indication</span><span class="status low">Very low evidence</span><span class="paper-count">3 papers</span></button>
+      <button class="topic-row" type="button"><span class="topic-name"><strong>GHK-Cu</strong><span>Copper-binding peptide</span></span><span class="topic-type">Cosmetic research</span><span class="status low">Limited evidence</span><span class="paper-count">3 papers</span></button>
+      <button class="topic-row" type="button"><span class="topic-name"><strong>SNAP-8</strong><span>Acetyl octapeptide-3</span></span><span class="topic-type">Topical cosmetic</span><span class="status low">Limited evidence</span><span class="paper-count">3 papers</span></button>
+      <button class="topic-row" type="button"><span class="topic-name"><strong>LL-37</strong><span>Antimicrobial peptide</span></span><span class="topic-type">Experimental research</span><span class="status low">Preclinical</span><span class="paper-count">3 papers</span></button>
+    </div>
+  </section>
+</template>
+
+<template id="article-template">
+  <section class="page">
+    <div class="breadcrumb"><button type="button" data-view="home">Discover</button><span>/</span><button type="button" data-view="category">Recovery &amp; healing</button><span>/</span><span>BPC-157</span></div>
+    <div class="article-layout">
+      <article>
+        <header class="article-head">
+          <p class="eyebrow">Experimental peptide · Reviewed 17 August 2026</p>
+          <div class="article-title-row">
+            <div><h1>BPC-157</h1><p class="article-subtitle">Also known as Body Protection Compound 157</p></div>
+            <button class="icon-button bookmark" type="button" aria-label="Save BPC-157"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 3h14v18l-7-4-7 4z"/></svg></button>
+          </div>
+        </header>
+
+        <div class="fact-grid">
+          <div class="fact"><span>Evidence</span><strong>Very low</strong></div>
+          <div class="fact"><span>Status</span><strong class="warning">Not FDA-approved</strong></div>
+          <div class="fact"><span>Human dose</span><strong>Not established</strong></div>
+        </div>
+
+        <section class="summary-card" id="overview"><h2>What to know</h2><p>BPC-157 is an experimental gastric peptide fragment promoted for tissue repair. There is no FDA-approved therapeutic indication, approved route, or evidence-based human dose. Most positive claims come from laboratory or animal work, not controlled human trials.</p></section>
+
+        <div class="evidence-callout"><span class="signal">!</span><div><strong>No self-administration protocol</strong><p>Current evidence does not establish a safe consumer dose, schedule, route, or stack. Product quality and route-specific harm remain uncertain.</p></div></div>
+
+        <div class="accordion">
+          <details open id="evidence"><summary>Evidence summary</summary><div class="detail-body"><p>Published research includes reviews, preclinical studies, and limited uncontrolled human observations. This is not enough to establish clinical effectiveness for injury recovery, pain, or gastrointestinal disease.</p></div></details>
+          <details id="use"><summary>When is it used?</summary><div class="detail-body"><p>There is no approved clinical use. Online use for tendon, muscle, joint, or gut recovery is experimental and should not be presented as established treatment.</p></div></details>
+          <details id="safety"><summary>Safety and interactions</summary><div class="detail-body"><ul><li>Human adverse-effect frequency is unknown.</li><li>Risks include immunogenicity, peptide impurities, and unknown systemic effects.</li><li>No clinical evidence establishes a beneficial stack with TB-500 or other peptides.</li></ul></div></details>
+          <details id="research"><summary>Research papers <span style="color:var(--muted);font-weight:500">(3)</span></summary><div class="detail-body paper-list">
+            <a class="paper" href="https://pubmed.ncbi.nlm.nih.gov/40756949/" target="_blank" rel="noreferrer"><span class="paper-year">2025</span><span><strong>Emerging Use of BPC-157 in Orthopaedic Sports Medicine</strong><p>Systematic review focused on musculoskeletal outcomes and tissue repair.</p></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 4h6v6M20 4l-9 9M19 14v6H4V5h6"/></svg></a>
+            <a class="paper" href="https://pubmed.ncbi.nlm.nih.gov/40005999/" target="_blank" rel="noreferrer"><span class="paper-year">2025</span><span><strong>Multifunctionality and Possible Medical Application of BPC 157</strong><p>Literature and patent review covering proposed applications and limits.</p></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 4h6v6M20 4l-9 9M19 14v6H4V5h6"/></svg></a>
+            <a class="paper" href="https://pubmed.ncbi.nlm.nih.gov/34324435/" target="_blank" rel="noreferrer"><span class="paper-year">2021</span><span><strong>Intra-Articular Injection of BPC 157 for Knee Pain</strong><p>Uncontrolled human report. It cannot establish efficacy or broad safety.</p></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 4h6v6M20 4l-9 9M19 14v6H4V5h6"/></svg></a>
+          </div></details>
+        </div>
+      </article>
+      <aside class="toc" aria-label="On this page">
+        <p class="toc-label">On this page</p>
+        <a href="#overview">What to know</a><a href="#evidence">Evidence summary</a><a href="#use">When is it used?</a><a href="#safety">Safety</a><a href="#research">Research papers</a>
+        <div class="toc-note"><strong>Evidence-first</strong>Recommendations describe evidence limits. They do not replace individual medical advice.</div>
+      </aside>
+    </div>
+  </section>
+</template>
+
+<script>
+  const content = document.querySelector('#content');
+  const drawer = document.querySelector('#drawer');
+  const templates = {
+    home: document.querySelector('#home-template'),
+    category: document.querySelector('#category-template'),
+    article: document.querySelector('#article-template')
+  };
+
+  function setView(view) {
+    const template = templates[view] || templates.home;
+    content.replaceChildren(template.content.cloneNode(true));
+    document.querySelectorAll('[data-view]').forEach((node) => node.classList.toggle('is-active', node.dataset.view === view));
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-view]');
+    if (trigger) setView(trigger.dataset.view);
+  });
+
+  document.querySelector('#open-drawer').addEventListener('click', () => {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+  });
+  document.querySelector('#close-drawer').addEventListener('click', () => {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+  });
+  drawer.addEventListener('click', (event) => {
+    if (event.target === drawer) {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+  });
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      document.querySelector('#search').focus();
+    }
+    if (event.key === 'Escape') {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  setView('home');
+</script>
+</body>
+</html>
