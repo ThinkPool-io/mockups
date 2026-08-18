@@ -350,7 +350,7 @@
       const candidate = /^https?:\/\//i.test(value) ? value : 'https://' + value;
       const url = new URL(candidate);
       const host = url.hostname.toLowerCase();
-      if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
+      if (['tiktok.com', 'www.tiktok.com', 'm.tiktok.com', 'vm.tiktok.com', 'vt.tiktok.com'].includes(host)) {
         return { platform: 'tiktok', url: url.origin + url.pathname };
       }
       if (host === 'instagram.com' || host.endsWith('.instagram.com') || host === 'instagr.am' || host.endsWith('.instagr.am')) {
@@ -373,15 +373,14 @@
   function trustedMediaUrl(value) {
     try {
       const url = new URL(value);
-      const host = url.hostname.toLowerCase();
-      const allowed = [
-        'tiktokcdn.com',
-        'tiktokcdn-us.com',
-        'tiktokcdn-eu.com',
-        'muscdn.com',
-        'tikwm.com'
-      ];
-      return url.protocol === 'https:' && allowed.some((domain) => host === domain || host.endsWith('.' + domain));
+      const keys = [...url.searchParams.keys()];
+      return url.protocol === 'https:'
+        && url.hostname.toLowerCase() === 'slopstream-resolver.vercel.app'
+        && !url.port
+        && url.pathname === '/api/tiktok-media'
+        && keys.length === 1
+        && keys[0] === 'ticket'
+        && Boolean(url.searchParams.get('ticket'));
     } catch {
       return false;
     }

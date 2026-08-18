@@ -1061,7 +1061,7 @@
         const candidate = /^https?:\/\//i.test(value) ? value : 'https://' + value;
         const url = new URL(candidate);
         const host = url.hostname.toLowerCase();
-        if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
+        if (['tiktok.com', 'www.tiktok.com', 'm.tiktok.com', 'vm.tiktok.com', 'vt.tiktok.com'].includes(host)) {
           return url.origin + url.pathname;
         }
         if (host === 'instagram.com' || host.endsWith('.instagram.com') || host === 'instagr.am' || host.endsWith('.instagr.am')) {
