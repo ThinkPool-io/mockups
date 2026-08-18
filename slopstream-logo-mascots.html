@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Ten character-led SlopStream logo options inspired by the Lynx icon system" />
+  <title>SlopStream · Mascot directions</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: rgb(9 13 20);
+      --surface: rgb(15 22 33);
+      --line: rgb(43 55 72);
+      --ink: rgb(243 247 255);
+      --muted: rgb(181 191 206);
+      --faint: rgb(130 144 164);
+      --blue: rgb(67 140 248);
+      --blue-hi: rgb(93 158 255);
+      --cyan: rgb(121 223 255);
+      --face: rgb(11 21 39);
+      --mouth: rgb(158 177 203);
+      --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Newsreader", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 50% -18%, rgb(40 118 247 / 0.16), transparent 34rem),
+        var(--bg);
+    }
+
+    .page {
+      width: min(100% - 48px, 1320px);
+      margin: 0 auto;
+      padding: 58px 0 68px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      align-items: end;
+      gap: 36px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--blue-hi);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(44px, 5.2vw, 74px);
+      font-weight: 400;
+      line-height: 0.94;
+      letter-spacing: -0.052em;
+    }
+
+    .brief {
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgb(15 22 33 / 0.94);
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--faint);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+    }
+
+    .crop {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgb(67 140 248 / 0.42);
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(5 8 18));
+    }
+
+    .crop svg { width: 34px; height: 34px; }
+
+    .stage {
+      min-height: 150px;
+      display: grid;
+      place-items: center;
+      margin: 8px 0 2px;
+    }
+
+    .tile {
+      width: 128px;
+      height: 128px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgb(67 140 248 / 0.5);
+      border-radius: 29px;
+      background: linear-gradient(145deg, rgb(26 60 112), rgb(9 20 38) 58%, rgb(5 8 18));
+      box-shadow: 0 22px 44px rgb(0 0 0 / 0.3);
+    }
+
+    .tile svg { width: 104px; height: 104px; }
+
+    svg { display: block; overflow: visible; }
+    .body { fill: var(--face); stroke: var(--blue); stroke-width: 5.5; stroke-linecap: round; stroke-linejoin: round; }
+    .body-detail { fill: var(--blue-hi); opacity: 0.46; }
+    .eyes { fill: none; stroke: var(--ink); stroke-width: 6; stroke-linecap: round; }
+    .nose { fill: var(--cyan); }
+    .mouth { fill: none; stroke: var(--mouth); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    h2 {
+      margin: 12px 0 5px;
+      font-size: 16px;
+      font-weight: 720;
+      letter-spacing: -0.025em;
+    }
+
+    .idea {
+      min-height: 36px;
+      margin: 0;
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      font-weight: 720;
+      letter-spacing: -0.035em;
+    }
+
+    .lockup svg { width: 25px; height: 25px; flex: 0 0 auto; }
+
+    .note {
+      margin: 24px 0 0;
+      color: var(--faint);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .page { width: calc(100% - 24px); padding: 28px 0 34px; }
+      header { grid-template-columns: 1fr; gap: 14px; padding-bottom: 20px; }
+      h1 { font-size: 46px; }
+      .brief { max-width: 350px; font-size: 12px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+      .card { padding: 11px; border-radius: 17px; }
+      .meta { font-size: 8px; }
+      .crop { width: 32px; height: 32px; }
+      .crop svg { width: 27px; height: 27px; }
+      .stage { min-height: 108px; margin-top: 5px; }
+      .tile { width: 92px; height: 92px; border-radius: 21px; }
+      .tile svg { width: 75px; height: 75px; }
+      h2 { margin-top: 8px; font-size: 13px; }
+      .idea { min-height: 39px; font-size: 9px; line-height: 1.38; }
+      .lockup { gap: 5px; margin-top: 10px; padding-top: 9px; font-size: 10px; }
+      .lockup svg { width: 18px; height: 18px; }
+      .note { margin-top: 16px; font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity · Mascot study</p>
+        <h1>A creature of its own</h1>
+      </div>
+      <p class="brief">The Lynx family logic, rebuilt for SlopStream: one memorable character, one expressive face, and a silhouette that survives a portfolio tile</p>
+    </header>
+
+    <section class="grid" aria-label="Ten SlopStream mascot logo options">
+      <article class="card">
+        <div class="meta"><span>01</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M60 13C47 34 27 48 27 74c0 22 15 34 33 34s33-12 33-34C93 48 73 34 60 13Z"/><path class="eyes" d="M40 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m60 76-6 5 6 5 6-5Z"/><path class="mouth" d="M60 86v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Drop mascot"><path class="body" d="M60 13C47 34 27 48 27 74c0 22 15 34 33 34s33-12 33-34C93 48 73 34 60 13Z"/><path class="body-detail" d="M60 25c-8 14-18 23-23 34 9-6 18-9 27-9 8 0 15 2 21 6-5-10-16-19-25-31Z"/><path class="eyes" d="M40 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m60 76-6 5 6 5 6-5Z"/><path class="mouth" d="M60 86v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Drop</h2><p class="idea">The clearest stream creature and strongest single silhouette</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M60 13C47 34 27 48 27 74c0 22 15 34 33 34s33-12 33-34C93 48 73 34 60 13Z"/><path class="eyes" d="M40 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m60 76-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>02</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M24 27q0-13 13-13h46q13 0 13 13v57q0 17-16 17H68v10H51v-10H39q-15 0-15-17Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/><path class="mouth" d="M60 83v7m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Melt mascot"><path class="body" d="M24 27q0-13 13-13h46q13 0 13 13v57q0 17-16 17H68v10H51v-10H39q-15 0-15-17Z"/><path class="body-detail" d="M24 29q0-15 15-15h42q15 0 15 15v14q-12-9-29-9-25 0-43 14Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/><path class="mouth" d="M60 83v7m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Melt</h2><p class="idea">A compact screen-like blob with one deliberate drip</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M24 27q0-13 13-13h46q13 0 13 13v57q0 17-16 17H68v10H51v-10H39q-15 0-15-17Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>03</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/><path class="mouth" d="M60 83v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Ghost mascot"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="body-detail" d="M25 47q10-30 35-30t35 30q-14-10-35-10T25 47Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/><path class="mouth" d="M60 83v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Ghost</h2><p class="idea">Content slips out of the platform and travels on its own</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 59q0-42 40-42t40 42v42l-13-10-13 10-14-10-14 10-13-10-13 10Z"/><path class="eyes" d="M40 60v-7m9 7V47m9 13v-9m22 9v-7m-9 7V47m-9 13v-9"/><path class="nose" d="m60 73-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>04</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 65q0-47 40-47t40 47q0 25-18 30v14l-13-12-9 13-9-13-13 12V95q-18-5-18-30Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/><path class="mouth" d="M60 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Jelly mascot"><path class="body" d="M20 65q0-47 40-47t40 47q0 25-18 30v14l-13-12-9 13-9-13-13 12V95q-18-5-18-30Z"/><path class="body-detail" d="M28 44q11-26 32-26t32 26q-13-9-32-9t-32 9Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/><path class="mouth" d="M60 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Jelly</h2><p class="idea">The most ownable stream-native creature in the set</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 65q0-47 40-47t40 47q0 25-18 30v14l-13-12-9 13-9-13-13 12V95q-18-5-18-30Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>05</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="body" cx="58" cy="62" r="40"/><circle class="body" cx="91" cy="28" r="11"/><path class="eyes" d="M38 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m58 76-6 5 6 5 6-5Z"/><path class="mouth" d="M58 86v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Bubble mascot"><circle class="body" cx="58" cy="62" r="40"/><circle class="body" cx="91" cy="28" r="11"/><path class="body-detail" d="M26 45q12-23 32-23 17 0 29 16-15-7-30-4-17 3-31 11Z"/><path class="eyes" d="M38 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m58 76-6 5 6 5 6-5Z"/><path class="mouth" d="M58 86v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Bubble</h2><p class="idea">A quieter mascot with a simple secondary cue</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="body" cx="58" cy="62" r="40"/><circle class="body" cx="91" cy="28" r="11"/><path class="eyes" d="M38 63v-7m9 7V50m9 13v-9m22 9v-7m-9 7V50m-9 13v-9"/><path class="nose" d="m58 76-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>06</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 48 31 36l-2-17 18 7L60 13l13 13 18-7-2 17 11 12-8 16 8 16-18 4-7 17-15-10-15 10-7-17-18-4 8-16Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/><path class="mouth" d="M60 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Splash mascot"><path class="body" d="M20 48 31 36l-2-17 18 7L60 13l13 13 18-7-2 17 11 12-8 16 8 16-18 4-7 17-15-10-15 10-7-17-18-4 8-16Z"/><path class="body-detail" d="M31 36 29 19l18 7 13-13 13 13 18-7-2 17q-13-10-29-10T31 36Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/><path class="mouth" d="M60 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Splash</h2><p class="idea">Highest-energy silhouette without becoming platform-specific</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M20 48 31 36l-2-17 18 7L60 13l13 13 18-7-2 17 11 12-8 16 8 16-18 4-7 17-15-10-15 10-7-17-18-4 8-16Z"/><path class="eyes" d="M40 62v-7m9 7V49m9 13v-9m22 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m60 75-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>07</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M15 73q7-29 32-29h26q25 0 32 29-5 28-45 31-40-3-45-31Z"/><path class="eyes" d="M39 72v-6m9 6V59m9 13v-8m24 8v-6m-9 6V59m-9 13v-8"/><path class="nose" d="m60 83-6 5 6 5 6-5Z"/><path class="mouth" d="M60 93v4m0 0q-7 5-14 2m14-2q7 5 14 2"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Puddle mascot"><path class="body" d="M15 73q7-29 32-29h26q25 0 32 29-5 28-45 31-40-3-45-31Z"/><path class="body-detail" d="M26 59q9-15 26-15h16q18 0 27 15-17-8-35-8t-34 8Z"/><path class="eyes" d="M39 72v-6m9 6V59m9 13v-8m24 8v-6m-9 6V59m-9 13v-8"/><path class="nose" d="m60 83-6 5 6 5 6-5Z"/><path class="mouth" d="M60 93v4m0 0q-7 5-14 2m14-2q7 5 14 2"/></svg></div></div>
+        <h2>Puddle</h2><p class="idea">Wide, calm, and unmistakably different from Lynx</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M15 73q7-29 32-29h26q25 0 32 29-5 28-45 31-40-3-45-31Z"/><path class="eyes" d="M39 72v-6m9 6V59m9 13v-8m24 8v-6m-9 6V59m-9 13v-8"/><path class="nose" d="m60 83-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>08</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M60 10q8 11 7 20 27 4 27 35v13q0 30-34 30T26 78V65q0-31 27-35-1-9 7-20Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/><path class="mouth" d="M60 87v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Capsule mascot"><path class="body" d="M60 10q8 11 7 20 27 4 27 35v13q0 30-34 30T26 78V65q0-31 27-35-1-9 7-20Z"/><path class="body-detail" d="M53 30q-1-9 7-20 8 11 7 20 15 2 22 13-14-7-29-7t-29 7q8-11 22-13Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/><path class="mouth" d="M60 87v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Capsule</h2><p class="idea">A disciplined vertical mascot with a small wave crest</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M60 10q8 11 7 20 27 4 27 35v13q0 30-34 30T26 78V65q0-31 27-35-1-9 7-20Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>09</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M24 47q0-31 35-31 25 0 37 19L83 47l13 12-13 12 13 12q-12 21-37 21-35 0-35-32Z"/><path class="eyes" d="M38 62v-7m9 7V49m9 13v-9m20 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m58 75-6 5 6 5 6-5Z"/><path class="mouth" d="M58 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Nibble mascot"><path class="body" d="M24 47q0-31 35-31 25 0 37 19L83 47l13 12-13 12 13 12q-12 21-37 21-35 0-35-32Z"/><path class="body-detail" d="M29 38q10-22 30-22 19 0 31 14-16-6-31-3-16 2-30 11Z"/><path class="eyes" d="M38 62v-7m9 7V49m9 13v-9m20 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m58 75-6 5 6 5 6-5Z"/><path class="mouth" d="M58 85v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Nibble</h2><p class="idea">A strange little content eater with a crisp edge rhythm</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M24 47q0-31 35-31 25 0 37 19L83 47l13 12-13 12 13 12q-12 21-37 21-35 0-35-32Z"/><path class="eyes" d="M38 62v-7m9 7V49m9 13v-9m20 9v-7m-9 7V49m-9 13v-9"/><path class="nose" d="m58 75-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+
+      <article class="card">
+        <div class="meta"><span>10</span><span class="crop"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M25 45 10 32l3 31 12 5q2 35 35 38 33-3 35-38l12-5 3-31-15 13q-12-22-35-22T25 45Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/><path class="mouth" d="M60 87v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></span></div>
+        <div class="stage"><div class="tile"><svg viewBox="0 0 120 120" role="img" aria-label="Streamling mascot"><path class="body" d="M25 45 10 32l3 31 12 5q2 35 35 38 33-3 35-38l12-5 3-31-15 13q-12-22-35-22T25 45Z"/><path class="body-detail" d="m10 32 15 13q12-22 35-22t35 22l15-13-3 31-12 5q-8-20-35-20T25 68l-12-5Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/><path class="mouth" d="M60 87v6m0 0q-8 7-16 3m16-3q8 7 16 3"/></svg></div></div>
+        <h2>Streamling</h2><p class="idea">The closest sibling to Lynx without borrowing the cat</p>
+        <div class="lockup"><svg viewBox="0 0 120 120" aria-hidden="true"><path class="body" d="M25 45 10 32l3 31 12 5q2 35 35 38 33-3 35-38l12-5 3-31-15 13q-12-22-35-22T25 45Z"/><path class="eyes" d="M40 64v-7m9 7V51m9 13v-9m22 9v-7m-9 7V51m-9 13v-9"/><path class="nose" d="m60 77-6 5 6 5 6-5Z"/></svg><span>SlopStream</span></div>
+      </article>
+    </section>
+
+    <p class="note">Every option is shown as a rounded tile, a circular portfolio crop, and a 25 px wordmark companion</p>
+  </main>
+</body>
+</html>
