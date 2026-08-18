@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Ten serious logo directions for SlopStream" />
+  <title>SlopStream · Logo directions</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: rgb(9 13 20);
+      --surface: rgb(15 22 33);
+      --surface-raised: rgb(20 29 42);
+      --line: rgb(43 55 72);
+      --line-hi: rgb(65 84 110);
+      --ink: rgb(242 245 250);
+      --muted: rgb(181 191 206);
+      --faint: rgb(130 144 164);
+      --blue: rgb(40 118 247);
+      --blue-hi: rgb(108 162 255);
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { min-height: 100svh; }
+
+    .page {
+      width: min(100% - 48px, 1280px);
+      margin: 0 auto;
+      padding: 72px 0 84px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--blue-hi);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(38px, 4.4vw, 64px);
+      font-weight: 710;
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .brief {
+      max-width: 360px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .card:hover { border-color: var(--line-hi); }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .number {
+      color: var(--faint);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0.12em;
+    }
+
+    .size-test {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--bg);
+    }
+
+    .size-test svg { width: 20px; height: 20px; }
+
+    .mark-wrap {
+      min-height: 126px;
+      display: grid;
+      place-items: center;
+    }
+
+    .mark {
+      width: 104px;
+      height: 104px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgb(108 162 255 / 0.38);
+      border-radius: 25px;
+      background: var(--surface-raised);
+      box-shadow: 0 20px 42px rgb(0 0 0 / 0.24);
+    }
+
+    .mark svg { width: 72px; height: 72px; }
+
+    svg {
+      display: block;
+      overflow: visible;
+      fill: none;
+      stroke: var(--blue-hi);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .solid-blue { fill: var(--blue); stroke: none; }
+    .solid-ink { fill: var(--ink); stroke: none; }
+    .solid-bg { fill: var(--surface-raised); stroke: none; }
+
+    .lockup {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 730;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+
+    .lockup svg { width: 24px; height: 24px; flex: 0 0 auto; }
+
+    h2 {
+      margin: 20px 0 7px;
+      font-size: 15px;
+      font-weight: 720;
+      letter-spacing: -0.02em;
+    }
+
+    .rationale {
+      min-height: 42px;
+      margin: 0;
+      color: var(--faint);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .footer-note {
+      margin: 26px 0 0;
+      color: var(--faint);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        width: min(100% - 32px, 520px);
+        padding: 42px 0 56px;
+      }
+
+      header { grid-template-columns: 1fr; gap: 18px; }
+      h1 { font-size: 42px; }
+      .grid { grid-template-columns: 1fr; gap: 12px; }
+      .card { padding: 20px; }
+      .mark-wrap { min-height: 118px; }
+      .rationale { min-height: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <p class="eyebrow">SlopStream identity</p>
+        <h1>Ten logo directions</h1>
+      </div>
+      <p class="brief">Serious, minimal marks built for a browser tab, app icon, player header, and portfolio case study</p>
+    </header>
+
+    <section class="grid" aria-label="Ten SlopStream logo options">
+      <article class="card">
+        <div class="card-top"><span class="number">01</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M5 24c4.7-8.3 11.1-12.5 19-12.5S38.3 15.7 43 24c-4.7 8.3-11.1 12.5-19 12.5S9.7 32.3 5 24Z"/><circle cx="24" cy="24" r="6" class="solid-blue"/><circle cx="24" cy="24" r="1.8" class="solid-ink"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M9 36c7-12.4 16-18.6 27-18.6S56 23.6 63 36c-7 12.4-16 18.6-27 18.6S16 48.4 9 36Z"/><circle cx="36" cy="36" r="9" class="solid-blue"/><circle cx="36" cy="36" r="2.6" class="solid-ink"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M5 24c4.7-8.3 11.1-12.5 19-12.5S38.3 15.7 43 24c-4.7 8.3-11.1 12.5-19 12.5S9.7 32.3 5 24Z"/><circle cx="24" cy="24" r="6" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Refined lens</h2><p class="rationale">Keeps recognition from the current mark with less detail and stronger reduction</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">02</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M18 12h-4a10 10 0 0 0 0 20h10a10 10 0 0 0 10-10"/><path d="M30 36h4a10 10 0 0 0 0-20H24a10 10 0 0 0-10 10"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M27 18h-6a15 15 0 0 0 0 30h15a15 15 0 0 0 15-15"/><path d="M45 54h6a15 15 0 0 0 0-30H36a15 15 0 0 0-15 15"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M18 12h-4a10 10 0 0 0 0 20h10a10 10 0 0 0 10-10"/><path d="M30 36h4a10 10 0 0 0 0-20H24a10 10 0 0 0-10 10"/></svg><span>SlopStream</span></div>
+        <h2>Relay loops</h2><p class="rationale">Two sources pass through one continuous connection without platform symbols</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">03</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="10"/><path d="m20 16 14 8-14 8Z" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><rect x="12" y="12" width="48" height="48" rx="15"/><path d="m30 24 21 12-21 12Z" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="10"/><path d="m20 16 14 8-14 8Z" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Clean play</h2><p class="rationale">The most literal promise with a restrained player frame and decisive play cue</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">04</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M13 8v10c0 5 3 7 8 7h6c5 0 8 2 8 7v8"/><path d="M24 8v8c0 4 2 6 6 6h2c5 0 8 3 8 8v10"/><path d="M8 8v12c0 7 4 10 11 10h5c4 0 6 2 6 6v4"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M20 12v15c0 7.5 4.5 10.5 12 10.5h9c7.5 0 12 3 12 10.5v12"/><path d="M36 12v12c0 6 3 9 9 9h3c7.5 0 12 4.5 12 12v15"/><path d="M12 12v18c0 10.5 6 15 16.5 15H36c6 0 9 3 9 9v6"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M13 8v10c0 5 3 7 8 7h6c5 0 8 2 8 7v8"/><path d="M24 8v8c0 4 2 6 6 6h2c5 0 8 3 8 8v10"/><path d="M8 8v12c0 7 4 10 11 10h5c4 0 6 2 6 6v4"/></svg><span>SlopStream</span></div>
+        <h2>Stream gate</h2><p class="rationale">Multiple incoming feeds resolve into a controlled destination</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">05</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M37 12H19c-6 0-10 3-10 8s4 8 10 8h10c6 0 10 3 10 8s-4 8-10 8H11"/><circle cx="37" cy="12" r="3" class="solid-blue"/><circle cx="11" cy="44" r="3" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M56 18H29c-9 0-15 4.5-15 12s6 12 15 12h15c9 0 15 4.5 15 12s-6 12-15 12H17"/><circle cx="56" cy="18" r="4.5" class="solid-blue"/><circle cx="17" cy="66" r="4.5" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M37 8H19c-6 0-10 3-10 8s4 8 10 8h10c6 0 10 3 10 8s-4 8-10 8H11"/><circle cx="37" cy="8" r="3" class="solid-blue"/><circle cx="11" cy="40" r="3" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Stream S</h2><p class="rationale">A proprietary initial drawn as one continuous media path</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">06</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><circle cx="19" cy="24" r="12"/><circle cx="29" cy="24" r="12"/><path d="M21 18v12l10-6Z" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><circle cx="29" cy="36" r="18"/><circle cx="43" cy="36" r="18"/><path d="M32 27v18l15-9Z" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><circle cx="19" cy="24" r="12"/><circle cx="29" cy="24" r="12"/><path d="M21 18v12l10-6Z" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Twin portals</h2><p class="rationale">One piece of media crossing from the social source into a clean viewer</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">07</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M20 8H14a6 6 0 0 0-6 6v6M28 8h6a6 6 0 0 1 6 6v6M40 28v6a6 6 0 0 1-6 6h-6M20 40h-6a6 6 0 0 1-6-6v-6"/><circle cx="24" cy="24" r="5" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M30 12h-9a9 9 0 0 0-9 9v9M42 12h9a9 9 0 0 1 9 9v9M60 42v9a9 9 0 0 1-9 9h-9M30 60h-9a9 9 0 0 1-9-9v-9"/><circle cx="36" cy="36" r="7.5" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M20 8H14a6 6 0 0 0-6 6v6M28 8h6a6 6 0 0 1 6 6v6M40 28v6a6 6 0 0 1-6 6h-6M20 40h-6a6 6 0 0 1-6-6v-6"/><circle cx="24" cy="24" r="5" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Open frame</h2><p class="rationale">A platform-free viewing window that remains open on every side</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">08</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M19 29h-3a8 8 0 1 1 0-16h8a8 8 0 0 1 7.5 5.2M29 19h3a8 8 0 1 1 0 16h-8a8 8 0 0 1-7.5-5.2"/><path d="M24 19v10l8-5Z" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M28.5 43.5H24a12 12 0 1 1 0-24h12a12 12 0 0 1 11.2 7.8M43.5 28.5H48a12 12 0 1 1 0 24H36a12 12 0 0 1-11.2-7.8"/><path d="M36 28.5v15l12-7.5Z" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M19 29h-3a8 8 0 1 1 0-16h8a8 8 0 0 1 7.5 5.2M29 19h3a8 8 0 1 1 0 16h-8a8 8 0 0 1-7.5-5.2"/><path d="M24 19v10l8-5Z" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Playable link</h2><p class="rationale">Combines the input and output concepts without borrowing either platform</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">09</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><path d="M9 12h6c6 0 9 3 9 9v6c0 6 3 9 9 9h6"/><path d="M9 36h6c6 0 9-3 9-9v-6c0-6 3-9 9-9h6"/><path d="m34 31 5 5-5 5"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><path d="M14 18h9c9 0 13.5 4.5 13.5 13.5v9C36.5 49.5 41 54 50 54h9"/><path d="M14 54h9c9 0 13.5-4.5 13.5-13.5v-9C36.5 22.5 41 18 50 18h9"/><path d="m51.5 46.5 7.5 7.5-7.5 7.5"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><path d="M9 12h6c6 0 9 3 9 9v6c0 6 3 9 9 9h6"/><path d="M9 36h6c6 0 9-3 9-9v-6c0-6 3-9 9-9h6"/><path d="m34 31 5 5-5 5"/></svg><span>SlopStream</span></div>
+        <h2>Clean merge</h2><p class="rationale">Two social sources converge into one consistent sharing route</p>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="number">10</span><span class="size-test" aria-label="Small size test"><svg viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="28" rx="8"/><path d="M7 18h34"/><path d="m20 22 10 6-10 6Z" class="solid-blue"/></svg></span></div>
+        <div class="mark-wrap"><div class="mark"><svg viewBox="0 0 72 72"><rect x="10.5" y="15" width="51" height="42" rx="12"/><path d="M10.5 27h51"/><path d="m30 33 15 9-15 9Z" class="solid-blue"/></svg></div></div>
+        <div class="lockup"><svg viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="28" rx="8"/><path d="M7 18h34"/><path d="m20 22 10 6-10 6Z" class="solid-blue"/></svg><span>SlopStream</span></div>
+        <h2>Clear window</h2><p class="rationale">A neutral browser surface that makes the clean playback promise explicit</p>
+      </article>
+    </section>
+
+    <p class="footer-note">All marks shown in primary color and at 32 px reduction</p>
+  </main>
+</body>
+</html>
