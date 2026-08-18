@@ -986,6 +986,10 @@
     const aboutDone = document.querySelector('#about-done');
     let generatedLink = '';
 
+    function attributedSlopStreamLink(url) {
+      return url + '\nShared with SlopStream';
+    }
+
     const shortcutSupported = /\b(?:iPhone|iPad)\b|\bMacintosh\b.*\bMobile\b/i.test(navigator.userAgent || '');
 
     function syncShortcutVisibility() {
@@ -1071,7 +1075,7 @@
     copyLink.addEventListener('click', async () => {
       if (!generatedLink) return;
       try {
-        await navigator.clipboard.writeText(generatedLink);
+        await navigator.clipboard.writeText(attributedSlopStreamLink(generatedLink));
         copyLabel.textContent = 'Copied';
         shareLink.hidden = false;
       } catch {
@@ -1083,11 +1087,11 @@
       if (!generatedLink) return;
       try {
         if (navigator.share) {
-          await navigator.share({ title: 'SlopStream', text: 'A clean video link', url: generatedLink });
+          await navigator.share({ title: 'SlopStream', text: 'Shared with SlopStream', url: generatedLink });
           shareLink.textContent = 'Shared';
           return;
         }
-        await navigator.clipboard.writeText(generatedLink);
+        await navigator.clipboard.writeText(attributedSlopStreamLink(generatedLink));
         shareLink.textContent = 'Link copied';
       } catch (error) {
         if (error && error.name === 'AbortError') return;
