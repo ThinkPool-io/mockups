@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <title>Melkio 9 · Частный план улучшения продажи</title>
+  <style>
+    :root {
+      --paper: #f4f1ea;
+      --paper-2: #ebe6dc;
+      --ink: #1e2724;
+      --muted: #68706b;
+      --line: #d4cec2;
+      --forest: #173f35;
+      --forest-2: #215548;
+      --sage: #dbe4dc;
+      --cream: #fffdf8;
+      --amber: #bb7630;
+      --amber-soft: #f3e3cc;
+      --red: #98453f;
+      --red-soft: #f1ddda;
+      --shadow: 0 24px 70px rgba(28, 39, 35, .11);
+      --radius: 22px;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 7% 4%, rgba(187, 118, 48, .10), transparent 24rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+    button { font: inherit; }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--forest);
+      color: white;
+      font-family: var(--serif);
+      font-size: 17px;
+    }
+
+    .private-label {
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.18fr .82fr;
+      gap: 56px;
+      align-items: center;
+      padding: 76px 0 62px;
+    }
+
+    .eyebrow {
+      margin: 0 0 17px;
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; }
+    h1 {
+      max-width: 780px;
+      margin-bottom: 22px;
+      font-size: clamp(46px, 6vw, 83px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .lead {
+      max-width: 710px;
+      margin-bottom: 0;
+      color: #515b56;
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.48;
+    }
+
+    .plan-figure {
+      position: relative;
+      min-height: 410px;
+      overflow: hidden;
+      border-radius: 36px 36px 8px 36px;
+      background: var(--forest);
+      box-shadow: var(--shadow);
+    }
+
+    .plan-figure svg { width: 100%; height: 100%; position: absolute; inset: 0; }
+    .plan-stamp {
+      position: absolute;
+      right: 24px;
+      bottom: 22px;
+      width: 146px;
+      padding: 13px 15px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 14px;
+      background: rgba(8,31,25,.68);
+      color: white;
+      backdrop-filter: blur(12px);
+    }
+
+    .plan-stamp b { display: block; font-size: 20px; }
+    .plan-stamp span { font-size: 11px; color: rgba(255,255,255,.68); text-transform: uppercase; letter-spacing: .08em; }
+
+    .decision {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 76px;
+      padding: 28px 30px;
+      border: 1px solid #e1c7c1;
+      border-radius: var(--radius);
+      background: var(--red-soft);
+    }
+
+    .decision .signal {
+      color: var(--red);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .decision h2 { margin: 0 0 8px; font-size: clamp(26px, 3vw, 39px); line-height: 1.08; }
+    .decision p { margin: 0; color: #66524e; }
+
+    section { padding: 76px 0; border-top: 1px solid var(--line); }
+    .section-head {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 28px;
+      margin-bottom: 34px;
+    }
+
+    .section-no { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .section-head h2 { max-width: 780px; margin: 0; font-size: clamp(34px, 4.2vw, 59px); line-height: 1.02; letter-spacing: -.035em; }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .issue-card {
+      min-height: 245px;
+      padding: 23px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,253,248,.66);
+    }
+
+    .issue-card .num { color: var(--amber); font-size: 12px; font-weight: 800; letter-spacing: .1em; }
+    .issue-card h3 { margin: 42px 0 12px; font-size: 25px; line-height: 1.08; }
+    .issue-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .proof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .proof {
+      padding: 26px;
+      border-radius: 18px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+    }
+    .proof strong { display: block; margin-bottom: 8px; font-family: var(--serif); font-size: 24px; font-weight: 500; }
+    .proof p { margin: 0; color: var(--muted); }
+    .proof.critical { background: var(--amber-soft); border-color: #dec29d; }
+
+    .timeline { display: grid; gap: 1px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--line); }
+    .day {
+      display: grid;
+      grid-template-columns: 170px 1fr 220px;
+      gap: 24px;
+      padding: 24px 26px;
+      background: var(--cream);
+      align-items: start;
+    }
+    .day-label { color: var(--forest); font-weight: 800; }
+    .day h3 { margin: 0 0 7px; font-size: 23px; }
+    .day p { margin: 0; color: var(--muted); }
+    .owner { color: var(--muted); font-size: 13px; text-align: right; }
+
+    .price-band {
+      display: grid;
+      grid-template-columns: 1.1fr repeat(3, .7fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--forest);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.16);
+      color: white;
+    }
+    .price-wrap { padding: 56px; border-radius: 28px; background: var(--forest); }
+    .price-wrap .section-head { margin-bottom: 30px; }
+    .price-wrap .section-no { color: #a9c2b9; }
+    .price-wrap .section-head h2 { color: white; }
+    .metric { padding: 25px; background: var(--forest-2); }
+    .metric:first-child { background: transparent; }
+    .metric b { display: block; margin-bottom: 5px; font-family: var(--serif); font-size: clamp(27px, 3vw, 42px); font-weight: 500; }
+    .metric span { color: #b9cec7; font-size: 13px; }
+    .price-note { max-width: 820px; margin: 24px 0 0; color: #c7d8d2; }
+
+    .listing-board { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .listing-board article { padding: 30px; border-radius: var(--radius); background: var(--cream); border: 1px solid var(--line); }
+    .listing-board h3 { font-size: 29px; }
+    .listing-board ol, .listing-board ul { margin: 0; padding-left: 21px; }
+    .listing-board li { margin: 11px 0; color: #4f5954; }
+
+    .dont { background: #262d2a; color: white; }
+    .dont .section-head { margin-bottom: 28px; }
+    .dont .section-no, .dont p { color: #aeb6b2; }
+    .dont-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .dont-item { padding: 20px; border: 1px solid rgba(255,255,255,.13); border-radius: 15px; color: #d5dad7; font-size: 14px; }
+    .dont-item b { display: block; margin-bottom: 14px; color: #e4b77e; font-size: 18px; }
+
+    .approval {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 24px;
+      align-items: end;
+    }
+    .approval h2 { margin-bottom: 18px; font-size: clamp(38px, 5vw, 67px); line-height: 1; letter-spacing: -.04em; }
+    .approval p { max-width: 710px; color: var(--muted); font-size: 18px; }
+    .checklist { display: grid; gap: 9px; }
+    .check { padding: 15px 17px; border: 1px solid var(--line); border-radius: 13px; background: var(--cream); font-weight: 700; }
+    .check::before { content: "□"; margin-right: 11px; color: var(--amber); }
+
+    .sources { padding-top: 36px; padding-bottom: 38px; font-size: 12px; color: var(--muted); }
+    .sources-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .source-link { display: inline-flex; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; background: rgba(255,255,255,.5); }
+    .source-link:hover { border-color: var(--forest); color: var(--forest); }
+
+    .actions {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    .action {
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      padding: 11px 15px;
+      background: rgba(23,63,53,.93);
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 54px; }
+      .plan-figure { min-height: 340px; }
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .price-band { grid-template-columns: 1fr 1fr; }
+      .metric:first-child { grid-column: 1 / -1; }
+      .dont-list { grid-template-columns: 1fr 1fr; }
+      .day { grid-template-columns: 120px 1fr; }
+      .owner { grid-column: 2; text-align: left; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 26px, 1180px); }
+      .topbar { padding: 16px 0; }
+      .brand span:last-child { display: none; }
+      .hero { padding: 42px 0 46px; }
+      h1 { font-size: 49px; }
+      .lead { font-size: 18px; }
+      .plan-figure { min-height: 300px; border-radius: 26px 26px 8px 26px; }
+      .decision { grid-template-columns: 1fr; gap: 10px; padding: 22px; margin-bottom: 52px; }
+      section { padding: 54px 0; }
+      .section-head { grid-template-columns: 1fr; gap: 10px; }
+      .grid-4, .proof-grid, .listing-board, .approval, .dont-list { grid-template-columns: 1fr; }
+      .issue-card { min-height: auto; }
+      .issue-card h3 { margin-top: 25px; }
+      .day { grid-template-columns: 1fr; gap: 8px; padding: 21px; }
+      .owner { grid-column: 1; }
+      .price-wrap { margin-left: -13px; margin-right: -13px; padding: 38px 13px; border-radius: 0; }
+      .price-band { grid-template-columns: 1fr; }
+      .metric:first-child { grid-column: auto; }
+      .actions { position: static; padding: 0 13px 22px; justify-content: flex-end; }
+      .action { background: var(--forest); }
+    }
+
+    @media print {
+      .actions { display: none; }
+      body { background: white; }
+      .shell { width: 100%; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <div class="brand"><span class="mark">M9</span><span>Melkio 9 · план собственника</span></div>
+    <span class="private-label">Частный документ · 19.08.2026</span>
+  </header>
+
+  <main>
+    <div class="shell hero">
+      <div>
+        <p class="eyebrow">Предложение по улучшению продажи</p>
+        <h1>Сначала убрать сомнения. Потом продавать потенциал.</h1>
+        <p class="lead">Сильный покупатель платит не за красивый текст. Он платит за понятный объект, проверяемые права, реалистичный путь до разрешения и быстро доступные документы.</p>
+      </div>
+      <div class="plan-figure" aria-label="Схематичный план проекта Melkio 9">
+        <svg viewBox="0 0 520 430" role="img" aria-label="Четыре корпуса и озеленённый двор">
+          <defs>
+            <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#4e7167" stroke-width="1" opacity=".38"/></pattern>
+          </defs>
+          <rect width="520" height="430" fill="url(#grid)"/>
+          <path d="M43 86C142 35 268 40 465 82L479 356C346 389 194 397 49 350Z" fill="#315f52" stroke="#7fa497" stroke-width="2"/>
+          <path d="M76 306C178 261 319 263 454 310" fill="none" stroke="#b8cbbf" stroke-width="24" opacity=".3"/>
+          <g fill="#eadfc9" stroke="#fffaf0" stroke-width="4">
+            <path d="M92 105l119-24 16 74-119 24z"/>
+            <path d="M288 86l125 22-14 76-125-22z"/>
+            <path d="M111 217l117-18 12 78-117 18z"/>
+            <path d="M292 210l121 22-15 78-121-22z"/>
+          </g>
+          <g fill="#d8a663">
+            <circle cx="254" cy="192" r="10"/><circle cx="257" cy="248" r="8"/><circle cx="69" cy="202" r="7"/><circle cx="442" cy="210" r="8"/>
+          </g>
+          <text x="28" y="32" fill="#a7c1b8" font-family="system-ui,sans-serif" font-size="11" letter-spacing="2">КОНЦЕПЦИЯ · 4 КОРПУСА</text>
+        </svg>
+        <div class="plan-stamp"><b>84 квартиры</b><span>около 6 000 м²</span></div>
+      </div>
+    </div>
+
+    <div class="shell decision">
+      <div class="signal">Решение сейчас</div>
+      <div>
+        <h2>Не снижать цену до исправления пакета продажи.</h2>
+        <p>Сначала закрыть четыре проверки, перепаковать объявление и дать рынку 14–21 день. Только после этого сравнивать не просмотры, а квалифицированные запросы от девелоперов.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">01 · Главные потери</div>
+          <h2>Покупатель видит четыре риска раньше, чем потенциал проекта.</h2>
+        </div>
+        <div class="grid-4">
+          <article class="issue-card"><span class="num">01</span><h3>Что именно продаётся</h3><p>В объявлениях встречаются 75 а, 76 а и 75,33 а. Без свежей выписки покупатель не понимает точный объект сделки.</p></article>
+          <article class="issue-card"><span class="num">02</span><h3>Права и обременения</h3><p>Публичные данные кредитора требуют короткого и ясного объяснения: что заложено, как снимается обременение, что получает покупатель.</p></article>
+          <article class="issue-card"><span class="num">03</span><h3>Статус разрешения</h3><p>Сентябрь 2026 года можно указывать только как план продавца. Нельзя создавать впечатление, что разрешение уже выдано.</p></article>
+          <article class="issue-card"><span class="num">04</span><h3>Слабая витрина</h3><p>Неточная карта, повторяющийся текст и водяные знаки снижают доверие даже при сильной проектной основе.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">02 · До публикации</div>
+          <h2>Четыре документа, без которых нельзя обещать больше.</h2>
+        </div>
+        <div class="proof-grid">
+          <article class="proof critical"><strong>Свежая выписка Registrų centras</strong><p>Номер участка, площадь, доля собственности, ограничения и точное основание сделки.</p></article>
+          <article class="proof critical"><strong>Письмо о снятии обременения</strong><p>Понятный порядок расчёта с кредитором и освобождения залога при сделке.</p></article>
+          <article class="proof"><strong>Письменный статус разрешения</strong><p>Что уже согласовано, что подано, что осталось и какая дата является плановой.</p></article>
+          <article class="proof"><strong>Актуальная таблица показателей</strong><p>7 533 м² участка, 84 квартиры, около 6 000 м², плотность 27%, интенсивность 0,80, 84 парковочных места, класс A++.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">03 · План на неделю</div>
+          <h2>Перезапуск можно подготовить за семь рабочих дней.</h2>
+        </div>
+        <div class="timeline">
+          <div class="day"><div class="day-label">День 1</div><div><h3>Закрыть юридическую картину</h3><p>Получить четыре документа выше и свести расхождения 75/76/75,33 а в одну точную формулировку.</p></div><div class="owner">Собственник + юрист</div></div>
+          <div class="day"><div class="day-label">Дни 2–3</div><div><h3>Собрать data room</h3><p>Одна ссылка, оглавление, проектные предложения, чертежи, показатели, сети, подъезд, календарь и документы сделки.</p></div><div class="owner">Менеджер проекта</div></div>
+          <div class="day"><div class="day-label">Дни 3–5</div><div><h3>Пересобрать витрину</h3><p>Новый заголовок, короткий первый экран, точная карта, 10 сильных изображений и 30–45 секунд видео на YouTube.</p></div><div class="owner">Брокер + визуализатор</div></div>
+          <div class="day"><div class="day-label">Дни 6–7</div><div><h3>Запустить адресные продажи</h3><p>Не ждать только порталы. Отправить предложение 20–30 подходящим девелоперам и инвесторам с персональным письмом.</p></div><div class="owner">Брокер</div></div>
+          <div class="day"><div class="day-label">14–21 день</div><div><h3>Оценить реальный спрос</h3><p>Считать квалифицированные звонки, запросы документов, встречи и предложения. Просмотры объявления сами по себе не являются спросом.</p></div><div class="owner">Один ответственный</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="price-wrap">
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">04 · Цена</div>
+          <h2>Текущую цену нужно защищать зрелостью проекта.</h2>
+        </div>
+        <div class="price-band">
+          <div class="metric"><b>€1,85 млн + НДС</b><span>текущая заявленная цена</span></div>
+          <div class="metric"><b>≈ €22 024</b><span>на планируемую квартиру</span></div>
+          <div class="metric"><b>≈ €307</b><span>на планируемый м²</span></div>
+          <div class="metric"><b>≈ +21%</b><span>к ближайшему ориентиру по допустимой площади*</span></div>
+        </div>
+        <p class="price-note">Премия может быть оправдана только доказательствами: более зрелая проектная документация, понятный путь до разрешения, сети и подъезд, чистая структура сделки. Если этих доказательств нет, покупатель будет автоматически дисконтировать цену.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">05 · Новая подача</div>
+          <h2>Объявление должно работать как инвестиционный тизер.</h2>
+        </div>
+        <div class="listing-board">
+          <article>
+            <h3>Первые 15 секунд</h3>
+            <ol>
+              <li><b>Точный объект:</b> адрес, площадь, право собственности.</li>
+              <li><b>Девелоперский потенциал:</b> 4 корпуса, 84 квартиры, около 6 000 м².</li>
+              <li><b>Стадия:</b> что готово сегодня и какой следующий официальный шаг.</li>
+              <li><b>Цена:</b> €1,85 млн + НДС, без скрытых условий.</li>
+              <li><b>Действие:</b> запросить data room и назначить разговор.</li>
+            </ol>
+          </article>
+          <article>
+            <h3>Порядок изображений</h3>
+            <ol>
+              <li>Лучший общий архитектурный ракурс.</li>
+              <li>Схема участка с границами и подъездом.</li>
+              <li>Генплан с четырьмя корпусами.</li>
+              <li>Таблица ключевых показателей.</li>
+              <li>Реальные фото участка и окружения.</li>
+              <li>Сети, транспорт и расстояния с источниками.</li>
+              <li>QR-код и ссылка на вращаемую 3D-модель.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dont">
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">06 · Не делать</div>
+          <h2>Пять способов потерять доверие серьёзного покупателя.</h2>
+        </div>
+        <div class="dont-list">
+          <div class="dont-item"><b>01</b>Писать, что разрешение уже выдано, если это только план.</div>
+          <div class="dont-item"><b>02</b>Называть участок отдельным объектом без подтверждения выпиской.</div>
+          <div class="dont-item"><b>03</b>Обещать подземный паркинг или сети без документов.</div>
+          <div class="dont-item"><b>04</b>Использовать стоковые рендеры с водяными знаками.</div>
+          <div class="dont-item"><b>05</b>Снижать цену первым шагом, не исправив упаковку и доказательства.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell approval">
+        <div>
+          <p class="eyebrow">Решение собственника</p>
+          <h2>Утвердить факты. Назначить одного ответственного. Перезапустить продажу.</h2>
+          <p>Цель не в том, чтобы сделать объявление длиннее. Цель в том, чтобы покупатель за одну встречу понял объект, открыл документы и мог вынести проект на инвестиционный комитет.</p>
+        </div>
+        <div class="checklist">
+          <div class="check">Юридический пакет</div>
+          <div class="check">Data room</div>
+          <div class="check">Новая витрина</div>
+          <div class="check">Адресный список покупателей</div>
+          <div class="check">Отчёт через 21 день</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell sources">
+    <div class="sources-row">
+      <a class="source-link" href="https://www.aruodas.lt/11-1287338/" target="_blank" rel="noreferrer">Текущее объявление Aruodas</a>
+      <a class="source-link" href="https://www.alio.lt/skelbimai/76-a-sklypas-vilnius/ID64709371.html" target="_blank" rel="noreferrer">Текущее объявление Alio</a>
+      <a class="source-link" href="https://melkio9.vercel.app/" target="_blank" rel="noreferrer">Сайт проекта</a>
+      <a class="source-link" href="https://melkio9.vercel.app/3d" target="_blank" rel="noreferrer">3D-модель</a>
+    </div>
+    <p>* Сравнение с ближайшим публичным предложением в Gineitiškės является ориентиром по заявленной цене, а не оценкой стоимости. Этот документ подготовлен для внутреннего обсуждения на основе публичных материалов. Он не заменяет юридическую проверку, оценку или письменное подтверждение органов власти.</p>
+  </footer>
+
+  <div class="actions">
+    <button class="action" type="button" onclick="navigator.clipboard.writeText(location.href).then(()=>this.textContent='Ссылка скопирована')">Скопировать ссылку</button>
+    <button class="action" type="button" onclick="window.print()">Сохранить PDF</button>
+  </div>
+</body>
+</html>
