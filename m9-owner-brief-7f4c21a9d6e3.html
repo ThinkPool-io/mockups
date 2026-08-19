@@ -247,6 +247,18 @@
     .listing-board ol, .listing-board ul { margin: 0; padding-left: 21px; }
     .listing-board li { margin: 11px 0; color: #4f5954; }
 
+    .draft-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr); gap: 18px; align-items: start; }
+    .draft-card { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--cream); }
+    .draft-top { display: flex; justify-content: space-between; gap: 18px; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--line); background: var(--sage); }
+    .draft-top b { font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .copy-draft { cursor: pointer; flex: none; border: 0; border-radius: 999px; padding: 9px 13px; background: var(--forest); color: white; font-weight: 750; }
+    .draft-copy { padding: 26px; color: #3d4742; font-size: 15px; line-height: 1.62; white-space: pre-wrap; }
+    .draft-copy strong { color: var(--ink); }
+    .field-notes { display: grid; gap: 10px; }
+    .field-note { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,253,248,.72); }
+    .field-note b { display: block; margin-bottom: 7px; color: var(--forest); }
+    .field-note p { margin: 0; color: var(--muted); font-size: 13px; }
+
     .dont { background: #262d2a; color: white; }
     .dont .section-head { margin-bottom: 28px; }
     .dont .section-no, .dont p { color: #aeb6b2; }
@@ -311,7 +323,7 @@
       .decision { grid-template-columns: 1fr; gap: 10px; padding: 22px; margin-bottom: 52px; }
       section { padding: 54px 0; }
       .section-head { grid-template-columns: 1fr; gap: 10px; }
-      .grid-4, .proof-grid, .listing-board, .approval, .dont-list { grid-template-columns: 1fr; }
+      .grid-4, .proof-grid, .listing-board, .draft-layout, .approval, .dont-list { grid-template-columns: 1fr; }
       .issue-card { min-height: auto; }
       .issue-card h3 { margin-top: 25px; }
       .day { grid-template-columns: 1fr; gap: 8px; padding: 21px; }
@@ -470,10 +482,65 @@
       </div>
     </section>
 
+    <section>
+      <div class="shell">
+        <div class="section-head">
+          <div class="section-no">06 · Черновик Aruodas</div>
+          <h2>Готовый текст для новой публикации на литовском.</h2>
+        </div>
+        <div class="draft-layout">
+          <article class="draft-card">
+            <div class="draft-top"><b>Tekstas kopijavimui</b><button class="copy-draft" type="button" onclick="navigator.clipboard.writeText(document.getElementById('aruodas-draft').innerText).then(()=>this.textContent='Nukopijuota')">Kopijuoti tekstą</button></div>
+            <div class="draft-copy" id="aruodas-draft"><strong>ANTRAŠTĖ</strong>
+Vilnius, Melkio g. 9 | daugiabučių projektas | 84 butai | 4 korpusai
+
+<strong>APRAŠYMAS</strong>
+Vilniuje, Melkio g. 9, siūlomas daugiabučių gyvenamųjų namų vystymo projektas, su juo susijęs nekilnojamasis turtas ir projekto dokumentacija.
+
+Tikslus parduodamas turtas, nuosavybės dalis, sandorio plotas ir suvaržymų panaikinimo tvarka pateikiami naujausiame Registrų centro išraše bei projekto duomenų kambaryje.
+
+<strong>PAGRINDINIAI PROJEKTO RODIKLIAI</strong>
+• Projektuojama teritorija: 7 533 m²
+• 4 daugiabučiai gyvenamieji namai
+• 4 aukštai
+• 84 butai
+• Planuojamas bendras plotas: apie 6 000 m²
+• Užstatymo tankis: 27 %
+• Užstatymo intensyvumas: 0,80
+• 84 automobilių stovėjimo vietos
+• Planuojama energinio naudingumo klasė: A++
+
+<strong>PROJEKTO STADIJA</strong>
+Parengti projektiniai pasiūlymai, architektūrinė koncepcija, pagrindiniai projekto rodikliai ir 3D vizualizacija.
+
+Statybą leidžiančio dokumento gavimas planuojamas 2026 m. rugsėjį pagal pardavėjo darbų grafiką. Skelbimo paskelbimo dieną leidimas dar nėra išduotas.
+
+<strong>KAINA</strong>
+1 850 000 Eur + PVM.
+
+<strong>INFORMACIJA PIRKĖJUI</strong>
+NT plėtotojams ir investuotojams pateikiamas struktūruotas duomenų kambarys: Registrų centro dokumentai, projektiniai pasiūlymai, brėžiniai, rodiklių lentelė, leidimo gavimo darbų grafikas, privažiavimo ir inžinerinių tinklų informacija bei suvaržymų panaikinimo tvarka.
+
+3D modelis: melkio9.vercel.app/3d
+Projekto pristatymas: melkio9.vercel.app
+
+Norėdami gauti duomenų kambario prieigą ir suderinti projekto pristatymą, susisiekite telefonu arba el. paštu.</div>
+          </article>
+          <aside class="field-notes">
+            <div class="field-note"><b>Sklypo plotas</b><p>Įrašyti tik tikslų plotą iš naujausio Registrų centro išrašo. Nemaišyti 75, 76 ir 75,33 aro reikšmių.</p></div>
+            <div class="field-note"><b>Objekto tipas</b><p>Laukelį rinktis pagal teisinį sandorio objektą, o ne vien pagal projekto vizualizaciją.</p></div>
+            <div class="field-note"><b>Leidimas</b><p>Iki oficialaus išdavimo žymėti, kad leidimo nėra. 2026 m. rugsėjis yra planinė data.</p></div>
+            <div class="field-note"><b>Žemėlapis</b><p>Rankiniu būdu patikrinti Melkio g. 9 tašką prieš skelbiant.</p></div>
+            <div class="field-note"><b>Vaizdo įrašas</b><p>Į YouTube lauką kelti 30–45 sek. 3D apžvalgą. Vercel nuorodą palikti aprašyme kaip paprastą tekstą.</p></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <section class="dont">
       <div class="shell">
         <div class="section-head">
-          <div class="section-no">06 · Не делать</div>
+          <div class="section-no">07 · Не делать</div>
           <h2>Пять способов потерять доверие серьёзного покупателя.</h2>
         </div>
         <div class="dont-list">
