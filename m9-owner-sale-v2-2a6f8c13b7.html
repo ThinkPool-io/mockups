@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <title>Melkio 9 · V2 · Управляемая продажа</title>
+  <style>
+    :root {
+      --bg:#eef0ec; --paper:#fbfcf8; --ink:#17201e; --muted:#68716e; --line:#ced4ce;
+      --navy:#132c3a; --navy2:#1e4152; --lime:#d8ff76; --lime2:#ecffbc;
+      --orange:#ff8c52; --blue:#69b8ff; --pink:#ffb6cc; --shadow:0 24px 70px rgba(18,41,50,.12);
+      --serif:Georgia,"Times New Roman",serif; --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
+    a{color:inherit}
+    button{font:inherit}
+    .shell{width:min(1180px,calc(100% - 40px));margin:0 auto}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em}
+    .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--navy);color:var(--lime);font-family:var(--serif)}
+    .tag{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:end;padding:78px 0 64px}
+    .kicker{margin:0 0 18px;color:#d65f2a;font-size:12px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+    h1,h2,h3,p{margin-top:0}
+    h1,h2,h3{font-family:var(--serif);font-weight:500}
+    h1{margin-bottom:24px;font-size:clamp(50px,6.5vw,90px);line-height:.93;letter-spacing:-.058em}
+    .lead{max-width:720px;margin:0;color:#4f5a56;font-size:clamp(18px,2vw,22px)}
+    .hero-card{padding:30px;border-radius:30px 30px 8px 30px;background:var(--navy);color:white;box-shadow:var(--shadow)}
+    .hero-card small{display:block;margin-bottom:30px;color:#a8c1cb;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+    .hero-card b{display:block;margin-bottom:12px;color:var(--lime);font-family:var(--serif);font-size:56px;font-weight:500;line-height:.9}
+    .hero-card p{margin:0;color:#c6d3d8}
+    .verdict{display:grid;grid-template-columns:210px 1fr;gap:28px;align-items:center;margin-bottom:72px;padding:28px 30px;border-radius:22px;background:var(--lime)}
+    .verdict-label{font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+    .verdict h2{margin:0 0 7px;font-size:clamp(28px,3.3vw,44px);line-height:1.04}
+    .verdict p{margin:0;color:#3b493f}
+    section{padding:74px 0;border-top:1px solid var(--line)}
+    .head{display:grid;grid-template-columns:165px 1fr;gap:28px;margin-bottom:34px}
+    .no{color:var(--muted);font-size:11px;font-weight:850;letter-spacing:.11em;text-transform:uppercase}
+    .head h2{max-width:850px;margin:0;font-size:clamp(34px,4.3vw,60px);line-height:1;letter-spacing:-.04em}
+    .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .case{display:flex;flex-direction:column;min-height:282px;padding:23px;border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+    .case:nth-child(1),.case:nth-child(5){background:var(--lime2)}
+    .case .where{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .case h3{margin:34px 0 10px;font-size:26px;line-height:1.06}
+    .case p{margin:0 0 20px;color:#5e6864;font-size:14px}
+    .case a{margin-top:auto;font-size:12px;font-weight:800}
+    .case .result{display:block;margin-bottom:8px;color:var(--navy);font-weight:850}
+    .pipeline{overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--line)}
+    .stage{display:grid;grid-template-columns:115px 1fr 240px;gap:24px;padding:22px 24px;background:var(--paper);border-bottom:1px solid var(--line)}
+    .stage:last-child{border-bottom:0}
+    .stage .day{color:var(--navy);font-weight:850}
+    .stage h3{margin:0 0 5px;font-size:22px}
+    .stage p{margin:0;color:var(--muted);font-size:14px}
+    .proof{color:var(--muted);font-size:12px;text-align:right}
+    .dark{background:var(--navy);color:white}
+    .dark .head{margin-bottom:28px}
+    .dark .no{color:#9db5bf}
+    .buyer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .buyer{padding:22px;border:1px solid rgba(255,255,255,.15);border-radius:16px;background:rgba(255,255,255,.045)}
+    .buyer b{display:block;margin-bottom:36px;color:var(--lime);font-family:var(--serif);font-size:24px;font-weight:500}
+    .buyer p{margin:0;color:#c3d0d5;font-size:13px}
+    .buyer span{display:block;margin-top:16px;color:#8fa8b2;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+    .options{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .option{padding:26px;border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+    .option em{display:inline-block;margin-bottom:38px;padding:6px 9px;border-radius:999px;background:var(--navy);color:white;font-style:normal;font-size:11px;font-weight:850}
+    .option h3{font-size:28px;line-height:1.06}
+    .option p{margin:0;color:var(--muted);font-size:14px}
+    .tactics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .tactic{display:grid;grid-template-columns:55px 1fr;gap:16px;padding:22px;border:1px solid var(--line);border-radius:17px;background:var(--paper)}
+    .tactic .n{color:#d65f2a;font-weight:900}
+    .tactic h3{margin:0 0 6px;font-size:22px}
+    .tactic p{margin:0;color:var(--muted);font-size:14px}
+    .room-wrap{padding:54px;border-radius:28px;background:#dbe6ff}
+    .room-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .folder{display:flex;gap:14px;align-items:flex-start;padding:18px;border:1px solid #bac9e4;border-radius:14px;background:rgba(255,255,255,.55)}
+    .folder b{flex:none;color:var(--navy)}
+    .folder p{margin:0;color:#5d6877;font-size:13px}
+    .score{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;overflow:hidden;border:1px solid var(--navy);border-radius:20px;background:var(--navy)}
+    .metric{padding:22px;background:var(--paper)}
+    .metric b{display:block;margin-bottom:6px;color:var(--navy);font-family:var(--serif);font-size:31px;font-weight:500}
+    .metric span{color:var(--muted);font-size:11px}
+    .metric:last-child{background:var(--lime)}
+    .score-note{margin:16px 0 0;color:var(--muted);font-size:13px}
+    .skip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .skip{padding:20px;border-radius:15px;background:#253b44;color:#d8e0e3;font-size:14px}
+    .skip b{display:block;margin-bottom:14px;color:var(--pink);font-size:18px}
+    .next{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:end}
+    .next h2{margin-bottom:18px;font-size:clamp(42px,5.5vw,74px);line-height:.96;letter-spacing:-.045em}
+    .next p{max-width:680px;color:var(--muted);font-size:18px}
+    .checks{display:grid;gap:9px}
+    .check{padding:15px 17px;border:1px solid var(--line);border-radius:13px;background:var(--paper);font-weight:750}
+    .check:before{content:"□";margin-right:10px;color:#d65f2a}
+    .sources{padding:34px 0 42px;color:var(--muted);font-size:12px}
+    .source-links{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+    .source{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.5);text-decoration:none}
+    .actions{position:fixed;right:18px;bottom:18px;z-index:10;display:flex;gap:8px}
+    .action{cursor:pointer;padding:11px 15px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(19,44,58,.95);color:white;box-shadow:0 10px 30px rgba(0,0,0,.17)}
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}.cases{grid-template-columns:1fr 1fr}.buyer-grid{grid-template-columns:1fr 1fr}
+      .stage{grid-template-columns:95px 1fr}.proof{grid-column:2;text-align:left}.options{grid-template-columns:1fr}.score{grid-template-columns:repeat(3,1fr)}
+    }
+    @media(max-width:620px){
+      .shell{width:min(100% - 26px,1180px)}.top{padding:15px 0}.brand span:last-child{display:none}.tag{font-size:9px}
+      .hero{padding:44px 0 45px;gap:28px}h1{font-size:51px}.hero-card b{font-size:48px}.verdict{grid-template-columns:1fr;gap:10px;padding:22px;margin-bottom:50px}
+      section{padding:52px 0}.head{grid-template-columns:1fr;gap:9px}.cases,.buyer-grid,.tactics,.room-grid,.next,.skip-grid{grid-template-columns:1fr}
+      .case{min-height:auto}.stage{grid-template-columns:1fr;gap:8px;padding:20px}.proof{grid-column:1}.room-wrap{margin-left:-13px;margin-right:-13px;padding:38px 13px;border-radius:0}
+      .score{grid-template-columns:1fr 1fr}.actions{position:static;padding:0 13px 22px;justify-content:flex-end}.action{background:var(--navy)}
+    }
+    @media print{.actions{display:none}body{background:white}.shell{width:100%}section{break-inside:avoid}}
+  </style>
+</head>
+<body>
+  <header class="shell top">
+    <div class="brand"><span class="mark">M9</span><span>Melkio 9 · Owner Sale V2</span></div>
+    <span class="tag">Отдельная версия · частный документ</span>
+  </header>
+
+  <main>
+    <div class="shell hero">
+      <div>
+        <p class="kicker">V2 · план на основе завершённых сделок</p>
+        <h1>Не объявление. Управляемая продажа.</h1>
+        <p class="lead">Aruodas оставляем как публичную витрину. Главный двигатель сделки: закрытый список девелоперов, проверенные документы, фиксированный график и конкуренция между квалифицированными покупателями.</p>
+      </div>
+      <aside class="hero-card">
+        <small>Рекомендованный формат</small>
+        <b>35 дней</b>
+        <p>от готового тизера до финальных предложений. Срок начинается только после закрытия юридических и разрешительных расхождений.</p>
+      </aside>
+    </div>
+
+    <div class="shell verdict">
+      <div class="verdict-label">Главное решение</div>
+      <div><h2>Не публиковать и ждать. Назначить дату финальных предложений.</h2><p>Порталы создают видимость. Контролируемый процесс создаёт конкурентное напряжение, сравнимые условия и цену, которую можно защищать фактами.</p></div>
+    </div>
+
+    <section>
+      <div class="shell">
+        <div class="head"><div class="no">01 · Что реально сработало</div><h2>Шесть завершённых сделок иллюстрируют дополняющие тактики.</h2></div>
+        <div class="cases">
+          <article class="case"><span class="where">Vilnius · Fabijoniškės</span><h3>Разрешение и готовый проект</h3><span class="result">Продано за €3,5 млн + НДС</span><p>1,7 га, готовый проект и действующее разрешение вызвали активный интерес нескольких девелоперов.</p><a href="https://www.ober-haus.lt/en/a-land-plot-has-been-sold-in-fabijoniskes-an-apartment-building-is-set-to-be-constructed/" target="_blank" rel="noreferrer">Ober-Haus ↗</a></article>
+          <article class="case"><span class="where">Vilnius · Senamiestis</span><h3>Закрытый аукцион</h3><span class="result">Несколько участников, лучшее предложение</span><p>Newsec привлёк несколько участников к закрытому аукциону проекта и участка, сделка завершена.</p><a href="https://madeinvilnius.lt/en/business/Real-Estate/a-plot-of-882-acres-was-sold-in-the-old-town%2C-it-will-be-developed-into-a-luxury-apartment-building-complex/" target="_blank" rel="noreferrer">Made in Vilnius ↗</a></article>
+          <article class="case"><span class="where">Cork · Square Deal</span><h3>Сначала снять неопределённость</h3><span class="result">Успешная продажа за €4,5 млн</span><p>Планировочный отчёт, e-mail по базе инвесторов и девелоперов, публичная реклама, затем Best Bid.</p><a href="https://pdf.euro.savills.co.uk/ireland-research/development-services-brochure-compressed.pdf" target="_blank" rel="noreferrer">Savills ↗</a></article>
+          <article class="case"><span class="where">Dublin · City Block 3</span><h3>Три структуры сделки</h3><span class="result">Продано выше €110 млн</span><p>Объект предложили как жилой лот, коммерческий лот или целиком. Восемь недель, два этапа торгов и время на legal due diligence.</p><a href="https://pdf.euro.savills.co.uk/ireland-research/dev-land-brochure---2019-v6.pdf" target="_blank" rel="noreferrer">Savills ↗</a></article>
+          <article class="case"><span class="where">Florida · Boynton Beach</span><h3>19 предложений и интервью</h3><span class="result">$37,75 млн, на $10 млн выше ожиданий</span><p>Широкая кампания, второй раунд, Best & Final и интервью трёх покупателей по опыту, капиталу и плану.</p><a href="https://www.foundrycommercial.com/case_study/bethesda-industrial-park/" target="_blank" rel="noreferrer">Foundry Commercial ↗</a></article>
+          <article class="case"><span class="where">Brisbane · Newstead</span><h3>Контролируемый off-market EOI</h3><span class="result">A$64,5 млн, оценочно более 10 предложений</span><p>Целевой список, фиксированные вехи и заданные продавцом условия доступа, сроков и формы предложения.</p><a href="https://www.colliers.com.au/en-au/news/final-riverfront-site-in-newstead-secures-deal-for-landmark-luxury-development" target="_blank" rel="noreferrer">Colliers ↗</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="head"><div class="no">02 · Процесс</div><h2>Воронка сделки: от тизера до исполнимого предложения.</h2></div>
+        <div class="pipeline">
+          <div class="stage"><div class="day">До старта</div><div><h3>Сделать объект продаваемым</h3><p>Выписка RC, точный объект сделки, снятие залога, статус SLD, таблица показателей, независимая проверка цены.</p></div><div class="proof">Gate: ни одного расхождения 75 / 76 / 75,33 а</div></div>
+          <div class="stage"><div class="day">Дни 1–5</div><div><h3>Тизер и buyer universe</h3><p>Двухстраничный тизер без лишней конфиденциальности. 40–60 названных покупателей, ответственный и персональный повод для контакта.</p></div><div class="proof">Выход: отправленное письмо + назначенный звонок</div></div>
+          <div class="stage"><div class="day">Дни 6–12</div><div><h3>Квалификация и data room</h3><p>Опыт похожих проектов, источник капитала, срок решения, команда. После квалификации: IM, модель, документы и Q&A.</p></div><div class="proof">Выход: подтверждённый интерес, не просмотр</div></div>
+          <div class="stage"><div class="day">Дни 13–21</div><div><h3>Встречи и indicative bids</h3><p>Одинаковая информация всем участникам, посещение участка, письменная форма предложения и крайний срок.</p></div><div class="proof">Выход: 3–5 сравнимых предложений</div></div>
+          <div class="stage"><div class="day">Дни 22–35</div><div><h3>Shortlist, интервью, Best & Final</h3><p>Сравнить цену, условия, финансирование, опыт и риск исполнения. Пригласить 2–3 сильнейших на финальный раунд.</p></div><div class="proof">Выход: исполнимое предложение + резерв</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="shell">
+        <div class="head"><div class="no">03 · Кому продавать</div><h2>Не аудитория. Именованный список покупателей.</h2></div>
+        <div class="buyer-grid">
+          <div class="buyer"><b>Vilnius developers</b><p>Компании с активными многоквартирными проектами, местной командой и быстрым инвестиционным комитетом.</p><span>Приоритет 1</span></div>
+          <div class="buyer"><b>Baltic & Nordic groups</b><p>Игроки, которым нужен готовый вход в Вильнюс и понятный локальный партнёр.</p><span>Приоритет 2</span></div>
+          <div class="buyer"><b>BTR / housing capital</b><p>Фонды, операторы аренды и институциональные покупатели, если экономика проекта соответствует их мандату.</p><span>Проверить формат</span></div>
+          <div class="buyer"><b>JV & family offices</b><p>Капитал, готовый купить объект совместно с девелопером или финансировать доведение до SLD.</p><span>Не путать с лидом без капитала</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="head"><div class="no">04 · Архитектура предложения</div><h2>Показать рынку варианты, но не обещать то, что не проверено.</h2></div>
+        <div class="options">
+          <article class="option"><em>A · Базовый</em><h3>Продажа актива сейчас</h3><p>Точный объект, текущая стадия, проектная документация и ясный механизм снятия обременений.</p></article>
+          <article class="option"><em>B · Условный</em><h3>Цена при достижении SLD</h3><p>Предложение с условием или отложенным расчётом, если юрист подтвердит структуру и ответственность сторон.</p></article>
+          <article class="option"><em>C · Альтернативный</em><h3>Продажа долей SPV или JV</h3><p>Рассматривать только после налоговой и юридической проверки. Вариант расширяет пул капитала, но добавляет риск.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="head"><div class="no">05 · Тактики V2</div><h2>Восемь приёмов, которые делают процесс сильнее обычного брокерского объявления.</h2></div>
+        <div class="tactics">
+          <article class="tactic"><div class="n">01</div><div><h3>Objection ledger</h3><p>До запуска ответить на 12 самых неприятных вопросов покупателя: право, доля, залог, SLD, сети, подъезд, смета, сроки.</p></div></article>
+          <article class="tactic"><div class="n">02</div><div><h3>Цена на одной экономической странице</h3><p>Показать цену за планируемую квартиру, за м² и чувствительность residual land value. Не заменяет оценку.</p></div></article>
+          <article class="tactic"><div class="n">03</div><div><h3>Buyer-specific cover</h3><p>Для каждого крупного покупателя одно персональное предложение: почему Melkio 9 подходит именно его продукту и команде.</p></div></article>
+          <article class="tactic"><div class="n">04</div><div><h3>Контролируемый VDR</h3><p>Одобрение доступа, журнал активности и follow-up по реально изученным документам. KPMG рекомендует контролировать доступ и активность. Мониторинг раскрывается участникам и ограничивается требованиями GDPR.</p></div></article>
+          <article class="tactic"><div class="n">05</div><div><h3>Единый Q&A для всех</h3><p>Раз в неделю публиковать обезличенные ответы всем квалифицированным участникам. Это снижает слухи и сохраняет равные условия.</p></div></article>
+          <article class="tactic"><div class="n">06</div><div><h3>Форма предложения</h3><p>Цена, НДС, структура, DD, финансирование, срок закрытия, условия и опыт. Сравнивать предложения одинаково.</p></div></article>
+          <article class="tactic"><div class="n">07</div><div><h3>Интервью финалистов</h3><p>Проверить капитал, муниципальный опыт, команду и план развития. Foundry использовал интервью для квалификации трёх лучших.</p></div></article>
+          <article class="tactic"><div class="n">08</div><div><h3>Настоящий дедлайн</h3><p>Один календарь для всех: доступ, вопросы, осмотр, indicative bid, Best & Final. Не продлевать без материальной причины.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell room-wrap">
+        <div class="head"><div class="no">06 · Data room</div><h2>Документы должны отвечать на вопросы раньше звонка.</h2></div>
+        <div class="room-grid">
+          <div class="folder"><b>01</b><p><strong>Legal.</strong> RC, кадастр, право/доля, ограничения, залог и порядок его снятия.</p></div>
+          <div class="folder"><b>02</b><p><strong>Planning.</strong> PP, согласования, статус и календарь SLD, письменные подтверждения. У каждого файла: current, dated, pending или superseded.</p></div>
+          <div class="folder"><b>03</b><p><strong>Design.</strong> Генплан, планы, площади, 84 квартиры, парковка, A++ и 3D.</p></div>
+          <div class="folder"><b>04</b><p><strong>Site.</strong> Границы, топография, подъезд, сети, ограничения, фото и drone.</p></div>
+          <div class="folder"><b>05</b><p><strong>Economics.</strong> Независимые рыночные ориентиры, residual model и сценарии чувствительности.</p></div>
+          <div class="folder"><b>06</b><p><strong>Transaction.</strong> Структуры A/B/C, bid form, DD rules, Q&A log и проект таймлайна.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="head"><div class="no">07 · Dashboard</div><h2>Считать продвижение по этапам сделки, а не по просмотрам.</h2></div>
+        <div class="score">
+          <div class="metric"><b>40–60</b><span>названных покупателей</span></div>
+          <div class="metric"><b>20+</b><span>живых контактов</span></div>
+          <div class="metric"><b>8+</b><span>доступов в VDR</span></div>
+          <div class="metric"><b>5+</b><span>встреч и осмотров</span></div>
+          <div class="metric"><b>3–5</b><span>indicative bids</span></div>
+          <div class="metric"><b>2–3</b><span>финалиста BAFO</span></div>
+        </div>
+        <p class="score-note">Цифры выше являются внутренними целями кампании, а не прогнозом рынка. Операционный SLA: автоматическое подтверждение сразу, человеческий ответ в рабочее время по возможности до 15 минут, затем квалификация. Это тестируемая цель, а не обещание конверсии. Главные метрики: VDR, bids, funding evidence, preferred bidder, exchange и completion.</p>
+      </div>
+    </section>
+
+    <section class="dark">
+      <div class="shell">
+        <div class="head"><div class="no">08 · Не тратить</div><h2>Технология помогает процессу. Она не заменяет процесс.</h2></div>
+        <div class="skip-grid">
+          <div class="skip"><b>Skip</b>Новый сложный портал недвижимости. Существующего сайта и тизера достаточно.</div>
+          <div class="skip"><b>Skip</b>Длинный CGI-фильм. В исследовании HBS 75 178 продаж домов 3D-туры не показали значимого ценового эффекта после контроля качества фото и описаний. Для девелоперского участка это только смежное свидетельство.</div>
+          <div class="skip"><b>Skip</b>Широкая платная реклама до готовности документов и buyer list.</div>
+          <div class="skip"><b>Use lean</b>Papermark/DocSend-подобный VDR, privacy analytics и простой календарь встреч.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell next">
+        <div><p class="kicker">Решение собственника</p><h2>Назначить брокера процесса, а не автора объявления.</h2><p>Мандат должен включать buyer universe, персональные контакты, data room, календарь торгов, weekly report и квалификацию финалистов. Оплата и конфликт интересов проверяются отдельным договором.</p></div>
+        <div class="checks">
+          <div class="check">Закрыть четыре документа V1</div>
+          <div class="check">Выбрать структуру A / B / C</div>
+          <div class="check">Утвердить buyer universe</div>
+          <div class="check">Назначить дату indicative bids</div>
+          <div class="check">Запустить 35-дневный процесс</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell sources">
+    <div class="source-links">
+      <a class="source" href="https://www.ober-haus.lt/en/a-land-plot-has-been-sold-in-fabijoniskes-an-apartment-building-is-set-to-be-constructed/" target="_blank" rel="noreferrer">Ober-Haus · Fabijoniškės</a>
+      <a class="source" href="https://madeinvilnius.lt/en/business/Real-Estate/a-plot-of-882-acres-was-sold-in-the-old-town%2C-it-will-be-developed-into-a-luxury-apartment-building-complex/" target="_blank" rel="noreferrer">Newsec · закрытый аукцион</a>
+      <a class="source" href="https://www.colliers.com.au/en-au/news/final-riverfront-site-in-newstead-secures-deal-for-landmark-luxury-development" target="_blank" rel="noreferrer">Colliers · Newstead</a>
+      <a class="source" href="https://www.foundrycommercial.com/case_study/bethesda-industrial-park/" target="_blank" rel="noreferrer">Foundry · Bethesda</a>
+      <a class="source" href="https://assets.kpmg.com/content/dam/kpmg/uk/pdf/2020/08/real-estate-stakeholder-options.pdf" target="_blank" rel="noreferrer">KPMG · teaser / IM / VDR</a>
+      <a class="source" href="https://matterport.com/en-gb/industries/case-studies/colliers-international-closes-deals-faster-matterport" target="_blank" rel="noreferrer">Matterport · Colliers</a>
+      <a class="source" href="https://www.library.hbs.edu/working-knowledge/are-virtual-tours-still-worth-it-in-real-estate-evidence-from-75000-home-sales" target="_blank" rel="noreferrer">HBS · 75 178 продаж</a>
+      <a class="source" href="https://ww3.rics.org/uk/en/journals/property-journal/how-to-attain-the-purchase-and-sale-competency-.html" target="_blank" rel="noreferrer">RICS · способы продажи</a>
+      <a class="source" href="https://github.com/papermark/papermark" target="_blank" rel="noreferrer">GitHub · Papermark</a>
+      <a class="source" href="https://github.com/plausible/analytics" target="_blank" rel="noreferrer">GitHub · Plausible</a>
+    </div>
+    <p>Источники подтверждают завершённые сделки и применённые процессы. Перенос тактик на Melkio 9 является профессиональной рекомендацией, а не гарантией результата. Цели dashboard являются внутренними рабочими ориентирами. Структуры сделки, налоги, право собственности, SLD и цена требуют письменной проверки профильными специалистами.</p>
+  </footer>
+
+  <div class="actions"><button class="action" type="button" onclick="navigator.clipboard.writeText(location.href).then(()=>this.textContent='Ссылка скопирована')">Скопировать ссылку</button><button class="action" type="button" onclick="window.print()">Сохранить PDF</button></div>
+</body>
+</html>
