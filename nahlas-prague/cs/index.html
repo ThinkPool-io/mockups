@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NAHLAS keeps authority actions and street observations separate." />
+    <title>NAHLAS</title>
+    <link rel="stylesheet" href="/mockups/nahlas-prague/styles.css" />
+    <script type="module" src="/mockups/nahlas-prague/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skip">К содержанию</a>
+    <header class="site-header" aria-label="Main navigation">
+      <a class="wordmark" href="#main" aria-label="NAHLAS, home">NAHLAS<span>.</span></a>
+      <nav class="top-nav" aria-label="Sections">
+        <a href="#case-list" data-i18n="navCases">ДЕЛА</a>
+        <a href="#how-it-works" data-i18n="navHow">КАК ЭТО РАБОТАЕТ</a>
+        <a href="#hotspot-card" data-i18n="hotspot">РАЙОНЫ</a>
+      </nav>
+      <div class="locale-switch" aria-label="Language">
+        <button type="button" data-locale="ru" aria-pressed="true">RU</button>
+        <button type="button" data-locale="cs" aria-pressed="false">CZ</button>
+        <button type="button" data-locale="en" aria-pressed="false">EN</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-meta"><span data-i18n="eyebrow">ПРАГА · ОБЩЕСТВЕННЫЙ КОНТРОЛЬ</span><span data-i18n="demoLabel">ДЕМО В БРАУЗЕРЕ</span></div>
+        <h1 id="hero-title"><span data-i18n="heroA">ВАШ РАЙОН</span><br /><i data-i18n="heroB">НЕ БРОШЕН.</i></h1>
+        <div class="hero-foot">
+          <p data-i18n="intro">Одно доказанное дело, все ответственные службы и независимая проверка результата.</p>
+          <button class="button button-red" id="report-action" type="button" data-i18n="report">СООБЩИТЬ О ПРОБЛЕМЕ</button>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="Registry status"><p data-i18n="simulator">ДЕМОНСТРАЦИЯ. НИЧЕГО НЕ ОТПРАВЛЯЕТСЯ СЛУЖБАМ.</p></section>
+
+      <section class="case-section" id="case-list" aria-labelledby="case-heading">
+        <div class="section-kicker"><span data-i18n="caseLabel">ДЕЛО</span><span id="case-id"></span></div>
+        <div class="case-layout">
+          <div class="case-stamp" aria-hidden="true" data-i18n="unresolvedStamp">ВСЁ ЕЩЁ<br />ВИДНО</div>
+          <article class="case-card" id="case-detail">
+            <div class="case-card-top"><span id="case-category"></span><span id="case-days"></span></div>
+            <h2 id="case-heading"></h2>
+            <p class="case-location" id="case-location"></p>
+            <div class="truth-grid" aria-label="Separate truth sources">
+              <div class="truth-card authority-truth" data-truth-source="authority">
+                <p class="eyebrow" data-i18n="authority">СТАТУС СЛУЖБЫ</p>
+                <p class="truth-value" id="authority-state"></p>
+              </div>
+              <div class="truth-card observed-truth" data-truth-source="observed">
+                <p class="eyebrow" data-i18n="observed">ЧТО ВИДНО НА УЛИЦЕ</p>
+                <p class="truth-value" id="observed-state"></p>
+              </div>
+            </div>
+            <p class="truth-note" data-i18n="truthNote">Закрытие службы не меняет наблюдение на улице.</p>
+            <section class="receipt-block" aria-labelledby="receipt-heading">
+              <p class="eyebrow" id="receipt-heading" data-i18n="receipt">КВИТАНЦИЯ МАРШРУТА</p>
+              <dl id="route-receipt" class="route-receipt" data-truth-source="routing"></dl>
+            </section>
+            <section class="timeline" aria-labelledby="timeline-heading">
+              <p class="eyebrow" id="timeline-heading" data-i18n="timeline">ЦЕПОЧКА ДОКАЗАТЕЛЬСТВ</p>
+              <ol id="case-timeline"></ol>
+            </section>
+            <div id="corroborate-panel" class="corroborate-panel" aria-label="Corroborate this problem">
+              <p id="corroboration-count"></p>
+              <button class="button button-dark" id="corroborate-action" type="button" data-i18n="corroborate">ЭТО ТА ЖЕ ПРОБЛЕМА</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="process" id="how-it-works" aria-labelledby="process-heading">
+        <div class="section-kicker"><span>02</span><span data-i18n="noDeadline">Срок не заявлен.</span></div>
+        <h2 id="process-heading" data-i18n="howTitle">НЕ ЯЩИК ДЛЯ ЖАЛОБ. КОНТУР РЕЗУЛЬТАТА.</h2>
+        <ol>
+          <li><span>01</span><div><h3 data-i18n="step1">НАЙДИТЕ ИЛИ СОЗДАЙТЕ ОДНО ДЕЛО</h3></div></li>
+          <li><span>02</span><div><h3 data-i18n="step2">ПОЛУЧИТЕ МАРШРУТ И КВИТАНЦИЮ</h3></div></li>
+          <li><span>03</span><div><h3 data-i18n="step3">ПРОВЕРЬТЕ УЛИЦУ ПОСЛЕ ОТВЕТА</h3></div></li>
+        </ol>
+      </section>
+
+      <section class="hotspot" id="hotspot-card" aria-labelledby="hotspot-heading">
+        <div><p class="eyebrow" data-i18n="hotspot">ПОВТОРЯЮЩЕЕСЯ МЕСТО</p><h2 id="hotspot-heading"></h2></div>
+        <div class="hotspot-stat"><strong id="hotspot-count"></strong><span data-i18n="memberCases">ОТДЕЛЬНЫХ<br />ДЕЛА</span></div>
+        <p class="hotspot-copy" data-i18n="hotspotBody">Отдельные инциденты остаются отдельными делами.</p>
+        <p class="hotspot-members" id="hotspot-members"></p>
+      </section>
+    </main>
+
+    <footer><a class="wordmark" href="#main">NAHLAS<span>.</span></a><p data-i18n="simulator">ДЕМОНСТРАЦИЯ. НИЧЕГО НЕ ОТПРАВЛЯЕТСЯ СЛУЖБАМ.</p></footer>
+    <dialog id="report-dialog" aria-labelledby="report-title" aria-describedby="report-description">
+      <form id="report-form" method="dialog">
+        <div class="dialog-top"><p class="eyebrow">NAHLAS</p><button class="icon-button" id="close-dialog" type="button" aria-label="Close">×</button></div>
+        <h2 id="report-title" data-i18n="reportTitle">СНАЧАЛА НАЙДЁМ СОВПАДЕНИЕ</h2>
+        <p id="report-description" data-i18n="reportBody">Выберите тип, район и публичное место. Ничего не отправляется наружу.</p>
+        <label for="report-category" data-i18n="category">ТИП ПРОБЛЕМЫ</label>
+        <select id="report-category" required></select>
+        <label for="report-district" data-i18n="district">РАЙОН</label>
+        <select id="report-district" required></select>
+        <label for="report-location" data-i18n="locationField">ПУБЛИЧНОЕ МЕСТО</label>
+        <input id="report-location" name="location" type="text" value="Křižíkova · Karlín" autocomplete="street-address" required />
+        <button class="button button-red" type="submit" data-i18n="findMatch">НАЙТИ ПОХОЖИЕ ДЕЛА</button>
+        <section id="match-result" aria-live="polite" hidden></section>
+        <p class="dialog-safe" data-i18n="simulator">ДЕМОНСТРАЦИЯ. НИЧЕГО НЕ ОТПРАВЛЯЕТСЯ СЛУЖБАМ.</p>
+      </form>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
