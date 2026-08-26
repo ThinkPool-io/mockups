@@ -186,7 +186,7 @@
     }
 
     /* Final About direction: centered, minimal, and visually continuous with Home. */
-    .about-header { min-height:144px; flex-direction:column; justify-content:center; gap:8px; border-bottom:0; }
+    .about-header { min-height:128px; flex-direction:column; justify-content:center; gap:6px; border-bottom:0; }
     .about-brand { flex-direction:column; gap:12px; font-size:18px; }
     .about-brand .ghost-mark { width:58px; height:58px; border-radius:16px; }
     .back-home { min-height:36px; display:inline-flex; align-items:center; color:var(--faint); font-size:12px; font-weight:650; text-underline-offset:4px; }
@@ -196,29 +196,29 @@
     .about-hero h1 { max-width:11ch; margin-right:auto; margin-left:auto; font-size:clamp(58px,6.3vw,82px); }
     .lede { max-width:620px; margin-right:auto; margin-left:auto; }
     .relay-line { justify-content:center; margin-top:28px; padding:0; border:0; color:var(--faint); font-weight:650; }
-    .about-section { display:block; padding:54px 0; text-align:center; }
+    .about-section { display:block; padding:28px 0; text-align:center; }
     .about-section h2 { max-width:680px; margin-right:auto; margin-left:auto; font-size:clamp(38px,4.2vw,54px); line-height:1.04; text-wrap:balance; }
-    .about-copy { max-width:630px; margin:24px auto 0; }
+    .about-copy { max-width:630px; margin:16px auto 0; }
     .about-copy p { max-width:620px; margin-right:auto; margin-left:auto; }
     .about-copy p strong { color:var(--ink); }
-    .facts { max-width:590px; margin:24px auto 0; }
-    .facts div { padding:18px 0; }
+    .facts { max-width:590px; margin:16px auto 0; }
+    .facts div { padding:14px 0; }
     .faq-list { max-width:620px; margin:34px auto 0; }
     summary { position:relative; justify-content:center; padding:0 44px; text-align:center; }
     summary::after { position:absolute; right:10px; }
     details p { margin:0 auto 24px; text-align:center; }
-    .about-footer { flex-direction:column; align-items:center; justify-content:center; padding:26px 0 32px; text-align:center; }
+    .about-footer { flex-direction:column; align-items:center; justify-content:center; padding:18px 0 24px; text-align:center; }
 
     @media (max-width:700px) {
       .about-header,.about-shell,.about-footer { width:min(100% - 36px,560px); }
-      .about-header { min-height:132px; }
+      .about-header { min-height:120px; }
       .about-brand .ghost-mark { width:52px; height:52px; }
       .about-hero { padding:12px 0 44px; }
       .about-hero h1 { max-width:10ch; font-size:46px; line-height:1; }
       .relay-line { margin-top:24px; font-size:12px; }
-      .about-section { padding:46px 0; }
+      .about-section { padding:30px 0; }
       .about-section h2 { max-width:340px; font-size:36px; line-height:1.06; }
-      .about-copy { margin-top:22px; }
+      .about-copy { margin-top:16px; }
       summary { min-height:76px; padding:0 34px; font-size:15px; }
       summary::after { right:6px; }
     }
