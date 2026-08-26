@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SlopStream · Return control options</title>
+  <style>
+    :root { color-scheme:dark; --bg:#090d14; --surface:#111823; --line:#2a3545; --ink:#f2f5fa; --muted:#b5bfce; --faint:#8290a4; --blue:#2876f7; --blue-hi:#6ca2ff; --serif:Georgia,"Times New Roman",serif; --sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; --mono:ui-monospace,"SFMono-Regular",Consolas,monospace; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--bg); font-family:var(--sans); -webkit-font-smoothing:antialiased; }
+    button,a { font:inherit; }
+    a { color:inherit; }
+    :focus-visible { outline:3px solid var(--blue-hi); outline-offset:3px; }
+    .board { width:min(1120px,calc(100% - 48px)); margin:0 auto; padding:72px 0 88px; }
+    .intro { max-width:760px; margin:0 auto 64px; text-align:center; }
+    .eyebrow { margin:0 0 14px; color:var(--blue-hi); font:750 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; }
+    h1 { max-width:13ch; margin:0 auto 20px; font:400 clamp(48px,6vw,76px)/.98 var(--serif); letter-spacing:-.045em; text-wrap:balance; }
+    .intro p:last-child { margin:0; color:var(--muted); font-size:17px; line-height:1.65; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 44px; }
+    .option { padding:32px 0 38px; border-top:1px solid var(--line); }
+    .option-head { min-height:24px; display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
+    .option-head strong { color:var(--ink); font-size:14px; }
+    .number { color:var(--blue-hi); font:700 11px/1 var(--mono); letter-spacing:.1em; }
+    .badge { padding:5px 8px; border-radius:999px; color:#07101f; background:var(--blue-hi); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+    .stage { min-height:116px; position:relative; display:flex; align-items:center; justify-content:center; padding:20px; border:1px solid var(--line); background:linear-gradient(180deg,#0e1b31 0%,#0b111b 100%); }
+    .note { max-width:54ch; margin:14px 0 0; color:var(--faint); font-size:12px; line-height:1.55; }
+    .wordmark { font-size:17px; font-weight:780; letter-spacing:-.03em; }
+    .quiet-link { min-height:42px; display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; font-weight:700; text-decoration:none; }
+    .quiet-link:hover { color:var(--ink); }
+    .pill { min-height:40px; display:inline-flex; align-items:center; gap:8px; padding:0 15px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:rgb(17 24 35 / .72); font-size:13px; font-weight:750; text-decoration:none; }
+    .pill:hover { border-color:var(--blue-hi); color:var(--ink); }
+    .brand-stack { display:grid; justify-items:center; gap:8px; }
+    .brand-row { width:100%; display:flex; align-items:center; justify-content:space-between; }
+    .crumb { display:flex; align-items:center; gap:9px; color:var(--faint); font-size:13px; }
+    .crumb a { color:var(--ink); font-weight:750; text-decoration:none; }
+    .segment { display:inline-grid; grid-template-columns:1fr 1fr; padding:3px; border:1px solid var(--line); border-radius:10px; background:#080c13; }
+    .segment a { min-width:88px; min-height:36px; display:grid; place-items:center; border-radius:7px; color:var(--faint); font-size:12px; font-weight:750; text-decoration:none; }
+    .segment .active { color:var(--ink); background:var(--surface); }
+    .utility { width:100%; min-height:42px; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; font-weight:750; text-decoration:none; }
+    .icon-button { width:42px; height:42px; display:grid; place-items:center; border:1px solid var(--line); border-radius:11px; color:var(--ink); background:var(--surface); text-decoration:none; font-size:19px; }
+    .icon-label { display:flex; align-items:center; gap:11px; }
+    .icon-label span { color:var(--muted); font-size:13px; font-weight:750; }
+    .primary { min-height:42px; display:inline-flex; align-items:center; padding:0 17px; border-radius:10px; color:#050812; background:var(--blue); font-size:13px; font-weight:820; text-decoration:none; }
+    .outline { min-height:42px; display:inline-flex; align-items:center; gap:8px; padding:0 16px; border:1px solid var(--blue-hi); border-radius:10px; color:var(--ink); font-size:13px; font-weight:750; text-decoration:none; }
+    .edge-back { position:absolute; left:18px; top:50%; translate:0 -50%; width:40px; height:40px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; color:var(--muted); text-decoration:none; }
+    .close { position:absolute; right:18px; top:50%; translate:0 -50%; width:40px; height:40px; display:grid; place-items:center; color:var(--muted); text-decoration:none; font-size:20px; }
+    .under-link { color:var(--blue-hi); font-size:12px; font-weight:750; text-decoration:none; }
+    @media (max-width:700px) {
+      .board { width:min(100% - 32px,560px); padding:48px 0 64px; }
+      .intro { margin-bottom:42px; }
+      h1 { font-size:45px; }
+      .intro p:last-child { font-size:15px; }
+      .grid { grid-template-columns:1fr; }
+      .option { padding:26px 0 32px; }
+      .stage { min-height:108px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="intro">
+      <p class="eyebrow">SlopStream navigation study</p>
+      <h1>Ten cleaner ways back</h1>
+      <p>Each option returns from About to the converter. The content is identical; only hierarchy and control treatment change.</p>
+    </header>
+    <section class="grid" aria-label="Return control options">
+      <article class="option">
+        <div class="option-head"><div><span class="number">01</span> <strong>Centered quiet pill</strong></div><span class="badge">Best fit</span></div>
+        <div class="stage"><div class="brand-stack"><span class="wordmark">SlopStream</span><a class="pill" href="#">← Converter</a></div></div>
+        <p class="note">Clear, compact, and still centered. It reads as a control without competing with the page.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">02</span> <strong>Split header</strong></div></div>
+        <div class="stage"><div class="brand-row"><span class="wordmark">SlopStream</span><a class="quiet-link" href="#">Converter ↗</a></div></div>
+        <p class="note">Familiar website navigation. Strong clarity, but breaks the fully centered composition.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">03</span> <strong>Breadcrumb</strong></div></div>
+        <div class="stage"><nav class="crumb"><a href="#">SlopStream</a><span>/</span><span>About</span></nav></div>
+        <p class="note">Explains location and makes the product name the return action.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">04</span> <strong>Home / About switch</strong></div></div>
+        <div class="stage"><nav class="segment"><a href="#">Home</a><a class="active" href="#">About</a></nav></div>
+        <p class="note">The clearest relationship between both pages. Slightly more interface than the product needs.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">05</span> <strong>Utility strip</strong></div></div>
+        <div class="stage" style="padding:0 20px;align-items:flex-start"><a class="utility" href="#">← Return to SlopStream</a></div>
+        <p class="note">Unmissable and restrained. The full-width rule makes it feel structural.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">06</span> <strong>Icon plus label</strong></div></div>
+        <div class="stage"><a class="icon-label" href="#"><b class="icon-button">←</b><span>Converter</span></a></div>
+        <p class="note">A larger tap target with a plain label. More app-like than editorial.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">07</span> <strong>Wordmark sublink</strong></div></div>
+        <div class="stage"><div class="brand-stack"><span class="wordmark">SlopStream</span><a class="under-link" href="#">Open converter ›</a></div></div>
+        <p class="note">Very light and centered. Clearer than the current underlined back link.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">08</span> <strong>Primary action</strong></div></div>
+        <div class="stage"><div class="brand-stack"><span class="wordmark">SlopStream</span><a class="primary" href="#">Use SlopStream</a></div></div>
+        <p class="note">Strongest call to action. Useful if conversion matters more than keeping About quiet.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">09</span> <strong>Outlined action</strong></div></div>
+        <div class="stage"><a class="outline" href="#">← Go to converter</a></div>
+        <p class="note">Clear button affordance with less visual weight than the blue primary action.</p>
+      </article>
+      <article class="option">
+        <div class="option-head"><div><span class="number">10</span> <strong>Corner controls</strong></div></div>
+        <div class="stage"><a class="edge-back" href="#" aria-label="Back to converter">←</a><span class="wordmark">SlopStream</span><a class="close" href="#" aria-label="Close About">×</a></div>
+        <p class="note">Maximum space efficiency. The arrows need labels or tooltips for first-time visitors.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
