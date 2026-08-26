@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d14" />
+  <meta name="description" content="Share public TikTok and Instagram videos without the apps. SlopStream makes a clean browser link with creator attribution." />
+  <title>SlopStream · Share public videos without the apps</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090d14;
+      --navy: #0e1b31;
+      --surface: #111823;
+      --surface-raised: #151f2d;
+      --input: #080c13;
+      --line: #2a3545;
+      --line-bright: #46607d;
+      --ink: #f2f5fa;
+      --muted: #b5bfce;
+      --faint: #8290a4;
+      --blue: #2876f7;
+      --blue-hi: #6ca2ff;
+      --danger: #e2827c;
+      --display: Georgia, "Times New Roman", serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+    button, input { font: inherit; }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .skip-link { position: fixed; z-index: 10; top: 12px; left: 12px; transform: translateY(-160%); padding: 10px 14px; border-radius: 9px; color: var(--input); background: var(--blue-hi); font-weight: 800; text-decoration: none; }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid var(--blue-hi); outline-offset: 3px; }
+
+    .site-header { width: min(1184px, calc(100% - 48px)); min-height: 86px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-size: 17px; font-weight: 780; letter-spacing: -0.035em; text-decoration: none; }
+    .brand-mark { width: 35px; height: 35px; display: block; flex: 0 0 auto; }
+    .brand-mark svg { display: block; width: 100%; height: 100%; }
+    .site-nav { display: flex; gap: 4px; align-items: center; }
+    .site-nav a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 12px; color: var(--muted); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--blue); text-underline-offset: 7px; }
+
+    .view { display: none; min-height: calc(100vh - 86px); }
+    .view.is-active { display: block; }
+    .shell { width: min(1184px, calc(100% - 48px)); margin: 0 auto; }
+    .eyebrow { margin: 0; color: var(--blue-hi); font-family: var(--mono); font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: -.045em; }
+    h1 { max-width: 10.8ch; margin-bottom: 22px; font-size: clamp(47px, 5.2vw, 76px); line-height: .98; }
+    h2 { margin-bottom: 16px; font-size: clamp(34px, 3vw, 49px); line-height: 1; }
+    h3 { margin-bottom: 8px; font-size: 17px; letter-spacing: -.02em; }
+    .lede { max-width: 56ch; margin-bottom: 0; color: var(--muted); font-size: 18px; line-height: 1.62; }
+    .section { padding: 100px 0; border-top: 1px solid var(--line); }
+    .section-head { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(230px, .68fr); align-items: end; margin-bottom: 38px; }
+    .section-head h2 { margin-bottom: 0; }
+
+    .home-hero { padding: 72px 0 94px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(370px, .76fr); gap: clamp(44px, 7vw, 112px); align-items: center; }
+    .hero-copy { padding-bottom: 8px; }
+    .answer { max-width: 59ch; margin: 0; padding-left: 16px; border-left: 2px solid var(--blue); color: var(--muted); font-size: 16px; line-height: 1.58; }
+    .answer strong { color: var(--ink); }
+    .converter { margin-top: 31px; padding: 12px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .converter form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+    .field { min-width: 0; height: 58px; display: flex; align-items: center; gap: 11px; padding: 0 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--input); }
+    .field:focus-within { border-color: var(--blue-hi); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 20%, transparent); }
+    .field svg { width: 20px; flex: 0 0 auto; color: var(--faint); }
+    input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 15px; }
+    input::placeholder { color: var(--faint); opacity: 1; }
+    .button { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 18px; border: 1px solid transparent; border-radius: 12px; color: var(--input); background: var(--blue); cursor: pointer; font-size: 15px; font-weight: 800; text-decoration: none; }
+    .button:hover { background: var(--blue-hi); }
+    .button.secondary { color: var(--ink); background: transparent; border-color: var(--line-bright); }
+    .button.secondary:hover { border-color: var(--blue-hi); background: color-mix(in srgb, var(--blue) 12%, transparent); }
+    .converter-note { margin: 11px 4px 0; color: var(--faint); font-size: 12px; line-height: 1.5; }
+    .converter-result { display: none; min-height: 126px; padding: 12px; }
+    .converter-result.is-visible { display: grid; gap: 13px; }
+    .demo-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
+    .demo-route { min-width: 0; display: flex; align-items: center; gap: 12px; }
+    .demo-route-mark { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--blue-hi) 48%, var(--line)); border-radius: 10px; color: var(--blue-hi); background: color-mix(in srgb, var(--blue) 12%, var(--surface)); }
+    .demo-route-mark svg { width: 20px; }
+    .demo-route-copy { min-width: 0; }
+    .demo-route-copy span, .demo-route-copy strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .demo-route-copy span { color: var(--blue-hi); font-family: var(--mono); font-size: 10px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+    .demo-route-copy strong { margin-top: 4px; font-size: 15px; }
+    .demo-actions { display: flex; gap: 8px; }
+    .demo-actions .button { min-height: 42px; padding: 0 13px; font-size: 13px; }
+    .status { min-height: 19px; margin: 9px 4px 0; color: var(--danger); font-size: 13px; }
+
+    .handoff { position: relative; min-height: 440px; padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: var(--navy); overflow: hidden; }
+    .handoff-title { margin: 0; color: var(--faint); font-family: var(--mono); font-size: 11px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+    .trace { position: absolute; inset: 74px 28px 35px; }
+    .trace-line { position: absolute; top: 48%; left: 58px; right: 58px; height: 1px; background: var(--line-bright); }
+    .trace-line::before, .trace-line::after { content: ""; position: absolute; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--blue-hi); }
+    .trace-line::before { left: 26%; } .trace-line::after { left: 66%; }
+    .handoff-node { position: absolute; z-index: 1; width: min(185px, 48%); padding: 14px; border: 1px solid var(--line-bright); border-radius: 14px; background: var(--surface); box-shadow: 0 12px 0 var(--bg); }
+    .handoff-node small, .handoff-node strong { display: block; }
+    .handoff-node small { margin-bottom: 8px; color: var(--blue-hi); font-family: var(--mono); font-size: 10px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+    .handoff-node strong { font-size: 14px; line-height: 1.27; }
+    .handoff-node span { display: block; margin-top: 7px; color: var(--faint); font-size: 12px; line-height: 1.4; }
+    .node-source { top: 2%; left: 0; } .node-clean { top: 39%; left: 50%; transform: translateX(-50%); border-color: var(--blue); } .node-recipient { right: 0; bottom: 2%; }
+    .trace-label { position: absolute; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .label-one { top: 25%; left: 8%; } .label-two { right: 11%; bottom: 27%; text-align: right; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .step { padding: 22px 0 0; border-top: 2px solid var(--line); }
+    .step-number { color: var(--blue-hi); font-family: var(--mono); font-size: 11px; font-weight: 750; letter-spacing: .1em; }
+    .step p { margin-bottom: 0; color: var(--muted); font-size: 15px; line-height: 1.58; }
+    .shortcut-band { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .85fr); gap: 56px; align-items: center; padding: 34px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .shortcut-band h2 { max-width: 14ch; margin-bottom: 14px; }
+    .shortcut-band p { max-width: 54ch; margin-bottom: 0; color: var(--muted); line-height: 1.58; }
+    .shortcut-steps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .shortcut-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .shortcut-steps strong { color: var(--blue-hi); font-family: var(--mono); font-size: 11px; letter-spacing: .08em; }
+
+    .use-grid, .about-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .use-card, .about-card { padding: 30px; background: var(--bg); }
+    .use-card p, .about-card p { max-width: 48ch; margin-bottom: 0; color: var(--muted); font-size: 15px; line-height: 1.62; }
+    .use-card svg { width: 25px; margin-bottom: 20px; color: var(--blue-hi); }
+    .limits { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 48px; }
+    .limits-copy p { max-width: 49ch; color: var(--muted); font-size: 16px; line-height: 1.62; }
+    .limits-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .limits-list li { display: grid; grid-template-columns: 145px 1fr; gap: 16px; padding: 17px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .limits-list strong { color: var(--ink); font-size: 13px; }
+    .faq { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: 48px; }
+    .faq-list { border-top: 1px solid var(--line); }
+    details { border-bottom: 1px solid var(--line); }
+    summary { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 18px; cursor: pointer; font-size: 16px; font-weight: 750; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--blue-hi); font-family: var(--display); font-size: 27px; font-weight: 400; }
+    details[open] summary::after { content: "−"; }
+    details p { max-width: 65ch; margin: 0 40px 20px 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .footer { width: min(1184px, calc(100% - 48px)); margin: 0 auto; padding: 26px 0 38px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; color: var(--faint); font-size: 12px; }
+    .footer a { color: var(--muted); text-underline-offset: 4px; }
+
+    .about-page { padding: 56px 0 92px; }
+    .about-intro { max-width: 770px; padding: 55px 0 74px; }
+    .about-intro h1 { max-width: 12ch; }
+    .about-intro .lede { max-width: 58ch; }
+    .about-grid { grid-template-columns: repeat(2, 1fr); }
+    .maker { display: flex; align-items: flex-start; gap: 18px; max-width: 610px; margin-top: 56px; padding-top: 27px; border-top: 1px solid var(--line); }
+    .maker .brand-mark { width: 48px; height: 48px; }
+    .maker p { margin: 5px 0 0; color: var(--muted); line-height: 1.55; }
+    .maker a { color: var(--ink); font-weight: 750; text-underline-offset: 4px; }
+
+    @media (max-width: 760px) {
+      .site-header, .shell, .footer { width: min(100% - 32px, 560px); }
+      .site-header { min-height: 70px; }
+      .brand { font-size: 16px; }
+      .brand-mark { width: 31px; height: 31px; }
+      .site-nav a { min-height: 40px; padding: 0 8px; font-size: 13px; }
+      .home-hero { padding: 42px 0 60px; }
+      .hero-grid, .section-head, .shortcut-band, .limits, .faq { grid-template-columns: 1fr; gap: 32px; }
+      h1 { max-width: 11.2ch; font-size: clamp(42px, 12vw, 56px); }
+      .lede { font-size: 16px; }
+      .converter form { grid-template-columns: 1fr; }
+      .button { min-height: 54px; }
+      .handoff { min-height: 400px; padding: 22px; }
+      .trace { inset: 66px 22px 25px; }
+      .trace-line { left: 32px; right: 32px; }
+      .handoff-node { padding: 12px; }
+      .node-source { left: 0; } .node-recipient { right: 0; }
+      .trace-label { display: none; }
+      .section { padding: 66px 0; }
+      .steps, .use-grid, .about-grid { grid-template-columns: 1fr; }
+      .steps { gap: 30px; }
+      .shortcut-band { padding: 26px 21px; }
+      .limits-list li { grid-template-columns: 1fr; gap: 5px; }
+      .use-card, .about-card { padding: 26px 22px; }
+      .footer { display: grid; gap: 10px; }
+      .about-page { padding-top: 30px; }
+      .about-intro { padding: 34px 0 50px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="SlopStream home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 200 200" role="img" aria-label="">
+          <defs><linearGradient id="ghost-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs>
+          <rect width="200" height="200" rx="44" fill="url(#ghost-bg)"/><path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/><rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/>
+        </svg>
+      </span>
+      <span>SlopStream</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#home" data-route="home">Home</a>
+      <a href="#about" data-route="about">About</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="view is-active" id="home-view" data-view="home">
+      <div class="shell home-hero">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">A clean handoff for public posts</p>
+            <h1>Share public TikTok and Instagram videos without the apps.</h1>
+            <p class="answer"><strong>SlopStream turns a supported public post into one clean browser link.</strong> The recipient can watch the post with creator attribution, without opening TikTok or Instagram and without falling into a feed.</p>
+            <section class="converter" aria-label="Demo video link converter">
+              <form id="converter-form" novalidate>
+                <div class="field">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <label for="source-url" class="sr-only">TikTok or Instagram link</label>
+                  <input id="source-url" type="url" inputmode="url" autocomplete="url" placeholder="Paste a public TikTok or Instagram link" required />
+                </div>
+                <button class="button" type="submit">Make clean link</button>
+              </form>
+              <div class="converter-result" id="converter-result" aria-live="polite">
+                <div class="demo-line">
+                  <div class="demo-route">
+                    <span class="demo-route-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 4 7 4v8l-7 4-7-4V8Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m9.5 10 5 2-5 2Z" fill="currentColor"/></svg></span>
+                    <div class="demo-route-copy"><span id="demo-platform">TikTok → SlopStream</span><strong>Clean browser link ready</strong></div>
+                  </div>
+                  <div class="demo-actions"><button class="button secondary" id="copy-demo" type="button">Copy demo</button><button class="button secondary" id="reset-demo" type="button">Reset</button></div>
+                </div>
+              </div>
+              <p class="status" id="converter-status" role="status">Demo only. This concept does not send or resolve a link.</p>
+            </section>
+          </div>
+
+          <figure class="handoff" aria-labelledby="handoff-title">
+            <figcaption class="handoff-title" id="handoff-title">The SlopStream handoff</figcaption>
+            <div class="trace" aria-label="A source post becomes a clean link for the recipient">
+              <div class="trace-line" aria-hidden="true"></div>
+              <div class="handoff-node node-source"><small>Source post</small><strong>Public TikTok or Instagram</strong><span>The creator and original context stay attached.</span></div>
+              <p class="trace-label label-one">Paste or share from the app</p>
+              <div class="handoff-node node-clean"><small>Clean link</small><strong>One post. No feed.</strong><span>A browser route that is made to pass on.</span></div>
+              <p class="trace-label label-two">Open in a browser, not the app</p>
+              <div class="handoff-node node-recipient"><small>Recipient</small><strong>Watch without the apps</strong><span>Useful when the app is not installed, wanted, or welcome.</span></div>
+            </div>
+          </figure>
+        </div>
+      </div>
+
+      <section class="section"><div class="shell">
+        <div class="section-head"><div><p class="eyebrow">How it works</p><h2>A post is not a feed.</h2></div><p class="lede">SlopStream is deliberately narrow. It is a relay for a public post, not a new place to browse social media.</p></div>
+        <div class="steps">
+          <article class="step"><div class="step-number">01</div><h3>Start with a public post</h3><p>Paste a TikTok or Instagram video link, or use the iPhone Shortcut from the Share menu.</p></article>
+          <article class="step"><div class="step-number">02</div><h3>Get one browser link</h3><p>SlopStream creates a route for that post, with its creator identified and the original post still available.</p></article>
+          <article class="step"><div class="step-number">03</div><h3>Send it where people are</h3><p>Put it in a group chat, message, or family thread. The recipient opens the post, not an endless scroll.</p></article>
+        </div>
+      </div></section>
+
+      <section class="section"><div class="shell">
+        <div class="shortcut-band" id="shortcut">
+          <div><p class="eyebrow">iPhone Shortcut</p><h2>Share with SlopStream</h2><p>Install the signed Shortcut once. Then TikTok and Instagram can hand a supported public post to SlopStream from their normal Share menu.</p></div>
+          <ol class="shortcut-steps"><li><strong>01</strong><span>Open the Shortcut in Safari, which hands it to Apple Shortcuts.</span></li><li><strong>02</strong><span>Review it, then choose “Add Shortcut”.</span></li><li><strong>03</strong><span>In TikTok or Instagram, use Share, then choose “Share with SlopStream”.</span></li></ol>
+        </div>
+      </div></section>
+
+      <section class="section"><div class="shell">
+        <div class="section-head"><div><p class="eyebrow">Who this helps</p><h2>For the people on the other end of the link.</h2></div><p class="lede">The benefit is not a feature list. It is a less presumptive way to send a video.</p></div>
+        <div class="use-grid">
+          <article class="use-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M5 20c.8-4.1 3.1-6.2 7-6.2s6.2 2.1 7 6.2"/></svg><h3>Parents and relatives</h3><p>Send the thing you meant to send, without requiring someone to install or learn an app they do not use.</p></article>
+          <article class="use-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5h16v11H8l-4 3Z"/><path d="M8 9h8M8 12h5"/></svg><h3>Group chats</h3><p>Keep a conversation moving when not everyone shares the same social apps, account, or tolerance for a feed.</p></article>
+          <article class="use-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><h3>Privacy-conscious recipients</h3><p>Open one public post in a browser. SlopStream itself does not ask people to make an account, accept ads, or become an analytics event.</p></article>
+          <article class="use-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 4h10v16H7z"/><path d="m10 10 5 2-5 2Z"/></svg><h3>People without the apps</h3><p>A clean link means the post has a chance to be seen even when TikTok or Instagram is not on the recipient’s phone.</p></article>
+        </div>
+      </div></section>
+
+      <section class="section"><div class="shell limits">
+        <div class="limits-copy"><p class="eyebrow">Boundaries, stated plainly</p><h2>What SlopStream does and does not promise.</h2><p>It works with supported public TikTok and Instagram posts. It preserves creator attribution. It does not turn private, removed, region-restricted, or otherwise unavailable posts into viewable media.</p></div>
+        <ul class="limits-list">
+          <li><strong>Public only</strong><span>Private posts and content that a source platform will not provide cannot be opened.</span></li>
+          <li><strong>Creator credit</strong><span>Each supported post keeps a link and attribution to its original creator and platform.</span></li>
+          <li><strong>No account layer</strong><span>SlopStream has no accounts, analytics, or ads.</span></li>
+          <li><strong>Playback</strong><span>Public links and TikTok’s official playback are unlimited. If the official TikTok player fails, native fallback playback is limited to 100 plays overall and 5 per connection each day.</span></li>
+        </ul>
+      </div></section>
+
+      <section class="section"><div class="shell faq">
+        <div><p class="eyebrow">Questions people actually ask</p><h2>FAQ</h2><p class="lede">Short answers, because the product is a small thing.</p></div>
+        <div class="faq-list">
+          <details><summary>Can I share TikTok videos without the TikTok app?</summary><p>For supported public TikTok posts, SlopStream makes a clean browser link so the recipient can open the post without the TikTok app. Some posts may still be unavailable because of source-platform restrictions.</p></details>
+          <details><summary>Can I share Instagram videos without the Instagram app?</summary><p>For supported public Instagram posts, SlopStream creates a browser route that lets a recipient open the post without installing Instagram. It does not bypass private or restricted content.</p></details>
+          <details><summary>Does SlopStream download videos?</summary><p>No. SlopStream is for sharing a supported public post through a clean browser link. It keeps creator attribution and the original source visible.</p></details>
+          <details><summary>What data does SlopStream collect?</summary><p>SlopStream has no accounts, analytics, or ads. Submitted links may be sent to TikTok, Instagram, and a resolver service to load public media. TikTok’s official player may use TikTok cookies, and hosting providers may temporarily log IP addresses, browser details, and request times.</p></details>
+          <details><summary>Why can a video fail to open?</summary><p>The original post may be private, deleted, region-restricted, unsupported, or unavailable from its platform. TikTok official playback can also fail. In that case, native fallback playback has the stated shared and per-connection limits.</p></details>
+        </div>
+      </div></section>
+    </section>
+
+    <section class="view" id="about-view" data-view="about">
+      <div class="shell about-page">
+        <div class="about-intro"><p class="eyebrow">About SlopStream</p><h1>A small relay for sharing one thing well.</h1><p class="lede">SlopStream exists for the ordinary moment when a public TikTok or Instagram post is worth sending, but the recipient should not have to enter the app to see it.</p></div>
+        <div class="about-grid">
+          <article class="about-card"><p class="eyebrow">Mission</p><h3>Keep the handoff intact</h3><p>A link should carry the post, its creator, and enough context to watch. It should not quietly carry a feed, a sign-up demand, or a new account requirement.</p></article>
+          <article class="about-card"><p class="eyebrow">How it operates</p><h3>A browser route for public posts</h3><p>SlopStream sends a submitted public link to TikTok, Instagram, and a resolver service as needed to load media. It then presents the supported post in a browser.</p></article>
+          <article class="about-card"><p class="eyebrow">Privacy</p><h3>No accounts, analytics, or ads</h3><p>SlopStream does not operate an account system or ads. TikTok’s official player may use TikTok cookies, and hosting providers may temporarily log IP addresses, browser details, and request times.</p></article>
+          <article class="about-card"><p class="eyebrow">Limitations</p><h3>Public and supported is the boundary</h3><p>Private, removed, restricted, or unsupported posts cannot be opened. Public links and official playback are unlimited. TikTok native fallback is limited to 100 plays overall and 5 per connection each day.</p></article>
+        </div>
+        <div class="maker">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="ghost-bg-about" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#ghost-bg-about)"/><path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/><rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/></svg></span>
+          <div><h3>Made by Maksim Zeidler</h3><p>SlopStream is a small independent project. <a href="https://maksim-zeidler.vercel.app/" target="_blank" rel="noreferrer">More about the maker</a>.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>SlopStream, a clean handoff for public posts.</span><a href="#about">About and limitations</a></footer>
+  <script>
+    const views = document.querySelectorAll('[data-view]');
+    const routeLinks = document.querySelectorAll('[data-route]');
+    function route() {
+      const name = window.location.hash === '#about' ? 'about' : 'home';
+      views.forEach((view) => view.classList.toggle('is-active', view.dataset.view === name));
+      routeLinks.forEach((link) => link.toggleAttribute('aria-current', link.dataset.route === name));
+      document.title = name === 'about' ? 'About SlopStream' : 'SlopStream · Share public videos without the apps';
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+    window.addEventListener('hashchange', route);
+    route();
+
+    const form = document.querySelector('#converter-form');
+    const source = document.querySelector('#source-url');
+    const result = document.querySelector('#converter-result');
+    const status = document.querySelector('#converter-status');
+    const platform = document.querySelector('#demo-platform');
+    const copyButton = document.querySelector('#copy-demo');
+    const resetButton = document.querySelector('#reset-demo');
+    let demoLink = '';
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = source.value.trim();
+      if (!value) { status.textContent = 'Paste a public TikTok or Instagram link to see the demo state.'; source.focus(); return; }
+      const isInstagram = /instagram\.com|instagr\.am/i.test(value);
+      const isTikTok = /tiktok\.com/i.test(value);
+      if (!isInstagram && !isTikTok) { status.textContent = 'This demo accepts TikTok or Instagram links only.'; source.focus(); return; }
+      platform.textContent = isInstagram ? 'Instagram → SlopStream' : 'TikTok → SlopStream';
+      demoLink = 'https://slopstream.example/watch?demo=public-post';
+      result.classList.add('is-visible');
+      form.hidden = true;
+      status.textContent = 'Demo result only. No link was sent, resolved, or tracked.';
+    });
+    copyButton.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(demoLink); copyButton.textContent = 'Copied'; }
+      catch { copyButton.textContent = 'Copy unavailable'; }
+    });
+    resetButton.addEventListener('click', () => { source.value = ''; result.classList.remove('is-visible'); form.hidden = false; copyButton.textContent = 'Copy demo'; status.textContent = 'Demo only. This concept does not send or resolve a link.'; source.focus(); });
+  </script>
+</body>
+</html>
