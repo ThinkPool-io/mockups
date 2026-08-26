@@ -121,6 +121,32 @@
     .about-footer { width:min(1184px,calc(100% - 48px)); display:flex; justify-content:space-between; gap:20px; margin:0 auto; padding:26px 0 38px; border-top:1px solid var(--line); color:var(--faint); font-size:12px; }
     .about-footer a { color:var(--muted); text-underline-offset:4px; }
 
+    /* The revised About page uses one quiet editorial rhythm. */
+    .about-header,.about-shell,.about-footer { width:min(960px,calc(100% - 48px)); }
+    .about-hero { display:block; max-width:840px; padding:112px 0 88px; }
+    .about-hero h1 { max-width:13ch; font-size:clamp(54px,6vw,82px); }
+    .lede { max-width:62ch; font-size:19px; line-height:1.7; }
+    .relay-line { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:48px 0 0; padding:18px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:var(--muted); font-size:14px; font-weight:700; }
+    .relay-line span { color:var(--blue-hi); font-family:var(--mono); font-size:12px; }
+    .about-section { display:grid; grid-template-columns:190px minmax(0,1fr); gap:54px; padding:76px 0; }
+    .about-section h2 { max-width:15ch; font-size:clamp(36px,4vw,52px); line-height:1.02; }
+    .about-copy { max-width:650px; }
+    .about-copy > :first-child { margin-top:0; }
+    .about-copy > :last-child { margin-bottom:0; }
+    .about-copy p { margin:0 0 24px; color:var(--muted); font-size:17px; line-height:1.72; }
+    .process { margin:0; padding:0; list-style:none; counter-reset:process; }
+    .process li { position:relative; padding:0 0 28px 48px; color:var(--muted); font-size:16px; line-height:1.65; counter-increment:process; }
+    .process li:last-child { padding-bottom:0; }
+    .process li::before { content:counter(process,decimal-leading-zero); position:absolute; top:2px; left:0; color:var(--blue-hi); font-family:var(--mono); font-size:11px; letter-spacing:.08em; }
+    .process strong { display:block; margin-bottom:4px; color:var(--ink); }
+    .text-link { color:var(--ink); font-weight:750; text-underline-offset:4px; text-decoration-color:var(--blue-hi); }
+    .facts { margin:0; }
+    .facts div { padding:22px 0; border-top:1px solid var(--line); }
+    .facts div:first-child { padding-top:0; border-top:0; }
+    .facts dt { margin-bottom:7px; color:var(--ink); font-weight:750; }
+    .facts dd { margin:0; color:var(--muted); font-size:15px; line-height:1.66; }
+    .maker-note { color:var(--muted); font-size:15px; line-height:1.65; }
+
     @media (max-width:700px) {
       .home-cluster { padding:16px 19px 0; }
       .home-title { margin-top:12px; font-size:clamp(2.75rem,13vw,3.5rem); line-height:.98; }
@@ -148,6 +174,15 @@
       .shortcut { padding:26px 22px; }
       .boundaries li { grid-template-columns:1fr; gap:6px; }
       .about-footer { display:grid; gap:10px; }
+    }
+    @media (max-width:700px) {
+      .about-hero { padding:62px 0 58px; }
+      .about-hero h1 { font-size:clamp(47px,13vw,62px); }
+      .lede { font-size:16px; }
+      .relay-line { margin-top:36px; }
+      .about-section { grid-template-columns:1fr; gap:30px; padding:60px 0; }
+      .about-section h2 { max-width:12ch; font-size:40px; }
+      .about-copy p { font-size:16px; }
     }
     @media (max-height:720px) and (min-width:701px) { .home-cluster { transform:scale(.86); transform-origin:center; } }
     @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto !important; transition:none !important; animation:none !important; } }
@@ -202,70 +237,54 @@
 
     <div class="about-shell">
       <section class="about-hero">
-        <div>
-          <p class="eyebrow">About SlopStream</p>
-          <h1>A small relay for sharing one thing well.</h1>
-          <p class="lede">SlopStream makes supported public TikTok and Instagram posts easier to send to people who do not use the apps. The recipient gets one clean browser view with creator attribution, not another feed.</p>
-        </div>
-        <aside class="handoff-trace" aria-label="How a SlopStream link travels">
-          <p class="eyebrow">The handoff</p>
-          <div class="handoff-line" aria-hidden="true"></div>
-          <div class="handoff-labels">
-            <div><strong>Public post</strong><span>TikTok or Instagram</span></div>
-            <div><strong>Clean link</strong><span>One browser route</span></div>
-            <div><strong>Recipient</strong><span>No app required</span></div>
-          </div>
-        </aside>
+        <p class="eyebrow">About SlopStream</p>
+        <h1>A small relay for sharing one thing well.</h1>
+        <p class="lede">SlopStream makes supported public TikTok and Instagram posts easier to send to people who do not use the apps. The recipient gets one clean browser view with creator attribution, not another feed.</p>
+        <p class="relay-line">Public post <span aria-hidden="true">→</span> clean link <span aria-hidden="true">→</span> recipient</p>
       </section>
 
       <section class="about-section">
-        <div class="section-intro">
-          <div><p class="eyebrow">Why it exists</p><h2>For the person on the other end of the link.</h2></div>
-          <p class="plain-answer">Sometimes the right video is on TikTok or Instagram, but the person you want to send it to is not. SlopStream removes the app requirement from that handoff. It is useful for parents and relatives, mixed-platform group chats, privacy-conscious recipients, and anyone who would rather open one post than enter a feed.</p>
-        </div>
-        <div class="use-grid">
-          <article class="use-item"><h3>Parents and relatives</h3><p>Share the thing you meant to share without asking someone to install or learn an app they do not use.</p></article>
-          <article class="use-item"><h3>Group chats</h3><p>Keep a conversation moving when not everyone uses the same social platforms or has the same accounts.</p></article>
-          <article class="use-item"><h3>Privacy-conscious recipients</h3><p>Open one supported public post in a browser. SlopStream itself has no accounts, analytics, or ads.</p></article>
-          <article class="use-item"><h3>People without the apps</h3><p>A browser link gives the post a chance to be seen even when TikTok or Instagram is not on the recipient’s phone.</p></article>
+        <div><p class="eyebrow">Why it exists</p><h2>For the person on the other end.</h2></div>
+        <div class="about-copy">
+          <p>Sometimes the right video is on TikTok or Instagram, but the person you want to send it to is not. SlopStream removes the app requirement from that handoff.</p>
+          <p>It is useful for parents and relatives, mixed-platform group chats, privacy-conscious recipients, and anyone who would rather open one post than enter a feed.</p>
+          <p>No account is required. The page stays focused on the post you meant to share, with its creator and original source identified.</p>
         </div>
       </section>
 
       <section class="about-section">
-        <div class="section-intro">
-          <div><p class="eyebrow">How it works</p><h2>A post is not a feed.</h2></div>
-          <p class="plain-answer">SlopStream is deliberately narrow. It turns a supported public post into a route made for sharing, preserves creator attribution, and leaves the original post available.</p>
-        </div>
-        <div class="steps">
-          <article class="step"><small>01</small><h3>Start with a public post</h3><p>Paste a TikTok or Instagram link, or use the iPhone Shortcut from the Share menu.</p></article>
-          <article class="step"><small>02</small><h3>Get one browser link</h3><p>SlopStream prepares a clean route for that post with its creator and original source identified.</p></article>
-          <article class="step"><small>03</small><h3>Send it anywhere</h3><p>Put it in Messages, WhatsApp, a group chat, or a family thread. The recipient opens the post, not an endless scroll.</p></article>
-        </div>
-      </section>
-
-      <section class="about-section">
-        <div class="shortcut">
-          <div><p class="eyebrow">iPhone Shortcut</p><h2>Share with SlopStream</h2><p>Install the signed Shortcut once. TikTok and Instagram can then hand a supported public post to SlopStream from their normal Share menu.</p></div>
-          <ol><li><strong>01</strong><span>Open the signed Shortcut in Safari.</span></li><li><strong>02</strong><span>Review it, then choose “Add Shortcut”.</span></li><li><strong>03</strong><span>From TikTok or Instagram, choose “Share with SlopStream”.</span></li></ol>
+        <div><p class="eyebrow">How it works</p><h2>A post is not a feed.</h2></div>
+        <div class="about-copy">
+          <ol class="process">
+            <li><strong>Start with a public post</strong>Paste a TikTok or Instagram link, or use the iPhone Shortcut from the Share menu.</li>
+            <li><strong>Get one browser link</strong>SlopStream prepares a clean route with the creator and original source identified.</li>
+            <li><strong>Send it anywhere</strong>Put it in Messages, WhatsApp, a group chat, or a family thread. The recipient opens the post, not an endless scroll.</li>
+          </ol>
         </div>
       </section>
 
       <section class="about-section">
-        <div class="section-intro">
-          <div><p class="eyebrow">Boundaries, stated plainly</p><h2>What SlopStream does and does not promise.</h2></div>
-          <p class="plain-answer">SlopStream works with supported public posts. It does not turn private, removed, region-restricted, unsupported, or otherwise unavailable content into viewable media.</p>
+        <div><p class="eyebrow">iPhone Shortcut</p><h2>Share without copying and pasting.</h2></div>
+        <div class="about-copy">
+          <p>The optional <a class="text-link" href="https://www.icloud.com/shortcuts/3ffd2fb432664f5abc689d155a81b053" target="_blank" rel="noreferrer">Share with SlopStream Shortcut</a> adds SlopStream to the iPhone Share menu.</p>
+          <p>Install it once, then choose “Share with SlopStream” from a supported public TikTok or Instagram post. The Shortcut creates the browser link for you.</p>
         </div>
-        <ul class="boundaries">
-          <li><strong>Public only</strong><span>Private posts and content a source platform will not provide cannot be opened.</span></li>
-          <li><strong>Creator credit</strong><span>Each supported post keeps attribution and a route back to its original creator and platform.</span></li>
-          <li><strong>No account layer</strong><span>SlopStream has no accounts, analytics, or ads.</span></li>
-          <li><strong>Privacy</strong><span>Submitted links may be sent to TikTok, Instagram, and a resolver service. TikTok’s official player may use TikTok cookies. Hosting providers may temporarily log IP addresses, browser details, and request times.</span></li>
-          <li><strong>Playback limits</strong><span>Public links and official playback are unlimited. If TikTok’s official player fails, native fallback playback is limited to 100 plays overall and 5 per connection each day.</span></li>
-        </ul>
       </section>
 
-      <section class="about-section faq">
-        <div><p class="eyebrow">Questions people ask</p><h2>FAQ</h2><p class="plain-answer">Direct answers for people deciding whether the link will work for them.</p></div>
+      <section class="about-section">
+        <div><p class="eyebrow">Boundaries</p><h2>What SlopStream does and does not promise.</h2></div>
+        <div class="about-copy">
+          <p>SlopStream works with supported public posts. It cannot make private, removed, region-restricted, unsupported, or otherwise unavailable content viewable.</p>
+          <dl class="facts">
+            <div><dt>Creator credit stays attached</dt><dd>Supported posts keep attribution and a route back to the original creator and platform.</dd></div>
+            <div><dt>No SlopStream accounts, analytics, or ads</dt><dd>Submitted links may still be sent to TikTok, Instagram, and a resolver service. TikTok’s official player may use TikTok cookies. Hosting providers may temporarily log IP addresses, browser details, and request times.</dd></div>
+            <div><dt>Fallback playback has limits</dt><dd>Public links and official playback are unlimited. If TikTok’s official player fails, native fallback playback is limited to 100 plays overall and 5 per connection each day.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <div><p class="eyebrow">Questions</p><h2>Direct answers.</h2></div>
         <div class="faq-list">
           <details><summary>Can I share TikTok videos without the TikTok app?</summary><p>For supported public TikTok posts, SlopStream makes a browser link so the recipient can open the post without installing TikTok. Some posts may still be unavailable because of source-platform restrictions.</p></details>
           <details><summary>Can I share Instagram videos without the Instagram app?</summary><p>For supported public Instagram posts, SlopStream creates a browser route that can be opened without installing Instagram. It does not bypass private or restricted content.</p></details>
@@ -276,13 +295,10 @@
       </section>
 
       <section class="about-section">
-        <div class="section-intro">
-          <div><p class="eyebrow">Independent by design</p><h2>Made as a small passion project.</h2></div>
-          <p class="plain-answer">SlopStream is not a social network and is not trying to become one. Its job is to make one public post easier to pass from one person to another.</p>
-        </div>
-        <div class="maker">
-          <span class="ghost-mark" aria-hidden="true"><svg viewBox="0 0 200 200"><rect width="200" height="200" rx="44" fill="#091426"/><path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/><rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/></svg></span>
-          <div><h3>Made by Maksim Zeidler</h3><p>More about the maker at <a href="https://maksim-zeidler.vercel.app/" target="_blank" rel="noreferrer">maksim-zeidler.vercel.app</a>.</p></div>
+        <div><p class="eyebrow">Independent</p><h2>A small passion project.</h2></div>
+        <div class="about-copy">
+          <p>SlopStream is not a social network and is not trying to become one. Its job is to make one public post easier to pass from one person to another.</p>
+          <p class="maker-note">Made by Maksim Zeidler. <a class="text-link" href="https://maksim-zeidler.vercel.app/" target="_blank" rel="noreferrer">More about the maker</a>.</p>
         </div>
       </section>
     </div>
