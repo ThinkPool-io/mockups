@@ -24,7 +24,12 @@
     html, body { min-height: 100%; }
 
     body {
+      display: grid;
+      height: 100vh;
+      min-height: 100%;
       margin: 0;
+      overflow: hidden;
+      grid-template-rows: minmax(0, 1fr) auto;
       background:
         radial-gradient(circle at 50% -120px, rgba(38, 94, 180, .25), transparent 390px),
         var(--bg);
@@ -38,7 +43,7 @@
     .page {
       display: flex;
       width: min(100%, 780px);
-      min-height: 100vh;
+      min-height: calc(100vh - 30px);
       margin: 0 auto;
       padding: 30px 28px 24px;
       flex-direction: column;
@@ -263,8 +268,8 @@
       flex: none;
       align-items: center;
       justify-content: center;
-      margin-top: auto;
-      padding-top: 12px;
+      margin: 0;
+      transform: translateY(14px);
       color: var(--muted);
       font-size: 12px;
     }
@@ -411,9 +416,10 @@
       </nav>
     </section>
 
-    <footer class="footer-note">
-      <button class="footer-link" type="button">About</button>
-    </footer>
   </main>
+
+  <footer class="footer-note">
+    <button class="footer-link" type="button">About</button>
+  </footer>
 </body>
 </html>
