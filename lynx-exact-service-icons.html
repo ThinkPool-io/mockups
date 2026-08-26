@@ -21,11 +21,14 @@
 
     * { box-sizing: border-box; }
 
-    html, body { min-height: 100%; }
+    html {
+      height: 100%;
+      background: var(--bg);
+    }
 
     body {
       display: grid;
-      height: 100vh;
+      height: 100dvh;
       min-height: 100%;
       margin: 0;
       overflow: hidden;
@@ -43,11 +46,16 @@
     .page {
       display: flex;
       width: min(100%, 780px);
-      min-height: calc(100vh - 30px);
+      min-height: 0;
+      max-height: 100%;
       margin: 0 auto;
+      overflow-y: auto;
       padding: 30px 28px 24px;
       flex-direction: column;
+      scrollbar-width: none;
     }
+
+    .page::-webkit-scrollbar { display: none; }
 
     .brand {
       display: flex;
@@ -269,7 +277,6 @@
       align-items: center;
       justify-content: center;
       margin: 0;
-      transform: translateY(14px);
       color: var(--muted);
       font-size: 12px;
     }
