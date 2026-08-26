@@ -200,6 +200,17 @@
     .about-copy { max-width:630px; margin:16px auto 0; }
     .about-copy p { max-width:620px; margin-right:auto; margin-left:auto; }
     .about-copy p strong { color:var(--ink); }
+    .eyebrow-options { width:min(100%,430px); display:grid; gap:7px; margin:0 auto 18px; text-align:left; }
+    .eyebrow-options > span { min-height:30px; display:grid; grid-template-columns:22px 1fr; align-items:center; }
+    .eyebrow-options small { color:var(--faint); font-family:var(--sans); font-size:10px; font-weight:650; letter-spacing:0; }
+    .eyebrow-options b { width:max-content; font-style:normal; }
+    .eyebrow-option-1 b { color:var(--muted); font-family:var(--sans); font-size:12px; font-weight:700; letter-spacing:0; text-transform:none; }
+    .eyebrow-option-2 b { display:inline-flex; align-items:center; gap:8px; color:var(--ink); font-family:var(--sans); font-size:11px; font-weight:750; letter-spacing:.06em; text-transform:uppercase; }
+    .eyebrow-option-2 b::before { width:16px; height:1px; content:""; background:var(--blue-hi); }
+    .eyebrow-option-3 b { padding:5px 10px; border:1px solid rgb(108 162 255 / .24); border-radius:999px; color:var(--blue-hi); background:rgb(40 118 247 / .08); font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:0; text-transform:none; }
+    .eyebrow-option-4 b { display:inline-flex; align-items:center; gap:8px; color:var(--muted); font-family:var(--display); font-size:15px; font-style:italic; font-weight:400; letter-spacing:0; text-transform:none; }
+    .eyebrow-option-4 b::before { width:5px; height:5px; content:""; border-radius:50%; background:var(--blue-hi); }
+    .eyebrow-option-5 b { color:var(--ink); font-family:var(--sans); font-size:13px; font-weight:650; letter-spacing:-.01em; text-transform:none; text-decoration:underline; text-decoration-color:var(--blue); text-decoration-thickness:1px; text-underline-offset:5px; }
     .facts { max-width:590px; margin:16px auto 0; }
     .facts div { padding:14px 0; }
     .faq-list { max-width:620px; margin:34px auto 0; }
@@ -273,7 +284,7 @@
 
     <div class="about-shell" id="about-content">
       <section class="about-section">
-        <div><p class="eyebrow">Why it exists</p><h2>For people who just want the post</h2></div>
+        <div><p class="eyebrow eyebrow-options" aria-label="Five section-label treatments"><span class="eyebrow-option-1"><small>1</small><b>Why it exists</b></span><span class="eyebrow-option-2"><small>2</small><b>Why it exists</b></span><span class="eyebrow-option-3"><small>3</small><b>Why it exists</b></span><span class="eyebrow-option-4"><small>4</small><b>Why it exists</b></span><span class="eyebrow-option-5"><small>5</small><b>Why it exists</b></span></p><h2>For people who just want the post</h2></div>
         <div class="about-copy">
           <p>Sometimes the right video is inside an app the recipient does not have. SlopStream lets parents, relatives, mixed-platform group chats, and privacy-conscious recipients open just the post instead of entering a feed.</p>
         </div>
