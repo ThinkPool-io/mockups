@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lynx · Share icon options</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html {
+      background: #07101a;
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: #07101a;
+      color: #f4f7fc;
+    }
+
+    main {
+      width: min(1040px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 48px 0 68px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .lynx-study-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .lynx-study-mark {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: 1px solid #2f68b6;
+      border-radius: 14px;
+      background: #0d1a2d;
+      color: #4f93ff;
+    }
+
+    .lynx-study-mark svg {
+      width: 31px;
+      height: 31px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.7;
+    }
+
+    h1 {
+      margin: 0 0 5px;
+      font-size: 30px;
+      font-weight: 760;
+      letter-spacing: -.04em;
+    }
+
+    header p {
+      margin: 0;
+      color: #94a1b5;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .lynx-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .lynx-option {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid #2b3749;
+      border-radius: 18px;
+      background: #101925;
+    }
+
+    .lynx-option-id {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid #344257;
+      border-radius: 12px;
+      background: #0a121e;
+      color: #95a4bb;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: .06em;
+    }
+
+    .lynx-button {
+      display: grid;
+      width: 100%;
+      min-height: 64px;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 0 18px;
+      border: 1px solid #2f7cf6;
+      border-radius: 16px;
+      background: #2f7cf6;
+      color: #07101e;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -.015em;
+    }
+
+    .lynx-button svg {
+      width: 24px;
+      height: 24px;
+      justify-self: end;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.9;
+    }
+
+    .lynx-button::after {
+      width: 24px;
+      height: 1px;
+      content: "";
+    }
+
+    .lynx-option:hover,
+    .lynx-option:focus-within {
+      border-color: #548ded;
+      background: #121e2d;
+    }
+
+    .lynx-button:focus-visible {
+      outline: 3px solid #a8c8ff;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        width: min(100% - 28px, 500px);
+        padding: 28px 0 42px;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+
+      .lynx-study-brand {
+        font-size: 22px;
+      }
+
+      h1 { font-size: 26px; }
+      .lynx-options { grid-template-columns: 1fr; gap: 10px; }
+
+      .lynx-option {
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 9px;
+        padding: 9px;
+        border-radius: 15px;
+      }
+
+      .lynx-option-id {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        font-size: 10px;
+      }
+
+      .lynx-button {
+        min-height: 58px;
+        gap: 10px;
+        padding: 0 12px;
+        border-radius: 14px;
+        font-size: 15px;
+      }
+
+      .lynx-button svg { width: 22px; height: 22px; }
+      .lynx-button::after { width: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="lynx-study-brand">
+        <span class="lynx-study-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="m7 11 2-6 5 4h4l5-4 2 6v10c0 5-4 8-9 8s-9-3-9-8Z"></path><path d="M11 17v3M14 16v5M18 16v5M21 17v3M13 25c2 1 4 1 6 0"></path></svg>
+        </span>
+        <span>Lynx</span>
+      </div>
+      <div>
+        <h1>Share icon study</h1>
+        <p>Ten directions in the production button context</p>
+      </div>
+    </header>
+
+    <section class="lynx-options" aria-label="Ten share icon options">
+      <article class="lynx-option">
+        <span class="lynx-option-id">01</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"></circle><circle cx="6" cy="12" r="2.5"></circle><circle cx="18" cy="19" r="2.5"></circle><path d="m8.3 10.7 7.3-4.3M8.3 13.3l7.3 4.3"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">02</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16V3M8 7l4-4 4 4"></path><path d="M6 11H4.8A1.8 1.8 0 0 0 3 12.8v6.4A1.8 1.8 0 0 0 4.8 21h14.4a1.8 1.8 0 0 0 1.8-1.8v-6.4a1.8 1.8 0 0 0-1.8-1.8H18"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">03</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v12M7.5 8.5 12 4l4.5 4.5"></path><path d="M5 14v5h14v-5"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">04</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 5 5 5-5 5"></path><path d="M20 10h-7.5C7.8 10 5 12.7 4 19c2.2-3.3 5-5 8.5-5H15"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">05</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 3-7.3 18-3.8-7-7-3.7L21 3Z"></path><path d="m9.9 14 4-4"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">06</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9.5 14.5 5-5"></path><path d="m7 17-1 1a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 5 0"></path><path d="m17 7 1-1a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-5 0"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">07</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="18" cy="19" r="2"></circle><path d="M8 5h3a5 5 0 0 1 5 5v7M8 5c3 0 5 1.5 5 4.5"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">08</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M11 5h8v8"></path><circle cx="5" cy="8" r="2"></circle><circle cx="8" cy="19" r="2"></circle></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">09</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"></circle><path d="M6 12a6 6 0 0 1 6 6M6 6a12 12 0 0 1 12 12"></path><path d="M15 5h4v4"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+
+      <article class="lynx-option">
+        <span class="lynx-option-id">10</span>
+        <button class="lynx-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h11M13 7l5 5-5 5"></path><circle cx="5" cy="5" r="2"></circle><circle cx="5" cy="19" r="2"></circle><path d="M7 5h3M7 19h3"></path></svg>
+          <span>Share universal link</span>
+        </button>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
