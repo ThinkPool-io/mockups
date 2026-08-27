@@ -176,11 +176,11 @@
     }
 
     .lynx-share-universal {
-      display: flex;
+      display: grid;
       width: 100%;
       min-height: 64px;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: center;
       gap: 12px;
       margin-top: 20px;
       border: 1px solid #2f7cf6;
@@ -195,11 +195,18 @@
     .lynx-share-universal svg {
       width: 23px;
       height: 23px;
+      justify-self: end;
       fill: none;
       stroke: currentColor;
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 2;
+    }
+
+    .lynx-share-universal::after {
+      width: 23px;
+      height: 1px;
+      content: "";
     }
 
     .lynx-convert-another {
