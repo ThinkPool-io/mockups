@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#e7ebf0" />
+  <title>Maksim Zeidler, five portfolio directions</title>
+  <style>
+    :root {
+      --board-bg: #e7ebf0;
+      --board-ink: #11151b;
+      --board-muted: #657080;
+      --board-line: #cbd2db;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--board-bg); }
+
+    body {
+      margin: 0;
+      color: var(--board-ink);
+      background: var(--board-bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+
+    .board {
+      width: min(100%, 1420px);
+      margin: 0 auto;
+      padding: 34px 28px 56px;
+    }
+
+    .board-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+      padding: 0 2px;
+    }
+
+    .board-kicker {
+      margin: 0 0 7px;
+      color: var(--board-muted);
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .board h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 50px);
+      line-height: .96;
+      letter-spacing: -.055em;
+    }
+
+    .board-intro {
+      max-width: 390px;
+      margin: 0;
+      color: var(--board-muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .option {
+      min-width: 0;
+    }
+
+    .option:last-child {
+      width: calc(50% - 9px);
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+
+    .option-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 3px 8px;
+      color: var(--board-muted);
+      font-size: 11px;
+    }
+
+    .option-meta strong {
+      color: var(--board-ink);
+      font-weight: 750;
+    }
+
+    .concept {
+      position: relative;
+      min-height: 540px;
+      overflow: hidden;
+      border: 1px solid var(--board-line);
+      border-radius: 18px;
+      box-shadow: 0 16px 34px rgb(18 25 35 / .08);
+    }
+
+    .concept a {
+      text-decoration: none;
+    }
+
+    .concept a:focus-visible {
+      outline: 3px solid currentColor;
+      outline-offset: 3px;
+    }
+
+    /* 01: Quiet index */
+    .index-concept {
+      display: flex;
+      flex-direction: column;
+      padding: 34px;
+      color: #11161d;
+      background: #f5f8fb;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .index-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 23px;
+      border-bottom: 1px solid #cbd3dc;
+    }
+
+    .index-name {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: -.055em;
+    }
+
+    .index-note {
+      max-width: 180px;
+      margin: 0;
+      color: #627080;
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .index-list {
+      display: grid;
+      margin-top: auto;
+      border-top: 1px solid #cbd3dc;
+    }
+
+    .index-link {
+      display: grid;
+      grid-template-columns: 112px 1fr 22px;
+      align-items: center;
+      gap: 16px;
+      min-height: 78px;
+      border-bottom: 1px solid #cbd3dc;
+    }
+
+    .index-link strong {
+      font-size: 16px;
+      letter-spacing: -.025em;
+    }
+
+    .index-link span {
+      color: #627080;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .index-link b {
+      color: #185cff;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* 02: Blue poster */
+    .poster-concept {
+      display: flex;
+      flex-direction: column;
+      padding: 30px 32px 32px;
+      color: #fff;
+      background: #164fe7;
+      isolation: isolate;
+    }
+
+    .poster-monogram {
+      position: absolute;
+      top: 24px;
+      right: -18px;
+      z-index: -1;
+      color: rgb(255 255 255 / .12);
+      font-size: clamp(160px, 20vw, 270px);
+      font-weight: 900;
+      line-height: .75;
+      letter-spacing: -.13em;
+      user-select: none;
+    }
+
+    .poster-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .poster-statement {
+      max-width: 340px;
+      margin: 92px 0 20px;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
+      line-height: .92;
+      letter-spacing: -.06em;
+    }
+
+    .poster-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .poster-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 48px;
+      padding: 0 16px;
+      border: 1px solid rgb(255 255 255 / .7);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .poster-foot {
+      margin: 16px 0 0;
+      color: rgb(255 255 255 / .72);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    /* 03: Signal console */
+    .console-concept {
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+      color: #e7eaff;
+      background: #0b0e15;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+    }
+
+    .console-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #272d3b;
+      color: #8992aa;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .console-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #ff9855;
+    }
+
+    .console-status::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .console-title {
+      margin: 38px 0 8px;
+      color: #b9c5ff;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .console-title::before {
+      color: #ff9855;
+      content: "> ";
+    }
+
+    .console-sub {
+      margin: 0;
+      color: #7f889d;
+      font-size: 12px;
+    }
+
+    .console-list {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .console-link {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 72px;
+      padding: 12px 15px;
+      border: 1px solid #272d3b;
+      border-radius: 8px;
+      background: #10141e;
+    }
+
+    .console-code {
+      color: #ff9855;
+      font-size: 11px;
+    }
+
+    .console-copy strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #eef0ff;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 15px;
+    }
+
+    .console-copy span {
+      display: block;
+      overflow: hidden;
+      color: #8992aa;
+      font-size: 10px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .console-open {
+      color: #b9c5ff;
+      font-size: 12px;
+    }
+
+    /* 04: Three doors */
+    .doors-concept {
+      display: grid;
+      grid-template-rows: auto repeat(3, 1fr);
+      color: #14171b;
+      background: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .doors-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 72px;
+      padding: 0 24px;
+      border-bottom: 1px solid #15191f;
+    }
+
+    .doors-head strong {
+      font-size: 15px;
+      letter-spacing: -.025em;
+    }
+
+    .doors-head span {
+      color: #657080;
+      font-size: 10px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .door {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+      min-height: 0;
+      padding: 20px 24px;
+      border-bottom: 1px solid #15191f;
+    }
+
+    .door:last-child { border-bottom: 0; }
+
+    .door strong {
+      display: block;
+      font-size: clamp(27px, 4vw, 44px);
+      line-height: .9;
+      letter-spacing: -.06em;
+    }
+
+    .door span {
+      display: block;
+      margin-top: 8px;
+      color: #657080;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .door b {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #15191f;
+      border-radius: 50%;
+      font-size: 17px;
+      font-weight: 400;
+    }
+
+    .door:nth-child(3) { background: #e9efff; }
+    .door:nth-child(4) { background: #f0f2f4; }
+
+    /* 05: Maker note */
+    .note-concept {
+      display: flex;
+      flex-direction: column;
+      padding: 34px;
+      color: #28223c;
+      background: #f1efff;
+    }
+
+    .note-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #28223c;
+      border-radius: 50%;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    .note-statement {
+      max-width: 510px;
+      margin: 72px 0 28px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 4vw, 50px);
+      font-weight: 400;
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+
+    .note-statement em {
+      color: #e54e4e;
+      font-weight: 400;
+    }
+
+    .note-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: auto;
+    }
+
+    .note-link {
+      min-width: 0;
+      min-height: 90px;
+      padding: 13px;
+      border: 1px solid rgb(40 34 60 / .32);
+      border-radius: 12px;
+      background: rgb(255 255 255 / .45);
+    }
+
+    .note-link strong {
+      display: block;
+      margin-bottom: 18px;
+      font-size: 14px;
+      letter-spacing: -.025em;
+    }
+
+    .note-link span {
+      display: block;
+      overflow: hidden;
+      color: #716a87;
+      font-size: 9px;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 820px) {
+      .board { padding: 24px 18px 38px; }
+      .board-head { align-items: start; flex-direction: column; }
+      .board-intro { max-width: 520px; }
+      .options { grid-template-columns: 1fr; }
+      .option:last-child {
+        width: auto;
+        grid-column: auto;
+      }
+      .concept { min-height: 500px; }
+    }
+
+    @media (max-width: 430px) {
+      .board { padding: 20px 14px 32px; }
+      .board-head { margin-bottom: 20px; }
+      .board-intro { font-size: 13px; }
+      .options { gap: 22px; }
+      .option-meta { font-size: 10px; }
+      .concept { min-height: 480px; border-radius: 15px; }
+
+      .index-concept { padding: 24px 20px; }
+      .index-name { font-size: 27px; }
+      .index-note { max-width: 130px; font-size: 10px; }
+      .index-link { grid-template-columns: 88px 1fr 18px; gap: 9px; }
+      .index-link strong { font-size: 14px; }
+      .index-link span { font-size: 9px; }
+
+      .poster-concept { padding: 24px 22px; }
+      .poster-statement { margin-top: 78px; font-size: 38px; }
+      .poster-monogram { top: 32px; font-size: 190px; }
+      .poster-link { min-height: 44px; padding: 0 13px; font-size: 12px; }
+
+      .console-concept { padding: 22px 18px; }
+      .console-title { margin-top: 30px; }
+      .console-link { grid-template-columns: 28px 1fr auto; gap: 8px; padding: 10px; }
+      .console-copy strong { font-size: 14px; }
+      .console-copy span { max-width: 210px; }
+
+      .doors-head { padding: 0 18px; }
+      .door { padding: 17px 18px; }
+      .door strong { font-size: 32px; }
+      .door span { font-size: 9px; }
+      .door b { width: 34px; height: 34px; }
+
+      .note-concept { padding: 26px 20px; }
+      .note-statement { margin-top: 56px; font-size: 35px; }
+      .note-links { grid-template-columns: 1fr; gap: 7px; }
+      .note-link {
+        min-height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+      }
+      .note-link strong { margin: 0; }
+      .note-link span { text-align: right; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-head">
+      <div>
+        <p class="board-kicker">Maksim Zeidler / portfolio study</p>
+        <h1>Five minimal directions</h1>
+      </div>
+      <p class="board-intro">Same three live products. Five different ideas about what should lead: clarity, attitude, systems, navigation, or personality.</p>
+    </header>
+
+    <div class="options">
+      <article class="option">
+        <div class="option-meta"><strong>01 · Quiet index</strong><span>direct, precise, neutral</span></div>
+        <section class="concept index-concept" aria-label="Quiet index portfolio direction">
+          <div class="index-top">
+            <h2 class="index-name">Maksim<br />Zeidler</h2>
+            <p class="index-note">Independent software projects, currently live.</p>
+          </div>
+          <nav class="index-list" aria-label="Maksim Zeidler projects, quiet index">
+            <a class="index-link" href="https://thinkpool.io" target="_blank" rel="noreferrer"><strong>thinkpool</strong><span>Direct AI agents together</span><b aria-hidden="true">↗</b></a>
+            <a class="index-link" href="https://lynx.stream" target="_blank" rel="noreferrer"><strong>Lynx</strong><span>Spotify, Apple Music + YouTube Music</span><b aria-hidden="true">↗</b></a>
+            <a class="index-link" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer"><strong>SlopStream</strong><span>X, TikTok, Instagram, Facebook + Shorts</span><b aria-hidden="true">↗</b></a>
+          </nav>
+        </section>
+      </article>
+
+      <article class="option">
+        <div class="option-meta"><strong>02 · Blue poster</strong><span>confident, public, graphic</span></div>
+        <section class="concept poster-concept" aria-label="Blue poster portfolio direction">
+          <div class="poster-monogram" aria-hidden="true">MZ</div>
+          <div class="poster-head"><strong>Maksim Zeidler</strong><span>Three things, live now</span></div>
+          <h2 class="poster-statement">Small tools for fewer tabs.</h2>
+          <nav class="poster-links" aria-label="Maksim Zeidler projects, blue poster">
+            <a class="poster-link" href="https://thinkpool.io" target="_blank" rel="noreferrer"><span>thinkpool</span><span aria-hidden="true">↗</span></a>
+            <a class="poster-link" href="https://lynx.stream" target="_blank" rel="noreferrer"><span>Lynx</span><span aria-hidden="true">↗</span></a>
+            <a class="poster-link" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer"><span>SlopStream</span><span aria-hidden="true">↗</span></a>
+          </nav>
+          <p class="poster-foot">AI agents together · music across three services · social posts across five platforms</p>
+        </section>
+      </article>
+
+      <article class="option">
+        <div class="option-meta"><strong>03 · Signal console</strong><span>technical, compact, alive</span></div>
+        <section class="concept console-concept" aria-label="Signal console portfolio direction">
+          <div class="console-bar"><span>mz / current</span><span class="console-status">online</span></div>
+          <h2 class="console-title">open_project</h2>
+          <p class="console-sub">Three public tools. No case-study theater.</p>
+          <nav class="console-list" aria-label="Maksim Zeidler projects, signal console">
+            <a class="console-link" href="https://thinkpool.io" target="_blank" rel="noreferrer"><span class="console-code">tp</span><span class="console-copy"><strong>thinkpool</strong><span>shared room for directing AI agents</span></span><span class="console-open">open()</span></a>
+            <a class="console-link" href="https://lynx.stream" target="_blank" rel="noreferrer"><span class="console-code">lx</span><span class="console-copy"><strong>Lynx</strong><span>spotify / apple music / youtube music</span></span><span class="console-open">open()</span></a>
+            <a class="console-link" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer"><span class="console-code">ss</span><span class="console-copy"><strong>SlopStream</strong><span>x / tiktok / instagram / facebook / shorts</span></span><span class="console-open">open()</span></a>
+          </nav>
+        </section>
+      </article>
+
+      <article class="option">
+        <div class="option-meta"><strong>04 · Three doors</strong><span>navigation is the design</span></div>
+        <section class="concept doors-concept" aria-label="Three doors portfolio direction">
+          <header class="doors-head"><strong>Maksim Zeidler</strong><span>Choose a project</span></header>
+          <a class="door" href="https://thinkpool.io" target="_blank" rel="noreferrer"><span><strong>thinkpool</strong><span>Direct coding agents in a shared room</span></span><b aria-hidden="true">↗</b></a>
+          <a class="door" href="https://lynx.stream" target="_blank" rel="noreferrer"><span><strong>Lynx</strong><span>Spotify · Apple Music · YouTube Music</span></span><b aria-hidden="true">↗</b></a>
+          <a class="door" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer"><span><strong>SlopStream</strong><span>X · TikTok · Instagram · Facebook · Shorts</span></span><b aria-hidden="true">↗</b></a>
+        </section>
+      </article>
+
+      <article class="option">
+        <div class="option-meta"><strong>05 · Maker note</strong><span>personal, calm, editorial</span></div>
+        <section class="concept note-concept" aria-label="Maker note portfolio direction">
+          <div class="note-mark" aria-hidden="true">MZ</div>
+          <h2 class="note-statement">I make small software that removes one <em>annoying step.</em></h2>
+          <nav class="note-links" aria-label="Maksim Zeidler projects, maker note">
+            <a class="note-link" href="https://thinkpool.io" target="_blank" rel="noreferrer"><strong>thinkpool ↗</strong><span>AI agents, together</span></a>
+            <a class="note-link" href="https://lynx.stream" target="_blank" rel="noreferrer"><strong>Lynx ↗</strong><span>music links, translated</span></a>
+            <a class="note-link" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer"><strong>SlopStream ↗</strong><span>social posts, cleaned</span></a>
+          </nav>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
