@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d0e" />
+  <title>Maksim Zeidler, M icon directions</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --mz-bg: hsl(212 13% 5%);
+      --mz-raised: hsl(212 11% 8%);
+      --mz-surface: hsl(212 10% 10%);
+      --mz-float: hsl(212 9% 13%);
+      --mz-line: hsl(212 7% 21%);
+      --mz-line-strong: hsl(212 7% 28%);
+      --mz-ink: hsl(212 14% 95%);
+      --mz-soft: hsl(212 14% 86%);
+      --mz-muted: hsl(212 14% 78%);
+      --mz-faint: hsl(212 12% 62%);
+      --mz-blue: #438cf8;
+      --mz-blue-hi: #7eb4ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--mz-ink);
+      background: var(--mz-bg);
+      font-family: "Hanken Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 500;
+    }
+
+    .symbol-bank {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    main {
+      width: min(100% - 48px, 1368px);
+      margin: 0 auto;
+      padding: 38px 0 46px;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--mz-line);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--mz-blue-hi);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .brief {
+      max-width: 430px;
+      margin: 0 0 3px;
+      color: var(--mz-faint);
+      font-size: 15px;
+      line-height: 1.45;
+      text-align: right;
+    }
+
+    .family {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 18px 0 20px;
+    }
+
+    .family-label {
+      margin-right: 4px;
+      color: var(--mz-faint);
+      font-size: 12px;
+    }
+
+    .family-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mz-muted);
+      font-size: 12px;
+    }
+
+    .family-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .family-icon svg,
+    .hero-icon svg,
+    .scale-icon svg,
+    .tab-icon svg { width: 100%; height: 100%; display: block; }
+
+    .directions {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .direction {
+      grid-column: span 2;
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--mz-line);
+      border-radius: 18px;
+      background: var(--mz-raised);
+    }
+
+    .direction:nth-child(4) { grid-column: 2 / span 2; }
+    .direction:nth-child(5) { grid-column: 4 / span 2; }
+
+    .direction-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -.02em;
+    }
+
+    .direction-note {
+      color: var(--mz-faint);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .mark-stage {
+      min-height: 156px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--mz-line) 72%, transparent);
+      border-radius: 14px;
+      background: var(--mz-surface);
+    }
+
+    .hero-icon {
+      width: 124px;
+      height: 124px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 16px 35px rgba(0, 0, 0, .22);
+    }
+
+    .proof {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: end;
+      margin-top: 16px;
+    }
+
+    .scale {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      min-width: max-content;
+    }
+
+    .scale-icon {
+      overflow: hidden;
+      border-radius: 7px;
+    }
+
+    .scale-icon.size-48 { width: 48px; height: 48px; border-radius: 11px; }
+    .scale-icon.size-32 { width: 32px; height: 32px; }
+    .scale-icon.size-16 { width: 16px; height: 16px; border-radius: 4px; }
+
+    .browser-tab {
+      min-width: 0;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      border: 1px solid var(--mz-line);
+      border-bottom-color: var(--mz-line-strong);
+      border-radius: 10px 10px 4px 4px;
+      color: var(--mz-soft);
+      background: var(--mz-float);
+      font-size: 11px;
+    }
+
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .tab-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tab-close { margin-left: auto; color: var(--mz-faint); }
+
+    @media (max-width: 900px) {
+      main { width: min(100% - 32px, 720px); }
+      .directions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .direction,
+      .direction:nth-child(4),
+      .direction:nth-child(5) { grid-column: auto; }
+      .direction:last-child { grid-column: 1 / -1; width: calc(50% - 7px); justify-self: center; }
+      .proof { grid-template-columns: 1fr; align-items: start; }
+    }
+
+    @media (max-width: 560px) {
+      main { width: min(100% - 28px, 430px); padding: 26px 0 34px; }
+      .masthead { display: block; padding-bottom: 20px; }
+      .brief { margin-top: 13px; text-align: left; }
+      .family { flex-wrap: wrap; gap: 10px 14px; }
+      .family-label { width: 100%; }
+      .directions { grid-template-columns: 1fr; }
+      .direction,
+      .direction:last-child { grid-column: auto; width: 100%; }
+      .direction { padding: 17px; }
+      .mark-stage { min-height: 150px; }
+      .hero-icon { width: 118px; height: 118px; border-radius: 26px; }
+      .proof { grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 12px; }
+      .scale-icon.size-48 { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="symbol-bank" aria-hidden="true">
+    <defs>
+      <linearGradient id="family-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#1a3c70" />
+        <stop offset=".6" stop-color="#091426" />
+        <stop offset="1" stop-color="#050812" />
+      </linearGradient>
+
+      <symbol id="brand-thinkpool" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="#0b1118" />
+        <circle cx="100" cy="100" r="66" fill="none" stroke="#1a6ef4" stroke-width="15" />
+        <path d="M100 48c-24 24-34 39-34 54a34 34 0 0 0 68 0c0-15-10-30-34-54Z" fill="#1a6ef4" />
+      </symbol>
+
+      <symbol id="brand-lynx" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round" />
+        <path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5" />
+        <path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94" fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round" />
+        <path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff" />
+      </symbol>
+
+      <symbol id="brand-slop" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff" />
+        <rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff" />
+      </symbol>
+
+      <symbol id="m-fold" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M44 148V54l56 66 56-66v94" fill="#0b1527" stroke="#438cf8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="m55 63 45 53 45-53" fill="none" stroke="#7eb4ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".56" />
+      </symbol>
+
+      <symbol id="m-block" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M42 151V49h25l33 43 33-43h25v102h-25V88l-33 43-33-43v63Z" fill="#438cf8" />
+        <path d="M53 60h9l38 49 38-49h9" fill="none" stroke="#a7cbff" stroke-width="5" stroke-linecap="round" opacity=".52" />
+      </symbol>
+
+      <symbol id="m-orbit" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <circle cx="100" cy="100" r="65" fill="#0b1527" stroke="#438cf8" stroke-width="8" />
+        <path d="M61 133V67l39 44 39-44v66" fill="none" stroke="#f3f7ff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="100" cy="35" r="5" fill="#7eb4ff" />
+      </symbol>
+
+      <symbol id="m-notch" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M43 151V49h28l29 42 29-42h28v102h-24V84l-33 47-33-47v67Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linejoin="round" />
+        <path d="m73 63 27 40 27-40" fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+      </symbol>
+
+      <symbol id="m-split" viewBox="0 0 200 200">
+        <rect width="200" height="200" rx="44" fill="url(#family-bg)" />
+        <path d="M47 148V58l53 61" fill="none" stroke="#438cf8" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="m100 119 53-61v90" fill="none" stroke="#f3f7ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M47 58 100 119" fill="none" stroke="#7eb4ff" stroke-width="5" stroke-linecap="round" opacity=".7" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <main>
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Portfolio icon study</p>
+        <h1>M for Maksim</h1>
+      </div>
+      <p class="brief">One shared app-icon shell. Five marks tested at full size, home-screen size, and the 16px browser tab.</p>
+    </header>
+
+    <div class="family" aria-label="Existing brand icon family">
+      <span class="family-label">Existing family</span>
+      <span class="family-item"><span class="family-icon"><svg><use href="#brand-thinkpool" /></svg></span>thinkpool</span>
+      <span class="family-item"><span class="family-icon"><svg><use href="#brand-lynx" /></svg></span>Lynx</span>
+      <span class="family-item"><span class="family-icon"><svg><use href="#brand-slop" /></svg></span>SlopStream</span>
+    </div>
+
+    <section class="directions" aria-label="Five M icon directions">
+      <article class="direction">
+        <div class="direction-head"><h2>Fold</h2><span class="direction-note">single-line M</span></div>
+        <div class="mark-stage"><span class="hero-icon"><svg><use href="#m-fold" /></svg></span></div>
+        <div class="proof">
+          <div class="scale" aria-label="Fold icon size test">
+            <span class="scale-icon size-48"><svg><use href="#m-fold" /></svg></span>
+            <span class="scale-icon size-32"><svg><use href="#m-fold" /></svg></span>
+            <span class="scale-icon size-16"><svg><use href="#m-fold" /></svg></span>
+          </div>
+          <div class="browser-tab"><span class="tab-icon"><svg><use href="#m-fold" /></svg></span><span class="tab-title">Maksim Zeidler</span><span class="tab-close">×</span></div>
+        </div>
+      </article>
+
+      <article class="direction">
+        <div class="direction-head"><h2>Block</h2><span class="direction-note">boldest at 16px</span></div>
+        <div class="mark-stage"><span class="hero-icon"><svg><use href="#m-block" /></svg></span></div>
+        <div class="proof">
+          <div class="scale" aria-label="Block icon size test">
+            <span class="scale-icon size-48"><svg><use href="#m-block" /></svg></span>
+            <span class="scale-icon size-32"><svg><use href="#m-block" /></svg></span>
+            <span class="scale-icon size-16"><svg><use href="#m-block" /></svg></span>
+          </div>
+          <div class="browser-tab"><span class="tab-icon"><svg><use href="#m-block" /></svg></span><span class="tab-title">Maksim Zeidler</span><span class="tab-close">×</span></div>
+        </div>
+      </article>
+
+      <article class="direction">
+        <div class="direction-head"><h2>Orbit</h2><span class="direction-note">closest to thinkpool</span></div>
+        <div class="mark-stage"><span class="hero-icon"><svg><use href="#m-orbit" /></svg></span></div>
+        <div class="proof">
+          <div class="scale" aria-label="Orbit icon size test">
+            <span class="scale-icon size-48"><svg><use href="#m-orbit" /></svg></span>
+            <span class="scale-icon size-32"><svg><use href="#m-orbit" /></svg></span>
+            <span class="scale-icon size-16"><svg><use href="#m-orbit" /></svg></span>
+          </div>
+          <div class="browser-tab"><span class="tab-icon"><svg><use href="#m-orbit" /></svg></span><span class="tab-title">Maksim Zeidler</span><span class="tab-close">×</span></div>
+        </div>
+      </article>
+
+      <article class="direction">
+        <div class="direction-head"><h2>Notch</h2><span class="direction-note">outlined monogram</span></div>
+        <div class="mark-stage"><span class="hero-icon"><svg><use href="#m-notch" /></svg></span></div>
+        <div class="proof">
+          <div class="scale" aria-label="Notch icon size test">
+            <span class="scale-icon size-48"><svg><use href="#m-notch" /></svg></span>
+            <span class="scale-icon size-32"><svg><use href="#m-notch" /></svg></span>
+            <span class="scale-icon size-16"><svg><use href="#m-notch" /></svg></span>
+          </div>
+          <div class="browser-tab"><span class="tab-icon"><svg><use href="#m-notch" /></svg></span><span class="tab-title">Maksim Zeidler</span><span class="tab-close">×</span></div>
+        </div>
+      </article>
+
+      <article class="direction">
+        <div class="direction-head"><h2>Split</h2><span class="direction-note">blue + ice</span></div>
+        <div class="mark-stage"><span class="hero-icon"><svg><use href="#m-split" /></svg></span></div>
+        <div class="proof">
+          <div class="scale" aria-label="Split icon size test">
+            <span class="scale-icon size-48"><svg><use href="#m-split" /></svg></span>
+            <span class="scale-icon size-32"><svg><use href="#m-split" /></svg></span>
+            <span class="scale-icon size-16"><svg><use href="#m-split" /></svg></span>
+          </div>
+          <div class="browser-tab"><span class="tab-icon"><svg><use href="#m-split" /></svg></span><span class="tab-title">Maksim Zeidler</span><span class="tab-close">×</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
