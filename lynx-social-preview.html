@@ -948,260 +948,56 @@ html&gt;body{padding:0}&lt;/style&gt;
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    border: 1px solid #1e2c43;
+    border: 1px solid #243754;
     border-radius: 32px;
     background:
-      radial-gradient(circle at 82% 34%, rgba(45, 118, 246, 0.24), transparent 28%),
-      radial-gradient(circle at 8% 0%, rgba(36, 93, 187, 0.24), transparent 32%),
-      linear-gradient(135deg, #0b111c 0%, #070b12 58%, #05070c 100%);
+      radial-gradient(circle at 50% 0%, rgba(42, 116, 238, 0.28), transparent 50%),
+      linear-gradient(180deg, #0b1422 0%, #070b12 72%);
     box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
     transform-origin: top left;
-  }
-
-  #lynx-og-board .lynx-og-grain {
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-    background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox=&#x27;0 0 180 180&#x27; xmlns=&#x27;http://www.w3.org/2000/svg&#x27;%3E%3Cfilter id=&#x27;n&#x27;%3E%3CfeTurbulence type=&#x27;fractalNoise&#x27; baseFrequency=&#x27;.9&#x27; numOctaves=&#x27;3&#x27; stitchTiles=&#x27;stitch&#x27;/%3E%3C/filter%3E%3Crect width=&#x27;100%25&#x27; height=&#x27;100%25&#x27; filter=&#x27;url(%23n)&#x27; opacity=&#x27;.75&#x27;/%3E%3C/svg%3E&quot;);
-    pointer-events: none;
   }
 
   #lynx-og-board .lynx-og-content {
     position: absolute;
     inset: 0;
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 54px;
-    padding: 62px 68px 58px;
-  }
-
-  #lynx-og-board .lynx-og-copy {
     display: flex;
-    min-width: 0;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 54px 72px 58px;
+    text-align: center;
   }
 
   #lynx-og-board .lynx-og-brand {
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: center;
+    gap: 16px;
     color: #f5f8ff;
-    font-size: 27px;
-    font-weight: 780;
+    font-size: 40px;
+    font-weight: 790;
     letter-spacing: -0.03em;
   }
 
   #lynx-og-board .lynx-og-mark {
-    width: 48px;
-    height: 48px;
+    width: 72px;
+    height: 72px;
     flex: 0 0 auto;
-    filter: drop-shadow(0 8px 22px rgba(42, 116, 238, 0.28));
+    filter: drop-shadow(0 10px 28px rgba(42, 116, 238, 0.32));
   }
 
   #lynx-og-board .lynx-og-title {
-    max-width: 720px;
-    margin: 70px 0 0;
-    color: #f6f8fc;
+    margin: 56px 0 0;
+    color: #f7f9fd;
     font-family: Georgia, &quot;Times New Roman&quot;, serif;
-    font-size: 86px;
+    font-size: 112px;
     font-weight: 400;
-    line-height: 0.94;
+    line-height: 0.96;
     letter-spacing: -0.055em;
   }
 
   #lynx-og-board .lynx-og-title span {
-    color: #77a9ff;
-  }
-
-  #lynx-og-board .lynx-og-subtitle {
-    max-width: 610px;
-    margin: 27px 0 0;
-    color: #aeb9cb;
-    font-size: 23px;
-    font-weight: 540;
-    line-height: 1.42;
-    letter-spacing: -0.015em;
-  }
-
-  #lynx-og-board .lynx-og-services {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: auto;
-  }
-
-  #lynx-og-board .lynx-og-service {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    color: #c6d0de;
-    font-size: 15px;
-    font-weight: 690;
-    white-space: nowrap;
-  }
-
-  #lynx-og-board .lynx-og-service + .lynx-og-service::before {
-    width: 3px;
-    height: 3px;
-    margin-right: 3px;
-    border-radius: 50%;
-    background: #526077;
-    content: &quot;&quot;;
-  }
-
-  #lynx-og-board .lynx-og-service-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.045);
-  }
-
-  #lynx-og-board .lynx-og-visual {
-    position: relative;
-    display: grid;
-    place-items: center;
-  }
-
-  #lynx-og-board .lynx-og-orbit {
-    position: relative;
-    width: min(370px, 100%);
-    aspect-ratio: 1;
-    border: 1px solid rgba(110, 157, 235, 0.14);
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(34, 92, 184, 0.16), transparent 66%);
-  }
-
-  #lynx-og-board .lynx-og-orbit::before,
-  #lynx-og-board .lynx-og-orbit::after {
-    position: absolute;
-    inset: 13%;
-    border: 1px solid rgba(110, 157, 235, 0.13);
-    border-radius: 50%;
-    content: &quot;&quot;;
-  }
-
-  #lynx-og-board .lynx-og-orbit::after {
-    inset: 31%;
-    border-color: rgba(110, 157, 235, 0.19);
-  }
-
-  #lynx-og-board .lynx-og-center {
-    position: absolute;
-    inset: 50% auto auto 50%;
-    z-index: 3;
-    width: 112px;
-    height: 112px;
-    display: grid;
-    place-items: center;
-    transform: translate(-50%, -50%);
-    border: 1px solid rgba(111, 161, 248, 0.42);
-    border-radius: 28px;
-    background: linear-gradient(145deg, rgba(28, 68, 133, 0.94), rgba(7, 15, 29, 0.98));
-    box-shadow: 0 22px 60px rgba(12, 81, 198, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  }
-
-  #lynx-og-board .lynx-og-center svg {
-    width: 67px;
-    height: 67px;
-  }
-
-  #lynx-og-board .lynx-og-node {
-    position: absolute;
-    z-index: 2;
-    width: 68px;
-    height: 68px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    background: rgba(10, 16, 27, 0.94);
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.055);
-  }
-
-  #lynx-og-board .lynx-og-node-one {
-    top: 7%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  #lynx-og-board .lynx-og-node-two {
-    right: 4%;
-    bottom: 18%;
-  }
-
-  #lynx-og-board .lynx-og-node-three {
-    left: 4%;
-    bottom: 18%;
-  }
-
-  #lynx-og-board .lynx-og-spotify {
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: #1ed760;
-  }
-
-  #lynx-og-board .lynx-og-spotify svg {
-    width: 26px;
-    height: 26px;
-  }
-
-  #lynx-og-board .lynx-og-apple {
-    font-size: 37px;
-    line-height: 1;
-  }
-
-  #lynx-og-board .lynx-og-youtube {
-    width: 41px;
-    height: 28px;
-    display: grid;
-    place-items: center;
-    border-radius: 8px;
-    background: #ff0033;
-  }
-
-  #lynx-og-board .lynx-og-youtube::after {
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-left: 11px solid white;
-    content: &quot;&quot;;
-  }
-
-  #lynx-og-board .lynx-og-connection {
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    width: 41%;
-    height: 1px;
-    transform-origin: left center;
-    background: linear-gradient(90deg, rgba(84, 142, 241, 0.66), rgba(84, 142, 241, 0.06));
-  }
-
-  #lynx-og-board .lynx-og-connection-one {
-    transform: rotate(-90deg);
-  }
-
-  #lynx-og-board .lynx-og-connection-two {
-    transform: rotate(29deg);
-  }
-
-  #lynx-og-board .lynx-og-connection-three {
-    transform: rotate(151deg);
-  }
-
-  #lynx-og-board .lynx-og-link {
-    position: absolute;
-    right: 0;
-    bottom: 4px;
-    color: #6f7e95;
-    font-size: 14px;
-    font-weight: 650;
-    letter-spacing: 0.01em;
+    color: #72a8ff;
   }
 
   @media (max-width: 760px) {
@@ -1212,23 +1008,21 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/style&gt;
 
 &lt;div id=&quot;lynx-og-board&quot;&gt;
-  &lt;section class=&quot;lynx-og-stage&quot; aria-label=&quot;Lynx Open Graph preview at 1200 by 630 pixels&quot;&gt;
+  &lt;section class=&quot;lynx-og-stage&quot; aria-label=&quot;Lynx social preview at 1200 by 630 pixels&quot;&gt;
     &lt;p class=&quot;lynx-og-caption&quot;&gt;Social preview · 1200 × 630&lt;/p&gt;
     &lt;div class=&quot;lynx-og-viewport&quot;&gt;
-    &lt;div class=&quot;lynx-og-frame&quot;&gt;
-      &lt;div class=&quot;lynx-og-grain&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;lynx-og-content&quot;&gt;
-        &lt;div class=&quot;lynx-og-copy&quot;&gt;
+      &lt;div class=&quot;lynx-og-frame&quot;&gt;
+        &lt;div class=&quot;lynx-og-content&quot;&gt;
           &lt;div class=&quot;lynx-og-brand&quot;&gt;
             &lt;svg class=&quot;lynx-og-mark&quot; viewBox=&quot;0 0 200 200&quot; aria-hidden=&quot;true&quot;&gt;
               &lt;defs&gt;
-                &lt;linearGradient id=&quot;lynx-preview-icon&quot; x1=&quot;20&quot; y1=&quot;5&quot; x2=&quot;180&quot; y2=&quot;200&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+                &lt;linearGradient id=&quot;lynx-centered-icon&quot; x1=&quot;20&quot; y1=&quot;5&quot; x2=&quot;180&quot; y2=&quot;200&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
                   &lt;stop stop-color=&quot;#1a3c70&quot; /&gt;
                   &lt;stop offset=&quot;.6&quot; stop-color=&quot;#091426&quot; /&gt;
                   &lt;stop offset=&quot;1&quot; stop-color=&quot;#050812&quot; /&gt;
                 &lt;/linearGradient&gt;
               &lt;/defs&gt;
-              &lt;rect width=&quot;200&quot; height=&quot;200&quot; rx=&quot;44&quot; fill=&quot;url(#lynx-preview-icon)&quot; /&gt;
+              &lt;rect width=&quot;200&quot; height=&quot;200&quot; rx=&quot;44&quot; fill=&quot;url(#lynx-centered-icon)&quot; /&gt;
               &lt;path d=&quot;M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z&quot; fill=&quot;#0b1527&quot; stroke=&quot;#438cf8&quot; stroke-width=&quot;6&quot; stroke-linejoin=&quot;round&quot; /&gt;
               &lt;path d=&quot;m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z&quot; fill=&quot;#5d9eff&quot; opacity=&quot;.5&quot; /&gt;
               &lt;g fill=&quot;none&quot; stroke=&quot;#f3f7ff&quot; stroke-width=&quot;7&quot; stroke-linecap=&quot;round&quot;&gt;
@@ -1241,47 +1035,9 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;/div&gt;
 
           &lt;h1 class=&quot;lynx-og-title&quot;&gt;Music links&lt;br /&gt;with &lt;span&gt;social skills.&lt;/span&gt;&lt;/h1&gt;
-          &lt;p class=&quot;lynx-og-subtitle&quot;&gt;One link that opens on the music service your friends actually use.&lt;/p&gt;
 
-          &lt;div class=&quot;lynx-og-services&quot; aria-label=&quot;Supported music services&quot;&gt;
-            &lt;span class=&quot;lynx-og-service&quot;&gt;&lt;i class=&quot;lynx-og-service-dot&quot; style=&quot;background:#1ed760&quot;&gt;&lt;/i&gt;Spotify&lt;/span&gt;
-            &lt;span class=&quot;lynx-og-service&quot;&gt;&lt;i class=&quot;lynx-og-service-dot&quot; style=&quot;background:#fb496f&quot;&gt;&lt;/i&gt;Apple Music&lt;/span&gt;
-            &lt;span class=&quot;lynx-og-service&quot;&gt;&lt;i class=&quot;lynx-og-service-dot&quot; style=&quot;background:#ff0033&quot;&gt;&lt;/i&gt;YouTube Music&lt;/span&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
-
-        &lt;div class=&quot;lynx-og-visual&quot; aria-hidden=&quot;true&quot;&gt;
-          &lt;div class=&quot;lynx-og-orbit&quot;&gt;
-            &lt;span class=&quot;lynx-og-connection lynx-og-connection-one&quot;&gt;&lt;/span&gt;
-            &lt;span class=&quot;lynx-og-connection lynx-og-connection-two&quot;&gt;&lt;/span&gt;
-            &lt;span class=&quot;lynx-og-connection lynx-og-connection-three&quot;&gt;&lt;/span&gt;
-
-            &lt;span class=&quot;lynx-og-node lynx-og-node-one&quot;&gt;
-              &lt;span class=&quot;lynx-og-spotify&quot;&gt;
-                &lt;svg viewBox=&quot;0 0 32 32&quot; aria-hidden=&quot;true&quot;&gt;
-                  &lt;path d=&quot;M7 11c7-2 13-1 19 2M8 16c6-1.5 11-.7 16 2M9 21c5-1 9-.4 13 1.8&quot; fill=&quot;none&quot; stroke=&quot;#07130b&quot; stroke-width=&quot;2.5&quot; stroke-linecap=&quot;round&quot; /&gt;
-                &lt;/svg&gt;
-              &lt;/span&gt;
-            &lt;/span&gt;
-            &lt;span class=&quot;lynx-og-node lynx-og-node-two&quot;&gt;&lt;span class=&quot;lynx-og-youtube&quot;&gt;&lt;/span&gt;&lt;/span&gt;
-            &lt;span class=&quot;lynx-og-node lynx-og-node-three&quot;&gt;&lt;span class=&quot;lynx-og-apple&quot;&gt;♪&lt;/span&gt;&lt;/span&gt;
-
-            &lt;span class=&quot;lynx-og-center&quot;&gt;
-              &lt;svg viewBox=&quot;0 0 200 200&quot; aria-hidden=&quot;true&quot;&gt;
-                &lt;path d=&quot;M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z&quot; fill=&quot;#0b1527&quot; stroke=&quot;#438cf8&quot; stroke-width=&quot;6&quot; stroke-linejoin=&quot;round&quot; /&gt;
-                &lt;path d=&quot;m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z&quot; fill=&quot;#5d9eff&quot; opacity=&quot;.5&quot; /&gt;
-                &lt;g fill=&quot;none&quot; stroke=&quot;#f3f7ff&quot; stroke-width=&quot;7&quot; stroke-linecap=&quot;round&quot;&gt;
-                  &lt;path d=&quot;M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94&quot; /&gt;
-                &lt;/g&gt;
-                &lt;path d=&quot;m100 128-8 7 8 7 8-7-8-7Z&quot; fill=&quot;#79dfff&quot; /&gt;
-                &lt;path d=&quot;M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5&quot; fill=&quot;none&quot; stroke=&quot;#9eb1cb&quot; stroke-width=&quot;5&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot; /&gt;
-              &lt;/svg&gt;
-            &lt;/span&gt;
-          &lt;/div&gt;
-          &lt;span class=&quot;lynx-og-link&quot;&gt;lynx.stream&lt;/span&gt;
         &lt;/div&gt;
       &lt;/div&gt;
-    &lt;/div&gt;
     &lt;/div&gt;
   &lt;/section&gt;
 &lt;/div&gt;
