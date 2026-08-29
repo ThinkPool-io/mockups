@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090d14" />
+    <title>Lynx · Guide page mockups</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090d14;
+        --board: #05080d;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --line-strong: #445065;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --spotify: #1ed760;
+        --apple: #fa3152;
+        --youtube: #ff334f;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--board);
+        color: var(--ink);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; background: var(--board); }
+      body { min-width: 320px; margin: 0; background: var(--board); color: var(--ink); -webkit-font-smoothing: antialiased; }
+      a { color: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+      svg { display: block; }
+
+      .board {
+        width: min(1220px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 52px 0 88px;
+      }
+
+      .board-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 28px;
+        padding: 0 2px 28px;
+      }
+
+      .board-kicker {
+        margin: 0 0 8px;
+        color: var(--blue-hi);
+        font-size: 12px;
+        font-weight: 780;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .board-header h1 {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1;
+        letter-spacing: -0.045em;
+      }
+
+      .board-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+      .board-nav a {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        padding: 0 13px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 720;
+        text-decoration: none;
+      }
+      .board-nav a:hover, .board-nav a:focus-visible { border-color: var(--blue-hi); color: var(--ink); outline: none; }
+
+      .mockup { margin: 0 0 42px; }
+      .mockup:last-child { margin-bottom: 0; }
+      .mockup-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 11px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 730;
+      }
+      .mockup-number { color: var(--blue-hi); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; letter-spacing: 0.1em; }
+
+      .site-page {
+        min-height: 900px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--bg);
+      }
+
+      .site-header,
+      .site-shell,
+      .site-footer {
+        width: min(720px, calc(100% - 48px));
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .site-header { display: flex; justify-content: center; padding: 28px 0 20px; }
+      .site-brand {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        font-size: 18px;
+        font-weight: 780;
+        letter-spacing: -0.035em;
+        text-decoration: none;
+      }
+      .site-brand-mark { display: block; width: 58px; height: 58px; overflow: hidden; border-radius: 16px; }
+      .site-brand-mark svg { width: 100%; height: 100%; }
+
+      .site-section { padding: 30px 0; border-top: 1px solid var(--line); text-align: center; }
+      .site-section.hero { padding-top: 30px; }
+      .site-page h1,
+      .site-page h2 {
+        max-width: 680px;
+        margin: 0 auto;
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(38px, 4.2vw, 54px);
+        font-weight: 400;
+        line-height: 1.04;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+      }
+      .site-page h1 { font-size: clamp(44px, 5vw, 62px); }
+      .site-page h3 { margin: 0; color: var(--ink); font-size: 18px; line-height: 1.35; letter-spacing: -0.02em; }
+      .lede { max-width: 630px; margin: 16px auto 0; color: var(--muted); font-size: 17px; line-height: 1.72; text-wrap: pretty; }
+      .site-copy { max-width: 630px; margin: 16px auto 0; }
+      .site-copy p { margin: 0 auto 22px; color: var(--muted); font-size: 17px; line-height: 1.72; }
+      .site-copy p:last-child { margin-bottom: 0; }
+      .site-copy strong { color: var(--ink); }
+      .text-link { color: var(--ink); font-weight: 750; text-decoration-color: var(--blue-hi); text-underline-offset: 4px; }
+
+      .guide-list { margin-top: 20px; border-bottom: 1px solid var(--line); text-align: left; }
+      .guide-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 24px;
+        padding: 25px 4px;
+        border-top: 1px solid var(--line);
+        text-decoration: none;
+      }
+      .guide-row h3 { font-family: Georgia, "Times New Roman", serif; font-size: 30px; font-weight: 400; line-height: 1.08; letter-spacing: -0.04em; }
+      .guide-row p { max-width: 520px; margin: 8px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+      .guide-arrow { color: var(--blue-hi); font-size: 28px; transition: transform 160ms ease; }
+      .guide-row:hover .guide-arrow, .guide-row:focus-visible .guide-arrow { transform: translateX(4px); }
+      .guide-row:focus-visible { outline: 2px solid var(--blue-hi); outline-offset: 4px; border-radius: 6px; }
+
+      .steps, .facts { max-width: 590px; margin: 18px auto 0; text-align: center; }
+      .step, .fact { padding: 17px 0; border-top: 1px solid var(--line); }
+      .step:first-child, .fact:first-child { padding-top: 0; border-top: 0; }
+      .step-number {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        margin: 0 auto 10px;
+        border-radius: 50%;
+        background: rgba(40, 118, 247, 0.14);
+        color: var(--blue-hi);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .step p, .fact p { margin: 6px auto 0; color: var(--muted); font-size: 15px; line-height: 1.65; }
+
+      .primary-link {
+        display: inline-flex;
+        min-height: 52px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 22px;
+        border: 0;
+        border-radius: 13px;
+        background: var(--blue);
+        padding: 0 22px;
+        color: #050b14;
+        font-size: 15px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      .primary-link:hover, .primary-link:focus-visible { background: var(--blue-hi); outline: none; }
+
+      .link-map { max-width: 620px; margin: 24px auto 0; }
+      .source-services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .service-node, .lynx-node {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 720;
+      }
+      .service-icon { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 14px; background: var(--raised); }
+      .service-icon svg { width: 31px; height: 31px; }
+      .service-icon.apple { background: var(--apple); }
+      .service-icon.youtube { border-radius: 50%; background: var(--youtube); }
+      .service-icon.spotify { border: 1px solid rgba(30, 215, 96, 0.38); }
+      .map-path { position: relative; height: 54px; }
+      .map-path::before { position: absolute; top: 25px; right: 16.5%; left: 16.5%; height: 1px; background: var(--line-strong); content: ""; }
+      .map-path::after { position: absolute; top: 25px; left: 50%; width: 1px; height: 29px; background: var(--line-strong); content: ""; }
+      .lynx-node .service-icon { width: 56px; height: 56px; overflow: hidden; border: 1px solid rgba(108, 162, 255, 0.55); border-radius: 16px; background: rgba(40, 118, 247, 0.12); }
+      .lynx-node .service-icon svg { width: 100%; height: 100%; }
+
+      .site-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 0 26px;
+        border-top: 1px solid var(--line);
+        color: var(--faint);
+        font-size: 12px;
+        text-align: center;
+      }
+      .site-footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+      .site-footer a { color: var(--muted); text-underline-offset: 4px; }
+
+      @media (max-width: 700px) {
+        .board { width: min(100% - 20px, 500px); padding: 26px 0 50px; }
+        .board-header { grid-template-columns: 1fr; align-items: start; gap: 18px; padding: 0 2px 24px; }
+        .board-header h1 { font-size: 31px; }
+        .board-nav { justify-content: flex-start; }
+        .board-nav a { min-height: 40px; font-size: 12px; }
+        .mockup { margin-bottom: 30px; }
+        .mockup-label { margin-left: 4px; }
+        .site-page { min-height: 844px; border-radius: 15px; }
+        .site-header, .site-shell, .site-footer { width: min(100% - 36px, 560px); }
+        .site-header { padding: 24px 0 18px; }
+        .site-brand-mark { width: 52px; height: 52px; }
+        .site-section { padding: 30px 0; }
+        .site-page h1, .site-page h2 { max-width: 340px; font-size: 36px; line-height: 1.06; }
+        .site-page h1 { font-size: 40px; }
+        .lede, .site-copy { margin-top: 16px; }
+        .lede, .site-copy p { font-size: 16px; }
+        .guide-row { gap: 14px; padding: 22px 0; }
+        .guide-row h3 { font-size: 27px; }
+        .guide-row p { font-size: 14px; }
+        .guide-arrow { font-size: 24px; }
+        .steps, .facts { margin-top: 16px; }
+        .step, .fact { padding: 16px 0; }
+        .source-services { gap: 8px; }
+        .service-node { font-size: 11px; }
+        .service-icon { width: 43px; height: 43px; border-radius: 12px; }
+        .service-icon svg { width: 27px; height: 27px; }
+        .map-path::before { right: 16%; left: 16%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <header class="board-header">
+        <div>
+          <p class="board-kicker">Lynx</p>
+          <h1>Guide page mockups</h1>
+        </div>
+        <nav class="board-nav" aria-label="Mockup index">
+          <a href="#guides-hub">Guides</a>
+          <a href="#iphone-guide">iPhone</a>
+          <a href="#sharing-guide">Cross-platform</a>
+        </nav>
+      </header>
+
+      <figure class="mockup" id="guides-hub">
+        <figcaption class="mockup-label"><span class="mockup-number">01</span> Guides hub</figcaption>
+        <article class="site-page">
+          <header class="site-header">
+            <a class="site-brand" href="#guides-hub" aria-label="Lynx Guides home">
+              <span class="site-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 200 200"><defs><linearGradient id="lynx-bg-a" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#lynx-bg-a)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round"/></svg>
+              </span>
+              <span>Lynx</span>
+            </a>
+          </header>
+          <main class="site-shell">
+            <section class="site-section hero">
+              <h1>Guides for music links</h1>
+              <p class="lede">Open and share Spotify, Apple Music, and YouTube Music links without making anyone search for the same release again.</p>
+            </section>
+            <section class="site-section" aria-label="Lynx guides">
+              <div class="guide-list">
+                <a class="guide-row" href="#iphone-guide">
+                  <span><h3>Open any music link on iPhone</h3><p>Use Lynx from the Share menu, or paste a link when you do not want to install anything.</p></span>
+                  <span class="guide-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="guide-row" href="#sharing-guide">
+                  <span><h3>Share music across platforms</h3><p>Turn one track or album into a link for Spotify, Apple Music, and YouTube Music listeners.</p></span>
+                  <span class="guide-arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+              <a class="primary-link" href="https://lynx.stream">Convert a music link</a>
+            </section>
+          </main>
+          <footer class="site-footer"><nav><a href="https://lynx.stream">Home</a><a href="https://lynx.stream/about">About</a></nav></footer>
+        </article>
+      </figure>
+
+      <figure class="mockup" id="iphone-guide">
+        <figcaption class="mockup-label"><span class="mockup-number">02</span> iPhone guide</figcaption>
+        <article class="site-page">
+          <header class="site-header">
+            <a class="site-brand" href="#guides-hub" aria-label="Lynx Guides home">
+              <span class="site-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 200 200"><defs><linearGradient id="lynx-bg-b" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#lynx-bg-b)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round"/></svg>
+              </span>
+              <span>Lynx</span>
+            </a>
+          </header>
+          <main class="site-shell">
+            <section class="site-section hero">
+              <h1>Open any music link on iPhone</h1>
+              <p class="lede">A Spotify, Apple Music, or YouTube Music link can open on the service you actually use.</p>
+            </section>
+            <section class="site-section">
+              <h2>From the Share menu</h2>
+              <div class="steps">
+                <div class="step"><span class="step-number">1</span><h3>Share the song or album</h3><p>Open the music app’s Share menu on the track or album someone sent you.</p></div>
+                <div class="step"><span class="step-number">2</span><h3>Choose Share with Lynx</h3><p>The optional Shortcut sends the public music link to Lynx without reading your library.</p></div>
+                <div class="step"><span class="step-number">3</span><h3>Pick your service</h3><p>Open the verified match on Spotify, Apple Music, or YouTube Music.</p></div>
+              </div>
+              <a class="primary-link" href="https://www.icloud.com/shortcuts/0990a27523b048c9a332d2b80de64a25">Install Share with Lynx</a>
+            </section>
+            <section class="site-section">
+              <h2>No Shortcut needed</h2>
+              <div class="site-copy"><p>Copy the music link, open <a class="text-link" href="https://lynx.stream">lynx.stream</a>, and paste it. The same conversion works in Safari, Chrome, or any browser.</p></div>
+            </section>
+            <section class="site-section">
+              <h2>When a direct match is uncertain</h2>
+              <div class="site-copy"><p>Different regions and release editions can make two albums look identical. Lynx opens a focused Search when the catalog evidence is not strong enough to choose safely.</p></div>
+            </section>
+          </main>
+          <footer class="site-footer"><nav><a href="#guides-hub">All guides</a><a href="https://lynx.stream">Convert a link</a><a href="https://lynx.stream/about">About</a></nav></footer>
+        </article>
+      </figure>
+
+      <figure class="mockup" id="sharing-guide">
+        <figcaption class="mockup-label"><span class="mockup-number">03</span> Cross-platform sharing guide</figcaption>
+        <article class="site-page">
+          <header class="site-header">
+            <a class="site-brand" href="#guides-hub" aria-label="Lynx Guides home">
+              <span class="site-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 200 200"><defs><linearGradient id="lynx-bg-c" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#lynx-bg-c)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round"/></svg>
+              </span>
+              <span>Lynx</span>
+            </a>
+          </header>
+          <main class="site-shell">
+            <section class="site-section hero">
+              <h1>Share music across platforms</h1>
+              <p class="lede">Send one link. The recipient opens the same track or album on the music service they prefer.</p>
+            </section>
+            <section class="site-section">
+              <h2>One link, three services</h2>
+              <div class="link-map" role="img" aria-label="Spotify, Apple Music, and YouTube Music connect through Lynx">
+                <div class="source-services">
+                  <div class="service-node"><span class="service-icon spotify"><svg viewBox="0 0 236 225" aria-hidden="true"><path fill="#1ed760" d="M122 3C62 1 11 48 9 108c-2 60 44 112 105 114 60 2 111-45 113-105C230 57 183 6 122 3Zm47 161c-1 2-4 3-7 3-1 0-2 0-2-1-15-8-30-13-47-16-17-2-33-1-50 3-3 1-7-1-8-5-1-3 1-7 5-8 18-4 36-5 55-3 18 3 35 9 51 18 3 2 4 6 3 9Zm14-29c-2 4-7 6-12 3-17-9-35-15-54-18s-38-2-57 2c-5 1-9-2-10-6-1-5 2-9 6-10 21-5 42-5 63-2 21 3 42 9 60 19 4 2 6 7 4 12Zm16-32c-2 4-7 6-11 5-1 0-2 0-3-1-20-10-41-17-63-20-22-3-44-2-66 2-6 1-12-3-13-8-1-6 3-12 8-13 24-5 49-6 74-2 25 3 48 11 70 22 5 3 7 9 4 15Z"/></svg></span><span>Spotify</span></div>
+                  <div class="service-node"><span class="service-icon apple"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#fff" d="M31 9v21.7c0 5.2-4.2 8.3-8.3 8.3-3.8 0-6.7-2.3-6.7-5.4 0-3.2 2.9-5.6 7.1-5.6 1.3 0 2.4.2 3.3.6V14.1L42 11v16.8c0 5.2-4.2 8.3-8.3 8.3-3.8 0-6.7-2.3-6.7-5.4s2.9-5.6 7.1-5.6c1.3 0 2.4.2 3.3.6V7.6L31 9Z" transform="translate(-5 1) scale(.95)"/></svg></span><span>Apple Music</span></div>
+                  <div class="service-node"><span class="service-icon youtube"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="16" fill="none" stroke="#fff" stroke-width="2.2"/><path d="m21 17 11 7-11 7Z" fill="#fff"/></svg></span><span>YouTube Music</span></div>
+                </div>
+                <div class="map-path" aria-hidden="true"></div>
+                <div class="lynx-node"><span class="service-icon"><svg viewBox="0 0 200 200"><defs><linearGradient id="lynx-bg-map" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#lynx-bg-map)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round"/></svg></span><span>One Lynx link</span></div>
+              </div>
+            </section>
+            <section class="site-section">
+              <h2>What the link contains</h2>
+              <div class="facts">
+                <div class="fact"><h3>Tracks and albums</h3><p>Lynx identifies the source release, then looks for the same music in the other supported catalogs.</p></div>
+                <div class="fact"><h3>The original service first</h3><p>The source link stays intact, and verified matches appear beside it for the other services.</p></div>
+                <div class="fact"><h3>No forced destination</h3><p>The recipient chooses their service. They do not need a Lynx account or access to your music library.</p></div>
+              </div>
+            </section>
+            <section class="site-section">
+              <h2>Direct when verified</h2>
+              <div class="site-copy"><p>Lynx compares titles, artists, release details, and available catalog evidence. If editions or regions remain ambiguous, it gives you a focused Search instead of guessing the wrong release.</p></div>
+              <a class="primary-link" href="https://lynx.stream">Share a music link</a>
+            </section>
+          </main>
+          <footer class="site-footer"><nav><a href="#guides-hub">All guides</a><a href="https://lynx.stream">Convert a link</a><a href="https://lynx.stream/about">About</a></nav></footer>
+        </article>
+      </figure>
+    </div>
+  </body>
+</html>
