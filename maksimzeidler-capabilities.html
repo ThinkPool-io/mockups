@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0B0D0E" />
+  <meta name="description" content="Links to projects by Maksim Zeidler." />
+  <link rel="canonical" href="https://maksimzeidler.vercel.app/" />
+  <meta property="og:title" content="Maksim Zeidler" />
+  <meta property="og:description" content="Lynx, SlopStream, and thinkpool." />
+  <meta property="og:url" content="https://maksimzeidler.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <title>Maksim Zeidler, capability copy</title>
+  <style>
+    :root {
+      --color-bg: hsl(212 13% 5%);
+      --color-raised: hsl(212 11% 8%);
+      --color-surface: hsl(212 10% 10%);
+      --color-float: hsl(212 9% 13%);
+      --color-line: hsl(212 7% 21%);
+      --color-line-strong: hsl(212 7% 28%);
+      --color-ink: hsl(212 14% 95%);
+      --color-ink-soft: hsl(212 14% 86%);
+      --color-muted: hsl(212 14% 78%);
+      --color-faint: hsl(212 12% 62%);
+      --color-pool: hsl(217 85% 62%);
+      --color-pool-hi: hsl(217 85% 70%);
+      --color-pool-soft: hsl(212 30% 18%);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+      color: var(--color-ink);
+      background: var(--color-bg);
+      font-family: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+      font-weight: 500;
+    }
+    main { width: min(100%, 480px); }
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .intro {
+      margin: 10px 0 30px;
+      color: var(--color-muted);
+      font-size: 17px;
+    }
+    .links { display: grid; gap: 12px; }
+    .link {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 15px 18px;
+      border: 1px solid var(--color-line);
+      border-radius: 14px;
+      color: inherit;
+      background: var(--color-surface);
+      text-decoration: none;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    a.link:hover { border-color: var(--color-pool); transform: translateY(-2px); }
+    a.link:focus-visible {
+      outline: 3px solid var(--color-pool-hi);
+      outline-offset: 3px;
+    }
+    .thinkpool-link {
+      background: var(--color-float);
+      border-color: color-mix(in oklab, var(--color-pool) 34%, var(--color-line));
+    }
+    .lynx-link,
+    .slopstream-link { background: var(--color-float); }
+    .name { display: block; margin-bottom: 4px; font-weight: 750; }
+    .detail {
+      color: var(--color-faint);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .arrow { font-size: 20px; }
+    .app-logo {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border-radius: 9px;
+    }
+    .app-logo svg { width: 100%; height: 100%; display: block; }
+    @media (max-width: 480px) {
+      body { place-items: start center; padding-top: 56px; }
+      h1 { font-size: 32px; }
+      .link { min-height: 72px; }
+      .detail { font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .link { transition: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Maksim Zeidler</h1>
+    <p class="intro">Project portfolio</p>
+
+    <div class="links">
+      <a class="link thinkpool-link" href="https://thinkpool.io" target="_blank" rel="noreferrer">
+        <span><span class="name">thinkpool</span><span class="detail">Shared room for directing AI agents</span></span>
+        <span class="arrow app-logo" aria-hidden="true"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="hsl(212 18% 10%)"/><circle cx="256" cy="256" r="172" fill="none" stroke="#1A6EF4" stroke-width="40"/><g transform="translate(107.2 107.2) scale(12.4)"><path d="M12 3c-5 5-7 8-7 11a7 7 0 0 0 14 0c0-3-2-6-7-11Z" fill="#1A6EF4"/></g></svg></span>
+      </a>
+      <a class="link lynx-link" href="https://lynx.stream" target="_blank" rel="noreferrer">
+        <span><span class="name">Lynx</span><span class="detail">Spotify, Apple Music + YouTube Music</span></span>
+        <span class="arrow app-logo" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="lynx-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#lynx-bg)"/><path d="M43 76 53 31l36 27q11-5 22 0l36-27 10 45q16 21 10 52-7 37-67 45-60-8-67-45-6-31 10-52Z" fill="#0b1527" stroke="#438cf8" stroke-width="6" stroke-linejoin="round"/><path d="m57 45 22 17-27 6 5-23Zm64 17 22-17 5 23-27-6Z" fill="#5d9eff" opacity=".5"/><g fill="none" stroke="#f3f7ff" stroke-width="7" stroke-linecap="round"><path d="M55 105v-8m12 8V89m12 16V94M145 105v-8m-12 8V89m-12 16V94"/></g><path d="m100 128-8 7 8 7 8-7-8-7Z" fill="#79dfff"/><path d="M100 142v10m0 0q-10 9-20 5m20-5q10 9 20 5" fill="none" stroke="#9eb1cb" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="link slopstream-link" href="https://slopstream.vercel.app" target="_blank" rel="noreferrer">
+        <span><span class="name">SlopStream</span><span class="detail">X, TikTok, Instagram, Facebook + Shorts</span></span>
+        <span class="arrow app-logo" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><linearGradient id="slopstream-bg" x1="20" y1="5" x2="180" y2="200" gradientUnits="userSpaceOnUse"><stop stop-color="#1a3c70"/><stop offset=".6" stop-color="#091426"/><stop offset="1" stop-color="#050812"/></linearGradient></defs><rect width="200" height="200" rx="44" fill="url(#slopstream-bg)"/><path d="M34 102q0-70 66-70t66 70v68l-21-16-22 16-23-16-23 16-22-16-21 16Z" fill="#0b1527" stroke="#438cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="69" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/><rect x="113" y="72" width="18" height="36" rx="9" fill="#f3f7ff"/></svg></span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
