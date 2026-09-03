@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RepState · Five onboarding directions</title>
+  <title>RepState · Five minimal onboarding directions</title>
   <style>
     @font-face {
       font-family: "RepState Inter";
@@ -1051,209 +1051,1079 @@
       }
     }
   </style>
+  <style id="minimal-pass">
+    :root {
+      --min-bg: #080b0e;
+      --min-panel: #0d1115;
+      --min-panel-2: #11161b;
+      --min-line: #252c33;
+      --min-muted: #8b929a;
+      --min-text: #f4f4f2;
+      --min-red: #e72d35;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: #06080a;
+      color: var(--min-text);
+      font-family: "RepState Inter", Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .minimal-board-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+      gap: 48px;
+      align-items: end;
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 72px 0 36px;
+      border-bottom: 1px solid var(--min-line);
+    }
+
+    .minimal-board-header p,
+    .minimal-board-header h1,
+    .minimal-direction-meta p,
+    .minimal-direction-meta h2 {
+      margin: 0;
+    }
+
+    .minimal-board-kicker,
+    .minimal-index,
+    .product-label,
+    .field-label,
+    .setup-step,
+    .fact-label {
+      color: var(--min-muted);
+      font-family: "RepState Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .minimal-board-kicker {
+      margin-bottom: 16px !important;
+      color: var(--min-red);
+    }
+
+    .minimal-board-header h1 {
+      max-width: 680px;
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 680;
+      letter-spacing: -0.045em;
+      line-height: 0.98;
+    }
+
+    .minimal-board-header > p {
+      max-width: 410px;
+      color: var(--min-muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .minimal-jump-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      gap: 6px;
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 14px 0;
+      overflow-x: auto;
+      background: rgba(6, 8, 10, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .minimal-jump-nav a {
+      flex: 0 0 auto;
+      padding: 10px 13px;
+      border: 1px solid var(--min-line);
+      border-radius: 8px;
+      color: #c8ccd0;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .minimal-jump-nav a span {
+      margin-right: 5px;
+      color: var(--min-red);
+      font-family: "RepState Mono", monospace;
+      font-size: 10px;
+    }
+
+    .minimal-board {
+      display: grid;
+      gap: 72px;
+      width: min(1180px, calc(100% - 48px));
+      margin: 32px auto 96px;
+    }
+
+    .minimal-direction {
+      display: grid;
+      gap: 16px;
+      scroll-margin-top: 84px;
+    }
+
+    .minimal-direction-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: baseline;
+    }
+
+    .minimal-direction-meta > div {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .minimal-index {
+      color: var(--min-red);
+    }
+
+    .minimal-direction-meta h2 {
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .minimal-direction-meta > p {
+      color: var(--min-muted);
+      font-size: 13px;
+    }
+
+    .minimal-board .direction-canvas {
+      height: 702px;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid var(--min-line);
+      border-radius: 18px;
+      background: var(--min-bg);
+    }
+
+    .minimal-screen {
+      position: relative;
+      width: 100%;
+      height: 700px;
+      overflow: hidden;
+      background: var(--min-bg);
+      color: var(--min-text);
+    }
+
+    .minimal-screen .brand {
+      display: inline-flex;
+      gap: 11px;
+      align-items: center;
+      color: var(--min-text);
+      font-size: 18px;
+      font-weight: 760;
+      letter-spacing: 0.095em;
+    }
+
+    .minimal-screen .brand-mark {
+      display: block;
+      width: 38px;
+      height: 24px;
+      flex: 0 0 38px;
+    }
+
+    .minimal-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .setup-step {
+      white-space: nowrap;
+    }
+
+    .product-label {
+      margin: 0 0 18px;
+      color: var(--min-red);
+    }
+
+    .minimal-title {
+      margin: 0;
+      max-width: 800px;
+      font-size: clamp(46px, 5.5vw, 74px);
+      font-weight: 680;
+      letter-spacing: -0.052em;
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+
+    .minimal-copy {
+      margin: 22px 0 0;
+      max-width: 610px;
+      color: var(--min-muted);
+      font-size: 18px;
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    .onboard-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .onboard-field {
+      display: grid;
+      gap: 9px;
+    }
+
+    .text-input {
+      width: 100%;
+      height: 56px;
+      padding: 0 17px;
+      border: 1px solid #323a42;
+      border-radius: 9px;
+      outline: none;
+      background: #090c0f;
+      color: var(--min-text);
+      font-size: 17px;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .text-input::placeholder {
+      color: #676e76;
+    }
+
+    .text-input:focus {
+      border-color: #6f777f;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.07);
+    }
+
+    .continue-button {
+      height: 56px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--min-red);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    .continue-button:disabled {
+      background: #7a2429;
+      color: rgba(255, 255, 255, 0.56);
+      cursor: default;
+    }
+
+    .account-line {
+      margin: 2px 0 0;
+      color: var(--min-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .account-line button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--min-text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .local-line {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin: 0;
+      color: #717981;
+      font-size: 12px;
+    }
+
+    .local-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--min-red);
+    }
+
+    /* 01 Direct */
+    .direct-screen {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 40px 44px;
+    }
+
+    .direct-hero {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    .direct-hero .minimal-copy {
+      max-width: 570px;
+    }
+
+    .direct-facts {
+      display: flex;
+      gap: 22px;
+      margin-top: 30px;
+      color: #c6cacf;
+      font-size: 13px;
+    }
+
+    .direct-facts span {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .direct-facts i {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--min-red);
+    }
+
+    .direct-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 10px;
+      width: min(650px, 100%);
+      margin: 0 auto;
+    }
+
+    .direct-foot {
+      display: flex;
+      justify-content: space-between;
+      grid-column: 1 / -1;
+      gap: 16px;
+    }
+
+    /* 02 Split */
+    .split-screen {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
+    }
+
+    .split-message,
+    .split-setup {
+      padding: 42px 44px;
+    }
+
+    .split-message {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .split-message-main {
+      align-self: center;
+    }
+
+    .split-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--min-line);
+    }
+
+    .split-point {
+      padding: 18px 14px 0 0;
+    }
+
+    .split-point strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .split-setup {
+      display: grid;
+      align-content: center;
+      border-left: 1px solid var(--min-line);
+      background: var(--min-panel);
+    }
+
+    .split-setup h4 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .split-setup > p {
+      margin: 0 0 28px;
+      color: var(--min-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* 03 Method */
+    .method-screen {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 40px 44px;
+    }
+
+    .method-main {
+      display: grid;
+      align-content: center;
+      gap: 34px;
+    }
+
+    .method-main .minimal-title,
+    .method-main .minimal-copy {
+      max-width: 780px;
+    }
+
+    .method-flow {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--min-line);
+      border-bottom: 1px solid var(--min-line);
+    }
+
+    .method-step {
+      min-height: 108px;
+      padding: 22px 24px 22px 0;
+    }
+
+    .method-step + .method-step {
+      padding-left: 24px;
+      border-left: 1px solid var(--min-line);
+    }
+
+    .method-step span {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--min-red);
+      font-family: "RepState Mono", monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .method-step strong {
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .method-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 10px;
+    }
+
+    .method-form .account-line {
+      grid-column: 1 / -1;
+    }
+
+    /* 04 Signal */
+    .signal-screen {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 40px 44px 0;
+    }
+
+    .signal-hero {
+      display: grid;
+      align-content: center;
+    }
+
+    .signal-hero .minimal-title {
+      max-width: 940px;
+      font-size: clamp(50px, 6vw, 82px);
+    }
+
+    .signal-hero .minimal-copy {
+      max-width: 680px;
+    }
+
+    .signal-bar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 210px;
+      gap: 10px;
+      margin: 0 -44px;
+      padding: 20px 44px 22px;
+      border-top: 1px solid var(--min-line);
+      background: var(--min-panel);
+    }
+
+    .signal-bar .account-line {
+      align-self: center;
+      text-align: right;
+    }
+
+    /* 05 Preview */
+    .preview-screen {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      padding: 40px 44px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.8fr);
+      gap: 54px;
+      align-items: center;
+    }
+
+    .preview-copy .minimal-title {
+      max-width: 690px;
+    }
+
+    .workout-glimpse {
+      display: grid;
+      gap: 0;
+      padding: 18px;
+      border: 1px solid var(--min-line);
+      border-radius: 12px;
+      background: var(--min-panel);
+    }
+
+    .glimpse-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 2px 2px 17px;
+      border-bottom: 1px solid var(--min-line);
+    }
+
+    .glimpse-top strong {
+      font-size: 17px;
+    }
+
+    .glimpse-top span {
+      color: var(--min-red);
+      font-family: "RepState Mono", monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .glimpse-exercise {
+      padding: 22px 2px;
+      border-bottom: 1px solid var(--min-line);
+    }
+
+    .glimpse-exercise p {
+      margin: 0 0 6px;
+      color: var(--min-muted);
+      font-size: 12px;
+    }
+
+    .glimpse-exercise h4 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .glimpse-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .glimpse-stat {
+      padding: 18px 12px 2px 2px;
+    }
+
+    .glimpse-stat + .glimpse-stat {
+      padding-left: 16px;
+      border-left: 1px solid var(--min-line);
+    }
+
+    .glimpse-stat span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--min-muted);
+      font-family: "RepState Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .glimpse-stat strong {
+      font-size: 15px;
+    }
+
+    .preview-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 190px;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .preview-form .account-line {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 760px) {
+      .minimal-board-header {
+        display: block;
+        width: calc(100% - 28px);
+        padding: 40px 0 26px;
+      }
+
+      .minimal-board-header h1 {
+        font-size: 38px;
+      }
+
+      .minimal-board-header > p {
+        margin-top: 18px;
+        font-size: 14px;
+      }
+
+      .minimal-jump-nav,
+      .minimal-board {
+        width: calc(100% - 28px);
+      }
+
+      .minimal-jump-nav {
+        padding: 10px 0;
+      }
+
+      .minimal-board {
+        gap: 50px;
+        margin-top: 22px;
+        margin-bottom: 60px;
+      }
+
+      .minimal-direction-meta {
+        display: block;
+      }
+
+      .minimal-direction-meta > p {
+        margin-top: 6px;
+      }
+
+      .minimal-board .direction-canvas {
+        height: 742px;
+        border-radius: 14px;
+      }
+
+      .minimal-screen {
+        height: 740px;
+      }
+
+      .minimal-screen .brand {
+        font-size: 16px;
+      }
+
+      .minimal-screen .brand-mark {
+        width: 34px;
+        height: 22px;
+        flex-basis: 34px;
+      }
+
+      .minimal-title {
+        font-size: 42px;
+        line-height: 1;
+      }
+
+      .minimal-copy {
+        margin-top: 18px;
+        font-size: 16px;
+      }
+
+      .direct-screen,
+      .method-screen,
+      .preview-screen {
+        padding: 26px 20px;
+      }
+
+      .direct-hero {
+        justify-items: start;
+        text-align: left;
+      }
+
+      .direct-facts {
+        display: grid;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .direct-form,
+      .method-form,
+      .preview-form {
+        grid-template-columns: 1fr;
+      }
+
+      .direct-foot {
+        display: grid;
+        grid-column: auto;
+        gap: 7px;
+      }
+
+      .split-screen {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+      }
+
+      .split-message,
+      .split-setup {
+        padding: 26px 20px;
+      }
+
+      .split-message {
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .split-message-main {
+        align-self: center;
+      }
+
+      .split-points {
+        gap: 10px;
+      }
+
+      .split-point {
+        padding-top: 14px;
+      }
+
+      .split-point strong {
+        font-size: 12px;
+      }
+
+      .split-setup {
+        border-top: 1px solid var(--min-line);
+        border-left: 0;
+      }
+
+      .split-setup h4,
+      .split-setup > p {
+        display: none;
+      }
+
+      .method-main {
+        gap: 24px;
+      }
+
+      .method-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .method-step {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 10px;
+        min-height: 0;
+        padding: 13px 0;
+      }
+
+      .method-step + .method-step {
+        padding-left: 0;
+        border-top: 1px solid var(--min-line);
+        border-left: 0;
+      }
+
+      .method-step span {
+        margin: 0;
+      }
+
+      .signal-screen {
+        padding: 26px 20px 0;
+      }
+
+      .signal-hero .minimal-title {
+        font-size: 46px;
+      }
+
+      .signal-bar {
+        grid-template-columns: 1fr;
+        margin: 0 -20px;
+        padding: 18px 20px 20px;
+      }
+
+      .signal-bar .account-line {
+        text-align: left;
+      }
+
+      .preview-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        align-content: center;
+      }
+
+      .workout-glimpse {
+        padding: 12px;
+      }
+
+      .preview-copy .minimal-title {
+        font-size: 38px;
+      }
+
+      .preview-copy .minimal-copy {
+        margin-top: 13px;
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      .preview-form {
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .glimpse-exercise {
+        padding: 11px 2px;
+      }
+
+      .glimpse-exercise h4 {
+        font-size: 17px;
+      }
+
+      .glimpse-stat {
+        padding-top: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="board-header">
+  <header class="minimal-board-header">
     <div>
-      <p class="board-kicker">RepState · First-run study</p>
-      <h1>Five ways to start training.</h1>
+      <p class="minimal-board-kicker">RepState · Minimal onboarding study</p>
+      <h1>Five clear first screens.</h1>
     </div>
     <p>
-      Same product language, same first-run task. Five structurally different
-      approaches to hierarchy, onboarding, and local-first reassurance.
+      Each option explains RepState before asking for anything: choose a plan,
+      log sets and weights, and track progressive overload.
     </p>
   </header>
 
-  <nav class="jump-nav" aria-label="Onboarding directions">
-    <a href="#monument"><span>01</span> Monument</a>
-    <a href="#guided"><span>02</span> Guided rail</a>
-    <a href="#redline"><span>03</span> Redline</a>
-    <a href="#console"><span>04</span> Console</a>
-    <a href="#quiet"><span>05</span> Quiet index</a>
+  <nav class="minimal-jump-nav" aria-label="Minimal onboarding directions">
+    <a href="#direct"><span>01</span>Direct</a>
+    <a href="#split"><span>02</span>Split</a>
+    <a href="#method"><span>03</span>Method</a>
+    <a href="#signal"><span>04</span>Signal</a>
+    <a href="#preview"><span>05</span>Preview</a>
   </nav>
 
-  <main class="board">
-    <article class="direction" id="monument">
-      <header class="direction-meta">
-        <div>
-          <p class="direction-number">Direction 01</p>
-          <h2>Monument split</h2>
-        </div>
-        <p>Brand and promise get the stage. Setup lives in a dedicated utility panel.</p>
+  <main class="minimal-board">
+    <article class="minimal-direction" id="direct">
+      <header class="minimal-direction-meta">
+        <div><span class="minimal-index">01</span><h2>Direct</h2></div>
+        <p>One promise, then the name field.</p>
       </header>
       <div class="direction-canvas">
-        <section class="mock-screen monument" aria-label="Monument split onboarding">
-          <div class="monument-main">
+        <section class="mock-screen minimal-screen direct-screen" aria-label="Direct onboarding">
+          <header class="minimal-topline">
             <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-            <div class="monument-hero">
-              <p class="monument-index">01 / Your profile</p>
-              <h3 class="screen-title">Start where<br>you are</h3>
-              <p class="screen-copy">
-                Tell us your name. We’ll keep your first workouts together on this
-                device until you choose to back them up with an account.
-              </p>
+            <span class="setup-step">Setup 1 of 2</span>
+          </header>
+
+          <div class="direct-hero">
+            <p class="product-label">Workout tracker · Progressive overload</p>
+            <h3 class="minimal-title">Track every workout.<br>Know what to lift next.</h3>
+            <p class="minimal-copy">
+              RepState keeps your plan, sets, weights, and history together so every
+              session starts where you left off.
+            </p>
+            <div class="direct-facts" aria-label="Core features">
+              <span><i></i>Plan workouts</span>
+              <span><i></i>Log sets and weights</span>
+              <span><i></i>See progress</span>
             </div>
           </div>
-          <div class="monument-panel">
-            <p class="micro">Local setup</p>
-            <form class="monument-form">
-              <label class="field-label" for="monument-name">What should we call you?</label>
-              <input class="text-input" id="monument-name" placeholder="Your name">
-              <button class="continue-button" disabled type="submit">Continue</button>
-            </form>
-            <button class="sign-in" type="button">Already use RepState? <strong>Sign in</strong></button>
-            <p class="local-note">Nothing leaves this device until you choose to create an account.</p>
-          </div>
+
+          <form class="onboard-form direct-form">
+            <label class="onboard-field" for="direct-name">
+              <span class="field-label">Your name</span>
+              <input class="text-input" id="direct-name" placeholder="Enter your name">
+            </label>
+            <button class="continue-button" disabled type="submit">Continue to plan</button>
+            <div class="direct-foot">
+              <p class="local-line"><span class="local-dot"></span>Starts on this device. Sync later.</p>
+              <p class="account-line">Already have an account? <button type="button">Sign in</button></p>
+            </div>
+          </form>
         </section>
       </div>
     </article>
 
-    <article class="direction" id="guided">
-      <header class="direction-meta">
-        <div>
-          <p class="direction-number">Direction 02</p>
-          <h2>Guided rail</h2>
-        </div>
-        <p>A compact three-step map makes the first run explicit without becoming a wizard.</p>
+    <article class="minimal-direction" id="split">
+      <header class="minimal-direction-meta">
+        <div><span class="minimal-index">02</span><h2>Split</h2></div>
+        <p>Product on the left. Setup on the right.</p>
       </header>
       <div class="direction-canvas">
-        <section class="mock-screen guided" aria-label="Guided rail onboarding">
-          <aside class="guided-rail">
-            <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-            <div class="guided-steps" aria-label="Setup progress">
-              <div class="guided-step is-active"><span>01</span>Name</div>
-              <div class="guided-step"><span>02</span>Plan</div>
-              <div class="guided-step"><span>03</span>Train</div>
+        <section class="mock-screen minimal-screen split-screen" aria-label="Split onboarding">
+          <div class="split-message">
+            <header class="minimal-topline">
+              <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
+            </header>
+
+            <div class="split-message-main">
+              <p class="product-label">Simple gym log</p>
+              <h3 class="minimal-title">Your plan, weights,<br>and progress. One log.</h3>
+              <p class="minimal-copy">Choose a workout, tap through each set, and see what changed.</p>
             </div>
-            <p class="guided-device">Local first<br>No account needed</p>
+
+            <div class="split-points" aria-label="RepState workflow">
+              <div class="split-point"><span class="fact-label">Plan</span><strong>Your workouts</strong></div>
+              <div class="split-point"><span class="fact-label">Log</span><strong>Sets and weights</strong></div>
+              <div class="split-point"><span class="fact-label">Review</span><strong>Your progress</strong></div>
+            </div>
+          </div>
+
+          <aside class="split-setup">
+            <span class="setup-step">Setup 1 of 2</span>
+            <h4>Start with your name</h4>
+            <p>Next, choose the Founder’s Split or build your own.</p>
+            <form class="onboard-form">
+              <label class="onboard-field" for="split-name">
+                <span class="field-label">Your name</span>
+                <input class="text-input" id="split-name" placeholder="Enter your name">
+              </label>
+              <button class="continue-button" disabled type="submit">Continue to plan</button>
+              <p class="local-line"><span class="local-dot"></span>Saved locally. Account optional.</p>
+              <p class="account-line">Already have an account? <button type="button">Sign in</button></p>
+            </form>
           </aside>
-          <div class="guided-main">
-            <p class="step-label">Step 01 · Create your profile</p>
-            <h3 class="screen-title">Set your<br>baseline</h3>
-            <p class="screen-copy">
-              Create a local profile now. Add an account later only if you want
-              cross-device backup.
-            </p>
-            <form class="guided-form">
-              <label class="field-label" for="guided-name">What should we call you?</label>
-              <input class="text-input" id="guided-name" placeholder="Your name">
-              <button class="continue-button" disabled type="submit">Continue</button>
-            </form>
-            <button class="sign-in" type="button">Already use RepState? <strong>Sign in</strong></button>
-          </div>
         </section>
       </div>
     </article>
 
-    <article class="direction" id="redline">
-      <header class="direction-meta">
-        <div>
-          <p class="direction-number">Direction 03</p>
-          <h2>Redline field</h2>
-        </div>
-        <p>The product red becomes a single decisive moment, with setup kept calm beneath it.</p>
+    <article class="minimal-direction" id="method">
+      <header class="minimal-direction-meta">
+        <div><span class="minimal-index">03</span><h2>Method</h2></div>
+        <p>The product workflow comes before setup.</p>
       </header>
       <div class="direction-canvas">
-        <section class="mock-screen redline" aria-label="Redline field onboarding">
-          <header class="redline-header">
+        <section class="mock-screen minimal-screen method-screen" aria-label="Method onboarding">
+          <header class="minimal-topline">
             <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-            <span class="micro">First run · 01</span>
+            <span class="setup-step">New profile</span>
           </header>
-          <div class="redline-field">
-            <h3 class="screen-title">Train.<br>Track. Progress.</h3>
-            <span class="redline-count">01 / 02</span>
-          </div>
-          <div class="redline-lower">
-            <p class="screen-copy">
-              Name your profile, choose a plan, and start logging. Your data stays
-              local until you turn on backup.
-            </p>
-            <form class="redline-form">
-              <label class="field-label" for="redline-name">What should we call you?</label>
-              <input class="text-input" id="redline-name" placeholder="Your name">
-              <button class="continue-button" disabled type="submit">Continue</button>
-              <button class="sign-in" type="button">Already use RepState? <strong>Sign in</strong></button>
-            </form>
-          </div>
-        </section>
-      </div>
-    </article>
 
-    <article class="direction" id="console">
-      <header class="direction-meta">
-        <div>
-          <p class="direction-number">Direction 04</p>
-          <h2>Training console</h2>
-        </div>
-        <p>A modular, product-like entry screen that feels connected to the training dashboard.</p>
-      </header>
-      <div class="direction-canvas">
-        <section class="mock-screen console" aria-label="Training console onboarding">
-          <header class="console-header">
-            <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-            <span class="micro">Profile setup / 01</span>
-          </header>
-          <div class="console-grid">
-            <div class="console-hero">
-              <p class="micro">New athlete</p>
-              <h3 class="screen-title">Your training,<br>clearly tracked</h3>
-              <p class="screen-copy">Set up once, then get straight to your working sets.</p>
+          <div class="method-main">
+            <div>
+              <p class="product-label">Built for progressive overload</p>
+              <h3 class="minimal-title">A workout tracker that remembers your working weight.</h3>
+              <p class="minimal-copy">Finish a session, come back, and know exactly where to continue.</p>
             </div>
-            <aside class="console-side">
-              <div class="console-side-row">
-                <span class="micro">Storage</span>
-                <strong>Private by default</strong>
-                <p>Your early workouts stay on this device.</p>
+
+            <div class="method-flow" aria-label="How RepState works">
+              <div class="method-step"><span>01</span><strong>Choose your plan</strong></div>
+              <div class="method-step"><span>02</span><strong>Log every set</strong></div>
+              <div class="method-step"><span>03</span><strong>Track load increases</strong></div>
+            </div>
+          </div>
+
+          <form class="onboard-form method-form">
+            <label class="onboard-field" for="method-name">
+              <span class="field-label">Your name</span>
+              <input class="text-input" id="method-name" placeholder="Enter your name">
+            </label>
+            <button class="continue-button" disabled type="submit">Continue to plan</button>
+            <p class="account-line">No account needed to start. <button type="button">Sign in</button> if you already use RepState.</p>
+          </form>
+        </section>
+      </div>
+    </article>
+
+    <article class="minimal-direction" id="signal">
+      <header class="minimal-direction-meta">
+        <div><span class="minimal-index">04</span><h2>Signal</h2></div>
+        <p>The product value is the headline.</p>
+      </header>
+      <div class="direction-canvas">
+        <section class="mock-screen minimal-screen signal-screen" aria-label="Signal onboarding">
+          <header class="minimal-topline">
+            <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
+            <span class="setup-step">Setup 1 of 2</span>
+          </header>
+
+          <div class="signal-hero">
+            <p class="product-label">RepState is a gym log</p>
+            <h3 class="minimal-title">Log sets. Track weight.<br>Build progress.</h3>
+            <p class="minimal-copy">
+              Follow your plan one exercise at a time. Your working weights and
+              workout history stay ready for the next session.
+            </p>
+          </div>
+
+          <form class="onboard-form signal-bar">
+            <label class="onboard-field" for="signal-name">
+              <span class="field-label">Your name</span>
+              <input class="text-input" id="signal-name" placeholder="Enter your name">
+            </label>
+            <button class="continue-button" disabled type="submit">Continue to plan</button>
+            <p class="account-line">Have an account? <button type="button">Sign in</button></p>
+          </form>
+        </section>
+      </div>
+    </article>
+
+    <article class="minimal-direction" id="preview">
+      <header class="minimal-direction-meta">
+        <div><span class="minimal-index">05</span><h2>Preview</h2></div>
+        <p>One workout example proves the point.</p>
+      </header>
+      <div class="direction-canvas">
+        <section class="mock-screen minimal-screen preview-screen" aria-label="Preview onboarding">
+          <header class="minimal-topline">
+            <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
+            <span class="setup-step">Setup 1 of 2</span>
+          </header>
+
+          <div class="preview-grid">
+            <div class="preview-copy">
+              <p class="product-label">Workout plan and lifting log</p>
+              <h3 class="minimal-title">Pick up where your last workout left off.</h3>
+              <p class="minimal-copy">
+                RepState shows the exercise, your working weight, and every set.
+                Finish the session and your next one is ready.
+              </p>
+              <form class="onboard-form preview-form">
+                <label class="onboard-field" for="preview-name">
+                  <span class="field-label">Your name</span>
+                  <input class="text-input" id="preview-name" placeholder="Enter your name">
+                </label>
+                <button class="continue-button" disabled type="submit">Continue</button>
+                <p class="account-line">Start locally or <button type="button">sign in</button> to sync.</p>
+              </form>
+            </div>
+
+            <aside class="workout-glimpse" aria-label="Example workout card">
+              <div class="glimpse-top"><strong>Chest</strong><span>Today</span></div>
+              <div class="glimpse-exercise">
+                <p>Exercise 1 of 8</p>
+                <h4>Strict incline bench</h4>
               </div>
-              <div class="console-side-row">
-                <span class="micro">Sync</span>
-                <strong>Optional later</strong>
-                <p>Create an account whenever you want cross-device backup.</p>
+              <div class="glimpse-stats">
+                <div class="glimpse-stat"><span>Weight</span><strong>20 kg</strong></div>
+                <div class="glimpse-stat"><span>Sets</span><strong>3</strong></div>
+                <div class="glimpse-stat"><span>Target</span><strong>8–10</strong></div>
               </div>
             </aside>
-            <form class="console-form-wrap">
-              <label>
-                <span class="field-label">What should we call you?</span>
-                <input class="text-input" placeholder="Your name">
-              </label>
-              <button class="continue-button" disabled type="submit">Continue</button>
-              <button class="sign-in" type="button">Have an account? <strong>Sign in</strong></button>
-            </form>
           </div>
-        </section>
-      </div>
-    </article>
-
-    <article class="direction" id="quiet">
-      <header class="direction-meta">
-        <div>
-          <p class="direction-number">Direction 05</p>
-          <h2>Quiet index</h2>
-        </div>
-        <p>The most restrained option, with one oversized step marker and a bottom setup dock.</p>
-      </header>
-      <div class="direction-canvas">
-        <section class="mock-screen quiet" aria-label="Quiet index onboarding">
-          <header class="quiet-header">
-            <div class="brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-            <span class="micro">Setup · 01 of 02</span>
-          </header>
-          <span class="quiet-index" aria-hidden="true">01</span>
-          <div class="quiet-hero">
-            <h3 class="screen-title">Ready when<br>you are</h3>
-            <p class="screen-copy">
-              Pick a name and a plan. Training stays on this device unless you
-              decide to sync it.
-            </p>
-          </div>
-          <form class="quiet-form">
-            <label>
-              <span class="field-label">What should we call you?</span>
-              <input class="text-input" placeholder="Your name">
-            </label>
-            <button class="continue-button" disabled type="submit">Continue</button>
-            <button class="sign-in" type="button">Already use RepState? <strong>Sign in</strong></button>
-          </form>
         </section>
       </div>
     </article>
