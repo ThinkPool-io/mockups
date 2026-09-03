@@ -1906,7 +1906,7 @@
 
     .direct-detail-screen {
       display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-rows: minmax(0, 1fr) auto;
       width: 100%;
       min-height: 100svh;
       padding: 44px clamp(36px, 6vw, 92px) 40px;
@@ -1914,44 +1914,42 @@
       background: var(--min-bg);
     }
 
-    .direct-detail-topline,
     .direct-detail-main,
     .direct-detail-form-wrap {
       width: min(1240px, 100%);
       margin-inline: auto;
     }
 
-    .direct-detail-topline {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: center;
-    }
-
     .direct-detail-brand {
       display: inline-flex;
-      gap: 11px;
+      flex-direction: column;
+      gap: 10px;
       align-items: center;
+      margin-bottom: 32px;
       color: var(--min-text);
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 780;
-      letter-spacing: 0.095em;
+      letter-spacing: 0.12em;
       line-height: 1;
     }
 
     .direct-detail-brand .brand-mark {
       display: block;
-      width: 43px;
-      height: 18px;
-      flex: 0 0 43px;
-      transform: translateY(-0.5px);
+      width: 84px;
+      height: 36px;
+      flex: 0 0 auto;
+      transform: none;
+    }
+
+    .direct-detail-brand-name {
+      display: block;
     }
 
     .direct-detail-main {
       display: grid;
       align-content: center;
       justify-items: center;
-      padding: 50px 0 38px;
+      padding: 34px 0 38px;
       text-align: center;
     }
 
@@ -2027,19 +2025,20 @@
       }
 
       .direct-detail-brand {
-        font-size: 16px;
+        gap: 9px;
+        margin-bottom: 28px;
+        font-size: 17px;
       }
 
       .direct-detail-brand .brand-mark {
-        width: 38px;
-        height: 16px;
-        flex-basis: 38px;
+        width: 72px;
+        height: 30px;
       }
 
       .direct-detail-main {
-        justify-items: start;
-        padding: 42px 0 28px;
-        text-align: left;
+        justify-items: center;
+        padding: 28px 0 28px;
+        text-align: center;
       }
 
       .direct-detail-title {
@@ -2095,11 +2094,11 @@
 <body class="direct-detail-body">
   <main class="direct-detail-page">
     <section class="mock-screen direct-detail-screen" aria-label="Detailed Direct onboarding mockup">
-      <header class="direct-detail-topline">
-        <div class="direct-detail-brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-      </header>
-
       <div class="direct-detail-main">
+        <div class="direct-detail-brand" aria-label="RepState">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="direct-detail-brand-name">REPSTATE</span>
+        </div>
         <h1 class="direct-detail-title"><span class="title-line">Track every workout</span><span class="title-line">Know when to overload</span></h1>
         <p class="direct-detail-copy">
           RepState keeps your plan, sets, weights,<br>and session history together
