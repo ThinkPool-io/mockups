@@ -2012,11 +2012,35 @@
     }
 
     .direct-detail-meta {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      justify-items: center;
       grid-column: 1 / -1;
-      gap: 20px;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .direct-detail-meta .local-line {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .direct-detail-about {
+      min-height: 44px;
+      display: inline-flex;
+      grid-column: 1 / -1;
       align-items: center;
+      justify-content: center;
+      justify-self: center;
+      padding: 0 8px;
+      border: 0;
+      background: transparent;
+      color: #717981;
+      font-size: 12px;
+      font-weight: 650;
+      text-decoration: underline;
+      text-decoration-color: var(--min-line);
+      text-underline-offset: 4px;
+      cursor: pointer;
     }
 
     @media (max-width: 760px) {
@@ -2072,9 +2096,8 @@
       }
 
       .direct-detail-meta {
-        display: grid;
         grid-column: auto;
-        gap: 7px;
+        gap: 6px;
       }
     }
 
@@ -2112,9 +2135,10 @@
           </label>
           <button class="continue-button" disabled type="submit">Continue to plan</button>
           <div class="direct-detail-meta">
-            <p class="local-line"><span class="local-dot"></span>Start locally on this device. Create an account to sync later.</p>
+            <p class="local-line">Start locally on this device. Create an account to sync later.</p>
             <p class="account-line">Already have an account? <button type="button">Sign in</button></p>
           </div>
+          <a class="direct-detail-about" href="repstate-about.html">About</a>
         </form>
       </div>
     </section>
