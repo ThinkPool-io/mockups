@@ -2003,6 +2003,7 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) 220px;
       gap: 10px;
+      align-items: end;
       width: min(720px, 100%);
       margin-inline: auto;
     }
@@ -2090,27 +2091,20 @@
       </header>
 
       <div class="direct-detail-main">
-        <h1 class="direct-detail-title">Track every workout.<br>Know what to lift next.</h1>
+        <h1 class="direct-detail-title">Track every workout<br>Know when to overload</h1>
         <p class="direct-detail-copy">
-          RepState keeps your plan, sets, weights, and history together so every
-          session starts where you left off.
+          RepState keeps your plan, sets, weights, and history together
         </p>
-        <div class="direct-detail-facts" aria-label="Core RepState features">
-          <span><i></i>Plan workouts</span>
-          <span><i></i>Log sets and weights</span>
-          <span><i></i>See progress</span>
-        </div>
       </div>
 
       <div class="direct-detail-form-wrap">
         <form class="onboard-form direct-detail-form">
           <label class="onboard-field" for="detail-name">
-            <span class="field-label">Your name</span>
-            <input class="text-input" id="detail-name" placeholder="Enter your name">
+            <input class="text-input" id="detail-name" aria-label="Your name" placeholder="Enter your name">
           </label>
           <button class="continue-button" disabled type="submit">Continue to plan</button>
           <div class="direct-detail-meta">
-            <p class="local-line"><span class="local-dot"></span>Starts on this device. Sync later.</p>
+            <p class="local-line"><span class="local-dot"></span>Start locally on this device. Create an account to sync later.</p>
             <p class="account-line">Already have an account? <button type="button">Sign in</button></p>
           </div>
         </form>
