@@ -1944,6 +1944,7 @@
       width: 43px;
       height: 18px;
       flex: 0 0 43px;
+      transform: translateY(-0.5px);
     }
 
     .direct-detail-main {
@@ -1962,6 +1963,10 @@
       letter-spacing: -0.055em;
       line-height: 0.96;
       text-wrap: balance;
+    }
+
+    .direct-detail-title .title-line {
+      display: block;
     }
 
     .direct-detail-copy {
@@ -2038,8 +2043,13 @@
       }
 
       .direct-detail-title {
-        font-size: clamp(44px, 12vw, 52px);
-        line-height: 0.98;
+        font-size: min(34px, 8.5vw);
+        line-height: 1.02;
+      }
+
+      .direct-detail-title .title-line {
+        display: block;
+        white-space: nowrap;
       }
 
       .direct-detail-copy {
@@ -2087,13 +2097,12 @@
     <section class="mock-screen direct-detail-screen" aria-label="Detailed Direct onboarding mockup">
       <header class="direct-detail-topline">
         <div class="direct-detail-brand"><span class="brand-mark" aria-hidden="true"></span>REPSTATE</div>
-        <span class="setup-step">Setup 1 of 2</span>
       </header>
 
       <div class="direct-detail-main">
-        <h1 class="direct-detail-title">Track every workout<br>Know when to overload</h1>
+        <h1 class="direct-detail-title"><span class="title-line">Track every workout</span><span class="title-line">Know when to overload</span></h1>
         <p class="direct-detail-copy">
-          RepState keeps your plan, sets, weights, and history together
+          RepState keeps your plan, sets, weights,<br>and session history together
         </p>
       </div>
 
