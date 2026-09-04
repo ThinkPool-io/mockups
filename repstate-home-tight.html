@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepState · Tighter home</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --repstate-page: #0d1013;
+      --repstate-text: #f4f2ea;
+      --repstate-muted: #858b93;
+      --repstate-line: #292f36;
+      --repstate-field: #0a0d10;
+      --repstate-red: #ef2b35;
+      --repstate-red-dark: #c81f29;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--repstate-page); }
+
+    body {
+      color: var(--repstate-text);
+      font-family: "Space Grotesk", "Avenir Next", Avenir, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+
+    .repstate-home {
+      width: min(720px, calc(100% - 40px));
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 58px 0 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .repstate-mark {
+      width: 76px;
+      height: auto;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    .repstate-hero { margin-top: 44px; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(52px, 5vw, 70px);
+      line-height: .96;
+      letter-spacing: -.058em;
+      font-weight: 650;
+    }
+
+    h1 span { display: block; }
+
+    .repstate-promise {
+      margin: 16px 0 0;
+      color: var(--repstate-muted);
+      font-size: 18px;
+      line-height: 1.4;
+      letter-spacing: -.015em;
+    }
+
+    .repstate-entry {
+      width: min(620px, 100%);
+      margin-top: 42px;
+      padding-top: 26px;
+      border-top: 1px solid var(--repstate-line);
+    }
+
+    .repstate-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 190px;
+      gap: 10px;
+    }
+
+    .repstate-form input,
+    .repstate-form button {
+      height: 58px;
+      border-radius: 8px;
+    }
+
+    .repstate-form input {
+      min-width: 0;
+      padding: 0 17px;
+      border: 1px solid #343a42;
+      background: var(--repstate-field);
+      color: var(--repstate-text);
+      font-size: 17px;
+      outline: none;
+    }
+
+    .repstate-form input::placeholder { color: #626972; opacity: 1; }
+
+    .repstate-form button {
+      border: 1px solid var(--repstate-red-dark);
+      background: var(--repstate-red);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .repstate-form button:disabled {
+      border-color: #76252b;
+      background: #6b2025;
+      color: #95797b;
+    }
+
+    .repstate-local,
+    .repstate-signin {
+      margin: 13px 0 0;
+      color: #747b84;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .repstate-signin { margin-top: 8px; }
+    .repstate-signin strong { color: var(--repstate-text); font-weight: 650; }
+
+    .repstate-about {
+      margin-top: auto;
+      padding-top: 28px;
+      color: #747b84;
+      font-size: 13px;
+      text-decoration: underline;
+      text-decoration-color: #3b4148;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .repstate-home {
+        width: 100%;
+        min-height: 100svh;
+        padding: 42px 20px 24px;
+      }
+
+      .repstate-mark { width: 68px; }
+      .repstate-hero { margin-top: 34px; }
+
+      h1 {
+        font-size: 38px;
+        line-height: 1.01;
+        letter-spacing: -.055em;
+      }
+
+      .repstate-promise { margin-top: 12px; font-size: 16px; }
+
+      .repstate-entry {
+        width: 100%;
+        margin-top: 34px;
+        padding-top: 22px;
+      }
+
+      .repstate-form { grid-template-columns: 1fr; gap: 9px; }
+      .repstate-form input, .repstate-form button { width: 100%; height: 56px; }
+      .repstate-form input { font-size: 16px; }
+      .repstate-about { padding-top: 24px; }
+    }
+
+    @media (max-height: 640px) and (max-width: 600px) {
+      .repstate-home { padding-top: 24px; }
+      .repstate-hero { margin-top: 22px; }
+      .repstate-entry { margin-top: 24px; padding-top: 18px; }
+      .repstate-about { padding-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="repstate-home">
+    <svg class="repstate-mark" viewBox="0 0 256 108" role="img" aria-label="RepState barbell mark">
+      <g fill="#f4f2ea">
+        <rect x="7" y="47" width="9" height="14" rx="2"/><rect x="29" y="18" width="15" height="72" rx="4"/><rect x="46" y="7" width="18" height="94" rx="4"/><rect x="62" y="48" width="132" height="12"/><path d="M97 27h42c16 0 27 11 27 27 0 13-8 23-20 27l20 20h-22l-36-34h31c8 0 12-4 12-11s-5-11-12-11H97V27Z"/><rect x="192" y="7" width="18" height="94" rx="4"/><rect x="212" y="18" width="15" height="72" rx="4"/><rect x="240" y="47" width="9" height="14" rx="2"/>
+      </g>
+      <g fill="#ef2b35"><rect x="18" y="36" width="9" height="36" rx="3"/><rect x="229" y="36" width="9" height="36" rx="3"/></g>
+    </svg>
+
+    <section class="repstate-hero">
+      <h1><span>Track every workout</span><span>Know when to overload</span></h1>
+      <p class="repstate-promise">Built for the minute between sets</p>
+    </section>
+
+    <section class="repstate-entry" aria-label="Start training">
+      <form class="repstate-form">
+        <label hidden for="repstate-name">Your name</label>
+        <input id="repstate-name" autocomplete="name" placeholder="Enter your name">
+        <button disabled type="button">Continue to plan</button>
+      </form>
+      <p class="repstate-local">Start locally on this device. Create an account to sync later.</p>
+      <p class="repstate-signin">Already have an account? <strong>Sign in</strong></p>
+    </section>
+
+    <a class="repstate-about" href="repstate-about-tight.html">About</a>
+  </main>
+</body>
+</html>
