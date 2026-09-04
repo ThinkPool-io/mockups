@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#06090e" />
+    <meta name="description" content="Three minimal SEO copy options for the Lynx homepage." />
+    <title>Lynx homepage, minimal SEO options</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --board: #06090e;
+        --bg: #090d14;
+        --raised: #111722;
+        --surface: #151b26;
+        --line: #2c3442;
+        --line-strong: #445065;
+        --ink: #f2f5fa;
+        --muted: #b5bfce;
+        --faint: #8290a4;
+        --blue: #2876f7;
+        --blue-hi: #6ca2ff;
+        --positive: #72c69b;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: var(--board);
+        color: var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--board);
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        background: var(--board);
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .board-header,
+      .options {
+        width: min(1180px, calc(100% - 48px));
+        margin-inline: auto;
+      }
+
+      .board-header {
+        display: grid;
+        padding: 62px 0 42px;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 410px);
+        gap: 48px;
+        align-items: end;
+      }
+
+      .board-kicker {
+        margin: 0 0 10px;
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 720;
+      }
+
+      .board-header h1 {
+        max-width: 750px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 6vw, 5.25rem);
+        font-weight: 400;
+        letter-spacing: -0.045em;
+        line-height: 0.94;
+        text-wrap: balance;
+      }
+
+      .board-intro {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .board-intro strong {
+        color: var(--ink);
+        font-weight: 650;
+      }
+
+      .options {
+        display: grid;
+        padding-bottom: 72px;
+        gap: 34px;
+      }
+
+      .option {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--bg);
+      }
+
+      .option.recommended {
+        border-color: rgba(108, 162, 255, 0.62);
+        box-shadow: 0 0 0 1px rgba(40, 118, 247, 0.16);
+      }
+
+      .option-meta {
+        display: grid;
+        min-height: 96px;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--line);
+        background: var(--raised);
+        grid-template-columns: 120px minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .option-name {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .option-name strong {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 22px;
+        font-weight: 400;
+      }
+
+      .option-name span {
+        color: var(--blue-hi);
+        font-size: 11px;
+        font-weight: 760;
+      }
+
+      .option-meta p {
+        max-width: 680px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .change-count {
+        color: var(--faint);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .mock-viewport {
+        position: relative;
+        height: 760px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      .mock-viewport::before {
+        position: absolute;
+        z-index: 0;
+        inset: 0 0 auto;
+        height: 470px;
+        background: radial-gradient(circle at 50% 0%, rgba(40, 118, 247, 0.18), transparent 65%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .lynx-page {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        height: 100%;
+        grid-template-rows: minmax(0, 1fr) auto;
+      }
+
+      .lynx-cluster {
+        width: 100%;
+        align-self: center;
+      }
+
+      .lynx-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        flex-direction: column;
+        font-size: 29px;
+        font-weight: 750;
+        line-height: 1;
+      }
+
+      .lynx-brand img {
+        display: block;
+        width: 72px;
+        height: 72px;
+        border: 1px solid rgba(108, 162, 255, 0.55);
+        border-radius: 19px;
+      }
+
+      .lynx-main {
+        display: flex;
+        width: min(700px, calc(100% - 56px));
+        margin: 14px auto 0;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .product-title {
+        max-width: 680px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(4rem, 7vw, 5.45rem);
+        font-weight: 400;
+        letter-spacing: -0.045em;
+        line-height: 0.94;
+        text-wrap: balance;
+      }
+
+      .intro {
+        max-width: 590px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        font-weight: 550;
+        line-height: 1.6;
+        text-wrap: balance;
+      }
+
+      .intro + .intro {
+        margin-top: 8px;
+      }
+
+      .intro.single {
+        max-width: 650px;
+      }
+
+      .converter {
+        width: 100%;
+        margin-top: 24px;
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: rgba(21, 27, 38, 0.9);
+        padding: 16px;
+        backdrop-filter: blur(12px);
+      }
+
+      .convert-form {
+        display: grid;
+        gap: 12px;
+      }
+
+      .input-shell {
+        display: flex;
+        min-height: 64px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(9, 13, 20, 0.84);
+        padding: 0 13px;
+      }
+
+      .link-icon {
+        width: 21px;
+        flex: 0 0 auto;
+        fill: none;
+        stroke: var(--faint);
+        stroke-width: 1.6;
+        stroke-linecap: round;
+      }
+
+      .input-shell input {
+        min-width: 0;
+        min-height: 44px;
+        flex: 1;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
+      .input-shell input::placeholder {
+        color: var(--faint);
+      }
+
+      .paste-button {
+        min-width: 56px;
+        min-height: 44px;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--blue-hi);
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .primary-button {
+        display: inline-flex;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 14px;
+        background: var(--blue);
+        color: #07101d;
+        font-size: 15px;
+        font-weight: 780;
+      }
+
+      .micro-proof {
+        display: flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin: 8px 0 0;
+        color: var(--faint);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .micro-proof a {
+        display: inline-flex;
+        min-height: 32px;
+        align-items: center;
+        color: var(--muted);
+        text-decoration-color: var(--line-strong);
+        text-underline-offset: 3px;
+      }
+
+      .lynx-footer {
+        display: flex;
+        min-height: 54px;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 3px 24px 20px;
+        color: var(--faint);
+        font-size: 12px;
+      }
+
+      .lynx-footer a {
+        display: inline-flex;
+        min-height: 32px;
+        align-items: center;
+        text-underline-offset: 4px;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+        white-space: nowrap;
+      }
+
+      :focus-visible {
+        outline: 3px solid rgba(108, 162, 255, 0.68);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 720px) {
+        .board-header,
+        .options {
+          width: min(100% - 24px, 1180px);
+        }
+
+        .board-header {
+          padding: 38px 4px 28px;
+          grid-template-columns: 1fr;
+          gap: 22px;
+        }
+
+        .board-header h1 {
+          font-size: clamp(2.75rem, 14vw, 4rem);
+        }
+
+        .board-intro {
+          font-size: 14px;
+        }
+
+        .options {
+          gap: 22px;
+          padding-bottom: 36px;
+        }
+
+        .option {
+          border-radius: 17px;
+        }
+
+        .option-meta {
+          min-height: 0;
+          padding: 18px;
+          grid-template-columns: 1fr auto;
+          gap: 12px;
+        }
+
+        .option-name {
+          gap: 2px;
+        }
+
+        .option-name strong {
+          font-size: 20px;
+        }
+
+        .option-meta p {
+          grid-column: 1 / -1;
+          grid-row: 2;
+        }
+
+        .change-count {
+          grid-column: 2;
+          grid-row: 1;
+        }
+
+        .mock-viewport {
+          height: 695px;
+        }
+
+        .lynx-brand {
+          font-size: 25px;
+        }
+
+        .lynx-brand img {
+          width: 60px;
+          height: 60px;
+          border-radius: 16px;
+        }
+
+        .lynx-main {
+          width: calc(100% - 28px);
+          margin-top: 18px;
+        }
+
+        .product-title {
+          font-size: clamp(3rem, 15vw, 4rem);
+          line-height: 0.94;
+        }
+
+        .intro {
+          max-width: 330px;
+          margin-top: 18px;
+          font-size: 15px;
+          line-height: 1.48;
+        }
+
+        .intro + .intro {
+          margin-top: 7px;
+        }
+
+        .converter {
+          margin-top: 20px;
+          padding: 12px;
+        }
+
+        .input-shell {
+          min-height: 58px;
+          padding-inline: 10px;
+        }
+
+        .micro-proof {
+          min-height: 52px;
+          padding: 3px 8px 0;
+          flex-wrap: wrap;
+          gap: 3px 8px;
+        }
+
+        .lynx-footer {
+          padding-bottom: 12px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="board-header">
+      <div>
+        <p class="board-kicker">Lynx homepage</p>
+        <h1>Three minimal SEO options.</h1>
+      </div>
+      <p class="board-intro">
+        <strong>No new sections and no duplicate About page.</strong>
+        Every option keeps the current converter-first screen and changes only one copy block.
+      </p>
+    </header>
+
+    <main class="options">
+      <article class="option recommended">
+        <header class="option-meta">
+          <div class="option-name">
+            <strong>One sentence</strong>
+            <span>Recommended</span>
+          </div>
+          <p>Replace the two vague intro lines with one literal description. Strongest query clarity, smallest visual change.</p>
+          <span class="change-count">1 copy block</span>
+        </header>
+        <div class="mock-viewport">
+          <div class="lynx-page">
+            <div class="lynx-cluster">
+              <div class="lynx-brand">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIyMCIgeTE9IjUiIHgyPSIxODAiIHkyPSIyMDAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzFhM2M3MCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNiIgc3RvcC1jb2xvcj0iIzA5MTQyNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTA4MTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iNDQiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTQzIDc2IDUzIDMxbDM2IDI3cTExLTUgMjIgMGwzNi0yNyAxMCA0NXExNiAyMSAxMCA1Mi03IDM3LTY3IDQ1LTYwLTgtNjctNDUtNi0zMSAxMC01MloiIGZpbGw9IiMwYjE1MjciIHN0cm9rZT0iIzQzOGNmOCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0ibTU3IDQ1IDIyIDE3LTI3IDYgNS0yM1ptNjQgMTcgMjItMTcgNSAyMy0yNy02WiIgZmlsbD0iIzVkOWVmZiIgb3BhY2l0eT0iMC41Ii8+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjNmN2ZmIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNNTUgMTA1di04bTEyIDhWODltMTIgMTZWOTRNMTQ1IDEwNXYtOG0tMTIgOFY4OW0tMTIgMTZWOTQiLz4KICA8L2c+CiAgPHBhdGggZD0ibTEwMCAxMjgtOCA3IDggNyA4LTctOC03WiIgZmlsbD0iIzc5ZGZmZiIvPgogIDxwYXRoIGQ9Ik0xMDAgMTQydjEwbTAgMHEtMTAgOS0yMCA1bTIwLTVxMTAgOSAyMCA1IiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZWIxY2IiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="" width="80" height="80" />
+                <span>Lynx</span>
+              </div>
+              <div class="lynx-main">
+                <h2 class="product-title">Music links<br />with social skills</h2>
+                <p class="intro single">Convert tracks and albums between Spotify, Apple Music, and YouTube Music.</p>
+                <section class="converter" aria-label="Music link converter">
+                  <form class="convert-form">
+                    <label class="sr-only" for="track-a">Spotify, Apple Music, or YouTube Music link</label>
+                    <div class="input-shell">
+                      <svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" /></svg>
+                      <input id="track-a" type="url" placeholder="Paste a music link…" />
+                      <button class="paste-button" type="button">Paste</button>
+                    </div>
+                    <button class="primary-button" type="button">Convert</button>
+                  </form>
+                </section>
+              </div>
+            </div>
+            <footer class="lynx-footer"><a href="https://lynx.stream/about">About Lynx</a></footer>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-meta">
+          <div class="option-name">
+            <strong>Action first</strong>
+            <span>More explanatory</span>
+          </div>
+          <p>Describe the user action and outcome in two short lines. Still one screen, with no new interface.</p>
+          <span class="change-count">1 copy block</span>
+        </header>
+        <div class="mock-viewport">
+          <div class="lynx-page">
+            <div class="lynx-cluster">
+              <div class="lynx-brand">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIyMCIgeTE9IjUiIHgyPSIxODAiIHkyPSIyMDAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzFhM2M3MCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNiIgc3RvcC1jb2xvcj0iIzA5MTQyNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTA4MTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iNDQiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTQzIDc2IDUzIDMxbDM2IDI3cTExLTUgMjIgMGwzNi0yNyAxMCA0NXExNiAyMSAxMCA1Mi03IDM3LTY3IDQ1LTYwLTgtNjctNDUtNi0zMSAxMC01MloiIGZpbGw9IiMwYjE1MjciIHN0cm9rZT0iIzQzOGNmOCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0ibTU3IDQ1IDIyIDE3LTI3IDYgNS0yM1ptNjQgMTcgMjItMTcgNSAyMy0yNy02WiIgZmlsbD0iIzVkOWVmZiIgb3BhY2l0eT0iMC41Ii8+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjNmN2ZmIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNNTUgMTA1di04bTEyIDhWODltMTIgMTZWOTRNMTQ1IDEwNXYtOG0tMTIgOFY4OW0tMTIgMTZWOTQiLz4KICA8L2c+CiAgPHBhdGggZD0ibTEwMCAxMjgtOCA3IDggNyA4LTctOC03WiIgZmlsbD0iIzc5ZGZmZiIvPgogIDxwYXRoIGQ9Ik0xMDAgMTQydjEwbTAgMHEtMTAgOS0yMCA1bTIwLTVxMTAgOSAyMCA1IiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZWIxY2IiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="" width="80" height="80" />
+                <span>Lynx</span>
+              </div>
+              <div class="lynx-main">
+                <h2 class="product-title">Music links<br />with social skills</h2>
+                <p class="intro">Paste a Spotify, Apple Music, or YouTube Music track or album link.</p>
+                <p class="intro">Lynx finds the matching release on the other services.</p>
+                <section class="converter" aria-label="Music link converter">
+                  <form class="convert-form">
+                    <label class="sr-only" for="track-b">Spotify, Apple Music, or YouTube Music link</label>
+                    <div class="input-shell">
+                      <svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" /></svg>
+                      <input id="track-b" type="url" placeholder="Paste a music link…" />
+                      <button class="paste-button" type="button">Paste</button>
+                    </div>
+                    <button class="primary-button" type="button">Convert</button>
+                  </form>
+                </section>
+              </div>
+            </div>
+            <footer class="lynx-footer"><a href="https://lynx.stream/about">About Lynx</a></footer>
+          </div>
+        </div>
+      </article>
+
+      <article class="option">
+        <header class="option-meta">
+          <div class="option-name">
+            <strong>Leave hero alone</strong>
+            <span>Least visible change</span>
+          </div>
+          <p>Keep today’s headline and intro untouched. Add one indexable descriptor beneath the converter, beside the existing About path.</p>
+          <span class="change-count">1 quiet line</span>
+        </header>
+        <div class="mock-viewport">
+          <div class="lynx-page">
+            <div class="lynx-cluster">
+              <div class="lynx-brand">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIyMCIgeTE9IjUiIHgyPSIxODAiIHkyPSIyMDAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzFhM2M3MCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNiIgc3RvcC1jb2xvcj0iIzA5MTQyNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwNTA4MTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iNDQiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTQzIDc2IDUzIDMxbDM2IDI3cTExLTUgMjIgMGwzNi0yNyAxMCA0NXExNiAyMSAxMCA1Mi03IDM3LTY3IDQ1LTYwLTgtNjctNDUtNi0zMSAxMC01MloiIGZpbGw9IiMwYjE1MjciIHN0cm9rZT0iIzQzOGNmOCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0ibTU3IDQ1IDIyIDE3LTI3IDYgNS0yM1ptNjQgMTcgMjItMTcgNSAyMy0yNy02WiIgZmlsbD0iIzVkOWVmZiIgb3BhY2l0eT0iMC41Ii8+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjNmN2ZmIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNNTUgMTA1di04bTEyIDhWODltMTIgMTZWOTRNMTQ1IDEwNXYtOG0tMTIgOFY4OW0tMTIgMTZWOTQiLz4KICA8L2c+CiAgPHBhdGggZD0ibTEwMCAxMjgtOCA3IDggNyA4LTctOC03WiIgZmlsbD0iIzc5ZGZmZiIvPgogIDxwYXRoIGQ9Ik0xMDAgMTQydjEwbTAgMHEtMTAgOS0yMCA1bTIwLTVxMTAgOSAyMCA1IiBmaWxsPSJub25lIiBzdHJva2U9IiM5ZWIxY2IiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=" alt="" width="80" height="80" />
+                <span>Lynx</span>
+              </div>
+              <div class="lynx-main">
+                <h2 class="product-title">Music links<br />with social skills</h2>
+                <p class="intro">Spotify, Apple, or Youtube Music</p>
+                <p class="intro">Lynx finds the match on all platforms</p>
+                <section class="converter" aria-label="Music link converter">
+                  <form class="convert-form">
+                    <label class="sr-only" for="track-c">Spotify, Apple Music, or YouTube Music link</label>
+                    <div class="input-shell">
+                      <svg class="link-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m21.4 11.6-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 1 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5" /></svg>
+                      <input id="track-c" type="url" placeholder="Paste a music link…" />
+                      <button class="paste-button" type="button">Paste</button>
+                    </div>
+                    <button class="primary-button" type="button">Convert</button>
+                  </form>
+                </section>
+                <p class="micro-proof">
+                  <span>Free music link converter for tracks and albums.</span>
+                  <a href="https://lynx.stream/about">How matching works</a>
+                </p>
+              </div>
+            </div>
+            <footer class="lynx-footer"><a href="https://lynx.stream/about">About Lynx</a></footer>
+          </div>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
