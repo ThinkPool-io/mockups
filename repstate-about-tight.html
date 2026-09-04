@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepState · Tighter about</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --repstate-page: #0d1013;
+      --repstate-text: #f4f2ea;
+      --repstate-muted: #858b93;
+      --repstate-line: #292f36;
+      --repstate-red: #ef2b35;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--repstate-page); }
+
+    body {
+      color: var(--repstate-text);
+      font-family: "Space Grotesk", "Avenir Next", Avenir, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .repstate-about-page {
+      width: min(680px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 46px 0 38px;
+      text-align: center;
+    }
+
+    .repstate-about-brand {
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--repstate-line);
+    }
+
+    .repstate-about-brand svg {
+      width: 68px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .repstate-about-intro {
+      padding: 36px 0 34px;
+      border-bottom: 1px solid var(--repstate-line);
+    }
+
+    h1, h2, h3 { margin: 0; font-weight: 650; }
+
+    h1 {
+      font-size: 50px;
+      line-height: 1;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      font-size: 31px;
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    .repstate-about-intro p,
+    .repstate-copy p {
+      color: var(--repstate-muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .repstate-about-intro p {
+      max-width: 580px;
+      margin: 16px auto 0;
+    }
+
+    .repstate-about-intro strong,
+    .repstate-copy strong { color: var(--repstate-text); font-weight: 650; }
+
+    .repstate-rating-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 26px;
+      border-top: 1px solid var(--repstate-line);
+      border-bottom: 1px solid var(--repstate-line);
+    }
+
+    .repstate-rating {
+      padding: 15px 10px 14px;
+      border-right: 1px solid var(--repstate-line);
+    }
+
+    .repstate-rating:last-child { border-right: 0; }
+    .repstate-rating b { display: block; font-size: 14px; }
+    .repstate-rating span { display: block; margin-top: 4px; color: var(--repstate-muted); font-size: 12px; }
+    .repstate-rating:last-child b { color: var(--repstate-red); }
+
+    .repstate-about-section {
+      padding: 31px 0 29px;
+      border-bottom: 1px solid var(--repstate-line);
+    }
+
+    .repstate-copy {
+      max-width: 590px;
+      margin: 18px auto 0;
+      display: grid;
+      gap: 11px;
+    }
+
+    .repstate-copy p { margin: 0; }
+
+    .repstate-about-footer {
+      padding-top: 29px;
+      color: #707780;
+      font-size: 12px;
+    }
+
+    .repstate-about-footer p { margin: 0 0 18px; }
+    .repstate-about-footer a { color: inherit; text-underline-offset: 4px; }
+    .repstate-about-home { display: inline-block; }
+
+    @media (max-width: 600px) {
+      .repstate-about-page { width: 100%; padding: 30px 18px 28px; }
+      .repstate-about-brand { padding-bottom: 23px; }
+      .repstate-about-brand svg { width: 62px; }
+      .repstate-about-intro { padding: 28px 0 27px; }
+
+      h1 { font-size: 38px; line-height: 1.02; }
+      h2 { font-size: 27px; }
+
+      .repstate-about-intro p,
+      .repstate-copy p { font-size: 14px; line-height: 1.55; }
+
+      .repstate-about-intro p { margin-top: 14px; }
+      .repstate-rating-strip { margin-top: 22px; }
+      .repstate-rating { padding: 13px 5px 12px; }
+      .repstate-rating b { font-size: 13px; }
+      .repstate-rating span { font-size: 11px; }
+      .repstate-about-section { padding: 26px 0 24px; }
+      .repstate-copy { margin-top: 15px; gap: 10px; }
+      .repstate-about-footer { padding-top: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="repstate-about-page">
+    <header class="repstate-about-brand" aria-label="RepState">
+      <svg viewBox="0 0 256 108" role="img" aria-label="RepState barbell mark">
+        <g fill="#f4f2ea">
+          <rect x="7" y="47" width="9" height="14" rx="2"/><rect x="29" y="18" width="15" height="72" rx="4"/><rect x="46" y="7" width="18" height="94" rx="4"/><rect x="62" y="48" width="132" height="12"/><path d="M97 27h42c16 0 27 11 27 27 0 13-8 23-20 27l20 20h-22l-36-34h31c8 0 12-4 12-11s-5-11-12-11H97V27Z"/><rect x="192" y="7" width="18" height="94" rx="4"/><rect x="212" y="18" width="15" height="72" rx="4"/><rect x="240" y="47" width="9" height="14" rx="2"/>
+        </g>
+        <g fill="#ef2b35"><rect x="18" y="36" width="9" height="36" rx="3"/><rect x="229" y="36" width="9" height="36" rx="3"/></g>
+      </svg>
+    </header>
+
+    <section class="repstate-about-intro">
+      <h1>How progression works</h1>
+      <p>Rate each exercise <strong>Light</strong>, <strong>Solid</strong>, or <strong>Cooked</strong>. After the workout, RepState recommends whether to add weight, repeat the load, or hold it.</p>
+      <div class="repstate-rating-strip" aria-label="Effort rating guide">
+        <div class="repstate-rating"><b>Light</b><span>Room to add</span></div>
+        <div class="repstate-rating"><b>Solid</b><span>Right on target</span></div>
+        <div class="repstate-rating"><b>Cooked</b><span>Hold the load</span></div>
+      </div>
+    </section>
+
+    <section class="repstate-about-section">
+      <h2>During a workout</h2>
+      <div class="repstate-copy">
+        <p><strong>Pick up where you stopped.</strong> Your exercise, completed sets, working weights, effort ratings, and rest countdown remain until you end the session.</p>
+        <p><strong>Rest on your terms.</strong> Choose no timer, 60 or 90 seconds, or 2 or 3 minutes. Dismiss it whenever you are ready.</p>
+        <p><strong>Undo accidental taps.</strong> Reverse the last completed set before you continue.</p>
+      </div>
+    </section>
+
+    <section class="repstate-about-section">
+      <h2>Keeping your data</h2>
+      <div class="repstate-copy">
+        <p><strong>Sync when you want.</strong> Create an account and bring your existing settings, plan, weights, sessions, and effort ratings with you.</p>
+        <p><strong>Keep a full backup.</strong> Download the same data any time as JSON.</p>
+      </div>
+    </section>
+
+    <footer class="repstate-about-footer">
+      <p>Made by <a href="https://maksimzeidler.vercel.app">Maksim Zeidler</a></p>
+      <a class="repstate-about-home" href="repstate-home-tight.html">Return home</a>
+    </footer>
+  </main>
+</body>
+</html>
