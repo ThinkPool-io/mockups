@@ -1281,6 +1281,12 @@ body.heist-board { background: #080b0d; }
 .heist-target strong { display: block; font-size: 15px; font-weight: 680; letter-spacing: -.02em; }
 .heist-why-button { align-self: center; min-height: 40px; padding: 0 10px; border: 1px solid #343941; border-radius: 8px; background: #171b20; color: #f2f3f5; font-size: 12px; cursor: pointer; }
 .heist-why-button[aria-expanded="true"] { color: #f46a71; border-color: #864047; }
+#workout-concept .heist-last-stacked { display: grid; justify-content: start; gap: 4px; }
+#workout-concept .heist-target-label { display: flex; align-items: center; }
+#workout-concept .heist-help-icon { display: inline-grid; place-items: center; position: relative; width: 44px; height: 44px; min-height: 44px; flex: 0 0 44px; margin: -13px -13px -13px -6px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #a8adb4; line-height: 1; }
+#workout-concept .heist-help-glyph { display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 50%; font-size: 12px; font-weight: 600; line-height: 1; }
+#workout-concept .heist-help-icon:hover, #workout-concept .heist-help-icon:focus-visible { color: #f2f3f5; }
+#workout-concept .heist-help-icon[aria-expanded="true"] { color: #f46a71; }
 .heist-reason { margin-top: 14px; padding: 15px 14px; background: #171b20; border: 1px solid #30363d; border-radius: 10px; }
 .heist-reason h3 { font-size: 17px; line-height: 1.2; letter-spacing: -.03em; margin: 0 0 9px; font-weight: 700; }
 .heist-reason p { font-size: 12px; line-height: 1.55; color: #a9b0b9; margin: 0; }
@@ -1348,12 +1354,11 @@ body.heist-board { background: #080b0d; }
   <nav class="heist-board-nav" aria-label="Explore the mockups"><a href="#workout-concept">Today’s target</a><a href="#reason-concept">Why?</a><a href="#completion-concept">Workout summary</a><a href="#equipment-concept">Available weights</a><a href="#swap-concept">Swap for today</a></nav>
 </header>
 <main class="heist-gallery"><article id="workout-concept" class="heist-concept heist-concept-workout"><header class="heist-concept-caption"><h2>Before your first set</h2><p>Today’s target, right above the set markers.</p></header><div class="heist-screen" aria-label="Before your first set"><main class="app-shell workout-shell"><header class="workout-header"><span class="workout-day-label">Training day</span><button aria-label="End session" class="end-session-link" title="End session" type="button"><svg aria-hidden="true" fill="none" viewBox="1 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button></header><div class="progress-track" aria-label="0% complete"><span style="width: 0%;"></span></div><div class="workout-layout"><section class="exercise-stage"><div class="exercise-title"><h1>Cable curl</h1></div><div class="load-console "><div class="load-pane"><div class="console-pane-label">Working load</div><div class="weight-readout"><span class="weight-value">20</span><div><strong>kg</strong></div></div><div class="load-controls"><button type="button" aria-label="Decrease by 2.5 kilograms"><span aria-hidden="true">−</span></button><button class="increase-button" type="button" aria-label="Increase by 2.5 kilograms"><span aria-hidden="true">+</span></button></div></div><div class="rep-pane"><div class="console-pane-label">Reps</div><div class="set-rep-tracker is-console"><div class="rep-controls"><button type="button" aria-label="Decrease reps">−</button><label><span>Reps completed</span><output class="heist-rep-value" aria-label="Reps">10</output></label><button type="button" aria-label="Increase reps">+</button></div></div></div></div><div class="set-panel"><div><section class="heist-guidance" aria-label="Previous session and today's target">
-    <div class="heist-last"><span>Last time</span><span>20 kg <i>·</i> 10 / 9 / 8 reps</span></div>
+    <div class="heist-last heist-last-stacked"><span>Last time</span><span>20 kg <i>·</i> 10 / 9 / 8 reps</span></div>
     <div class="heist-target">
-      <div><span>Today’s target</span><strong>20 kg <i>·</i> 10 / 9 / 9 reps</strong></div>
-      <button class="heist-why-button" type="button" aria-expanded="false">Why?</button>
+      <div><span class="heist-target-label"><span>Today’s target</span><button class="heist-why-button heist-help-icon" type="button" aria-label="Why this target?" aria-expanded="false" aria-controls="workout-target-reason"><span class="heist-help-glyph" aria-hidden="true">?</span></button></span><strong>20 kg <i>·</i> 10 / 9 / 9 reps</strong></div>
     </div>
-    <div class="heist-reason" hidden="">
+    <div class="heist-reason" id="workout-target-reason" hidden="">
       <h3>One more rep. Same load.</h3>
       <p>You finished 10 / 9 / 8 last time and rated it Solid. Aim for one more rep on the last set today.</p>
       <div class="heist-reason-numbers"><span>Last time <strong>27 reps</strong></span><span>Today <strong>28 reps</strong></span></div>
@@ -1424,7 +1429,8 @@ body.heist-board { background: #080b0d; }
     const button = event.currentTarget;
     const open = button.getAttribute('aria-expanded') !== 'true';
     button.setAttribute('aria-expanded', String(open));
-    button.textContent = open ? 'Got it' : 'Why?';
+    if (button.classList.contains('heist-help-icon')) button.setAttribute('aria-label', open ? 'Hide target explanation' : 'Why this target?');
+    else button.textContent = open ? 'Got it' : 'Why?';
     screen.querySelector('.heist-reason').hidden = !open;
   });
   screen.querySelectorAll('.heist-close').forEach(button => button.addEventListener('click', () => {
