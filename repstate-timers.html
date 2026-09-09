@@ -1379,6 +1379,10 @@ button:disabled, .primary-button:disabled, .secondary-button:disabled { cursor: 
 .rt-save-form input { min-width:0; flex:1; min-height:44px; border:1px solid var(--rt-line); border-radius:8px; background:#111417; color:var(--rt-text); padding:10px; font-size:14px; }
 .rt-save-form button { padding:10px 14px; border:0; border-radius:8px; background:#25292f; color:var(--rt-text); font-size:13px; }
 .rt-full-link { display:none; }
+article#interval-setup > div > main > div > div > h1,
+article#rest-setup > div > main > div > section:nth-of-type(1) > div:nth-of-type(1),
+article#interval-setup > div > main > div > section:nth-of-type(1) > div:nth-of-type(1) { text-align:center; }
+article#interval-setup > div > main > div > section:nth-of-type(1) > p:nth-of-type(1) { justify-content:center; align-items:baseline; gap:8px; }
 article#rest-running > div > main > div > section > p:nth-of-type(3),
 article#interval-running > div > main > div > section > p:nth-of-type(3),
 article#rest-finished > div > main > div > section > p:nth-of-type(3),
@@ -1413,7 +1417,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
 <header class="rt-board-header"><p>RepState · Interactive design proposal</p><h1>Your plan. A separate timer.</h1><p class="rt-board-description">Open Timers from the home menu. Rest starts with a tap; intervals run on their own. Strength sessions stay unchanged.</p><nav class="rt-board-nav" aria-label="Mockup screens"><a href="#home">Home / Main menu</a><a href="#rest-setup">Rest / Setup</a><a href="#interval-setup">Intervals / Setup</a><a href="#rest-running">Rest / Running</a><a href="#interval-running">Intervals / Running</a><a href="#rest-finished">Rest / Finished</a></nav></header>
 <main class="rt-gallery"><article class="rt-concept" id="home"><header class="rt-caption"><h2>Home · Main menu</h2><a href="https://thinkpool-io.github.io/mockups/repstate-timers.html?screen=home">Full screen</a></header><div class="rt-screen"><main class="app-shell home-shell"><div class="home-frame"><section class="home-app"><header class="topbar home-topbar"><button class="home-mobile-brand" aria-label="RepState home" type="button" data-go="home"><strong><span class="repstate-wordmark-rep">REP</span><span class="repstate-wordmark-state">STATE</span></strong></button><div class="topbar-actions">
   <button type="button" class="rt-home-entry" data-go="rest-setup">Timers</button>
-<button class="settings-button" type="button"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="settings-button-label">Settings</span></button></div></header><div class="home-content"><section class="home-main"><div class="intro-copy"><h1>Choose your workout</h1></div><div class="day-grid" aria-label="Training days"><button class="day-card day-card-chest" aria-label="Start Chest" type="button"><span class="day-card-index">01</span><span class="day-card-name">Chest</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-legs" aria-label="Start Legs" type="button"><span class="day-card-index">02</span><span class="day-card-name">Legs</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-back" aria-label="Start Back" type="button"><span class="day-card-index">03</span><span class="day-card-name">Back</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-shoulders" aria-label="Start Shoulders" type="button"><span class="day-card-index">04</span><span class="day-card-name">Shoulders</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button></div></section><section class="home-stats" id="home-training-overview" aria-label="Workout log"><div class="home-overview-grid"><div class="recent-sessions" aria-label="Recent sessions"><p class="recent-sessions-empty">Complete a workout to build your log.</p></div></div></section></div></section></div></main></div></article>
+<button class="settings-button" type="button"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="settings-button-label">Settings</span></button></div></header><div class="home-content"><section class="home-main"><div class="intro-copy"><h1>Choose your workout</h1></div><div class="day-grid" aria-label="Training days"><button class="day-card day-card-chest" aria-label="Start Chest" type="button"><span class="day-card-index">01</span><span class="day-card-name">Chest</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-legs" aria-label="Start Legs" type="button"><span class="day-card-index">02</span><span class="day-card-name">Legs</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-back" aria-label="Start Back" type="button"><span class="day-card-index">03</span><span class="day-card-name">Back</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-shoulders" aria-label="Start Shoulders" type="button"><span class="day-card-index">04</span><span class="day-card-name">Shoulders</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button></div></section><section class="home-stats" id="home-training-overview" aria-label="Workout log"><div class="home-overview-grid"><div class="recent-sessions" aria-label="Recent sessions"><p class="recent-sessions-empty">Complete a workout to build your log</p></div></div></section></div></section></div></main></div></article>
 <article class="rt-concept" id="rest-setup"><header class="rt-caption"><h2>Rest · Setup</h2><a href="https://thinkpool-io.github.io/mockups/repstate-timers.html?screen=rest-setup">Full screen</a></header><div class="rt-screen">
   <main class="rt-app">
     <header class="rt-topbar">
@@ -1429,7 +1433,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
   </nav>
 
   <section class="rt-setup" aria-label="Rest timer setup">
-    <div class="rt-section-heading"><h2>Rest timer</h2><p>Tap to start after each set.</p></div>
+    <div class="rt-section-heading"><h2>Rest timer</h2><p>Tap to start after each set</p></div>
     <div class="rt-rest-duration">
       <span class="rt-label">Rest duration</span>
       <output class="rt-digits rt-duration" data-value="rest" aria-label="Rest duration">01:00</output>
@@ -1443,7 +1447,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
     <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
   </div>
-  <p class="rt-caveat">Keep RepState open to hear the timer.</p>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
 
     <button class="rt-primary" type="button" data-start="rest">Start rest</button>
     <button class="rt-save" type="button" data-save="rest">Save timer</button>
@@ -1479,7 +1483,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
     <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
   </div>
-  <p class="rt-caveat">Keep RepState open to hear the timer.</p>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
 
     <button class="rt-primary" type="button" data-start="interval">Start intervals</button>
     <button class="rt-save" type="button" data-save="interval">Save timer</button>
@@ -1507,9 +1511,9 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
     <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
   </div>
-  <p class="rt-caveat">Keep RepState open to hear the timer.</p>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
 
-    <p class="rt-live-note">When it rings, do your next set.<br>Start the timer again when you’re ready.</p>
+    <p class="rt-live-note">When it rings, do your next set<br>Start the timer again when you’re ready</p>
   </section>
 </div>
   </main>
@@ -1534,7 +1538,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
     <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
   </div>
-  <p class="rt-caveat">Keep RepState open to hear the timer.</p>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
 
   </section>
 </div>
@@ -1551,7 +1555,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
   <section class="rt-live rt-finished" aria-label="Rest timer finished">
     <p class="rt-live-meta">Rest complete</p>
     <h2>Ready when<br>you are</h2>
-    <p class="rt-finished-note">Do your next set.<br>Your timer is ready for another round.</p>
+    <p class="rt-finished-note">Do your next set<br>Your timer is ready for another round</p>
     <div class="rt-ready-duration"><span>Same rest time</span><strong data-value="rest">01:00</strong></div>
     <button class="rt-primary" type="button" data-start="rest">Start again</button>
     <button class="rt-save" type="button" data-go="rest-setup">Change duration</button>
@@ -1560,7 +1564,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
     <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
   </div>
-  <p class="rt-caveat">Keep RepState open to hear the timer.</p>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
 
   </section>
 </div>
@@ -1634,7 +1638,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     article.querySelector('[data-countdown]').textContent='00:00';
     article.querySelector('[data-live-phase]').textContent='Complete';
     article.querySelector('[data-live-status]').textContent=`${config.rounds} rounds finished`;
-    article.querySelector('[data-next]').textContent='Your interval timer is complete.';
+    article.querySelector('[data-next]').textContent='Your interval timer is complete';
     article.querySelector('[data-pause]').textContent='Start again'; state.finished=true;
   }
   function advance(article,state) {
@@ -1665,7 +1669,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
       const active=button.getAttribute('aria-pressed')!=='true';
       root.querySelectorAll(`[data-toggle=${button.dataset.toggle}]`).forEach(n=>n.setAttribute('aria-pressed',String(active)));
       if(button.dataset.toggle==='sound'&&active)primeAudio();
-      if(button.dataset.toggle==='awake')status(article,active?'Screen-awake preference selected in this prototype.':'Screen-awake preference off.');
+      if(button.dataset.toggle==='awake')status(article,active?'Screen-awake preference selected in this prototype':'Screen-awake preference off');
     } else if(button.dataset.start) start(button.dataset.start);
     else if(button.hasAttribute('data-pause')||button.hasAttribute('data-reset')||button.hasAttribute('data-add')||button.hasAttribute('data-skip')) {
       const state=clocks.get(article.id)||sample(article);clocks.set(article.id,state);primeAudio();
