@@ -211,10 +211,10 @@ a,button{transition:color var(--motion-snap) var(--ease-settle),background-color
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style><style>
-.mockup-tools{position:fixed;top:12px;right:12px;z-index:100;padding:2px 10px;background:#111823;border:1px solid #2a3545;border-radius:10px;color:#b5bfce;font:12px system-ui}
+.mockup-tools{position:fixed;margin:0;inset:12px 12px auto auto;z-index:100;padding:2px 10px;background:#111823;border:1px solid #2a3545;border-radius:10px;color:#b5bfce;font:12px system-ui}
 .mockup-tools label{display:flex;align-items:center;gap:8px;min-height:40px;cursor:pointer}
-.shortcut-guide:has(#mockup-guides:checked) h2,.shortcut-guide:has(#mockup-guides:checked) .shortcut-steps,.shortcut-guide:has(#mockup-guides:checked) .shortcut-guide-actions{outline:1px dashed #79dfff;outline-offset:3px}
-.shortcut-guide:has(#mockup-guides:checked) .shortcut-step-copy{outline:1px dotted #79dfff;outline-offset:2px}
+body:has(#mockup-guides:checked) .shortcut-guide h2,body:has(#mockup-guides:checked) .shortcut-guide .shortcut-steps,body:has(#mockup-guides:checked) .shortcut-guide .shortcut-guide-actions{outline:1px dashed #79dfff;outline-offset:3px}
+body:has(#mockup-guides:checked) .shortcut-guide .shortcut-step-copy{outline:1px dotted #79dfff;outline-offset:2px}
 </style></head>
 <body class="homepage">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -245,7 +245,7 @@ a,button{transition:color var(--motion-snap) var(--ease-settle),background-color
 <li class="shortcut-step"><span class="shortcut-step-number">3</span><span class="shortcut-step-copy"><strong>Use YapTap</strong><span>Double-tap the back of your iPhone.<br>Speak, tap the screen to finish, then paste.</span></span><span class="shortcut-step-icon shortcut-microphone" aria-hidden="true"></span></li>
 </ol>
 <div class="shortcut-guide-actions"><a class="shortcut-guide-install shortcut-download" href="https://www.icloud.com/shortcuts/b60c1f7e570b48a1928d63ccfa7c5b48" target="_blank" rel="noopener">Open in Shortcuts</a><button class="shortcut-guide-dismiss" type="button">Not now</button></div>
-<aside class="mockup-tools" aria-label="Mockup inspection"><label><input id="mockup-guides" type="checkbox">Alignment guides</label></aside></dialog>
+</dialog><aside class="mockup-tools" id="mockup-tools" popover="manual" aria-label="Mockup inspection"><label><input id="mockup-guides" type="checkbox">Alignment guides</label></aside>
 <script>(() => {
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const targets = [...document.querySelectorAll('.about-section, .facts > div')];
@@ -282,6 +282,7 @@ a,button{transition:color var(--motion-snap) var(--ease-settle),background-color
     priorOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     popup.showModal();
+    document.querySelector("#mockup-tools").showPopover();
   }
   function finishClose() {
     clearTimeout(closeTimer);
