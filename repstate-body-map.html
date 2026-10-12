@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RepState · Muscle map mockup</title>
+<style>
+  :root { --bg:#0d0f12; --surface:#13161a; --surface-2:#171a1f; --line:#2b2f36; --line-soft:#20242a; --white:#f3f4f5; --muted:#a1a5ac;
+    --red:#e72d35; --good:#24b86f; --under-blue:#438bfa; --under-yellow:#e2b33a; --none:#2a2f37; --body:#1b1f25; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--white); font:16px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { max-width:1120px; margin:0 auto; padding:40px 24px 56px; }
+  .eyebrow { margin:0 0 6px; text-align:center; color:var(--muted); font-size:13px; letter-spacing:.06em; text-transform:uppercase; }
+  .brand b { color:var(--red); }
+  h1 { margin:0 0 8px; text-align:center; font-size:32px; letter-spacing:-.035em; line-height:1.15; }
+  .lede { margin:0 auto 28px; max-width:620px; text-align:center; color:var(--muted); font-size:15px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:22px 20px 18px; }
+  .option-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:14px; }
+  .option-head h2 { margin:0; font-size:18px; letter-spacing:-.02em; }
+  .option-head span { color:var(--muted); font-size:13px; }
+  .section-title { margin:0 0 16px; text-align:center; font-size:22px; font-weight:700; letter-spacing:-.03em; }
+  .segment { display:flex; padding:4px; border:1px solid var(--line); border-radius:10px; background:var(--surface-2); margin:0 auto 18px; max-width:420px; }
+  .segment button { flex:1; white-space:nowrap; padding:0 6px; min-height:40px; border:0; border-radius:6px; background:transparent; color:var(--muted); font:600 13px Inter, system-ui, sans-serif; cursor:pointer; }
+  .segment button[aria-pressed="true"] { background:#30353d; color:var(--white); }
+  .figures { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  figure { margin:0; text-align:center; }
+  figcaption { color:var(--muted); font-size:13px; margin-top:4px; }
+  svg.body { width:100%; max-width:230px; height:auto; display:block; margin:0 auto; }
+  .base { fill:var(--body); }
+  .m { stroke:var(--surface); stroke-width:1.6; stroke-linejoin:round; transition:fill .18s, opacity .18s; cursor:pointer; }
+  .m.dim { opacity:.35; }
+  .detail { fill:none; stroke:var(--surface); stroke-width:1.2; pointer-events:none; }
+  .legend { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; margin:14px 0 4px; font-size:13px; color:var(--muted); }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .list { list-style:none; margin:14px 0 0; padding:0; border-top:1px solid var(--line); }
+  .list li { display:grid; grid-template-columns:12px minmax(0,1fr) 44px 64px; align-items:center; gap:10px; min-height:40px; padding:0 6px; border-bottom:1px solid var(--line-soft); font-size:14px; }
+  .list li.active { background:#1b2026; border-radius:8px; }
+  .list .dot { width:10px; height:10px; border-radius:3px; }
+  .list .n { text-align:center; font-weight:650; font-variant-numeric:tabular-nums; }
+  .list .s { text-align:right; color:var(--muted); font-size:13px; }
+  .notes { margin:24px auto 0; max-width:760px; color:var(--muted); font-size:14px; }
+  .notes li { margin:4px 0; }
+  @media (max-width:760px) {
+    .page { padding:28px 16px 40px; }
+    h1 { font-size:26px; }
+    .options { grid-template-columns:1fr; }
+    .option { padding:18px 12px 14px; }
+    .option-head { flex-direction:column; align-items:flex-start; gap:2px; }
+    .segment button { font-size:12px; }
+    .list li { grid-template-columns:12px minmax(0,1fr) 40px 56px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <p class="eyebrow"><span class="brand">Rep<b>State</b></span> · mockup</p>
+  <h1>Muscle map</h1>
+  <p class="lede">Every muscle is coloured by its working sets for the selected period, from your real log. Two options for the under-trained colour. Tap a muscle to see its sets.</p>
+
+  <div class="options">
+    <section class="option" data-under="blue">
+      <div class="option-head"><h2>A · Blue for under</h2><span>matches the Light effort colour</span></div>
+      <div class="map"></div>
+    </section>
+    <section class="option" data-under="yellow">
+      <div class="option-head"><h2>B · Yellow for under</h2><span>warmer warning tone</span></div>
+      <div class="map"></div>
+    </section>
+  </div>
+
+  <ul class="notes">
+    <li>Numbers are direct working sets per muscle from your RepState log (28 Sept – 11 Oct). In the app, secondary muscles would count as half a set, the same as the Sets per muscle table.</li>
+    <li>Ranges in this mockup: under 8 sets a week, 8–18 in range, over 18 too much. Grey means not trained in the period. The ranges could be per muscle, or editable.</li>
+    <li>Rotator cuff sits on the shoulder blade in the back view. Abs include the obliques.</li>
+  </ul>
+</main>
+
+<template id="map-template">
+  <h3 class="section-title">Sets per muscle</h3>
+  <div class="segment" role="group" aria-label="Period">
+    <button type="button" data-period="w1" aria-pressed="true">28 Sept – 4 Oct</button>
+    <button type="button" data-period="w2" aria-pressed="false">5 – 11 Oct</button>
+    <button type="button" data-period="avg" aria-pressed="false">4-week avg</button>
+  </div>
+  <div class="figures">
+    <figure>
+      <svg class="body" viewBox="0 0 200 392" role="img" aria-label="Front of body">
+        <g class="base">
+          <ellipse cx="100" cy="32" rx="17" ry="21"/>
+          <path d="M91 50h18l3 16H88z"/>
+          <path d="M60 78 C70 66 86 64 100 64 C114 64 130 66 140 78 L146 104 L140 150 L138 186 L62 186 L60 150 L54 104 Z"/>
+          <ellipse cx="50" cy="210" rx="7" ry="10"/><ellipse cx="150" cy="210" rx="7" ry="10"/>
+          <ellipse cx="85" cy="278" rx="9" ry="7"/><ellipse cx="115" cy="278" rx="9" ry="7"/>
+          <path d="M76 374h16l2 12H70z"/><path d="M108 374h16l6 12h-24z"/>
+        </g>
+        <g class="side">
+          <path class="m" data-m="traps" d="M90 58 L74 66 L91 67 Z"/>
+          <path class="m" data-m="front-delts" d="M82 68 C71 67 63 71 60 81 L67 89 C70 81 76 75 86 72 Z"/>
+          <path class="m" data-m="side-delts" d="M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z"/>
+          <path class="m" data-m="chest" d="M99 70 L87 72 C78 76 70 83 67 91 C71 103 85 109 99 107 Z"/>
+          <path class="m" data-m="biceps" d="M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z"/>
+          <path class="m" data-m="forearms" d="M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z"/>
+          <path class="m" data-m="abs" d="M87 110 C80 118 77 136 79 160 L87 172 L89 110 Z"/>
+          <path class="m" data-m="quads" d="M77 186 C72 212 72 242 78 270 L93 270 C95 248 96 222 96 198 C90 192 84 189 77 186 Z"/>
+          <path class="m" data-m="adductors" d="M97 198 C97 217 96 236 94 258 L99 250 L99 192 Z"/>
+          <path class="m" data-m="calves" d="M78 287 L92 287 C94 312 92 342 90 372 L81 372 C77 342 76 312 78 287 Z"/>
+        </g>
+        <use href="#mirror-front"/>
+        <path class="m" data-m="abs" d="M90 110 H110 V172 C106 178 94 178 90 172 Z"/>
+        <path class="detail" d="M90 126h20M90 142h20M90 158h20M100 110v66"/>
+      </svg>
+      <figcaption>Front</figcaption>
+    </figure>
+    <figure>
+      <svg class="body" viewBox="0 0 200 392" role="img" aria-label="Back of body">
+        <g class="base">
+          <ellipse cx="100" cy="32" rx="17" ry="21"/>
+          <path d="M91 50h18l3 16H88z"/>
+          <path d="M60 78 C70 66 86 64 100 64 C114 64 130 66 140 78 L146 104 L140 150 L138 186 L62 186 L60 150 L54 104 Z"/>
+          <ellipse cx="50" cy="210" rx="7" ry="10"/><ellipse cx="150" cy="210" rx="7" ry="10"/>
+          <ellipse cx="85" cy="278" rx="9" ry="7"/><ellipse cx="115" cy="278" rx="9" ry="7"/>
+          <path d="M76 374h16l2 12H70z"/><path d="M108 374h16l6 12h-24z"/>
+        </g>
+        <path class="m" data-m="traps" d="M100 54 L77 66 L90 77 L100 106 L110 77 L123 66 Z"/>
+        <g class="side">
+          <path class="m" data-m="rear-delts" d="M76 67 C68 67 62 72 60 82 L67 89 L79 76 Z"/>
+          <path class="m" data-m="side-delts" d="M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z"/>
+          <path class="m" data-m="rotator-cuff" d="M88 79 L80 77 L72 90 L87 97 Z"/>
+          <path class="m" data-m="back" d="M87 99 L71 92 L67 101 C69 121 77 140 91 150 L98 112 Z"/>
+          <path class="m" data-m="triceps" d="M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z"/>
+          <path class="m" data-m="forearms" d="M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z"/>
+          <path class="m" data-m="glutes" d="M77 172 C74 187 81 201 98 201 L98 168 C90 166 83 167 77 172 Z"/>
+          <path class="m" data-m="hamstrings" d="M77 204 C74 230 76 252 80 270 L94 270 C96 250 98 228 98 206 Z"/>
+          <path class="m" data-m="calves" d="M78 287 C73 304 75 332 81 352 L92 352 C95 332 95 304 92 287 Z"/>
+        </g>
+        <path class="m" data-m="lower-back" d="M93 140 L107 140 L109 166 L91 166 Z"/>
+        <path class="detail" d="M100 106v34"/>
+      </svg>
+      <figcaption>Back</figcaption>
+    </figure>
+  </div>
+  <div class="legend"><span><i data-k="under"></i>Under 8</span><span><i data-k="good"></i>8–18</span><span><i data-k="over"></i>Over 18</span><span><i data-k="none"></i>Not trained</span></div>
+  <ul class="list"></ul>
+</template>
+
+<script>
+  // Direct sets per muscle from the RepState log (primary muscle only), 2026-09-28 to 2026-10-11.
+  const DATA = {
+    w1:  { chest:22, back:9, traps:3, 'front-delts':6, 'side-delts':11, 'rear-delts':8, 'rotator-cuff':2, biceps:6, triceps:9, forearms:15, abs:7, 'lower-back':3, glutes:6, quads:4, hamstrings:3, adductors:3, calves:3 },
+    w2:  { chest:8, back:0, traps:3, 'front-delts':3, 'side-delts':3, 'rear-delts':4, 'rotator-cuff':0, biceps:0, triceps:0, forearms:5, abs:3, 'lower-back':0, glutes:0, quads:0, hamstrings:0, adductors:0, calves:0 },
+    avg: { chest:14.5, back:10.5, traps:3.8, 'front-delts':4.5, 'side-delts':7.5, 'rear-delts':6, 'rotator-cuff':2, biceps:8, triceps:6.8, forearms:11.3, abs:6.8, 'lower-back':2.3, glutes:5, quads:3.5, hamstrings:5.3, adductors:2.8, calves:3 },
+  };
+  const LABELS = { chest:'Chest', back:'Back', traps:'Traps', 'front-delts':'Front delts', 'side-delts':'Side delts', 'rear-delts':'Rear delts', 'rotator-cuff':'Rotator cuff', biceps:'Biceps', triceps:'Triceps', forearms:'Forearms', abs:'Abs', 'lower-back':'Lower back', glutes:'Glutes', quads:'Quads', hamstrings:'Hamstrings', adductors:'Adductors', calves:'Calves' };
+  const STATUS = { under:'Under', good:'In range', over:'Over', none:'Not trained' };
+  const status = n => n <= 0 ? 'none' : n < 8 ? 'under' : n > 18 ? 'over' : 'good';
+  const fmt = n => (Math.round(n * 2) / 2).toString();
+  for (const option of document.querySelectorAll('.option')) {
+    const colors = { under: getComputedStyle(document.documentElement).getPropertyValue(option.dataset.under === 'blue' ? '--under-blue' : '--under-yellow').trim(),
+      good: '#24b86f', over: '#e72d35', none: '#2a2f37' };
+    const map = option.querySelector('.map');
+    map.append(document.getElementById('map-template').content.cloneNode(true));
+    // Mirror the left-side muscles to the right side.
+    for (const svg of map.querySelectorAll('svg')) {
+      const side = svg.querySelector('.side');
+      const mirror = side.cloneNode(true);
+      mirror.setAttribute('transform', 'translate(200 0) scale(-1 1)');
+      side.after(mirror);
+      svg.querySelector('use')?.remove();
+    }
+    map.querySelectorAll('.legend i').forEach(i => i.style.background = colors[i.dataset.k]);
+    const list = map.querySelector('.list');
+    let period = 'w1', active = null;
+    function render() {
+      const values = DATA[period];
+      map.querySelectorAll('.m').forEach(path => {
+        const k = path.dataset.m; path.style.fill = colors[status(values[k] ?? 0)];
+        path.classList.toggle('dim', !!active && active !== k);
+      });
+      const order = { over:0, under:1, none:2, good:3 };
+      const rows = Object.keys(LABELS).sort((a, b) => order[status(values[a])] - order[status(values[b])] || values[b] - values[a]);
+      list.innerHTML = rows.map(k => `<li data-m="${k}" class="${active === k ? 'active' : ''}"><span class="dot" style="background:${colors[status(values[k])]}"></span><span>${LABELS[k]}</span><span class="n">${fmt(values[k])}</span><span class="s">${STATUS[status(values[k])]}</span></li>`).join('');
+    }
+    map.querySelectorAll('.segment button').forEach(button => button.addEventListener('click', () => {
+      period = button.dataset.period;
+      map.querySelectorAll('.segment button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+      render();
+    }));
+    map.addEventListener('click', event => {
+      const k = event.target.closest('[data-m]')?.dataset.m;
+      if (!k) return;
+      active = active === k ? null : k; render();
+    });
+    render();
+  }
+</script>
+</body>
+</html>
