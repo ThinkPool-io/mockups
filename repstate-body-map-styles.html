@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RepState · 10 muscle map styles</title>
+<style>
+  :root { --bg:#0d0f12; --surface:#13161a; --line:#2b2f36; --white:#f3f4f5; --muted:#a1a5ac; --red:#e72d35; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--white); font:15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { max-width:1400px; margin:0 auto; padding:36px 24px 56px; }
+  .eyebrow { margin:0 0 6px; text-align:center; color:var(--muted); font-size:13px; letter-spacing:.06em; text-transform:uppercase; }
+  .eyebrow b { color:var(--red); }
+  h1 { margin:0 0 8px; text-align:center; font-size:32px; letter-spacing:-.035em; line-height:1.15; }
+  .lede { margin:0 auto 28px; max-width:680px; text-align:center; color:var(--muted); font-size:15px; }
+  .grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; }
+  .v { border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden; display:flex; flex-direction:column; }
+  .v-head { display:flex; align-items:baseline; gap:10px; padding:14px 16px 10px; }
+  .v-head .num { color:var(--muted); font:600 12px ui-monospace, Menlo, monospace; }
+  .v-head h2 { margin:0; font-size:17px; letter-spacing:-.02em; white-space:nowrap; }
+  .v-head p { margin:0 0 0 auto; color:var(--muted); font-size:12.5px; text-align:right; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .stage { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:0; padding:10px 6px 8px; min-height:340px; overflow:hidden; }
+  .stage svg { width:100%; height:auto; display:block; position:relative; }
+  .stage canvas { width:100%; height:auto; display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
+  .foot { padding:10px 16px 14px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; font-size:12.5px; color:var(--muted); }
+  .foot i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+  .readout { margin-left:auto; color:var(--white); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .m { cursor:pointer; transition:opacity .18s; }
+  .dim .m:not(.on) { opacity:.25; }
+  .notes { margin:26px auto 0; max-width:820px; color:var(--muted); font-size:14px; }
+  .notes li { margin:4px 0; }
+
+  /* 2 · Hellforged */
+  .t-hell .stage { background:radial-gradient(ellipse at 50% 60%, #3a0907 0%, #160403 55%, #070101 100%); }
+  .t-hell .m[data-s="over"] { animation:flicker 1.6s infinite alternate ease-in-out; }
+  @keyframes flicker { 0% { filter:brightness(1); } 40% { filter:brightness(1.35); } 100% { filter:brightness(.9); } }
+  .ember { animation:rise 5s linear infinite; }
+  @keyframes rise { from { transform:translateY(0); opacity:0; } 15% { opacity:1; } to { transform:translateY(-340px); opacity:0; } }
+  .sigil { transform-origin:100px 190px; animation:spin 60s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* 3 · Reaper */
+  .t-reaper .stage { background:radial-gradient(ellipse at 50% 40%, #0b1a2c 0%, #04080f 70%); }
+
+  /* 4 · Cyborg */
+  .t-cyborg .stage { background:#020a0d; background-image:linear-gradient(rgba(25,227,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(25,227,255,.07) 1px, transparent 1px); background-size:22px 22px; }
+  .t-cyborg .v-head h2, .t-cyborg .readout { font-family:ui-monospace, Menlo, monospace; }
+  .scan { animation:scan 3.4s linear infinite; }
+  @keyframes scan { from { transform:translateY(0); } to { transform:translateY(440px); } }
+
+  /* 5 · Thermal */
+  .t-thermal .stage { background:#07030f; }
+
+  /* 6 · Marble */
+  .t-marble .stage { background:radial-gradient(ellipse at 50% 18%, #f6f1e8 0%, #d6cebf 55%, #a99f8e 100%); }
+
+  /* 7 · Arcade */
+  .t-arcade .stage { background:#0b0b1e; grid-template-rows:auto 1fr; font-family:ui-monospace, Menlo, monospace; }
+  .hud { grid-column:1 / -1; display:flex; justify-content:space-between; gap:10px; padding:2px 8px 8px; color:#fcfcfc; font:700 11px ui-monospace, Menlo, monospace; letter-spacing:.08em; text-transform:uppercase; }
+  .hud .bars { display:grid; grid-template-columns:auto 70px; gap:3px 8px; align-items:center; }
+  .hud .bar { height:7px; background:#3c3c5c; box-shadow:0 0 0 1px #fcfcfc; }
+  .hud .bar span { display:block; height:100%; }
+  .blink { animation:blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+
+  /* 8 · Comic */
+  .t-comic .stage { background-color:#f4ecd8; background-image:radial-gradient(rgba(0,0,0,.09) 1.1px, transparent 1.3px); background-size:7px 7px; }
+
+  /* 9 · Minotaur */
+  .t-mino .stage { background:radial-gradient(circle at 50% 35%, #4a2a12 0%, #1d130b 55%, #0d0805 100%); }
+
+  /* 10 · Tarot */
+  .t-tarot .stage { background:#14123a; margin:10px; border-radius:14px; box-shadow:inset 0 0 0 2px #d4af37, inset 0 0 0 6px #14123a, inset 0 0 0 7px #d4af37; padding:30px 10px 34px; }
+  .t-tarot .stage::before { content:""; position:absolute; inset:0; background:repeating-conic-gradient(from 0deg at 50% 46%, rgba(212,175,55,.10) 0 4deg, transparent 4deg 12deg); pointer-events:none; }
+  .tarot-label { position:absolute; left:0; right:0; text-align:center; color:#d4af37; font:600 13px Georgia, "Times New Roman", serif; letter-spacing:.32em; }
+  .tarot-label.top { top:12px; } .tarot-label.bottom { bottom:12px; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation:none !important; } .ember { opacity:.6; } }
+  .grid > .v:last-child:nth-child(3n+1) { grid-column:2; }
+  @media (max-width:1100px) { .grid > .v:last-child:nth-child(3n+1) { grid-column:auto; } .grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:700px) {
+    .page { padding:26px 12px 40px; }
+    h1 { font-size:26px; }
+    .grid { grid-template-columns:1fr; }
+    .v-head p { display:none; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <p class="eyebrow">Rep<b>State</b> · mockup</p>
+  <h1>Muscle map, 10 styles</h1>
+  <p class="lede">Same numbers on every card: your weekly average over the previous 4 weeks, from your log. Forearms are over at 24.5 sets and every leg muscle is under. Tap any muscle to read its sets.</p>
+  <div class="grid" id="grid"></div>
+  <ul class="notes">
+    <li>Status ranges are the shipped ones: under 8 sets a week, 8 to 18 in range, over 18. Thermal (5) swaps to a heat palette, so cold means under.</li>
+    <li>Forearms are drawn as one group here. The front and back forearm split from the main lane would colour each figure separately in any of these styles.</li>
+    <li>Arcade (7) is rendered at low resolution on purpose, so it has no tap targets.</li>
+  </ul>
+</main>
+
+<script>
+// Weekly average over the previous 4 weeks, from the RepState log as shipped on Home (2026-10-12).
+const DATA = { chest:15, biceps:14, 'front-delts':13.5, back:13.5, triceps:12.5, 'side-delts':9, glutes:8.5, 'rear-delts':8,
+  forearms:24.5, hamstrings:7.5, traps:7, abs:7, 'rotator-cuff':5, quads:3.5, 'lower-back':3.5, calves:3, adductors:3 };
+const LABELS = { chest:'Chest', back:'Back', traps:'Traps', 'front-delts':'Front delts', 'side-delts':'Side delts', 'rear-delts':'Rear delts', 'rotator-cuff':'Rotator cuff', biceps:'Biceps', triceps:'Triceps', forearms:'Forearms', abs:'Abs', 'lower-back':'Lower back', glutes:'Glutes', quads:'Quads', hamstrings:'Hamstrings', adductors:'Adductors', calves:'Calves' };
+const STATUS = { under:'Under', good:'In range', over:'Over', none:'Not trained' };
+const status = n => n <= 0 ? 'none' : n < 8 ? 'under' : n > 18 ? 'over' : 'good';
+const fmt = n => (Math.round(n * 2) / 2).toString();
+const VB = '-50 -36 300 460';
+
+// Shared geometry (left side; the right side is mirrored).
+const GEO = {
+  front: {
+    side: [
+      ['traps','M90 58 L74 66 L91 67 Z'],
+      ['front-delts','M82 68 C71 67 63 71 60 81 L67 89 C70 81 76 75 86 72 Z'],
+      ['side-delts','M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z'],
+      ['chest','M99 70 L87 72 C78 76 70 83 67 91 C71 103 85 109 99 107 Z'],
+      ['biceps','M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z'],
+      ['forearms','M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z'],
+      ['abs','M87 110 C80 118 77 136 79 160 L87 172 L89 110 Z'],
+      ['quads','M77 186 C72 212 72 242 78 270 L93 270 C95 248 96 222 96 198 C90 192 84 189 77 186 Z'],
+      ['adductors','M97 198 C97 217 96 236 94 258 L99 250 L99 192 Z'],
+      ['calves','M78 287 L92 287 C94 312 92 342 90 372 L81 372 C77 342 76 312 78 287 Z'],
+    ],
+    center: [['abs','M90 110 H110 V172 C106 178 94 178 90 172 Z']],
+    detail: 'M90 126h20M90 142h20M90 158h20M100 110v66',
+  },
+  back: {
+    side: [
+      ['rear-delts','M76 67 C68 67 62 72 60 82 L67 89 L79 76 Z'],
+      ['side-delts','M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z'],
+      ['rotator-cuff','M88 79 L80 77 L72 90 L87 97 Z'],
+      ['back','M87 99 L71 92 L67 101 C69 121 77 140 91 150 L98 112 Z'],
+      ['triceps','M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z'],
+      ['forearms','M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z'],
+      ['glutes','M77 172 C74 187 81 201 98 201 L98 168 C90 166 83 167 77 172 Z'],
+      ['hamstrings','M77 204 C74 230 76 252 80 270 L94 270 C96 250 98 228 98 206 Z'],
+      ['calves','M78 287 C73 304 75 332 81 352 L92 352 C95 332 95 304 92 287 Z'],
+    ],
+    center: [['traps','M100 54 L77 66 L90 77 L100 106 L110 77 L123 66 Z'], ['lower-back','M93 140 L107 140 L109 166 L91 166 Z']],
+    detail: 'M100 106v34',
+  },
+};
+const HEAD = '<ellipse cx="100" cy="32" rx="17" ry="21"/>';
+const BODY = '<path d="M91 50h18l3 16H88z"/><path d="M60 78 C70 66 86 64 100 64 C114 64 130 66 140 78 L146 104 L140 150 L138 186 L62 186 L60 150 L54 104 Z"/><ellipse cx="50" cy="210" rx="7" ry="10"/><ellipse cx="150" cy="210" rx="7" ry="10"/><ellipse cx="85" cy="278" rx="9" ry="7"/><ellipse cx="115" cy="278" rx="9" ry="7"/><path d="M76 374h16l2 12H70z"/><path d="M108 374h16l6 12h-24z"/>';
+const MIRROR = 'translate(200 0) scale(-1 1)';
+const both = s => `${s}<g transform="${MIRROR}">${s}</g>`;
+
+function figure(t, view, uid, opts = {}) {
+  const g = GEO[view];
+  const fill = s => t.fill ? t.fill(s, uid) : t.colors[s];
+  const path = ([k, d]) => { const s = status(DATA[k] ?? 0); return `<path class="m" data-m="${k}" data-s="${s}" fill="${fill(s)}" d="${d}"/>`; };
+  const side = g.side.map(path).join('');
+  const muscles = `${side}<g transform="${MIRROR}">${side}</g>${g.center.map(path).join('')}`;
+  const head = t.head ? t.head(view, uid) : HEAD;
+  return `<svg viewBox="${VB}" role="img" aria-label="${view} of body">
+    <defs>${t.defs ? t.defs(uid, view) : ''}</defs>
+    ${t.behind ? t.behind(view, uid) : ''}
+    <g class="base" fill="${t.body}" stroke="${t.bodyStroke || 'none'}" stroke-width="${t.bodyStrokeW || 1}" ${t.bodyAttr ? t.bodyAttr(uid) : ''}>${opts.plain ? HEAD : (t.headBehind ? '' : head)}${BODY}</g>
+    ${t.underlay ? t.underlay(view, uid) : ''}
+    <g class="muscles" stroke="${t.stroke}" stroke-width="${t.strokeW || 1.5}" stroke-linejoin="round" ${t.mAttr ? t.mAttr(uid) : ''}>${muscles}</g>
+    ${t.hideDetail ? '' : `<path d="${g.detail}" fill="none" stroke="${t.stroke}" stroke-width="1.1" pointer-events="none"/>`}
+    ${t.headBehind && !opts.plain ? head : ''}
+    ${t.front && !opts.plain ? t.front(view, uid) : ''}
+  </svg>`;
+}
+
+// Helpers
+const glowFilter = (id, sd = 2.2) => `<filter id="${id}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="${sd}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+const lowest = n => Object.keys(DATA).sort((a, b) => DATA[a] - DATA[b]).slice(0, n);
+const overs = () => Object.keys(DATA).filter(k => status(DATA[k]) === 'over');
+
+const THEMES = [
+  { key:'studio', name:'Studio', blurb:'the shipped look, refined',
+    colors:{ none:'#2a2f37', under:'#e2b33a', good:'#24b86f', over:'#e72d35' }, body:'#1b1f25', stroke:'#13161a',
+    stageCss:'background:linear-gradient(180deg,#171a1f,#111317)',
+    defs:uid => glowFilter(`gl-${uid}`, 3),
+    mAttr:() => '',
+    behind:() => '<ellipse cx="100" cy="392" rx="70" ry="8" fill="#000" opacity=".35"/>',
+    front:(v, uid) => `<g filter="url(#gl-${uid})" opacity=".55" pointer-events="none">${GEO[v].side.filter(([k]) => status(DATA[k]) === 'over').map(([, d]) => both(`<path d="${d}" fill="#e72d35"/>`)).join('')}</g>`,
+  },
+  { key:'hell', name:'Hellforged', blurb:'molten over, ember under, hellfire green',
+    colors:{ none:'#241414', under:'#f0a020', good:'#3ee07f', over:'#ff3b1f' }, body:'#1c0909', bodyStroke:'#5a1414', stroke:'#0c0202',
+    fill:(s, uid) => s === 'over' ? `url(#lava-${uid})` : ({ none:'#241414', under:'#e8901c', good:'#33d36f' })[s],
+    defs:uid => `<radialGradient id="lava-${uid}" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#fff3c4"/><stop offset=".35" stop-color="#ffb02e"/><stop offset=".75" stop-color="#ff3b1f"/><stop offset="1" stop-color="#8a0c06"/></radialGradient>
+      <linearGradient id="horn-${uid}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2a1a14"/><stop offset=".6" stop-color="#8b7660"/><stop offset="1" stop-color="#e9dcc2"/></linearGradient>
+      ${glowFilter(`hg-${uid}`, 2.6)}`,
+    mAttr:uid => `filter="url(#hg-${uid})"`,
+    behind:(v, uid) => {
+      const wing = `<path d="M74 86 C52 44 14 14 -44 4 C-32 28 -36 50 -44 70 C-26 62 -14 70 -8 90 C2 80 16 82 24 100 C36 92 50 98 60 116 Z" fill="#2b0b0b" stroke="#6a1616" stroke-width="1.4"/><path d="M74 86 L-44 4 M66 98 L-44 70 M62 106 L-8 90 M60 112 L24 100" stroke="#5a1414" stroke-width="1.2" fill="none"/>`;
+      const embers = Array.from({ length: 14 }, (_, i) => `<circle class="ember" cx="${-30 + (i * 37) % 260}" cy="${360 + (i * 13) % 50}" r="${1 + (i % 3) * .6}" fill="#ffb02e" style="animation-delay:${(i * 0.37).toFixed(2)}s;animation-duration:${4 + (i % 4)}s"/>`).join('');
+      const star = [0,1,2,3,4].map(i => { const a = -Math.PI / 2 + i * 4 * Math.PI / 5; return `${(100 + 128 * Math.cos(a)).toFixed(1)},${(190 + 128 * Math.sin(a)).toFixed(1)}`; }).join(' ');
+      return `<g class="sigil" fill="none" stroke="#7a1a12" opacity=".55"><circle cx="100" cy="190" r="150" stroke-dasharray="3 6"/><circle cx="100" cy="190" r="132"/><polygon points="${star}"/></g>${both(wing)}
+        <path d="M104 176 C150 206 168 254 140 300 C128 322 146 342 168 332" fill="none" stroke="#3a0e0e" stroke-width="5" stroke-linecap="round"/><path d="M168 332 L184 316 L178 340 Z" fill="#3a0e0e"/>${embers}`;
+    },
+    front:(v, uid) => `${both(`<path d="M90 16 C78 10 68 -2 66 -20 C74 -8 84 -2 96 8 Z" fill="url(#horn-${uid})"/>`)}
+      ${v === 'front' ? `<g filter="url(#hg-${uid})">${both('<path d="M87 27 L97 31 L88 33 Z" fill="#ff6a1f"/>')}</g>` : ''}
+      ${both('<path d="M70 374 C70 386 94 388 94 380 L92 386 L70 386 Z" fill="#0c0202"/>')}`,
+  },
+  { key:'reaper', name:'Reaper X-ray', blurb:'bones show through the muscle',
+    colors:{ none:'#1a2a3d', under:'#ffd34d', good:'#49f0a0', over:'#ff4a5a' }, body:'#0c1a2b', bodyStroke:'#2a4a6e', stroke:'#04080f',
+    mAttr:() => 'opacity=".62"', headBehind:true,
+    behind:v => `<path d="M72 46 C66 8 84 -10 100 -10 C116 -10 134 8 128 46 L140 76 L60 76 Z" fill="#060c16" stroke="#21405f" stroke-width="1.2"/>
+      ${v === 'front' ? '<path d="M184 30 C204 -6 236 -12 248 0 C228 0 206 14 188 46 Z" fill="#cfe0f0" opacity=".9"/><path d="M186 36 L160 410" stroke="#6b5a45" stroke-width="3.2" stroke-linecap="round"/>' : ''}`,
+    underlay:() => `<g stroke="#a9cdf5" stroke-width="2.6" stroke-linecap="round" fill="none" opacity=".75">${both('<path d="M74 70 L98 75"/><path d="M100 82 C86 80 76 86 72 96 M100 90 C86 88 76 94 73 104 M100 98 C88 96 78 102 75 112 M100 106 C90 104 81 110 78 120"/><path d="M62 92 L58 140 M58 147 L50 196 M61 147 L56 196"/><path d="M80 168 C82 186 96 190 100 184"/><path d="M87 192 L86 270 M86 288 L86 370 M82 290 L80 368"/>')}<path d="M100 60 V178" stroke-dasharray="4 3"/></g>`,
+    head:v => v === 'front'
+      ? '<path d="M85 30 C85 12 115 12 115 30 C115 40 111 45 109 47 L108 54 L92 54 L91 47 C89 45 85 40 85 30Z" fill="#dfe9f5"/><ellipse cx="94" cy="31" rx="4.4" ry="5" fill="#04080f"/><ellipse cx="106" cy="31" rx="4.4" ry="5" fill="#04080f"/><circle cx="94" cy="31" r="1.3" fill="#49f0a0"/><circle cx="106" cy="31" r="1.3" fill="#49f0a0"/><path d="M100 36 L97.5 42 H102.5 Z" fill="#04080f"/><path d="M94 49v5M98 49v5M102 49v5M106 49v5" stroke="#04080f" stroke-width="1"/>'
+      : '<ellipse cx="100" cy="30" rx="17" ry="20" fill="#060c16"/>',
+  },
+  { key:'cyborg', name:'Cyborg HUD', blurb:'wireframe scan with callouts',
+    colors:{ none:'#12303a', under:'#ffcc00', good:'#00ffa3', over:'#ff2e63' }, body:'#03161c', bodyStroke:'#19e3ff', bodyStrokeW:.8, stroke:'#19e3ff', strokeW:.8,
+    fill:s => ({ none:'#12303a', under:'rgba(255,204,0,.55)', good:'rgba(0,255,163,.42)', over:'rgba(255,46,99,.7)' })[s],
+    defs:uid => `${glowFilter(`cg-${uid}`, 1.8)}<linearGradient id="sc-${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#19e3ff" stop-opacity="0"/><stop offset="1" stop-color="#19e3ff" stop-opacity=".35"/></linearGradient>`,
+    mAttr:uid => `filter="url(#cg-${uid})"`,
+    front:(v, uid) => {
+      const spots = v === 'front'
+        ? [['forearms', 52, 172, -46, 150, 'start'], ['quads', 86, 236, 246, 214, 'end'], ['adductors', 97, 222, 246, 250, 'end']]
+        : [['calves', 84, 320, -46, 300, 'start'], ['lower-back', 100, 152, 246, 132, 'end'], ['rotator-cuff', 80, 87, -46, 50, 'start']];
+      const callouts = spots.map(([k, x, y, lx, ly, anchor]) => { const s = status(DATA[k]); const c = THEMES[3].colors[s];
+        const elbow = anchor === 'start' ? lx + 74 : lx - 74;
+        return `<g font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="${c}"><circle cx="${x}" cy="${y}" r="2.6" fill="none" stroke="${c}"/><path d="M${x} ${y} L${elbow} ${ly + 4} L${lx} ${ly + 4}" fill="none" stroke="${c}" stroke-width=".8"/><text x="${lx}" y="${ly}" text-anchor="${anchor}">${LABELS[k].toUpperCase()}</text><text x="${lx}" y="${ly + 14}" text-anchor="${anchor}" font-weight="700">${fmt(DATA[k])} ${s === 'over' ? '▲ OVERLOAD' : '▼ LOW'}</text></g>`; }).join('');
+      const head = v === 'front' ? `<path d="M83 25 H117 L115 35 H85 Z" fill="#ff2e63" filter="url(#cg-${uid})"/><path d="M86 44 H114 M92 50 H108" stroke="#19e3ff" stroke-width=".8"/>` : '<path d="M100 60 V176" stroke="#19e3ff" stroke-width="1.6" stroke-dasharray="2 4"/>';
+      const corners = '<path d="M-44 -28 h18 M-44 -28 v18 M244 -28 h-18 M244 -28 v18 M-44 416 h18 M-44 416 v-18 M244 416 h-18 M244 416 v-18" stroke="#19e3ff" stroke-width="1.2" fill="none"/>';
+      return `${head}${callouts}${corners}<rect class="scan" x="-50" y="-50" width="300" height="18" fill="url(#sc-${uid})" pointer-events="none"/>`;
+    },
+  },
+  { key:'thermal', name:'Thermal cam', blurb:'cold = under, white-hot = over',
+    colors:{ none:'#2a0d4d', under:'#6c2bd9', good:'#ff8a00', over:'#fff4b0' }, body:'#1d0a3c', stroke:'none', strokeW:0, hideDetail:true,
+    defs:uid => `<filter id="tb-${uid}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter><filter id="tb2-${uid}"><feGaussianBlur stdDeviation="5"/></filter><linearGradient id="ts-${uid}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#140530"/><stop offset=".3" stop-color="#6c2bd9"/><stop offset=".55" stop-color="#e8247a"/><stop offset=".78" stop-color="#ff8a00"/><stop offset="1" stop-color="#fff4b0"/></linearGradient>`,
+    bodyAttr:uid => `filter="url(#tb2-${uid})"`,
+    mAttr:uid => `filter="url(#tb-${uid})"`,
+    front:(v, uid) => `<g font-family="ui-monospace,Menlo,monospace" font-size="9" fill="#e7dcff">
+      ${v === 'front' ? `<text x="-44" y="-20">● REC</text><text x="-44" y="-8" fill="#fff4b0">MAX 24.5</text><path d="M52 160 m-9 0 h6 m6 0 h6 M52 151 v6 m0 6 v6" stroke="#fff4b0" stroke-width="1"/>` : `<text x="244" y="-20" text-anchor="end">IR · 4WK AVG</text>`}
+      ${v === 'back' ? `<rect x="232" y="40" width="8" height="300" fill="url(#ts-${uid})"/><text x="228" y="46" text-anchor="end">18+</text><text x="228" y="196" text-anchor="end">8</text><text x="228" y="340" text-anchor="end">0</text>` : ''}</g>`,
+  },
+  { key:'marble', name:'Marble statue', blurb:'porphyry over, patina in range, ochre under',
+    colors:{ none:'#ece6dc', under:'#c9962c', good:'#3f9b7f', over:'#a3262a' }, body:'#ece6dc', stroke:'#b9b0a2', strokeW:1.1,
+    defs:uid => `<filter id="mb-${uid}" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.02 0.045" numOctaves="3" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .32  0 0 0 0 .3  0 0 0 0 .27  1 0 0 0 0" result="r"/><feComponentTransfer in="r" result="v"><feFuncA type="table" tableValues="0 0 0 0 0 0 .55 0 0 0 0 0 0"/></feComponentTransfer><feComposite in="v" in2="SourceGraphic" operator="in" result="vc"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="vc"/></feMerge></filter>
+      <linearGradient id="ms-${uid}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset=".45" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>`,
+    bodyAttr:uid => `filter="url(#mb-${uid})"`, mAttr:uid => `filter="url(#mb-${uid})"`,
+    behind:() => '<rect x="40" y="388" width="120" height="14" fill="#cfc7b9"/><rect x="32" y="400" width="136" height="20" fill="#bdb4a5"/><text x="100" y="414" text-anchor="middle" font-family="Georgia,serif" font-size="9" letter-spacing="3" fill="#6d6455">MMXXVI</text>',
+    front:(v, uid) => `${both([0,1,2,3,4].map(i => `<ellipse cx="${84 - i * .6}" cy="${14 + i * 6}" rx="5" ry="2.2" transform="rotate(${-40 + i * 18} ${84 - i * .6} ${14 + i * 6})" fill="#c9a227"/>`).join(''))}`,
+  },
+  { key:'arcade', name:'8-bit fighter', blurb:'pixel art with HP bars', pixel:true,
+    colors:{ none:'#3c3c5c', under:'#fcbc3c', good:'#3cbc3c', over:'#e40058' }, body:'#5c5c8c', stroke:'#0b0b1e', strokeW:2.4, hideDetail:true,
+    head:() => '<ellipse cx="100" cy="32" rx="17" ry="21"/><path d="M82 22 H118 V30 H82 Z" fill="#e40058"/><path d="M82 24 L64 18 L66 30 Z" fill="#e40058"/>',
+  },
+  { key:'comic', name:'Comic panel', blurb:'halftone ink with a speech burst',
+    colors:{ none:'#e8dfc8', under:'#ffd23f', good:'#3ecf8e', over:'#ff3b3b' }, body:'#f7f1e1', bodyStroke:'#111', bodyStrokeW:2.4, stroke:'#111', strokeW:2,
+    fill:(s, uid) => `url(#ht-${s}-${uid})`,
+    defs:uid => ['none','under','good','over'].map(s => `<pattern id="ht-${s}-${uid}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><rect width="5" height="5" fill="${THEMES[7].colors[s]}"/><circle cx="2.5" cy="2.5" r="${s === 'over' ? 1.4 : 1}" fill="#000" opacity=".22"/></pattern>`).join(''),
+    behind:() => `<g stroke="#111" stroke-width="1" opacity=".16">${Array.from({ length: 28 }, (_, i) => { const a = i * Math.PI / 14; return `<path d="M${(100 + 70 * Math.cos(a)).toFixed(1)} ${(190 + 90 * Math.sin(a)).toFixed(1)} L${(100 + 260 * Math.cos(a)).toFixed(1)} ${(190 + 300 * Math.sin(a)).toFixed(1)}"/>`; }).join('')}</g>`,
+    front:v => {
+      if (v === 'front') {
+        const pts = Array.from({ length: 22 }, (_, i) => { const a = i * Math.PI / 11, r = i % 2 ? 40 : 54; return `${(26 + r * 1.3 * Math.cos(a)).toFixed(1)},${(30 + r * .78 * Math.sin(a)).toFixed(1)}`; }).join(' ');
+        return `<polygon points="${pts}" fill="#fff" stroke="#111" stroke-width="2.2"/><path d="M34 66 L48 146 L48 64 Z" fill="#fff" stroke="#111" stroke-width="2"/><path d="M36 63 L46 63" stroke="#fff" stroke-width="4"/>
+          <text x="26" y="25" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="15" fill="#111">FOREARMS</text><text x="26" y="45" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="20" fill="#ff3b3b" stroke="#111" stroke-width=".6">24.5!!</text>`;
+      }
+      return `<rect x="-44" y="388" width="186" height="30" fill="#ffd23f" stroke="#111" stroke-width="2"/><text x="-37" y="401" font-family="Impact,'Arial Black',sans-serif" font-size="10" fill="#111">MEANWHILE, DOWN IN LEG CITY...</text><text x="-37" y="413" font-family="Impact,'Arial Black',sans-serif" font-size="10" fill="#111">QUADS 3.5 · CALVES 3 · ADDUCTORS 3</text>`;
+    },
+  },
+  { key:'mino', name:'Minotaur', blurb:'bull head, broken chains, labyrinth',
+    colors:{ none:'#4a3a2d', under:'#e0a83a', good:'#6fbf4a', over:'#d63a2a' }, body:'#3b2a1e', bodyStroke:'#1a110a', stroke:'#1d130b',
+    defs:uid => `<linearGradient id="ih-${uid}" x1="1" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#5a4632"/><stop offset=".5" stop-color="#cdbb98"/><stop offset="1" stop-color="#f4ead2"/></linearGradient>${glowFilter(`mg-${uid}`, 1.6)}`,
+    behind:() => `<g fill="none" stroke="#3a2a1c" stroke-width="3" opacity=".7">${[0,1,2,3,4,5].map(i => { const r = 40 + i * 30; return `<path d="M${100 - r} ${190 - r * 1.3} H${100 + r} V${190 + r * 1.3} H${100 - r + (i % 2 ? 0 : 30)} ${i % 2 ? `V${190 - r * 1.3 + 30}` : ''}"/>`; }).join('')}</g>`,
+    head:v => v === 'front'
+      ? '<path d="M82 16 C82 4 118 4 118 16 L121 34 C121 44 114 52 108 57 L92 57 C86 52 79 44 79 34 Z"/><ellipse cx="100" cy="47" rx="11.5" ry="8.5" fill="#6b4c36"/><ellipse cx="95.5" cy="48" rx="2" ry="2.6" fill="#140c07"/><ellipse cx="104.5" cy="48" rx="2" ry="2.6" fill="#140c07"/><circle cx="100" cy="56" r="5" fill="none" stroke="#d6a93a" stroke-width="2"/>'
+      : '<path d="M82 16 C82 4 118 4 118 16 L120 36 C120 48 112 56 100 58 C88 56 80 48 80 36 Z"/>',
+    front:(v, uid) => `${both(`<path d="M84 16 C68 18 52 14 42 2 C37 -5 36 -13 38 -22 C44 -9 52 -3 60 1 C70 5 78 7 87 8 Z" fill="url(#ih-${uid})"/><path d="M80 14 L74 6 L86 9 Z" fill="#3b2a1e"/>`)}
+      ${v === 'front' ? `<g filter="url(#mg-${uid})">${both('<path d="M88 27 L96 30 L89 32 Z" fill="#ff4a1a"/>')}</g>` : ''}
+      ${both('<rect x="43" y="196" width="15" height="7" rx="1.5" fill="#6d6d6d" stroke="#2a2a2a"/><ellipse cx="44" cy="210" rx="3" ry="5" fill="none" stroke="#7d7d7d" stroke-width="1.8"/><ellipse cx="41" cy="220" rx="5" ry="3" fill="none" stroke="#7d7d7d" stroke-width="1.8"/><path d="M38 226 L35 232 M40 227 L41 233" stroke="#7d7d7d" stroke-width="1.8"/>')}`,
+  },
+  { key:'tarot', name:'Tarot · Strength', blurb:'gold-framed card VIII', tarot:true,
+    colors:{ none:'#2c2a5c', under:'#f2c14e', good:'#4fd1a5', over:'#ef4b5f' }, body:'#1f1d4a', bodyStroke:'#d4af37', bodyStrokeW:.9, stroke:'#14123a',
+    behind:v => v === 'front'
+      ? `<circle cx="100" cy="30" r="34" fill="none" stroke="#d4af37" stroke-width="1.2"/><g stroke="#d4af37" stroke-width="1">${Array.from({ length: 16 }, (_, i) => { const a = i * Math.PI / 8; return `<path d="M${(100 + 38 * Math.cos(a)).toFixed(1)} ${(30 + 38 * Math.sin(a)).toFixed(1)} L${(100 + 48 * Math.cos(a)).toFixed(1)} ${(30 + 48 * Math.sin(a)).toFixed(1)}"/>`; }).join('')}</g><path d="M80 -14 C70 -24 70 -32 80 -32 C86 -32 94 -24 100 -18 C106 -24 114 -32 120 -32 C130 -32 130 -24 120 -14 C114 -8 106 -14 100 -18 C94 -14 86 -8 80 -14 Z" fill="none" stroke="#d4af37" stroke-width="1.4"/>`
+      : `<path d="M118 -6 A30 30 0 1 0 118 66 A24 24 0 1 1 118 -6 Z" fill="#d4af37" opacity=".85"/>`,
+    front:() => `<g fill="#f4e3a1">${[[-30,40],[226,70],[-24,300],[230,330],[-36,190],[236,200],[200,-10],[0,-14]].map(([x, y]) => `<path d="M${x} ${y - 6} L${x + 1.6} ${y - 1.6} L${x + 6} ${y} L${x + 1.6} ${y + 1.6} L${x} ${y + 6} L${x - 1.6} ${y + 1.6} L${x - 6} ${y} L${x - 1.6} ${y - 1.6} Z"/>`).join('')}</g>`,
+  },
+];
+
+// Pixel renderer for the arcade card: rasterise at low resolution, then snap every pixel to the palette.
+function pixelate(t, view, canvas) {
+  const svg = figure(t, view, `px-${view}`, { plain: false }).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+  const img = new Image();
+  img.onload = () => {
+    const w = 75, h = 115; canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+    const px = ctx.getImageData(0, 0, w, h), pal = [...Object.values(t.colors), t.body, t.stroke, '#fcfcfc'].map(c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)));
+    for (let i = 0; i < px.data.length; i += 4) {
+      if (px.data[i + 3] < 110) { px.data[i + 3] = 0; continue; }
+      let best = pal[0], bd = Infinity;
+      for (const p of pal) { const d = (p[0] - px.data[i]) ** 2 + (p[1] - px.data[i + 1]) ** 2 + (p[2] - px.data[i + 2]) ** 2; if (d < bd) { bd = d; best = p; } }
+      px.data[i] = best[0]; px.data[i + 1] = best[1]; px.data[i + 2] = best[2]; px.data[i + 3] = 255;
+    }
+    ctx.putImageData(px, 0, 0);
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+const grid = document.getElementById('grid');
+THEMES.forEach((t, i) => {
+  const card = document.createElement('article');
+  card.className = `v t-${t.key}`;
+  const legend = ['under', 'good', 'over', 'none'].map(s => `<span><i style="background:${t.colors[s]}"></i>${({ under:'Under 8', good:'8–18', over:'Over 18', none:'Not trained' })[s]}</span>`).join('');
+  let stage;
+  if (t.pixel) {
+    const bars = [...overs(), ...lowest(2)].map(k => { const s = status(DATA[k]); const pct = Math.min(100, DATA[k] / 24.5 * 100); return `<span>${LABELS[k]}</span><div class="bar"><span style="width:${pct}%;background:${t.colors[s]}"></span></div>`; }).join('');
+    stage = `<div class="hud"><div>1P MAX<br><span class="blink">${status(DATA.forearms) === 'over' ? 'FOREARMS OVERHEAT!' : 'READY'}</span></div><div class="bars">${bars}</div></div><canvas data-view="front"></canvas><canvas data-view="back"></canvas>`;
+  } else {
+    stage = `${t.tarot ? '<div class="tarot-label top">VIII</div><div class="tarot-label bottom">STRENGTH</div>' : ''}${figure(t, 'front', `${t.key}-f`)}${figure(t, 'back', `${t.key}-b`)}`;
+  }
+  card.innerHTML = `<div class="v-head"><span class="num">${String(i + 1).padStart(2, '0')}</span><h2>${t.name}</h2><p>${t.blurb}</p></div>
+    <div class="stage" ${t.stageCss ? `style="${t.stageCss}"` : ''}>${stage}</div>
+    <div class="foot">${legend}<span class="readout">${t.pixel ? 'Front · Back' : 'Tap a muscle'}</span></div>`;
+  grid.append(card);
+  if (t.pixel) card.querySelectorAll('canvas').forEach(c => pixelate(t, c.dataset.view, c));
+  let active = null;
+  card.addEventListener('click', e => {
+    const k = e.target.closest('.m')?.dataset.m;
+    if (!k) return;
+    active = active === k ? null : k;
+    card.querySelector('.stage').classList.toggle('dim', !!active);
+    card.querySelectorAll('.m').forEach(p => p.classList.toggle('on', p.dataset.m === active));
+    card.querySelector('.readout').textContent = active ? `${LABELS[k]} · ${fmt(DATA[k])} sets · ${STATUS[status(DATA[k])]}` : 'Tap a muscle';
+  });
+});
+</script>
+</body>
+</html>
