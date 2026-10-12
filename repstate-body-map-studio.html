@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RepState · Muscle map, Studio with forearm split and obliques</title>
+<style>
+  :root { --bg:#0d0f12; --surface:#13161a; --surface-2:#171a1f; --line:#2b2f36; --line-soft:#20242a; --white:#f3f4f5; --muted:#a1a5ac;
+    --red:#e72d35; --good:#24b86f; --under:#e2b33a; --none:#2a2f37; --body:#1b1f25; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--white); font:16px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { max-width:760px; margin:0 auto; padding:36px 20px 56px; }
+  .eyebrow { margin:0 0 6px; text-align:center; color:var(--muted); font-size:13px; letter-spacing:.06em; text-transform:uppercase; }
+  .eyebrow b { color:var(--red); }
+  h1 { margin:0 0 8px; text-align:center; font-size:30px; letter-spacing:-.035em; line-height:1.15; }
+  .lede { margin:0 auto 24px; max-width:560px; text-align:center; color:var(--muted); font-size:15px; }
+  .card { border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:22px 18px 16px; }
+  .section-title { margin:0 0 14px; text-align:center; font-size:22px; font-weight:700; letter-spacing:-.03em; }
+  .segment { display:flex; padding:4px; border:1px solid var(--line); border-radius:10px; background:var(--surface-2); margin:0 auto 14px; max-width:320px; }
+  .segment button { flex:1; white-space:nowrap; min-height:40px; border:0; border-radius:6px; background:transparent; color:var(--muted); font:600 13px Inter, system-ui, sans-serif; cursor:pointer; }
+  .segment button[aria-pressed="true"] { background:#30353d; color:var(--white); }
+  .figures { display:grid; grid-template-columns:1fr 1fr; gap:4px; background:linear-gradient(180deg,#171a1f,#111317); border-radius:10px; padding:12px 4px 6px; }
+  figure { margin:0; text-align:center; }
+  figcaption { color:var(--muted); font-size:13px; margin-top:2px; }
+  svg { width:100%; max-width:250px; height:auto; display:block; margin:0 auto; }
+  .m { stroke:#13161a; stroke-width:1.5; stroke-linejoin:round; cursor:pointer; transition:fill .18s, opacity .18s; }
+  .m.new { stroke:#f3f4f5; stroke-width:1.1; stroke-dasharray:2.5 2; }
+  .dim .m:not(.on) { opacity:.25; }
+  .legend { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; margin:14px 0 4px; font-size:13px; color:var(--muted); }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .legend .new-key { border:1px dashed var(--white); background:transparent; }
+  .list { list-style:none; margin:12px 0 0; padding:0; border-top:1px solid var(--line); }
+  .list li { display:grid; grid-template-columns:12px minmax(0,1fr) 44px 74px; align-items:center; gap:10px; min-height:40px; padding:0 6px; border-bottom:1px solid var(--line-soft); font-size:14px; cursor:pointer; }
+  .list li.on { background:#1b2026; border-radius:8px; }
+  .list .name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .list .tag { margin-left:6px; padding:1px 6px; border:1px solid var(--line); border-radius:5px; color:var(--muted); font-size:11px; }
+  .list .dot { width:10px; height:10px; border-radius:3px; }
+  .list .n { text-align:center; font-weight:650; font-variant-numeric:tabular-nums; }
+  .list .s { text-align:right; color:var(--muted); font-size:13px; white-space:nowrap; }
+  .notes { margin:20px auto 0; color:var(--muted); font-size:14px; padding-left:20px; }
+  .notes li { margin:5px 0; }
+  @media (prefers-reduced-motion: reduce) { .m { transition:none; } }
+  @media (max-width:360px) { .list .tag { display:none; } }
+  @media (max-width:420px) {
+    .page { padding:26px 12px 40px; } h1 { font-size:25px; }
+    .card { padding:18px 10px 12px; }
+    .list li { grid-template-columns:12px minmax(0,1fr) 38px 64px; gap:8px; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <p class="eyebrow">Rep<b>State</b> · mockup</p>
+  <h1>Muscle map: Studio</h1>
+  <p class="lede">Style 1 with front and back forearms on their own figures, and obliques added on both. Numbers are from your log. Dashed outlines mark the new areas. Tap a muscle.</p>
+
+  <section class="card">
+    <h3 class="section-title">Sets per muscle</h3>
+    <div class="segment" role="group" aria-label="Period">
+      <button type="button" data-period="avg" aria-pressed="true">Weekly avg</button>
+      <button type="button" data-period="week" aria-pressed="false">This week</button>
+    </div>
+    <div class="figures" id="figures"></div>
+    <div class="legend"><span><i style="background:var(--under)"></i>Under 8</span><span><i style="background:var(--good)"></i>8–18</span><span><i style="background:var(--red)"></i>Over 18</span><span><i style="background:var(--none)"></i>Not trained</span><span><i class="new-key"></i>New area</span></div>
+    <ul class="list" id="list"></ul>
+  </section>
+
+  <ul class="notes">
+    <li><b>Obliques: 3 sets a week (under).</b> They come from Hanging windshield wipers, 2 to 3 sets in 8 sessions. In this mockup wipers count fully for obliques and half for abs. That's why abs drop from 7 to 5.5 compared with Home today.</li>
+    <li><b>Forearms:</b> front 8 (in range) from towel pronation and behind-the-back wrist curls, back 4 (under) from reverse wrist curls, towel supination and hammer curls. These are the live numbers.</li>
+    <li>Weekly avg covers the 4 weeks before Monday 12 Oct. This week covers Monday's session so far.</li>
+  </ul>
+</main>
+
+<script>
+// Computed with the app's weeklyMuscleSets (origin/main c6c0e4d) on the real log, with windshield wipers as obliques (primary) + abs (secondary).
+const DATA = {
+  avg:  { 'front-delts':15, chest:14, biceps:12, triceps:11, back:10.5, traps:10, 'side-delts':9, glutes:8.5, 'rear-delts':8, 'forearm-flexors':8,
+          hamstrings:7.5, abs:5.5, 'forearm-extensors':4, quads:3.5, 'lower-back':3.5, calves:3, adductors:3, obliques:3, 'rotator-cuff':2 },
+  week: { 'front-delts':7, chest:9.5, biceps:0, triceps:4.5, back:0, traps:0, 'side-delts':0, glutes:0, 'rear-delts':0, 'forearm-flexors':3,
+          hamstrings:0, abs:3, 'forearm-extensors':0, quads:0, 'lower-back':0, calves:0, adductors:0, obliques:0, 'rotator-cuff':0 },
+};
+const LABELS = { chest:'Chest', back:'Back', traps:'Traps', 'front-delts':'Front delts', 'side-delts':'Side delts', 'rear-delts':'Rear delts',
+  'rotator-cuff':'Rotator cuff', biceps:'Biceps', triceps:'Triceps', 'forearm-flexors':'Front forearms', 'forearm-extensors':'Back forearms',
+  abs:'Abs', obliques:'Obliques', 'lower-back':'Lower back', glutes:'Glutes', quads:'Quads', hamstrings:'Hamstrings', adductors:'Adductors', calves:'Calves' };
+const NEW = new Set(['obliques', 'forearm-flexors', 'forearm-extensors']);
+const COLORS = { none:'#2a2f37', under:'#e2b33a', good:'#24b86f', over:'#e72d35' };
+const STATUS = { under:'Under', good:'In range', over:'Over', none:'Not trained' };
+const round = n => Math.round(n * 2) / 2;
+const status = n => { const r = round(n); return r <= 0 ? 'none' : r < 8 ? 'under' : r > 18 ? 'over' : 'good'; };
+
+const FRONT_SIDE = [
+  ['traps','M90 58 L74 66 L91 67 Z'],
+  ['front-delts','M82 68 C71 67 63 71 60 81 L67 89 C70 81 76 75 86 72 Z'],
+  ['side-delts','M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z'],
+  ['chest','M99 70 L87 72 C78 76 70 83 67 91 C71 103 85 109 99 107 Z'],
+  ['biceps','M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z'],
+  ['forearm-flexors','M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z'],
+  ['obliques','M87 110 C80 118 77 136 79 160 L87 172 L89 110 Z'],
+  ['quads','M77 186 C72 212 72 242 78 270 L93 270 C95 248 96 222 96 198 C90 192 84 189 77 186 Z'],
+  ['adductors','M97 198 C97 217 96 236 94 258 L99 250 L99 192 Z'],
+  ['calves','M78 287 L92 287 C94 312 92 342 90 372 L81 372 C77 342 76 312 78 287 Z'],
+];
+const FRONT_CENTRE = [['abs','M90 110 H110 V172 C106 178 94 178 90 172 Z']];
+const BACK_SIDE = [
+  ['rear-delts','M76 67 C68 67 62 72 60 82 L67 89 L79 76 Z'],
+  ['side-delts','M59 82 C54 85 52 92 53 100 L60 98 L66 89 Z'],
+  ['rotator-cuff','M88 79 L80 77 L72 90 L87 97 Z'],
+  ['back','M87 99 L71 92 L67 101 C69 121 77 140 91 150 L98 112 Z'],
+  ['triceps','M66 92 L60 99 L54 101 C52 113 53 128 56 141 L66 139 C68 125 70 109 68 97 Z'],
+  ['forearm-extensors','M56 145 L66 143 C67 161 62 180 57 199 L46 197 C47 178 51 160 56 145 Z'],
+  ['obliques','M68 118 C71 136 78 151 90 158 L90 166 C84 166 79 168 76 171 C71 156 68 138 68 118 Z'],
+  ['glutes','M77 172 C74 187 81 201 98 201 L98 168 C90 166 83 167 77 172 Z'],
+  ['hamstrings','M77 204 C74 230 76 252 80 270 L94 270 C96 250 98 228 98 206 Z'],
+  ['calves','M78 287 C73 304 75 332 81 352 L92 352 C95 332 95 304 92 287 Z'],
+];
+const BACK_CENTRE = [['traps','M100 54 L77 66 L90 77 L100 106 L110 77 L123 66 Z'], ['lower-back','M93 140 L107 140 L109 166 L91 166 Z']];
+const BASE = '<ellipse cx="100" cy="32" rx="17" ry="21"/><path d="M91 50h18l3 16H88z"/><path d="M60 78 C70 66 86 64 100 64 C114 64 130 66 140 78 L146 104 L140 150 L138 186 L62 186 L60 150 L54 104 Z"/><ellipse cx="50" cy="210" rx="7" ry="10"/><ellipse cx="150" cy="210" rx="7" ry="10"/><ellipse cx="85" cy="278" rx="9" ry="7"/><ellipse cx="115" cy="278" rx="9" ry="7"/><path d="M76 374h16l2 12H70z"/><path d="M108 374h16l6 12h-24z"/>';
+
+function svg(label, side, centre, detail) {
+  const p = ([k, d]) => `<path class="m${NEW.has(k) ? ' new' : ''}" data-m="${k}" d="${d}"/>`;
+  const s = side.map(p).join('');
+  return `<figure><svg viewBox="0 -4 200 400" role="img" aria-label="${label} of body"><ellipse cx="100" cy="391" rx="68" ry="6" fill="#000" opacity=".35"/>
+    <g fill="#1b1f25">${BASE}</g>${s}<g transform="translate(200 0) scale(-1 1)">${s}</g>${centre.map(p).join('')}
+    <path d="${detail}" fill="none" stroke="#13161a" stroke-width="1.1" pointer-events="none"/></svg><figcaption>${label}</figcaption></figure>`;
+}
+document.getElementById('figures').innerHTML =
+  svg('Front', FRONT_SIDE, FRONT_CENTRE, 'M90 126h20M90 142h20M90 158h20M100 110v66') + svg('Back', BACK_SIDE, BACK_CENTRE, 'M100 106v34');
+
+let period = 'avg', active = null;
+function render() {
+  const v = DATA[period];
+  document.querySelectorAll('.m').forEach(path => { const k = path.dataset.m; path.style.fill = COLORS[status(v[k])]; path.classList.toggle('on', k === active); });
+  document.getElementById('figures').classList.toggle('dim', !!active);
+  const order = { over:0, under:1, none:2, good:3 };
+  const rows = Object.keys(LABELS).sort((a, b) => order[status(v[a])] - order[status(v[b])] || v[b] - v[a]);
+  document.getElementById('list').innerHTML = rows.map(k => `<li data-m="${k}" class="${active === k ? 'on' : ''}"><span class="dot" style="background:${COLORS[status(v[k])]}"></span><span class="name">${LABELS[k]}${NEW.has(k) ? '<span class="tag">new</span>' : ''}</span><span class="n">${round(v[k])}</span><span class="s">${STATUS[status(v[k])]}</span></li>`).join('');
+}
+document.querySelectorAll('.segment button').forEach(b => b.addEventListener('click', () => {
+  period = b.dataset.period; document.querySelectorAll('.segment button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); render();
+}));
+document.addEventListener('click', e => { const k = e.target.closest('[data-m]')?.dataset.m; if (!k) return; active = active === k ? null : k; render(); });
+render();
+</script>
+</body>
+</html>
