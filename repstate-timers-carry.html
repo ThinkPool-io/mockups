@@ -1530,7 +1530,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <div class="rt-content">
   <div class="rt-live-heading"><h1>Farmer&#39;s carry</h1><button type="button" class="rt-text" data-go="interval-setup">Edit timer</button></div>
   <section class="rt-live" aria-label="Interval timer running">
-    <p class="rt-live-load" data-value="load" aria-label="Carry load">20 kg per hand · 40 kg total</p>
+    <p class="rt-live-load" data-value="load" aria-label="Carry load">40 kg total</p>
     <p class="rt-live-meta" data-live-status="">Round 3 of 10</p>
     <h2 class="rt-phase" data-live-phase="">Work</h2>
     <output class="rt-digits rt-countdown" data-countdown="" aria-label="Time remaining">00:22</output>
@@ -1559,7 +1559,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
   <section class="rt-live rt-finished" aria-label="Carry logged">
     <p class="rt-live-meta">Carry complete</p>
     <h2>10 rounds<br>logged</h2>
-    <p class="rt-finished-note">20 kg per hand<br>40 kg total load</p>
+    <p class="rt-finished-note">40 kg total</p>
     <div class="rt-ready-duration"><span>Saved to your log</span><strong>Today</strong></div>
     <button class="rt-primary" type="button" data-start="interval">Run again</button>
     <button class="rt-save" type="button" data-go="interval-setup">Change load</button>
@@ -1631,7 +1631,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
       const key = node.dataset.value;
       node.textContent = key === 'rounds' ? config.rounds
         : key === 'weight' ? `${config.weight} kg`
-        : key === 'load' ? `${config.weight} kg per hand \u00b7 ${config.weight * 2} kg total`
+        : key === 'load' ? `${config.weight * 2} kg total`
         : fmt(key === 'total' ? (config.work + config.intervalRest) * config.rounds : config[key]);
     });
     root.querySelectorAll('[data-duration]').forEach(node => node.setAttribute('aria-pressed',String(Number(node.dataset.duration) === config.rest)));
