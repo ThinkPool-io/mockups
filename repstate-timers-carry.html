@@ -1360,6 +1360,7 @@ button:disabled, .primary-button:disabled, .secondary-button:disabled { cursor: 
 .rt-phase { margin:0 0 16px; font-size:48px; font-weight:750; letter-spacing:-.04em; line-height:1; }
 .rt-countdown { font-size:112px; }
 .rt-next { margin:22px 0 0; color:var(--rt-muted); font-size:14px; line-height:1.5; }
+.rt-live-load { margin:0 0 14px; color:#c5c9cf; font-size:15px; font-weight:600; line-height:1.5; letter-spacing:-.01em; font-variant-numeric:tabular-nums; }
 .rt-live-actions { margin-top:50px; }
 .rt-secondary-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
 .rt-live .rt-options { margin-top:24px; }
@@ -1414,7 +1415,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
 @media (prefers-reduced-motion:reduce) { .rt-board *, .rt-board *::before, .rt-board *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; } }
 </style></head>
 <body class="space_grotesk_412bb0dd-module__vq0YDa__variable space_mono_db713d67-module__-gAs0W__variable inter_2b8b082d-module__gBndNW__variable rt-board"><div id="repstate-timer-board">
-<header class="rt-board-header"><p>RepState · Timers · new preset</p><h1>A carry preset, inside Intervals.</h1><p class="rt-board-description">A farmer&#39;s carry is a 30/30 interval: 30 seconds of loaded walking, 30 seconds of rest, repeated for 10 rounds. It slots into the Intervals tab as one more saved timer, beside Kettlebells. Nothing in the workout plan changes.</p><nav class="rt-board-nav" aria-label="Mockup screens"><a href="#home">Home / Main menu</a><a href="#rest-setup">Rest / Setup</a><a href="#interval-setup">Intervals / Setup</a><a href="#rest-running">Rest / Running</a><a href="#interval-running">Intervals / Running</a><a href="#rest-finished">Rest / Finished</a></nav></header>
+<header class="rt-board-header"><p>RepState · Timers · new preset</p><h1>A carry preset, inside Intervals.</h1><p class="rt-board-description">A farmer&#39;s carry is a 30/30 interval: 30 seconds of loaded walking, 30 seconds of rest, for 10 rounds. The timer holds a load as well now, so the weight you walked with is captured and logged, not just the time. It stays one saved timer in the Intervals tab, beside Kettlebells.</p><nav class="rt-board-nav" aria-label="Mockup screens"><a href="#home">Home / Main menu</a><a href="#rest-setup">Rest / Setup</a><a href="#interval-setup">Intervals / Setup</a><a href="#rest-running">Rest / Running</a><a href="#interval-running">Intervals / Running</a><a href="#interval-logged">Intervals / Logged</a><a href="#rest-finished">Rest / Finished</a></nav></header>
 <main class="rt-gallery"><article class="rt-concept" id="home"><header class="rt-caption"><h2>Home · Main menu</h2><a href="https://thinkpool-io.github.io/mockups/repstate-timers-carry.html?screen=home">Full screen</a></header><div class="rt-screen"><main class="app-shell home-shell"><div class="home-frame"><section class="home-app"><header class="topbar home-topbar"><button class="home-mobile-brand" aria-label="RepState home" type="button" data-go="home"><strong><span class="repstate-wordmark-rep">REP</span><span class="repstate-wordmark-state">STATE</span></strong></button><div class="topbar-actions">
   <button type="button" class="rt-home-entry" data-go="rest-setup">Timers</button>
 <button class="settings-button" type="button"><svg aria-hidden="true" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="settings-button-label">Settings</span></button></div></header><div class="home-content"><section class="home-main"><div class="intro-copy"><h1>Choose your workout</h1></div><div class="day-grid" aria-label="Training days"><button class="day-card day-card-chest" aria-label="Start Chest" type="button"><span class="day-card-index">01</span><span class="day-card-name">Chest</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-legs" aria-label="Start Legs" type="button"><span class="day-card-index">02</span><span class="day-card-name">Legs</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-back" aria-label="Start Back" type="button"><span class="day-card-index">03</span><span class="day-card-name">Back</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button><button class="day-card day-card-shoulders" aria-label="Start Shoulders" type="button"><span class="day-card-index">04</span><span class="day-card-name">Shoulders</span><span class="day-card-meta">8 exercises</span><span class="day-card-action" aria-hidden="true">→</span></button></div></section><section class="home-stats" id="home-training-overview" aria-label="Workout log"><div class="home-overview-grid"><div class="recent-sessions" aria-label="Recent sessions"><p class="recent-sessions-empty">Complete a workout to build your log</p></div></div></section></div></section></div></main></div></article>
@@ -1476,8 +1477,10 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
       <div class="rt-field"><span>Work</span><div><button type="button" data-adjust="work:-5" aria-label="Decrease work by 5 seconds">−</button><output data-value="work" aria-label="Work duration">00:30</output><button type="button" data-adjust="work:5" aria-label="Increase work by 5 seconds">+</button></div></div>
       <div class="rt-field"><span>Rest</span><div><button type="button" data-adjust="intervalRest:-5" aria-label="Decrease interval rest by 5 seconds">−</button><output data-value="intervalRest" aria-label="Interval rest duration">00:30</output><button type="button" data-adjust="intervalRest:5" aria-label="Increase interval rest by 5 seconds">+</button></div></div>
       <div class="rt-field"><span>Rounds</span><div><button type="button" data-adjust="rounds:-1" aria-label="Decrease rounds">−</button><output data-value="rounds" aria-label="Rounds">10</output><button type="button" data-adjust="rounds:1" aria-label="Increase rounds">+</button></div></div>
+      <div class="rt-field"><span>Weight / hand</span><div><button type="button" data-adjust="weight:-2.5" aria-label="Decrease carry weight by 2.5 kilograms per hand">−</button><output data-value="weight" aria-label="Carry weight per hand">20 kg</output><button type="button" data-adjust="weight:2.5" aria-label="Increase carry weight by 2.5 kilograms per hand">+</button></div></div>
     </div>
     <p class="rt-total"><span>Total time</span><strong data-value="total">10:00</strong></p>
+    <p class="rt-total rt-load"><span>Total load</span><strong data-value="load">20 kg per hand · 40 kg total</strong></p>
     
   <div class="rt-options">
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
@@ -1488,7 +1491,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <button class="rt-primary" type="button" data-start="interval">Start intervals</button>
     <button class="rt-save" type="button" data-save="interval">Save timer</button>
   </section>
-  <section class="rt-presets" aria-label="Saved interval timers"><h2>Saved timers</h2><button class="rt-preset" type="button" data-preset="interval" data-saved="{&quot;rest&quot;:60,&quot;work&quot;:30,&quot;intervalRest&quot;:30,&quot;rounds&quot;:10}"><span><strong>Farmer&#39;s carry</strong><small>30s work · 30s rest · 10 rounds</small></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 5 5 5-5 5"></path></svg></button><button class="rt-preset" type="button" data-preset="interval"><span><strong>Kettlebells</strong><small>45s work · 15s rest · 8 rounds</small></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 5 5 5-5 5"></path></svg></button></section>
+  <section class="rt-presets" aria-label="Saved interval timers"><h2>Saved timers</h2><button class="rt-preset" type="button" data-preset="interval" data-saved="{&quot;rest&quot;:60,&quot;work&quot;:30,&quot;intervalRest&quot;:30,&quot;rounds&quot;:10,&quot;weight&quot;:20}"><span><strong>Farmer&#39;s carry</strong><small>30s work · 30s rest · 10 rounds · 20 kg</small></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 5 5 5-5 5"></path></svg></button><button class="rt-preset" type="button" data-preset="interval"><span><strong>Kettlebells</strong><small>45s work · 15s rest · 8 rounds</small></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 5 5 5-5 5"></path></svg></button></section>
 </div>
   </main>
 </div></article>
@@ -1527,12 +1530,39 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     <div class="rt-content">
   <div class="rt-live-heading"><h1>Farmer&#39;s carry</h1><button type="button" class="rt-text" data-go="interval-setup">Edit timer</button></div>
   <section class="rt-live" aria-label="Interval timer running">
+    <p class="rt-live-load" data-value="load" aria-label="Carry load">20 kg per hand · 40 kg total</p>
     <p class="rt-live-meta" data-live-status="">Round 3 of 10</p>
     <h2 class="rt-phase" data-live-phase="">Work</h2>
     <output class="rt-digits rt-countdown" data-countdown="" aria-label="Time remaining">00:22</output>
     <p class="rt-next" data-next="">Next: rest for 30 seconds</p>
     <div class="rt-round-progress" aria-label="Round 3 of 10"><span class="is-complete"></span><span class="is-complete"></span><span class="is-current"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="rt-live-actions"><button class="rt-primary" type="button" data-pause="">Pause</button><div class="rt-secondary-actions"><button type="button" data-reset="">Restart</button><button type="button" data-skip="">Skip interval</button></div></div>
+    
+  <div class="rt-options">
+    <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
+    <button class="rt-option" type="button" aria-pressed="false" data-toggle="awake"><span class="rt-switch" aria-hidden="true"></span><span>Keep screen awake</span></button>
+  </div>
+  <p class="rt-caveat">Keep RepState open to hear the timer</p>
+
+  </section>
+</div>
+  </main>
+</div></article>
+<article class="rt-concept" id="interval-logged"><header class="rt-caption"><h2>Intervals · Logged (carry)</h2><a href="https://thinkpool-io.github.io/mockups/repstate-timers-carry.html?screen=interval-logged">Full screen</a></header><div class="rt-screen">
+  <main class="rt-app">
+    <header class="rt-topbar">
+      <button class="rt-brand" type="button" data-go="home" aria-label="RepState home"><span class="repstate-wordmark-rep">REP</span><span class="repstate-wordmark-state">STATE</span></button>
+      <button class="rt-back" type="button" data-go="home"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15 10H5m5-5-5 5 5 5"></path></svg>Home</button>
+    </header>
+    <div class="rt-content">
+  <div class="rt-live-heading"><h1>Farmer&#39;s carry</h1><button type="button" class="rt-text" data-go="interval-setup">Edit timer</button></div>
+  <section class="rt-live rt-finished" aria-label="Carry logged">
+    <p class="rt-live-meta">Carry complete</p>
+    <h2>10 rounds<br>logged</h2>
+    <p class="rt-finished-note">20 kg per hand<br>40 kg total load</p>
+    <div class="rt-ready-duration"><span>Saved to your log</span><strong>Today</strong></div>
+    <button class="rt-primary" type="button" data-start="interval">Run again</button>
+    <button class="rt-save" type="button" data-go="interval-setup">Change load</button>
     
   <div class="rt-options">
     <button class="rt-option" type="button" aria-pressed="true" data-toggle="sound"><span class="rt-switch" aria-hidden="true"></span><span>Sound</span></button>
@@ -1571,7 +1601,7 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
   </main>
 </div></article></main><a class="rt-full-link" href="https://thinkpool-io.github.io/mockups/repstate-timers-carry.html">View all mockups</a><footer class="rt-board-footer">Prototype only. Try Timers, change durations, and start or pause a countdown. Nothing here changes your training data.</footer></div><script>(() => {
   const root = document.getElementById('repstate-timer-board');
-  const config = { rest:60, work:30, intervalRest:30, rounds:10 };
+  const config = { rest:60, work:30, intervalRest:30, rounds:10, weight:20 };
   const clocks = new Map();
   let audioContext;
   const fmt = seconds => `${String(Math.floor(seconds / 60)).padStart(2,'0')}:${String(seconds % 60).padStart(2,'0')}`;
@@ -1599,7 +1629,10 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
   function updateConfig() {
     root.querySelectorAll('[data-value]').forEach(node => {
       const key = node.dataset.value;
-      node.textContent = key === 'rounds' ? config.rounds : fmt(key === 'total' ? (config.work + config.intervalRest) * config.rounds : config[key]);
+      node.textContent = key === 'rounds' ? config.rounds
+        : key === 'weight' ? `${config.weight} kg`
+        : key === 'load' ? `${config.weight} kg per hand \u00b7 ${config.weight * 2} kg total`
+        : fmt(key === 'total' ? (config.work + config.intervalRest) * config.rounds : config[key]);
     });
     root.querySelectorAll('[data-duration]').forEach(node => node.setAttribute('aria-pressed',String(Number(node.dataset.duration) === config.rest)));
   }
@@ -1663,7 +1696,9 @@ body[data-screen] .rt-full-link { display:block; padding:12px; text-align:center
     const article=button.closest('.rt-concept'); if(!article)return;
     if(button.dataset.go) { const active=clocks.get(article.id); if(active)cancel(active); go(button.dataset.go); }
     else if(button.dataset.adjust) {
-      const [key,delta]=button.dataset.adjust.split(':'); config[key]=Math.max(key==='rounds'?1:5,Math.min(key==='rounds'?24:900,config[key]+Number(delta))); updateConfig();
+      const [key,delta]=button.dataset.adjust.split(':');
+      if(key==='weight') config.weight=Math.max(0,Math.min(200,config.weight+Number(delta)));
+      else config[key]=Math.max(key==='rounds'?1:5,Math.min(key==='rounds'?24:900,config[key]+Number(delta))); updateConfig();
     } else if(button.dataset.duration) {config.rest=Number(button.dataset.duration);updateConfig();}
     else if(button.dataset.toggle) {
       const active=button.getAttribute('aria-pressed')!=='true';
